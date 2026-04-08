@@ -1,63 +1,89 @@
 // app/page.tsx
-// Multi-directory homepage with search, filters, and pagination
-
 import Link from "next/link";
-
-const { SUPABASE_URL, SUPABASE_SERVICE_KEY } = process.env;
+import Image from "next/image";
 
 type Listing = {
   id: string;
-  name: string;
+  project_tag: string;
+  listing_name: string;
   city: string | null;
   state: string | null;
-  type: string | null;
   short_description: string | null;
-  plan: string | null;
-  project_tag?: string;
+  is_featured: boolean;
 };
 
 const PROJECTS: Record<
   string,
-  { label: string; description: string }
+  {
+    label: string;
+    tagline: string;
+    badge: string;
+    color: string;
+  }
 > = {
   green: {
     label: "Project Green · Cannabis",
-    description: "Licensed dispensaries and cannabis listings.",
+    tagline: "Licensed dispensaries, delivery services & patient-first cannabis brands.",
+    badge: "Cannabis",
+    color: "#16a34a",
   },
   heal: {
     label: "Project Heal · Holistic",
-    description: "Breathwork, bodywork, and holistic healers.",
+    tagline: "Somatic workers, energy healers, bodyworkers & alternative care.",
+    badge: "Holistic",
+    color: "#22c55e",
   },
   her: {
     label: "Project Her · Women’s Wellness",
-    description: "Pelvic floor PTs and women-focused care.",
+    tagline: "Clinics, practitioners & brands focused on women’s bodies and stories.",
+    badge: "Women’s wellness",
+    color: "#ec4899",
   },
   machine: {
     label: "Project Machine · AI Tools",
-    description: "AI tools for builders and businesses.",
+    tagline: "AI tools actually used by operators, not just launch-day hype.",
+    badge: "AI tools",
+    color: "#38bdf8",
   },
   bid: {
     label: "Project Bid · Gov Contractors",
-    description: "Vendors winning city/county/state contracts.",
+    tagline: "Vendors winning city, county & state contracts — mapped and trackable.",
+    badge: "Gov contracts",
+    color: "#6366f1",
   },
   rent: {
     label: "Project Rent · FSBO Rentals",
-    description: "For-rent-by-owner listings.",
+    tagline: "For-rent-by-owner inventory without the property management middleman.",
+    badge: "FSBO rentals",
+    color: "#f97316",
   },
 };
 
-async function getListings(projectTag: string): Promise<Listing[]> {
+function getProjectLabel(tag: string) {
+  return PROJECTS[tag]?.label ?? "Directory Network";
+}
+
+function getLocation(listing: Listing) {
+  if (listing.city && listing.state) return `${listing.city}, ${listing.state}`;
+  if (listing.city) return listing.city;
+  if (listing.state) return listing.state;
+  return "Location on file";
+}
+
+async function fetchListings(tag: string): Promise<Listing[]> {
+  const { SUPABASE_URL, SUPABASE_SERVICE_KEY } = process.env;
+
   if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-    throw new Error("Missing Supabase env vars");
+    console.error("Missing SUPABASE_URL or SUPABASE_SERVICE_KEY");
+    return [];
   }
 
   const baseUrl = SUPABASE_URL.replace(/\/$/, "");
   const url =
-    baseUrl +
-    "/rest/v1/master_listings" +
-    `?project_tag=eq.${projectTag}` +
-    "&select=id,name,city,state,type,short_description,plan,project_tag" +
-    "&order=city.asc";
+    `${baseUrl}/rest/v1/master_listings` +
+    `?project_tag=eq.${encodeURIComponent(tag)}` +
+    `&select=id,project_tag,listing_name,city,state,short_description,is_featured` +
+    `&order=is_featured.desc,listing_name.asc`;
 
   const res = await fetch(url, {
     method: "GET",
@@ -69,288 +95,391 @@ async function getListings(projectTag: string): Promise<Listing[]> {
   });
 
   if (!res.ok) {
-    console.error("Failed to fetch listings:", await res.text());
-    throw new Error("Failed to load listings from Supabase");
+    const text = await res.text();
+    console.error("Failed to fetch listings:", text);
+    return [];
   }
 
-  return res.json();
+  return (await res.json()) as Listing[];
 }
 
 export default async function Home({
   searchParams,
 }: {
-  searchParams: Promise<{
-    tag?: string;
-    q?: string;
-    state?: string;
-    plan?: string;
-    page?: string;
-  }>;
+  searchParams: Promise<{ tag?: string }>;
 }) {
-  // Next 16: searchParams is a Promise
-  const params = await searchParams;
+  const { tag } = await searchParams;
+  const selectedTag = tag && PROJECTS[tag] ? tag : "green";
 
-  const selectedTag = params.tag || "green";
-  const tag = PROJECTS[selectedTag] ? selectedTag : "green";
+  const listings = await fetchListings(selectedTag);
+  const featured = listings.filter((l) => l.is_featured);
+  const regular = listings.filter((l) => !l.is_featured);
 
-  const q = (params.q || "").toLowerCase().trim();
-  const stateFilter = params.state || "all";
-  const planFilter = params.plan || "all";
-  const pageParam = parseInt(params.page || "1", 10);
-  const page = Number.isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
-  const pageSize = 8;
-
-  const allListings = await getListings(tag);
-
-  // Derive available states and plans from data
-  const stateOptions = Array.from(
-    new Set(
-      allListings
-        .map((l) => l.state)
-        .filter((s): s is string => !!s && s !== "NA")
-    )
-  ).sort();
-
-  const planOptions = Array.from(
-    new Set(
-      allListings
-        .map((l) => l.plan)
-        .filter((p): p is string => !!p)
-    )
-  ).sort();
-
-  // Filter in-memory (data set is small enough)
-  let filtered = allListings;
-
-  if (q) {
-    filtered = filtered.filter((l) => {
-      const haystack = `${l.name || ""} ${l.city || ""} ${
-        l.state || ""
-      }`.toLowerCase();
-      return haystack.includes(q);
-    });
-  }
-
-  if (stateFilter !== "all") {
-    filtered = filtered.filter((l) => l.state === stateFilter);
-  }
-
-  if (planFilter !== "all") {
-    filtered = filtered.filter((l) => (l.plan || "free") === planFilter);
-  }
-
-  const total = filtered.length;
-  const totalPages = Math.max(1, Math.ceil(total / pageSize));
-  const safePage = Math.min(page, totalPages);
-  const start = (safePage - 1) * pageSize;
-  const pageItems = filtered.slice(start, start + pageSize);
-
-  const meta = PROJECTS[tag];
-  const tabs = Object.entries(PROJECTS);
-
-  // Helper for building query strings for pagination/filters
-  const buildQuery = (overrides: Record<string, string | number | undefined>) => {
-    const sp = new URLSearchParams();
-    sp.set("tag", tag);
-    if (q) sp.set("q", q);
-    if (stateFilter !== "all") sp.set("state", stateFilter);
-    if (planFilter !== "all") sp.set("plan", planFilter);
-    sp.set("page", String(overrides.page ?? safePage));
-    return `/?${sp.toString()}`;
-  };
+  const currentProject = PROJECTS[selectedTag];
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-50">
-      <div className="max-w-6xl mx-auto px-4 py-6 space-y-8">
-        {/* Global header */}
-        <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h1 className="text-xl font-semibold tracking-tight">
-              Directory Network
-            </h1>
-            <p className="text-slate-400 text-xs">
-              Six vertical directories powered by one Supabase backend.
-            </p>
+    <main className="min-h-screen bg-[#030712] text-slate-50">
+      {/* Top gradient halo */}
+      <div className="pointer-events-none fixed inset-x-0 top-0 z-0 h-64 bg-gradient-to-b from-[#2D1B69] via-[#030712] to-transparent opacity-80" />
+
+      {/* Header */}
+      <header className="relative z-10 border-b border-white/5 bg-black/40 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:py-4">
+          <div className="flex items-center gap-2">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#7FE3C7] text-xs font-semibold text-slate-900 shadow-sm">
+              DN
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold tracking-tight">
+                Directory Network
+              </span>
+              <span className="text-[11px] text-slate-400">
+                Curated vertical directories · 6 markets
+              </span>
+            </div>
           </div>
-          <nav className="flex flex-wrap gap-2 text-xs">
-            {tabs.map(([key, info]) => {
-              const active = key === tag;
-              return (
-                <Link
-                  key={key}
-                  href={key === "green" ? "/" : `/?tag=${key}`}
-                  className={[
-                    "px-3 py-1 rounded-full border transition",
-                    active
-                      ? "bg-slate-100 text-slate-900 border-slate-100"
-                      : "border-slate-700 text-slate-300 hover:bg-slate-800",
-                  ].join(" ")}
-                >
-                  {info.label.split("·")[0].trim()}
-                </Link>
-              );
-            })}
+
+          <nav className="hidden items-center gap-4 text-xs text-slate-300 md:flex">
+            <Link
+              href="#how-it-works"
+              className="transition-colors hover:text-slate-50"
+            >
+              How it works
+            </Link>
+            <Link
+              href="#directories"
+              className="transition-colors hover:text-slate-50"
+            >
+              Directories
+            </Link>
+            <Link
+              href="/admin/leads"
+              className="rounded-full border border-white/10 px-3 py-1.5 text-[11px] text-slate-300 hover:border-white/30 hover:bg-white/5"
+            >
+              Operator inbox
+            </Link>
+            <Link
+              href="/get-listed"
+              className="rounded-full bg-[#7FE3C7] px-3.5 py-1.5 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#6ad3b7]"
+            >
+              Get listed
+            </Link>
           </nav>
-        </header>
 
-        {/* Directory meta + filters */}
-        <section className="space-y-4">
-          <div className="space-y-1">
-            <h2 className="text-2xl font-bold">{meta.label}</h2>
-            <p className="text-slate-300 text-sm">{meta.description}</p>
-            <p className="text-slate-500 text-xs">
-              Showing{" "}
-              <span className="font-semibold">
-                {total} listing{total === 1 ? "" : "s"}
-              </span>{" "}
-              for <span className="font-semibold">project_tag = &apos;{tag}&apos;</span>.
+          {/* Mobile CTA */}
+          <div className="flex items-center gap-2 md:hidden">
+            <Link
+              href="/get-listed"
+              className="rounded-full bg-[#7FE3C7] px-3 py-1.5 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#6ad3b7]"
+            >
+              Get listed
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero + summary */}
+      <section className="relative z-10 border-b border-white/5 bg-gradient-to-b from-black/60 via-[#020617] to-[#020617]">
+        <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-8 md:flex-row md:items-center md:py-12">
+          {/* Left: copy */}
+          <div className="flex-1 space-y-5">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-[11px] font-medium text-emerald-200">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />
+              Live multi-directory prototype · Cannabis-led rollout
+            </div>
+
+            <h1 className="text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl md:text-4xl">
+              A clean, credible home for{" "}
+              <span className="bg-gradient-to-r from-[#7FE3C7] to-[#38bdf8] bg-clip-text text-transparent">
+                high-trust directories
+              </span>
+              .
+            </h1>
+
+            <p className="max-w-xl text-sm leading-relaxed text-slate-300 md:text-base">
+              The Directory Network is a small, opinionated collection of
+              vertical marketplaces — starting with{" "}
+              <span className="font-medium text-emerald-300">
+                cannabis, healers, women&apos;s wellness, AI tools, gov
+                contractors &amp; FSBO rentals
+              </span>
+              . Fewer listings, more signal, and zero late-2000s scam energy.
             </p>
+
+            {/* Stats strip */}
+            <div className="grid grid-cols-2 gap-3 text-xs text-slate-200 sm:flex sm:flex-wrap sm:gap-4">
+              <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2">
+                <div className="text-[11px] uppercase tracking-wide text-slate-400">
+                  Directories
+                </div>
+                <div className="text-lg font-semibold text-slate-50">6</div>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2">
+                <div className="text-[11px] uppercase tracking-wide text-slate-400">
+                  Curated listings
+                </div>
+                <div className="text-lg font-semibold text-slate-50">
+                  {listings.length.toString().padStart(2, "0")}+
+                </div>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2">
+                <div className="text-[11px] uppercase tracking-wide text-slate-400">
+                  Focus
+                </div>
+                <div className="text-xs font-medium text-slate-100">
+                  Regulated, niche &amp; high-trust markets
+                </div>
+              </div>
+            </div>
+
+            {/* Hero CTAs */}
+            <div className="flex flex-wrap gap-3 pt-1 text-xs">
+              <Link
+                href="/get-listed"
+                className="inline-flex items-center rounded-full bg-[#7FE3C7] px-4 py-2 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#6ad3b7]"
+              >
+                Apply to get listed
+              </Link>
+              <a
+                href="#directories"
+                className="inline-flex items-center rounded-full border border-white/10 bg-transparent px-4 py-2 text-[11px] font-medium text-slate-200 hover:border-white/40 hover:bg-white/5"
+              >
+                Explore live directories
+              </a>
+            </div>
           </div>
 
-          {/* Filters / search form */}
-          <form
-            className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between text-xs"
-            action="/"
-            method="get"
-          >
-            {/* Keep the current tag */}
-            <input type="hidden" name="tag" value={tag} />
+          {/* Right: current project highlight */}
+          <div className="flex-1">
+            <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-slate-900/70 p-4 shadow-xl sm:p-5">
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-slate-800/70 px-3 py-1 text-[11px] text-slate-200">
+                <span
+                  className="h-2 w-2 rounded-full"
+                  style={{ backgroundColor: currentProject.color }}
+                />
+                Currently viewing
+                <span className="font-semibold text-slate-50">
+                  {currentProject.label}
+                </span>
+              </div>
 
-            <div className="flex-1 flex flex-col gap-2 md:flex-row md:items-center">
-              <input
-                name="q"
-                placeholder="Search by name or city…"
-                defaultValue={q}
-                className="w-full md:max-w-xs rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-400"
-              />
+              <p className="mb-4 text-xs text-slate-300 md:text-sm">
+                {currentProject.tagline}
+              </p>
 
-              <select
-                name="state"
-                defaultValue={stateFilter}
-                className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-slate-100 focus:outline-none focus:ring-1 focus:ring-slate-400"
-              >
-                <option value="all">All states</option>
-                {stateOptions.map((s) => (
-                  <option key={s} value={s}>
-                    {s}
-                  </option>
-                ))}
-              </select>
+              <div className="space-y-2">
+                {(featured.length ? featured : listings.slice(0, 3)).map(
+                  (listing) => (
+                    <Link
+                      key={listing.id}
+                      href={`/l/${listing.id}`}
+                      className="flex items-start justify-between gap-3 rounded-2xl border border-white/5 bg-slate-900/80 px-3 py-2.5 text-xs text-slate-100 transition hover:border-[#7FE3C7]/60 hover:bg-slate-900"
+                    >
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-[13px] font-semibold">
+                            {listing.listing_name}
+                          </h3>
+                          {listing.is_featured && (
+                            <span className="rounded-full bg-[#7FE3C7]/15 px-2 py-0.5 text-[10px] font-medium text-[#7FE3C7]">
+                              Featured
+                            </span>
+                          )}
+                        </div>
+                        <div className="mt-0.5 text-[11px] text-slate-400">
+                          {getLocation(listing)}
+                        </div>
+                        {listing.short_description && (
+                          <p className="mt-1 line-clamp-2 text-[11px] text-slate-300">
+                            {listing.short_description}
+                          </p>
+                        )}
+                      </div>
+                      <span className="mt-1 text-[11px] text-slate-500">
+                        View →
+                      </span>
+                    </Link>
+                  )
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-              <select
-                name="plan"
-                defaultValue={planFilter}
-                className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-slate-100 focus:outline-none focus:ring-1 focus:ring-slate-400"
-              >
-                <option value="all">All plans</option>
-                {planOptions.map((p) => (
-                  <option key={p} value={p}>
-                    {p}
-                  </option>
-                ))}
-              </select>
+      {/* Directories + listings */}
+      <section
+        id="directories"
+        className="relative z-10 border-t border-white/5 bg-[#020617]"
+      >
+        <div className="mx-auto max-w-6xl px-4 py-8 md:py-10">
+          {/* Directory tabs */}
+          <div className="mb-5 flex flex-col gap-3 md:mb-6 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h2 className="text-sm font-semibold tracking-tight text-slate-100 md:text-base">
+                Browse the network
+              </h2>
+              <p className="text-[11px] text-slate-400 md:text-xs">
+                Switch directories to see a different slice of the network.
+              </p>
             </div>
 
-            <div className="flex gap-2">
-              <button
-                type="submit"
-                className="rounded-md bg-slate-100 px-3 py-2 text-xs font-semibold text-slate-900 hover:bg-white transition"
-              >
-                Apply
-              </button>
-              <Link
-                href={tag === "green" ? "/" : `/?tag=${tag}`}
-                className="rounded-md border border-slate-700 px-3 py-2 text-xs text-slate-200 hover:bg-slate-800 transition flex items-center"
-              >
-                Reset
-              </Link>
+            <div className="flex flex-wrap gap-1.5 text-[11px] md:text-xs">
+              {Object.entries(PROJECTS).map(([key, proj]) => {
+                const isActive = key === selectedTag;
+                return (
+                  <Link
+                    key={key}
+                    href={key === "green" ? "/" : `/?tag=${key}`}
+                    className={[
+                      "inline-flex items-center rounded-full border px-3 py-1 transition-colors",
+                      isActive
+                        ? "border-[#7FE3C7] bg-[#7FE3C7]/15 text-[#7FE3C7]"
+                        : "border-slate-700 bg-slate-900 text-slate-300 hover:border-slate-500 hover:bg-slate-800",
+                    ].join(" ")}
+                  >
+                    {proj.badge}
+                  </Link>
+                );
+              })}
             </div>
-          </form>
-        </section>
+          </div>
 
-        {/* Listings grid */}
-        {pageItems.length === 0 ? (
-          <p className="text-slate-400 text-sm">
-            No listings match these filters yet.
-          </p>
-        ) : (
-          <section className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {pageItems.map((listing) => (
+          {/* Listing grid */}
+          {listings.length === 0 ? (
+            <div className="rounded-3xl border border-dashed border-slate-700 bg-slate-900/40 px-4 py-10 text-center text-sm text-slate-400 md:px-8">
+              <p>
+                No listings yet for this directory. We&apos;re curating the
+                first operators —{" "}
+                <Link
+                  href="/get-listed"
+                  className="font-medium text-[#7FE3C7] underline-offset-2 hover:underline"
+                >
+                  apply to be one of them
+                </Link>
+                .
+              </p>
+            </div>
+          ) : (
+            <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+              {listings.map((listing) => (
                 <Link
                   key={listing.id}
                   href={`/l/${listing.id}`}
-                  className="border border-slate-800 rounded-xl p-4 bg-slate-900/60 hover:bg-slate-800/70 transition block"
+                  className="group flex flex-col rounded-3xl border border-slate-800 bg-slate-900/60 p-4 text-xs text-slate-100 shadow-sm transition hover:border-[#7FE3C7]/60 hover:bg-slate-900"
                 >
-                  <div className="flex items-center justify-between mb-1">
-                    <h3 className="font-semibold text-sm md:text-base">
-                      {listing.name}
-                    </h3>
-                    <span className="text-[10px] uppercase tracking-wide rounded-full px-2 py-1 bg-slate-800 text-slate-300">
-                      {listing.type || "Listing"}
-                    </span>
+                  <div className="mb-2 flex items-start justify-between gap-2">
+                    <div>
+                      <h3 className="line-clamp-1 text-sm font-semibold">
+                        {listing.listing_name}
+                      </h3>
+                      <p className="mt-0.5 text-[11px] text-slate-400">
+                        {getLocation(listing)}
+                      </p>
+                    </div>
+                    {listing.is_featured && (
+                      <span className="rounded-full bg-[#7FE3C7]/15 px-2 py-0.5 text-[10px] font-medium text-[#7FE3C7]">
+                        Featured
+                      </span>
+                    )}
                   </div>
-
-                  <p className="text-slate-400 text-xs mb-2">
-                    {listing.city || "Unknown city"}
-                    {listing.state ? `, ${listing.state}` : ""}
-                  </p>
-
                   {listing.short_description && (
-                    <p className="text-slate-200 text-xs mb-3 line-clamp-3">
+                    <p className="mb-3 line-clamp-3 text-[11px] text-slate-300">
                       {listing.short_description}
                     </p>
                   )}
-
-                  <div className="flex items-center justify-between text-[10px] text-slate-400">
-                    <span>
-                      Plan:{" "}
-                      <span className="font-semibold text-slate-200">
-                        {listing.plan || "free"}
-                      </span>
-                    </span>
-                    <span className="text-slate-500 truncate max-w-[140px]">
-                      id: {listing.id}
+                  <div className="mt-auto flex items-center justify-between pt-1 text-[11px] text-slate-400">
+                    <span>View profile</span>
+                    <span className="text-slate-500 group-hover:text-[#7FE3C7]">
+                      →
                     </span>
                   </div>
                 </Link>
               ))}
             </div>
+          )}
+        </div>
+      </section>
 
-            {/* Pagination */}
-            <div className="flex items-center justify-between text-xs text-slate-400">
-              <span>
-                Page{" "}
-                <span className="font-semibold text-slate-200">
-                  {safePage}
-                </span>{" "}
-                of{" "}
-                <span className="font-semibold text-slate-200">
-                  {totalPages}
-                </span>
-              </span>
-              <div className="flex gap-2">
-                {safePage > 1 && (
-                  <Link
-                    href={buildQuery({ page: safePage - 1 })}
-                    className="px-3 py-1 rounded-md border border-slate-700 hover:bg-slate-800 transition"
-                  >
-                    ← Prev
-                  </Link>
-                )}
-                {safePage < totalPages && (
-                  <Link
-                    href={buildQuery({ page: safePage + 1 })}
-                    className="px-3 py-1 rounded-md border border-slate-700 hover:bg-slate-800 transition"
-                  >
-                    Next →
-                  </Link>
-                )}
-              </div>
+      {/* How it works */}
+      <section
+        id="how-it-works"
+        className="relative z-10 border-t border-white/5 bg-black"
+      >
+        <div className="mx-auto max-w-6xl px-4 py-9 md:py-12">
+          <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h2 className="text-sm font-semibold tracking-tight text-slate-100 md:text-base">
+                How the Directory Network works
+              </h2>
+              <p className="text-[11px] text-slate-400 md:text-xs">
+                Simple for visitors, opinionated behind the scenes.
+              </p>
             </div>
-          </section>
-        )}
-      </div>
+            <Link
+              href="/get-listed"
+              className="inline-flex items-center rounded-full bg-[#7FE3C7] px-4 py-2 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#6ad3b7]"
+            >
+              Start a listing request
+            </Link>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            <div className="rounded-3xl border border-white/10 bg-slate-950/80 p-4 text-xs text-slate-200">
+              <div className="mb-2 text-[11px] font-semibold text-[#7FE3C7]">
+                01 · Curated verticals
+              </div>
+              <p className="text-slate-300">
+                We don&apos;t list everything. Each directory is focused on a
+                specific, high-trust niche where relevance matters more than
+                raw volume.
+              </p>
+            </div>
+            <div className="rounded-3xl border border-white/10 bg-slate-950/80 p-4 text-xs text-slate-200">
+              <div className="mb-2 text-[11px] font-semibold text-[#7FE3C7]">
+                02 · Human review
+              </div>
+              <p className="text-slate-300">
+                Claims and new listing requests go to a real operator inbox,
+                not a black hole. Basic checks on licensing, fit, and quality
+                before anything goes live.
+              </p>
+            </div>
+            <div className="rounded-3xl border border-white/10 bg-slate-950/80 p-4 text-xs text-slate-200">
+              <div className="mb-2 text-[11px] font-semibold text-[#7FE3C7]">
+                03 · Room to grow
+              </div>
+              <p className="text-slate-300">
+                This is a prototype built for speed — but the rails are in
+                place for featured placements, paid tiers, and deeper
+                search/filter when the time is right.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-white/5 bg-black">
+        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-5 text-[11px] text-slate-500 md:flex-row md:items-center md:justify-between">
+          <div className="flex items-center gap-2">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#7FE3C7]/10 text-[10px] font-semibold text-[#7FE3C7]">
+              DN
+            </div>
+            <span>Directory Network · prototype build</span>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <span>6 verticals live in v1</span>
+            <span className="hidden text-slate-600 md:inline">•</span>
+            <Link
+              href="/get-listed"
+              className="text-slate-300 underline-offset-2 hover:text-slate-100 hover:underline"
+            >
+              Get listed
+            </Link>
+          </div>
+        </div>
+      </footer>
     </main>
   );
 }
