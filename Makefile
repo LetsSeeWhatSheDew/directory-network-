@@ -14,7 +14,7 @@ SHELL := /bin/bash
 include .env.local
 export
 
-SITE_URL ?= https://projectgreen.com
+SITE_URL ?= https://directory-network-eta.vercel.app
 DATE := $(shell date +%Y-%m-%d)
 
 # ── seed ──────────────────────────────────────────────────────────
