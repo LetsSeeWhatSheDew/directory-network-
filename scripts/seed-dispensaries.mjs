@@ -45,8 +45,9 @@ const sql = readFileSync(
 );
 
 const records = [];
+// Match each VALUES tuple — tolerant of whitespace/newlines between fields
 const re =
-  /\(gen_random_uuid\(\),\s*'([^']*)',\s*'([^']*)',\s*'([^']*)',\s*'([^']*)',\s*'([^']*)',\s*'([^']*)',\s*\n\s*'([^']*)',\s*\n\s*'([^']*)',\s*(true|false)\)/g;
+  /\(gen_random_uuid\(\),\s*'([^']*)',\s*'([^']*)',\s*'([^']*)',\s*'([^']*)',\s*'([^']*)',\s*'([^']*)',\s*'([^']*)',\s*'([^']*)',\s*(true|false)\)/gs;
 
 let m;
 while ((m = re.exec(sql)) !== null) {
@@ -59,7 +60,7 @@ while ((m = re.exec(sql)) !== null) {
     state: m[6],
     short_description: m[7],
     plan_tier: m[8],
-    
+    is_featured: m[9] === "true",
   });
 }
 
