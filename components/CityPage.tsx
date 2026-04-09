@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { CityListing } from "@/lib/fetchCityListings";
 import CityEmailCapture from "@/app/components/CityEmailCapture";
+import { getNearbyCities } from "@/config/cities/illinois/geo";
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -463,9 +464,38 @@ export default function CityPage({ config, listings = [] }: Props) {
         </section>
 
         {/* ============================================================ */}
-        {/*  EMAIL CAPTURE                                               */}
+        {/*  NEARBY CITIES                                               */}
         {/* ============================================================ */}
         <section className="relative z-10 border-b border-white/5 bg-black">
+          <div className="mx-auto max-w-6xl px-4 py-10 md:py-14">
+            <h2 className="mb-2 text-lg font-semibold tracking-tight text-slate-100 md:text-xl">
+              Nearby Cities
+            </h2>
+            <p className="mb-6 text-sm text-slate-400">
+              Browse dispensaries in nearby Illinois cities.
+            </p>
+
+            <div className="flex flex-wrap gap-2">
+              {getNearbyCities(config.slug, 5).map((nearby) => (
+                <Link
+                  key={nearby.slug}
+                  href={`/cannabis/illinois/${nearby.slug}`}
+                  className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-3.5 py-1.5 text-[11px] text-slate-300 transition-colors hover:border-[#7FE3C7]/60 hover:bg-slate-800 hover:text-slate-50"
+                >
+                  <span>{nearby.name}</span>
+                  <span className="ml-2 rounded bg-slate-800 px-1.5 py-0.5 text-[10px] font-medium text-[#7FE3C7]">
+                    {nearby.distanceMi} mi
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ============================================================ */}
+        {/*  EMAIL CAPTURE                                               */}
+        {/* ============================================================ */}
+        <section className="relative z-10 border-b border-white/5 bg-[#020617]">
           <div className="mx-auto max-w-xl px-4 py-10 md:py-14">
             <CityEmailCapture city={city} state={state} />
           </div>
