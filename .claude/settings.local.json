@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc:*)",
+      "Bash(xxd \"/Users/matthew/Desktop/GPT/Project -/Project - Directory/project-green/app/components/ClaimForm.tsx\")",
+      "Bash(timeout 20 npm run dev)",
+      "Bash(npm run:*)",
+      "Read(//tmp/**)",
+      "Bash(kill %1)"
+    ]
+  }
+}

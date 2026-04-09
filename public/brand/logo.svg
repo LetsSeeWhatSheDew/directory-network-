@@ -1,0 +1,10 @@
+<svg viewBox="0 0 260 40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+  <!-- "Project" in warm white — weight 400 for editorial restraint -->
+  <text x="0" y="28" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="22" font-weight="400" fill="#f0ede8" letter-spacing="-0.2">Project</text>
+
+  <!-- Thin vertical rule separator — like a publication masthead -->
+  <line x1="100" y1="8" x2="100" y2="32" stroke="#8a9490" stroke-width="0.75" opacity="0.5"/>
+
+  <!-- "Green" in accent weight 600 — the brand mark -->
+  <text x="110" y="28" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="22" font-weight="600" fill="#50c878" letter-spacing="-0.2">Green</text>
+</svg>

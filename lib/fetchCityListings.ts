@@ -35,8 +35,8 @@ export async function fetchCityListings(
     `?project_tag=eq.green` +
     `&city=ilike.${encodeURIComponent(city)}` +
     `&state=ilike.${encodeURIComponent(state)}` +
-    `&select=id,project_tag,listing_name,listing_title,city,state,short_description,is_featured,plan_tier` +
-    `&order=is_featured.desc,listing_name.asc`;
+    `&select=*` +
+    `&order=is_featured.desc`;
 
   try {
     const res = await fetch(endpoint, {

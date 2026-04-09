@@ -5,12 +5,18 @@ import Image from "next/image";
 type Listing = {
   id: string;
   project_tag: string;
-  listing_name: string;
+  listing_name?: string;
+  name?: string;
+  listing_title?: string;
   city: string | null;
   state: string | null;
   short_description: string | null;
   is_featured: boolean;
 };
+
+function getListingName(listing: Listing): string {
+  return listing.listing_name || listing.name || listing.listing_title || "Unnamed";
+}
 
 const PROJECTS: Record<
   string,
@@ -82,8 +88,8 @@ async function fetchListings(tag: string): Promise<Listing[]> {
   const url =
     `${baseUrl}/rest/v1/master_listings` +
     `?project_tag=eq.${encodeURIComponent(tag)}` +
-    `&select=id,project_tag,listing_name,city,state,short_description,is_featured` +
-    `&order=is_featured.desc,listing_name.asc`;
+    `&select=*` +
+    `&order=is_featured.desc`;
 
   const res = await fetch(url, {
     method: "GET",
@@ -118,25 +124,15 @@ export default async function Home({
   const currentProject = PROJECTS[selectedTag];
 
   return (
-    <main className="min-h-screen bg-[#030712] text-slate-50">
+    <main className="min-h-screen bg-[#050f09] text-slate-50">
       {/* Top gradient halo */}
-      <div className="pointer-events-none fixed inset-x-0 top-0 z-0 h-64 bg-gradient-to-b from-[#2D1B69] via-[#030712] to-transparent opacity-80" />
+      <div className="pointer-events-none fixed inset-x-0 top-0 z-0 h-64 bg-gradient-to-b from-[#0a2818] via-[#050f09] to-transparent opacity-80" />
 
       {/* Header */}
       <header className="relative z-10 border-b border-white/5 bg-black/40 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:py-4">
-          <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#7FE3C7] text-xs font-semibold text-slate-900 shadow-sm">
-              DN
-            </div>
-            <div className="flex flex-col">
-              <span className="text-sm font-semibold tracking-tight">
-                Directory Network
-              </span>
-              <span className="text-[11px] text-slate-400">
-                Curated vertical directories · 6 markets
-              </span>
-            </div>
+          <div className="flex items-center gap-3">
+            <Image src="/brand/logo.svg" alt="Project Green" width={160} height={28} className="h-7 w-auto" />
           </div>
 
           <nav className="hidden items-center gap-4 text-xs text-slate-300 md:flex">
@@ -159,14 +155,14 @@ export default async function Home({
               Directories
             </Link>
             <Link
-              href="/admin/leads"
+              href="/admin"
               className="rounded-full border border-white/10 px-3 py-1.5 text-[11px] text-slate-300 hover:border-white/30 hover:bg-white/5"
             >
-              Operator inbox
+              Dashboard
             </Link>
             <Link
               href="/get-listed"
-              className="rounded-full bg-[#7FE3C7] px-3.5 py-1.5 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#6ad3b7]"
+              className="rounded-full bg-[#50c878] px-3.5 py-1.5 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#3da85e]"
             >
               Get listed
             </Link>
@@ -176,7 +172,7 @@ export default async function Home({
           <div className="flex items-center gap-2 md:hidden">
             <Link
               href="/get-listed"
-              className="rounded-full bg-[#7FE3C7] px-3 py-1.5 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#6ad3b7]"
+              className="rounded-full bg-[#50c878] px-3 py-1.5 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#3da85e]"
             >
               Get listed
             </Link>
@@ -185,56 +181,51 @@ export default async function Home({
       </header>
 
       {/* Hero + summary */}
-      <section className="relative z-10 border-b border-white/5 bg-gradient-to-b from-black/60 via-[#020617] to-[#020617]">
+      <section className="relative z-10 border-b border-white/5 bg-gradient-to-b from-black/60 via-[#040d07] to-[#040d07]">
         <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-8 md:flex-row md:items-center md:py-12">
           {/* Left: copy */}
           <div className="flex-1 space-y-5">
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-[11px] font-medium text-emerald-200">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />
-              Live multi-directory prototype · Cannabis-led rollout
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#50c878]/20 bg-[#50c878]/5 px-3 py-1 text-[11px] font-medium text-[#50c878]/80 tracking-wide uppercase">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#50c878]" />
+              Live &middot; Cannabis-led rollout
             </div>
 
-            <h1 className="text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl md:text-4xl">
-              A clean, credible home for{" "}
-              <span className="bg-gradient-to-r from-[#7FE3C7] to-[#38bdf8] bg-clip-text text-transparent">
-                high-trust directories
+            <h1 className="text-2xl font-semibold tracking-tight text-[#f0ede8] sm:text-3xl md:text-4xl">
+              The curated directory for{" "}
+              <span className="text-[#50c878]">
+                licensed cannabis operators
               </span>
               .
             </h1>
 
-            <p className="max-w-xl text-sm leading-relaxed text-slate-300 md:text-base">
-              The Directory Network is a small, opinionated collection of
-              vertical marketplaces — starting with{" "}
-              <span className="font-medium text-emerald-300">
-                cannabis, healers, women&apos;s wellness, AI tools, gov
-                contractors &amp; FSBO rentals
-              </span>
-              . Fewer listings, more signal, and zero late-2000s scam energy.
+            <p className="max-w-xl text-sm leading-relaxed text-[#8a9490] md:text-base">
+              Project Green is an editorially curated directory of dispensaries,
+              brands, and cannabis businesses across Illinois and Missouri.
+              Verified listings only. No pay-to-play. Built for operators
+              who take their market seriously.
             </p>
 
             {/* Stats strip */}
-            <div className="grid grid-cols-2 gap-3 text-xs text-slate-200 sm:flex sm:flex-wrap sm:gap-4">
-              <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2">
-                <div className="text-[11px] uppercase tracking-wide text-slate-400">
-                  Directories
+            <div className="grid grid-cols-3 gap-3 text-xs text-[#f0ede8] sm:flex sm:flex-wrap sm:gap-4">
+              <div className="rounded-xl border border-white/5 bg-white/[0.03] px-3 py-2">
+                <div className="text-[10px] uppercase tracking-widest text-[#8a9490]">
+                  Markets
                 </div>
-                <div className="text-lg font-semibold text-slate-50">6</div>
+                <div className="text-lg font-semibold text-[#f0ede8]">2</div>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2">
-                <div className="text-[11px] uppercase tracking-wide text-slate-400">
-                  Curated listings
+              <div className="rounded-xl border border-white/5 bg-white/[0.03] px-3 py-2">
+                <div className="text-[10px] uppercase tracking-widest text-[#8a9490]">
+                  Verified listings
                 </div>
-                <div className="text-lg font-semibold text-slate-50">
-                  {listings.length.toString().padStart(2, "0")}+
+                <div className="text-lg font-semibold text-[#f0ede8]">
+                  {listings.length}+
                 </div>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2">
-                <div className="text-[11px] uppercase tracking-wide text-slate-400">
-                  Focus
+              <div className="rounded-xl border border-white/5 bg-white/[0.03] px-3 py-2">
+                <div className="text-[10px] uppercase tracking-widest text-[#8a9490]">
+                  Cities covered
                 </div>
-                <div className="text-xs font-medium text-slate-100">
-                  Regulated, niche &amp; high-trust markets
-                </div>
+                <div className="text-lg font-semibold text-[#f0ede8]">45</div>
               </div>
             </div>
 
@@ -242,16 +233,16 @@ export default async function Home({
             <div className="flex flex-wrap gap-3 pt-1 text-xs">
               <Link
                 href="/get-listed"
-                className="inline-flex items-center rounded-full bg-[#7FE3C7] px-4 py-2 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#6ad3b7]"
+                className="inline-flex items-center rounded-full bg-[#50c878] px-4 py-2 text-[12px] font-semibold text-[#050f09] shadow-sm hover:bg-[#3da85e] transition-colors"
               >
-                Apply to get listed
+                Request a listing
               </Link>
-              <a
-                href="#directories"
-                className="inline-flex items-center rounded-full border border-white/10 bg-transparent px-4 py-2 text-[11px] font-medium text-slate-200 hover:border-white/40 hover:bg-white/5"
+              <Link
+                href="/cannabis/illinois"
+                className="inline-flex items-center rounded-full border border-white/10 bg-transparent px-4 py-2 text-[12px] font-medium text-[#f0ede8] hover:border-[#50c878]/30 hover:bg-white/5 transition-colors"
               >
-                Explore live directories
-              </a>
+                Browse Illinois
+              </Link>
             </div>
           </div>
 
@@ -279,15 +270,15 @@ export default async function Home({
                     <Link
                       key={listing.id}
                       href={`/l/${listing.id}`}
-                      className="flex items-start justify-between gap-3 rounded-2xl border border-white/5 bg-slate-900/80 px-3 py-2.5 text-xs text-slate-100 transition hover:border-[#7FE3C7]/60 hover:bg-slate-900"
+                      className="flex items-start justify-between gap-3 rounded-2xl border border-white/5 bg-slate-900/80 px-3 py-2.5 text-xs text-slate-100 transition hover:border-[#50c878]/60 hover:bg-slate-900"
                     >
                       <div>
                         <div className="flex items-center gap-2">
                           <h3 className="text-[13px] font-semibold">
-                            {listing.listing_name}
+                            {getListingName(listing)}
                           </h3>
                           {listing.is_featured && (
-                            <span className="rounded-full bg-[#7FE3C7]/15 px-2 py-0.5 text-[10px] font-medium text-[#7FE3C7]">
+                            <span className="rounded-full bg-[#50c878]/15 px-2 py-0.5 text-[10px] font-medium text-[#50c878]">
                               Featured
                             </span>
                           )}
@@ -316,17 +307,17 @@ export default async function Home({
       {/* Directories + listings */}
       <section
         id="directories"
-        className="relative z-10 border-t border-white/5 bg-[#020617]"
+        className="relative z-10 border-t border-white/5 bg-[#040d07]"
       >
         <div className="mx-auto max-w-6xl px-4 py-8 md:py-10">
           {/* Directory tabs */}
           <div className="mb-5 flex flex-col gap-3 md:mb-6 md:flex-row md:items-center md:justify-between">
             <div>
-              <h2 className="text-sm font-semibold tracking-tight text-slate-100 md:text-base">
-                Browse the network
+              <h2 className="text-sm font-semibold tracking-tight text-[#f0ede8] md:text-base">
+                Directory index
               </h2>
-              <p className="text-[11px] text-slate-400 md:text-xs">
-                Switch directories to see a different slice of the network.
+              <p className="text-[11px] text-[#8a9490] md:text-xs">
+                Select a vertical to view its listings.
               </p>
             </div>
 
@@ -340,7 +331,7 @@ export default async function Home({
                     className={[
                       "inline-flex items-center rounded-full border px-3 py-1 transition-colors",
                       isActive
-                        ? "border-[#7FE3C7] bg-[#7FE3C7]/15 text-[#7FE3C7]"
+                        ? "border-[#50c878] bg-[#50c878]/15 text-[#50c878]"
                         : "border-slate-700 bg-slate-900 text-slate-300 hover:border-slate-500 hover:bg-slate-800",
                     ].join(" ")}
                   >
@@ -359,7 +350,7 @@ export default async function Home({
                 first operators —{" "}
                 <Link
                   href="/get-listed"
-                  className="font-medium text-[#7FE3C7] underline-offset-2 hover:underline"
+                  className="font-medium text-[#50c878] underline-offset-2 hover:underline"
                 >
                   apply to be one of them
                 </Link>
@@ -372,19 +363,19 @@ export default async function Home({
                 <Link
                   key={listing.id}
                   href={`/l/${listing.id}`}
-                  className="group flex flex-col rounded-3xl border border-slate-800 bg-slate-900/60 p-4 text-xs text-slate-100 shadow-sm transition hover:border-[#7FE3C7]/60 hover:bg-slate-900"
+                  className="group flex flex-col rounded-3xl border border-slate-800 bg-slate-900/60 p-4 text-xs text-slate-100 shadow-sm transition hover:border-[#50c878]/60 hover:bg-slate-900"
                 >
                   <div className="mb-2 flex items-start justify-between gap-2">
                     <div>
                       <h3 className="line-clamp-1 text-sm font-semibold">
-                        {listing.listing_name}
+                        {getListingName(listing)}
                       </h3>
                       <p className="mt-0.5 text-[11px] text-slate-400">
                         {getLocation(listing)}
                       </p>
                     </div>
                     {listing.is_featured && (
-                      <span className="rounded-full bg-[#7FE3C7]/15 px-2 py-0.5 text-[10px] font-medium text-[#7FE3C7]">
+                      <span className="rounded-full bg-[#50c878]/15 px-2 py-0.5 text-[10px] font-medium text-[#50c878]">
                         Featured
                       </span>
                     )}
@@ -396,7 +387,7 @@ export default async function Home({
                   )}
                   <div className="mt-auto flex items-center justify-between pt-1 text-[11px] text-slate-400">
                     <span>View profile</span>
-                    <span className="text-slate-500 group-hover:text-[#7FE3C7]">
+                    <span className="text-slate-500 group-hover:text-[#50c878]">
                       →
                     </span>
                   </div>
@@ -415,50 +406,50 @@ export default async function Home({
         <div className="mx-auto max-w-6xl px-4 py-9 md:py-12">
           <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div>
-              <h2 className="text-sm font-semibold tracking-tight text-slate-100 md:text-base">
-                How the Directory Network works
+              <h2 className="text-sm font-semibold tracking-tight text-[#f0ede8] md:text-base">
+                Editorial standards
               </h2>
-              <p className="text-[11px] text-slate-400 md:text-xs">
-                Simple for visitors, opinionated behind the scenes.
+              <p className="text-[11px] text-[#8a9490] md:text-xs">
+                How listings earn their place in the directory.
               </p>
             </div>
             <Link
               href="/get-listed"
-              className="inline-flex items-center rounded-full bg-[#7FE3C7] px-4 py-2 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#6ad3b7]"
+              className="inline-flex items-center rounded-full bg-[#50c878] px-4 py-2 text-[11px] font-semibold text-[#050f09] shadow-sm hover:bg-[#3da85e] transition-colors"
             >
-              Start a listing request
+              Submit for review
             </Link>
           </div>
 
           <div className="grid gap-4 md:grid-cols-3">
-            <div className="rounded-3xl border border-white/10 bg-slate-950/80 p-4 text-xs text-slate-200">
-              <div className="mb-2 text-[11px] font-semibold text-[#7FE3C7]">
-                01 · Curated verticals
+            <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-5 text-xs text-[#f0ede8]">
+              <div className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#50c878]">
+                Verification
               </div>
-              <p className="text-slate-300">
-                We don&apos;t list everything. Each directory is focused on a
-                specific, high-trust niche where relevance matters more than
-                raw volume.
+              <p className="text-[#8a9490] leading-relaxed">
+                Every listing is checked against state licensing records.
+                We verify active status, location accuracy, and operational
+                legitimacy before publication.
               </p>
             </div>
-            <div className="rounded-3xl border border-white/10 bg-slate-950/80 p-4 text-xs text-slate-200">
-              <div className="mb-2 text-[11px] font-semibold text-[#7FE3C7]">
-                02 · Human review
+            <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-5 text-xs text-[#f0ede8]">
+              <div className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#50c878]">
+                Local authority
               </div>
-              <p className="text-slate-300">
-                Claims and new listing requests go to a real operator inbox,
-                not a black hole. Basic checks on licensing, fit, and quality
-                before anything goes live.
+              <p className="text-[#8a9490] leading-relaxed">
+                City-level pages with jurisdiction-specific regulations,
+                purchase limits, and consumption rules. Built for Illinois
+                and Missouri — not a national aggregator.
               </p>
             </div>
-            <div className="rounded-3xl border border-white/10 bg-slate-950/80 p-4 text-xs text-slate-200">
-              <div className="mb-2 text-[11px] font-semibold text-[#7FE3C7]">
-                03 · Room to grow
+            <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-5 text-xs text-[#f0ede8]">
+              <div className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#50c878]">
+                Curation
               </div>
-              <p className="text-slate-300">
-                This is a prototype built for speed — but the rails are in
-                place for featured placements, paid tiers, and deeper
-                search/filter when the time is right.
+              <p className="text-[#8a9490] leading-relaxed">
+                Inclusion is not automatic. Listing requests are reviewed
+                for fit, quality, and regional relevance. Featured placements
+                are earned, not purchased.
               </p>
             </div>
           </div>
@@ -469,19 +460,17 @@ export default async function Home({
       <footer className="border-t border-white/5 bg-black">
         <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-5 text-[11px] text-slate-500 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#7FE3C7]/10 text-[10px] font-semibold text-[#7FE3C7]">
-              DN
-            </div>
-            <span>Directory Network · prototype build</span>
+            <Image src="/brand/logo.svg" alt="Project Green" width={120} height={20} className="h-4 w-auto opacity-60" />
           </div>
-          <div className="flex flex-wrap gap-3">
-            <span>6 verticals live in v1</span>
-            <span className="hidden text-slate-600 md:inline">•</span>
+          <div className="flex flex-wrap items-center gap-3">
+            <Link href="/cannabis/illinois" className="text-[#8a9490] hover:text-[#f0ede8] transition-colors">Illinois</Link>
+            <Link href="/cannabis/missouri" className="text-[#8a9490] hover:text-[#f0ede8] transition-colors">Missouri</Link>
+            <span className="hidden text-slate-700 md:inline">|</span>
             <Link
               href="/get-listed"
-              className="text-slate-300 underline-offset-2 hover:text-slate-100 hover:underline"
+              className="text-[#50c878] underline-offset-2 hover:text-[#3da85e]"
             >
-              Get listed
+              Request a listing
             </Link>
           </div>
         </div>

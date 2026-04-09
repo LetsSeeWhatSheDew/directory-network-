@@ -26,7 +26,7 @@ export const DIRECTORY_CONFIG: DirectoryConfig = {
   heroHeadline: "Your Dispensary Deserves to Be Found",
   heroSubheadline:
     "The trusted cannabis directory for Illinois — curated listings, zero spam, license-verified operators.",
-  accentColor: "#4ade80",
+  accentColor: "#50c878",
   stats: [
     { label: "Active Listings", value: "120+" },
     { label: "Illinois Cities", value: "40+" },
