@@ -5,18 +5,12 @@ import Image from "next/image";
 type Listing = {
   id: string;
   project_tag: string;
-  listing_name?: string;
-  name?: string;
-  listing_title?: string;
+  listing_name: string;
   city: string | null;
   state: string | null;
   short_description: string | null;
   is_featured: boolean;
 };
-
-function getListingName(listing: Listing): string {
-  return listing.listing_name || listing.name || listing.listing_title || "Unnamed";
-}
 
 const PROJECTS: Record<
   string,
@@ -88,8 +82,8 @@ async function fetchListings(tag: string): Promise<Listing[]> {
   const url =
     `${baseUrl}/rest/v1/master_listings` +
     `?project_tag=eq.${encodeURIComponent(tag)}` +
-    `&select=*` +
-    `&order=is_featured.desc`;
+    `&select=id,project_tag,listing_name,city,state,short_description,is_featured` +
+    `&order=is_featured.desc,listing_name.asc`;
 
   const res = await fetch(url, {
     method: "GET",
@@ -187,7 +181,7 @@ export default async function Home({
           <div className="flex-1 space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full border border-[#50c878]/20 bg-[#50c878]/5 px-3 py-1 text-[11px] font-medium text-[#50c878]/80 tracking-wide uppercase">
               <span className="h-1.5 w-1.5 rounded-full bg-[#50c878]" />
-              Live &middot; Cannabis-led rollout
+              Illinois &middot; Now live
             </div>
 
             <h1 className="text-2xl font-semibold tracking-tight text-[#f0ede8] sm:text-3xl md:text-4xl">
@@ -275,7 +269,7 @@ export default async function Home({
                       <div>
                         <div className="flex items-center gap-2">
                           <h3 className="text-[13px] font-semibold">
-                            {getListingName(listing)}
+                            {listing.listing_name}
                           </h3>
                           {listing.is_featured && (
                             <span className="rounded-full bg-[#50c878]/15 px-2 py-0.5 text-[10px] font-medium text-[#50c878]">
@@ -368,7 +362,7 @@ export default async function Home({
                   <div className="mb-2 flex items-start justify-between gap-2">
                     <div>
                       <h3 className="line-clamp-1 text-sm font-semibold">
-                        {getListingName(listing)}
+                        {listing.listing_name}
                       </h3>
                       <p className="mt-0.5 text-[11px] text-slate-400">
                         {getLocation(listing)}
