@@ -327,9 +327,14 @@ export default function DirectoryLandingPage({ config }: Props) {
       <footer className="border-t border-white/5 bg-black">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-5 text-xs text-slate-500">
           <span>{directoryName} · {region} Cannabis Directory</span>
-          <a href="/" className="hover:text-slate-300 transition-colors">
-            Directory Network →
-          </a>
+          <div className="flex items-center gap-4">
+            <a href="/cannabis/illinois" className="hover:text-slate-300 transition-colors">
+              Illinois City Guides →
+            </a>
+            <a href="/" className="hover:text-slate-300 transition-colors">
+              Directory Network →
+            </a>
+          </div>
         </div>
       </footer>
     </div>

@@ -141,6 +141,12 @@ export default async function Home({
 
           <nav className="hidden items-center gap-4 text-xs text-slate-300 md:flex">
             <Link
+              href="/cannabis/illinois"
+              className="transition-colors hover:text-slate-50"
+            >
+              Illinois Cannabis
+            </Link>
+            <Link
               href="#how-it-works"
               className="transition-colors hover:text-slate-50"
             >

@@ -2,35 +2,43 @@
 import Link from "next/link";
 
 type Lead = {
-  id: number;
+  id: string;
   created_at: string;
-  listing_id: string | null;
-  project_tag: string | null;
-  listing_name: string | null;
-  name: string | null;
-  email: string | null;
-  company: string | null;
-  message: string | null;
+  updated_at: string;
+  business_name: string;
+  email: string;
+  phone: string | null;
+  tier_interest: string;
+  niche: string;
+  region: string;
+  source: string;
+  status: string;
 };
 
-const TAG_LABELS: Record<string, string> = {
-  green: "Project Green · Cannabis",
-  heal: "Project Heal · Holistic",
-  her: "Project Her · Women’s Wellness",
-  machine: "Project Machine · AI Tools",
-  bid: "Project Bid · Gov Contractors",
-  rent: "Project Rent · FSBO Rentals",
+const NICHE_LABELS: Record<string, string> = {
+  cannabis: "Project Green · Cannabis",
+  holistic: "Project Heal · Holistic",
+  wellness: "Project Her · Women's Wellness",
+  ai: "Project Machine · AI Tools",
+  government: "Project Bid · Gov Contractors",
+  rentals: "Project Rent · FSBO Rentals",
 };
 
 const FILTERS = [
   { value: "all", label: "All directories" },
-  { value: "green", label: "Green · Cannabis" },
-  { value: "heal", label: "Heal · Holistic" },
-  { value: "her", label: "Her · Women’s Wellness" },
-  { value: "machine", label: "Machine · AI Tools" },
-  { value: "bid", label: "Bid · Gov Contracts" },
-  { value: "rent", label: "Rent · FSBO" },
+  { value: "cannabis", label: "Green · Cannabis" },
+  { value: "holistic", label: "Heal · Holistic" },
+  { value: "wellness", label: "Her · Women's Wellness" },
+  { value: "ai", label: "Machine · AI Tools" },
+  { value: "government", label: "Bid · Gov Contracts" },
+  { value: "rentals", label: "Rent · FSBO" },
 ];
+
+const STATUS_STYLES: Record<string, string> = {
+  new: "bg-[#4ade80]/15 text-[#4ade80] border-[#4ade80]/30",
+  reviewed: "bg-blue-500/15 text-blue-300 border-blue-400/30",
+  converted: "bg-purple-500/15 text-purple-300 border-purple-400/30",
+};
 
 function formatDate(value: string | null) {
   if (!value) return "—";
@@ -39,7 +47,7 @@ function formatDate(value: string | null) {
   return d.toLocaleString();
 }
 
-async function fetchLeads(filterTag?: string): Promise<Lead[]> {
+async function fetchLeads(filterNiche?: string): Promise<Lead[]> {
   const { SUPABASE_URL, SUPABASE_SERVICE_KEY } = process.env;
 
   if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
@@ -48,11 +56,10 @@ async function fetchLeads(filterTag?: string): Promise<Lead[]> {
   }
 
   const baseUrl = SUPABASE_URL.replace(/\/$/, "");
-  let url = `${baseUrl}/rest/v1/leads?select=*&order=created_at.desc`;
+  let url = `${baseUrl}/rest/v1/directory_leads?select=*&order=created_at.desc`;
 
-  if (filterTag && filterTag !== "all") {
-    // filter by project_tag using PostgREST syntax
-    url += `&project_tag=eq.${encodeURIComponent(filterTag)}`;
+  if (filterNiche && filterNiche !== "all") {
+    url += `&niche=eq.${encodeURIComponent(filterNiche)}`;
   }
 
   const res = await fetch(url, {
@@ -76,15 +83,17 @@ async function fetchLeads(filterTag?: string): Promise<Lead[]> {
 export default async function AdminLeadsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ tag?: string }>;
+  searchParams: Promise<{ niche?: string }>;
 }) {
-  const { tag } = await searchParams;
-  const selectedTag =
-    tag && FILTERS.some((f) => f.value === tag) ? tag : "all";
+  const { niche } = await searchParams;
+  const selectedNiche =
+    niche && FILTERS.some((f) => f.value === niche) ? niche : "all";
 
   const leads = await fetchLeads(
-    selectedTag === "all" ? undefined : selectedTag
+    selectedNiche === "all" ? undefined : selectedNiche
   );
+
+  const newLeads = leads.filter((l) => l.status === "new").length;
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
@@ -92,15 +101,15 @@ export default async function AdminLeadsPage({
       <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:py-4">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#7FE3C7] text-xs font-semibold text-slate-900 shadow-sm">
-              DN
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#4ade80] text-xs font-semibold text-slate-900 shadow-sm">
+              PG
             </div>
             <div className="flex flex-col">
               <span className="text-sm font-semibold tracking-tight">
-                Directory Network · Operator
+                Project Green · Admin
               </span>
               <span className="text-xs text-slate-400">
-                Leads inbox · claims &amp; listing requests
+                Leads inbox · listing requests
               </span>
             </div>
           </div>
@@ -109,13 +118,13 @@ export default async function AdminLeadsPage({
             href="/"
             className="rounded-full border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-200 shadow-sm hover:bg-slate-800"
           >
-            ← Back to public site
+            ← Back to site
           </Link>
         </div>
       </header>
 
       <div className="mx-auto max-w-6xl px-4 py-6 md:py-8">
-        {/* Header + filters */}
+        {/* Header + stats */}
         <section className="mb-4 space-y-3 md:mb-6">
           <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
             <div>
@@ -123,29 +132,34 @@ export default async function AdminLeadsPage({
                 Leads inbox
               </h1>
               <p className="text-xs text-slate-400 md:text-sm">
-                Every claim and “Get listed” submission across all directories,
-                newest first.
+                All "Get Listed" submissions, newest first.
               </p>
             </div>
 
             <div className="flex flex-wrap gap-2 text-[11px] md:text-xs">
               <span className="inline-flex items-center rounded-full bg-slate-900 px-3 py-1 text-slate-200">
-                Total leads:{" "}
-                <span className="ml-1 font-semibold text-[#7FE3C7]">
+                Total:{" "}
+                <span className="ml-1 font-semibold text-[#4ade80]">
                   {leads.length}
                 </span>
               </span>
+              {newLeads > 0 && (
+                <span className="inline-flex items-center rounded-full bg-[#4ade80]/15 px-3 py-1 text-[#4ade80]">
+                  New:{" "}
+                  <span className="ml-1 font-semibold">{newLeads}</span>
+                </span>
+              )}
             </div>
           </div>
 
           {/* Filter pills */}
           <div className="flex flex-wrap gap-1.5 text-[11px] md:text-xs">
             {FILTERS.map((f) => {
-              const isActive = f.value === selectedTag;
+              const isActive = f.value === selectedNiche;
               const href =
                 f.value === "all"
                   ? "/admin/leads"
-                  : `/admin/leads?tag=${encodeURIComponent(f.value)}`;
+                  : `/admin/leads?niche=${encodeURIComponent(f.value)}`;
 
               return (
                 <Link
@@ -154,7 +168,7 @@ export default async function AdminLeadsPage({
                   className={[
                     "inline-flex items-center rounded-full border px-3 py-1 transition-colors",
                     isActive
-                      ? "border-[#7FE3C7] bg-[#7FE3C7]/15 text-[#7FE3C7]"
+                      ? "border-[#4ade80] bg-[#4ade80]/15 text-[#4ade80]"
                       : "border-slate-700 bg-slate-900 text-slate-300 hover:border-slate-500 hover:bg-slate-800",
                   ].join(" ")}
                 >
@@ -168,7 +182,7 @@ export default async function AdminLeadsPage({
         {/* No data state */}
         {leads.length === 0 && (
           <div className="rounded-2xl border border-slate-800 bg-slate-900/60 px-4 py-8 text-center text-sm text-slate-400 md:px-8">
-            <p>No leads for this filter yet. Submit a claim or Get listed request to test.</p>
+            <p>No leads yet. Once someone submits the "Get Listed" form, they&apos;ll appear here.</p>
           </div>
         )}
 
@@ -176,57 +190,48 @@ export default async function AdminLeadsPage({
         {leads.length > 0 && (
           <section className="space-y-2">
             {leads.map((lead) => {
-              const tagKey = (lead.project_tag || "").toLowerCase();
-              const tagLabel = TAG_LABELS[tagKey] || "Unknown directory";
-
-              const isNewListing = lead.listing_id?.startsWith("new-");
-              const shortId = lead.listing_id || "—";
+              const nicheLabel = NICHE_LABELS[lead.niche] || lead.niche;
+              const statusStyle = STATUS_STYLES[lead.status] || STATUS_STYLES.new;
 
               return (
                 <article
                   key={lead.id}
                   className="rounded-2xl border border-slate-800 bg-slate-900/60 px-4 py-3 text-xs text-slate-100 shadow-sm md:px-5 md:py-4 md:text-sm"
                 >
-                  <div className="mb-2 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                  <div className="mb-2 flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
                     <div className="space-y-0.5">
                       <div className="flex flex-wrap items-center gap-2">
                         <h2 className="text-sm font-semibold md:text-base">
-                          {lead.listing_name || "New listing request"}
+                          {lead.business_name}
                         </h2>
                         <span className="inline-flex items-center rounded-full bg-slate-800 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-slate-200">
-                          {tagLabel}
+                          {nicheLabel}
                         </span>
-                        {isNewListing && (
-                          <span className="inline-flex items-center rounded-full bg-[#7FE3C7]/15 px-2 py-0.5 text-[10px] font-medium text-[#7FE3C7]">
-                            New listing
-                          </span>
-                        )}
+                        <span
+                          className={[
+                            "inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium capitalize",
+                            statusStyle,
+                          ].join(" ")}
+                        >
+                          {lead.status}
+                        </span>
                       </div>
                       <div className="flex flex-wrap gap-3 text-[11px] text-slate-400 md:text-xs">
                         <span>{formatDate(lead.created_at)}</span>
                         <span className="text-slate-600">•</span>
-                        <span>ID: {shortId}</span>
-                        {lead.company && (
-                          <>
-                            <span className="text-slate-600">•</span>
-                            <span>{lead.company}</span>
-                          </>
-                        )}
+                        <span>Tier: <span className="text-slate-200">{lead.tier_interest}</span></span>
+                        <span className="text-slate-600">•</span>
+                        <span>{lead.region}</span>
                       </div>
                     </div>
+
                     <div className="mt-1 flex flex-col items-start gap-1 text-[11px] text-slate-300 md:mt-0 md:items-end">
-                      <span className="font-medium">
-                        {lead.name || "Unknown contact"}
-                      </span>
-                      <span className="text-slate-400">{lead.email}</span>
+                      <span className="font-medium text-slate-100">{lead.email}</span>
+                      {lead.phone && (
+                        <span className="text-slate-400">{lead.phone}</span>
+                      )}
                     </div>
                   </div>
-
-                  {lead.message && (
-                    <p className="mt-2 whitespace-pre-line rounded-xl bg-slate-900/80 px-3 py-2 text-[11px] leading-relaxed text-slate-200 md:text-xs">
-                      {lead.message}
-                    </p>
-                  )}
                 </article>
               );
             })}
