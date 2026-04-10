@@ -1,66 +1,102 @@
-import type { MetadataRoute } from "next";
-import { ALL_ILLINOIS_CITIES } from "@/config/cities/illinois/shared";
+import { MetadataRoute } from "next";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://projectgreen.com";
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  // Static routes
-  const staticRoutes: MetadataRoute.Sitemap = [
+const NOINDEX_SLUGS = [
+  "emerald-city-dispensary-chicago-il",
+  "emerald-leaf-collective-chicago-il",
+  "lakefront-cannabis-co-chicago-il",
+];
+
+async function getAllListings() {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/master_listings?select=slug,updated_at&limit=200`,
+      {
+        headers: {
+          apikey: SUPABASE_ANON_KEY!,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+        next: { revalidate: 3600 },
+      }
+    );
+    if (!res.ok) return [];
+    return res.json();
+  } catch {
+    return [];
+  }
+}
+
+async function getIllinoisCities() {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/master_listings?select=city,state&state=eq.IL&limit=200`,
+      {
+        headers: {
+          apikey: SUPABASE_ANON_KEY!,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+        next: { revalidate: 3600 },
+      }
+    );
+    if (!res.ok) return [];
+    const rows = await res.json();
+    const unique = [...new Set(rows.map((r: { city: string }) => r.city).filter(Boolean))];
+    return unique;
+  } catch {
+    return [];
+  }
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [listings, cities] = await Promise.all([
+    getAllListings(),
+    getIllinoisCities(),
+  ]);
+
+  const base: MetadataRoute.Sitemap = [
     {
-      url: `${baseUrl}/`,
+      url: "https://cleanlist.co",
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 1.0,
     },
     {
-      url: `${baseUrl}/grow`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/get-listed`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/cannabis/illinois`,
+      url: "https://cleanlist.co/cannabis",
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.9,
     },
+    {
+      url: "https://cleanlist.co/cannabis/illinois",
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.9,
+    },
+    {
+      url: "https://cleanlist.co/get-listed",
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
   ];
 
-  // Dynamic city routes
-  const cityRoutes: MetadataRoute.Sitemap = ALL_ILLINOIS_CITIES.map((city) => ({
-    url: `${baseUrl}/cannabis/illinois/${city.slug}`,
+  const listingUrls: MetadataRoute.Sitemap = listings
+    .filter((l: { slug: string }) => l.slug && !NOINDEX_SLUGS.includes(l.slug))
+    .map((l: { slug: string; updated_at: string }) => ({
+      url: `https://cleanlist.co/l/${l.slug}`,
+      lastModified: l.updated_at ? new Date(l.updated_at) : new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    }));
+
+  const cityUrls: MetadataRoute.Sitemap = (cities as string[]).map((city) => ({
+    url: `https://cleanlist.co/cannabis/illinois/${city.toLowerCase().replace(/\s+/g, "-")}`,
     lastModified: new Date(),
-    changeFrequency: "weekly" as const,
-    priority: 0.8,
+    changeFrequency: "daily" as const,
+    priority: 0.85,
   }));
 
-  // Chicago neighborhood routes
-  const chicagoNeighborhoods = [
-    { name: "Wrigleyville", slug: "wrigleyville" },
-    { name: "River North", slug: "river-north" },
-    { name: "South Loop", slug: "south-loop" },
-    { name: "Wicker Park", slug: "wicker-park" },
-    { name: "Logan Square", slug: "logan-square" },
-    { name: "Lakeview", slug: "lakeview" },
-    { name: "West Loop", slug: "west-loop" },
-    { name: "Pilsen", slug: "pilsen" },
-    { name: "Hyde Park", slug: "hyde-park" },
-    { name: "Lincoln Park", slug: "lincoln-park" },
-  ];
-  const neighborhoodRoutes: MetadataRoute.Sitemap = chicagoNeighborhoods.map(
-    (neighborhood) => ({
-      url: `${baseUrl}/cannabis/illinois/chicago/${neighborhood.slug}`,
-      lastModified: new Date(),
-      changeFrequency: "weekly" as const,
-      priority: 0.7,
-    })
-  );
-
-  return [...staticRoutes, ...cityRoutes, ...neighborhoodRoutes];
+  return [...base, ...listingUrls, ...cityUrls];
 }

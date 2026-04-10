@@ -1,7 +1,14 @@
 export const revalidate = 0;
 
 import Link from "next/link";
+import { Metadata } from "next";
 import ClaimForm from "../../components/ClaimForm";
+
+const NOINDEX_SLUGS = [
+  "emerald-city-dispensary-chicago-il",
+  "emerald-leaf-collective-chicago-il",
+  "lakefront-cannabis-co-chicago-il",
+];
 
 type Listing = {
   id: string;
@@ -103,6 +110,60 @@ async function getProducts(listingId: string): Promise<ProductOrService[]> {
   );
 }
 
+async function getRelated(city: string, currentId: string): Promise<Listing[]> {
+  const rows = await fetchJson<Listing[]>(
+    `/master_listings?city=eq.${encodeURIComponent(city)}&id=neq.${encodeURIComponent(currentId)}&select=id,name,slug,city,state,type,short_description,logo_url&limit=3`
+  );
+  return rows ?? [];
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const isNoIndex = NOINDEX_SLUGS.includes(id);
+
+  if (isNoIndex) {
+    return { robots: { index: false, follow: false } };
+  }
+
+  const listing = await getListing(id);
+  if (!listing) {
+    return { robots: { index: false, follow: false } };
+  }
+
+  const title = listing.meta_title ||
+    `${listing.name} — ${listing.city}, IL Cannabis Dispensary | Directory Network`;
+  const description = listing.meta_description ||
+    listing.short_description ||
+    `Find hours, directions, and deals for ${listing.name} in ${listing.city}, Illinois. View the full listing on Directory Network.`;
+  const canonicalUrl = `https://cleanlist.co/l/${listing.slug}`;
+  const image = listing.logo_url || listing.hero_image_url;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: canonicalUrl },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: "Directory Network",
+      type: "website",
+      ...(image ? { images: [{ url: image, alt: (listing.name ?? "") + " logo" }] } : {}),
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+      ...(image ? { images: [image] } : {}),
+    },
+    robots: { index: true, follow: true },
+  };
+}
+
 function formatTime(t: string | null | undefined): string {
   if (!t) return "";
   const [h, m] = t.split(":");
@@ -135,12 +196,45 @@ function getTodayStatus(hours: ListingHour[]): { open: boolean; label: string } 
   return { open: false, label: "Closed now" };
 }
 
+function buildSchemaOrg(listing: Listing, hours: ListingHour[]) {
+  const openingHours = hours
+    .filter((h) => !h.is_closed && h.opens_at && h.closes_at)
+    .map((h) => ({
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"][h.weekday],
+      opens: h.opens_at?.substring(0, 5),
+      closes: h.closes_at?.substring(0, 5),
+    }));
+
+  return JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: listing.name,
+    ...(listing.address1 ? {
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: listing.address1,
+        addressLocality: listing.city,
+        addressRegion: listing.state,
+        addressCountry: "US",
+      }
+    } : {}),
+    ...(listing.phone ? { telephone: listing.phone } : {}),
+    url: listing.website ?? `https://cleanlist.co/l/${listing.slug}`,
+    ...(listing.logo_url ? { image: listing.logo_url } : {}),
+    ...(openingHours.length > 0 ? { openingHoursSpecification: openingHours } : {}),
+    ...(listing.short_description ? { description: listing.short_description } : {}),
+    sameAs: [`https://cleanlist.co/l/${listing.slug}`],
+  });
+}
+
 export default async function ListingPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const isNoIndex = NOINDEX_SLUGS.includes(id);
   const listing = await getListing(id);
 
   if (!listing) {
@@ -157,15 +251,17 @@ export default async function ListingPage({
     );
   }
 
-  const [hours, attributes, products] = await Promise.all([
+  const [hours, attributes, products, related] = await Promise.all([
     getHours(listing.id),
     getAttributes(listing.id),
     getProducts(listing.id),
+    listing.city ? getRelated(listing.city, listing.id) : Promise.resolve([]),
   ]);
 
   const todayStatus = getTodayStatus(hours);
   const isClaimed = listing.claimed === true;
   const initial = (listing.name ?? "?").charAt(0).toUpperCase();
+  const schemaOrg = buildSchemaOrg(listing, hours);
 
   const productsByCategory = products.reduce<Record<string, ProductOrService[]>>((acc, p) => {
     const cat = p.category || "Other";
@@ -188,6 +284,10 @@ export default async function ListingPage({
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: schemaOrg }}
+      />
       <style>{`
         * { box-sizing: border-box; margin: 0; padding: 0; }
         .dn-root { min-height: 100vh; background: #f7f6f2; font-family: Georgia, 'Times New Roman', serif; color: #1a1a1a; }
@@ -197,11 +297,11 @@ export default async function ListingPage({
         .dn-nav-name { font-size: 1.1rem; font-weight: 700; color: #0f1f3d; letter-spacing: -0.02em; }
         .dn-nav-accent { color: #16a34a; }
         .dn-nav-back { font-size: 0.85rem; color: #6b7280; text-decoration: none; font-family: system-ui, sans-serif; }
-        .dn-nav-back:hover { color: #374151; }
         .dn-banner { background: #fffbeb; border-bottom: 1px solid #fde68a; padding: 10px 32px; display: flex; align-items: center; gap: 10px; }
         .dn-banner-dot { width: 8px; height: 8px; border-radius: 50%; background: #d97706; flex-shrink: 0; }
         .dn-banner-text { font-size: 0.85rem; color: #92400e; font-family: system-ui, sans-serif; }
         .dn-banner-link { color: #d97706; font-weight: 600; text-decoration: none; }
+        .dn-noindex-banner { background: #f0fdf4; border-bottom: 1px solid #bbf7d0; padding: 8px 32px; text-align: center; font-size: 0.78rem; color: #166534; font-family: system-ui, sans-serif; }
         .dn-inner { max-width: 1100px; margin: 0 auto; padding: 32px 24px 64px; }
         .dn-hero { background: #fff; border-radius: 16px; border: 1px solid #e8e5de; padding: 32px; margin-bottom: 24px; }
         .dn-hero-top { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
@@ -211,6 +311,7 @@ export default async function ListingPage({
         .dn-hero-info { flex: 1; min-width: 200px; }
         .dn-hero-meta { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
         .dn-badge-type { font-size: 0.7rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #16a34a; background: #dcfce7; padding: 3px 10px; border-radius: 100px; }
+        .dn-badge-featured { font-size: 0.7rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #854d0e; background: #fef9c3; padding: 3px 10px; border-radius: 100px; }
         .dn-hero-name { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 700; letter-spacing: -0.03em; color: #0f1f3d; margin-bottom: 6px; line-height: 1.1; }
         .dn-hero-location { font-size: 0.9rem; color: #6b7280; font-family: system-ui, sans-serif; margin-bottom: 8px; }
         .dn-hero-tagline { font-size: 0.95rem; color: #374151; font-family: system-ui, sans-serif; line-height: 1.6; max-width: 480px; }
@@ -257,6 +358,14 @@ export default async function ListingPage({
         .dn-trust-title { font-size: 0.7rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #14532d; margin-bottom: 12px; }
         .dn-trust-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
         .dn-trust-item { font-size: 0.825rem; color: #166534; font-family: system-ui, sans-serif; line-height: 1.4; }
+        .dn-related { margin-top: 0; }
+        .dn-related-grid { display: flex; flex-direction: column; gap: 12px; }
+        .dn-related-card { display: flex; align-items: center; gap: 12px; padding: 12px; background: #f7f6f2; border-radius: 10px; border: 1px solid #e8e5de; text-decoration: none; }
+        .dn-related-card:hover { border-color: #16a34a; background: #f0fdf4; }
+        .dn-related-logo { width: 36px; height: 36px; border-radius: 8px; background: #fff; border: 1px solid #e8e5de; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 700; color: #16a34a; flex-shrink: 0; }
+        .dn-related-img { width: 100%; height: 100%; object-fit: contain; padding: 4px; border-radius: 6px; }
+        .dn-related-name { font-size: 0.875rem; font-weight: 600; color: #0f1f3d; font-family: system-ui, sans-serif; }
+        .dn-related-city { font-size: 0.75rem; color: #6b7280; font-family: system-ui, sans-serif; }
         .dn-footer-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid #e8e5de; flex-wrap: wrap; gap: 12px; }
         .dn-footer-back { font-size: 0.85rem; color: #6b7280; text-decoration: none; font-family: system-ui, sans-serif; }
         .dn-footer-fwd { font-size: 0.85rem; color: #16a34a; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 600; }
@@ -274,7 +383,6 @@ export default async function ListingPage({
       `}</style>
 
       <div className="dn-root">
-        {/* NAV */}
         <nav className="dn-nav">
           <Link href="/" className="dn-nav-brand">
             <span className="dn-nav-dot" />
@@ -283,8 +391,13 @@ export default async function ListingPage({
           <Link href="/" className="dn-nav-back">← All Directories</Link>
         </nav>
 
-        {/* UNCLAIMED BANNER */}
-        {!isClaimed && (
+        {isNoIndex && (
+          <div className="dn-noindex-banner">
+            This listing is pending verification and is not publicly indexed.
+          </div>
+        )}
+
+        {!isClaimed && !isNoIndex && (
           <div className="dn-banner">
             <span className="dn-banner-dot" />
             <span className="dn-banner-text">
@@ -295,29 +408,23 @@ export default async function ListingPage({
         )}
 
         <div className="dn-inner">
-
-          {/* HERO */}
           <div className="dn-hero">
             <div className="dn-hero-top">
-
-              {/* Logo */}
               <div className="dn-logo-wrap">
                 {listing.logo_url ? (
                   /* eslint-disable-next-line @next/next/no-img-element */
-                  <img
-                    src={listing.logo_url}
-                    alt={listing.name + " logo"}
-                    className="dn-logo-img"
-                  />
+                  <img src={listing.logo_url} alt={listing.name + " logo"} className="dn-logo-img" />
                 ) : (
                   <span className="dn-logo-fallback">{initial}</span>
                 )}
               </div>
 
-              {/* Info */}
               <div className="dn-hero-info">
                 <div className="dn-hero-meta">
                   <span className="dn-badge-type">{listing.type ?? "Dispensary"}</span>
+                  {listing.plan === "boost" || listing.plan === "featured" ? (
+                    <span className="dn-badge-featured">★ Featured</span>
+                  ) : null}
                 </div>
                 <h1 className="dn-hero-name">{listing.name ?? "Unnamed Listing"}</h1>
                 <p className="dn-hero-location">
@@ -328,7 +435,6 @@ export default async function ListingPage({
                 )}
               </div>
 
-              {/* Status + Contact */}
               <div className="dn-hero-actions">
                 <span className={`dn-status ${todayStatus.open ? "dn-status-open" : "dn-status-closed"}`}>
                   <span className={`dn-status-dot ${todayStatus.open ? "dn-status-dot-open" : "dn-status-dot-closed"}`} />
@@ -345,7 +451,6 @@ export default async function ListingPage({
               </div>
             </div>
 
-            {/* Amenities */}
             {amenities.length > 0 && (
               <div className="dn-amenities">
                 {amenities.map((a) => (
@@ -355,13 +460,8 @@ export default async function ListingPage({
             )}
           </div>
 
-          {/* CONTENT GRID */}
           <div className="dn-grid">
-
-            {/* LEFT */}
             <div className="dn-col">
-
-              {/* Hours */}
               <div className="dn-card">
                 <p className="dn-card-title">Hours</p>
                 {hours.length === 0 ? (
@@ -375,8 +475,7 @@ export default async function ListingPage({
                       return (
                         <div key={day} className={`dn-hours-row${isToday ? " dn-hours-row-today" : ""}`}>
                           <span className={`dn-hours-day${isToday ? " dn-hours-day-today" : ""}`}>
-                            {day}
-                            {isToday && <span className="dn-today-dot" />}
+                            {day}{isToday && <span className="dn-today-dot" />}
                           </span>
                           <span className={`dn-hours-time${closed ? " dn-hours-closed" : isToday ? " dn-hours-time-today" : ""}`}>
                             {closed ? "Closed" : `${formatTime(row?.opens_at ?? null)} – ${formatTime(row?.closes_at ?? null)}`}
@@ -388,7 +487,6 @@ export default async function ListingPage({
                 )}
               </div>
 
-              {/* Attributes */}
               {attributes.length > 0 && (
                 <div className="dn-card">
                   <p className="dn-card-title">Features</p>
@@ -402,7 +500,6 @@ export default async function ListingPage({
                 </div>
               )}
 
-              {/* Products */}
               {products.length > 0 && (
                 <div className="dn-card">
                   <p className="dn-card-title">Products & Services</p>
@@ -425,19 +522,39 @@ export default async function ListingPage({
                 </div>
               )}
 
-              {/* About */}
               {listing.long_description && (
                 <div className="dn-card">
                   <p className="dn-card-title">About</p>
                   <p className="dn-about">{listing.long_description}</p>
                 </div>
               )}
+
+              {related.length > 0 && (
+                <div className="dn-card dn-related">
+                  <p className="dn-card-title">Other dispensaries in {listing.city}</p>
+                  <div className="dn-related-grid">
+                    {related.map((r) => (
+                      <Link key={r.id} href={`/l/${r.slug}`} className="dn-related-card">
+                        <div className="dn-related-logo">
+                          {r.logo_url ? (
+                            /* eslint-disable-next-line @next/next/no-img-element */
+                            <img src={r.logo_url} alt={r.name + " logo"} className="dn-related-img" />
+                          ) : (
+                            (r.name ?? "?").charAt(0)
+                          )}
+                        </div>
+                        <div>
+                          <p className="dn-related-name">{r.name}</p>
+                          <p className="dn-related-city">{r.city}, {r.state}</p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* RIGHT */}
             <div className="dn-col">
-
-              {/* Claim */}
               <div id="claim" className="dn-claim-card">
                 <div className="dn-claim-header">
                   <div className="dn-claim-icon">★</div>
@@ -469,7 +586,6 @@ export default async function ListingPage({
                 )}
               </div>
 
-              {/* Trust */}
               <div className="dn-trust-card">
                 <p className="dn-trust-title">Why Directory Network?</p>
                 <ul className="dn-trust-list">
@@ -482,14 +598,12 @@ export default async function ListingPage({
             </div>
           </div>
 
-          {/* FOOTER NAV */}
           <div className="dn-footer-nav">
             <Link href="/" className="dn-footer-back">← Back to all directories</Link>
             <Link href="/cannabis/illinois" className="dn-footer-fwd">Browse Illinois dispensaries →</Link>
           </div>
         </div>
 
-        {/* FOOTER */}
         <footer className="dn-footer">
           <span className="dn-footer-brand">Directory<span className="dn-nav-accent">Network</span></span>
           <span className="dn-footer-note">© {new Date().getFullYear()} Directory Network · Illinois Cannabis Directory</span>

@@ -1,4 +1,4 @@
-import type { MetadataRoute } from "next";
+import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -6,9 +6,10 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin/", "/api/"],
+        disallow: ["/admin", "/api/"],
       },
     ],
-    sitemap: "https://projectgreen.com/sitemap.xml",
+    sitemap: "https://cleanlist.co/sitemap.xml",
+    host: "https://cleanlist.co",
   };
 }
