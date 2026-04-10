@@ -5,14 +5,14 @@ import ClaimForm from "../../components/ClaimForm";
 type Listing = {
   id: string;
   project_tag: string;
-  listing_type: string | null;
-  listing_title: string | null;
+  type: string | null;
+  name: string | null;
   slug: string | null;
   city: string | null;
   state: string | null;
   short_description: string | null;
   long_description: string | null;
-  plan_tier: string | null;
+  plan: string | null;
   is_featured: boolean | null;
 };
 
@@ -157,13 +157,13 @@ export default async function ListingPage({
     getProducts(listing.id),
   ]);
 
-  const title = listing.listing_title ?? "Untitled listing";
+  const title = listing.name ?? "Untitled listing";
   const location = [listing.city, listing.state].filter(Boolean).join(", ");
   const snapshot =
     listing.short_description ??
     "This listing doesn’t have a short description yet.";
 
-  const plan = (listing.plan_tier ?? "free").toLowerCase();
+  const plan = (listing.plan ?? "free").toLowerCase();
 
   return (
     <div className="min-h-screen bg-[#faf7ef] text-zinc-900">
@@ -206,7 +206,7 @@ export default async function ListingPage({
 
             <div className="flex flex-wrap items-center gap-2">
               {badge(`Plan: ${plan}`, plan === "featured" ? "mint" : "soft")}
-              {badge(`Type: ${listing.listing_type ?? "listing"}`, "soft")}
+              {badge(`Type: ${listing.type ?? "listing"}`, "soft")}
               {listing.is_featured ? badge("Featured", "mint") : null}
             </div>
           </div>
