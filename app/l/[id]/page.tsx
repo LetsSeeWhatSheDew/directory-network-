@@ -93,7 +93,7 @@ async function fetchJson<T>(path: string): Promise<T> {
 
 async function getListing(id: string): Promise<Listing | null> {
   const rows = await fetchJson<Listing[]>(
-    `/master_listings?id=eq.${encodeURIComponent(id)}&select=*`
+    `/master_listings?slug=eq.${encodeURIComponent(id)}&select=*`
   );
   return rows?.[0] ?? null;
 }
