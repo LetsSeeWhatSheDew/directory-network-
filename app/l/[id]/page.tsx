@@ -457,7 +457,7 @@ export default async function ListingPage({
 }
 
 /* ─────────────────────── STYLES ─────────────────────── */
-const styles: Record<string, React.CSSProperties> = {
+const styles: Record<string, any> = {
   root: {
     minHeight: "100vh",
     background: "#f7f6f2",
