@@ -1,3 +1,5 @@
+export const revalidate = 0;
+
 // project-green/app/l/[id]/page.tsx
 import Link from "next/link";
 import ClaimForm from "../../components/ClaimForm";
