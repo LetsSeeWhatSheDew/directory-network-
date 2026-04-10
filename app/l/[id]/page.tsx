@@ -205,8 +205,11 @@ export default async function ListingPage({
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={listing.logo_url}
-                  alt={listing.name + ' logo'}
+                  alt={`${listing.name} logo`}
                   style={styles.logoImg}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = "none";
+                  }}
                 />
               ) : (
                 <div style={styles.logoFallback}>
@@ -242,11 +245,11 @@ export default async function ListingPage({
                 ...styles.statusBadge,
                 background: todayStatus.open ? "#dcfce7" : "#fee2e2",
                 color: todayStatus.open ? "#14532d" : "#991b1b",
-              >
+              }}>
                 <span style={{
                   ...styles.statusDot,
                   background: todayStatus.open ? "#16a34a" : "#dc2626",
-                 />
+                }} />
                 {todayStatus.label}
               </div>
               {listing.phone && (
@@ -305,18 +308,18 @@ export default async function ListingPage({
                         borderRadius: isToday ? "8px" : "0",
                         padding: isToday ? "6px 10px" : "4px 0",
                         margin: isToday ? "0 -10px" : "0",
-                      >
+                      }}>
                         <span style={{
                           ...styles.hoursDay,
                           fontWeight: isToday ? 700 : 500,
                           color: isToday ? "#14532d" : "#374151",
-                        >
+                        }}>
                           {day}{isToday && <span style={styles.todayDot} />}
                         </span>
                         <span style={{
                           ...styles.hoursTime,
                           color: closed ? "#9ca3af" : (isToday ? "#14532d" : "#374151"),
-                        >
+                        }}>
                           {closed
                             ? "Closed"
                             : `${formatTime(row?.opens_at ?? null)} – ${formatTime(row?.closes_at ?? null)}`}
@@ -356,7 +359,7 @@ export default async function ListingPage({
                             style={{
                               ...styles.productItem,
                               opacity: p.available === false ? 0.4 : 1,
-                            >
+                            }}>
                             {p.subcategory}
                           </span>
                         ))}
