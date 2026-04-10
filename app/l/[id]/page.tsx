@@ -20,9 +20,9 @@ type ListingHour = {
   id?: number;
   project_tag: string;
   listing_id: string;
-  day_of_week: number; // 0=Mon ... 6=Sun
-  open_time: string | null; // "09:00:00"
-  close_time: string | null; // "18:00:00"
+  weekday: number; // 0=Mon ... 6=Sun
+  opens_at: string | null; // "09:00:00"
+  closes_at: string | null; // "18:00:00"
   is_closed: boolean | null;
 };
 
@@ -38,8 +38,8 @@ type ProductOrService = {
   project_tag: string;
   listing_id: string;
   category: string | null;
-  name: string;
-  is_active: boolean | null;
+  subcategory: string;
+  available: boolean | null;
 };
 
 const DAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -102,7 +102,7 @@ async function getHours(listingId: string): Promise<ListingHour[]> {
   return fetchJson<ListingHour[]>(
     `/listing_hours?listing_id=eq.${encodeURIComponent(
       listingId
-    )}&select=*&order=day_of_week.asc`
+    )}&select=*&order=weekday.asc`
   );
 }
 
@@ -118,7 +118,7 @@ async function getProducts(listingId: string): Promise<ProductOrService[]> {
   return fetchJson<ProductOrService[]>(
     `/products_or_services?listing_id=eq.${encodeURIComponent(
       listingId
-    )}&select=*&order=category.asc,name.asc`
+    )}&select=*&order=category.asc,subcategory.asc`
   );
 }
 
@@ -217,12 +217,12 @@ export default async function ListingPage({
             <h2 className="text-sm font-semibold">Hours</h2>
             <div className="mt-4 space-y-2 text-sm">
               {DAY_LABELS.map((d, idx) => {
-                const row = hours.find((h) => h.day_of_week === idx);
+                const row = hours.find((h) => h.weekday === idx);
                 const closed = row?.is_closed || !row;
                 const label = closed
                   ? "Closed"
-                  : `${formatTime(row?.open_time ?? null)} — ${formatTime(
-                      row?.close_time ?? null
+                  : `${formatTime(row?.opens_at ?? null)} — ${formatTime(
+                      row?.closes_at ?? null
                     )}`;
                 return (
                   <div key={d} className="flex items-center justify-between">
@@ -262,13 +262,13 @@ export default async function ListingPage({
               {products.length ? (
                 products.map((p) => (
                   <div
-                    key={`${p.listing_id}-${p.category ?? "general"}-${p.name}`}
+                    key={`${p.listing_id}-${p.category ?? "general"}-${p.subcategory}`}
                     className="flex items-center justify-between"
                   >
                     <span className="text-zinc-700">
-                      {(p.category ? `${p.category}: ` : "") + p.name}
+                      {(p.category ? `${p.category}: ` : "") + p.subcategory}
                     </span>
-                    {p.is_active ? (
+                    {p.available ? (
                       <span className="text-xs text-emerald-700">Active</span>
                     ) : (
                       <span className="text-xs text-zinc-400">—</span>
