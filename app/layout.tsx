@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   verification: {
-    google: "FdgiJxqm6nBTT1I37dPrrFMNTWkDMLX4-T386WUgFjg",
+    google: ["FdgiJxqm6nBTT1I37dPrrFMNTWkDMLX4-T386WUgFjg", "07gWVtJUIV3VbVxvKmo3NbCPu1_oiH7aYOC9FoF5H6Y"],
   },
   title: {
     default: "Project Green | Cannabis Directory Network",
