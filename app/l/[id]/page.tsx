@@ -30,7 +30,7 @@ type ListingAttribute = {
   id?: number;
   project_tag: string;
   listing_id: string;
-  attribute: string;
+  tag: string;
 };
 
 type ProductOrService = {
@@ -110,7 +110,7 @@ async function getAttributes(listingId: string): Promise<ListingAttribute[]> {
   return fetchJson<ListingAttribute[]>(
     `/listing_attributes?listing_id=eq.${encodeURIComponent(
       listingId
-    )}&select=*&order=attribute.asc`
+    )}&select=*&order=tag.asc`
   );
 }
 
@@ -242,10 +242,10 @@ export default async function ListingPage({
               {attrs.length ? (
                 attrs.map((a) => (
                   <span
-                    key={`${a.listing_id}-${a.attribute}`}
+                    key={`${a.listing_id}-${a.tag}`}
                     className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs text-zinc-700"
                   >
-                    {a.attribute.replaceAll("_", " ")}
+                    {a.tag.replaceAll("_", " ")}
                   </span>
                 ))
               ) : (
