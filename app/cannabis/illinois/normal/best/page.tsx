@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 const SB=process.env.SUPABASE_URL;const SK=process.env.SUPABASE_SERVICE_KEY;
 type L={id:string;name:string|null;slug:string|null;city:string|null;state:string|null;address1:string|null;short_description:string|null;logo_url:string|null;plan:string|null;};
 async function fj<T>(p:string):Promise<T>{const r=await fetch(`${SB}/rest/v1${p}`,{headers:{apikey:SK!,Authorization:`Bearer ${SK}`},next:{revalidate:86400}});if(!r.ok)return[]as unknown as T;return r.json();}
-function s2c(s:string){return s.split("-").map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(" ");}
+function s2c(s:string|undefined|null){if(!s)return"";return s.split("-").map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(" ");}
 export async function generateMetadata({params}:{params:Promise<{city:string}>}):Promise<Metadata>{const{city:cs}=await params;const city=s2c(cs);const url=`https://cleanlist.co/cannabis/illinois/${cs}/best`;return{title:`Best Dispensaries in ${city}, IL | Directory Network`,description:`Best cannabis dispensaries in ${city}, Illinois. All licensed, real hours and directions.`,alternates:{canonical:url},openGraph:{title:`Best Dispensaries in ${city}, IL`,url,siteName:"Directory Network",type:"website"},robots:{index:true,follow:true}};}
 export default async function Page({params}:{params:Promise<{city:string}>}){
 const{city:cs}=await params;const city=s2c(cs);
