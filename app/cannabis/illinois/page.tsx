@@ -1,379 +1,288 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { ALL_ILLINOIS_CITIES } from "@/config/cities/illinois/shared";
+export const revalidate = 3600;
 
-const YEAR = new Date().getFullYear();
+import { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: `Cannabis Dispensaries in Illinois — City-by-City Guide (${YEAR})`,
-  description: `Browse licensed cannabis dispensaries across Illinois. City guides for Chicago, Rockford, Springfield, Peoria, Naperville, and more — laws, tips, and local info updated for ${YEAR}.`,
+  title: "Illinois Cannabis Dispensaries — Complete Directory | Directory Network",
+  description: "Find licensed cannabis dispensaries across Illinois. Browse by city, view real hours, and discover deals. 270+ dispensaries listed across 35+ Illinois cities.",
+  alternates: { canonical: "https://cleanlist.co/cannabis/illinois" },
   openGraph: {
-    title: `Illinois Cannabis Dispensary Guide (${YEAR})`,
-    description: `Find dispensaries in every major Illinois city. Local laws, first-timer tips, pricing, and curated directory listings.`,
-    siteName: "Project Green",
+    title: "Illinois Cannabis Dispensaries — Complete Directory",
+    description: "Find licensed cannabis dispensaries across Illinois. Browse by city, view real hours, and discover deals.",
+    url: "https://cleanlist.co/cannabis/illinois",
+    siteName: "Directory Network",
     type: "website",
-    locale: "en_US",
   },
+  robots: { index: true, follow: true },
 };
 
-const CITY_HIGHLIGHTS: Record<string, { dispensaries: string; tagline: string }> = {
-  chicago: {
-    dispensaries: "20–30+",
-    tagline: "Largest market in the state with neighborhood-level options.",
-  },
-  rockford: {
-    dispensaries: "~7",
-    tagline: "Border-town draw for Wisconsin visitors.",
-  },
-  springfield: {
-    dispensaries: "~5–15",
-    tagline: "State capital hub serving central IL's rural catchment.",
-  },
-  peoria: {
-    dispensaries: "~10",
-    tagline: "Central IL's largest metro — Jacaranda Peoria's home turf.",
-  },
-  naperville: {
-    dispensaries: "~9",
-    tagline: "Affluent DuPage County suburb with premium selection.",
-  },
-  "champaign-urbana": {
-    dispensaries: "~8",
-    tagline: "University of Illinois college-town market.",
-  },
-  "bloomington-normal": {
-    dispensaries: "~10",
-    tagline: "I-55/I-74 crossroads with an outsized dispensary cluster.",
-  },
-  joliet: {
-    dispensaries: "~9",
-    tagline: "I-80 corridor gateway for Will County.",
-  },
-  aurora: {
-    dispensaries: "~1–3",
-    tagline: "IL's 2nd-largest city — underserved and growing.",
-  },
-  collinsville: {
-    dispensaries: "~5–8",
-    tagline: "Metro East hub drawing St. Louis cross-border shoppers.",
-  },
-  effingham: {
-    dispensaries: "~3–5",
-    tagline: "I-57/I-70 crossroads capturing highway traveler traffic.",
-  },
-  quincy: {
-    dispensaries: "~8",
-    tagline: "Western IL hub near Iowa and Missouri borders.",
-  },
-  danville: {
-    dispensaries: "~3–4",
-    tagline: "Indiana border town — IN is still illegal recreationally.",
-  },
-  "east-peoria": {
-    dispensaries: "~8",
-    tagline: "Complements Peoria with its own dispensary cluster.",
-  },
-  marion: {
-    dispensaries: "~4–6",
-    tagline: "Southern IL hub near SIU and Shawnee National Forest.",
-  },
-  sycamore: {
-    dispensaries: "~1–2",
-    tagline: "DeKalb County newcomer with fresh 2026 openings.",
-  },
-  carbondale: {
-    dispensaries: "~3–4",
-    tagline: "SIU college town in scenic Southern Illinois.",
-  },
-  decatur: {
-    dispensaries: "~3–5",
-    tagline: "Central IL market still underserved relative to demand.",
-  },
-  elgin: {
-    dispensaries: "~3–5",
-    tagline: "Large NW suburban population in Kane County.",
-  },
-  waukegan: {
-    dispensaries: "~4–6",
-    tagline: "Lake County anchor near the Wisconsin border.",
-  },
-  schaumburg: {
-    dispensaries: "~3–5",
-    tagline: "Major NW suburban retail corridor.",
-  },
-  normal: {
-    dispensaries: "~7–8",
-    tagline: "ISU town with the densest dispensary cluster downstate.",
-  },
-  champaign: {
-    dispensaries: "~5–6",
-    tagline: "UofI campus side of the twin-city market.",
-  },
-  addison: {
-    dispensaries: "~2–3",
-    tagline: "DuPage County option between Chicago and Naperville.",
-  },
-  "north-aurora": {
-    dispensaries: "~1–2",
-    tagline: "Kane County complement to nearby Aurora.",
-  },
-  mundelein: {
-    dispensaries: "~2–3",
-    tagline: "Lake County suburban market north of Chicago.",
-  },
-  ottawa: {
-    dispensaries: "~2–3",
-    tagline: "LaSalle County stop on the I-80 corridor.",
-  },
-  canton: {
-    dispensaries: "~1–2",
-    tagline: "Fulton County market near the Peoria metro.",
-  },
-  galesburg: {
-    dispensaries: "~2–3",
-    tagline: "Knox County hub in western Illinois.",
-  },
-  moline: {
-    dispensaries: "~3–4",
-    tagline: "Quad Cities anchor drawing Iowa cross-border traffic.",
-  },
-  "rock-island": {
-    dispensaries: "~2–3",
-    tagline: "Quad Cities market on the Mississippi River.",
-  },
-  sterling: {
-    dispensaries: "~1–2",
-    tagline: "Whiteside County option in northwestern IL.",
-  },
-  morris: {
-    dispensaries: "~2–3",
-    tagline: "Grundy County I-80 corridor stop.",
-  },
-  jacksonville: {
-    dispensaries: "~1–2",
-    tagline: "Morgan County market in western central Illinois.",
-  },
-  litchfield: {
-    dispensaries: "~1–2",
-    tagline: "I-55 corridor stop between Springfield and St. Louis.",
-  },
+const IL_CITIES = [
+  "Aurora", "Bloomington", "Canton", "Carbondale", "Champaign",
+  "Chicago", "Collinsville", "Danville", "Decatur", "East Peoria",
+  "Effingham", "Elgin", "Galesburg", "Jacksonville", "Joliet",
+  "Litchfield", "Marion", "Moline", "Morris", "Mundelein",
+  "Naperville", "Normal", "North Aurora", "Ottawa", "Peoria",
+  "Quincy", "Rock Island", "Rockford", "Schaumburg", "Springfield",
+  "Sterling", "Sycamore", "Urbana", "Waukegan",
+];
+
+const REGIONS: Record<string, string[]> = {
+  "Chicago area": ["Chicago", "Aurora", "Elgin", "Joliet", "Mundelein", "Naperville", "North Aurora", "Schaumburg"],
+  "Central Illinois": ["Bloomington", "Champaign", "Danville", "Decatur", "Normal", "Peoria", "East Peoria", "Canton", "Springfield", "Urbana"],
+  "Southern Illinois": ["Carbondale", "Collinsville", "Effingham", "Litchfield", "Marion"],
+  "Northern Illinois": ["Galesburg", "Moline", "Morris", "Ottawa", "Rock Island", "Rockford", "Sterling", "Sycamore", "Waukegan"],
+  "Western Illinois": ["Jacksonville", "Quincy"],
 };
+
+const faqSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Is cannabis legal in Illinois?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. Illinois legalized recreational cannabis on January 1, 2020. Adults 21 and older can purchase cannabis at any licensed dispensary without a medical card.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How many cannabis dispensaries are in Illinois?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Illinois has over 270 licensed cannabis dispensaries operating across the state, with the highest concentration in the Chicago metro area.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Can tourists buy cannabis in Illinois?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. Any adult 21 or older with a valid government-issued ID can purchase cannabis at any Illinois dispensary, regardless of their home state or country.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What do I need to buy cannabis in Illinois?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "A valid government-issued photo ID proving you are 21 or older. No medical card is required for recreational purchases. Most dispensaries prefer cash, though many also accept debit cards.",
+      },
+    },
+  ],
+});
 
 export default function IllinoisHubPage() {
   return (
-    <main className="min-h-screen bg-[#030712] text-slate-50">
-      {/* Gradient halo */}
-      <div className="pointer-events-none fixed inset-x-0 top-0 z-0 h-64 bg-gradient-to-b from-[#2D1B69] via-[#030712] to-transparent opacity-80" />
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: faqSchema }} />
+      <style>{`
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .il-root { min-height: 100vh; background: #f7f6f2; font-family: Georgia, serif; }
+        .il-nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 32px; background: #fff; border-bottom: 1px solid #e8e5de; position: sticky; top: 0; z-index: 50; }
+        .il-nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .il-nav-dot { width: 10px; height: 10px; border-radius: 50%; background: #16a34a; display: inline-block; }
+        .il-nav-name { font-size: 1.1rem; font-weight: 700; color: #0f1f3d; letter-spacing: -0.02em; }
+        .il-nav-accent { color: #16a34a; }
+        .il-nav-back { font-size: 0.85rem; color: #6b7280; text-decoration: none; font-family: system-ui, sans-serif; }
+        .il-breadcrumb { padding: 12px 32px; background: #fff; border-bottom: 1px solid #f0ede6; font-size: 0.8rem; font-family: system-ui, sans-serif; color: #6b7280; display: flex; gap: 8px; }
+        .il-breadcrumb a { color: #6b7280; text-decoration: none; }
+        .il-inner { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+        .il-hero { margin-bottom: 40px; }
+        .il-label { font-size: 0.72rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #16a34a; margin-bottom: 12px; }
+        .il-h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; color: #0f1f3d; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 14px; }
+        .il-intro { font-size: 1rem; color: #374151; font-family: system-ui, sans-serif; line-height: 1.7; max-width: 640px; margin-bottom: 24px; }
+        .il-stats { display: flex; gap: 32px; flex-wrap: wrap; margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid #e8e5de; }
+        .il-stat-num { font-size: 2rem; font-weight: 700; color: #0f1f3d; letter-spacing: -0.03em; }
+        .il-stat-label { font-size: 0.78rem; color: #6b7280; font-family: system-ui, sans-serif; margin-top: 2px; }
+        .il-quick-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 40px; }
+        .il-quick-card { background: #fff; border-radius: 12px; border: 1px solid #e8e5de; padding: 18px 20px; text-decoration: none; display: flex; align-items: center; gap: 14px; }
+        .il-quick-card:hover { border-color: #16a34a; background: #f0fdf4; }
+        .il-quick-icon { font-size: 1.4rem; flex-shrink: 0; }
+        .il-quick-title { font-size: 0.9rem; font-weight: 700; color: #0f1f3d; font-family: system-ui, sans-serif; margin-bottom: 2px; }
+        .il-quick-sub { font-size: 0.75rem; color: #6b7280; font-family: system-ui, sans-serif; }
+        .il-section-title { font-size: 1.2rem; font-weight: 700; color: #0f1f3d; letter-spacing: -0.02em; margin-bottom: 16px; }
+        .il-region { margin-bottom: 36px; }
+        .il-region-label { font-size: 0.7rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #9ca3af; margin-bottom: 12px; }
+        .il-city-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; }
+        .il-city-link { background: #fff; border-radius: 8px; border: 1px solid #e8e5de; padding: 10px 14px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; }
+        .il-city-link:hover { border-color: #16a34a; color: #16a34a; }
+        .il-city-name { font-size: 0.875rem; font-family: system-ui, sans-serif; font-weight: 500; color: #0f1f3d; }
+        .il-city-arrow { font-size: 0.75rem; color: #16a34a; }
+        .il-guides { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 40px; }
+        .il-guide-card { background: #fff; border-radius: 14px; border: 1px solid #e8e5de; padding: 24px; text-decoration: none; }
+        .il-guide-card:hover { border-color: #16a34a; }
+        .il-guide-label { font-size: 0.68rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #16a34a; margin-bottom: 8px; }
+        .il-guide-title { font-size: 1rem; font-weight: 700; color: #0f1f3d; letter-spacing: -0.01em; margin-bottom: 6px; line-height: 1.3; }
+        .il-guide-desc { font-size: 0.825rem; color: #6b7280; font-family: system-ui, sans-serif; line-height: 1.5; }
+        .il-faq { margin-bottom: 48px; }
+        .il-faq-item { border-bottom: 1px solid #e8e5de; padding: 18px 0; }
+        .il-faq-q { font-size: 1rem; font-weight: 700; color: #0f1f3d; margin-bottom: 8px; line-height: 1.4; }
+        .il-faq-a { font-size: 0.9rem; color: #374151; font-family: system-ui, sans-serif; line-height: 1.7; }
+        .il-cta { background: #0f1f3d; border-radius: 16px; padding: 32px; text-align: center; margin-top: 48px; }
+        .il-cta-title { font-size: 1.4rem; font-weight: 700; color: #fff; margin-bottom: 10px; }
+        .il-cta-sub { font-size: 0.9rem; color: #94a3b8; font-family: system-ui, sans-serif; margin-bottom: 20px; }
+        .il-cta-btn { display: inline-block; background: #16a34a; color: #fff; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 700; font-size: 0.9rem; }
+        .il-footer { background: #0f1f3d; padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 80px; }
+        .il-footer-brand { font-size: 1rem; font-weight: 700; color: #fff; font-family: Georgia, serif; }
+        .il-footer-note { font-size: 0.78rem; color: #475569; font-family: system-ui, sans-serif; }
+        @media (max-width: 768px) {
+          .il-nav { padding: 14px 20px; }
+          .il-breadcrumb { padding: 10px 20px; }
+          .il-inner { padding: 24px 16px 60px; }
+          .il-city-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+        }
+      `}</style>
 
-      {/* Header */}
-      <header className="relative z-10 border-b border-white/5 bg-black/40 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:py-4">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#7FE3C7] text-xs font-semibold text-slate-900 shadow-sm">
-              PG
-            </div>
-            <div className="flex flex-col">
-              <span className="text-sm font-semibold tracking-tight">
-                Project Green
-              </span>
-              <span className="text-[11px] text-slate-400">
-                Illinois Cannabis Directory
-              </span>
-            </div>
+      <div className="il-root">
+        <nav className="il-nav">
+          <Link href="/" className="il-nav-brand">
+            <span className="il-nav-dot" />
+            <span className="il-nav-name">Directory<span className="il-nav-accent">Network</span></span>
           </Link>
+          <Link href="/cannabis" className="il-nav-back">← Cannabis</Link>
+        </nav>
 
-          <nav className="flex items-center gap-3 text-xs">
-            <Link
-              href="/grow"
-              className="hidden text-slate-300 transition-colors hover:text-slate-50 md:inline"
-            >
-              All Listings
+        <div className="il-breadcrumb">
+          <Link href="/">Home</Link>
+          <span>›</span>
+          <Link href="/cannabis">Cannabis</Link>
+          <span>›</span>
+          <span style={{ color: "#374151" }}>Illinois</span>
+        </div>
+
+        <div className="il-inner">
+          <div className="il-hero">
+            <p className="il-label">Illinois Cannabis Directory</p>
+            <h1 className="il-h1">Cannabis Dispensaries in Illinois</h1>
+            <p className="il-intro">
+              Find every licensed cannabis dispensary in Illinois. Browse by city, check real hours,
+              and discover deals near you. Illinois legalized recreational cannabis in January 2020 —
+              adults 21 and older can purchase at any licensed dispensary without a medical card.
+            </p>
+            <div className="il-stats">
+              <div>
+                <div className="il-stat-num">270+</div>
+                <div className="il-stat-label">Licensed dispensaries</div>
+              </div>
+              <div>
+                <div className="il-stat-num">{IL_CITIES.length}</div>
+                <div className="il-stat-label">Cities covered</div>
+              </div>
+              <div>
+                <div className="il-stat-num">2020</div>
+                <div className="il-stat-label">Year legalized</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick links */}
+          <div className="il-quick-links">
+            <Link href="/cannabis/illinois/open-now" className="il-quick-card">
+              <span className="il-quick-icon">🟢</span>
+              <div>
+                <p className="il-quick-title">Open right now</p>
+                <p className="il-quick-sub">See what&apos;s open now</p>
+              </div>
             </Link>
-            <Link
-              href="/get-listed"
-              className="rounded-full bg-[#7FE3C7] px-3.5 py-1.5 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#6ad3b7]"
-            >
-              Get listed
+            <Link href="/cannabis/illinois/first-time-guide" className="il-quick-card">
+              <span className="il-quick-icon">👋</span>
+              <div>
+                <p className="il-quick-title">First-time guide</p>
+                <p className="il-quick-sub">What to know before you go</p>
+              </div>
             </Link>
-          </nav>
-        </div>
-      </header>
-
-      {/* Hero */}
-      <section className="relative z-10 border-b border-white/5 bg-gradient-to-b from-black/60 via-[#020617] to-[#020617]">
-        <div className="mx-auto max-w-6xl px-4 py-10 md:py-16">
-          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-[11px] font-medium text-emerald-200">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />
-            Illinois · {YEAR} Cannabis Guide
+            <Link href="/cannabis/illinois/laws" className="il-quick-card">
+              <span className="il-quick-icon">⚖️</span>
+              <div>
+                <p className="il-quick-title">Illinois cannabis laws</p>
+                <p className="il-quick-sub">What&apos;s legal, what&apos;s not</p>
+              </div>
+            </Link>
+            <Link href="/get-listed" className="il-quick-card">
+              <span className="il-quick-icon">📋</span>
+              <div>
+                <p className="il-quick-title">Claim your listing</p>
+                <p className="il-quick-sub">Free for dispensary owners</p>
+              </div>
+            </Link>
           </div>
 
-          <h1 className="mt-5 text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl md:text-4xl">
-            Cannabis Dispensaries in{" "}
-            <span className="bg-gradient-to-r from-[#7FE3C7] to-[#38bdf8] bg-clip-text text-transparent">
-              Illinois
-            </span>
-          </h1>
-
-          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-300 md:text-base">
-            Illinois legalized recreational cannabis on January 1, 2020 and has
-            since grown to 271+ licensed dispensaries across 66+ cities.
-            Statewide sales topped $1.5 billion in 2025. Browse our city-by-city
-            guides below for local laws, dispensary info, first-timer tips, and
-            pricing for every major market in the state.
-          </p>
-
-          <div className="mt-6 grid grid-cols-2 gap-3 text-xs text-slate-200 sm:flex sm:flex-wrap sm:gap-4">
-            <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2">
-              <div className="text-[11px] uppercase tracking-wide text-slate-400">
-                Licensed Dispensaries
-              </div>
-              <div className="text-lg font-semibold text-slate-50">271+</div>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2">
-              <div className="text-[11px] uppercase tracking-wide text-slate-400">
-                Cities Covered
-              </div>
-              <div className="text-lg font-semibold text-slate-50">
-                {ALL_ILLINOIS_CITIES.length}
+          {/* Cities by region */}
+          <p className="il-section-title">Browse by city</p>
+          {Object.entries(REGIONS).map(([region, cities]) => (
+            <div key={region} className="il-region">
+              <p className="il-region-label">{region}</p>
+              <div className="il-city-grid">
+                {cities.map(city => (
+                  <Link
+                    key={city}
+                    href={`/cannabis/illinois/${city.toLowerCase().replace(/\s+/g, "-")}`}
+                    className="il-city-link"
+                  >
+                    <span className="il-city-name">{city}</span>
+                    <span className="il-city-arrow">→</span>
+                  </Link>
+                ))}
               </div>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2">
-              <div className="text-[11px] uppercase tracking-wide text-slate-400">
-                {YEAR} Sales
-              </div>
-              <div className="text-lg font-semibold text-slate-50">$1.5B+</div>
+          ))}
+
+          {/* Guides */}
+          <p className="il-section-title" style={{ marginTop: "16px" }}>Illinois cannabis guides</p>
+          <div className="il-guides">
+            <Link href="/cannabis/illinois/first-time-guide" className="il-guide-card">
+              <p className="il-guide-label">Beginner guide</p>
+              <p className="il-guide-title">First Time Buying Cannabis in Illinois</p>
+              <p className="il-guide-desc">What to bring, how much you can buy, what to expect inside, and what things cost.</p>
+            </Link>
+            <Link href="/cannabis/illinois/laws" className="il-guide-card">
+              <p className="il-guide-label">Legal guide</p>
+              <p className="il-guide-title">Illinois Cannabis Laws — Complete Guide</p>
+              <p className="il-guide-desc">Possession limits, consumption rules, driving laws, taxes, and penalties explained.</p>
+            </Link>
+            <Link href="/cannabis/illinois/open-now" className="il-guide-card">
+              <p className="il-guide-label">Live hours</p>
+              <p className="il-guide-title">Illinois Dispensaries Open Right Now</p>
+              <p className="il-guide-desc">Real-time view of which dispensaries are currently open across Illinois.</p>
+            </Link>
+          </div>
+
+          {/* FAQ */}
+          <div className="il-faq">
+            <p className="il-section-title">Frequently asked questions</p>
+            <div className="il-faq-item">
+              <p className="il-faq-q">Is cannabis legal in Illinois?</p>
+              <p className="il-faq-a">Yes. Illinois legalized adult-use recreational cannabis on January 1, 2020 under the Cannabis Regulation and Tax Act. Adults 21 and older can legally purchase and possess cannabis from any licensed dispensary.</p>
+            </div>
+            <div className="il-faq-item">
+              <p className="il-faq-q">Do I need a medical card to buy cannabis in Illinois?</p>
+              <p className="il-faq-a">No. Illinois has full recreational cannabis — no medical card required. You just need a valid government-issued ID showing you are 21 or older.</p>
+            </div>
+            <div className="il-faq-item">
+              <p className="il-faq-q">How many dispensaries are in Illinois?</p>
+              <p className="il-faq-a">Illinois has over 270 licensed cannabis dispensaries operating statewide, with the largest concentration in the Chicago metro area. Directory Network lists dispensaries across 35+ Illinois cities.</p>
+            </div>
+            <div className="il-faq-item">
+              <p className="il-faq-q">Can tourists buy cannabis in Illinois?</p>
+              <p className="il-faq-a">Yes. Any adult 21 or older with a valid government-issued ID can purchase cannabis in Illinois, regardless of where they are from. Out-of-state visitors have lower possession limits than Illinois residents.</p>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* City Grid */}
-      <section className="relative z-10 border-b border-white/5 bg-[#020617]">
-        <div className="mx-auto max-w-6xl px-4 py-10 md:py-14">
-          <h2 className="mb-2 text-lg font-semibold tracking-tight text-slate-100 md:text-xl">
-            Browse by City
-          </h2>
-          <p className="mb-6 text-sm text-slate-400">
-            Each guide includes local cannabis laws, dispensary info, pricing,
-            and a first-timer walkthrough.
-          </p>
-
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {ALL_ILLINOIS_CITIES.map((city) => {
-              const info = CITY_HIGHLIGHTS[city.slug];
-              return (
-                <Link
-                  key={city.slug}
-                  href={`/cannabis/illinois/${city.slug}`}
-                  className="group flex flex-col rounded-3xl border border-slate-800 bg-slate-900/60 p-5 text-xs shadow-sm transition hover:border-[#7FE3C7]/60 hover:bg-slate-900"
-                >
-                  <h3 className="text-sm font-semibold text-slate-100">
-                    {city.name}
-                  </h3>
-                  {info && (
-                    <>
-                      <p className="mt-1 text-[11px] text-slate-400">
-                        {info.dispensaries} dispensaries
-                      </p>
-                      <p className="mt-2 flex-1 text-xs leading-relaxed text-slate-300">
-                        {info.tagline}
-                      </p>
-                    </>
-                  )}
-                  <div className="mt-3 flex items-center justify-between pt-1 text-[11px] text-slate-400">
-                    <span>View city guide</span>
-                    <span className="text-slate-500 group-hover:text-[#7FE3C7]">
-                      →
-                    </span>
-                  </div>
-                </Link>
-              );
-            })}
+          <div className="il-cta">
+            <p className="il-cta-title">Own a dispensary in Illinois?</p>
+            <p className="il-cta-sub">Claim your free listing, update your hours, and get in front of customers searching for dispensaries near them.</p>
+            <Link href="/get-listed" className="il-cta-btn">Claim your free listing →</Link>
           </div>
         </div>
-      </section>
 
-      {/* Quick statewide info */}
-      <section className="relative z-10 border-b border-white/5 bg-black">
-        <div className="mx-auto max-w-6xl px-4 py-10 md:py-14">
-          <h2 className="mb-2 text-lg font-semibold tracking-tight text-slate-100 md:text-xl">
-            Illinois Cannabis at a Glance
-          </h2>
-          <p className="mb-6 max-w-3xl text-sm leading-relaxed text-slate-300">
-            Quick-reference rules that apply statewide, regardless of which city
-            you visit.
-          </p>
-
-          <div className="grid gap-4 md:grid-cols-3">
-            <div className="rounded-3xl border border-white/10 bg-slate-950/80 p-4 text-xs text-slate-200">
-              <div className="mb-2 text-[11px] font-semibold text-[#7FE3C7]">
-                Purchase Limits
-              </div>
-              <p className="text-slate-300">
-                IL residents: 30g flower, 5g concentrate, 500mg edibles per
-                transaction. Non-residents get half. Must be 21+ with valid
-                photo ID.
-              </p>
-            </div>
-            <div className="rounded-3xl border border-white/10 bg-slate-950/80 p-4 text-xs text-slate-200">
-              <div className="mb-2 text-[11px] font-semibold text-[#7FE3C7]">
-                Tax Structure
-              </div>
-              <p className="text-slate-300">
-                State excise tax: 10% (≤35% THC), 20% (edibles), 25% (&gt;35%
-                THC). Plus 6.25% state sales tax and local municipal taxes up to
-                3%. Medical taxed at 1%.
-              </p>
-            </div>
-            <div className="rounded-3xl border border-white/10 bg-slate-950/80 p-4 text-xs text-slate-200">
-              <div className="mb-2 text-[11px] font-semibold text-[#7FE3C7]">
-                Consumption
-              </div>
-              <p className="text-slate-300">
-                Public consumption is prohibited statewide. Private residences
-                only — landlords may add further restrictions. No cannabis
-                lounges yet in most cities.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="relative z-10 border-t border-white/5 bg-black">
-        <div className="mx-auto max-w-6xl px-4 py-8">
-          <div className="flex flex-col gap-3 text-[11px] text-slate-500 md:flex-row md:items-center md:justify-between">
-            <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#7FE3C7]/10 text-[10px] font-semibold text-[#7FE3C7]">
-                PG
-              </div>
-              <span>Project Green · Illinois Cannabis Directory</span>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <Link
-                href="/"
-                className="text-slate-300 underline-offset-2 hover:text-slate-100 hover:underline"
-              >
-                Directory Network
-              </Link>
-              <span className="hidden text-slate-600 md:inline">·</span>
-              <Link
-                href="/grow"
-                className="text-slate-300 underline-offset-2 hover:text-slate-100 hover:underline"
-              >
-                All Listings
-              </Link>
-              <span className="hidden text-slate-600 md:inline">·</span>
-              <Link
-                href="/get-listed"
-                className="text-slate-300 underline-offset-2 hover:text-slate-100 hover:underline"
-              >
-                Get Listed
-              </Link>
-            </div>
-          </div>
-        </div>
-      </footer>
-    </main>
+        <footer className="il-footer">
+          <span className="il-footer-brand">Directory<span style={{ color: "#16a34a" }}>Network</span></span>
+          <span className="il-footer-note">© {new Date().getFullYear()} Directory Network · Illinois Cannabis Directory</span>
+        </footer>
+      </div>
+    </>
   );
 }
