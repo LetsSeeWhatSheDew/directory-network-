@@ -86,7 +86,7 @@ export default async function CityPage({
   const { city: citySlug } = await params;
 
   // Exclude known non-city routes — let their static pages handle these
-  const NON_CITY_SLUGS = ["first-time-guide", "laws", "get-listed", "sitemap", "robots"];
+  const NON_CITY_SLUGS = ["first-time-guide", "laws", "open-now", "get-listed", "sitemap", "robots"];
   if (NON_CITY_SLUGS.includes(citySlug)) {
     notFound();
   }
