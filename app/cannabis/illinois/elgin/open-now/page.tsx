@@ -15,7 +15,7 @@ export default async function Page({params}:{params:Promise<{city:string}>}){
 const{city:cs}=await params;const city=s2c(cs);
 const di=(new Date().getDay()+6)%7;
 const ts=new Date().toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit",timeZone:"America/Chicago"});
-const[listings,hours]=await Promise.all([fj<L[]>(`/master_listings?city=ilike.${encodeURIComponent(city)}&state=eq.IL&select=id,name,slug,city,state,address1,logo_url,delivery,online_ordering&order=name.asc&limit=50`),fj<H[]>(`/listing_hours?weekday=eq.${di}&select=listing_id,weekday,opens_at,closes_at,is_closed`)]);
+const[listings,hours]=await Promise.all([fj<L[]>(`/master_listings?city=ilike.${encodeURIComponent(city)}&state=eq.IL&project_tag=eq.green&select=id,name,slug,city,state,address1,logo_url,delivery,online_ordering&order=name.asc&limit=50`),fj<H[]>(`/listing_hours?weekday=eq.${di}&select=listing_id,weekday,opens_at,closes_at,is_closed`)]);
 if(listings.length===0)notFound();
 const ws=listings.map(l=>({...l,...openNow(hours,l.id)}));
 const on=ws.filter(l=>l.open);const cl=ws.filter(l=>!l.open);
