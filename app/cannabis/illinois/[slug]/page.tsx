@@ -40,7 +40,8 @@ async function fetchJson<T>(path: string): Promise<T> {
   return res.json();
 }
 
-function slugToCity(slug: string): string {
+function slugToCity(slug: string | undefined | null): string {
+  if (!slug) return "";
   return slug.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
 }
 
