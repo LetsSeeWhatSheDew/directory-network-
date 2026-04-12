@@ -26,7 +26,7 @@ const city=s2c(slug);
 const ts=new Date().toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit",timeZone:"America/Chicago"});
 const di=(new Date().getDay()+6)%7;
 const listings=await fj<L[]>(`/master_listings?city=ilike.${encodeURIComponent(city)}&state=eq.IL&project_tag=eq.green&select=id,name,slug,city,state,address1,short_description,logo_url,plan,delivery,online_ordering&order=plan.desc,name.asc&limit=50`);
-if(listings.length===0)notFound();
+
 let hours:H[]=[];
 if(intent==="open-now"){hours=await fj<H[]>(`/listing_hours?weekday=eq.${di}&select=listing_id,weekday,opens_at,closes_at,is_closed`);}
 const ws=listings.map(l=>({...l,...(intent==="open-now"?on2(hours,l.id):{open:false,closes:null})}));
