@@ -1,4 +1,5 @@
 export const dynamic = "force-dynamic";
+export async function generateStaticParams() { return []; }
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
