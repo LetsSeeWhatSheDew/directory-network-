@@ -1,11 +1,5 @@
 import Link from "next/link";
 
-export const metadata = {
-    title: "Illinois Cannabis Dispensary Directory | Find Dispensaries Open Now",
-    description: "Find cannabis dispensaries open near you in Illinois. Real hours, verified listings, deals and directions. Browse by city.",
-    alternates: { canonical: "https://cleanlist.co" },
-};
-
 const CITIES = [
   { name: "Chicago", slug: "chicago", count: 3 },
   { name: "Springfield", slug: "springfield", count: 5 },
