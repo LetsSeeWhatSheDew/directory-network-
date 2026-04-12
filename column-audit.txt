@@ -1,0 +1,85 @@
+Column Audit — app/l/[id]/page.tsx
+====================================
+
+All three queries use `select=*` (all columns), but each query also references
+specific columns in its filter/order clauses, and the TypeScript types +
+rendering code consume specific columns from the response.
+
+Below is every column name touched by each table.
+
+-----------------------------------------------
+TABLE: listing_hours
+-----------------------------------------------
+Query (lines 101-107):
+  /listing_hours?listing_id=eq.{listingId}&select=*&order=day_of_week.asc
+
+Columns used in the QUERY STRING:
+  - listing_id     (filter: listing_id=eq.{id})
+  - day_of_week    (order clause)
+
+Columns consumed from the RESPONSE (via `ListingHour` type + JSX):
+  - id             (optional, not rendered)
+  - project_tag    (declared in type, not rendered)
+  - listing_id     (declared in type, not rendered)
+  - day_of_week    (used at line 220: hours.find(h => h.day_of_week === idx))
+  - open_time      (used at line 224: formatTime(row?.open_time))
+  - close_time     (used at line 225: formatTime(row?.close_time))
+  - is_closed      (used at line 221: const closed = row?.is_closed)
+
+-----------------------------------------------
+TABLE: listing_attributes
+-----------------------------------------------
+Query (lines 109-115):
+  /listing_attributes?listing_id=eq.{listingId}&select=*&order=attribute.asc
+
+Columns used in the QUERY STRING:
+  - listing_id     (filter: listing_id=eq.{id})
+  - attribute      (order clause)
+
+Columns consumed from the RESPONSE (via `ListingAttribute` type + JSX):
+  - id             (optional, not rendered)
+  - project_tag    (declared in type, not rendered)
+  - listing_id     (used at line 245 as part of React key: ${a.listing_id}-${a.attribute})
+  - attribute      (used at line 248: a.attribute.replaceAll("_", " "))
+
+-----------------------------------------------
+TABLE: products_or_services
+-----------------------------------------------
+Query (lines 117-123):
+  /products_or_services?listing_id=eq.{listingId}&select=*&order=category.asc,name.asc
+
+Columns used in the QUERY STRING:
+  - listing_id     (filter: listing_id=eq.{id})
+  - category       (first order clause)
+  - name           (second order clause)
+
+Columns consumed from the RESPONSE (via `ProductOrService` type + JSX):
+  - id             (optional, not rendered)
+  - project_tag    (declared in type, not rendered)
+  - listing_id     (used at line 265 as part of React key)
+  - category       (used at lines 265, 269: `${p.category ? `${p.category}: ` : ""}` + p.name)
+  - name           (used at lines 265, 269)
+  - is_active      (used at line 271: p.is_active ? "Active" : "—")
+
+-----------------------------------------------
+SUMMARY — columns that MUST exist for the page to render
+-----------------------------------------------
+listing_hours:         listing_id, day_of_week, open_time, close_time, is_closed
+listing_attributes:    listing_id, attribute
+products_or_services:  listing_id, category, name, is_active
+
+Also required (from master_listings, via getListing):
+  id, project_tag, listing_type, listing_title, slug, city, state,
+  short_description, long_description, plan_tier, is_featured
+
+-----------------------------------------------
+NOTE on the current 500 error
+-----------------------------------------------
+The Vercel log shows a Postgres 42703 error mentioning `products_or_ser...`.
+Error 42703 is "undefined column" (not "undefined table"), which suggests
+the `products_or_services` table exists but is missing one of the columns
+referenced in the order clause — most likely `category` or `name`.
+
+Because the page uses `Promise.all([getHours, getAttributes, getProducts])`
+and `fetchJson` throws on non-ok, a single missing column in any of the
+three tables crashes the entire listing page.
