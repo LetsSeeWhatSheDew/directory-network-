@@ -198,6 +198,6 @@ export default function HomePage() {
                         </div>
                         <span className="fc">&copy; {new Date().getFullYear()} Directory Network</span>
                 </footer>
-          </>
-        );
-}</>
+    </>
+  );
+}
