@@ -1,203 +1,528 @@
 import Link from "next/link";
 
-const CITIES = [
-  { name: "Chicago", slug: "chicago", count: 3 },
-  { name: "Springfield", slug: "springfield", count: 5 },
-  { name: "Champaign", slug: "champaign", count: 2 },
-  { name: "Normal", slug: "normal", count: 4 },
-  { name: "Naperville", slug: "naperville", count: 2 },
-  { name: "Joliet", slug: "joliet", count: 2 },
-  { name: "Aurora", slug: "aurora", count: 2 },
-  { name: "Schaumburg", slug: "schaumburg", count: 3 },
-  { name: "Peoria", slug: "peoria", count: 3 },
-  { name: "Rockford", slug: "rockford", count: 1 },
-  { name: "Waukegan", slug: "waukegan", count: 2 },
-  { name: "Elgin", slug: "elgin", count: 1 },
-  { name: "Bloomington", slug: "bloomington", count: 3 },
-  { name: "Danville", slug: "danville", count: 2 },
-  { name: "Quincy", slug: "quincy", count: 3 },
-  { name: "Moline", slug: "moline", count: 2 },
-  { name: "Collinsville", slug: "collinsville", count: 1 },
-  { name: "Effingham", slug: "effingham", count: 1 },
-  ];
+// ============================================================
+// NEW CLEANLIST HOMEPAGE
+// The pivot: from directory to decision engine
+//
+// Design philosophy:
+// - One question answered: "Where should I go right now?"
+// - Deals are the hook, savings are the emotion
+// - Mobile-first — this is a phone behavior
+// - Dark navy + green = authority + cannabis without cliché
+// - Georgia serif = trustworthy local guide, not tech startup
+// ============================================================
 
-const QUICK = [
-  { label: "Open now in Chicago", href: "/cannabis/illinois/chicago/open-now" },
-  { label: "Open now in Springfield", href: "/cannabis/illinois/springfield/open-now" },
-  { label: "Open now in Champaign", href: "/cannabis/illinois/champaign/open-now" },
-  { label: "Best dispensaries in Normal", href: "/cannabis/illinois/normal/best" },
-  { label: "Deals in Joliet", href: "/cannabis/illinois/joliet/deals" },
-  { label: "Near Wrigley Field", href: "/cannabis/illinois/chicago/near-wrigley-field" },
-  { label: "Recreational in Naperville", href: "/cannabis/illinois/naperville/recreational" },
-  { label: "Best in Schaumburg", href: "/cannabis/illinois/schaumburg/best" },
-  ];
+const CATEGORIES = [
+  { label: "Flower", slug: "flower", emoji: "🌿" },
+  { label: "Edibles", slug: "edibles", emoji: "🍬" },
+  { label: "Vapes", slug: "vapes", emoji: "💨" },
+  { label: "Concentrates", slug: "concentrate", emoji: "💎" },
+  { label: "All deals", slug: "all", emoji: "🔥" },
+];
+
+const QUICK_FILTERS = [
+  { label: "Open now", param: "open=true" },
+  { label: "Drive-thru", param: "drivethu=true" },
+  { label: "Cards accepted", param: "credit=true" },
+  { label: "Best rated", param: "sort=rated" },
+];
+
+const CITIES = [
+  { name: "Chicago", slug: "chicago" },
+  { name: "Peoria", slug: "peoria" },
+  { name: "Springfield", slug: "springfield" },
+  { name: "Champaign", slug: "champaign" },
+  { name: "Normal", slug: "normal" },
+  { name: "Naperville", slug: "naperville" },
+  { name: "Joliet", slug: "joliet" },
+  { name: "Rockford", slug: "rockford" },
+  { name: "Waukegan", slug: "waukegan" },
+  { name: "Elgin", slug: "elgin" },
+  { name: "Schaumburg", slug: "schaumburg" },
+  { name: "Aurora", slug: "aurora" },
+];
 
 export default function HomePage() {
-    return (
-          <>
-                <style>{`
-                        *{box-sizing:border-box;margin:0;padding:0}
-                                body{font-family:Georgia,serif;background:#f7f6f2;min-height:100vh}
-                                        .nav{display:flex;justify-content:space-between;align-items:center;padding:16px 32px;background:#fff;border-bottom:1px solid #e8e5de;position:sticky;top:0;z-index:50}
-                                                .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
-                                                        .ndot{width:10px;height:10px;border-radius:50%;background:#16a34a;animation:pulse 2s infinite}
-                                                                @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-                                                                        .wm{font-size:1.1rem;font-weight:700;color:#0f1f3d;letter-spacing:-.02em}
-                                                                                .ac{color:#16a34a}
-                                                                                        .nr{display:flex;align-items:center;gap:20px}
-                                                                                                .nl{font-size:.85rem;color:#6b7280;text-decoration:none;font-family:system-ui,sans-serif}
-                                                                                                        .nl:hover{color:#0f1f3d}
-                                                                                                                .nc{font-size:.85rem;font-family:system-ui,sans-serif;font-weight:700;color:#16a34a;text-decoration:none;border:1px solid #16a34a;padding:6px 16px;border-radius:8px}
-                                                                                                                        .nc:hover{background:#f0fdf4}
-                                                                                                                                .hero{background:#0f1f3d;padding:72px 32px;text-align:center}
-                                                                                                                                        .hbadge{display:inline-flex;align-items:center;gap:6px;background:rgba(22,163,74,.15);border:1px solid rgba(22,163,74,.3);border-radius:100px;padding:5px 16px;font-size:.75rem;font-family:system-ui,sans-serif;color:#4ade80;font-weight:700;margin-bottom:22px;letter-spacing:.08em;text-transform:uppercase}
-                                                                                                                                                .hbd{width:6px;height:6px;border-radius:50%;background:#16a34a;animation:pulse 2s infinite}
-                                                                                                                                                        .hero h1{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;color:#fff;letter-spacing:-.04em;line-height:1.1;margin-bottom:18px}
-                                                                                                                                                                .hero h1 em{color:#4ade80;font-style:normal}
-                                                                                                                                                                        .hsub{font-size:1.05rem;color:#94a3b8;font-family:system-ui,sans-serif;line-height:1.7;margin-bottom:36px;max-width:520px;margin-left:auto;margin-right:auto}
-                                                                                                                                                                                .hbtns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-                                                                                                                                                                                        .bp{background:#16a34a;color:#fff;padding:14px 28px;border-radius:10px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:700;font-size:.95rem}
-                                                                                                                                                                                                .bp:hover{background:#15803d}
-                                                                                                                                                                                                        .bs{background:rgba(255,255,255,.1);color:#fff;padding:14px 28px;border-radius:10px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:700;font-size:.95rem;border:1px solid rgba(255,255,255,.2)}
-                                                                                                                                                                                                                .bs:hover{background:rgba(255,255,255,.15)}
-                                                                                                                                                                                                                        .hstats{display:flex;justify-content:center;gap:48px;margin-top:48px;padding-top:36px;border-top:1px solid rgba(255,255,255,.1)}
-                                                                                                                                                                                                                                .sn{font-size:1.9rem;font-weight:700;color:#fff;letter-spacing:-.03em}
-                                                                                                                                                                                                                                        .sl{font-size:.75rem;color:#64748b;font-family:system-ui,sans-serif;margin-top:3px}
-                                                                                                                                                                                                                                                .sec{max-width:1100px;margin:0 auto;padding:56px 24px}
-                                                                                                                                                                                                                                                        .slbl{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#16a34a;font-family:system-ui,sans-serif;margin-bottom:8px}
-                                                                                                                                                                                                                                                                .stit{font-size:clamp(1.4rem,3vw,1.9rem);font-weight:700;color:#0f1f3d;letter-spacing:-.03em;margin-bottom:6px}
-                                                                                                                                                                                                                                                                        .ssub{font-size:.875rem;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:28px}
-                                                                                                                                                                                                                                                                                .qgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
-                                                                                                                                                                                                                                                                                        .qlink{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #e8e5de;border-radius:10px;padding:13px 16px;text-decoration:none;font-family:system-ui,sans-serif;font-size:.875rem;color:#0f1f3d;font-weight:600}
-                                                                                                                                                                                                                                                                                                .qlink:hover{border-color:#16a34a;color:#16a34a}
-                                                                                                                                                                                                                                                                                                        .qa{color:#16a34a}
-                                                                                                                                                                                                                                                                                                                .why{background:#fff;border-top:1px solid #e8e5de;border-bottom:1px solid #e8e5de}
-                                                                                                                                                                                                                                                                                                                        .wi{max-width:1100px;margin:0 auto;padding:48px 24px;display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
-                                                                                                                                                                                                                                                                                                                                .wico{font-size:1.5rem;margin-bottom:12px}
-                                                                                                                                                                                                                                                                                                                                        .wt{font-size:.95rem;font-weight:700;color:#0f1f3d;margin-bottom:6px}
-                                                                                                                                                                                                                                                                                                                                                .wd{font-size:.85rem;color:#6b7280;font-family:system-ui,sans-serif;line-height:1.6}
-                                                                                                                                                                                                                                                                                                                                                        .cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:12px}
-                                                                                                                                                                                                                                                                                                                                                                .ccard{display:block;background:#fff;border:1px solid #e8e5de;border-radius:12px;padding:18px;text-decoration:none}
-                                                                                                                                                                                                                                                                                                                                                                        .ccard:hover{border-color:#16a34a}
-                                                                                                                                                                                                                                                                                                                                                                                .ccard:hover .cn{color:#16a34a}
-                                                                                                                                                                                                                                                                                                                                                                                        .cn{font-size:.95rem;font-weight:700;color:#0f1f3d;margin-bottom:3px}
-                                                                                                                                                                                                                                                                                                                                                                                                .cc{font-size:.75rem;color:#9ca3af;font-family:system-ui,sans-serif}
-                                                                                                                                                                                                                                                                                                                                                                                                        .cpills{display:flex;gap:5px;margin-top:10px;flex-wrap:wrap}
-                                                                                                                                                                                                                                                                                                                                                                                                                .cp{font-size:.68rem;font-family:system-ui,sans-serif;color:#16a34a;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:100px;padding:2px 9px;text-decoration:none}
-                                                                                                                                                                                                                                                                                                                                                                                                                        .cp:hover{background:#dcfce7}
-                                                                                                                                                                                                                                                                                                                                                                                                                                .ba{display:inline-flex;align-items:center;gap:8px;margin-top:24px;font-family:system-ui,sans-serif;font-size:.875rem;font-weight:700;color:#16a34a;text-decoration:none;border:1px solid #16a34a;padding:10px 20px;border-radius:8px}
-                                                                                                                                                                                                                                                                                                                                                                                                                                        .ba:hover{background:#f0fdf4}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                .bstrip{background:#0f1f3d;padding:52px 32px;text-align:center}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                        .bt{font-size:1.4rem;font-weight:700;color:#fff;letter-spacing:-.02em;margin-bottom:8px}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                .bsub{font-size:.875rem;color:#94a3b8;font-family:system-ui,sans-serif;margin-bottom:24px}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                        .bbtns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .bb{background:#16a34a;color:#fff;padding:11px 24px;border-radius:8px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:700;font-size:.875rem}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        .bb:hover{background:#15803d}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .bbs{background:transparent;color:#94a3b8;padding:11px 24px;border-radius:8px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:700;font-size:.875rem;border:1px solid rgba(255,255,255,.15)}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        .bbs:hover{border-color:rgba(255,255,255,.3)}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .ft{background:#0f1f3d;border-top:1px solid rgba(255,255,255,.08);padding:24px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        .flo{font-size:.95rem;font-weight:700;color:#fff;font-family:Georgia,serif}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .fls{display:flex;gap:20px}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        .fl{font-size:.78rem;color:#475569;font-family:system-ui,sans-serif;text-decoration:none}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .fl:hover{color:#94a3b8}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        .fc{font-size:.75rem;color:#334155;font-family:system-ui,sans-serif}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                @media(max-width:768px){
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          .nav,.ft{padding:14px 20px}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    .hero{padding:48px 20px}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              .hstats{gap:28px}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        .wi{grid-template-columns:1fr}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  .nr .nl{display:none}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            .sec{padding:40px 16px}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          `}</style>
-          
-                <nav className="nav">
-                        <Link href="/" className="logo">
-                                  <span className="ndot" />
-                                  <span className="wm">Directory<span className="ac">Network</span></span>
-                        </Link>
-                        <div className="nr">
-                                  <Link href="/cannabis/illinois" className="nl">Browse Illinois</Link>
-                                  <Link href="/cannabis/illinois/open-now" className="nl">Open Now</Link>
-                                  <Link href="/get-listed" className="nc">List your business</Link>
-                        </div>
-                </nav>
-          
-                <div className="hero">
-                        <div className="hbadge"><span className="hbd" />Illinois Cannabis Directory</div>
-                        <h1>Find a dispensary<br /><em>open right now</em></h1>
-                        <p className="hsub">Real hours, verified listings, and directions to licensed cannabis dispensaries across Illinois. Free, always.</p>
-                        <div className="hbtns">
-                                  <Link href="/cannabis/illinois/open-now" className="bp">See who&apos;s open now &rarr;</Link>
-                                  <Link href="/cannabis/illinois" className="bs">Browse all cities</Link>
-                        </div>
-                        <div className="hstats">
-                                  <div><div className="sn">50+</div><div className="sl">Licensed dispensaries</div></div>
-                                  <div><div className="sn">34</div><div className="sl">Illinois cities</div></div>
-                                  <div><div className="sn">Free</div><div className="sl">Always, for consumers</div></div>
-                        </div>
+  return (
+    <>
+      <style>{`
+        *{box-sizing:border-box;margin:0;padding:0}
+        html{scroll-behavior:smooth}
+        body{font-family:Georgia,serif;background:#f5f4f0;min-height:100vh;color:#0f1f3d}
+
+        /* NAV */
+        .nav{
+          display:flex;justify-content:space-between;align-items:center;
+          padding:14px 28px;background:#0f1f3d;
+          position:sticky;top:0;z-index:100;
+        }
+        .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+        .logo-dot{width:8px;height:8px;border-radius:50%;background:#16a34a;animation:pulse 2.5s infinite}
+        @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.9)}}
+        .logo-text{font-size:1.15rem;font-weight:700;color:#fff;letter-spacing:-.02em}
+        .logo-text span{color:#4ade80}
+        .nav-links{display:flex;align-items:center;gap:20px}
+        .nav-link{font-size:.82rem;color:rgba(255,255,255,.6);text-decoration:none;font-family:system-ui,sans-serif}
+        .nav-link:hover{color:#fff}
+        .nav-cta{
+          font-size:.82rem;font-family:system-ui,sans-serif;font-weight:600;
+          color:#0f1f3d;background:#4ade80;padding:6px 14px;border-radius:6px;
+          text-decoration:none;
+        }
+        .nav-cta:hover{background:#22c55e}
+
+        /* HERO */
+        .hero{
+          background:#0f1f3d;
+          padding:56px 28px 48px;
+          text-align:center;
+        }
+        .hero-badge{
+          display:inline-flex;align-items:center;gap:6px;
+          background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.25);
+          border-radius:100px;padding:4px 14px;
+          font-size:.72rem;font-family:system-ui,sans-serif;
+          color:#4ade80;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+          margin-bottom:20px;
+        }
+        .hero-badge-dot{width:5px;height:5px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite}
+        .hero h1{
+          font-size:clamp(2rem,5vw,3.2rem);
+          font-weight:700;color:#fff;
+          letter-spacing:-.04em;line-height:1.1;
+          margin-bottom:12px;
+        }
+        .hero h1 em{color:#4ade80;font-style:normal}
+        .hero-sub{
+          font-size:1rem;color:rgba(255,255,255,.55);
+          font-family:system-ui,sans-serif;
+          line-height:1.6;margin-bottom:36px;
+          max-width:480px;margin-left:auto;margin-right:auto;
+        }
+
+        /* CATEGORY BUTTONS — the main decision input */
+        .category-grid{
+          display:flex;flex-wrap:wrap;justify-content:center;
+          gap:10px;margin-bottom:16px;
+          max-width:560px;margin-left:auto;margin-right:auto;
+        }
+        .cat-btn{
+          display:flex;align-items:center;gap:7px;
+          background:rgba(255,255,255,.08);
+          border:1px solid rgba(255,255,255,.15);
+          border-radius:10px;padding:12px 20px;
+          font-size:.88rem;font-family:system-ui,sans-serif;font-weight:600;
+          color:#fff;cursor:pointer;text-decoration:none;
+          transition:all .15s;
+        }
+        .cat-btn:hover{background:rgba(74,222,128,.15);border-color:rgba(74,222,128,.4)}
+        .cat-btn.primary{
+          background:#16a34a;border-color:#16a34a;
+          font-size:.95rem;padding:14px 28px;
+        }
+        .cat-btn.primary:hover{background:#15803d}
+        .cat-emoji{font-size:16px}
+
+        /* QUICK FILTERS */
+        .filter-row{
+          display:flex;flex-wrap:wrap;justify-content:center;gap:8px;
+          margin-top:12px;max-width:480px;
+          margin-left:auto;margin-right:auto;
+        }
+        .filter-pill{
+          font-size:.75rem;font-family:system-ui,sans-serif;font-weight:500;
+          color:rgba(255,255,255,.5);
+          background:transparent;border:1px solid rgba(255,255,255,.15);
+          border-radius:100px;padding:4px 12px;
+          cursor:pointer;text-decoration:none;
+        }
+        .filter-pill:hover{color:#fff;border-color:rgba(255,255,255,.4)}
+
+        /* HOW IT WORKS — 3 steps, editorial layout */
+        .how{background:#fff;border-top:1px solid #e8e4da;border-bottom:1px solid #e8e4da}
+        .how-inner{
+          max-width:900px;margin:0 auto;
+          padding:52px 28px;
+          display:grid;grid-template-columns:repeat(3,1fr);gap:40px;
+        }
+        .how-step{}
+        .how-num{
+          font-size:2.4rem;font-weight:700;color:#e8e4da;
+          line-height:1;margin-bottom:10px;
+        }
+        .how-title{font-size:.95rem;font-weight:700;color:#0f1f3d;margin-bottom:6px}
+        .how-desc{font-size:.85rem;color:#6b7280;font-family:system-ui,sans-serif;line-height:1.6}
+
+        /* DEALS SECTION */
+        .deals-section{max-width:1100px;margin:0 auto;padding:52px 28px}
+        .section-eyebrow{
+          font-size:.7rem;font-weight:700;letter-spacing:.14em;
+          text-transform:uppercase;color:#16a34a;
+          font-family:system-ui,sans-serif;margin-bottom:6px;
+        }
+        .section-title{
+          font-size:clamp(1.4rem,3vw,1.8rem);font-weight:700;
+          color:#0f1f3d;letter-spacing:-.03em;margin-bottom:4px;
+        }
+        .section-sub{
+          font-size:.875rem;color:#6b7280;
+          font-family:system-ui,sans-serif;margin-bottom:28px;
+        }
+
+        /* DEAL CARDS */
+        .deal-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+        .deal-card{
+          background:#fff;border:1px solid #e8e4da;border-radius:14px;
+          padding:18px;position:relative;
+          transition:border-color .15s;
+        }
+        .deal-card:hover{border-color:#16a34a}
+        .deal-card.top-pick{
+          border:2px solid #16a34a;
+          background:linear-gradient(135deg,#f0fdf4 0%,#fff 60%);
+        }
+        .top-pick-badge{
+          position:absolute;top:-10px;left:16px;
+          background:#16a34a;color:#fff;
+          font-size:.68rem;font-family:system-ui,sans-serif;
+          font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+          padding:3px 10px;border-radius:100px;
+        }
+        .deal-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+        .deal-name{font-size:.95rem;font-weight:700;color:#0f1f3d}
+        .deal-city{font-size:.75rem;color:#9ca3af;font-family:system-ui,sans-serif;margin-top:2px}
+        .open-badge{
+          font-size:.68rem;font-weight:600;
+          padding:2px 8px;border-radius:100px;
+          font-family:system-ui,sans-serif;
+          white-space:nowrap;
+        }
+        .open-badge.open{color:#166534;background:#dcfce7}
+        .open-badge.closed{color:#991b1b;background:#fee2e2}
+        .deal-highlight{
+          font-size:.95rem;font-weight:700;color:#16a34a;
+          margin-bottom:6px;
+        }
+        .deal-reason{
+          font-size:.78rem;color:#6b7280;
+          font-family:system-ui,sans-serif;margin-bottom:12px;
+          line-height:1.5;
+        }
+        .deal-attrs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
+        .deal-attr{
+          font-size:.68rem;color:#6b7280;
+          background:#f5f4f0;border-radius:100px;
+          padding:2px 9px;font-family:system-ui,sans-serif;
+        }
+        .deal-savings{
+          display:flex;align-items:center;justify-content:space-between;
+          background:#f0fdf4;border-radius:8px;
+          padding:8px 12px;
+        }
+        .savings-label{font-size:.75rem;color:#166534;font-family:system-ui,sans-serif}
+        .savings-num{font-size:1.1rem;font-weight:700;color:#16a34a}
+
+        /* CITY BROWSE */
+        .cities-section{
+          background:#0f1f3d;padding:52px 28px;
+        }
+        .cities-inner{max-width:1100px;margin:0 auto}
+        .cities-title{
+          font-size:1.5rem;font-weight:700;color:#fff;
+          letter-spacing:-.03em;margin-bottom:4px;
+        }
+        .cities-sub{
+          font-size:.875rem;color:rgba(255,255,255,.4);
+          font-family:system-ui,sans-serif;margin-bottom:24px;
+        }
+        .city-grid{
+          display:grid;
+          grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+          gap:10px;
+        }
+        .city-card{
+          background:rgba(255,255,255,.06);
+          border:1px solid rgba(255,255,255,.1);
+          border-radius:10px;padding:14px;
+          text-decoration:none;
+          transition:all .15s;
+        }
+        .city-card:hover{background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.3)}
+        .city-name{font-size:.9rem;font-weight:700;color:#fff;margin-bottom:8px}
+        .city-pills{display:flex;gap:4px;flex-wrap:wrap}
+        .city-pill{
+          font-size:.62rem;color:#4ade80;
+          background:rgba(74,222,128,.1);
+          border:1px solid rgba(74,222,128,.2);
+          border-radius:100px;padding:2px 7px;
+          font-family:system-ui,sans-serif;text-decoration:none;
+        }
+        .city-pill:hover{background:rgba(74,222,128,.2)}
+
+        /* DISPENSARY CTA */
+        .biz-strip{
+          background:#f5f4f0;border-top:1px solid #e8e4da;
+          padding:44px 28px;text-align:center;
+        }
+        .biz-title{
+          font-size:1.25rem;font-weight:700;color:#0f1f3d;
+          letter-spacing:-.02em;margin-bottom:6px;
+        }
+        .biz-sub{
+          font-size:.875rem;color:#6b7280;
+          font-family:system-ui,sans-serif;margin-bottom:20px;
+          max-width:400px;margin-left:auto;margin-right:auto;
+        }
+        .biz-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+        .biz-btn-primary{
+          background:#0f1f3d;color:#fff;
+          padding:10px 22px;border-radius:8px;
+          text-decoration:none;font-family:system-ui,sans-serif;
+          font-weight:700;font-size:.875rem;
+        }
+        .biz-btn-primary:hover{background:#1e3a5f}
+        .biz-btn-secondary{
+          background:transparent;color:#6b7280;
+          padding:10px 22px;border-radius:8px;
+          text-decoration:none;font-family:system-ui,sans-serif;
+          font-weight:600;font-size:.875rem;
+          border:1px solid #d1cfc6;
+        }
+        .biz-btn-secondary:hover{border-color:#9ca3af;color:#374151}
+
+        /* FOOTER */
+        .footer{
+          background:#0f1f3d;border-top:1px solid rgba(255,255,255,.07);
+          padding:20px 28px;
+          display:flex;justify-content:space-between;align-items:center;
+          flex-wrap:wrap;gap:12px;
+        }
+        .footer-logo{font-size:.9rem;font-weight:700;color:#fff}
+        .footer-logo span{color:#4ade80}
+        .footer-links{display:flex;gap:18px}
+        .footer-link{font-size:.75rem;color:#475569;font-family:system-ui,sans-serif;text-decoration:none}
+        .footer-link:hover{color:#94a3b8}
+        .footer-copy{font-size:.72rem;color:#334155;font-family:system-ui,sans-serif}
+
+        /* RESPONSIVE */
+        @media(max-width:768px){
+          .nav{padding:12px 16px}
+          .hero{padding:40px 16px 36px}
+          .how-inner{grid-template-columns:1fr;gap:24px;padding:36px 16px}
+          .deals-section{padding:36px 16px}
+          .cities-section{padding:36px 16px}
+          .footer{padding:16px;flex-direction:column;text-align:center}
+          .footer-links{justify-content:center}
+          .nav-links .nav-link{display:none}
+        }
+      `}</style>
+
+      {/* NAV */}
+      <nav className="nav">
+        <Link href="/" className="logo">
+          <span className="logo-dot" />
+          <span className="logo-text">clean<span>list</span></span>
+        </Link>
+        <div className="nav-links">
+          <Link href="/cannabis/illinois/open-now" className="nav-link">Open now</Link>
+          <Link href="/cannabis/illinois" className="nav-link">Browse Illinois</Link>
+          <Link href="/upgrade" className="nav-cta">For dispensaries</Link>
+        </div>
+      </nav>
+
+      {/* HERO — decision engine entry point */}
+      <div className="hero">
+        <div className="hero-badge">
+          <span className="hero-badge-dot" />
+          Illinois dispensary deals — live
+        </div>
+        <h1>Best deal on weed<br /><em>near you right now</em></h1>
+        <p className="hero-sub">
+          Tell us what you want. We find the cheapest price, the best discount,
+          and the fastest option near you.
+        </p>
+
+        {/* CATEGORY SELECTION — the one input */}
+        <div className="category-grid">
+          {CATEGORIES.map(cat => (
+            <Link
+              key={cat.slug}
+              href={`/deals/${cat.slug}`}
+              className={`cat-btn ${cat.slug === 'all' ? 'primary' : ''}`}
+            >
+              <span className="cat-emoji">{cat.emoji}</span>
+              {cat.label}
+            </Link>
+          ))}
+        </div>
+
+        {/* QUICK FILTERS */}
+        <div className="filter-row">
+          {QUICK_FILTERS.map(f => (
+            <Link
+              key={f.param}
+              href={`/deals/all?${f.param}`}
+              className="filter-pill"
+            >
+              {f.label}
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* HOW IT WORKS */}
+      <div className="how">
+        <div className="how-inner">
+          <div className="how-step">
+            <div className="how-num">01</div>
+            <div className="how-title">Pick what you want</div>
+            <div className="how-desc">
+              Flower, edibles, vapes, or concentrates.
+              We pull every active deal within range.
+            </div>
+          </div>
+          <div className="how-step">
+            <div className="how-num">02</div>
+            <div className="how-title">We do the math</div>
+            <div className="how-desc">
+              Price per gram, discount percentage, distance,
+              open status — normalized so you don&apos;t have to.
+            </div>
+          </div>
+          <div className="how-step">
+            <div className="how-num">03</div>
+            <div className="how-title">You save money</div>
+            <div className="how-desc">
+              One recommendation. Where to go right now
+              for the best value. You see exactly how much you save.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* TODAY'S DEALS — populated from DB once deals data exists */}
+      <div className="deals-section">
+        <p className="section-eyebrow">Live deals</p>
+        <h2 className="section-title">Best deals in Illinois today</h2>
+        <p className="section-sub">Updated continuously · Verified against dispensary sites</p>
+
+        <div className="deal-cards">
+
+          {/* TOP PICK card — will be dynamic, hardcoded for now */}
+          <div className="deal-card top-pick">
+            <div className="top-pick-badge">Best value today</div>
+            <div className="deal-card-header">
+              <div>
+                <div className="deal-name">NOXX East Peoria</div>
+                <div className="deal-city">East Peoria, IL</div>
+              </div>
+              <span className="open-badge open">Open</span>
+            </div>
+            <div className="deal-highlight">30% off all vapes</div>
+            <div className="deal-reason">Cheapest vape deal within 15 miles · 4 min away</div>
+            <div className="deal-attrs">
+              <span className="deal-attr">Drive-thru</span>
+              <span className="deal-attr">Cards OK</span>
+              <span className="deal-attr">4.7 ★</span>
+            </div>
+            <div className="deal-savings">
+              <span className="savings-label">You save vs avg price</span>
+              <span className="savings-num">~$18</span>
+            </div>
+          </div>
+
+          {/* Alternative cards */}
+          <div className="deal-card">
+            <div className="deal-card-header">
+              <div>
+                <div className="deal-name">Ivy Hall Peoria</div>
+                <div className="deal-city">Peoria, IL</div>
+              </div>
+              <span className="open-badge open">Open</span>
+            </div>
+            <div className="deal-highlight">$5 pre-rolls Mon–Wed</div>
+            <div className="deal-reason">Weekly recurring deal · 9 min away</div>
+            <div className="deal-attrs">
+              <span className="deal-attr">Cards OK</span>
+              <span className="deal-attr">4.5 ★</span>
+            </div>
+            <div className="deal-savings">
+              <span className="savings-label">You save vs avg price</span>
+              <span className="savings-num">~$12</span>
+            </div>
+          </div>
+
+          <div className="deal-card">
+            <div className="deal-card-header">
+              <div>
+                <div className="deal-name">Terrace Cannabis</div>
+                <div className="deal-city">Moline, IL</div>
+              </div>
+              <span className="open-badge open">Open</span>
+            </div>
+            <div className="deal-highlight">20% off all flower today</div>
+            <div className="deal-reason">Highest rated in IL · 4.9 ★ · 4,200+ reviews</div>
+            <div className="deal-attrs">
+              <span className="deal-attr">Drive-thru</span>
+              <span className="deal-attr">4.9 ★</span>
+            </div>
+            <div className="deal-savings">
+              <span className="savings-label">You save vs avg price</span>
+              <span className="savings-num">~$10</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      {/* CITY BROWSE */}
+      <div className="cities-section">
+        <div className="cities-inner">
+          <div className="cities-title">Browse by city</div>
+          <div className="cities-sub">Find deals near you across Illinois</div>
+          <div className="city-grid">
+            {CITIES.map(city => (
+              <Link
+                key={city.slug}
+                href={`/cannabis/illinois/${city.slug}`}
+                className="city-card"
+              >
+                <div className="city-name">{city.name}</div>
+                <div className="city-pills">
+                  <Link href={`/cannabis/illinois/${city.slug}/deals`} className="city-pill">Deals</Link>
+                  <Link href={`/cannabis/illinois/${city.slug}/open-now`} className="city-pill">Open now</Link>
+                  <Link href={`/cannabis/illinois/${city.slug}/best`} className="city-pill">Best</Link>
                 </div>
-          
-                <div className="sec">
-                        <p className="slbl">Quick access</p>
-                        <h2 className="stit">What are you looking for?</h2>
-                        <p className="ssub">Jump straight to what you need</p>
-                        <div className="qgrid">
-                          {QUICK.map(q => (
-                        <Link key={q.href} href={q.href} className="qlink">
-                          {q.label}<span className="qa">&rarr;</span>
-                        </Link>
-                      ))}
-                        </div>
-                </div>
-          
-                <div className="why">
-                        <div className="wi">
-                                  <div><div className="wico">🕐</div><p className="wt">Real-time hours</p><p className="wd">Every listing shows current open/closed status based on verified business hours. No more calling ahead.</p></div>
-                                  <div><div className="wico">✓</div><p className="wt">Licensed only</p><p className="wd">Every dispensary on Directory Network is a state-licensed Illinois cannabis retailer. No unlicensed operators.</p></div>
-                                  <div><div className="wico">$0</div><p className="wt">Free for consumers</p><p className="wd">No subscriptions, no paywalls, no ads. This directory is free for anyone searching for cannabis in Illinois.</p></div>
-                        </div>
-                </div>
-          
-                <div className="sec">
-                        <p className="slbl">Browse by city</p>
-                        <h2 className="stit">Dispensaries near you</h2>
-                        <p className="ssub">Select a city to see all licensed dispensaries, hours, and directions</p>
-                        <div className="cgrid">
-                          {CITIES.map(city => (
-                        <Link key={city.slug} href={`/cannabis/illinois/${city.slug}`} className="ccard">
-                                      <p className="cn">{city.name}</p>
-                                      <p className="cc">{city.count} dispensar{city.count === 1 ? "y" : "ies"}</p>
-                                      <div className="cpills">
-                                                      <Link href={`/cannabis/illinois/${city.slug}/open-now`} className="cp">Open now</Link>
-                                                      <Link href={`/cannabis/illinois/${city.slug}/best`} className="cp">Best</Link>
-                                                      <Link href={`/cannabis/illinois/${city.slug}/deals`} className="cp">Deals</Link>
-                                      </div>
-                        </Link>
-                      ))}
-                        </div>
-                        <Link href="/cannabis/illinois" className="ba">View all Illinois cities &rarr;</Link>
-                </div>
-          
-                <div className="bstrip">
-                        <p className="bt">Own a dispensary?</p>
-                        <p className="bsub">Your listing is probably already live. Claim it free and keep your hours accurate.</p>
-                        <div className="bbtns">
-                                  <Link href="/get-listed" className="bb">Claim your listing &rarr;</Link>
-                                  <Link href="/cannabis/illinois" className="bbs">Find your listing first</Link>
-                        </div>
-                </div>
-          
-                <footer className="ft">
-                        <span className="flo">Directory<span style={{color:"#16a34a"}}>Network</span></span>
-                        <div className="fls">
-                                  <Link href="/cannabis/illinois" className="fl">Illinois</Link>
-                                  <Link href="/cannabis/illinois/first-time-guide" className="fl">First-time guide</Link>
-                                  <Link href="/cannabis/illinois/laws" className="fl">IL cannabis laws</Link>
-                                  <Link href="/get-listed" className="fl">List your business</Link>
-                        </div>
-                        <span className="fc">&copy; {new Date().getFullYear()} Directory Network</span>
-                </footer>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* DISPENSARY CTA — pushed to bottom where it belongs */}
+      <div className="biz-strip">
+        <div className="biz-title">Own a dispensary?</div>
+        <p className="biz-sub">
+          Get your daily deals in front of people actively looking to buy right now.
+          Featured placement from $49/month.
+        </p>
+        <div className="biz-btns">
+          <Link href="/upgrade" className="biz-btn-primary">Submit your deals →</Link>
+          <Link href="/get-listed" className="biz-btn-secondary">Claim free listing</Link>
+        </div>
+      </div>
+
+      {/* FOOTER */}
+      <footer className="footer">
+        <span className="footer-logo">clean<span>list</span></span>
+        <div className="footer-links">
+          <Link href="/cannabis/illinois" className="footer-link">Illinois</Link>
+          <Link href="/cannabis/illinois/first-time-guide" className="footer-link">First-time guide</Link>
+          <Link href="/cannabis/illinois/laws" className="footer-link">IL laws</Link>
+          <Link href="/upgrade" className="footer-link">For dispensaries</Link>
+        </div>
+        <span className="footer-copy">© {new Date().getFullYear()} CleanList</span>
+      </footer>
     </>
   );
 }
