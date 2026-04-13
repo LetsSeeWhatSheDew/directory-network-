@@ -109,95 +109,95 @@ export default function HomePage() {
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   .nr .nl{display:none}
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             .sec{padding:40px 16px}
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          `}</style>style>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          `}</style>
           
                 <nav className="nav">
                         <Link href="/" className="logo">
                                   <span className="ndot" />
-                                  <span className="wm">Directory<span className="ac">Network</span>span></span>span>
-                        </Link>Link>
+                                  <span className="wm">Directory<span className="ac">Network</span></span>
+                        </Link>
                         <div className="nr">
-                                  <Link href="/cannabis/illinois" className="nl">Browse Illinois</Link>Link>
-                                  <Link href="/cannabis/illinois/open-now" className="nl">Open Now</Link>Link>
-                                  <Link href="/get-listed" className="nc">List your business</Link>Link>
-                        </div>div>
-                </nav>nav>
+                                  <Link href="/cannabis/illinois" className="nl">Browse Illinois</Link>
+                                  <Link href="/cannabis/illinois/open-now" className="nl">Open Now</Link>
+                                  <Link href="/get-listed" className="nc">List your business</Link>
+                        </div>
+                </nav>
           
                 <div className="hero">
-                        <div className="hbadge"><span className="hbd" />Illinois Cannabis Directory</div>div>
-                        <h1>Find a dispensary<br /><em>open right now</em>em></h1>h1>
-                        <p className="hsub">Real hours, verified listings, and directions to licensed cannabis dispensaries across Illinois. Free, always.</p>p>
+                        <div className="hbadge"><span className="hbd" />Illinois Cannabis Directory</div>
+                        <h1>Find a dispensary<br /><em>open right now</em></h1>
+                        <p className="hsub">Real hours, verified listings, and directions to licensed cannabis dispensaries across Illinois. Free, always.</p>
                         <div className="hbtns">
-                                  <Link href="/cannabis/illinois/open-now" className="bp">See who&apos;s open now &rarr;</Link>Link>
-                                  <Link href="/cannabis/illinois" className="bs">Browse all cities</Link>Link>
-                        </div>div>
+                                  <Link href="/cannabis/illinois/open-now" className="bp">See who&apos;s open now &rarr;</Link>
+                                  <Link href="/cannabis/illinois" className="bs">Browse all cities</Link>
+                        </div>
                         <div className="hstats">
-                                  <div><div className="sn">50+</div>div><div className="sl">Licensed dispensaries</div>div></div>div>
-                                  <div><div className="sn">34</div>div><div className="sl">Illinois cities</div>div></div>div>
-                                  <div><div className="sn">Free</div>div><div className="sl">Always, for consumers</div>div></div>div>
-                        </div>div>
-                </div>div>
+                                  <div><div className="sn">50+</div><div className="sl">Licensed dispensaries</div></div>
+                                  <div><div className="sn">34</div><div className="sl">Illinois cities</div></div>
+                                  <div><div className="sn">Free</div><div className="sl">Always, for consumers</div></div>
+                        </div>
+                </div>
           
                 <div className="sec">
-                        <p className="slbl">Quick access</p>p>
-                        <h2 className="stit">What are you looking for?</h2>h2>
-                        <p className="ssub">Jump straight to what you need</p>p>
+                        <p className="slbl">Quick access</p>
+                        <h2 className="stit">What are you looking for?</h2>
+                        <p className="ssub">Jump straight to what you need</p>
                         <div className="qgrid">
                           {QUICK.map(q => (
                         <Link key={q.href} href={q.href} className="qlink">
-                          {q.label}<span className="qa">&rarr;</span>span>
-                        </Link>Link>
+                          {q.label}<span className="qa">&rarr;</span>
+                        </Link>
                       ))}
-                        </div>div>
-                </div>div>
+                        </div>
+                </div>
           
                 <div className="why">
                         <div className="wi">
-                                  <div><div className="wico">🕐</div>div><p className="wt">Real-time hours</p>p><p className="wd">Every listing shows current open/closed status based on verified business hours. No more calling ahead.</p>p></div>div>
-                                  <div><div className="wico">✓</div>div><p className="wt">Licensed only</p>p><p className="wd">Every dispensary on Directory Network is a state-licensed Illinois cannabis retailer. No unlicensed operators.</p>p></div>div>
-                                  <div><div className="wico">$0</div>div><p className="wt">Free for consumers</p>p><p className="wd">No subscriptions, no paywalls, no ads. This directory is free for anyone searching for cannabis in Illinois.</p>p></div>div>
-                        </div>div>
-                </div>div>
+                                  <div><div className="wico">🕐</div><p className="wt">Real-time hours</p><p className="wd">Every listing shows current open/closed status based on verified business hours. No more calling ahead.</p></div>
+                                  <div><div className="wico">✓</div><p className="wt">Licensed only</p><p className="wd">Every dispensary on Directory Network is a state-licensed Illinois cannabis retailer. No unlicensed operators.</p></div>
+                                  <div><div className="wico">$0</div><p className="wt">Free for consumers</p><p className="wd">No subscriptions, no paywalls, no ads. This directory is free for anyone searching for cannabis in Illinois.</p></div>
+                        </div>
+                </div>
           
                 <div className="sec">
-                        <p className="slbl">Browse by city</p>p>
-                        <h2 className="stit">Dispensaries near you</h2>h2>
-                        <p className="ssub">Select a city to see all licensed dispensaries, hours, and directions</p>p>
+                        <p className="slbl">Browse by city</p>
+                        <h2 className="stit">Dispensaries near you</h2>
+                        <p className="ssub">Select a city to see all licensed dispensaries, hours, and directions</p>
                         <div className="cgrid">
                           {CITIES.map(city => (
                         <Link key={city.slug} href={`/cannabis/illinois/${city.slug}`} className="ccard">
-                                      <p className="cn">{city.name}</p>p>
-                                      <p className="cc">{city.count} dispensar{city.count === 1 ? "y" : "ies"}</p>p>
+                                      <p className="cn">{city.name}</p>
+                                      <p className="cc">{city.count} dispensar{city.count === 1 ? "y" : "ies"}</p>
                                       <div className="cpills">
-                                                      <Link href={`/cannabis/illinois/${city.slug}/open-now`} className="cp" onClick={e => e.stopPropagation()}>Open now</Link>Link>
-                                                      <Link href={`/cannabis/illinois/${city.slug}/best`} className="cp" onClick={e => e.stopPropagation()}>Best</Link>Link>
-                                                      <Link href={`/cannabis/illinois/${city.slug}/deals`} className="cp" onClick={e => e.stopPropagation()}>Deals</Link>Link>
-                                      </div>div>
-                        </Link>Link>
+                                                      <Link href={`/cannabis/illinois/${city.slug}/open-now`} className="cp" onClick={e => e.stopPropagation()}>Open now</Link>
+                                                      <Link href={`/cannabis/illinois/${city.slug}/best`} className="cp" onClick={e => e.stopPropagation()}>Best</Link>
+                                                      <Link href={`/cannabis/illinois/${city.slug}/deals`} className="cp" onClick={e => e.stopPropagation()}>Deals</Link>
+                                      </div>
+                        </Link>
                       ))}
-                        </div>div>
-                        <Link href="/cannabis/illinois" className="ba">View all Illinois cities &rarr;</Link>Link>
-                </div>div>
+                        </div>
+                        <Link href="/cannabis/illinois" className="ba">View all Illinois cities &rarr;</Link>
+                </div>
           
                 <div className="bstrip">
-                        <p className="bt">Own a dispensary?</p>p>
-                        <p className="bsub">Your listing is probably already live. Claim it free and keep your hours accurate.</p>p>
+                        <p className="bt">Own a dispensary?</p>
+                        <p className="bsub">Your listing is probably already live. Claim it free and keep your hours accurate.</p>
                         <div className="bbtns">
-                                  <Link href="/get-listed" className="bb">Claim your listing &rarr;</Link>Link>
-                                  <Link href="/cannabis/illinois" className="bbs">Find your listing first</Link>Link>
-                        </div>div>
-                </div>div>
+                                  <Link href="/get-listed" className="bb">Claim your listing &rarr;</Link>
+                                  <Link href="/cannabis/illinois" className="bbs">Find your listing first</Link>
+                        </div>
+                </div>
           
                 <footer className="ft">
-                        <span className="flo">Directory<span style={{color:"#16a34a"}}>Network</span>span></span>span>
+                        <span className="flo">Directory<span style={{color:"#16a34a"}}>Network</span></span>
                         <div className="fls">
-                                  <Link href="/cannabis/illinois" className="fl">Illinois</Link>Link>
-                                  <Link href="/cannabis/illinois/first-time-guide" className="fl">First-time guide</Link>Link>
-                                  <Link href="/cannabis/illinois/laws" className="fl">IL cannabis laws</Link>Link>
-                                  <Link href="/get-listed" className="fl">List your business</Link>Link>
-                        </div>div>
-                        <span className="fc">&copy; {new Date().getFullYear()} Directory Network</span>span>
-                </footer>footer>
+                                  <Link href="/cannabis/illinois" className="fl">Illinois</Link>
+                                  <Link href="/cannabis/illinois/first-time-guide" className="fl">First-time guide</Link>
+                                  <Link href="/cannabis/illinois/laws" className="fl">IL cannabis laws</Link>
+                                  <Link href="/get-listed" className="fl">List your business</Link>
+                        </div>
+                        <span className="fc">&copy; {new Date().getFullYear()} Directory Network</span>
+                </footer>
           </>>
         );
 }</>
