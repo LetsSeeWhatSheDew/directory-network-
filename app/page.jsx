@@ -336,7 +336,7 @@ export default function HomePage() {
           <span className="hero-badge-dot" />
           Illinois dispensary deals — live
         </div>
-        <h1>Best deal on weed<br /><em>near you right now</em></h1>
+        <h1>Best Bud For<br /><em>Your Buck$</em></h1>
         <p className="hero-sub">
           Tell us what you want. We find the cheapest price, the best discount,
           and the fastest option near you.
