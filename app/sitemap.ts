@@ -75,6 +75,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: "https://cleanlist.co/cannabis", lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: "https://cleanlist.co/cannabis/illinois", lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     { url: "https://cleanlist.co/get-listed", lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+    { url: "https://cleanlist.co/upgrade", lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
       ];
 
   // Static IL guide pages
