@@ -169,9 +169,9 @@ export default function HomePage() {
                                       <p className="cn">{city.name}</p>
                                       <p className="cc">{city.count} dispensar{city.count === 1 ? "y" : "ies"}</p>
                                       <div className="cpills">
-                                                      <Link href={`/cannabis/illinois/${city.slug}/open-now`} className="cp" onClick={e => e.stopPropagation()}>Open now</Link>
-                                                      <Link href={`/cannabis/illinois/${city.slug}/best`} className="cp" onClick={e => e.stopPropagation()}>Best</Link>
-                                                      <Link href={`/cannabis/illinois/${city.slug}/deals`} className="cp" onClick={e => e.stopPropagation()}>Deals</Link>
+                                                      <Link href={`/cannabis/illinois/${city.slug}/open-now`} className="cp">Open now</Link>
+                                                      <Link href={`/cannabis/illinois/${city.slug}/best`} className="cp">Best</Link>
+                                                      <Link href={`/cannabis/illinois/${city.slug}/deals`} className="cp">Deals</Link>
                                       </div>
                         </Link>
                       ))}
