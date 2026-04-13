@@ -1,338 +1,139 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Get Featured | Directory Network",
-  description:
-    "Top placement for your dispensary listing. $49/month. Cancel anytime.",
+  title: "Upgrade Your Listing | CleanList",
+  description: "Choose a plan to get more visibility for your dispensary. Featured listings from $49/month.",
 };
 
 const tiers = [
   {
-    name: "Listed",
-    price: "Free",
-    period: "forever",
-    description: "Get found by local customers",
+    name: "Free",
+    price: "$0",
+    period: "/month",
+    description: "Get discovered by local customers at no cost.",
     features: [
-      "Basic business profile",
-      "Address & hours displayed",
-      "Map placement on city page",
-      "Customer-facing listing page",
+      "Basic dispensary listing",
+      "Standard search placement",
+      "Business hours & address",
+      "Customer reviews",
     ],
-    cta: null,
+    cta: "Get Started",
+    href: "mailto:matthew@jacarandapeoria.com?subject=Featured+Listing+Inquiry",
     highlighted: false,
   },
   {
-    name: "Boost",
+    name: "Featured",
     price: "$49",
     period: "/month",
-    description: "Stand out in your city",
+    description: "Boost your visibility and attract more customers.",
     features: [
-      "Everything in Listed",
-      "Priority placement in search results",
-      "Monthly performance insights",
-      "Highlighted listing badge",
-      "Click-to-call tracking",
+      "Everything in Free",
+      "Featured badge on listing",
+      "Priority search placement",
+      "Menu & deal highlights",
+      "Analytics dashboard",
+      "Monthly performance report",
     ],
-    cta: {
-      label: "Get Started — $49/month",
-      href: "mailto:matthew@jacarandapeoria.com?subject=Featured+Listing+Inquiry&body=Hi%20Matthew%2C%0A%0AI%27m%20interested%20in%20the%20Boost%20plan%20for%20my%20dispensary.%0A%0ABusiness%20name%3A%20%0ACity%3A%20%0A",
-    },
+    cta: "Get Featured",
+    href: "mailto:matthew@jacarandapeoria.com?subject=Featured+Listing+Inquiry",
     highlighted: true,
   },
   {
-    name: "Featured",
+    name: "Premium",
     price: "$149",
     period: "/month",
-    description: "Own your city page",
+    description: "Maximum exposure for high-volume dispensaries.",
     features: [
-      "Everything in Boost",
-      "Top of category & city pages",
-      "Direct lead alerts via email",
-      "One featured spot per city",
-      "Priority support & onboarding",
+      "Everything in Featured",
+      "Top-of-page placement",
+      "Homepage spotlight",
+      "Custom brand colors",
+      "Dedicated account manager",
+      "Social media mentions",
+      "Priority support",
     ],
-    cta: {
-      label: "Contact Us — $149/month",
-      href: "mailto:matthew@jacarandapeoria.com?subject=Featured+Listing+Inquiry&body=Hi%20Matthew%2C%0A%0AI%27m%20interested%20in%20the%20Featured%20plan%20for%20my%20dispensary.%0A%0ABusiness%20name%3A%20%0ACity%3A%20%0A",
-    },
+    cta: "Go Premium",
+    href: "mailto:matthew@jacarandapeoria.com?subject=Featured+Listing+Inquiry",
     highlighted: false,
   },
 ];
 
 export default function UpgradePage() {
   return (
-    <main
-      style={{
-        backgroundColor: "#0f1f3d",
-        minHeight: "100vh",
-        color: "#ffffff",
-        fontFamily: "Georgia, 'Times New Roman', serif",
-      }}
-    >
-      {/* Header */}
-      <section
-        style={{
-          textAlign: "center",
-          padding: "80px 24px 48px",
-          maxWidth: "900px",
-          margin: "0 auto",
-        }}
-      >
-        <h1
-          style={{
-            fontSize: "clamp(2rem, 5vw, 3.25rem)",
-            fontWeight: 700,
-            lineHeight: 1.15,
-            margin: "0 0 16px",
-          }}
-        >
-          Get Featured on{" "}
-          <span style={{ color: "#16a34a" }}>Directory Network</span>
+    <main className="min-h-screen bg-[#0a1628] py-16 px-4">
+      <div className="max-w-5xl mx-auto">
+        <h1 className="text-center text-white text-4xl font-bold mb-3">
+          Upgrade Your Listing
         </h1>
-        <p
-          style={{
-            fontSize: "clamp(1.1rem, 2.5vw, 1.35rem)",
-            color: "#94a3b8",
-            margin: 0,
-            fontStyle: "italic",
-          }}
-        >
-          Top placement in your city. $49/month. Cancel anytime.
+        <p className="text-center text-slate-400 text-lg mb-14">
+          Choose the plan that helps your dispensary stand out on CleanList
         </p>
-      </section>
 
-      {/* Pricing Grid */}
-      <section
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-          gap: "24px",
-          maxWidth: "1100px",
-          margin: "0 auto",
-          padding: "0 24px 80px",
-        }}
-      >
-        {tiers.map((tier) => (
-          <div
-            key={tier.name}
-            style={{
-              backgroundColor: tier.highlighted ? "#162a4a" : "#0a1628",
-              border: tier.highlighted
-                ? "2px solid #16a34a"
-                : "1px solid #1e3a5f",
-              borderRadius: "16px",
-              padding: "40px 32px",
-              display: "flex",
-              flexDirection: "column",
-              position: "relative",
-              transform: tier.highlighted ? "scale(1.04)" : "none",
-            }}
-          >
-            {tier.highlighted && (
-              <span
-                style={{
-                  position: "absolute",
-                  top: "-14px",
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                  backgroundColor: "#16a34a",
-                  color: "#fff",
-                  fontSize: "0.8rem",
-                  fontFamily: "Arial, Helvetica, sans-serif",
-                  fontWeight: 700,
-                  padding: "4px 16px",
-                  borderRadius: "999px",
-                  letterSpacing: "0.05em",
-                  textTransform: "uppercase",
-                }}
-              >
-                Most Popular
-              </span>
-            )}
-
-            <h2
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {tiers.map((tier) => (
+            <div
+              key={tier.name}
+              className="relative flex flex-col rounded-2xl p-8"
               style={{
-                fontSize: "1.5rem",
-                fontWeight: 700,
-                margin: "0 0 8px",
+                backgroundColor: tier.highlighted ? "#1a3a2a" : "#132033",
+                border: tier.highlighted ? "2px solid #22c55e" : "1px solid #1e3a5f",
               }}
             >
-              {tier.name}
-            </h2>
+              {tier.highlighted && (
+                <div
+                  className="absolute -top-4 left-1/2 -translate-x-1/2 text-xs font-bold uppercase tracking-wider px-4 py-1 rounded-full"
+                  style={{ backgroundColor: "#22c55e", color: "#0a1628" }}
+                >
+                  Most Popular
+                </div>
+              )}
 
-            <div style={{ margin: "0 0 8px" }}>
-              <span style={{ fontSize: "2.75rem", fontWeight: 700 }}>
-                {tier.price}
-              </span>
-              <span
-                style={{
-                  fontSize: "1rem",
-                  color: "#94a3b8",
-                  marginLeft: "4px",
-                }}
-              >
-                {tier.period}
-              </span>
-            </div>
-
-            <p
-              style={{
-                color: "#94a3b8",
-                fontSize: "0.95rem",
-                margin: "0 0 24px",
-                fontFamily: "Arial, Helvetica, sans-serif",
-              }}
-            >
-              {tier.description}
-            </p>
-
-            <ul
-              style={{
-                listStyle: "none",
-                padding: 0,
-                margin: "0 0 32px",
-                flex: 1,
-                fontFamily: "Arial, Helvetica, sans-serif",
-                fontSize: "0.95rem",
-                lineHeight: 1.8,
-              }}
-            >
-              {tier.features.map((feature) => (
-                <li key={feature} style={{ paddingLeft: "24px", position: "relative" }}>
-                  <span
-                    style={{
-                      position: "absolute",
-                      left: 0,
-                      color: "#16a34a",
-                      fontWeight: 700,
-                    }}
-                  >
-                    ✓
-                  </span>
-                  {feature}
-                </li>
-              ))}
-            </ul>
-
-            {tier.cta ? (
-              <a
-                href={tier.cta.href}
-                style={{
-                  display: "block",
-                  textAlign: "center",
-                  backgroundColor: tier.highlighted ? "#16a34a" : "transparent",
-                  color: tier.highlighted ? "#fff" : "#16a34a",
-                  border: tier.highlighted ? "none" : "2px solid #16a34a",
-                  borderRadius: "12px",
-                  padding: "16px 24px",
-                  fontSize: "1.05rem",
-                  fontFamily: "Arial, Helvetica, sans-serif",
-                  fontWeight: 700,
-                  textDecoration: "none",
-                  transition: "opacity 0.15s",
-                  cursor: "pointer",
-                }}
-              >
-                {tier.cta.label}
-              </a>
-            ) : (
-              <div
-                style={{
-                  textAlign: "center",
-                  color: "#64748b",
-                  fontSize: "0.9rem",
-                  fontFamily: "Arial, Helvetica, sans-serif",
-                  padding: "16px 0",
-                }}
-              >
-                Included with every listing
+              <h2 className="text-slate-100 text-xl font-bold mb-2">{tier.name}</h2>
+              <div className="mb-3">
+                <span
+                  className="text-4xl font-extrabold"
+                  style={{ color: tier.highlighted ? "#22c55e" : "#60a5fa" }}
+                >
+                  {tier.price}
+                </span>
+                <span className="text-slate-400 text-base">{tier.period}</span>
               </div>
-            )}
-          </div>
-        ))}
-      </section>
+              <p className="text-slate-400 text-sm mb-6">{tier.description}</p>
 
-      {/* FAQ / Trust section */}
-      <section
-        style={{
-          maxWidth: "700px",
-          margin: "0 auto",
-          padding: "0 24px 80px",
-          textAlign: "center",
-        }}
-      >
-        <h3
-          style={{
-            fontSize: "1.5rem",
-            fontWeight: 700,
-            marginBottom: "24px",
-          }}
-        >
-          Frequently Asked Questions
-        </h3>
-        <div
-          style={{
-            textAlign: "left",
-            fontFamily: "Arial, Helvetica, sans-serif",
-            fontSize: "0.95rem",
-            lineHeight: 1.8,
-            color: "#cbd5e1",
-          }}
-        >
-          <p style={{ marginBottom: "20px" }}>
-            <strong style={{ color: "#fff" }}>Is there a contract?</strong>
-            <br />
-            No. Month-to-month, cancel anytime. No setup fees, no hidden costs.
-          </p>
-          <p style={{ marginBottom: "20px" }}>
-            <strong style={{ color: "#fff" }}>
-              How many featured spots per city?
-            </strong>
-            <br />
-            One. The Featured placement is exclusive — only one dispensary per
-            city gets the top spot. First come, first served.
-          </p>
-          <p style={{ marginBottom: "20px" }}>
-            <strong style={{ color: "#fff" }}>How does this compare to Leafly or Weedmaps?</strong>
-            <br />
-            Leafly starts around $600/month. Weedmaps starts around $495/month.
-            Our Boost plan is $49/month with one-per-city exclusivity they
-            don&apos;t offer.
-          </p>
-          <p>
-            <strong style={{ color: "#fff" }}>Can I claim my free listing first?</strong>
-            <br />
-            Absolutely. Every dispensary in Illinois already has a free listing.
-            Visit your listing page and click &quot;Claim Your Listing&quot; — no payment
-            needed.
-          </p>
+              <ul className="flex-1 space-y-2 mb-8">
+                {tier.features.map((feature) => (
+                  <li key={feature} className="flex items-center gap-2 text-slate-300 text-sm">
+                    <span className="text-green-400 font-bold">&#10003;</span>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+
+              <a
+                href={tier.href}
+                className="block text-center py-3 px-6 rounded-lg text-base font-bold no-underline transition-opacity hover:opacity-90"
+                style={
+                  tier.highlighted
+                    ? { backgroundColor: "#22c55e", color: "#0a1628" }
+                    : { border: "2px solid #22c55e", color: "#22c55e", backgroundColor: "transparent" }
+                }
+              >
+                {tier.cta}
+              </a>
+            </div>
+          ))}
         </div>
-      </section>
 
-      {/* Footer CTA */}
-      <section
-        style={{
-          textAlign: "center",
-          padding: "48px 24px 80px",
-          borderTop: "1px solid #1e3a5f",
-        }}
-      >
-        <p
-          style={{
-            fontSize: "1.15rem",
-            color: "#94a3b8",
-            marginBottom: "24px",
-          }}
-        >
-          Questions? Email{" "}
+        <p className="text-center text-slate-500 text-sm mt-12">
+          Questions?{" "}
           <a
-            href="mailto:matthew@jacarandapeoria.com"
-            style={{ color: "#16a34a", textDecoration: "underline" }}
+            href="mailto:matthew@jacarandapeoria.com?subject=Featured+Listing+Inquiry"
+            className="text-blue-400 hover:underline"
           >
             matthew@jacarandapeoria.com
           </a>
         </p>
-      </section>
+      </div>
     </main>
   );
 }
