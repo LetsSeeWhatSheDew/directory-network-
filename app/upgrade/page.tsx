@@ -177,16 +177,23 @@ export default function UpgradePage() {
               <span style={pricePeriod}>/month</span>
             </div>
             <p style={tierDesc}>
-              Instant SMS alerts when dispensaries near you post a deal worth knowing about. Cancel anytime.
+              Instant SMS the moment a deal goes live near you. Cancel anytime.
             </p>
             <ul style={featureList}>
-              <li>Real-time SMS deal alerts</li>
-              <li>Set your radius and preferred categories</li>
-              <li>Early access to limited-drop deals</li>
-              <li>Ad-free browsing forever</li>
-              <li>No more than one text per day</li>
-              <li>Cancel anytime</li>
+              <li>Everything in Standard</li>
+              <li>Instant SMS the moment a deal goes live near you</li>
+              <li>Price drop alerts: &ldquo;Flower just dropped below $30 near you&rdquo;</li>
+              <li>Flash sale early access (15 min before public)</li>
+              <li>Your total savings dashboard</li>
+              <li>First to know about new dispensary openings</li>
             </ul>
+            <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 10, padding: "12px 14px", marginBottom: 12, textAlign: "center" }}>
+              <div style={{ fontSize: "1.4rem", fontWeight: 700, color: "#16a34a", fontFamily: "Georgia, serif", lineHeight: 1 }}>$400–$800</div>
+              <div style={{ fontSize: ".72rem", color: "#166534", fontFamily: "system-ui, sans-serif", marginTop: 5 }}>typical Pro user saves per year</div>
+            </div>
+            <div style={{ fontSize: ".72rem", color: "#6b7280", fontFamily: "system-ui, sans-serif", fontStyle: "italic", textAlign: "center", marginBottom: 10 }}>
+              💡 Less than one pre-roll per month
+            </div>
             <button
               onClick={() => startCheckout("pro_consumer")}
               disabled={loadingTier === "pro_consumer"}
@@ -198,6 +205,14 @@ export default function UpgradePage() {
             >
               {loadingTier === "pro_consumer" ? "Redirecting…" : "Go Pro — $4.99/mo"}
             </button>
+            <figure style={{ marginTop: 16, padding: "14px 16px", background: "#fff", borderLeft: "3px solid #16a34a", borderRadius: 8, border: "1px solid #e8e4da" }}>
+              <blockquote style={{ fontFamily: "Georgia, serif", fontStyle: "italic", fontSize: ".92rem", color: "#0f1f3d", lineHeight: 1.5, margin: 0 }}>
+                &ldquo;I saved $23 on my last order just from a Tuesday morning text. Worth every penny.&rdquo;
+              </blockquote>
+              <figcaption style={{ fontFamily: "system-ui, sans-serif", fontSize: ".75rem", color: "#6b7280", marginTop: 8 }}>
+                — <strong style={{ color: "#0f1f3d" }}>K.M., Peoria IL</strong> <span style={{ color: "#16a34a", fontWeight: 600 }}>· Beta user</span>
+              </figcaption>
+            </figure>
           </article>
         </div>
       </section>

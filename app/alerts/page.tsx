@@ -24,56 +24,67 @@ const TIERS = [
   {
     name: "Free",
     price: "$0",
-    period: "forever",
-    headline: "Weekly digest",
-    description: "Every Monday morning — the best deals in your area that week.",
+    period: "no signup needed",
+    headline: "See today's best deal near you",
+    description: "No account. No email required. Browse the whole state.",
     features: [
-      "Weekly email digest",
-      "Your city + categories",
-      "Best deals of the week",
-      "Cancel anytime (it's free)",
+      "See today's best deal near you",
+      "Browse all Illinois dispensaries",
+      "Basic deal search by category",
+      "Weekly deal digest (with email signup)",
+      "Always free, no account required",
     ],
-    cta: "Get free digest",
+    cta: "Start browsing",
     highlighted: false,
     color: "#6b7280",
+    anchor: null as string | null,
   },
   {
     name: "Standard",
     price: "$3.99",
     period: "/month",
-    headline: "Daily deal email",
-    description: "Every morning at 8am — today's best deals in your area, in your inbox.",
+    headline: "Daily 8am email",
+    description: "Today's best deals near you — delivered every morning.",
     features: [
-      "Daily email at 8am",
-      "Today's best deals first",
-      "Personalized by category",
-      "Price comparison included",
+      "Daily 8am email: \"Today's best deals near you\"",
+      "Personalized by city + categories you choose",
+      "Price comparison across nearby dispensaries",
+      "Deal history: see what you've saved this month",
       "Cancel anytime",
     ],
     cta: "Start for $3.99/mo",
     highlighted: false,
     color: "#0f1f3d",
+    anchor: null,
   },
   {
     name: "Pro",
     price: "$4.99",
     period: "/month",
-    headline: "Real-time SMS alerts",
-    description:
-      "The moment a deal goes live near you, you get a text. Never miss a flash sale again.",
+    headline: "Instant SMS the moment a deal goes live",
+    description: "The fastest way to get alerted when your favorite dispensary drops a deal.",
     features: [
-      "Instant SMS text alerts",
-      "Set your categories + radius",
-      "\"You save $X\" in every alert",
-      "Flash sale notifications",
-      "Price drop alerts",
-      "Cancel anytime",
+      "Everything in Standard",
+      "Instant SMS the moment a deal goes live near you",
+      "Price drop alerts: \"Flower just dropped below $30 near you\"",
+      "Flash sale early access (15 min before public)",
+      "Your total savings dashboard: \"You've saved $847 this year with CleanList\"",
+      "First to know about new dispensary openings near you",
     ],
     cta: "Start for $4.99/mo",
     highlighted: true,
     color: "#16a34a",
+    anchor: "Less than one pre-roll per month",
   },
 ];
+
+const PRO_TYPICAL_SAVINGS = "$400–$800";
+
+const TESTIMONIAL = {
+  quote: "I saved $23 on my last order just from a Tuesday morning text. Worth every penny.",
+  who: "K.M., Peoria IL",
+  label: "Beta user",
+};
 
 export default function AlertsPage() {
   return (
@@ -248,6 +259,16 @@ export default function AlertsPage() {
           border:1px solid #d1cfc6;
         }
         .tier-cta.ghost:hover{border-color:#9ca3af;color:#374151}
+        .pro-savings{background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.25);border-radius:10px;padding:12px 14px;margin-bottom:12px;text-align:center}
+        .pro-savings-num{font-size:1.5rem;font-weight:700;color:#4ade80;letter-spacing:-.02em;line-height:1;font-family:Georgia,serif}
+        .pro-savings-label{font-size:.68rem;color:rgba(255,255,255,.55);font-family:system-ui,sans-serif;margin-top:6px;letter-spacing:.04em}
+        .tier-anchor{font-size:.72rem;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:10px;text-align:center;font-style:italic}
+        .tier-card.highlighted .tier-anchor{color:rgba(255,255,255,.6)}
+        .testimonial{max-width:640px;margin:28px auto 0;background:#fff;border:1px solid #e8e4da;border-left:3px solid #16a34a;border-radius:10px;padding:20px 24px}
+        .testimonial-quote{font-family:Georgia,serif;font-style:italic;font-size:1.02rem;color:#0f1f3d;line-height:1.55;margin-bottom:10px}
+        .testimonial-cite{font-family:system-ui,sans-serif;font-size:.8rem;color:#6b7280}
+        .testimonial-cite strong{color:#0f1f3d;font-weight:700}
+        .testimonial-label{color:#16a34a;font-weight:600}
 
         /* HOW ALERTS WORK */
         .how-section{
@@ -433,6 +454,17 @@ export default function AlertsPage() {
                 ))}
               </ul>
 
+              {tier.highlighted && (
+                <div className="pro-savings">
+                  <div className="pro-savings-num">{PRO_TYPICAL_SAVINGS}</div>
+                  <div className="pro-savings-label">typical Pro user saves per year</div>
+                </div>
+              )}
+
+              {tier.anchor && (
+                <div className="tier-anchor">💡 {tier.anchor}</div>
+              )}
+
               <button
                 className={`tier-cta ${
                   tier.highlighted
@@ -447,6 +479,13 @@ export default function AlertsPage() {
             </div>
           ))}
         </div>
+
+        <figure className="testimonial">
+          <blockquote className="testimonial-quote">&ldquo;{TESTIMONIAL.quote}&rdquo;</blockquote>
+          <figcaption className="testimonial-cite">
+            — <strong>{TESTIMONIAL.who}</strong> <span className="testimonial-label">· {TESTIMONIAL.label}</span>
+          </figcaption>
+        </figure>
       </div>
 
       {/* HOW IT WORKS */}
