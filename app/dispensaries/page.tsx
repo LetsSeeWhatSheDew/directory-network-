@@ -4,7 +4,12 @@
 // pages). This page is for users who land via /dispensaries.
 
 import Link from "next/link";
-import { supabase } from "@/lib/supabase";
+
+const SUPABASE_URL =
+  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
+const SUPABASE_ANON_KEY =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300";
 
 export const metadata = {
   title: "All Illinois Dispensaries | CleanList",
@@ -12,27 +17,64 @@ export const metadata = {
   alternates: { canonical: "https://cleanlist.co/dispensaries" },
 };
 
+export const dynamic = "force-dynamic";
+
 type Listing = {
   slug: string;
-  name: string;
-  city: string;
+  name: string | null;
+  city: string | null;
+  state: string | null;
   google_rating: number | null;
-  review_count: number | null;
+  accepts_credit: boolean | null;
+  drive_thru: boolean | null;
+  delivery: boolean | null;
   plan: string | null;
 };
 
+type DealRow = { listing_slug: string };
+
+async function getListings(): Promise<Listing[]> {
+  const url = `${SUPABASE_URL}/rest/v1/master_listings?select=slug,name,city,state,google_rating,accepts_credit,drive_thru,delivery,plan&project_tag=eq.green&order=city.asc&limit=500`;
+  const res = await fetch(url, {
+    headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
+    cache: "no-store",
+  });
+  if (!res.ok) return [];
+  const data = await res.json();
+  return Array.isArray(data) ? data : [];
+}
+
+async function getActiveDealSlugs(): Promise<Map<string, number>> {
+  const url = `${SUPABASE_URL}/rest/v1/deals?select=listing_slug&is_active=eq.true&project_tag=eq.green&limit=1000`;
+  const res = await fetch(url, {
+    headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
+    cache: "no-store",
+  });
+  if (!res.ok) return new Map();
+  const data = (await res.json()) as DealRow[];
+  const counts = new Map<string, number>();
+  for (const d of data || []) {
+    if (!d.listing_slug) continue;
+    counts.set(d.listing_slug, (counts.get(d.listing_slug) ?? 0) + 1);
+  }
+  return counts;
+}
+
+function humanize(slug: string) {
+  return slug.split("-").filter(Boolean).map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+}
+
 export default async function DispensariesIndexPage() {
-  const { data, error } = await supabase
-    .from("master_listings")
-    .select("slug, name, city, google_rating, review_count, plan")
-    .eq("project_tag", "green")
-    .eq("state", "Illinois")
-    .order("city", { ascending: true })
-    .order("google_rating", { ascending: false });
+  const [listings, dealCounts] = await Promise.all([getListings(), getActiveDealSlugs()]);
 
-  if (error) console.error("[dispensaries] query error:", error);
-
-  const listings = (data as Listing[] | null) || [];
+  // Group by city
+  const byCity = new Map<string, Listing[]>();
+  for (const l of listings) {
+    const c = l.city || "Other";
+    if (!byCity.has(c)) byCity.set(c, []);
+    byCity.get(c)!.push(l);
+  }
+  const cities = Array.from(byCity.keys()).sort();
 
   // Group by city
   const byCity = new Map<string, Listing[]>();
@@ -88,35 +130,52 @@ export default async function DispensariesIndexPage() {
                     </Link>
                   </div>
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 12 }}>
-                    {items.map((l) => (
-                      <Link
-                        key={l.slug}
-                        href={`/l/${l.slug}`}
-                        style={{
-                          background: "#fff",
-                          border: l.plan === "featured" ? "2px solid #16a34a" : "1px solid #e8e4da",
-                          borderRadius: 10,
-                          padding: 14,
-                          textDecoration: "none",
-                          color: "#0f1f3d",
-                          display: "block",
-                        }}
-                      >
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
-                          <div style={{ fontSize: ".95rem", fontWeight: 700 }}>{l.name}</div>
-                          {l.plan === "featured" && (
-                            <span style={{ fontSize: ".62rem", background: "#16a34a", color: "#fff", padding: "2px 7px", borderRadius: 100, fontFamily: "system-ui, sans-serif", fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase" }}>
-                              Featured
-                            </span>
-                          )}
-                        </div>
-                        {l.google_rating ? (
-                          <div style={{ marginTop: 6, fontSize: ".78rem", color: "#6b7280", fontFamily: "system-ui, sans-serif" }}>
-                            {l.google_rating.toFixed(1)} ★ · {l.review_count?.toLocaleString() || 0} reviews
+                    {items.map((l) => {
+                      const rawName = l.name || "";
+                      const display =
+                        !rawName || rawName === l.slug || /^[a-z0-9-]+$/.test(rawName)
+                          ? humanize(l.slug)
+                          : rawName;
+                      const count = dealCounts.get(l.slug) ?? 0;
+                      const attrs: string[] = [];
+                      if (l.accepts_credit) attrs.push("Cards OK");
+                      if (l.drive_thru) attrs.push("Drive-thru");
+                      if (l.delivery) attrs.push("Delivery");
+                      return (
+                        <Link
+                          key={l.slug}
+                          href={`/l/${l.slug}`}
+                          style={{
+                            background: "#fff",
+                            border: l.plan === "featured" ? "2px solid #16a34a" : "1px solid #e8e4da",
+                            borderRadius: 10,
+                            padding: 14,
+                            textDecoration: "none",
+                            color: "#0f1f3d",
+                            display: "block",
+                          }}
+                        >
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
+                            <div style={{ fontSize: ".95rem", fontWeight: 700 }}>{display}</div>
+                            {l.plan === "featured" && (
+                              <span style={{ fontSize: ".62rem", background: "#16a34a", color: "#fff", padding: "2px 7px", borderRadius: 100, fontFamily: "system-ui, sans-serif", fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase" }}>
+                                Featured
+                              </span>
+                            )}
                           </div>
-                        ) : null}
-                      </Link>
-                    ))}
+                          <div style={{ marginTop: 6, fontSize: ".78rem", color: "#6b7280", fontFamily: "system-ui, sans-serif" }}>
+                            {l.google_rating ? `${l.google_rating.toFixed(1)} ★` : "No rating yet"}
+                            {attrs.length > 0 ? ` · ${attrs.join(" · ")}` : ""}
+                          </div>
+                          {count > 0 && (
+                            <div style={{ marginTop: 10, display: "inline-flex", alignItems: "center", gap: 6, fontSize: ".7rem", fontFamily: "system-ui, sans-serif", fontWeight: 700, color: "#166534", background: "#f0fdf4", border: "1px solid #bbf7d0", padding: "3px 9px", borderRadius: 100 }}>
+                              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#16a34a" }} />
+                              {count} active deal{count === 1 ? "" : "s"}
+                            </div>
+                          )}
+                        </Link>
+                      );
+                    })}
                   </div>
                 </div>
               );
