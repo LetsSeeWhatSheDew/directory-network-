@@ -447,6 +447,13 @@ export default async function HomePage() {
         @keyframes ticker-marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
         @keyframes ticker-pulse{0%{box-shadow:0 0 0 0 rgba(239,68,68,.7)}70%{box-shadow:0 0 0 8px rgba(239,68,68,0)}100%{box-shadow:0 0 0 0 rgba(239,68,68,0)}}
 
+        /* HERO SAVINGS CALLOUT */
+        .hero-save{background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.3);border-radius:12px;padding:12px 20px;display:flex;align-items:center;justify-content:center;gap:12px;max-width:560px;margin:0 auto 20px;font-family:system-ui,sans-serif;font-size:.88rem;color:rgba(255,255,255,.8);flex-wrap:wrap}
+        .hero-save-amt{color:#4ade80;font-weight:700;font-size:1.1rem}
+        .hero-save-link{color:rgba(255,255,255,.75);text-decoration:none;font-weight:600;white-space:nowrap;border-left:1px solid rgba(255,255,255,.15);padding-left:12px;margin-left:auto}
+        .hero-save-link:hover{color:#4ade80}
+        @media(max-width:480px){.hero-save-link{border-left:0;padding-left:0;margin-left:0;width:100%;text-align:center}}
+
         /* HERO SEARCH */
         .hero-search{display:flex;gap:8px;max-width:560px;margin:0 auto 22px;background:#fff;border-radius:10px;padding:6px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
         .hero-search-input{flex:1;border:none;outline:none;background:transparent;padding:10px 12px;font-family:system-ui,sans-serif;font-size:.92rem;color:#0f1f3d;min-width:0}
@@ -736,6 +743,15 @@ export default async function HomePage() {
           </div>
           <h1>Best Bud For<br /><em>Your Buck$</em></h1>
           <p className="hero-sub">Low Prices. High Times.</p>
+
+          {/* SAVINGS CALLOUT — above the fold */}
+          <div className="hero-save" role="note">
+            <span>
+              Illinois cannabis buyers save an average of{" "}
+              <span className="hero-save-amt">$23 per trip</span> using CleanList
+            </span>
+            <Link href="/deals/all" className="hero-save-link">→ See today&apos;s top deal</Link>
+          </div>
 
           {/* LIVE DEALS TICKER */}
           {tickerDeals.length > 0 && (
