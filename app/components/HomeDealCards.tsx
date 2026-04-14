@@ -1,0 +1,203 @@
+"use client";
+
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { formatSavingsDollars, gradeDeal } from "../../lib/dealScoring";
+import TrackedLink from "./TrackedLink";
+
+type Deal = {
+  deal_id?: string;
+  id?: string;
+  listing_slug?: string;
+  slug?: string;
+  name?: string;
+  city?: string;
+  category?: string | null;
+  deal_title?: string;
+  deal_description?: string | null;
+  discount_value?: number;
+  discount_unit?: string;
+  accepts_credit?: boolean | null;
+  drive_thru?: boolean | null;
+  delivery?: boolean | null;
+  google_rating?: number | null;
+  is_recurring?: boolean | null;
+  expires_at?: string | null;
+  scope?: "local" | "statewide";
+};
+
+function slugToName(s: string) {
+  return s.split("-").filter(Boolean).map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+}
+
+function displayName(d: Deal) {
+  const name = d.name;
+  const slug = d.slug || d.listing_slug || "";
+  if (!name || name === slug || /^[a-z0-9-]+$/.test(name)) {
+    return slugToName(slug || name || "Illinois dispensary");
+  }
+  return name;
+}
+
+function isLikelyOpen() {
+  const utcHour = new Date().getUTCHours();
+  const ctHour = (utcHour + 24 - 5) % 24;
+  return ctHour >= 9 && ctHour < 21;
+}
+
+function getExpiryUrgency(expiresAt?: string | null) {
+  if (!expiresAt) return null;
+  const now = Date.now();
+  const expiry = new Date(expiresAt).getTime();
+  if (!Number.isFinite(expiry) || expiry < now) return null;
+  const hoursLeft = (expiry - now) / (1000 * 60 * 60);
+  if (hoursLeft < 24) return { key: "today", text: "⚡ Expires today", bg: "#fee2e2", fg: "#991b1b" };
+  if (hoursLeft < 48) return { key: "soon", text: "⏱ Expires soon", bg: "#fef3c7", fg: "#92400e" };
+  if (hoursLeft < 168) {
+    const weekday = new Date(expiresAt).toLocaleDateString("en-US", { weekday: "short" });
+    return { key: "week", text: `Expires ${weekday}`, bg: "#f1f5f9", fg: "#475569" };
+  }
+  return null;
+}
+
+export default function HomeDealCards({ initial }: { initial: Deal[] }) {
+  const [deals, setDeals] = useState<Deal[]>(initial || []);
+  const [city, setCity] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    let c: string | null = null;
+    try {
+      c = sessionStorage.getItem("cl_city");
+    } catch {}
+    if (!c) return;
+    setCity(c);
+    setLoading(true);
+    fetch(
+      `/api/deals/recommend?category=all&limit=3&city=${encodeURIComponent(c)}`,
+      { cache: "no-store" }
+    )
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        const arr: Deal[] = Array.isArray(data?.deals) ? data.deals.slice(0, 3) : [];
+        if (arr.length > 0) setDeals(arr);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  const likelyOpen = isLikelyOpen();
+
+  if (!deals || deals.length === 0) {
+    return (
+      <div className="deal-cards">
+        {[0, 1, 2].map((i) => (
+          <div key={`skel-${i}`} className="deal-card" style={{ padding: 18, minHeight: 220 }} aria-hidden="true">
+            <div style={{ height: 14, width: "55%", borderRadius: 6, background: "#e8e4da", marginBottom: 8 }} />
+            <div style={{ height: 10, width: "35%", borderRadius: 5, background: "#f0ece3", marginBottom: 18 }} />
+            <div style={{ height: 16, width: "75%", borderRadius: 6, background: "#e8e4da", marginBottom: 10 }} />
+            <div style={{ height: 10, width: "92%", borderRadius: 5, background: "#f0ece3", marginBottom: 6 }} />
+            <div style={{ height: 10, width: "68%", borderRadius: 5, background: "#f0ece3", marginBottom: 18 }} />
+            <div style={{ height: 42, width: "100%", borderRadius: 10, background: "#f0fdf4", border: "1px solid #bbf7d0" }} />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: 14 }}>
+        <div>
+          <p className="section-eyebrow">Live deals</p>
+          <h2 className="section-title">
+            {city ? `Best deals near ${city} today` : "Top deals in Illinois today"}
+          </h2>
+          <p className="section-sub">
+            Updated continuously · Verified against dispensary sites
+            {loading && " · Refreshing…"}
+          </p>
+        </div>
+        {city && (
+          <Link
+            href="/deals/all"
+            style={{
+              fontSize: ".85rem",
+              color: "#16a34a",
+              fontFamily: "system-ui, sans-serif",
+              fontWeight: 600,
+              textDecoration: "none",
+              whiteSpace: "nowrap",
+            }}
+          >
+            See all Illinois deals →
+          </Link>
+        )}
+      </div>
+
+      <div className="deal-cards">
+        {deals.map((d, i) => {
+          const slug = d.slug || d.listing_slug || "";
+          const name = displayName(d);
+          const g = gradeDeal(d);
+          const urgency = getExpiryUrgency(d.expires_at);
+          return (
+            <TrackedLink
+              key={d.deal_id || d.id || i}
+              href={`/l/${slug}`}
+              className={`deal-card${i === 0 ? " top-pick" : ""}`}
+              style={{ textDecoration: "none", color: "inherit" }}
+              event="deal_click"
+              params={{ dispensary: name, category: d.category || "all", position: i + 1 }}
+            >
+              {i === 0 && <div className="top-pick-badge">Best value today</div>}
+              <span
+                className="deal-grade"
+                style={{ background: g.color.bg, color: g.color.fg }}
+                title={`${g.label} · score ${g.score}/100`}
+                aria-label={`Deal score ${g.grade}, ${g.label}`}
+              >
+                {g.grade}
+              </span>
+              <div className="deal-card-header">
+                <div>
+                  <div className="deal-name">{name}</div>
+                  <div className="deal-city">
+                    {d.city || "Illinois"}
+                    {d.scope === "statewide" && city ? " · statewide" : ""}
+                  </div>
+                </div>
+                <span className={`open-badge ${likelyOpen ? "open" : "closed"}`}>
+                  {likelyOpen ? "Likely open" : "Closed"}
+                </span>
+              </div>
+              <div className="deal-highlight">{d.deal_title || "Active deal"}</div>
+              {urgency && (
+                <div style={{ display: "inline-block", marginTop: 4, marginBottom: 6, fontSize: ".7rem", fontFamily: "system-ui,sans-serif", fontWeight: 700, color: urgency.fg, background: urgency.bg, padding: "2px 9px", borderRadius: 100 }}>
+                  {urgency.text}
+                </div>
+              )}
+              {d.deal_description && (
+                <div className="deal-reason">{d.deal_description}</div>
+              )}
+              <div className="deal-attrs">
+                {d.accepts_credit && <span className="deal-attr">Cards OK</span>}
+                {d.drive_thru && <span className="deal-attr">Drive-thru</span>}
+                {d.delivery && <span className="deal-attr">Delivery</span>}
+                {d.google_rating && d.google_rating > 0 && <span className="deal-attr">{d.google_rating} ★</span>}
+                {d.is_recurring && <span className="deal-attr">Recurring</span>}
+              </div>
+              <div className="deal-savings">
+                <div className="savings-copy">
+                  <span className="savings-label">You save</span>
+                  <span className="savings-sub">vs. Illinois average</span>
+                </div>
+                <span className="savings-num">{formatSavingsDollars(d)}</span>
+              </div>
+            </TrackedLink>
+          );
+        })}
+      </div>
+    </>
+  );
+}

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import LocationAware from "./components/LocationAware";
 import TrackedLink from "./components/TrackedLink";
+import HomeTicker from "./components/HomeTicker";
+import HomeDealCards from "./components/HomeDealCards";
 import { formatSavingsDollars, gradeDeal } from "../lib/dealScoring";
 
 // ============================================================
@@ -758,36 +760,8 @@ export default async function HomePage() {
             <Link href="/deals/all" className="hero-save-link">→ See today&apos;s top deal</Link>
           </div>
 
-          {/* LIVE DEALS TICKER */}
-          {tickerDeals.length > 0 && (
-            <div className="ticker" aria-label="Live deals ticker">
-              <span className="ticker-live"><span className="ticker-live-dot" />Live</span>
-              <div className="ticker-track">
-                {[...tickerDeals, ...tickerDeals].map((d, i) => {
-                  const name = displayName(d);
-                  const title = d.deal_title ||
-                    (d.discount_unit === "percent"
-                      ? `${Math.round(d.discount_value)}% off ${d.category || "deal"}`
-                      : d.discount_unit === "dollars"
-                      ? `$${d.discount_value} off ${d.category || "deal"}`
-                      : "Active deal");
-                  const pct =
-                    d.discount_unit === "percent" && d.discount_value
-                      ? `${Math.round(d.discount_value)}%`
-                      : null;
-                  return (
-                    <span key={`tk-${i}`} style={{ display: "inline-flex", gap: 22, alignItems: "center" }}>
-                      <Link href={`/deals/${d.category || "all"}`}>
-                        {categoryEmoji(d.category)} <strong>{name}</strong>: {title}
-                        {pct && <> · <em>Save {pct}</em></>}
-                      </Link>
-                      <span className="sep">·</span>
-                    </span>
-                  );
-                })}
-              </div>
-            </div>
-          )}
+          {/* LIVE DEALS TICKER — client component, refilters by detected city */}
+          <HomeTicker initial={tickerDeals} />
 
           {/* SEARCH */}
           <form action="/search" method="get" className="hero-search" role="search">
@@ -906,114 +880,9 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* TODAY'S DEALS */}
+      {/* TODAY'S DEALS — client-side filters to detected city */}
       <div className="deals-section">
-        <p className="section-eyebrow">Live deals</p>
-        <h2 className="section-title">Best deals in Illinois today</h2>
-        <p className="section-sub">Updated continuously · Verified against dispensary sites</p>
-
-        {topDeals.length > 0 ? (
-          <div className="deal-cards">
-            {topDeals.map((d, i) => {
-              const slug = d.slug || d.listing_slug;
-              const name = displayName(d);
-              return (
-                <TrackedLink
-                  key={d.deal_id || d.id || i}
-                  href={`/l/${slug}`}
-                  className={`deal-card${i === 0 ? " top-pick" : ""}`}
-                  style={{ textDecoration: "none", color: "inherit" }}
-                  event="deal_click"
-                  params={{ dispensary: name, category: d.category || "all", position: i + 1 }}
-                >
-                  {i === 0 && <div className="top-pick-badge">Best value today</div>}
-                  {(() => {
-                    const g = gradeDeal(d);
-                    return (
-                      <span
-                        className="deal-grade"
-                        style={{ background: g.color.bg, color: g.color.fg }}
-                        title={`${g.label} · score ${g.score}/100`}
-                        aria-label={`Deal score ${g.grade}, ${g.label}`}
-                      >
-                        {g.grade}
-                      </span>
-                    );
-                  })()}
-                  <div className="deal-card-header">
-                    <div>
-                      <div className="deal-name">{name}</div>
-                      <div className="deal-city">{d.city || "Illinois"}</div>
-                    </div>
-                    <span className={`open-badge ${likelyOpen ? "open" : "closed"}`}>
-                      {likelyOpen ? "Likely open" : "Closed"}
-                    </span>
-                  </div>
-                  <div className="deal-highlight">{d.deal_title || formatDiscount(d)}</div>
-                  {d.deal_description && <div className="deal-reason">{d.deal_description}</div>}
-                  <div className="deal-attrs">
-                    {d.accepts_credit && <span className="deal-attr">Cards OK</span>}
-                    {d.drive_thru && <span className="deal-attr">Drive-thru</span>}
-                    {d.delivery && <span className="deal-attr">Delivery</span>}
-                    {d.google_rating > 0 && <span className="deal-attr">{d.google_rating} ★</span>}
-                    {d.is_recurring && <span className="deal-attr">Recurring</span>}
-                  </div>
-                  <div className="deal-savings">
-                    <div className="savings-copy">
-                      <span className="savings-label">You save</span>
-                      <span className="savings-sub">vs. Illinois average</span>
-                    </div>
-                    <span className="savings-num">{formatSavingsDollars(d)}</span>
-                  </div>
-                </TrackedLink>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="deal-cards">
-            {[0, 1, 2].map((i) => (
-              <div
-                key={`skel-${i}`}
-                className="deal-card"
-                style={{
-                  padding: 18,
-                  minHeight: 220,
-                  position: "relative",
-                  overflow: "hidden",
-                }}
-                aria-hidden="true"
-              >
-                <div style={{ height: 14, width: "55%", borderRadius: 6, background: "#e8e4da", marginBottom: 8 }} />
-                <div style={{ height: 10, width: "35%", borderRadius: 5, background: "#f0ece3", marginBottom: 18 }} />
-                <div style={{ height: 16, width: "75%", borderRadius: 6, background: "#e8e4da", marginBottom: 10 }} />
-                <div style={{ height: 10, width: "92%", borderRadius: 5, background: "#f0ece3", marginBottom: 6 }} />
-                <div style={{ height: 10, width: "68%", borderRadius: 5, background: "#f0ece3", marginBottom: 18 }} />
-                <div style={{ height: 42, width: "100%", borderRadius: 10, background: "#f0fdf4", border: "1px solid #bbf7d0" }} />
-              </div>
-            ))}
-            <div
-              className="deal-card"
-              style={{
-                gridColumn: "1 / -1",
-                textAlign: "center",
-                padding: "26px 20px",
-                background: "linear-gradient(135deg,#f0fdf4 0%,#fff 70%)",
-                border: "1px solid #bbf7d0",
-              }}
-            >
-              <div style={{ fontSize: ".7rem", fontFamily: "system-ui,sans-serif", fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: "#16a34a", marginBottom: 8 }}>
-                Loading today&apos;s best deals…
-              </div>
-              <div className="deal-highlight" style={{ marginBottom: 8 }}>Fresh deals land every hour</div>
-              <div className="deal-reason" style={{ maxWidth: 420, margin: "0 auto" }}>
-                We&apos;re pulling the latest from 293 Illinois dispensaries. Get alerts the moment a new deal drops near you.
-              </div>
-              <Link href="/alerts" className="biz-btn-primary" style={{ display: "inline-block", marginTop: 14 }}>
-                Get free deal alerts →
-              </Link>
-            </div>
-          </div>
-        )}
+        <HomeDealCards initial={topDeals} />
       </div>
 
       {/* CITY BROWSE */}

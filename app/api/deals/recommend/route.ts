@@ -79,43 +79,53 @@ export async function GET(req: NextRequest) {
     const categoryRaw = (searchParams.get("category") || "all").toLowerCase();
     const category = VALID_CATEGORIES.has(categoryRaw) ? categoryRaw : "all";
     const city = (searchParams.get("city") || "").trim();
+    const limitRaw = Number.parseInt(searchParams.get("limit") || "10", 10);
+    const limit = Number.isFinite(limitRaw) ? Math.max(1, Math.min(50, limitRaw)) : 10;
     // lat/lng accepted for forward-compat; not yet used for distance scoring
-    const lat = searchParams.get("lat");
-    const lng = searchParams.get("lng");
-    void lat;
-    void lng;
+    void searchParams.get("lat");
+    void searchParams.get("lng");
 
-    let deals = await fetchDeals(category);
+    const statewide = await fetchDeals(category);
 
-    if (city) {
-      const needle = city.toLowerCase();
-      deals = deals.filter(
-        (d) => typeof d.city === "string" && d.city.toLowerCase().includes(needle)
-      );
+    const localMatches = city
+      ? statewide.filter(
+          (d) => typeof d.city === "string" && d.city.toLowerCase().includes(city.toLowerCase())
+        )
+      : statewide;
+
+    const scoredLocal: Deal[] = localMatches
+      .map((d) => ({ ...d, score: scoreDeal(d), scope: "local" as const }))
+      .sort((a, b) => ((b.score as number) || 0) - ((a.score as number) || 0));
+
+    // Fill remaining slots with statewide deals not already included
+    const localIds = new Set<string>(scoredLocal.map((d) => String(d.deal_id ?? d.id ?? "")));
+    const scoredFill: Deal[] = statewide
+      .filter((d) => !localIds.has(String(d.deal_id ?? d.id ?? "")))
+      .map((d) => ({ ...d, score: scoreDeal(d), scope: "statewide" as const }))
+      .sort((a, b) => ((b.score as number) || 0) - ((a.score as number) || 0));
+
+    const combined = [...scoredLocal, ...scoredFill].slice(0, limit);
+
+    if (combined.length === 0) {
+      return NextResponse.json({ ...emptyResponse(category, city), deals: [] });
     }
 
-    if (deals.length === 0) {
-      return NextResponse.json(emptyResponse(category, city));
-    }
-
-    const scored = deals
-      .map((d) => ({ ...d, score: scoreDeal(d) }))
-      .sort((a, b) => (b.score || 0) - (a.score || 0));
-
-    const top = scored[0];
+    const top = combined[0];
     const topPick = { ...top, rankingReason: rankingReason(top, category, city) };
-    const alternatives = scored.slice(1, 4);
+    const alternatives = combined.slice(1, Math.max(4, limit));
 
     return NextResponse.json({
       topPick,
       alternatives,
-      totalFound: scored.length,
+      deals: combined,
+      totalFound: combined.length,
+      localCount: scoredLocal.length,
       city,
       category,
       generatedAt: new Date().toISOString(),
     });
   } catch (err) {
     console.error("[api/deals/recommend] error:", err);
-    return NextResponse.json(emptyResponse("all", ""));
+    return NextResponse.json({ ...emptyResponse("all", ""), deals: [] });
   }
 }
