@@ -1,6 +1,6 @@
 # CleanList — Session Handoff
 
-**Last updated:** April 14, 2026
+**Last updated:** April 14, 2026 (end of day)
 **Owner:** Matthew Burns (Peoria, IL) · matthew@jacarandapeoria.com
 
 > Living doc. Any new Claude Code session reads this first to skip re-exploring
@@ -21,81 +21,135 @@ Illinois cannabis deal intelligence engine. Answers one question:
 ---
 
 ## What's working ✅
-- **Deal engine pages** (`/deals/[category]`) — fixed today: Next.js 16 params
-  is a Promise, page was reading synchronously → `category=eq.undefined` →
-  0 results despite 45 active deals. Now awaits params. Covers flower,
-  edibles, vapes, concentrate, all.
-- **Homepage** (`/`) — hero with cannabis plant SVGs, 7-blade leaf / gummy
-  bear / vape pen / crystal / flame category icons at 36px, logo mark in
-  nav, live deal-count stats strip, 4/20 banner (auto-shows Apr 17–20 only).
-- **Alerts signup** (`/alerts`)
-- **Listing pages** (`/l/[id]`)
-- **City pages** (`/cannabis/illinois/[slug]` and `/[slug]/[intent]`)
-- **Upgrade page** (`/upgrade`) — 3-tier pricing, buttons wired to Stripe
-  checkout, graceful 503 when keys missing
-- **About page** (`/about`) — personal brand story, IDFPR coverage numbers
-- **OG / Twitter metadata** — root layout, og-image.png rendered
-- **Favicon** — public/favicon.svg (navy + list lines + green dot)
-- **Admin**
 
-## What's broken or incomplete ❌
-- **Stripe** — scaffold built, env vars not yet set in Vercel
-  (`STRIPE_SECRET_KEY`, `STRIPE_FEATURED_PRICE_ID`, `STRIPE_PRO_PRICE_ID`).
-  Route returns helpful 503 until keys land.
-- **Name change pending** — candidates: PuffPrice, BudBuck, GreenRoute.
-  Decide before domain + email + logo finalize.
-- **Email system** — not set up. 201 outreach drafts sit unsent.
-- **Webhook** — no `/api/stripe/webhook` yet to provision featured listings
-  post-payment. Metadata (`tier`, `listing_slug`) is already attached to
-  checkout sessions so the webhook can read it when we add it.
+Site
+- Homepage (/) — hero with cannabis SVGs, primary "See all deals near you"
+  CTA + 2×2 secondary category grid, hero savings callout ("$23/trip"),
+  live ticker with red pulsing LIVE dot + real dispensary names + "Save
+  N%", location-aware top-3 deal cards with Deal Score A/B/C/D badges and
+  prominent 2rem savings numbers.
+- Location detection — GPS-first via `navigator.geolocation` +
+  Nominatim reverse geocode. IP fallback only when denied/unavailable.
+  Manual override via "Not in {City}? Change location" link + inline
+  input. Stored in sessionStorage, propagates to both ticker and deal
+  cards which re-fetch filtered to detected city (with statewide
+  fallback if <3 local deals).
+- Deal engine pages (/deals/[category]) — params awaited, schema.org
+  ItemList + BreadcrumbList, "Last updated X ago", price-history trend
+  chips (better/worse), A/B/C/D Deal Score badges, **expiration urgency
+  badges** (⚡today/⏱soon/{Weekday}).
+- Alerts (/alerts) — two tiers only (Free no-account, Pro \$0.99/mo).
+  Pro card has email input + Stripe-checkout button + "Less than a
+  dollar a week" anchor + J.R. Chicago testimonial. "What Pro actually
+  feels like" narrative section. Live-updating 3-input savings
+  calculator at the bottom (~$X/week → free-eighths).
+- /alerts/preferences — full preference form (city/radius/categories/
+  frequency), upserts to deal_alerts by email.
+- /dispensaries — 293 dispensaries grouped by city, deal-count chips,
+  humanized names from slugs.
+- /savings and /savings/dashboard — shareable calculator + personal
+  savings log (localStorage, "you saved \$X this month").
+- /map — Leaflet map, green `$` pins for dispensaries with deals,
+  gray dots otherwise, All/Deals-only toggle.
+- /search — ILIKE across master_listings name+city+address1.
+- /about, /early-access (now indexable), /claim/[slug], /upgrade.
+- /dispensary/submit-deal — dispensary autocomplete, live deal
+  preview card, inline validation, confirmed page with Featured
+  upsell.
+- /api routes: deals/recommend (scored, city-filtered, `&limit=N`),
+  location (ipapi), price-history/[slug], alerts/preferences,
+  claim, listings/search, stripe/create-checkout, dispensary/
+  submit-deal.
+- GA4 with event tracking: category_click, deal_click, deal_view,
+  deal_cta_click, alert_signup, upgrade_click, search,
+  location_detected.
 
-## Immediate next priorities (in order)
-1. **Name decision** — blocks domain, email, logo lock-in
-2. **Stripe keys in Vercel** — unblocks `Featured $49/mo` and `Pro $4.99/mo`
-3. **Send outreach emails** — 201 drafts queued; need sending infra +
-   from-address on new domain
-4. **4/20 deals push** — banner is already live-gated to Apr 17–20; push
-   extra deals into Supabase that week
+Data & infra
+- Supabase: deals, deal_alerts, deal_clicks, master_listings,
+  active_deals_with_listings view.
+- New SQL pending apply: sql/listing-claims.sql,
+  sql/deal-price-history.sql (migrations live in repo, run
+  manually in Supabase SQL editor).
+- OG image + favicon + sitemap.ts + robots metadata.
+- 4/20 banner (auto-gates April 17–20, 2026) already deployed.
 
-## Key decisions made
-- Pivoted from directory to **deal engine** — "where should I go right now, and why?"
-- Headline locked: **"Best Bud For Your Buck$"** · subtitle: **"Low Prices. High Times."**
-- Pricing: Dispensary Free / **$49/mo Featured** / $149/mo Boost · Consumer Free weekly / $3.99 daily / **$4.99 SMS**
-- Visual: navy (#0f1f3d) + green (#16a34a / #4ade80), Georgia serif, real SVG cannabis icons (no emoji)
-- Coverage claim: **293 dispensaries, 162 Illinois cities** (IDFPR)
+## What's pending ❌
+- **Stripe keys** (blocks ALL revenue) — `STRIPE_SECRET_KEY`,
+  `STRIPE_FEATURED_PRICE_ID`, new $0.99/mo `STRIPE_PRO_PRICE_ID`.
+  Checkout route returns a helpful 503 until set.
+- **Email system** (blocks alerts) — 201 outreach drafts unsent,
+  no SendGrid/Resend wiring yet.
+- **Brand name decision** (blocks domain + email + logo final) —
+  candidates: PuffPrice (~$11), BudBuck (~$11), GreenRoute, or
+  keep CleanList.
+- **listing-claims.sql** not yet run in Supabase — claim API
+  returns 502 until applied.
+- **Price history data** — table exists, but needs a scraper/
+  cron populating it before trend chips actually render. Right
+  now they quietly never show.
 
-## Open questions
-- Final brand name — PuffPrice vs BudBuck vs GreenRoute (or keep CleanList?)
-- Email domain — jacarandapeoria.com vs new brand domain
-- SMS provider for $4.99 instant alerts — Twilio? MessageBird?
+## Immediate priorities (in order)
+1. **Register domain tonight** — PuffPrice.com or GetBudBuck.com
+   (both ~$11 on Namecheap/Cloudflare). Decide-and-pull-trigger is
+   the blocker for everything branded.
+2. **Stripe account + keys in Vercel** — unblocks Pro \$0.99/mo +
+   Featured \$49/mo + first revenue.
+3. **Send 5 4/20 outreach emails** from Gmail drafts created today
+   (Terrace Moline, High Haven Elgin, NOXX East Peoria, Ivy Hall
+   Peoria, Seven Point Danville). Before Friday 4/18.
+4. **Run listing-claims.sql + deal-price-history.sql** in Supabase
+   SQL editor.
 
-## Revenue status
-- **$0 MRR**
-- Stripe scaffold built · keys not entered
-- 201 outreach emails drafted · 0 sent
+## Key decisions made today (April 14)
+- **Two consumer tiers only.** GPT advised killing Standard; Matthew
+  agreed. Free (no-account browse + weekly digest) + Pro (\$0.99/mo,
+  instant SMS + price history + Beat-My-Last-Price + flash early
+  access + monthly savings report).
+- **Pro starts at \$0.99/month.** Deliberately cheap — remove
+  friction, build habit, raise later.
+- **Deal engine is the product, not a directory.** Everything
+  optimizes for "where should I go right now, and why?" — the
+  directory surface is a byproduct.
+- **Location detection = GPS-first.** IP is only a fallback (was
+  routing Peoria users to Chicago through ISP hubs). Manual
+  override always wins.
+- **Visual hierarchy on homepage:** "See all deals" is the primary
+  full-width action; categories are secondary in a 2×2 grid.
+- **4/20 framing:** banner auto-gates Apr 17–20; outreach template
+  is "4/20 is Sunday — here's how to not lose your biggest
+  weekend."
 
----
+## Tool stack
+- **Claude Code** — primary builder (this repo, features, fixes).
+- **Chrome (with Claude browser MCP)** — browser automation + QA.
+- **Cowork** — long autonomous sessions when work spans hours.
+- **Chat (ChatGPT/Claude.ai)** — strategy, naming, outreach copy
+  review.
 
 ## Key files (skip the rest of the tree)
-- `app/page.jsx` — homepage (hero, stats, how-it-works, deals, cities)
-- `app/deals/[category]/page.tsx` — deal engine pages
-- `app/about/page.tsx` — about / brand story
-- `app/alerts/page.tsx` — consumer alerts signup
-- `app/upgrade/page.tsx` — pricing tiers + checkout wiring
-- `app/api/stripe/create-checkout/route.ts` — Stripe REST (no SDK)
-- `app/layout.tsx` — root metadata (OG, Twitter, favicon)
-- `lib/decisionEngine.ts` — ranking algorithm
-- `sql/deals-schema.sql`, `sql/deals-seed.sql`, `sql/create-view.sql`
-- `public/favicon.svg`, `public/og-image.{svg,png}`
+- `app/page.jsx` — homepage (hero + location-aware ticker + cards)
+- `app/components/HomeTicker.tsx`, `HomeDealCards.tsx`,
+  `LocationAware.tsx` — location-aware client islands
+- `app/deals/[category]/page.tsx` — deal engine
+- `app/alerts/page.tsx` + `AlertsCalculator.tsx` + `ProCheckoutButton.tsx`
+- `app/dispensary/submit-deal/page.tsx` + `DispensaryAutocomplete.tsx`
+  + `confirmed/page.tsx`
+- `app/api/deals/recommend/route.ts` — scored recommender (+&limit, city)
+- `app/api/price-history/[slug]/route.ts`, `app/api/location/route.ts`,
+  `app/api/listings/search/route.ts`, `app/api/stripe/create-checkout/route.ts`
+- `lib/dealScoring.ts` — savings estimation + A/B/C/D grading
+- `sql/deals-schema.sql`, `sql/deals-seed.sql`, `sql/create-view.sql`,
+  `sql/listing-claims.sql`, `sql/deal-price-history.sql`
+- `outreach/420-drafts.md` — 5 4/20 email draft IDs
 
 ## Supabase
 - URL: `https://hnbjufmtmrhexmdrfubw.supabase.co`
-- Tables: `deals`, `deal_alerts`, `deal_clicks`, `master_listings`
-- View: `active_deals_with_listings` (joins `deals` + `master_listings`)
-- Anon key in CLAUDE.md · hardcoded as fallback in server fetches
+- Anon key hardcoded as fallback in every server fetch so builds
+  don't break without env.
+- View: `active_deals_with_listings` (deals ⨝ master_listings).
 
 ## Workflow rules
-- Commit with descriptive messages · push `main` for deploy
-- Never heredoc in zsh (breaks) — use `python3 -c` for multi-line writes
-- Never hardcode secrets in committed files
-- Check Vercel after every push
+- Commit with descriptive messages · push `main` for deploy.
+- Never heredoc in zsh — use `python3 -c` for multi-line writes.
+- Never hardcode secrets in committed files.
+- Check Vercel after every push.
