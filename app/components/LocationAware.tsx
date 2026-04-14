@@ -281,14 +281,14 @@ export default function LocationAware() {
 }
 
 const wrapperStyle: React.CSSProperties = {
-  marginTop: -8,
-  marginBottom: 12,
-  fontSize: ".75rem",
+  margin: 0,
+  fontSize: ".8rem",
   fontFamily: "system-ui, sans-serif",
-  color: "#6b7280",
-  letterSpacing: ".02em",
+  color: "#16a34a",
+  fontWeight: 500,
+  letterSpacing: ".01em",
   display: "flex",
-  justifyContent: "center",
+  justifyContent: "flex-start",
   alignItems: "center",
   flexWrap: "wrap",
   gap: 4,

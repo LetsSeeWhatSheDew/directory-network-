@@ -1,8 +1,8 @@
 import Link from "next/link";
 import LocationAware from "./components/LocationAware";
 import TrackedLink from "./components/TrackedLink";
-import HomeTicker from "./components/HomeTicker";
 import HomeDealCards from "./components/HomeDealCards";
+import HeroDealCard from "./components/HeroDealCard";
 import SearchTracker from "./components/SearchTracker";
 import { formatSavingsDollars, gradeDeal } from "../lib/dealScoring";
 
@@ -358,10 +358,9 @@ async function getActiveDealCount() {
 }
 
 export default async function HomePage() {
-  const [dealCount, topDeals, tickerDeals] = await Promise.all([
+  const [dealCount, topDeals] = await Promise.all([
     getActiveDealCount(),
     getTopDeals(),
-    getTickerDeals(),
   ]);
   const likelyOpen = isLikelyOpen();
   return (
@@ -411,33 +410,113 @@ export default async function HomePage() {
         /* HERO */
         .hero{
           background:#fff;
-          padding:56px 28px 48px;
-          text-align:center;
+          padding:20px 28px 44px;
           position:relative;
           overflow:hidden;
         }
-        .hero-inner{position:relative;z-index:1}
-        .hero-badge{
-          display:inline-flex;align-items:center;gap:6px;
-          background:#f0fdf4;border:1px solid #bbf7d0;
-          border-radius:100px;padding:4px 14px;
-          font-size:.72rem;font-family:system-ui,sans-serif;
-          color:#16a34a;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
-          margin-bottom:20px;
+        .hero-inner{position:relative;z-index:1;max-width:1100px;margin:0 auto}
+        .hero-grid{
+          display:grid;grid-template-columns:1fr;gap:20px;
+          align-items:start;
         }
-        .hero-badge-dot{width:5px;height:5px;border-radius:50%;background:#16a34a;animation:pulse 2s infinite}
+        @media(min-width:900px){
+          .hero-grid{grid-template-columns:1.6fr 1fr;gap:32px}
+        }
+        .hero-left{display:flex;flex-direction:column;gap:12px}
+
+        /* LOCATION LINE */
+        .hero-loc-line{
+          font-size:.8rem;color:#16a34a;font-family:system-ui,sans-serif;
+          font-weight:500;margin-bottom:2px;
+        }
+
         .hero h1{
-          font-size:clamp(1.8rem,5vw,3.2rem);
+          font-size:clamp(1.8rem,5vw,2.8rem);
           font-weight:700;color:#0f1f3d;
-          letter-spacing:-.04em;line-height:1.1;
-          margin-bottom:12px;
+          letter-spacing:-.04em;line-height:1.05;
+          margin-bottom:4px;
         }
         .hero h1 em{color:#16a34a;font-style:normal}
         .hero-sub{
-          font-size:1rem;color:#6b7280;
+          font-size:.92rem;color:#6b7280;
           font-family:system-ui,sans-serif;
-          line-height:1.6;margin-bottom:36px;
-          max-width:480px;margin-left:auto;margin-right:auto;
+          line-height:1.5;margin-bottom:14px;
+        }
+
+        /* HERO DEAL CARD — THE hero element */
+        .hero-deal-card{
+          background:#fff;
+          border:1px solid #e8e4da;
+          border-left:4px solid #16a34a;
+          border-radius:14px;
+          padding:22px 22px 18px;
+          box-shadow:0 4px 16px rgba(15,31,61,.06);
+          display:flex;flex-direction:column;
+          max-width:560px;
+        }
+        .hero-deal-label{
+          font-size:.7rem;color:#6b7280;
+          font-family:system-ui,sans-serif;
+          font-weight:500;letter-spacing:.02em;
+          margin-bottom:4px;
+        }
+        .hero-deal-savings{
+          font-size:clamp(2.4rem,9vw,3.4rem);
+          font-weight:700;color:#16a34a;
+          letter-spacing:-.04em;line-height:1;
+        }
+        .hero-deal-vs{
+          font-size:.72rem;color:#9ca3af;
+          font-family:system-ui,sans-serif;
+          margin-top:2px;margin-bottom:16px;
+        }
+        .hero-deal-name{
+          font-size:1.1rem;font-weight:700;
+          color:#0f1f3d;line-height:1.2;
+        }
+        .hero-deal-title{
+          font-size:.9rem;color:#374151;
+          font-family:system-ui,sans-serif;
+          margin-top:2px;margin-bottom:18px;
+          line-height:1.4;
+        }
+        .hero-deal-row{
+          display:flex;align-items:center;
+          justify-content:space-between;gap:12px;
+          flex-wrap:wrap;
+        }
+        .hero-deal-meta{
+          display:flex;gap:12px;flex-wrap:wrap;
+          font-size:.8rem;color:#6b7280;
+          font-family:system-ui,sans-serif;font-weight:500;
+        }
+        .hero-deal-urgent{color:#991b1b;font-weight:700}
+        .hero-deal-cta{
+          background:#16a34a;color:#fff;
+          padding:12px 22px;border-radius:10px;
+          text-decoration:none;font-family:system-ui,sans-serif;
+          font-weight:800;font-size:.92rem;letter-spacing:.02em;
+          transition:background .15s;white-space:nowrap;
+        }
+        .hero-deal-cta:hover{background:#15803d}
+        .hero-deal-more{
+          margin-top:14px;align-self:flex-start;
+          font-size:.82rem;color:#6b7280;
+          font-family:system-ui,sans-serif;
+          text-decoration:none;
+        }
+        .hero-deal-more:hover{color:#16a34a}
+        .skeleton{pointer-events:none}
+
+        /* HERO RIGHT — desktop category stack */
+        .hero-right{display:flex;flex-direction:column;gap:10px}
+        .hero-right-label{
+          font-size:.68rem;font-weight:700;letter-spacing:.14em;
+          text-transform:uppercase;color:#9ca3af;
+          font-family:system-ui,sans-serif;margin-bottom:2px;
+        }
+        @media(max-width:899px){
+          .hero-right{display:none}
         }
 
         /* DEALS TICKER */
@@ -511,26 +590,61 @@ export default async function HomePage() {
         }
         .filter-pill:hover{color:#0f1f3d;border-color:#9ca3af}
 
-        /* STATS STRIP */
-        .stats{background:#f5f4f0;padding:22px 28px;border-top:1px solid #e8e4da;border-bottom:1px solid #e8e4da}
-        .stats-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;text-align:center}
-        .stat-num{font-size:1.7rem;font-weight:700;color:#16a34a;letter-spacing:-.02em;line-height:1}
-        .stat-label{font-size:.72rem;color:#6b7280;font-family:system-ui,sans-serif;text-transform:uppercase;letter-spacing:.1em;margin-top:6px}
-        @media(max-width:520px){.stats-inner{gap:14px}.stat-num{font-size:1.3rem}.stat-label{font-size:.65rem}}
+        /* STATS STRIP — minimal credibility line */
+        .stats{background:#f5f4f0;padding:22px 28px;text-align:center}
+        .stats-inner{max-width:900px;margin:0 auto}
+        .stats-line{font-size:.85rem;color:#6b7280;font-family:system-ui,sans-serif;letter-spacing:.01em}
+        .stats-line strong{color:#16a34a;font-weight:700}
+        @media(max-width:520px){.stats-line{font-size:.78rem}}
 
-        /* HOW IT WORKS */
-        .how{background:#fff;border-top:1px solid #e8e4da;border-bottom:1px solid #e8e4da}
+        /* BELOW-FOLD CATEGORY SECTION */
+        .below-section{background:#fff;border-top:1px solid #e8e4da}
+        .below-inner{max-width:900px;margin:0 auto;padding:48px 28px}
+        .below-title{
+          font-size:clamp(1.3rem,3vw,1.6rem);font-weight:700;
+          color:#0f1f3d;letter-spacing:-.03em;margin-bottom:18px;
+        }
+        .below-cat-grid{
+          display:grid;grid-template-columns:1fr 1fr;gap:12px;
+        }
+        .below-cat-card{
+          display:flex;flex-direction:column;align-items:center;gap:10px;
+          background:#fff;border:1px solid #e8e4da;border-radius:12px;
+          padding:24px 16px;text-decoration:none;
+          transition:all .15s;
+        }
+        .below-cat-card:hover{border-color:#16a34a;background:#f0fdf4}
+        .below-cat-icon{display:flex;align-items:center;justify-content:center}
+        .below-cat-icon svg{width:38px;height:38px}
+        .below-cat-label{
+          font-size:.95rem;font-weight:700;color:#0f1f3d;
+          font-family:system-ui,sans-serif;
+        }
+
+        /* HOW IT WORKS — simplified 3 lines */
+        .how{background:#f5f4f0;border-top:1px solid #e8e4da;border-bottom:1px solid #e8e4da}
         .how-inner{
           max-width:900px;margin:0 auto;
-          padding:52px 28px;
-          display:grid;grid-template-columns:repeat(3,1fr);gap:40px;
+          padding:40px 28px;
+          display:grid;grid-template-columns:repeat(3,1fr);gap:28px;
         }
         .how-num{
-          font-size:2.4rem;font-weight:700;color:#e8e4da;
-          line-height:1;margin-bottom:10px;
+          font-size:1.8rem;font-weight:700;color:#16a34a;
+          line-height:1;margin-bottom:8px;
         }
-        .how-title{font-size:.95rem;font-weight:700;color:#0f1f3d;margin-bottom:6px}
-        .how-desc{font-size:.85rem;color:#6b7280;font-family:system-ui,sans-serif;line-height:1.6}
+        .how-title{font-size:.95rem;font-weight:700;color:#0f1f3d;font-family:system-ui,sans-serif;line-height:1.3}
+
+        /* ALERTS CTA STRIP */
+        .alerts-strip{background:#fff;border-top:1px solid #e8e4da;padding:44px 28px;text-align:center}
+        .alerts-inner{max-width:600px;margin:0 auto}
+        .alerts-title{font-size:1.3rem;font-weight:700;color:#0f1f3d;letter-spacing:-.02em;margin-bottom:6px}
+        .alerts-sub{font-size:.9rem;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:18px}
+        .alerts-btn{
+          display:inline-block;background:#16a34a;color:#fff;
+          padding:12px 24px;border-radius:10px;text-decoration:none;
+          font-family:system-ui,sans-serif;font-weight:700;font-size:.9rem;
+        }
+        .alerts-btn:hover{background:#15803d}
 
         /* DEALS SECTION */
         .deals-section{max-width:1100px;margin:0 auto;padding:52px 28px}
@@ -758,176 +872,107 @@ export default async function HomePage() {
       {/* 4/20 DEALS WEEK BANNER — only renders Apr 17–20, 2026 */}
       <FourTwentyBanner />
 
-      {/* HERO — decision engine entry point with botanical plants */}
+      {/* HERO — one recommendation, above the fold */}
       <div className="hero">
         <PlantSilhouette side="left" />
         <PlantSilhouette side="right" />
         <div className="hero-inner">
-          <div className="hero-badge">
-            <span className="hero-badge-dot" />
-            {dealCount !== null ? `${dealCount} Illinois dispensary deals — live` : "Illinois dispensary deals — live"}
+          <div className="hero-grid">
+            <div className="hero-left">
+              {/* Location line — tiny, first */}
+              <LocationAware />
+
+              {/* Headline */}
+              <h1>Best Bud For <em>Your Buck$</em></h1>
+              <p className="hero-sub">Low Prices. High Times.</p>
+
+              {/* THE big deal card — the hero element */}
+              <HeroDealCard initial={topDeals[0] || null} />
+            </div>
+
+            {/* Desktop-only right column: category shortcuts */}
+            <div className="hero-right">
+              <div className="hero-right-label">Browse by category</div>
+              {CATEGORIES.map((cat) => (
+                <TrackedLink
+                  key={cat.slug}
+                  href={`/deals/${cat.slug}`}
+                  className="cat-btn"
+                  event="category_click"
+                  params={{ category: cat.slug }}
+                >
+                  {renderIcon(cat.icon)}
+                  {cat.label}
+                </TrackedLink>
+              ))}
+            </div>
           </div>
-          <h1>Best Bud For<br /><em>Your Buck$</em></h1>
-          <p className="hero-sub">Low Prices. High Times.</p>
+        </div>
+      </div>
 
-          {/* SAVINGS CALLOUT — above the fold */}
-          <div className="hero-save" role="note">
-            <span>
-              Illinois cannabis buyers save an average of{" "}
-              <span className="hero-save-amt">$23 per trip</span> using CleanList
-            </span>
-            <Link href="/deals/all" className="hero-save-link">→ See today&apos;s top deal</Link>
-          </div>
-
-          {/* LIVE DEALS TICKER — client component, refilters by detected city */}
-          <HomeTicker initial={tickerDeals} />
-
-          {/* SEARCH */}
-          <form action="/search" method="get" className="hero-search" role="search">
-            <input
-              type="search"
-              name="q"
-              aria-label="Search"
-              placeholder="Search city, zip code, or dispensary name…"
-              className="hero-search-input"
-              autoComplete="off"
-            />
-            <button type="submit" className="hero-search-btn" aria-label="Search">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
-            </button>
-          </form>
-          <LocationAware />
-          <SearchTracker />
-
-          {/* CATEGORY SELECTION — primary action first */}
-          {(() => {
-            const all = CATEGORIES.find((c) => c.slug === "all");
-            const rest = CATEGORIES.filter((c) => c.slug !== "all");
-            return (
-              <>
-                {all && (
-                  <div className="cat-primary-wrap">
-                    <TrackedLink
-                      href={`/deals/${all.slug}`}
-                      className="cat-btn primary"
-                      event="category_click"
-                      params={{ category: all.slug }}
-                    >
-                      {renderIcon(all.icon)}
-                      See all deals near you
-                    </TrackedLink>
-                  </div>
-                )}
-                <div className="cat-or">Or browse by category</div>
-                <div className="category-grid">
-                  {rest.map((cat) => (
-                    <TrackedLink
-                      key={cat.slug}
-                      href={`/deals/${cat.slug}`}
-                      className="cat-btn"
-                      event="category_click"
-                      params={{ category: cat.slug }}
-                    >
-                      {renderIcon(cat.icon)}
-                      {cat.label}
-                    </TrackedLink>
-                  ))}
-                </div>
-              </>
-            );
-          })()}
-
-          {/* QUICK FILTERS */}
-          <div className="filter-row">
-            {QUICK_FILTERS.map(f => (
-              <Link
-                key={f.param}
-                href={`/deals/all?${f.param}`}
-                className="filter-pill"
+      {/* BELOW FOLD — Section 1: Browse by category (mobile-first) */}
+      <div className="below-section below-categories">
+        <div className="below-inner">
+          <h2 className="below-title">Browse by what you want</h2>
+          <div className="below-cat-grid">
+            {CATEGORIES.filter((c) => c.slug !== "all").map((cat) => (
+              <TrackedLink
+                key={cat.slug}
+                href={`/deals/${cat.slug}`}
+                className="below-cat-card"
+                event="category_click"
+                params={{ category: cat.slug, source: "below_fold" }}
               >
-                {f.label}
-              </Link>
+                <div className="below-cat-icon">{renderIcon(cat.icon)}</div>
+                <div className="below-cat-label">{cat.label}</div>
+              </TrackedLink>
             ))}
           </div>
         </div>
       </div>
 
-      {/* STATS STRIP — live deal count + IDFPR coverage */}
-      <div className="stats">
-        <div className="stats-inner">
-          <div>
-            <div className="stat-num">{dealCount !== null ? dealCount : "—"}</div>
-            <div className="stat-label">Active deals today</div>
-          </div>
-          <div>
-            <div className="stat-num">293</div>
-            <div className="stat-label">Illinois dispensaries</div>
-          </div>
-          <div>
-            <div className="stat-num">162</div>
-            <div className="stat-label">Cities covered</div>
-          </div>
-        </div>
-      </div>
-
-      {/* HOW IT WORKS */}
+      {/* Section 2: How it works — 3 simplified lines */}
       <div className="how">
         <div className="how-inner">
           <div className="how-step">
             <div className="how-num">01</div>
-            <div className="how-title">Pick what you want</div>
-            <div className="how-desc">
-              Flower, edibles, vapes, or concentrates.
-              We pull every active deal within range.
-            </div>
+            <div className="how-title">We detect your location</div>
           </div>
           <div className="how-step">
             <div className="how-num">02</div>
-            <div className="how-title">We do the math</div>
-            <div className="how-desc">
-              Price per gram, discount percentage, distance,
-              open status — normalized so you don&apos;t have to.
-            </div>
+            <div className="how-title">We find the best deal right now</div>
           </div>
           <div className="how-step">
             <div className="how-num">03</div>
             <div className="how-title">You save money</div>
-            <div className="how-desc">
-              One recommendation. Where to go right now
-              for the best value. You see exactly how much you save.
-            </div>
           </div>
         </div>
       </div>
 
-      {/* TODAY'S DEALS — client-side filters to detected city */}
+      {/* Section 3: More deals near you (existing card grid) */}
       <div className="deals-section">
         <HomeDealCards initial={topDeals} />
       </div>
 
-      {/* CITY BROWSE */}
-      <div className="cities-section">
-        <div className="cities-inner">
-          <div className="cities-title">Browse by city</div>
-          <div className="cities-sub">Find deals near you across Illinois</div>
-          <div className="city-grid">
-            {CITIES.map(city => (
-              <Link
-                key={city.slug}
-                href={`/cannabis/illinois/${city.slug}`}
-                className="city-card"
-              >
-                <div className="city-name">{city.name}</div>
-                <div className="city-pills">
-                  <Link href={`/cannabis/illinois/${city.slug}/deals`} className="city-pill">Deals</Link>
-                  <Link href={`/cannabis/illinois/${city.slug}/open-now`} className="city-pill">Open now</Link>
-                  <Link href={`/cannabis/illinois/${city.slug}/best`} className="city-pill">Best</Link>
-                </div>
-              </Link>
-            ))}
-          </div>
+      {/* Section 4: Get alerts CTA */}
+      <div className="alerts-strip">
+        <div className="alerts-inner">
+          <div className="alerts-title">Never miss a deal near you</div>
+          <p className="alerts-sub">Free email alerts when a better deal drops in your city.</p>
+          <Link href="/alerts" className="alerts-btn">Get free alerts →</Link>
         </div>
       </div>
+
+      {/* Section 5: Stats — credibility line */}
+      <div className="stats">
+        <div className="stats-inner">
+          <span className="stats-line">
+            <strong>{dealCount !== null ? dealCount : "100"}</strong> active deals · <strong>293</strong> dispensaries · <strong>162</strong> cities
+          </span>
+        </div>
+      </div>
+
+      <SearchTracker />
 
       {/* DISPENSARY CTA */}
       <div className="biz-strip">
