@@ -1,7 +1,12 @@
 import { MetadataRoute } from "next";
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const SUPABASE_URL =
+  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
+const SUPABASE_ANON_KEY =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300";
+
+const DEAL_CATEGORIES = ["flower", "edibles", "vapes", "concentrate", "all"] as const;
 
 const NOINDEX_SLUGS = [
     "emerald-city-dispensary-chicago-il",
@@ -71,12 +76,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ]);
 
   const base: MetadataRoute.Sitemap = [
-    { url: "https://cleanlist.co", lastModified: new Date(), changeFrequency: "weekly", priority: 1.0 },
+    { url: "https://cleanlist.co", lastModified: new Date(), changeFrequency: "daily", priority: 1.0 },
     { url: "https://cleanlist.co/cannabis", lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: "https://cleanlist.co/cannabis/illinois", lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
+    { url: "https://cleanlist.co/alerts", lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
+    { url: "https://cleanlist.co/dispensaries", lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
+    { url: "https://cleanlist.co/about", lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: "https://cleanlist.co/get-listed", lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+    { url: "https://cleanlist.co/early-access", lastModified: new Date(), changeFrequency: "weekly", priority: 0.6 },
     { url: "https://cleanlist.co/upgrade", lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
-      ];
+  ];
+
+  // Deal engine category pages
+  const dealUrls: MetadataRoute.Sitemap = DEAL_CATEGORIES.map((c) => ({
+    url: `https://cleanlist.co/deals/${c}`,
+    lastModified: new Date(),
+    changeFrequency: "hourly" as const,
+    priority: 0.9,
+  }));
 
   // Static IL guide pages
   const staticPages: MetadataRoute.Sitemap = STATIC_PAGES.map((p) => ({
@@ -122,5 +139,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.8,
   }));
 
-  return [...base, ...staticPages, ...listingUrls, ...cityUrls, ...intentUrls, ...landmarkUrls];
+  return [...base, ...dealUrls, ...staticPages, ...listingUrls, ...cityUrls, ...intentUrls, ...landmarkUrls];
 }
