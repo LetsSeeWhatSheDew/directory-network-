@@ -89,6 +89,56 @@ async function getDeals(category: string) {
 
 const formatSavings = (deal: any) => formatSavingsDollars(deal);
 
+type Trend = "better" | "worse" | "stable" | "unknown";
+
+async function getTrendsForSlugs(slugs: string[]): Promise<Record<string, Trend>> {
+  if (slugs.length === 0) return {};
+  try {
+    const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    const inList = slugs.map((s) => `"${s}"`).join(",");
+    const url = `${SUPABASE_URL}/rest/v1/deal_price_history?select=listing_slug,discount_value,recorded_at&listing_slug=in.(${inList})&recorded_at=gte.${since}&project_tag=eq.green&order=recorded_at.asc&limit=2000`;
+    const res = await fetch(url, {
+      headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
+      next: { revalidate: 600 },
+    });
+    if (!res.ok) return {};
+    const rows = (await res.json()) as Array<{
+      listing_slug: string;
+      discount_value: number | null;
+      recorded_at: string;
+    }>;
+    const bySlug = new Map<string, typeof rows>();
+    for (const r of rows) {
+      if (!r.listing_slug) continue;
+      const list = bySlug.get(r.listing_slug) || [];
+      list.push(r);
+      bySlug.set(r.listing_slug, list);
+    }
+    const out: Record<string, Trend> = {};
+    const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    for (const slug of slugs) {
+      const list = bySlug.get(slug);
+      if (!list || list.length < 2) {
+        out[slug] = "unknown";
+        continue;
+      }
+      const latest = list[list.length - 1];
+      const baseline = [...list].reverse().find((r) => new Date(r.recorded_at).getTime() <= weekAgo) || list[0];
+      const a = latest.discount_value;
+      const b = baseline.discount_value;
+      if (a == null || b == null) {
+        out[slug] = "unknown";
+        continue;
+      }
+      const diff = a - b;
+      out[slug] = diff > 1 ? "better" : diff < -1 ? "worse" : "stable";
+    }
+    return out;
+  } catch {
+    return {};
+  }
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ category: string }> }) {
   const { category } = await params;
   const label = CATEGORY_LABELS[category] || "Cannabis deals";
@@ -152,6 +202,14 @@ function buildBreadcrumbSchema(categoryLabel: string, category: string) {
 export default async function DealsPage({ params }: { params: Promise<{ category: string }> }) {
   const { category } = await params;
   const { deals, source } = await getDeals(category);
+  const slugs = Array.from(
+    new Set(
+      deals
+        .map((d: any) => (d.slug || d.listing_slug) as string | undefined)
+        .filter(Boolean) as string[]
+    )
+  );
+  const trends = await getTrendsForSlugs(slugs);
 
   const categoryLabel = CATEGORY_LABELS[category] || "Deals";
   const subtitle = CATEGORY_SUBTITLES[category] || "Best deals near you";
@@ -323,6 +381,12 @@ export default async function DealsPage({ params }: { params: Promise<{ category
               <div className="deal-title-big">
                 {topDeal.deal_title || topDeal.title || `${topDeal.discount_value}% off ${topDeal.category}`}
               </div>
+              {(() => {
+                const t = trends[topDeal.slug || topDeal.listing_slug];
+                if (t === "better") return <div style={{ fontSize: ".82rem", fontFamily: "system-ui,sans-serif", color: "#16a34a", fontWeight: 600, marginBottom: 8 }}>↓ Better deal than last week</div>;
+                if (t === "worse") return <div style={{ fontSize: ".82rem", fontFamily: "system-ui,sans-serif", color: "#f59e0b", fontWeight: 600, marginBottom: 8 }}>↑ Not as good as last week</div>;
+                return null;
+              })()}
 
               {(topDeal.deal_description || topDeal.description) && (
                 <div className="deal-desc">
@@ -387,6 +451,12 @@ export default async function DealsPage({ params }: { params: Promise<{ category
                           <div className="alt-deal">
                             {deal.deal_title || deal.title || `${deal.discount_value}% off`}
                           </div>
+                          {(() => {
+                            const t = trends[deal.slug || deal.listing_slug];
+                            if (t === "better") return <div style={{ fontSize: ".72rem", fontFamily: "system-ui,sans-serif", color: "#16a34a", fontWeight: 600, marginTop: 2 }}>↓ Better than last week</div>;
+                            if (t === "worse") return <div style={{ fontSize: ".72rem", fontFamily: "system-ui,sans-serif", color: "#f59e0b", fontWeight: 600, marginTop: 2 }}>↑ Not as good as last week</div>;
+                            return null;
+                          })()}
                           <div className="alt-meta">
                             {deal.city || "Illinois"}
                             {deal.accepts_credit ? " · Cards OK" : ""}
