@@ -1,23 +1,208 @@
 import Link from "next/link";
 
 // ============================================================
-// NEW CLEANLIST HOMEPAGE
-// The pivot: from directory to decision engine
+// CLEANLIST HOMEPAGE — Cannabis visual identity overhaul
 //
 // Design philosophy:
-// - One question answered: "Where should I go right now?"
-// - Deals are the hook, savings are the emotion
-// - Mobile-first — this is a phone behavior
+// - Unmistakably cannabis within 1 second of landing
+// - Real SVG icons, not emoji fallbacks
+// - Botanical plant illustrations in hero background (low opacity)
 // - Dark navy + green = authority + cannabis without cliché
 // - Georgia serif = trustworthy local guide, not tech startup
 // ============================================================
 
+// ---------- SVG ICON COMPONENTS ----------
+
+// 7-blade cannabis leaf — universal cannabis symbol
+function LeafIcon({ size = 20, color = "#4ade80" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      {/* stem */}
+      <path d="M32 60 L32 44" stroke={color} strokeWidth="2" strokeLinecap="round" />
+      {/* center blade (tallest) */}
+      <path d="M32 44 Q30 28 32 4 Q34 28 32 44 M30 14 L26 16 M34 14 L38 16 M30 22 L25 24 M34 22 L39 24 M30 30 L24 33 M34 30 L40 33" stroke={color} strokeWidth="1.5" fill={color} fillOpacity="0.55" strokeLinejoin="round" />
+      {/* upper-left blade */}
+      <path d="M32 44 Q20 32 10 14 Q22 28 32 44 M15 18 L11 22 M19 22 L15 26 M23 26 L20 30" stroke={color} strokeWidth="1.4" fill={color} fillOpacity="0.5" strokeLinejoin="round" />
+      {/* upper-right blade */}
+      <path d="M32 44 Q44 32 54 14 Q42 28 32 44 M49 18 L53 22 M45 22 L49 26 M41 26 L44 30" stroke={color} strokeWidth="1.4" fill={color} fillOpacity="0.5" strokeLinejoin="round" />
+      {/* mid-left blade (widest) */}
+      <path d="M32 44 Q14 40 2 30 Q18 40 32 44 M10 34 L7 38 M16 36 L13 40 M22 40 L20 43" stroke={color} strokeWidth="1.4" fill={color} fillOpacity="0.45" strokeLinejoin="round" />
+      {/* mid-right blade (widest) */}
+      <path d="M32 44 Q50 40 62 30 Q46 40 32 44 M54 34 L57 38 M48 36 L51 40 M42 40 L44 43" stroke={color} strokeWidth="1.4" fill={color} fillOpacity="0.45" strokeLinejoin="round" />
+      {/* lower-left blade (short) */}
+      <path d="M32 44 Q22 48 12 50 Q24 46 32 44" stroke={color} strokeWidth="1.3" fill={color} fillOpacity="0.4" strokeLinejoin="round" />
+      {/* lower-right blade (short) */}
+      <path d="M32 44 Q42 48 52 50 Q40 46 32 44" stroke={color} strokeWidth="1.3" fill={color} fillOpacity="0.4" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+// Gummy bear — edibles icon
+function GummyBearIcon({ size = 20 }) {
+  const color = "#fb923c";
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      {/* left ear */}
+      <circle cx="20" cy="14" r="6" fill={color} />
+      {/* right ear */}
+      <circle cx="44" cy="14" r="6" fill={color} />
+      {/* head */}
+      <circle cx="32" cy="22" r="10" fill={color} />
+      {/* torso */}
+      <ellipse cx="32" cy="40" rx="13" ry="14" fill={color} />
+      {/* left arm */}
+      <ellipse cx="16" cy="36" rx="5" ry="6" fill={color} />
+      {/* right arm */}
+      <ellipse cx="48" cy="36" rx="5" ry="6" fill={color} />
+      {/* left leg */}
+      <ellipse cx="24" cy="56" rx="5" ry="5" fill={color} />
+      {/* right leg */}
+      <ellipse cx="40" cy="56" rx="5" ry="5" fill={color} />
+      {/* eyes */}
+      <circle cx="28" cy="20" r="1.4" fill="#0f1f3d" />
+      <circle cx="36" cy="20" r="1.4" fill="#0f1f3d" />
+      {/* smile */}
+      <path d="M28 25 Q32 28 36 25" stroke="#0f1f3d" strokeWidth="1.3" strokeLinecap="round" fill="none" />
+    </svg>
+  );
+}
+
+// Vape pen — sleek cartridge with oil window
+function VapeIcon({ size = 20 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      {/* mouthpiece */}
+      <rect x="28" y="4" width="8" height="8" rx="1.5" fill="#1f2937" />
+      {/* upper cartridge body */}
+      <rect x="24" y="12" width="16" height="22" rx="2" fill="#e5e7eb" stroke="#9ca3af" strokeWidth="1" />
+      {/* oil window */}
+      <rect x="27" y="16" width="10" height="14" rx="1" fill="#fbbf24" />
+      {/* metal band */}
+      <rect x="23" y="34" width="18" height="4" rx="1" fill="#9ca3af" />
+      {/* battery body */}
+      <rect x="24" y="38" width="16" height="20" rx="2" fill="#0f1f3d" />
+      {/* LED button */}
+      <circle cx="32" cy="52" r="2.2" fill="#16a34a" />
+      <circle cx="32" cy="52" r="1" fill="#4ade80" />
+    </svg>
+  );
+}
+
+// Concentrate crystal — faceted gem / water drop
+function ConcentrateIcon({ size = 20 }) {
+  const color = "#a78bfa";
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      {/* outer crystal teardrop */}
+      <path d="M32 6 L50 32 Q50 54 32 58 Q14 54 14 32 Z" fill={color} fillOpacity="0.85" stroke="#7c3aed" strokeWidth="1.2" strokeLinejoin="round" />
+      {/* internal facet lines */}
+      <path d="M32 6 L32 58" stroke="#c4b5fd" strokeWidth="0.8" />
+      <path d="M14 32 L50 32" stroke="#c4b5fd" strokeWidth="0.8" />
+      <path d="M22 18 L42 46" stroke="#c4b5fd" strokeWidth="0.7" />
+      <path d="M42 18 L22 46" stroke="#c4b5fd" strokeWidth="0.7" />
+      {/* highlight */}
+      <path d="M26 14 L22 24" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" opacity="0.75" />
+    </svg>
+  );
+}
+
+// Flame — all deals icon
+function FlameIcon({ size = 20 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      {/* outer flame (white on green bg) */}
+      <path d="M32 6 C36 18 48 24 48 40 C48 52 40 58 32 58 C24 58 16 52 16 40 C16 30 22 26 24 20 C26 26 30 22 32 6 Z" fill="#fff" stroke="#fff" strokeWidth="1" strokeLinejoin="round" />
+      {/* inner flame */}
+      <path d="M32 22 C34 28 40 32 40 42 C40 50 36 54 32 54 C28 54 24 50 24 42 C24 36 28 34 29 30 C30 34 31 32 32 22 Z" fill="#fb923c" />
+      {/* core */}
+      <path d="M32 34 C33 38 36 40 36 45 C36 49 34 51 32 51 C30 51 28 49 28 45 C28 41 30 41 32 34 Z" fill="#fbbf24" />
+    </svg>
+  );
+}
+
+// Large decorative cannabis plant — hero background
+function PlantSilhouette({ side = "left" }) {
+  const transform = side === "right" ? "scale(-1,1) translate(-200,0)" : "";
+  return (
+    <svg
+      width="200"
+      height="500"
+      viewBox="0 0 200 500"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{
+        position: "absolute",
+        top: "0",
+        [side]: "-20px",
+        opacity: 0.13,
+        pointerEvents: "none",
+        zIndex: 0,
+      }}
+      aria-hidden="true"
+    >
+      <g transform={transform} fill="#4ade80" stroke="#4ade80" strokeWidth="1.5" strokeLinejoin="round">
+        {/* main stalk */}
+        <path d="M100 500 L100 60" stroke="#4ade80" strokeWidth="3" fill="none" />
+        {/* upper fan leaf cluster (5 blades) */}
+        <g transform="translate(100 80)">
+          <path d="M0 0 Q-4 -30 -2 -60 Q2 -30 0 0" />
+          <path d="M0 0 Q-20 -20 -35 -45 Q-12 -15 0 0" />
+          <path d="M0 0 Q20 -20 35 -45 Q12 -15 0 0" />
+          <path d="M0 0 Q-30 -8 -50 -20 Q-20 -5 0 0" />
+          <path d="M0 0 Q30 -8 50 -20 Q20 -5 0 0" />
+        </g>
+        {/* mid-upper branch + cluster */}
+        <path d="M100 160 Q80 155 60 150" stroke="#4ade80" strokeWidth="2" fill="none" />
+        <g transform="translate(55 148)">
+          <path d="M0 0 Q-4 -24 -2 -48 Q2 -24 0 0" />
+          <path d="M0 0 Q-18 -14 -30 -34 Q-10 -10 0 0" />
+          <path d="M0 0 Q18 -14 30 -34 Q10 -10 0 0" />
+          <path d="M0 0 Q-26 -4 -44 -14 Q-18 -2 0 0" />
+          <path d="M0 0 Q26 -4 44 -14 Q18 -2 0 0" />
+          <path d="M0 0 Q-10 12 -18 22 Q-6 8 0 0" />
+          <path d="M0 0 Q10 12 18 22 Q6 8 0 0" />
+        </g>
+        {/* mid-lower branch + cluster (other side) */}
+        <path d="M100 240 Q120 236 140 230" stroke="#4ade80" strokeWidth="2" fill="none" />
+        <g transform="translate(145 228)">
+          <path d="M0 0 Q-4 -24 -2 -48 Q2 -24 0 0" />
+          <path d="M0 0 Q-18 -14 -30 -34 Q-10 -10 0 0" />
+          <path d="M0 0 Q18 -14 30 -34 Q10 -10 0 0" />
+          <path d="M0 0 Q-26 -4 -44 -14 Q-18 -2 0 0" />
+          <path d="M0 0 Q26 -4 44 -14 Q18 -2 0 0" />
+          <path d="M0 0 Q-10 12 -18 22 Q-6 8 0 0" />
+          <path d="M0 0 Q10 12 18 22 Q6 8 0 0" />
+        </g>
+        {/* lower branch + cluster */}
+        <path d="M100 330 Q78 326 56 320" stroke="#4ade80" strokeWidth="2" fill="none" />
+        <g transform="translate(50 318)">
+          <path d="M0 0 Q-4 -20 -2 -40 Q2 -20 0 0" />
+          <path d="M0 0 Q-16 -12 -26 -28 Q-10 -8 0 0" />
+          <path d="M0 0 Q16 -12 26 -28 Q10 -8 0 0" />
+          <path d="M0 0 Q-22 -3 -36 -10 Q-16 -2 0 0" />
+          <path d="M0 0 Q22 -3 36 -10 Q16 -2 0 0" />
+        </g>
+        {/* bottom branch */}
+        <path d="M100 410 Q118 408 138 404" stroke="#4ade80" strokeWidth="2" fill="none" />
+        <g transform="translate(140 402)">
+          <path d="M0 0 Q-4 -18 -2 -34 Q2 -18 0 0" />
+          <path d="M0 0 Q-14 -10 -22 -22 Q-8 -7 0 0" />
+          <path d="M0 0 Q14 -10 22 -22 Q8 -7 0 0" />
+          <path d="M0 0 Q-18 -2 -30 -8 Q-14 -1 0 0" />
+          <path d="M0 0 Q18 -2 30 -8 Q14 -1 0 0" />
+        </g>
+      </g>
+    </svg>
+  );
+}
+
+// ---------- DATA ----------
+
 const CATEGORIES = [
-  { label: "Flower", slug: "flower", emoji: "🌿" },
-  { label: "Edibles", slug: "edibles", emoji: "🍬" },
-  { label: "Vapes", slug: "vapes", emoji: "💨" },
-  { label: "Concentrates", slug: "concentrate", emoji: "💎" },
-  { label: "All deals", slug: "all", emoji: "🔥" },
+  { label: "Flower", slug: "flower", icon: "leaf" },
+  { label: "Edibles", slug: "edibles", icon: "gummy" },
+  { label: "Vapes", slug: "vapes", icon: "vape" },
+  { label: "Concentrates", slug: "concentrate", icon: "crystal" },
+  { label: "All deals", slug: "all", icon: "flame" },
 ];
 
 const QUICK_FILTERS = [
@@ -41,6 +226,15 @@ const CITIES = [
   { name: "Schaumburg", slug: "schaumburg" },
   { name: "Aurora", slug: "aurora" },
 ];
+
+function renderIcon(key) {
+  if (key === "leaf") return <LeafIcon />;
+  if (key === "gummy") return <GummyBearIcon />;
+  if (key === "vape") return <VapeIcon />;
+  if (key === "crystal") return <ConcentrateIcon />;
+  if (key === "flame") return <FlameIcon />;
+  return null;
+}
 
 export default function HomePage() {
   return (
@@ -76,7 +270,10 @@ export default function HomePage() {
           background:#0f1f3d;
           padding:56px 28px 48px;
           text-align:center;
+          position:relative;
+          overflow:hidden;
         }
+        .hero-inner{position:relative;z-index:1}
         .hero-badge{
           display:inline-flex;align-items:center;gap:6px;
           background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.25);
@@ -100,14 +297,14 @@ export default function HomePage() {
           max-width:480px;margin-left:auto;margin-right:auto;
         }
 
-        /* CATEGORY BUTTONS — the main decision input */
+        /* CATEGORY BUTTONS */
         .category-grid{
           display:flex;flex-wrap:wrap;justify-content:center;
           gap:10px;margin-bottom:16px;
-          max-width:560px;margin-left:auto;margin-right:auto;
+          max-width:620px;margin-left:auto;margin-right:auto;
         }
         .cat-btn{
-          display:flex;align-items:center;gap:7px;
+          display:flex;align-items:center;gap:8px;
           background:rgba(255,255,255,.08);
           border:1px solid rgba(255,255,255,.15);
           border-radius:10px;padding:12px 20px;
@@ -121,7 +318,7 @@ export default function HomePage() {
           font-size:.95rem;padding:14px 28px;
         }
         .cat-btn.primary:hover{background:#15803d}
-        .cat-emoji{font-size:16px}
+        .cat-btn svg{flex-shrink:0}
 
         /* QUICK FILTERS */
         .filter-row{
@@ -138,14 +335,13 @@ export default function HomePage() {
         }
         .filter-pill:hover{color:#fff;border-color:rgba(255,255,255,.4)}
 
-        /* HOW IT WORKS — 3 steps, editorial layout */
+        /* HOW IT WORKS */
         .how{background:#fff;border-top:1px solid #e8e4da;border-bottom:1px solid #e8e4da}
         .how-inner{
           max-width:900px;margin:0 auto;
           padding:52px 28px;
           display:grid;grid-template-columns:repeat(3,1fr);gap:40px;
         }
-        .how-step{}
         .how-num{
           font-size:2.4rem;font-weight:700;color:#e8e4da;
           line-height:1;margin-bottom:10px;
@@ -223,9 +419,7 @@ export default function HomePage() {
         .savings-num{font-size:1.1rem;font-weight:700;color:#16a34a}
 
         /* CITY BROWSE */
-        .cities-section{
-          background:#0f1f3d;padding:52px 28px;
-        }
+        .cities-section{background:#0f1f3d;padding:52px 28px}
         .cities-inner{max-width:1100px;margin:0 auto}
         .cities-title{
           font-size:1.5rem;font-weight:700;color:#fff;
@@ -259,7 +453,7 @@ export default function HomePage() {
         }
         .city-pill:hover{background:rgba(74,222,128,.2)}
 
-        /* DISPENSARY CTA */
+        /* BIZ STRIP */
         .biz-strip{
           background:#f5f4f0;border-top:1px solid #e8e4da;
           padding:44px 28px;text-align:center;
@@ -330,43 +524,47 @@ export default function HomePage() {
         </div>
       </nav>
 
-      {/* HERO — decision engine entry point */}
+      {/* HERO — decision engine entry point with botanical plants */}
       <div className="hero">
-        <div className="hero-badge">
-          <span className="hero-badge-dot" />
-          Illinois dispensary deals — live
-        </div>
-        <h1>Best Bud For<br /><em>Your Buck$</em></h1>
-        <p className="hero-sub">
-          Tell us what you want. We find the cheapest price, the best discount,
-          and the fastest option near you.
-        </p>
+        <PlantSilhouette side="left" />
+        <PlantSilhouette side="right" />
+        <div className="hero-inner">
+          <div className="hero-badge">
+            <span className="hero-badge-dot" />
+            Illinois dispensary deals — live
+          </div>
+          <h1>Best Bud For<br /><em>Your Buck$</em></h1>
+          <p className="hero-sub">
+            Tell us what you want. We find the cheapest price, the best discount,
+            and the fastest option near you.
+          </p>
 
-        {/* CATEGORY SELECTION — the one input */}
-        <div className="category-grid">
-          {CATEGORIES.map(cat => (
-            <Link
-              key={cat.slug}
-              href={`/deals/${cat.slug}`}
-              className={`cat-btn ${cat.slug === 'all' ? 'primary' : ''}`}
-            >
-              <span className="cat-emoji">{cat.emoji}</span>
-              {cat.label}
-            </Link>
-          ))}
-        </div>
+          {/* CATEGORY SELECTION */}
+          <div className="category-grid">
+            {CATEGORIES.map(cat => (
+              <Link
+                key={cat.slug}
+                href={`/deals/${cat.slug}`}
+                className={`cat-btn ${cat.slug === 'all' ? 'primary' : ''}`}
+              >
+                {renderIcon(cat.icon)}
+                {cat.label}
+              </Link>
+            ))}
+          </div>
 
-        {/* QUICK FILTERS */}
-        <div className="filter-row">
-          {QUICK_FILTERS.map(f => (
-            <Link
-              key={f.param}
-              href={`/deals/all?${f.param}`}
-              className="filter-pill"
-            >
-              {f.label}
-            </Link>
-          ))}
+          {/* QUICK FILTERS */}
+          <div className="filter-row">
+            {QUICK_FILTERS.map(f => (
+              <Link
+                key={f.param}
+                href={`/deals/all?${f.param}`}
+                className="filter-pill"
+              >
+                {f.label}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -400,15 +598,13 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* TODAY'S DEALS — populated from DB once deals data exists */}
+      {/* TODAY'S DEALS */}
       <div className="deals-section">
         <p className="section-eyebrow">Live deals</p>
         <h2 className="section-title">Best deals in Illinois today</h2>
         <p className="section-sub">Updated continuously · Verified against dispensary sites</p>
 
         <div className="deal-cards">
-
-          {/* TOP PICK card — will be dynamic, hardcoded for now */}
           <div className="deal-card top-pick">
             <div className="top-pick-badge">Best value today</div>
             <div className="deal-card-header">
@@ -431,7 +627,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Alternative cards */}
           <div className="deal-card">
             <div className="deal-card-header">
               <div>
@@ -471,7 +666,6 @@ export default function HomePage() {
               <span className="savings-num">~$10</span>
             </div>
           </div>
-
         </div>
       </div>
 
@@ -499,7 +693,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* DISPENSARY CTA — pushed to bottom where it belongs */}
+      {/* DISPENSARY CTA */}
       <div className="biz-strip">
         <div className="biz-title">Own a dispensary?</div>
         <p className="biz-sub">
