@@ -240,6 +240,49 @@ const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGci
 
 export const revalidate = 300;
 
+async function getTopDeals() {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&order=discount_value.desc&limit=3`,
+      {
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+        cache: "no-store",
+      }
+    );
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
+
+function formatDiscount(d) {
+  if (d.discount_unit === "percent") return `${Math.round(d.discount_value)}% off ${d.category || ""}`.trim();
+  if (d.discount_unit === "dollars") {
+    if (d.discount_type === "fixed_price") return `$${d.discount_value} flat`;
+    return `$${d.discount_value} off`;
+  }
+  return d.deal_title || "Deal available";
+}
+
+function formatSavings(d) {
+  if (d.savings_amount && d.savings_amount > 0) return `~$${Math.round(d.savings_amount)}`;
+  if (d.discount_unit === "percent") return `${Math.round(d.discount_value)}% off`;
+  if (d.discount_unit === "dollars") return `$${d.discount_value}`;
+  return "Save";
+}
+
+function isLikelyOpen() {
+  // Simple CT hour heuristic (9am-9pm CT). Server-side so no client jitter.
+  const utcHour = new Date().getUTCHours();
+  const ctHour = (utcHour + 24 - 5) % 24; // rough CT (ignores DST)
+  return ctHour >= 9 && ctHour < 21;
+}
+
 async function getActiveDealCount() {
   try {
     const res = await fetch(
@@ -266,7 +309,8 @@ async function getActiveDealCount() {
 }
 
 export default async function HomePage() {
-  const dealCount = await getActiveDealCount();
+  const [dealCount, topDeals] = await Promise.all([getActiveDealCount(), getTopDeals()]);
+  const likelyOpen = isLikelyOpen();
   return (
     <>
       <style>{`
@@ -679,69 +723,54 @@ export default async function HomePage() {
         <h2 className="section-title">Best deals in Illinois today</h2>
         <p className="section-sub">Updated continuously · Verified against dispensary sites</p>
 
-        <div className="deal-cards">
-          <div className="deal-card top-pick">
-            <div className="top-pick-badge">Best value today</div>
-            <div className="deal-card-header">
-              <div>
-                <div className="deal-name">NOXX East Peoria</div>
-                <div className="deal-city">East Peoria, IL</div>
-              </div>
-              <span className="open-badge open">Open</span>
-            </div>
-            <div className="deal-highlight">30% off all vapes</div>
-            <div className="deal-reason">Cheapest vape deal within 15 miles · 4 min away</div>
-            <div className="deal-attrs">
-              <span className="deal-attr">Drive-thru</span>
-              <span className="deal-attr">Cards OK</span>
-              <span className="deal-attr">4.7 ★</span>
-            </div>
-            <div className="deal-savings">
-              <span className="savings-label">You save vs avg price</span>
-              <span className="savings-num">~$18</span>
+        {topDeals.length > 0 ? (
+          <div className="deal-cards">
+            {topDeals.map((d, i) => {
+              const slug = d.slug || d.listing_slug;
+              const name = d.name || d.listing_slug || "Illinois dispensary";
+              return (
+                <Link
+                  key={d.deal_id || d.id || i}
+                  href={`/l/${slug}`}
+                  className={`deal-card${i === 0 ? " top-pick" : ""}`}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  {i === 0 && <div className="top-pick-badge">Best value today</div>}
+                  <div className="deal-card-header">
+                    <div>
+                      <div className="deal-name">{name}</div>
+                      <div className="deal-city">{d.city || "Illinois"}</div>
+                    </div>
+                    <span className={`open-badge ${likelyOpen ? "open" : "closed"}`}>
+                      {likelyOpen ? "Likely open" : "Closed"}
+                    </span>
+                  </div>
+                  <div className="deal-highlight">{d.deal_title || formatDiscount(d)}</div>
+                  {d.deal_description && <div className="deal-reason">{d.deal_description}</div>}
+                  <div className="deal-attrs">
+                    {d.accepts_credit && <span className="deal-attr">Cards OK</span>}
+                    {d.drive_thru && <span className="deal-attr">Drive-thru</span>}
+                    {d.delivery && <span className="deal-attr">Delivery</span>}
+                    {d.google_rating > 0 && <span className="deal-attr">{d.google_rating} ★</span>}
+                    {d.is_recurring && <span className="deal-attr">Recurring</span>}
+                  </div>
+                  <div className="deal-savings">
+                    <span className="savings-label">Savings vs full price</span>
+                    <span className="savings-num">{formatSavings(d)}</span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="deal-cards">
+            <div className="deal-card" style={{ gridColumn: "1 / -1", textAlign: "center", padding: "32px 16px" }}>
+              <div className="deal-highlight">Check back soon</div>
+              <div className="deal-reason">Fresh deals loading. Get deal alerts to be first to know.</div>
+              <Link href="/alerts" className="biz-btn-primary" style={{ display: "inline-block", marginTop: 12 }}>Get alerts →</Link>
             </div>
           </div>
-
-          <div className="deal-card">
-            <div className="deal-card-header">
-              <div>
-                <div className="deal-name">Ivy Hall Peoria</div>
-                <div className="deal-city">Peoria, IL</div>
-              </div>
-              <span className="open-badge open">Open</span>
-            </div>
-            <div className="deal-highlight">$5 pre-rolls Mon–Wed</div>
-            <div className="deal-reason">Weekly recurring deal · 9 min away</div>
-            <div className="deal-attrs">
-              <span className="deal-attr">Cards OK</span>
-              <span className="deal-attr">4.5 ★</span>
-            </div>
-            <div className="deal-savings">
-              <span className="savings-label">You save vs avg price</span>
-              <span className="savings-num">~$12</span>
-            </div>
-          </div>
-
-          <div className="deal-card">
-            <div className="deal-card-header">
-              <div>
-                <div className="deal-name">Terrace Cannabis</div>
-                <div className="deal-city">Moline, IL</div>
-              </div>
-              <span className="open-badge open">Open</span>
-            </div>
-            <div className="deal-highlight">20% off all flower today</div>
-            <div className="deal-reason">Highest rated in IL · 4.9 ★ · 4,200+ reviews</div>
-            <div className="deal-attrs">
-              <span className="deal-attr">Drive-thru</span>
-              <span className="deal-attr">4.9 ★</span>
-            </div>
-            <div className="deal-savings">
-              <span className="savings-label">You save vs avg price</span>
-              <span className="savings-num">~$10</span>
-            </div>
-          </div>
-        </div>
+        )}
       </div>
 
       {/* CITY BROWSE */}
