@@ -24,6 +24,10 @@ export default function UpgradePage() {
     }
     setLoadingTier(tier);
     try {
+      try {
+        const w = window as any;
+        if (typeof w.gtag === "function") w.gtag("event", "upgrade_click", { tier });
+      } catch {}
       const res = await fetch("/api/stripe/create-checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

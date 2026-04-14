@@ -3,6 +3,7 @@ import LocationAware from "./components/LocationAware";
 import TrackedLink from "./components/TrackedLink";
 import HomeTicker from "./components/HomeTicker";
 import HomeDealCards from "./components/HomeDealCards";
+import SearchTracker from "./components/SearchTracker";
 import { formatSavingsDollars, gradeDeal } from "../lib/dealScoring";
 
 // ============================================================
@@ -789,6 +790,7 @@ export default async function HomePage() {
             </button>
           </form>
           <LocationAware />
+          <SearchTracker />
 
           {/* CATEGORY SELECTION — primary action first */}
           {(() => {

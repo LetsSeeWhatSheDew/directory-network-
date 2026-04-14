@@ -16,6 +16,10 @@ export default function ProCheckoutButton() {
     }
     setBusy(true);
     try {
+      try {
+        const w = window as any;
+        if (typeof w.gtag === "function") w.gtag("event", "upgrade_click", { tier: "pro" });
+      } catch {}
       const res = await fetch("/api/stripe/create-checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

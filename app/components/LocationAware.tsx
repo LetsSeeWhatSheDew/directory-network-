@@ -90,6 +90,12 @@ export default function LocationAware() {
     save(next, lat, lng);
     setLoc(next);
     applyPlaceholder(next.city);
+    try {
+      const w = window as any;
+      if (typeof w.gtag === "function") {
+        w.gtag("event", "location_detected", { method: next.source, city: next.city });
+      }
+    } catch {}
   }, []);
 
   const useGps = useCallback(async () => {
