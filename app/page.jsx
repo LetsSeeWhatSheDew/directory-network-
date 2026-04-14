@@ -268,6 +268,26 @@ function categoryEmoji(c) {
   return "🔥";
 }
 
+// View's name column often mirrors the slug. Humanize anything that
+// looks slug-shaped (lowercase + hyphens, no spaces).
+function slugToName(slug) {
+  if (!slug) return "";
+  return String(slug)
+    .split("-")
+    .filter(Boolean)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
+function displayName(d) {
+  const name = d?.name;
+  const slug = d?.slug || d?.listing_slug;
+  if (!name || name === slug || /^[a-z0-9-]+$/.test(name)) {
+    return slugToName(slug || name || "Illinois dispensary");
+  }
+  return name;
+}
+
 async function getTopDeals() {
   try {
     const res = await fetch(
@@ -693,7 +713,7 @@ export default async function HomePage() {
             <div className="ticker" aria-label="Live deals ticker">
               <div className="ticker-track">
                 {[...tickerDeals, ...tickerDeals].map((d, i) => {
-                  const name = d.name || d.listing_slug || "Illinois dispensary";
+                  const name = displayName(d);
                   const title = d.deal_title ||
                     (d.discount_unit === "percent"
                       ? `${Math.round(d.discount_value)}% off ${d.category || "deal"}`
@@ -815,7 +835,7 @@ export default async function HomePage() {
           <div className="deal-cards">
             {topDeals.map((d, i) => {
               const slug = d.slug || d.listing_slug;
-              const name = d.name || d.listing_slug || "Illinois dispensary";
+              const name = displayName(d);
               return (
                 <Link
                   key={d.deal_id || d.id || i}
