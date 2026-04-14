@@ -9,9 +9,17 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Early access — CleanList deal alerts",
-  description: "Free early access to CleanList deal alerts. Built by Matthew Burns in Peoria, IL.",
-  robots: { index: false }, // Personal-share page, not for SEO indexing
+  title: "Early access to CleanList — Illinois cannabis deal alerts",
+  description:
+    "Get free early access to CleanList deal alerts for Illinois cannabis dispensaries. Weekly digest, no account needed.",
+  alternates: { canonical: "https://cleanlist.co/early-access" },
+  openGraph: {
+    title: "Early access to CleanList",
+    description: "Free early access to Illinois cannabis deal alerts.",
+    url: "https://cleanlist.co/early-access",
+    type: "website",
+  },
+  robots: { index: true, follow: true },
 };
 
 export default function EarlyAccessPage() {
