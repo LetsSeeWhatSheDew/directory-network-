@@ -230,7 +230,9 @@ export default function HomePage() {
           padding:14px 28px;background:#0f1f3d;
           position:sticky;top:0;z-index:100;
         }
-        .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+        .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+        .logo-mark{position:relative;width:28px;height:28px;display:inline-block;flex-shrink:0}
+        .logo-mark-dot{position:absolute;top:-2px;right:-2px;width:10px;height:10px;border-radius:50%;background:#4ade80;border:2px solid #0f1f3d;animation:pulse 2.5s infinite}
         .logo-dot{width:8px;height:8px;border-radius:50%;background:#16a34a;animation:pulse 2.5s infinite}
         @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.9)}}
         .logo-text{font-size:1.15rem;font-weight:700;color:#fff;letter-spacing:-.02em}
@@ -493,8 +495,16 @@ export default function HomePage() {
 
       {/* NAV */}
       <nav className="nav">
-        <Link href="/" className="logo">
-          <span className="logo-dot" />
+        <Link href="/" className="logo" aria-label="CleanList home">
+          <span className="logo-mark">
+            <svg width="28" height="28" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="0" y="0" width="28" height="28" rx="6" fill="#0b172f" stroke="rgba(255,255,255,.12)" strokeWidth="1" />
+              <rect x="7" y="9" width="14" height="1.8" rx="0.9" fill="#fff" />
+              <rect x="7" y="13.2" width="14" height="1.8" rx="0.9" fill="#fff" />
+              <rect x="7" y="17.4" width="14" height="1.8" rx="0.9" fill="#fff" />
+            </svg>
+            <span className="logo-mark-dot" aria-hidden="true" />
+          </span>
           <span className="logo-text">clean<span>list</span></span>
         </Link>
         <div className="nav-links">
