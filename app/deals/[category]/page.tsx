@@ -106,6 +106,55 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
 
 export const dynamic = "force-dynamic"; // Force SSR, never cache
 
+function buildItemListSchema(deals: any[], categoryLabel: string, category: string) {
+  const top = deals.slice(0, 4).map((d, i) => {
+    const price = d.sale_price ?? d.discount_value ?? undefined;
+    return {
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "Product",
+        name: d.deal_title || d.title || `${categoryLabel} deal`,
+        description: d.deal_description || d.description || `${categoryLabel} deal at ${d.name || d.listing_slug || "Illinois dispensary"}`,
+        offers: {
+          "@type": "Offer",
+          availability: "https://schema.org/InStock",
+          ...(price !== undefined ? { price: String(price), priceCurrency: "USD" } : {}),
+          seller: {
+            "@type": "Store",
+            name: d.name || d.listing_slug || "Illinois cannabis dispensary",
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: d.city || "Illinois",
+              addressRegion: "IL",
+              addressCountry: "US",
+            },
+          },
+        },
+      },
+    };
+  });
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `Best ${categoryLabel} Deals in Illinois`,
+    description: `Top cannabis ${category === "all" ? "" : categoryLabel.toLowerCase() + " "}deals at Illinois dispensaries today`,
+    itemListElement: top,
+  };
+}
+
+function buildBreadcrumbSchema(categoryLabel: string, category: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://cleanlist.co" },
+      { "@type": "ListItem", position: 2, name: "Deals", item: "https://cleanlist.co/deals/all" },
+      { "@type": "ListItem", position: 3, name: categoryLabel, item: `https://cleanlist.co/deals/${category}` },
+    ],
+  };
+}
+
 export default async function DealsPage({ params }: { params: Promise<{ category: string }> }) {
   const { category } = await params;
   const { deals, source } = await getDeals(category);
@@ -114,9 +163,21 @@ export default async function DealsPage({ params }: { params: Promise<{ category
   const subtitle = CATEGORY_SUBTITLES[category] || "Best deals near you";
   const topDeal = deals[0] || null;
   const alternatives = deals.slice(1, 4);
+  const itemListSchema = deals.length > 0 ? buildItemListSchema(deals, categoryLabel, category) : null;
+  const breadcrumbSchema = buildBreadcrumbSchema(categoryLabel, category);
 
   return (
     <>
+      {itemListSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+        />
+      )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
         body{font-family:Georgia,serif;background:#f5f4f0;color:#0f1f3d;min-height:100vh}
