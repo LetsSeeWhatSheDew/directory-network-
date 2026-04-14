@@ -1,4 +1,5 @@
 import Link from "next/link";
+import LocationAware from "./components/LocationAware";
 
 // ============================================================
 // CLEANLIST HOMEPAGE — Cannabis visual identity overhaul
@@ -747,6 +748,7 @@ export default async function HomePage() {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
             </button>
           </form>
+          <LocationAware />
 
           {/* CATEGORY SELECTION */}
           <div className="category-grid">
