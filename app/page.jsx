@@ -462,27 +462,32 @@ export default async function HomePage() {
         .hero-search-btn:hover{background:#1e3a5f}
 
         /* CATEGORY BUTTONS */
+        .cat-primary-wrap{max-width:560px;margin:0 auto 14px}
+        .cat-btn.primary{
+          width:100%;
+          display:flex;align-items:center;justify-content:center;gap:10px;
+          background:#16a34a;border:1px solid #16a34a;color:#fff;
+          border-radius:12px;padding:16px 32px;
+          font-size:1rem;font-family:system-ui,sans-serif;font-weight:700;
+          text-decoration:none;cursor:pointer;transition:all .15s;
+        }
+        .cat-btn.primary:hover{background:#15803d;border-color:#15803d}
+        .cat-or{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.4);font-family:system-ui,sans-serif;text-align:center;margin:14px 0 10px}
         .category-grid{
-          display:flex;flex-wrap:wrap;justify-content:center;
-          gap:10px;margin-bottom:16px;
-          max-width:620px;margin-left:auto;margin-right:auto;
+          display:grid;grid-template-columns:1fr 1fr;
+          gap:8px;max-width:560px;margin:0 auto 12px;
         }
         .cat-btn{
-          display:flex;align-items:center;gap:8px;
-          background:rgba(255,255,255,.08);
-          border:1px solid rgba(255,255,255,.15);
-          border-radius:10px;padding:12px 20px;
-          font-size:.88rem;font-family:system-ui,sans-serif;font-weight:600;
-          color:#fff;cursor:pointer;text-decoration:none;
+          display:flex;align-items:center;justify-content:center;gap:8px;
+          background:rgba(255,255,255,.05);
+          border:1px solid rgba(255,255,255,.1);
+          border-radius:10px;padding:11px 14px;
+          font-size:.85rem;font-family:system-ui,sans-serif;font-weight:500;
+          color:rgba(255,255,255,.85);cursor:pointer;text-decoration:none;
           transition:all .15s;
         }
-        .cat-btn:hover{background:rgba(74,222,128,.15);border-color:rgba(74,222,128,.4)}
-        .cat-btn.primary{
-          background:#16a34a;border-color:#16a34a;
-          font-size:.95rem;padding:14px 28px;
-        }
-        .cat-btn.primary:hover{background:#15803d}
-        .cat-btn svg{flex-shrink:0}
+        .cat-btn:hover{background:rgba(74,222,128,.12);border-color:rgba(74,222,128,.3);color:#fff}
+        .cat-btn svg{flex-shrink:0;width:24px;height:24px}
 
         /* QUICK FILTERS */
         .filter-row{
@@ -694,9 +699,8 @@ export default async function HomePage() {
         @media(max-width:480px){
           .hero h1{font-size:2.2rem}
           .hero-badge{font-size:.66rem;padding:4px 10px}
-          .category-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-          .cat-btn{justify-content:center;padding:12px 8px;font-size:.82rem}
-          .cat-btn.primary{grid-column:1 / -1;font-size:.92rem;padding:14px 16px}
+          .cat-btn.primary{font-size:.95rem;padding:14px 18px}
+          .cat-btn{padding:10px 8px;font-size:.8rem}
           .hero-search{flex-direction:row}
           .hero-search-input{font-size:.88rem;padding:8px 10px}
           .hero-search-btn{padding:0 12px}
@@ -800,21 +804,43 @@ export default async function HomePage() {
           </form>
           <LocationAware />
 
-          {/* CATEGORY SELECTION */}
-          <div className="category-grid">
-            {CATEGORIES.map(cat => (
-              <TrackedLink
-                key={cat.slug}
-                href={`/deals/${cat.slug}`}
-                className={`cat-btn ${cat.slug === 'all' ? 'primary' : ''}`}
-                event="category_click"
-                params={{ category: cat.slug }}
-              >
-                {renderIcon(cat.icon)}
-                {cat.label}
-              </TrackedLink>
-            ))}
-          </div>
+          {/* CATEGORY SELECTION — primary action first */}
+          {(() => {
+            const all = CATEGORIES.find((c) => c.slug === "all");
+            const rest = CATEGORIES.filter((c) => c.slug !== "all");
+            return (
+              <>
+                {all && (
+                  <div className="cat-primary-wrap">
+                    <TrackedLink
+                      href={`/deals/${all.slug}`}
+                      className="cat-btn primary"
+                      event="category_click"
+                      params={{ category: all.slug }}
+                    >
+                      {renderIcon(all.icon)}
+                      See all deals near you
+                    </TrackedLink>
+                  </div>
+                )}
+                <div className="cat-or">Or browse by category</div>
+                <div className="category-grid">
+                  {rest.map((cat) => (
+                    <TrackedLink
+                      key={cat.slug}
+                      href={`/deals/${cat.slug}`}
+                      className="cat-btn"
+                      event="category_click"
+                      params={{ category: cat.slug }}
+                    >
+                      {renderIcon(cat.icon)}
+                      {cat.label}
+                    </TrackedLink>
+                  ))}
+                </div>
+              </>
+            );
+          })()}
 
           {/* QUICK FILTERS */}
           <div className="filter-row">
