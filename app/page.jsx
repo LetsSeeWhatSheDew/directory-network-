@@ -383,6 +383,13 @@ export default async function HomePage() {
           max-width:480px;margin-left:auto;margin-right:auto;
         }
 
+        /* HERO SEARCH */
+        .hero-search{display:flex;gap:8px;max-width:560px;margin:0 auto 22px;background:#fff;border-radius:10px;padding:6px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+        .hero-search-input{flex:1;border:none;outline:none;background:transparent;padding:10px 12px;font-family:system-ui,sans-serif;font-size:.92rem;color:#0f1f3d;min-width:0}
+        .hero-search-input::placeholder{color:#9ca3af}
+        .hero-search-btn{background:#0f1f3d;color:#fff;border:none;border-radius:7px;padding:0 16px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s}
+        .hero-search-btn:hover{background:#1e3a5f}
+
         /* CATEGORY BUTTONS */
         .category-grid{
           display:flex;flex-wrap:wrap;justify-content:center;
@@ -639,6 +646,21 @@ export default async function HomePage() {
           </div>
           <h1>Best Bud For<br /><em>Your Buck$</em></h1>
           <p className="hero-sub">Low Prices. High Times.</p>
+
+          {/* SEARCH */}
+          <form action="/search" method="get" className="hero-search" role="search">
+            <input
+              type="search"
+              name="q"
+              aria-label="Search"
+              placeholder="Search city, zip code, or dispensary name…"
+              className="hero-search-input"
+              autoComplete="off"
+            />
+            <button type="submit" className="hero-search-btn" aria-label="Search">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+            </button>
+          </form>
 
           {/* CATEGORY SELECTION */}
           <div className="category-grid">
