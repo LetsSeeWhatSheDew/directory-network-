@@ -132,7 +132,7 @@ function PlantSilhouette({ side = "left" }) {
   const transform = side === "right" ? "scale(-1,1) translate(-200,0)" : "";
   // Single 7-blade fan leaf cluster, origin at (0,0), blades radiating upward
   const FanLeaf = ({ scale = 1 }) => (
-    <g transform={`scale(${scale})`} fill="#4ade80" fillOpacity="0.9" stroke="#4ade80" strokeWidth="1" strokeLinejoin="round">
+    <g transform={`scale(${scale})`} fill="#e8e4da" fillOpacity="0.9" stroke="#e8e4da" strokeWidth="1" strokeLinejoin="round">
       {/* center blade — tallest, straight up */}
       <path d="M0 0 Q-3 -40 -1 -78 Q0 -82 1 -78 Q3 -40 0 0 Z" />
       {/* blades at 30° (left + right) */}
@@ -156,7 +156,7 @@ function PlantSilhouette({ side = "left" }) {
         position: "absolute",
         bottom: "0",
         [side]: "-30px",
-        opacity: 0.13,
+        opacity: 0.3,
         pointerEvents: "none",
         zIndex: 0,
       }}
@@ -164,11 +164,11 @@ function PlantSilhouette({ side = "left" }) {
     >
       <g transform={transform}>
         {/* main stalk, rises from bottom */}
-        <path d="M100 420 L100 20" stroke="#4ade80" strokeWidth="3" fill="none" />
+        <path d="M100 420 L100 20" stroke="#e8e4da" strokeWidth="3" fill="none" />
         {/* branch offshoots */}
-        <path d="M100 330 Q82 318 62 304" stroke="#4ade80" strokeWidth="2" fill="none" />
-        <path d="M100 240 Q118 228 140 216" stroke="#4ade80" strokeWidth="2" fill="none" />
-        <path d="M100 150 Q80 140 60 128" stroke="#4ade80" strokeWidth="2" fill="none" />
+        <path d="M100 330 Q82 318 62 304" stroke="#e8e4da" strokeWidth="2" fill="none" />
+        <path d="M100 240 Q118 228 140 216" stroke="#e8e4da" strokeWidth="2" fill="none" />
+        <path d="M100 150 Q80 140 60 128" stroke="#e8e4da" strokeWidth="2" fill="none" />
         {/* fan leaf clusters at different heights */}
         <g transform="translate(100 22)"><FanLeaf scale={1} /></g>
         <g transform="translate(60 128)"><FanLeaf scale={0.82} /></g>
@@ -371,28 +371,32 @@ export default async function HomePage() {
         html{scroll-behavior:smooth}
         body{font-family:Georgia,serif;background:#f5f4f0;min-height:100vh;color:#0f1f3d}
 
+        /* GREEN TOP STRIPE — money signal */
+        .top-stripe{height:4px;background:#16a34a;width:100%}
+
         /* NAV */
         .nav{
           display:flex;justify-content:space-between;align-items:center;
-          padding:14px 28px;background:#0f1f3d;
+          padding:14px 28px;background:#fff;
           position:sticky;top:0;z-index:100;
+          border-bottom:1px solid #e8e4da;
         }
         .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
         .logo-mark{position:relative;width:28px;height:28px;display:inline-block;flex-shrink:0}
-        .logo-mark-dot{position:absolute;top:-2px;right:-2px;width:10px;height:10px;border-radius:50%;background:#4ade80;border:2px solid #0f1f3d;animation:pulse 2.5s infinite}
+        .logo-mark-dot{position:absolute;top:-2px;right:-2px;width:10px;height:10px;border-radius:50%;background:#16a34a;border:2px solid #fff;animation:pulse 2.5s infinite}
         .logo-dot{width:8px;height:8px;border-radius:50%;background:#16a34a;animation:pulse 2.5s infinite}
         @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.9)}}
-        .logo-text{font-size:1.15rem;font-weight:700;color:#fff;letter-spacing:-.02em}
-        .logo-text span{color:#4ade80}
+        .logo-text{font-size:1.15rem;font-weight:700;color:#0f1f3d;letter-spacing:-.02em}
+        .logo-text span{color:#16a34a}
         .nav-links{display:flex;align-items:center;gap:20px}
-        .nav-link{font-size:.82rem;color:rgba(255,255,255,.6);text-decoration:none;font-family:system-ui,sans-serif}
-        .nav-link:hover{color:#fff}
+        .nav-link{font-size:.82rem;color:#6b7280;text-decoration:none;font-family:system-ui,sans-serif}
+        .nav-link:hover{color:#0f1f3d}
         .nav-cta{
           font-size:.82rem;font-family:system-ui,sans-serif;font-weight:600;
-          color:#0f1f3d;background:#4ade80;padding:6px 14px;border-radius:6px;
+          color:#fff;background:#16a34a;padding:6px 14px;border-radius:6px;
           text-decoration:none;
         }
-        .nav-cta:hover{background:#22c55e}
+        .nav-cta:hover{background:#15803d}
 
         /* 4/20 PROMO BANNER */
         .promo-banner{background:#15803d;color:#fff}
@@ -406,7 +410,7 @@ export default async function HomePage() {
 
         /* HERO */
         .hero{
-          background:#0f1f3d;
+          background:#fff;
           padding:56px 28px 48px;
           text-align:center;
           position:relative;
@@ -415,50 +419,50 @@ export default async function HomePage() {
         .hero-inner{position:relative;z-index:1}
         .hero-badge{
           display:inline-flex;align-items:center;gap:6px;
-          background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.25);
+          background:#f0fdf4;border:1px solid #bbf7d0;
           border-radius:100px;padding:4px 14px;
           font-size:.72rem;font-family:system-ui,sans-serif;
-          color:#4ade80;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+          color:#16a34a;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
           margin-bottom:20px;
         }
-        .hero-badge-dot{width:5px;height:5px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite}
+        .hero-badge-dot{width:5px;height:5px;border-radius:50%;background:#16a34a;animation:pulse 2s infinite}
         .hero h1{
           font-size:clamp(1.8rem,5vw,3.2rem);
-          font-weight:700;color:#fff;
+          font-weight:700;color:#0f1f3d;
           letter-spacing:-.04em;line-height:1.1;
           margin-bottom:12px;
         }
-        .hero h1 em{color:#4ade80;font-style:normal}
+        .hero h1 em{color:#16a34a;font-style:normal}
         .hero-sub{
-          font-size:1rem;color:rgba(255,255,255,.55);
+          font-size:1rem;color:#6b7280;
           font-family:system-ui,sans-serif;
           line-height:1.6;margin-bottom:36px;
           max-width:480px;margin-left:auto;margin-right:auto;
         }
 
         /* DEALS TICKER */
-        .ticker{position:relative;overflow:hidden;margin:18px auto 22px;max-width:880px;padding:10px 0 10px 60px;background:rgba(255,255,255,.06);border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1)}
-        .ticker-live{position:absolute;left:14px;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;gap:6px;font-family:system-ui,sans-serif;font-size:.7rem;font-weight:700;color:#fca5a5;letter-spacing:.12em;text-transform:uppercase;z-index:2;background:linear-gradient(90deg,rgba(15,31,61,.95) 72%,rgba(15,31,61,0) 100%);padding-right:18px}
+        .ticker{position:relative;overflow:hidden;margin:18px auto 22px;max-width:880px;padding:10px 0 10px 60px;background:#f5f4f0;border-top:1px solid #e8e4da;border-bottom:1px solid #e8e4da;border-radius:8px}
+        .ticker-live{position:absolute;left:14px;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;gap:6px;font-family:system-ui,sans-serif;font-size:.7rem;font-weight:700;color:#dc2626;letter-spacing:.12em;text-transform:uppercase;z-index:2;background:linear-gradient(90deg,#f5f4f0 72%,rgba(245,244,240,0) 100%);padding-right:18px}
         .ticker-live-dot{width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 0 0 rgba(239,68,68,.6);animation:ticker-pulse 1.6s infinite}
         .ticker-track{display:inline-flex;gap:22px;white-space:nowrap;animation:ticker-marquee 48s linear infinite;will-change:transform}
         .ticker:hover .ticker-track{animation-play-state:paused}
-        .ticker a{color:rgba(255,255,255,.82);text-decoration:none;font-family:system-ui,sans-serif;font-size:.88rem;font-weight:500;transition:color .15s}
-        .ticker a strong{color:#fff;font-weight:700}
-        .ticker a em{color:#4ade80;font-style:normal;font-weight:600}
-        .ticker a:hover{color:#4ade80}
-        .ticker .sep{color:#4ade80;font-family:system-ui,sans-serif;font-size:.88rem;user-select:none;line-height:1}
+        .ticker a{color:#374151;text-decoration:none;font-family:system-ui,sans-serif;font-size:.88rem;font-weight:500;transition:color .15s}
+        .ticker a strong{color:#0f1f3d;font-weight:700}
+        .ticker a em{color:#16a34a;font-style:normal;font-weight:600}
+        .ticker a:hover{color:#16a34a}
+        .ticker .sep{color:#16a34a;font-family:system-ui,sans-serif;font-size:.88rem;user-select:none;line-height:1}
         @keyframes ticker-marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
         @keyframes ticker-pulse{0%{box-shadow:0 0 0 0 rgba(239,68,68,.7)}70%{box-shadow:0 0 0 8px rgba(239,68,68,0)}100%{box-shadow:0 0 0 0 rgba(239,68,68,0)}}
 
         /* HERO SAVINGS CALLOUT */
-        .hero-save{background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.3);border-radius:12px;padding:12px 20px;display:flex;align-items:center;justify-content:center;gap:12px;max-width:560px;margin:0 auto 20px;font-family:system-ui,sans-serif;font-size:.88rem;color:rgba(255,255,255,.8);flex-wrap:wrap}
-        .hero-save-amt{color:#4ade80;font-weight:700;font-size:1.1rem}
-        .hero-save-link{color:rgba(255,255,255,.75);text-decoration:none;font-weight:600;white-space:nowrap;border-left:1px solid rgba(255,255,255,.15);padding-left:12px;margin-left:auto}
-        .hero-save-link:hover{color:#4ade80}
+        .hero-save{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:12px 20px;display:flex;align-items:center;justify-content:center;gap:12px;max-width:560px;margin:0 auto 20px;font-family:system-ui,sans-serif;font-size:.88rem;color:#374151;flex-wrap:wrap}
+        .hero-save-amt{color:#16a34a;font-weight:700;font-size:1.1rem}
+        .hero-save-link{color:#16a34a;text-decoration:none;font-weight:600;white-space:nowrap;border-left:1px solid #bbf7d0;padding-left:12px;margin-left:auto}
+        .hero-save-link:hover{color:#15803d}
         @media(max-width:480px){.hero-save-link{border-left:0;padding-left:0;margin-left:0;width:100%;text-align:center}}
 
         /* HERO SEARCH */
-        .hero-search{display:flex;gap:8px;max-width:560px;margin:0 auto 22px;background:#fff;border-radius:10px;padding:6px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+        .hero-search{display:flex;gap:8px;max-width:560px;margin:0 auto 22px;background:#fff;border:1px solid #e8e4da;border-radius:10px;padding:6px;box-shadow:0 1px 2px rgba(15,31,61,.04)}
         .hero-search-input{flex:1;border:none;outline:none;background:transparent;padding:10px 12px;font-family:system-ui,sans-serif;font-size:.92rem;color:#0f1f3d;min-width:0}
         .hero-search-input::placeholder{color:#9ca3af}
         .hero-search-btn{background:#0f1f3d;color:#fff;border:none;border-radius:7px;padding:0 16px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s}
@@ -475,21 +479,21 @@ export default async function HomePage() {
           text-decoration:none;cursor:pointer;transition:all .15s;
         }
         .cat-btn.primary:hover{background:#15803d;border-color:#15803d}
-        .cat-or{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.4);font-family:system-ui,sans-serif;text-align:center;margin:14px 0 10px}
+        .cat-or{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#9ca3af;font-family:system-ui,sans-serif;text-align:center;margin:14px 0 10px}
         .category-grid{
           display:grid;grid-template-columns:1fr 1fr;
           gap:8px;max-width:560px;margin:0 auto 12px;
         }
         .cat-btn{
           display:flex;align-items:center;justify-content:center;gap:8px;
-          background:rgba(255,255,255,.05);
-          border:1px solid rgba(255,255,255,.1);
+          background:#fff;
+          border:1px solid #e8e4da;
           border-radius:10px;padding:11px 14px;
           font-size:.85rem;font-family:system-ui,sans-serif;font-weight:500;
-          color:rgba(255,255,255,.85);cursor:pointer;text-decoration:none;
+          color:#0f1f3d;cursor:pointer;text-decoration:none;
           transition:all .15s;
         }
-        .cat-btn:hover{background:rgba(74,222,128,.12);border-color:rgba(74,222,128,.3);color:#fff}
+        .cat-btn:hover{background:#f0fdf4;border-color:#16a34a;color:#0f1f3d}
         .cat-btn svg{flex-shrink:0;width:24px;height:24px}
 
         /* QUICK FILTERS */
@@ -500,18 +504,18 @@ export default async function HomePage() {
         }
         .filter-pill{
           font-size:.75rem;font-family:system-ui,sans-serif;font-weight:500;
-          color:rgba(255,255,255,.5);
-          background:transparent;border:1px solid rgba(255,255,255,.15);
+          color:#6b7280;
+          background:transparent;border:1px solid #d1cfc6;
           border-radius:100px;padding:4px 12px;
           cursor:pointer;text-decoration:none;
         }
-        .filter-pill:hover{color:#fff;border-color:rgba(255,255,255,.4)}
+        .filter-pill:hover{color:#0f1f3d;border-color:#9ca3af}
 
         /* STATS STRIP */
-        .stats{background:#0b172f;padding:22px 28px;border-top:1px solid rgba(255,255,255,.06)}
+        .stats{background:#f5f4f0;padding:22px 28px;border-top:1px solid #e8e4da;border-bottom:1px solid #e8e4da}
         .stats-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;text-align:center}
-        .stat-num{font-size:1.7rem;font-weight:700;color:#4ade80;letter-spacing:-.02em;line-height:1}
-        .stat-label{font-size:.72rem;color:rgba(255,255,255,.5);font-family:system-ui,sans-serif;text-transform:uppercase;letter-spacing:.1em;margin-top:6px}
+        .stat-num{font-size:1.7rem;font-weight:700;color:#16a34a;letter-spacing:-.02em;line-height:1}
+        .stat-label{font-size:.72rem;color:#6b7280;font-family:system-ui,sans-serif;text-transform:uppercase;letter-spacing:.1em;margin-top:6px}
         @media(max-width:520px){.stats-inner{gap:14px}.stat-num{font-size:1.3rem}.stat-label{font-size:.65rem}}
 
         /* HOW IT WORKS */
@@ -609,14 +613,14 @@ export default async function HomePage() {
         .savings-num{font-size:2rem;font-weight:700;color:#16a34a;letter-spacing:-.03em;line-height:1}
 
         /* CITY BROWSE */
-        .cities-section{background:#0f1f3d;padding:52px 28px}
+        .cities-section{background:#f5f4f0;padding:52px 28px;border-top:1px solid #e8e4da}
         .cities-inner{max-width:1100px;margin:0 auto}
         .cities-title{
-          font-size:1.5rem;font-weight:700;color:#fff;
+          font-size:1.5rem;font-weight:700;color:#0f1f3d;
           letter-spacing:-.03em;margin-bottom:4px;
         }
         .cities-sub{
-          font-size:.875rem;color:rgba(255,255,255,.4);
+          font-size:.875rem;color:#6b7280;
           font-family:system-ui,sans-serif;margin-bottom:24px;
         }
         .city-grid{
@@ -625,23 +629,23 @@ export default async function HomePage() {
           gap:10px;
         }
         .city-card{
-          background:rgba(255,255,255,.06);
-          border:1px solid rgba(255,255,255,.1);
+          background:#fff;
+          border:1px solid #e8e4da;
           border-radius:10px;padding:14px;
           text-decoration:none;
           transition:all .15s;
         }
-        .city-card:hover{background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.3)}
-        .city-name{font-size:.9rem;font-weight:700;color:#fff;margin-bottom:8px}
+        .city-card:hover{background:#f0fdf4;border-color:#16a34a}
+        .city-name{font-size:.9rem;font-weight:700;color:#0f1f3d;margin-bottom:8px}
         .city-pills{display:flex;gap:4px;flex-wrap:wrap}
         .city-pill{
-          font-size:.62rem;color:#4ade80;
-          background:rgba(74,222,128,.1);
-          border:1px solid rgba(74,222,128,.2);
+          font-size:.62rem;color:#16a34a;
+          background:#f0fdf4;
+          border:1px solid #bbf7d0;
           border-radius:100px;padding:2px 7px;
           font-family:system-ui,sans-serif;text-decoration:none;
         }
-        .city-pill:hover{background:rgba(74,222,128,.2)}
+        .city-pill:hover{background:#dcfce7}
 
         /* BIZ STRIP */
         .biz-strip{
@@ -676,17 +680,17 @@ export default async function HomePage() {
 
         /* FOOTER */
         .footer{
-          background:#0f1f3d;border-top:1px solid rgba(255,255,255,.07);
+          background:#fff;border-top:1px solid #e8e4da;
           padding:20px 28px;
           display:flex;justify-content:space-between;align-items:center;
           flex-wrap:wrap;gap:12px;
         }
-        .footer-logo{font-size:.9rem;font-weight:700;color:#fff}
-        .footer-logo span{color:#4ade80}
+        .footer-logo{font-size:.9rem;font-weight:700;color:#0f1f3d}
+        .footer-logo span{color:#16a34a}
         .footer-links{display:flex;gap:18px}
-        .footer-link{font-size:.75rem;color:#475569;font-family:system-ui,sans-serif;text-decoration:none}
-        .footer-link:hover{color:#94a3b8}
-        .footer-copy{font-size:.72rem;color:#334155;font-family:system-ui,sans-serif}
+        .footer-link{font-size:.75rem;color:#6b7280;font-family:system-ui,sans-serif;text-decoration:none}
+        .footer-link:hover{color:#0f1f3d}
+        .footer-copy{font-size:.72rem;color:#9ca3af;font-family:system-ui,sans-serif}
 
         /* RESPONSIVE */
         @media(max-width:768px){
@@ -725,12 +729,15 @@ export default async function HomePage() {
         }
       `}</style>
 
+      {/* GREEN MONEY STRIPE */}
+      <div className="top-stripe" aria-hidden="true" />
+
       {/* NAV */}
       <nav className="nav">
         <Link href="/" className="logo" aria-label="CleanList home">
           <span className="logo-mark">
             <svg width="28" height="28" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <rect x="0" y="0" width="28" height="28" rx="6" fill="#0b172f" stroke="rgba(255,255,255,.12)" strokeWidth="1" />
+              <rect x="0" y="0" width="28" height="28" rx="6" fill="#0f1f3d" />
               <rect x="7" y="9" width="14" height="1.8" rx="0.9" fill="#fff" />
               <rect x="7" y="13.2" width="14" height="1.8" rx="0.9" fill="#fff" />
               <rect x="7" y="17.4" width="14" height="1.8" rx="0.9" fill="#fff" />

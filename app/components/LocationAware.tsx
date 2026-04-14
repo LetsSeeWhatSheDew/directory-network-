@@ -225,7 +225,7 @@ export default function LocationAware() {
             setEditing(false);
             setDraft("");
           }}
-          style={{ ...buttonStyle, background: "transparent", color: "rgba(255,255,255,.55)" }}
+          style={{ ...buttonStyle, background: "transparent", color: "#6b7280" }}
         >
           Cancel
         </button>
@@ -245,7 +245,7 @@ export default function LocationAware() {
     <div aria-live="polite" style={wrapperStyle}>
       <span>
         {approximate ? "📍 Location approximate —" : "📍 Showing deals near"}{" "}
-        <span style={{ color: "#4ade80", fontWeight: 600 }}>{loc.city}</span>
+        <span style={{ color: "#16a34a", fontWeight: 600 }}>{loc.city}</span>
         {approximate && (
           <>
             {" · "}
@@ -285,7 +285,7 @@ const wrapperStyle: React.CSSProperties = {
   marginBottom: 12,
   fontSize: ".75rem",
   fontFamily: "system-ui, sans-serif",
-  color: "rgba(255,255,255,.55)",
+  color: "#6b7280",
   letterSpacing: ".02em",
   display: "flex",
   justifyContent: "center",
@@ -297,7 +297,7 @@ const wrapperStyle: React.CSSProperties = {
 const linkBtn: React.CSSProperties = {
   background: "transparent",
   border: "none",
-  color: "rgba(255,255,255,.75)",
+  color: "#16a34a",
   textDecoration: "underline",
   cursor: "pointer",
   padding: 0,
@@ -316,11 +316,11 @@ const formStyle: React.CSSProperties = {
 };
 
 const inputStyle: React.CSSProperties = {
-  background: "rgba(255,255,255,.08)",
-  border: "1px solid rgba(255,255,255,.18)",
+  background: "#fff",
+  border: "1px solid #e8e4da",
   borderRadius: 8,
   padding: "6px 10px",
-  color: "#fff",
+  color: "#0f1f3d",
   fontFamily: "system-ui, sans-serif",
   fontSize: ".8rem",
   outline: "none",
