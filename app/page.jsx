@@ -1,5 +1,6 @@
 import Link from "next/link";
 import LocationAware from "./components/LocationAware";
+import TrackedLink from "./components/TrackedLink";
 import { formatSavingsDollars } from "../lib/dealScoring";
 
 // ============================================================
@@ -769,14 +770,16 @@ export default async function HomePage() {
           {/* CATEGORY SELECTION */}
           <div className="category-grid">
             {CATEGORIES.map(cat => (
-              <Link
+              <TrackedLink
                 key={cat.slug}
                 href={`/deals/${cat.slug}`}
                 className={`cat-btn ${cat.slug === 'all' ? 'primary' : ''}`}
+                event="category_click"
+                params={{ category: cat.slug }}
               >
                 {renderIcon(cat.icon)}
                 {cat.label}
-              </Link>
+              </TrackedLink>
             ))}
           </div>
 
@@ -855,11 +858,13 @@ export default async function HomePage() {
               const slug = d.slug || d.listing_slug;
               const name = displayName(d);
               return (
-                <Link
+                <TrackedLink
                   key={d.deal_id || d.id || i}
                   href={`/l/${slug}`}
                   className={`deal-card${i === 0 ? " top-pick" : ""}`}
                   style={{ textDecoration: "none", color: "inherit" }}
+                  event="deal_click"
+                  params={{ dispensary: name, category: d.category || "all", position: i + 1 }}
                 >
                   {i === 0 && <div className="top-pick-badge">Best value today</div>}
                   <div className="deal-card-header">
@@ -887,7 +892,7 @@ export default async function HomePage() {
                     </div>
                     <span className="savings-num">{formatSavingsDollars(d)}</span>
                   </div>
-                </Link>
+                </TrackedLink>
               );
             })}
           </div>

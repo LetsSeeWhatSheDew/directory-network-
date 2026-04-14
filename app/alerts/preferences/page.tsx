@@ -39,6 +39,12 @@ export default function AlertPreferencesPage() {
       const data = await res.json();
       if (res.ok) {
         setSaved(true);
+        try {
+          const w = window as any;
+          if (typeof w.gtag === "function") {
+            w.gtag("event", "alert_signup", { tier: frequency });
+          }
+        } catch {}
       } else {
         setError(data.error || "Save failed. Please try again.");
       }

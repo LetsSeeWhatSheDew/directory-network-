@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { formatSavingsDollars, gradeDeal } from "../../../lib/dealScoring";
+import TrackView from "../../components/TrackView";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://hnbjufmtmrhexmdrfubw.supabase.co';
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300';
@@ -266,6 +267,7 @@ export default async function DealsPage({ params }: { params: Promise<{ category
 
         {topDeal ? (
           <>
+            <TrackView event="deal_view" params={{ dispensary: topDeal.name || topDeal.listing_slug, category }} />
             <div className="top-label">Our recommendation</div>
             <div className="top-card">
               <div className="verdict-badge">
