@@ -3,6 +3,7 @@ import LocationAware from "./components/LocationAware";
 import TrackedLink from "./components/TrackedLink";
 import HomeDealCards from "./components/HomeDealCards";
 import HeroDealCard from "./components/HeroDealCard";
+import MobileNavMenu from "./components/MobileNavMenu";
 import SearchTracker from "./components/SearchTracker";
 import { formatSavingsDollars, gradeDeal } from "../lib/dealScoring";
 
@@ -815,7 +816,6 @@ export default async function HomePage() {
           .cities-section{padding:36px 16px}
           .footer{padding:16px;flex-direction:column;text-align:center}
           .footer-links{justify-content:center}
-          .nav-links .nav-link{display:none}
         }
         @media(max-width:480px){
           .hero{padding:32px 14px 28px}
@@ -860,13 +860,14 @@ export default async function HomePage() {
           </span>
           <span className="logo-text">clean<span>list</span></span>
         </Link>
-        <div className="nav-links">
+        <div className="nav-links desktop-only-nav">
           <Link href="/cannabis/illinois/open-now" className="nav-link">Open now</Link>
           <Link href="/savings/dashboard" className="nav-link">My savings</Link>
           <Link href="/map" className="nav-link">Map view</Link>
           <Link href="/cannabis/illinois" className="nav-link">Browse Illinois</Link>
           <Link href="/dispensaries" className="nav-cta">For dispensaries</Link>
         </div>
+        <MobileNavMenu />
       </nav>
 
       {/* 4/20 DEALS WEEK BANNER — only renders Apr 17–20, 2026 */}
