@@ -434,15 +434,18 @@ export default async function HomePage() {
         }
 
         /* DEALS TICKER */
-        .ticker{position:relative;overflow:hidden;margin:18px auto 22px;max-width:880px;padding:6px 0 6px 44px;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08)}
-        .ticker-live{position:absolute;left:10px;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;gap:5px;font-family:system-ui,sans-serif;font-size:.65rem;font-weight:700;color:#fca5a5;letter-spacing:.1em;text-transform:uppercase;z-index:2;background:linear-gradient(90deg,rgba(15,31,61,1) 65%,rgba(15,31,61,0) 100%);padding-right:16px}
-        .ticker-live-dot{width:6px;height:6px;border-radius:50%;background:#ef4444;animation:pulse 1.6s infinite}
-        .ticker-track{display:inline-flex;gap:28px;white-space:nowrap;animation:ticker-marquee 42s linear infinite;will-change:transform}
+        .ticker{position:relative;overflow:hidden;margin:18px auto 22px;max-width:880px;padding:10px 0 10px 60px;background:rgba(255,255,255,.06);border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1)}
+        .ticker-live{position:absolute;left:14px;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;gap:6px;font-family:system-ui,sans-serif;font-size:.7rem;font-weight:700;color:#fca5a5;letter-spacing:.12em;text-transform:uppercase;z-index:2;background:linear-gradient(90deg,rgba(15,31,61,.95) 72%,rgba(15,31,61,0) 100%);padding-right:18px}
+        .ticker-live-dot{width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 0 0 rgba(239,68,68,.6);animation:ticker-pulse 1.6s infinite}
+        .ticker-track{display:inline-flex;gap:22px;white-space:nowrap;animation:ticker-marquee 48s linear infinite;will-change:transform}
         .ticker:hover .ticker-track{animation-play-state:paused}
-        .ticker a{color:rgba(255,255,255,.6);text-decoration:none;font-family:system-ui,sans-serif;font-size:.78rem;transition:color .15s}
+        .ticker a{color:rgba(255,255,255,.82);text-decoration:none;font-family:system-ui,sans-serif;font-size:.88rem;font-weight:500;transition:color .15s}
+        .ticker a strong{color:#fff;font-weight:700}
+        .ticker a em{color:#4ade80;font-style:normal;font-weight:600}
         .ticker a:hover{color:#4ade80}
-        .ticker .sep{color:rgba(255,255,255,.25);font-family:system-ui,sans-serif;font-size:.78rem;user-select:none}
+        .ticker .sep{color:#4ade80;font-family:system-ui,sans-serif;font-size:.88rem;user-select:none;line-height:1}
         @keyframes ticker-marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+        @keyframes ticker-pulse{0%{box-shadow:0 0 0 0 rgba(239,68,68,.7)}70%{box-shadow:0 0 0 8px rgba(239,68,68,0)}100%{box-shadow:0 0 0 0 rgba(239,68,68,0)}}
 
         /* HERO SEARCH */
         .hero-search{display:flex;gap:8px;max-width:560px;margin:0 auto 22px;background:#fff;border-radius:10px;padding:6px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
@@ -747,10 +750,15 @@ export default async function HomePage() {
                       : d.discount_unit === "dollars"
                       ? `$${d.discount_value} off ${d.category || "deal"}`
                       : "Active deal");
+                  const pct =
+                    d.discount_unit === "percent" && d.discount_value
+                      ? `${Math.round(d.discount_value)}%`
+                      : null;
                   return (
-                    <span key={`tk-${i}`} style={{ display: "inline-flex", gap: 28, alignItems: "center" }}>
+                    <span key={`tk-${i}`} style={{ display: "inline-flex", gap: 22, alignItems: "center" }}>
                       <Link href={`/deals/${d.category || "all"}`}>
-                        {categoryEmoji(d.category)} {name}: {title}
+                        {categoryEmoji(d.category)} <strong>{name}</strong>: {title}
+                        {pct && <> · <em>Save {pct}</em></>}
                       </Link>
                       <span className="sep">·</span>
                     </span>
