@@ -1,0 +1,121 @@
+// app/api/deals/recommend/route.ts
+// Core decision-engine API: returns the best-ranked deal + alternatives for
+// a category (and optionally a city / lat-lng).
+//
+// GET /api/deals/recommend?category=flower&city=peoria
+
+import { NextRequest, NextResponse } from "next/server";
+
+const SUPABASE_URL =
+  process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  "https://hnbjufmtmrhexmdrfubw.supabase.co";
+const SUPABASE_ANON_KEY =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300";
+
+const VALID_CATEGORIES = new Set(["flower", "edibles", "vapes", "concentrate", "all"]);
+
+type Deal = Record<string, any> & { score?: number; rankingReason?: string };
+
+function scoreDeal(d: Deal): number {
+  let s = 0;
+  const discount = Number(d.discount_value) || 0;
+  s += discount * 2;
+  if (d.is_recurring) s += 10;
+  if (d.accepts_credit) s += 5;
+  if (d.drive_thru) s += 3;
+  const rating = Number(d.google_rating) || 0;
+  if (rating >= 4.5) s += (rating - 4) * 10;
+  if (d.plan === "featured") s += 15;
+  if (d.plan === "boost") s += 8;
+  return s;
+}
+
+function rankingReason(d: Deal, category: string, city?: string): string {
+  const cat = category === "all" ? "deals" : category;
+  const where = city ? `in ${city[0].toUpperCase()}${city.slice(1)}` : "in Illinois";
+  const rating = Number(d.google_rating) || 0;
+  if (d.plan === "featured") return `Featured partner · top ${cat} deal ${where} today`;
+  if (d.is_recurring) return "Recurring deal — reliable savings week to week";
+  if (rating >= 4.7) return `Best-rated dispensary (${rating}★) with an active deal`;
+  const discount = Number(d.discount_value) || 0;
+  if (discount >= 30) return `Highest discount on ${cat} ${where} today`;
+  if (d.accepts_credit && d.drive_thru) return `Drive-thru + cards accepted — easy stop ${where}`;
+  return `Top-ranked ${cat} deal ${where} today`;
+}
+
+async function fetchDeals(category: string): Promise<Deal[]> {
+  const params = new URLSearchParams({ select: "*", order: "discount_value.desc", limit: "50" });
+  if (category !== "all") params.set("category", `eq.${category}`);
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/active_deals_with_listings?${params.toString()}`,
+    {
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+      },
+      cache: "no-store",
+    }
+  );
+  if (!res.ok) return [];
+  const json = await res.json();
+  return Array.isArray(json) ? json : [];
+}
+
+function emptyResponse(category: string, city: string) {
+  return {
+    topPick: null,
+    alternatives: [],
+    totalFound: 0,
+    city,
+    category,
+    generatedAt: new Date().toISOString(),
+  };
+}
+
+export async function GET(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const categoryRaw = (searchParams.get("category") || "all").toLowerCase();
+    const category = VALID_CATEGORIES.has(categoryRaw) ? categoryRaw : "all";
+    const city = (searchParams.get("city") || "").trim();
+    // lat/lng accepted for forward-compat; not yet used for distance scoring
+    const lat = searchParams.get("lat");
+    const lng = searchParams.get("lng");
+    void lat;
+    void lng;
+
+    let deals = await fetchDeals(category);
+
+    if (city) {
+      const needle = city.toLowerCase();
+      deals = deals.filter(
+        (d) => typeof d.city === "string" && d.city.toLowerCase().includes(needle)
+      );
+    }
+
+    if (deals.length === 0) {
+      return NextResponse.json(emptyResponse(category, city));
+    }
+
+    const scored = deals
+      .map((d) => ({ ...d, score: scoreDeal(d) }))
+      .sort((a, b) => (b.score || 0) - (a.score || 0));
+
+    const top = scored[0];
+    const topPick = { ...top, rankingReason: rankingReason(top, category, city) };
+    const alternatives = scored.slice(1, 4);
+
+    return NextResponse.json({
+      topPick,
+      alternatives,
+      totalFound: scored.length,
+      city,
+      category,
+      generatedAt: new Date().toISOString(),
+    });
+  } catch (err) {
+    console.error("[api/deals/recommend] error:", err);
+    return NextResponse.json(emptyResponse("all", ""));
+  }
+}
