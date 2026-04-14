@@ -206,6 +206,25 @@ const CITIES = [
   { name: "Aurora", slug: "aurora" },
 ];
 
+function FourTwentyBanner() {
+  const now = new Date();
+  const show = now >= new Date("2026-04-17") && now <= new Date("2026-04-20T23:59:59");
+  if (!show) return null;
+  return (
+    <div className="promo-banner">
+      <div className="promo-inner">
+        <span className="promo-left">
+          <span className="promo-dot" aria-hidden="true" />
+          <span className="promo-text">
+            🌿 4/20 DEALS WEEK — Best discounts of the year at Illinois dispensaries
+          </span>
+        </span>
+        <Link href="/deals/all" className="promo-cta">See all deals →</Link>
+      </div>
+    </div>
+  );
+}
+
 function renderIcon(key) {
   const s = 36;
   if (key === "leaf") return <LeafIcon size={s} />;
@@ -246,6 +265,16 @@ export default function HomePage() {
           text-decoration:none;
         }
         .nav-cta:hover{background:#22c55e}
+
+        /* 4/20 PROMO BANNER */
+        .promo-banner{background:#15803d;color:#fff}
+        .promo-inner{max-width:1100px;margin:0 auto;padding:8px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+        .promo-left{display:flex;align-items:center;gap:10px;font-family:system-ui,sans-serif;font-size:.82rem;font-weight:600}
+        .promo-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite;flex-shrink:0}
+        .promo-text{line-height:1.3}
+        .promo-cta{color:#fff;text-decoration:none;font-family:system-ui,sans-serif;font-size:.82rem;font-weight:600;white-space:nowrap}
+        .promo-cta:hover{text-decoration:underline}
+        @media(max-width:520px){.promo-inner{padding:8px 14px}.promo-text{font-size:.75rem}}
 
         /* HERO */
         .hero{
@@ -513,6 +542,9 @@ export default function HomePage() {
           <Link href="/upgrade" className="nav-cta">For dispensaries</Link>
         </div>
       </nav>
+
+      {/* 4/20 DEALS WEEK BANNER — only renders Apr 17–20, 2026 */}
+      <FourTwentyBanner />
 
       {/* HERO — decision engine entry point with botanical plants */}
       <div className="hero">
