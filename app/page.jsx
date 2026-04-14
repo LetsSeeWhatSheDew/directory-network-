@@ -240,6 +240,34 @@ const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGci
 
 export const revalidate = 300;
 
+async function getTickerDeals() {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_title,category,name,listing_slug,city,discount_value,discount_unit&order=discount_value.desc&limit=8`,
+      {
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+        cache: "no-store",
+      }
+    );
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
+
+function categoryEmoji(c) {
+  if (c === "flower") return "🌿";
+  if (c === "edibles") return "🍬";
+  if (c === "vapes") return "💨";
+  if (c === "concentrate") return "💎";
+  return "🔥";
+}
+
 async function getTopDeals() {
   try {
     const res = await fetch(
@@ -309,7 +337,11 @@ async function getActiveDealCount() {
 }
 
 export default async function HomePage() {
-  const [dealCount, topDeals] = await Promise.all([getActiveDealCount(), getTopDeals()]);
+  const [dealCount, topDeals, tickerDeals] = await Promise.all([
+    getActiveDealCount(),
+    getTopDeals(),
+    getTickerDeals(),
+  ]);
   const likelyOpen = isLikelyOpen();
   return (
     <>
@@ -382,6 +414,15 @@ export default async function HomePage() {
           line-height:1.6;margin-bottom:36px;
           max-width:480px;margin-left:auto;margin-right:auto;
         }
+
+        /* DEALS TICKER */
+        .ticker{position:relative;overflow:hidden;margin:18px auto 22px;max-width:880px;padding:6px 0;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08)}
+        .ticker-track{display:inline-flex;gap:28px;white-space:nowrap;animation:ticker-marquee 42s linear infinite;will-change:transform}
+        .ticker:hover .ticker-track{animation-play-state:paused}
+        .ticker a{color:rgba(255,255,255,.6);text-decoration:none;font-family:system-ui,sans-serif;font-size:.78rem;transition:color .15s}
+        .ticker a:hover{color:#4ade80}
+        .ticker .sep{color:rgba(255,255,255,.25);font-family:system-ui,sans-serif;font-size:.78rem;user-select:none}
+        @keyframes ticker-marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
         /* HERO SEARCH */
         .hero-search{display:flex;gap:8px;max-width:560px;margin:0 auto 22px;background:#fff;border-radius:10px;padding:6px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
@@ -646,6 +687,31 @@ export default async function HomePage() {
           </div>
           <h1>Best Bud For<br /><em>Your Buck$</em></h1>
           <p className="hero-sub">Low Prices. High Times.</p>
+
+          {/* LIVE DEALS TICKER */}
+          {tickerDeals.length > 0 && (
+            <div className="ticker" aria-label="Live deals ticker">
+              <div className="ticker-track">
+                {[...tickerDeals, ...tickerDeals].map((d, i) => {
+                  const name = d.name || d.listing_slug || "Illinois dispensary";
+                  const title = d.deal_title ||
+                    (d.discount_unit === "percent"
+                      ? `${Math.round(d.discount_value)}% off ${d.category || "deal"}`
+                      : d.discount_unit === "dollars"
+                      ? `$${d.discount_value} off ${d.category || "deal"}`
+                      : "Active deal");
+                  return (
+                    <span key={`tk-${i}`} style={{ display: "inline-flex", gap: 28, alignItems: "center" }}>
+                      <Link href={`/deals/${d.category || "all"}`}>
+                        {categoryEmoji(d.category)} {name}: {title}
+                      </Link>
+                      <span className="sep">·</span>
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {/* SEARCH */}
           <form action="/search" method="get" className="hero-search" role="search">
