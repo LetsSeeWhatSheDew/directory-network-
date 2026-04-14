@@ -433,7 +433,9 @@ export default async function HomePage() {
         }
 
         /* DEALS TICKER */
-        .ticker{position:relative;overflow:hidden;margin:18px auto 22px;max-width:880px;padding:6px 0;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08)}
+        .ticker{position:relative;overflow:hidden;margin:18px auto 22px;max-width:880px;padding:6px 0 6px 44px;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08)}
+        .ticker-live{position:absolute;left:10px;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;gap:5px;font-family:system-ui,sans-serif;font-size:.65rem;font-weight:700;color:#fca5a5;letter-spacing:.1em;text-transform:uppercase;z-index:2;background:linear-gradient(90deg,rgba(15,31,61,1) 65%,rgba(15,31,61,0) 100%);padding-right:16px}
+        .ticker-live-dot{width:6px;height:6px;border-radius:50%;background:#ef4444;animation:pulse 1.6s infinite}
         .ticker-track{display:inline-flex;gap:28px;white-space:nowrap;animation:ticker-marquee 42s linear infinite;will-change:transform}
         .ticker:hover .ticker-track{animation-play-state:paused}
         .ticker a{color:rgba(255,255,255,.6);text-decoration:none;font-family:system-ui,sans-serif;font-size:.78rem;transition:color .15s}
@@ -703,7 +705,7 @@ export default async function HomePage() {
         <div className="hero-inner">
           <div className="hero-badge">
             <span className="hero-badge-dot" />
-            Illinois dispensary deals — live
+            {dealCount !== null ? `${dealCount} Illinois dispensary deals — live` : "Illinois dispensary deals — live"}
           </div>
           <h1>Best Bud For<br /><em>Your Buck$</em></h1>
           <p className="hero-sub">Low Prices. High Times.</p>
@@ -711,6 +713,7 @@ export default async function HomePage() {
           {/* LIVE DEALS TICKER */}
           {tickerDeals.length > 0 && (
             <div className="ticker" aria-label="Live deals ticker">
+              <span className="ticker-live"><span className="ticker-live-dot" />Live</span>
               <div className="ticker-track">
                 {[...tickerDeals, ...tickerDeals].map((d, i) => {
                   const name = displayName(d);

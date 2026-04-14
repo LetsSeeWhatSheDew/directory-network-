@@ -110,6 +110,17 @@ async function getProducts(listingId: string): Promise<ProductOrService[]> {
   );
 }
 
+async function getTopActiveDeal(slug: string): Promise<{ title: string } | null> {
+  try {
+    const rows = await fetchJson<Array<{ title: string; discount_value?: number }>>(
+      `/deals?listing_slug=eq.${encodeURIComponent(slug)}&is_active=eq.true&project_tag=eq.green&select=title,discount_value&order=discount_value.desc&limit=1`
+    );
+    return rows?.[0] ? { title: rows[0].title } : null;
+  } catch {
+    return null;
+  }
+}
+
 async function getRelated(city: string, currentId: string): Promise<Listing[]> {
   const rows = await fetchJson<Listing[]>(
     `/master_listings?city=eq.${encodeURIComponent(city)}&id=neq.${encodeURIComponent(currentId)}&select=id,name,slug,city,state,type,short_description,logo_url&limit=3`
@@ -251,11 +262,12 @@ export default async function ListingPage({
     );
   }
 
-  const [hours, attributes, products, related] = await Promise.all([
+  const [hours, attributes, products, related, activeDeal] = await Promise.all([
     getHours(listing.id),
     getAttributes(listing.id),
     getProducts(listing.id),
     listing.city ? getRelated(listing.city, listing.id) : Promise.resolve([]),
+    getTopActiveDeal(listing.slug),
   ]);
 
   const todayStatus = getTodayStatus(hours);
@@ -394,6 +406,24 @@ export default async function ListingPage({
         {isNoIndex && (
           <div className="dn-noindex-banner">
             This listing is pending verification and is not publicly indexed.
+          </div>
+        )}
+
+        {activeDeal && (
+          <div style={{
+            background: "linear-gradient(90deg, #16a34a, #22c55e)",
+            color: "#fff",
+            padding: "10px 20px",
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            fontFamily: "system-ui, sans-serif",
+            fontSize: ".88rem",
+            fontWeight: 600,
+          }}>
+            <span style={{ fontSize: ".8rem" }} aria-hidden="true">🟢</span>
+            <span style={{ opacity: 0.9 }}>Active deal today —</span>
+            <span>{activeDeal.title}</span>
           </div>
         )}
 

@@ -263,6 +263,24 @@ export default async function DealsPage({ params }: { params: Promise<{ category
                 <span className="vdot" />
                 Best value right now
               </div>
+              {(() => {
+                const ts = topDeal.updated_at || topDeal.created_at;
+                if (!ts) return null;
+                const then = new Date(ts).getTime();
+                if (!Number.isFinite(then)) return null;
+                const mins = Math.max(1, Math.round((Date.now() - then) / 60000));
+                const label =
+                  mins < 60
+                    ? `${mins} minute${mins === 1 ? "" : "s"} ago`
+                    : mins < 24 * 60
+                    ? `${Math.round(mins / 60)} hour${Math.round(mins / 60) === 1 ? "" : "s"} ago`
+                    : `${Math.round(mins / 1440)} day${Math.round(mins / 1440) === 1 ? "" : "s"} ago`;
+                return (
+                  <div style={{ fontSize: ".72rem", color: "#6b7280", fontFamily: "system-ui, sans-serif", marginBottom: 12 }}>
+                    Last updated: {label}
+                  </div>
+                );
+              })()}
               <div className="card-top">
                 <div>
                   <div className="disp-name">
