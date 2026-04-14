@@ -225,6 +225,15 @@ export default async function DealsPage({ params }: { params: Promise<{ category
         .no-deals-link{display:inline-block;background:#0f1f3d;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:700;font-size:.875rem}
         .source-note{font-size:.68rem;color:#d1cfc6;font-family:system-ui,sans-serif;text-align:center;margin-top:24px}
         @media(max-width:600px){.page{padding:24px 14px}.nav{padding:12px 16px}}
+        @media(max-width:480px){
+          .page-title{font-size:1.35rem}
+          .savings-bar{padding:14px 16px;gap:10px}
+          .save-amount{font-size:2.1rem}
+          .top-card{padding:18px}
+          .deal-title-big{font-size:1.15rem}
+          .cat-pill{font-size:.75rem;padding:5px 11px}
+          .alt-card{padding:14px}
+        }
       `}</style>
 
       <nav className="nav">

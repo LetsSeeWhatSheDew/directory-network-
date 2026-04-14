@@ -419,7 +419,7 @@ export default async function HomePage() {
         }
         .hero-badge-dot{width:5px;height:5px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite}
         .hero h1{
-          font-size:clamp(2rem,5vw,3.2rem);
+          font-size:clamp(1.8rem,5vw,3.2rem);
           font-weight:700;color:#fff;
           letter-spacing:-.04em;line-height:1.1;
           margin-bottom:12px;
@@ -670,6 +670,20 @@ export default async function HomePage() {
           .footer{padding:16px;flex-direction:column;text-align:center}
           .footer-links{justify-content:center}
           .nav-links .nav-link{display:none}
+        }
+        @media(max-width:480px){
+          .hero h1{font-size:2.2rem}
+          .hero-badge{font-size:.66rem;padding:4px 10px}
+          .category-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+          .cat-btn{justify-content:center;padding:12px 8px;font-size:.82rem}
+          .cat-btn.primary{grid-column:1 / -1;font-size:.92rem;padding:14px 16px}
+          .hero-search{flex-direction:row}
+          .hero-search-input{font-size:.88rem;padding:8px 10px}
+          .hero-search-btn{padding:0 12px}
+          .ticker{padding:6px 0 6px 48px}
+          .ticker a,.ticker .sep{font-size:.7rem}
+          .stats-inner{grid-template-columns:1fr;gap:12px;text-align:center}
+          .stat-num{font-size:1.4rem}
         }
       `}</style>
 
