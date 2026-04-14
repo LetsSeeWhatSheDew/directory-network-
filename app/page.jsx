@@ -191,28 +191,6 @@ const CATEGORIES = [
   { label: "All deals", slug: "all", icon: "flame" },
 ];
 
-const QUICK_FILTERS = [
-  { label: "Open now", param: "open=true" },
-  { label: "Drive-thru", param: "drivethu=true" },
-  { label: "Cards accepted", param: "credit=true" },
-  { label: "Best rated", param: "sort=rated" },
-];
-
-const CITIES = [
-  { name: "Chicago", slug: "chicago" },
-  { name: "Peoria", slug: "peoria" },
-  { name: "Springfield", slug: "springfield" },
-  { name: "Champaign", slug: "champaign" },
-  { name: "Normal", slug: "normal" },
-  { name: "Naperville", slug: "naperville" },
-  { name: "Joliet", slug: "joliet" },
-  { name: "Rockford", slug: "rockford" },
-  { name: "Waukegan", slug: "waukegan" },
-  { name: "Elgin", slug: "elgin" },
-  { name: "Schaumburg", slug: "schaumburg" },
-  { name: "Aurora", slug: "aurora" },
-];
-
 function FourTwentyBanner() {
   const now = new Date();
   const show = now >= new Date("2026-04-17") && now <= new Date("2026-04-20T23:59:59");
@@ -335,7 +313,6 @@ export default async function HomePage() {
     getActiveDealCount(),
     getTopDeals(),
   ]);
-  const likelyOpen = isLikelyOpen();
   return (
     <>
       <style>{`
@@ -641,41 +618,6 @@ export default async function HomePage() {
         .savings-sub{font-size:.68rem;color:rgba(22,101,52,.7);font-family:system-ui,sans-serif;margin-top:2px}
         .savings-num{font-size:2rem;font-weight:700;color:#16a34a;letter-spacing:-.03em;line-height:1}
 
-        /* CITY BROWSE */
-        .cities-section{background:#f5f4f0;padding:52px 28px;border-top:1px solid #e8e4da}
-        .cities-inner{max-width:1100px;margin:0 auto}
-        .cities-title{
-          font-size:1.5rem;font-weight:700;color:#0f1f3d;
-          letter-spacing:-.03em;margin-bottom:4px;
-        }
-        .cities-sub{
-          font-size:.875rem;color:#6b7280;
-          font-family:system-ui,sans-serif;margin-bottom:24px;
-        }
-        .city-grid{
-          display:grid;
-          grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
-          gap:10px;
-        }
-        .city-card{
-          background:#fff;
-          border:1px solid #e8e4da;
-          border-radius:10px;padding:14px;
-          text-decoration:none;
-          transition:all .15s;
-        }
-        .city-card:hover{background:#f0fdf4;border-color:#16a34a}
-        .city-name{font-size:.9rem;font-weight:700;color:#0f1f3d;margin-bottom:8px}
-        .city-pills{display:flex;gap:4px;flex-wrap:wrap}
-        .city-pill{
-          font-size:.62rem;color:#16a34a;
-          background:#f0fdf4;
-          border:1px solid #bbf7d0;
-          border-radius:100px;padding:2px 7px;
-          font-family:system-ui,sans-serif;text-decoration:none;
-        }
-        .city-pill:hover{background:#dcfce7}
-
         /* BIZ STRIP */
         .biz-strip{
           background:#f5f4f0;border-top:1px solid #e8e4da;
@@ -727,7 +669,6 @@ export default async function HomePage() {
           .hero{padding:40px 16px 36px}
           .how-inner{grid-template-columns:1fr;gap:24px;padding:36px 16px}
           .deals-section{padding:36px 16px}
-          .cities-section{padding:36px 16px}
           .footer{padding:16px;flex-direction:column;text-align:center}
           .footer-links{justify-content:center}
         }
