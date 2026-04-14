@@ -534,10 +534,7 @@ export default function HomePage() {
             Illinois dispensary deals — live
           </div>
           <h1>Best Bud For<br /><em>Your Buck$</em></h1>
-          <p className="hero-sub">
-            Tell us what you want. We find the cheapest price, the best discount,
-            and the fastest option near you.
-          </p>
+          <p className="hero-sub">Low Prices. High Times.</p>
 
           {/* CATEGORY SELECTION */}
           <div className="category-grid">
