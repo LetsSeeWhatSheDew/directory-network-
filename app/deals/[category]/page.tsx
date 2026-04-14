@@ -2,8 +2,9 @@
 // Fixed v2: force no-cache + correct Supabase query format
 
 import Link from "next/link";
-import { formatSavingsDollars, gradeDeal } from "../../../lib/dealScoring";
+import { estimateSavings, formatSavingsDollars, gradeDeal } from "../../../lib/dealScoring";
 import TrackView from "../../components/TrackView";
+import DealCtaLink from "../../components/DealCtaLink";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://hnbjufmtmrhexmdrfubw.supabase.co';
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300';
@@ -420,9 +421,18 @@ export default async function DealsPage({ params }: { params: Promise<{ category
                 <div className="save-amount">{formatSavings(topDeal)}</div>
               </div>
 
-              <Link href={`/l/${topDeal.slug || topDeal.listing_slug}`} className="card-cta">
+              <DealCtaLink
+                href={`/l/${topDeal.slug || topDeal.listing_slug}`}
+                className="card-cta"
+                deal={{
+                  dispensary: topDeal.name || topDeal.listing_slug || "Illinois dispensary",
+                  dealTitle: topDeal.deal_title || topDeal.title || "",
+                  savingsAmount: estimateSavings(topDeal) ?? 0,
+                  category: topDeal.category || null,
+                }}
+              >
                 View {topDeal.name || "dispensary"} →
-              </Link>
+              </DealCtaLink>
             </div>
 
             {alternatives.length > 0 && (

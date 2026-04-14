@@ -727,6 +727,7 @@ export default async function HomePage() {
         </Link>
         <div className="nav-links">
           <Link href="/cannabis/illinois/open-now" className="nav-link">Open now</Link>
+          <Link href="/savings/dashboard" className="nav-link">My savings</Link>
           <Link href="/map" className="nav-link">Map view</Link>
           <Link href="/cannabis/illinois" className="nav-link">Browse Illinois</Link>
           <Link href="/dispensaries" className="nav-cta">For dispensaries</Link>
