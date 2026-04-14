@@ -2,6 +2,7 @@
 // Fixed v2: force no-cache + correct Supabase query format
 
 import Link from "next/link";
+import { formatSavingsDollars, gradeDeal } from "../../../lib/dealScoring";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://hnbjufmtmrhexmdrfubw.supabase.co';
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300';
@@ -85,15 +86,7 @@ async function getDeals(category: string) {
   return { deals: Array.isArray(deals) ? deals : [], source: "table" };
 }
 
-function formatSavings(deal: any): string {
-  if (deal.savings_amount && deal.savings_amount > 0) return `~$${Math.round(deal.savings_amount)}`;
-  if (deal.discount_value) {
-    if (deal.discount_unit === "percent") return `${Math.round(deal.discount_value)}% off`;
-    if (deal.discount_unit === "dollars") return `$${deal.discount_value} off`;
-    return `${deal.discount_value}% off`;
-  }
-  return "Deal available";
-}
+const formatSavings = (deal: any) => formatSavingsDollars(deal);
 
 export async function generateMetadata({ params }: { params: Promise<{ category: string }> }) {
   const { category } = await params;
@@ -210,10 +203,10 @@ export default async function DealsPage({ params }: { params: Promise<{ category
         .deal-desc{font-size:.875rem;color:#374151;font-family:system-ui,sans-serif;margin-bottom:16px;line-height:1.5}
         .attrs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
         .attr{font-size:.72rem;color:#6b7280;background:#f5f4f0;border-radius:100px;padding:3px 10px;font-family:system-ui,sans-serif}
-        .savings-bar{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-        .save-label{font-size:.82rem;color:#166534;font-family:system-ui,sans-serif;font-weight:600}
-        .save-sub{font-size:.72px;color:#86efac;font-family:system-ui,sans-serif;margin-top:2px;font-size:.72rem}
-        .save-amount{font-size:2rem;font-weight:700;color:#16a34a}
+        .savings-bar{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:14px}
+        .save-label{font-size:.7rem;color:#166534;font-family:system-ui,sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.12em}
+        .save-sub{font-size:.72rem;color:rgba(22,101,52,.7);font-family:system-ui,sans-serif;margin-top:3px}
+        .save-amount{font-size:2.6rem;font-weight:700;color:#16a34a;letter-spacing:-.03em;line-height:1}
         .card-cta{display:block;text-align:center;background:#0f1f3d;color:#fff;padding:12px;border-radius:10px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:700;font-size:.9rem}
         .card-cta:hover{background:#1e3a5f}
         .alt-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#9ca3af;font-family:system-ui,sans-serif;margin-bottom:12px}
@@ -312,8 +305,8 @@ export default async function DealsPage({ params }: { params: Promise<{ category
 
               <div className="savings-bar">
                 <div>
-                  <div className="save-label">Savings</div>
-                  <div className="save-sub">vs. full price</div>
+                  <div className="save-label">You save</div>
+                  <div className="save-sub">vs. Illinois average</div>
                 </div>
                 <div className="save-amount">{formatSavings(topDeal)}</div>
               </div>

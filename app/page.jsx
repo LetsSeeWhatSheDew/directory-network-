@@ -1,5 +1,6 @@
 import Link from "next/link";
 import LocationAware from "./components/LocationAware";
+import { formatSavingsDollars } from "../lib/dealScoring";
 
 // ============================================================
 // CLEANLIST HOMEPAGE — Cannabis visual identity overhaul
@@ -318,12 +319,7 @@ function formatDiscount(d) {
   return d.deal_title || "Deal available";
 }
 
-function formatSavings(d) {
-  if (d.savings_amount && d.savings_amount > 0) return `~$${Math.round(d.savings_amount)}`;
-  if (d.discount_unit === "percent") return `${Math.round(d.discount_value)}% off`;
-  if (d.discount_unit === "dollars") return `$${d.discount_value}`;
-  return "Save";
-}
+// formatSavings is now sourced from lib/dealScoring (formatSavingsDollars)
 
 function isLikelyOpen() {
   // Simple CT hour heuristic (9am-9pm CT). Server-side so no client jitter.
@@ -574,11 +570,13 @@ export default async function HomePage() {
         }
         .deal-savings{
           display:flex;align-items:center;justify-content:space-between;
-          background:#f0fdf4;border-radius:8px;
-          padding:8px 12px;
+          gap:10px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;
+          padding:14px 16px;margin-top:auto;
         }
-        .savings-label{font-size:.75rem;color:#166534;font-family:system-ui,sans-serif}
-        .savings-num{font-size:1.1rem;font-weight:700;color:#16a34a}
+        .savings-copy{display:flex;flex-direction:column}
+        .savings-label{font-size:.65rem;font-weight:700;color:#166534;font-family:system-ui,sans-serif;text-transform:uppercase;letter-spacing:.12em}
+        .savings-sub{font-size:.68rem;color:rgba(22,101,52,.7);font-family:system-ui,sans-serif;margin-top:2px}
+        .savings-num{font-size:2rem;font-weight:700;color:#16a34a;letter-spacing:-.03em;line-height:1}
 
         /* CITY BROWSE */
         .cities-section{background:#0f1f3d;padding:52px 28px}
@@ -866,8 +864,11 @@ export default async function HomePage() {
                     {d.is_recurring && <span className="deal-attr">Recurring</span>}
                   </div>
                   <div className="deal-savings">
-                    <span className="savings-label">Savings vs full price</span>
-                    <span className="savings-num">{formatSavings(d)}</span>
+                    <div className="savings-copy">
+                      <span className="savings-label">You save</span>
+                      <span className="savings-sub">vs. Illinois average</span>
+                    </div>
+                    <span className="savings-num">{formatSavingsDollars(d)}</span>
                   </div>
                 </Link>
               );
