@@ -247,34 +247,6 @@ const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGci
 
 export const revalidate = 300;
 
-async function getTickerDeals() {
-  try {
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_title,category,name,listing_slug,city,discount_value,discount_unit&order=discount_value.desc&limit=8`,
-      {
-        headers: {
-          apikey: SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-        },
-        cache: "no-store",
-      }
-    );
-    if (!res.ok) return [];
-    const data = await res.json();
-    return Array.isArray(data) ? data : [];
-  } catch {
-    return [];
-  }
-}
-
-function categoryEmoji(c) {
-  if (c === "flower") return "🌿";
-  if (c === "edibles") return "🍬";
-  if (c === "vapes") return "💨";
-  if (c === "concentrate") return "💎";
-  return "🔥";
-}
-
 // View's name column often mirrors the slug. Humanize anything that
 // looks slug-shaped (lowercase + hyphens, no spaces).
 function slugToName(slug) {
@@ -520,50 +492,7 @@ export default async function HomePage() {
           .hero-right{display:none}
         }
 
-        /* DEALS TICKER */
-        .ticker{position:relative;overflow:hidden;margin:18px auto 22px;max-width:880px;padding:10px 0 10px 60px;background:#f5f4f0;border-top:1px solid #e8e4da;border-bottom:1px solid #e8e4da;border-radius:8px}
-        .ticker-live{position:absolute;left:14px;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;gap:6px;font-family:system-ui,sans-serif;font-size:.7rem;font-weight:700;color:#dc2626;letter-spacing:.12em;text-transform:uppercase;z-index:2;background:linear-gradient(90deg,#f5f4f0 72%,rgba(245,244,240,0) 100%);padding-right:18px}
-        .ticker-live-dot{width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 0 0 rgba(239,68,68,.6);animation:ticker-pulse 1.6s infinite}
-        .ticker-track{display:inline-flex;gap:22px;white-space:nowrap;animation:ticker-marquee 48s linear infinite;will-change:transform}
-        .ticker:hover .ticker-track{animation-play-state:paused}
-        .ticker a{color:#374151;text-decoration:none;font-family:system-ui,sans-serif;font-size:.88rem;font-weight:500;transition:color .15s}
-        .ticker a strong{color:#0f1f3d;font-weight:700}
-        .ticker a em{color:#16a34a;font-style:normal;font-weight:600}
-        .ticker a:hover{color:#16a34a}
-        .ticker .sep{color:#16a34a;font-family:system-ui,sans-serif;font-size:.88rem;user-select:none;line-height:1}
-        @keyframes ticker-marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-        @keyframes ticker-pulse{0%{box-shadow:0 0 0 0 rgba(239,68,68,.7)}70%{box-shadow:0 0 0 8px rgba(239,68,68,0)}100%{box-shadow:0 0 0 0 rgba(239,68,68,0)}}
-
-        /* HERO SAVINGS CALLOUT */
-        .hero-save{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:12px 20px;display:flex;align-items:center;justify-content:center;gap:12px;max-width:560px;margin:0 auto 20px;font-family:system-ui,sans-serif;font-size:.88rem;color:#374151;flex-wrap:wrap}
-        .hero-save-amt{color:#16a34a;font-weight:700;font-size:1.1rem}
-        .hero-save-link{color:#16a34a;text-decoration:none;font-weight:600;white-space:nowrap;border-left:1px solid #bbf7d0;padding-left:12px;margin-left:auto}
-        .hero-save-link:hover{color:#15803d}
-        @media(max-width:480px){.hero-save-link{border-left:0;padding-left:0;margin-left:0;width:100%;text-align:center}}
-
-        /* HERO SEARCH */
-        .hero-search{display:flex;gap:8px;max-width:560px;margin:0 auto 22px;background:#fff;border:1px solid #e8e4da;border-radius:10px;padding:6px;box-shadow:0 1px 2px rgba(15,31,61,.04)}
-        .hero-search-input{flex:1;border:none;outline:none;background:transparent;padding:10px 12px;font-family:system-ui,sans-serif;font-size:.92rem;color:#0f1f3d;min-width:0}
-        .hero-search-input::placeholder{color:#9ca3af}
-        .hero-search-btn{background:#0f1f3d;color:#fff;border:none;border-radius:7px;padding:0 16px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s}
-        .hero-search-btn:hover{background:#1e3a5f}
-
-        /* CATEGORY BUTTONS */
-        .cat-primary-wrap{max-width:560px;margin:0 auto 14px}
-        .cat-btn.primary{
-          width:100%;
-          display:flex;align-items:center;justify-content:center;gap:10px;
-          background:#16a34a;border:1px solid #16a34a;color:#fff;
-          border-radius:12px;padding:16px 32px;
-          font-size:1rem;font-family:system-ui,sans-serif;font-weight:700;
-          text-decoration:none;cursor:pointer;transition:all .15s;
-        }
-        .cat-btn.primary:hover{background:#15803d;border-color:#15803d}
-        .cat-or{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#9ca3af;font-family:system-ui,sans-serif;text-align:center;margin:14px 0 10px}
-        .category-grid{
-          display:grid;grid-template-columns:1fr 1fr;
-          gap:8px;max-width:560px;margin:0 auto 12px;
-        }
+        /* CATEGORY BUTTONS (used by desktop right column) */
         .cat-btn{
           display:flex;align-items:center;justify-content:center;gap:8px;
           background:#fff;
@@ -575,21 +504,6 @@ export default async function HomePage() {
         }
         .cat-btn:hover{background:#f0fdf4;border-color:#16a34a;color:#0f1f3d}
         .cat-btn svg{flex-shrink:0;width:24px;height:24px}
-
-        /* QUICK FILTERS */
-        .filter-row{
-          display:flex;flex-wrap:wrap;justify-content:center;gap:8px;
-          margin-top:12px;max-width:480px;
-          margin-left:auto;margin-right:auto;
-        }
-        .filter-pill{
-          font-size:.75rem;font-family:system-ui,sans-serif;font-weight:500;
-          color:#6b7280;
-          background:transparent;border:1px solid #d1cfc6;
-          border-radius:100px;padding:4px 12px;
-          cursor:pointer;text-decoration:none;
-        }
-        .filter-pill:hover{color:#0f1f3d;border-color:#9ca3af}
 
         /* STATS STRIP — minimal credibility line */
         .stats{background:#f5f4f0;padding:22px 28px;text-align:center}
@@ -818,22 +732,12 @@ export default async function HomePage() {
           .footer-links{justify-content:center}
         }
         @media(max-width:480px){
-          .hero{padding:32px 14px 28px}
-          .hero h1{font-size:2.2rem;max-width:100%}
-          .hero-badge{font-size:.66rem;padding:4px 10px}
-          .hero-save{flex-direction:column;align-items:stretch;gap:6px;padding:10px 14px;font-size:.82rem;text-align:center;margin:0 auto 16px}
-          .hero-save-amt{font-size:1.02rem}
-          .hero-save-link{border-left:0;padding-left:0;margin-left:0;width:100%;text-align:center}
-          .cat-btn.primary{font-size:.95rem;padding:14px 18px}
-          .cat-btn{padding:10px 8px;font-size:.8rem}
-          .hero-search{flex-direction:row;width:100%;max-width:100%}
-          .hero-search-input{font-size:.9rem;padding:10px 12px}
-          .hero-search-btn{padding:0 12px}
-          .ticker{padding:8px 0 8px 52px;max-width:100%}
-          .ticker a,.ticker .sep{font-size:.72rem}
-          .ticker a strong{font-size:.72rem}
+          .hero{padding:16px 16px 32px}
+          .hero h1{font-size:2rem;max-width:100%}
+          .hero-deal-card{padding:20px 18px 16px}
+          .hero-deal-savings{font-size:2.8rem}
+          .hero-deal-cta{padding:11px 18px;font-size:.88rem}
           .stats{padding:18px 16px}
-          .stats-inner{grid-template-columns:1fr;gap:10px;text-align:center}
           .stat-num{font-size:1.3rem}
           .deal-cards{grid-template-columns:1fr}
           .deal-card{padding:16px}
