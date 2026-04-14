@@ -235,7 +235,38 @@ function renderIcon(key) {
   return null;
 }
 
-export default function HomePage() {
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300";
+
+export const revalidate = 300;
+
+async function getActiveDealCount() {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/deals?select=id&is_active=eq.true&project_tag=eq.green`,
+      {
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          Prefer: "count=exact",
+          "Range-Unit": "items",
+          Range: "0-0",
+        },
+        next: { revalidate: 300 },
+      }
+    );
+    const range = res.headers.get("content-range");
+    if (range) {
+      const total = range.split("/")[1];
+      const n = Number.parseInt(total, 10);
+      if (Number.isFinite(n)) return n;
+    }
+  } catch {}
+  return null;
+}
+
+export default async function HomePage() {
+  const dealCount = await getActiveDealCount();
   return (
     <>
       <style>{`
@@ -345,6 +376,13 @@ export default function HomePage() {
           cursor:pointer;text-decoration:none;
         }
         .filter-pill:hover{color:#fff;border-color:rgba(255,255,255,.4)}
+
+        /* STATS STRIP */
+        .stats{background:#0b172f;padding:22px 28px;border-top:1px solid rgba(255,255,255,.06)}
+        .stats-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;text-align:center}
+        .stat-num{font-size:1.7rem;font-weight:700;color:#4ade80;letter-spacing:-.02em;line-height:1}
+        .stat-label{font-size:.72rem;color:rgba(255,255,255,.5);font-family:system-ui,sans-serif;text-transform:uppercase;letter-spacing:.1em;margin-top:6px}
+        @media(max-width:520px){.stats-inner{gap:14px}.stat-num{font-size:1.3rem}.stat-label{font-size:.65rem}}
 
         /* HOW IT WORKS */
         .how{background:#fff;border-top:1px solid #e8e4da;border-bottom:1px solid #e8e4da}
@@ -583,6 +621,24 @@ export default function HomePage() {
                 {f.label}
               </Link>
             ))}
+          </div>
+        </div>
+      </div>
+
+      {/* STATS STRIP — live deal count + IDFPR coverage */}
+      <div className="stats">
+        <div className="stats-inner">
+          <div>
+            <div className="stat-num">{dealCount !== null ? dealCount : "—"}</div>
+            <div className="stat-label">Active deals today</div>
+          </div>
+          <div>
+            <div className="stat-num">293</div>
+            <div className="stat-label">Illinois dispensaries</div>
+          </div>
+          <div>
+            <div className="stat-num">162</div>
+            <div className="stat-label">Cities covered</div>
           </div>
         </div>
       </div>
