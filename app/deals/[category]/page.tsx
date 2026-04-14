@@ -249,14 +249,15 @@ export default async function DealsPage({ params }: { params: Promise<{ category
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
         body{font-family:Georgia,serif;background:#f5f4f0;color:#0f1f3d;min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#0f1f3d;position:sticky;top:0;z-index:100}
+        .top-stripe{height:4px;background:#16a34a;width:100%}
+        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;position:sticky;top:0;z-index:100;border-bottom:1px solid #e8e4da}
         .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
         .logo-dot{width:8px;height:8px;border-radius:50%;background:#16a34a;animation:pulse 2.5s infinite}
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-        .logo-text{font-size:1.1rem;font-weight:700;color:#fff}
-        .logo-text span{color:#4ade80}
-        .back{font-size:.82rem;color:rgba(255,255,255,.5);text-decoration:none;font-family:system-ui,sans-serif}
-        .back:hover{color:#fff}
+        .logo-text{font-size:1.1rem;font-weight:700;color:#0f1f3d}
+        .logo-text span{color:#16a34a}
+        .back{font-size:.82rem;color:#6b7280;text-decoration:none;font-family:system-ui,sans-serif}
+        .back:hover{color:#0f1f3d}
         .page{max-width:800px;margin:0 auto;padding:40px 20px}
         .cat-tag{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#16a34a;font-family:system-ui,sans-serif;margin-bottom:8px}
         .page-title{font-size:clamp(1.5rem,4vw,2.2rem);font-weight:700;color:#0f1f3d;letter-spacing:-.04em;line-height:1.1;margin-bottom:6px}
@@ -265,38 +266,39 @@ export default async function DealsPage({ params }: { params: Promise<{ category
         .cat-switch-label{font-size:.7rem;color:#9ca3af;font-family:system-ui,sans-serif;margin-bottom:10px}
         .cat-pills{display:flex;gap:8px;flex-wrap:wrap}
         .cat-pill{font-size:.8rem;font-family:system-ui,sans-serif;font-weight:500;padding:6px 14px;border-radius:100px;text-decoration:none;border:1px solid #e8e4da;color:#6b7280}
-        .cat-pill.active{background:#0f1f3d;color:#fff;border-color:#0f1f3d}
+        .cat-pill.active{background:#16a34a;color:#fff;border-color:#16a34a}
         .cat-pill:hover:not(.active){border-color:#9ca3af;color:#374151}
         .top-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#16a34a;font-family:system-ui,sans-serif;margin-bottom:10px}
-        .top-card{background:#fff;border:2px solid #16a34a;border-radius:16px;padding:24px;position:relative;margin-bottom:24px}
-        .deal-grade{position:absolute;top:14px;right:14px;min-width:40px;height:40px;padding:0 10px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;font-family:system-ui,sans-serif;font-weight:800;font-size:1rem;letter-spacing:-.01em;box-shadow:0 1px 3px rgba(0,0,0,.1)}
-        .alt-card{position:relative}
-        .alt-grade{min-width:32px;height:32px;padding:0 7px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-family:system-ui,sans-serif;font-weight:800;font-size:.8rem;margin-right:10px}
-        .verdict-badge{display:inline-flex;align-items:center;gap:6px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:100px;padding:4px 12px;margin-bottom:16px;font-size:.72rem;font-family:system-ui,sans-serif;font-weight:600;color:#166534}
-        .vdot{width:5px;height:5px;border-radius:50%;background:#16a34a}
-        .card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
-        .disp-name{font-size:1.2rem;font-weight:700;color:#0f1f3d}
-        .disp-detail{font-size:.82rem;color:#9ca3af;font-family:system-ui,sans-serif;margin-top:2px}
-        .deal-title-big{font-size:1.4rem;font-weight:700;color:#16a34a;margin-bottom:6px}
-        .deal-desc{font-size:.875rem;color:#374151;font-family:system-ui,sans-serif;margin-bottom:16px;line-height:1.5}
-        .attrs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
-        .attr{font-size:.72rem;color:#6b7280;background:#f5f4f0;border-radius:100px;padding:3px 10px;font-family:system-ui,sans-serif}
-        .savings-bar{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:14px}
-        .save-label{font-size:.7rem;color:#166534;font-family:system-ui,sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.12em}
-        .save-sub{font-size:.72rem;color:rgba(22,101,52,.7);font-family:system-ui,sans-serif;margin-top:3px}
-        .save-amount{font-size:2.6rem;font-weight:700;color:#16a34a;letter-spacing:-.03em;line-height:1}
-        .card-cta{display:block;text-align:center;background:#0f1f3d;color:#fff;padding:12px;border-radius:10px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:700;font-size:.9rem}
-        .card-cta:hover{background:#1e3a5f}
+
+        /* TOP DEAL CARD — savings dominates */
+        .top-card{background:#fff;border:1px solid #e8e4da;border-left:4px solid #16a34a;border-radius:16px;padding:24px;position:relative;margin-bottom:24px;box-shadow:0 4px 16px rgba(15,31,61,.06)}
+        .deal-grade{position:absolute;top:12px;right:12px;min-width:28px;height:24px;padding:0 8px;display:inline-flex;align-items:center;justify-content:center;border-radius:100px;font-family:system-ui,sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.02em;opacity:.7}
+        .you-save-label{font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:2px}
+        .save-amount{font-size:clamp(2.2rem,8vw,3rem);font-weight:700;color:#16a34a;letter-spacing:-.04em;line-height:1;margin-bottom:2px}
+        .save-vs{font-size:.72rem;color:#9ca3af;font-family:system-ui,sans-serif;margin-bottom:18px}
+        .disp-name{font-size:1.1rem;font-weight:700;color:#0f1f3d;margin-top:4px}
+        .disp-detail{font-size:.8rem;color:#9ca3af;font-family:system-ui,sans-serif;margin-top:2px;margin-bottom:6px}
+        .deal-title-big{font-size:.92rem;font-weight:600;color:#374151;margin-bottom:14px;font-family:system-ui,sans-serif;line-height:1.4;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+        .attrs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:16px}
+        .attr{font-size:.66rem;color:#9ca3af;background:#f5f4f0;border-radius:100px;padding:2px 8px;font-family:system-ui,sans-serif}
+        .deal-more-toggle{font-size:.78rem;color:#16a34a;font-family:system-ui,sans-serif;margin-bottom:16px;cursor:pointer;text-decoration:none;display:inline-block}
+        .deal-more-toggle:hover{text-decoration:underline}
+        .card-cta{display:block;width:100%;text-align:center;background:#16a34a;color:#fff;padding:14px;border-radius:10px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:800;font-size:.95rem;letter-spacing:.02em;transition:background .15s}
+        .card-cta:hover{background:#15803d}
+
+        /* ALTERNATIVES — same hierarchy pattern */
         .alt-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#9ca3af;font-family:system-ui,sans-serif;margin-bottom:12px}
         .alt-cards{display:flex;flex-direction:column;gap:10px;margin-bottom:36px}
-        .alt-card{background:#fff;border:1px solid #e8e4da;border-radius:12px;padding:16px;display:flex;justify-content:space-between;align-items:center;text-decoration:none;transition:border-color .15s}
+        .alt-card{position:relative;background:#fff;border:1px solid #e8e4da;border-radius:12px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;text-decoration:none;transition:border-color .15s;gap:14px}
         .alt-card:hover{border-color:#16a34a}
-        .alt-name{font-size:.9rem;font-weight:700;color:#0f1f3d}
-        .alt-deal{font-size:.82rem;color:#16a34a;font-family:system-ui,sans-serif;margin-top:2px}
-        .alt-meta{font-size:.7rem;color:#9ca3af;font-family:system-ui,sans-serif;margin-top:3px}
-        .alt-right{text-align:right}
-        .alt-savings{font-size:1.1rem;font-weight:700;color:#16a34a}
-        .alt-savings-label{font-size:.7rem;color:#9ca3af;font-family:system-ui,sans-serif}
+        .alt-grade{position:absolute;top:10px;right:12px;font-size:.62rem;color:#9ca3af;font-family:system-ui,sans-serif;font-weight:600;letter-spacing:.08em;opacity:.7}
+        .alt-savings-block{min-width:92px;flex-shrink:0}
+        .alt-savings-label-top{font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:1px}
+        .alt-savings{font-size:1.5rem;font-weight:700;color:#16a34a;letter-spacing:-.03em;line-height:1}
+        .alt-body{flex:1;min-width:0}
+        .alt-name{font-size:.92rem;font-weight:700;color:#0f1f3d}
+        .alt-deal{font-size:.78rem;color:#374151;font-family:system-ui,sans-serif;margin-top:2px;line-height:1.4}
+        .alt-meta{font-size:.66rem;color:#9ca3af;font-family:system-ui,sans-serif;margin-top:4px}
         .no-deals{text-align:center;padding:60px 20px;background:#fff;border-radius:16px;border:1px solid #e8e4da}
         .no-deals-title{font-size:1.2rem;font-weight:700;color:#0f1f3d;margin-bottom:8px}
         .no-deals-sub{font-size:.875rem;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:20px}
@@ -305,22 +307,22 @@ export default async function DealsPage({ params }: { params: Promise<{ category
         @media(max-width:600px){.page{padding:24px 14px}.nav{padding:12px 16px}}
         @media(max-width:480px){
           .page-title{font-size:1.35rem}
-          .top-card{padding:18px;width:100%}
-          .deal-title-big{font-size:1.15rem}
-          .savings-bar{padding:12px 14px;gap:10px}
-          .save-amount{font-size:1.6rem}
+          .top-card{padding:20px 18px;width:100%}
+          .deal-title-big{font-size:.88rem}
           .cat-switch{padding:12px 10px}
           .cat-pills{flex-wrap:nowrap;overflow-x:auto;gap:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
           .cat-pills::-webkit-scrollbar{display:none}
           .cat-pill{font-size:.78rem;padding:6px 12px;flex-shrink:0;white-space:nowrap}
           .alt-cards{gap:8px}
-          .alt-card{padding:12px;flex-direction:column;align-items:stretch;gap:10px}
-          .alt-card .alt-right{text-align:left;display:flex;gap:10px;align-items:baseline;justify-content:space-between}
-          .alt-grade{min-width:28px;height:28px;font-size:.72rem}
-          .deal-grade{top:10px;right:10px;min-width:32px;height:32px;font-size:.82rem}
+          .alt-card{padding:14px;gap:12px}
+          .alt-savings{font-size:1.3rem}
+          .alt-savings-block{min-width:80px}
+          .alt-name{font-size:.86rem}
+          .alt-deal{font-size:.74rem}
         }
       `}</style>
 
+      <div className="top-stripe" aria-hidden="true" />
       <nav className="nav">
         <Link href="/" className="logo">
           <span className="logo-dot" />
@@ -367,64 +369,38 @@ export default async function DealsPage({ params }: { params: Promise<{ category
                   </span>
                 );
               })()}
-              <div className="verdict-badge">
-                <span className="vdot" />
-                Best value right now
+
+              <div className="you-save-label">You save</div>
+              <div className="save-amount">{formatSavings(topDeal)}</div>
+              <div className="save-vs">vs. Illinois average</div>
+
+              <div className="disp-name">
+                {topDeal.name || topDeal.listing_slug}
               </div>
-              {(() => {
-                const ts = topDeal.updated_at || topDeal.created_at;
-                if (!ts) return null;
-                const then = new Date(ts).getTime();
-                if (!Number.isFinite(then)) return null;
-                const mins = Math.max(1, Math.round((Date.now() - then) / 60000));
-                const label =
-                  mins < 60
-                    ? `${mins} minute${mins === 1 ? "" : "s"} ago`
-                    : mins < 24 * 60
-                    ? `${Math.round(mins / 60)} hour${Math.round(mins / 60) === 1 ? "" : "s"} ago`
-                    : `${Math.round(mins / 1440)} day${Math.round(mins / 1440) === 1 ? "" : "s"} ago`;
-                return (
-                  <div style={{ fontSize: ".72rem", color: "#6b7280", fontFamily: "system-ui, sans-serif", marginBottom: 12 }}>
-                    Last updated: {label}
-                  </div>
-                );
-              })()}
-              <div className="card-top">
-                <div>
-                  <div className="disp-name">
-                    {topDeal.name || topDeal.listing_slug}
-                  </div>
-                  <div className="disp-detail">
-                    {topDeal.city || "Illinois"}
-                    {topDeal.google_rating > 0 && ` · ${topDeal.google_rating}★`}
-                  </div>
-                </div>
+              <div className="disp-detail">
+                {topDeal.city || "Illinois"}
+                {topDeal.google_rating > 0 && ` · ${topDeal.google_rating}★`}
               </div>
 
-              <div className="deal-title-big" style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
+              <div className="deal-title-big">
                 <span>{topDeal.deal_title || topDeal.title || `${topDeal.discount_value}% off ${topDeal.category}`}</span>
                 {(() => {
                   const u = getExpiryUrgency(topDeal.expires_at);
                   if (!u) return null;
                   return (
-                    <span style={{ fontSize: ".72rem", fontFamily: "system-ui,sans-serif", fontWeight: 700, color: u.fg, background: u.bg, padding: "3px 10px", borderRadius: 100, whiteSpace: "nowrap" }}>
+                    <span style={{ fontSize: ".68rem", fontFamily: "system-ui,sans-serif", fontWeight: 700, color: u.fg, background: u.bg, padding: "2px 9px", borderRadius: 100, whiteSpace: "nowrap" }}>
                       {u.text}
                     </span>
                   );
                 })()}
               </div>
+
               {(() => {
                 const t = trends[topDeal.slug || topDeal.listing_slug];
-                if (t === "better") return <div style={{ fontSize: ".82rem", fontFamily: "system-ui,sans-serif", color: "#16a34a", fontWeight: 600, marginBottom: 8 }}>↓ Better deal than last week</div>;
-                if (t === "worse") return <div style={{ fontSize: ".82rem", fontFamily: "system-ui,sans-serif", color: "#f59e0b", fontWeight: 600, marginBottom: 8 }}>↑ Not as good as last week</div>;
+                if (t === "better") return <div style={{ fontSize: ".78rem", fontFamily: "system-ui,sans-serif", color: "#16a34a", fontWeight: 600, marginBottom: 10 }}>↓ Better deal than last week</div>;
+                if (t === "worse") return <div style={{ fontSize: ".78rem", fontFamily: "system-ui,sans-serif", color: "#f59e0b", fontWeight: 600, marginBottom: 10 }}>↑ Not as good as last week</div>;
                 return null;
               })()}
-
-              {(topDeal.deal_description || topDeal.description) && (
-                <div className="deal-desc">
-                  {topDeal.deal_description || topDeal.description}
-                </div>
-              )}
 
               <div className="attrs">
                 {topDeal.accepts_credit && <span className="attr">Cards OK</span>}
@@ -444,13 +420,14 @@ export default async function DealsPage({ params }: { params: Promise<{ category
                 )}
               </div>
 
-              <div className="savings-bar">
-                <div>
-                  <div className="save-label">You save</div>
-                  <div className="save-sub">vs. Illinois average</div>
-                </div>
-                <div className="save-amount">{formatSavings(topDeal)}</div>
-              </div>
+              {(topDeal.deal_description || topDeal.description) && (
+                <details style={{ marginBottom: 16 }}>
+                  <summary className="deal-more-toggle">See details →</summary>
+                  <div style={{ fontSize: ".82rem", color: "#374151", fontFamily: "system-ui,sans-serif", marginTop: 8, lineHeight: 1.5 }}>
+                    {topDeal.deal_description || topDeal.description}
+                  </div>
+                </details>
+              )}
 
               <DealCtaLink
                 href={`/l/${topDeal.slug || topDeal.listing_slug}`}
@@ -462,7 +439,7 @@ export default async function DealsPage({ params }: { params: Promise<{ category
                   category: topDeal.category || null,
                 }}
               >
-                View {topDeal.name || "dispensary"} →
+                GO HERE →
               </DealCtaLink>
             </div>
 
@@ -478,45 +455,34 @@ export default async function DealsPage({ params }: { params: Promise<{ category
                       href={`/l/${deal.slug || deal.listing_slug}`}
                       className="alt-card"
                     >
-                      <div style={{ display: "flex", alignItems: "center", gap: 0, flex: 1, minWidth: 0 }}>
-                        <span
-                          className="alt-grade"
-                          style={{ background: g.color.bg, color: g.color.fg }}
-                          title={`${g.label} · score ${g.score}/100`}
-                          aria-label={`Deal score ${g.grade}, ${g.label}`}
-                        >
-                          {g.grade}
-                        </span>
-                        <div>
-                          <div className="alt-name">{deal.name || deal.listing_slug}</div>
-                          <div className="alt-deal">
-                            {deal.deal_title || deal.title || `${deal.discount_value}% off`}
-                          </div>
-                          {(() => {
-                            const u = getExpiryUrgency(deal.expires_at);
-                            if (!u) return null;
-                            return (
-                              <div style={{ marginTop: 4, display: "inline-block", fontSize: ".66rem", fontFamily: "system-ui,sans-serif", fontWeight: 700, color: u.fg, background: u.bg, padding: "2px 8px", borderRadius: 100 }}>
-                                {u.text}
-                              </div>
-                            );
-                          })()}
-                          {(() => {
-                            const t = trends[deal.slug || deal.listing_slug];
-                            if (t === "better") return <div style={{ fontSize: ".72rem", fontFamily: "system-ui,sans-serif", color: "#16a34a", fontWeight: 600, marginTop: 2 }}>↓ Better than last week</div>;
-                            if (t === "worse") return <div style={{ fontSize: ".72rem", fontFamily: "system-ui,sans-serif", color: "#f59e0b", fontWeight: 600, marginTop: 2 }}>↑ Not as good as last week</div>;
-                            return null;
-                          })()}
-                          <div className="alt-meta">
-                            {deal.city || "Illinois"}
-                            {deal.accepts_credit ? " · Cards OK" : ""}
-                            {deal.drive_thru ? " · Drive-thru" : ""}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="alt-right">
+                      <span
+                        className="alt-grade"
+                        title={`${g.label} · score ${g.score}/100`}
+                        aria-label={`Deal score ${g.grade}, ${g.label}`}
+                      >
+                        {g.grade}
+                      </span>
+                      <div className="alt-savings-block">
+                        <div className="alt-savings-label-top">You save</div>
                         <div className="alt-savings">{formatSavings(deal)}</div>
-                        <div className="alt-savings-label">savings</div>
+                      </div>
+                      <div className="alt-body">
+                        <div className="alt-name">{deal.name || deal.listing_slug}</div>
+                        <div className="alt-deal">
+                          {deal.deal_title || deal.title || `${deal.discount_value}% off`}
+                        </div>
+                        {(() => {
+                          const u = getExpiryUrgency(deal.expires_at);
+                          if (!u) return null;
+                          return (
+                            <div style={{ marginTop: 4, display: "inline-block", fontSize: ".64rem", fontFamily: "system-ui,sans-serif", fontWeight: 700, color: u.fg, background: u.bg, padding: "2px 8px", borderRadius: 100 }}>
+                              {u.text}
+                            </div>
+                          );
+                        })()}
+                        <div className="alt-meta">
+                          {deal.city || "Illinois"}
+                        </div>
                       </div>
                     </Link>
                   )})}
