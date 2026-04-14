@@ -928,10 +928,46 @@ export default async function HomePage() {
           </div>
         ) : (
           <div className="deal-cards">
-            <div className="deal-card" style={{ gridColumn: "1 / -1", textAlign: "center", padding: "32px 16px" }}>
-              <div className="deal-highlight">Check back soon</div>
-              <div className="deal-reason">Fresh deals loading. Get deal alerts to be first to know.</div>
-              <Link href="/alerts" className="biz-btn-primary" style={{ display: "inline-block", marginTop: 12 }}>Get alerts →</Link>
+            {[0, 1, 2].map((i) => (
+              <div
+                key={`skel-${i}`}
+                className="deal-card"
+                style={{
+                  padding: 18,
+                  minHeight: 220,
+                  position: "relative",
+                  overflow: "hidden",
+                }}
+                aria-hidden="true"
+              >
+                <div style={{ height: 14, width: "55%", borderRadius: 6, background: "#e8e4da", marginBottom: 8 }} />
+                <div style={{ height: 10, width: "35%", borderRadius: 5, background: "#f0ece3", marginBottom: 18 }} />
+                <div style={{ height: 16, width: "75%", borderRadius: 6, background: "#e8e4da", marginBottom: 10 }} />
+                <div style={{ height: 10, width: "92%", borderRadius: 5, background: "#f0ece3", marginBottom: 6 }} />
+                <div style={{ height: 10, width: "68%", borderRadius: 5, background: "#f0ece3", marginBottom: 18 }} />
+                <div style={{ height: 42, width: "100%", borderRadius: 10, background: "#f0fdf4", border: "1px solid #bbf7d0" }} />
+              </div>
+            ))}
+            <div
+              className="deal-card"
+              style={{
+                gridColumn: "1 / -1",
+                textAlign: "center",
+                padding: "26px 20px",
+                background: "linear-gradient(135deg,#f0fdf4 0%,#fff 70%)",
+                border: "1px solid #bbf7d0",
+              }}
+            >
+              <div style={{ fontSize: ".7rem", fontFamily: "system-ui,sans-serif", fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: "#16a34a", marginBottom: 8 }}>
+                Loading today&apos;s best deals…
+              </div>
+              <div className="deal-highlight" style={{ marginBottom: 8 }}>Fresh deals land every hour</div>
+              <div className="deal-reason" style={{ maxWidth: 420, margin: "0 auto" }}>
+                We&apos;re pulling the latest from 293 Illinois dispensaries. Get alerts the moment a new deal drops near you.
+              </div>
+              <Link href="/alerts" className="biz-btn-primary" style={{ display: "inline-block", marginTop: 14 }}>
+                Get free deal alerts →
+              </Link>
             </div>
           </div>
         )}
