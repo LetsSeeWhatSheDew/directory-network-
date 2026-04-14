@@ -76,15 +76,6 @@ export default async function DispensariesIndexPage() {
   }
   const cities = Array.from(byCity.keys()).sort();
 
-  // Group by city
-  const byCity = new Map<string, Listing[]>();
-  for (const l of listings) {
-    const c = l.city || "Other";
-    if (!byCity.has(c)) byCity.set(c, []);
-    byCity.get(c)!.push(l);
-  }
-  const cities = Array.from(byCity.keys()).sort();
-
   return (
     <div style={{ fontFamily: "Georgia, serif", background: "#f5f4f0", minHeight: "100vh", color: "#0f1f3d" }}>
       <nav style={{ padding: "14px 28px", background: "#0f1f3d", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
