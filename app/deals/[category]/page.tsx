@@ -52,8 +52,8 @@ async function getDeals(category: string) {
         return { deals: data, source: "view" };
       }
     }
-  } catch (e) {
-    console.log("View query failed, falling back to direct table");
+  } catch {
+    // fall through to direct table query below
   }
 
   // Fallback: query deals table directly

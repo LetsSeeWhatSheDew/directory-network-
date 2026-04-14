@@ -669,7 +669,7 @@ export default async function HomePage() {
         <div className="nav-links">
           <Link href="/cannabis/illinois/open-now" className="nav-link">Open now</Link>
           <Link href="/cannabis/illinois" className="nav-link">Browse Illinois</Link>
-          <Link href="/upgrade" className="nav-cta">For dispensaries</Link>
+          <Link href="/dispensaries" className="nav-cta">For dispensaries</Link>
         </div>
       </nav>
 
@@ -905,7 +905,7 @@ export default async function HomePage() {
           <Link href="/cannabis/illinois" className="footer-link">Illinois</Link>
           <Link href="/cannabis/illinois/first-time-guide" className="footer-link">First-time guide</Link>
           <Link href="/cannabis/illinois/laws" className="footer-link">IL laws</Link>
-          <Link href="/upgrade" className="footer-link">For dispensaries</Link>
+          <Link href="/dispensaries" className="footer-link">For dispensaries</Link>
         </div>
         <span className="footer-copy">© {new Date().getFullYear()} CleanList</span>
       </footer>
