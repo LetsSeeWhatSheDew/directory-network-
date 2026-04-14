@@ -120,76 +120,55 @@ function FlameIcon({ size = 20 }) {
   );
 }
 
-// Large decorative cannabis plant — hero background
+// Large botanical cannabis plant — hero background, 420px tall, bottom-aligned
+// 7-blade fan leaf clusters branching off the main stalk at multiple heights
 function PlantSilhouette({ side = "left" }) {
   const transform = side === "right" ? "scale(-1,1) translate(-200,0)" : "";
+  // Single 7-blade fan leaf cluster, origin at (0,0), blades radiating upward
+  const FanLeaf = ({ scale = 1 }) => (
+    <g transform={`scale(${scale})`} fill="#4ade80" fillOpacity="0.9" stroke="#4ade80" strokeWidth="1" strokeLinejoin="round">
+      {/* center blade — tallest, straight up */}
+      <path d="M0 0 Q-3 -40 -1 -78 Q0 -82 1 -78 Q3 -40 0 0 Z" />
+      {/* blades at 30° (left + right) */}
+      <path d="M0 0 Q-22 -32 -40 -62 Q-43 -66 -38 -65 Q-14 -28 0 0 Z" />
+      <path d="M0 0 Q22 -32 40 -62 Q43 -66 38 -65 Q14 -28 0 0 Z" />
+      {/* blades at 60° (widest) */}
+      <path d="M0 0 Q-38 -20 -64 -34 Q-68 -36 -63 -32 Q-24 -10 0 0 Z" />
+      <path d="M0 0 Q38 -20 64 -34 Q68 -36 63 -32 Q24 -10 0 0 Z" />
+      {/* blades at 80° (short lower) */}
+      <path d="M0 0 Q-32 -4 -50 -4 Q-54 -3 -48 -1 Q-22 2 0 0 Z" />
+      <path d="M0 0 Q32 -4 50 -4 Q54 -3 48 -1 Q22 2 0 0 Z" />
+    </g>
+  );
   return (
     <svg
       width="200"
-      height="500"
-      viewBox="0 0 200 500"
+      height="420"
+      viewBox="0 0 200 420"
       xmlns="http://www.w3.org/2000/svg"
       style={{
         position: "absolute",
-        top: "0",
-        [side]: "-20px",
+        bottom: "0",
+        [side]: "-30px",
         opacity: 0.13,
         pointerEvents: "none",
         zIndex: 0,
       }}
       aria-hidden="true"
     >
-      <g transform={transform} fill="#4ade80" stroke="#4ade80" strokeWidth="1.5" strokeLinejoin="round">
-        {/* main stalk */}
-        <path d="M100 500 L100 60" stroke="#4ade80" strokeWidth="3" fill="none" />
-        {/* upper fan leaf cluster (5 blades) */}
-        <g transform="translate(100 80)">
-          <path d="M0 0 Q-4 -30 -2 -60 Q2 -30 0 0" />
-          <path d="M0 0 Q-20 -20 -35 -45 Q-12 -15 0 0" />
-          <path d="M0 0 Q20 -20 35 -45 Q12 -15 0 0" />
-          <path d="M0 0 Q-30 -8 -50 -20 Q-20 -5 0 0" />
-          <path d="M0 0 Q30 -8 50 -20 Q20 -5 0 0" />
-        </g>
-        {/* mid-upper branch + cluster */}
-        <path d="M100 160 Q80 155 60 150" stroke="#4ade80" strokeWidth="2" fill="none" />
-        <g transform="translate(55 148)">
-          <path d="M0 0 Q-4 -24 -2 -48 Q2 -24 0 0" />
-          <path d="M0 0 Q-18 -14 -30 -34 Q-10 -10 0 0" />
-          <path d="M0 0 Q18 -14 30 -34 Q10 -10 0 0" />
-          <path d="M0 0 Q-26 -4 -44 -14 Q-18 -2 0 0" />
-          <path d="M0 0 Q26 -4 44 -14 Q18 -2 0 0" />
-          <path d="M0 0 Q-10 12 -18 22 Q-6 8 0 0" />
-          <path d="M0 0 Q10 12 18 22 Q6 8 0 0" />
-        </g>
-        {/* mid-lower branch + cluster (other side) */}
-        <path d="M100 240 Q120 236 140 230" stroke="#4ade80" strokeWidth="2" fill="none" />
-        <g transform="translate(145 228)">
-          <path d="M0 0 Q-4 -24 -2 -48 Q2 -24 0 0" />
-          <path d="M0 0 Q-18 -14 -30 -34 Q-10 -10 0 0" />
-          <path d="M0 0 Q18 -14 30 -34 Q10 -10 0 0" />
-          <path d="M0 0 Q-26 -4 -44 -14 Q-18 -2 0 0" />
-          <path d="M0 0 Q26 -4 44 -14 Q18 -2 0 0" />
-          <path d="M0 0 Q-10 12 -18 22 Q-6 8 0 0" />
-          <path d="M0 0 Q10 12 18 22 Q6 8 0 0" />
-        </g>
-        {/* lower branch + cluster */}
-        <path d="M100 330 Q78 326 56 320" stroke="#4ade80" strokeWidth="2" fill="none" />
-        <g transform="translate(50 318)">
-          <path d="M0 0 Q-4 -20 -2 -40 Q2 -20 0 0" />
-          <path d="M0 0 Q-16 -12 -26 -28 Q-10 -8 0 0" />
-          <path d="M0 0 Q16 -12 26 -28 Q10 -8 0 0" />
-          <path d="M0 0 Q-22 -3 -36 -10 Q-16 -2 0 0" />
-          <path d="M0 0 Q22 -3 36 -10 Q16 -2 0 0" />
-        </g>
-        {/* bottom branch */}
-        <path d="M100 410 Q118 408 138 404" stroke="#4ade80" strokeWidth="2" fill="none" />
-        <g transform="translate(140 402)">
-          <path d="M0 0 Q-4 -18 -2 -34 Q2 -18 0 0" />
-          <path d="M0 0 Q-14 -10 -22 -22 Q-8 -7 0 0" />
-          <path d="M0 0 Q14 -10 22 -22 Q8 -7 0 0" />
-          <path d="M0 0 Q-18 -2 -30 -8 Q-14 -1 0 0" />
-          <path d="M0 0 Q18 -2 30 -8 Q14 -1 0 0" />
-        </g>
+      <g transform={transform}>
+        {/* main stalk, rises from bottom */}
+        <path d="M100 420 L100 20" stroke="#4ade80" strokeWidth="3" fill="none" />
+        {/* branch offshoots */}
+        <path d="M100 330 Q82 318 62 304" stroke="#4ade80" strokeWidth="2" fill="none" />
+        <path d="M100 240 Q118 228 140 216" stroke="#4ade80" strokeWidth="2" fill="none" />
+        <path d="M100 150 Q80 140 60 128" stroke="#4ade80" strokeWidth="2" fill="none" />
+        {/* fan leaf clusters at different heights */}
+        <g transform="translate(100 22)"><FanLeaf scale={1} /></g>
+        <g transform="translate(60 128)"><FanLeaf scale={0.82} /></g>
+        <g transform="translate(140 216)"><FanLeaf scale={0.78} /></g>
+        <g transform="translate(62 304)"><FanLeaf scale={0.68} /></g>
+        <g transform="translate(100 390)"><FanLeaf scale={0.55} /></g>
       </g>
     </svg>
   );
@@ -228,11 +207,12 @@ const CITIES = [
 ];
 
 function renderIcon(key) {
-  if (key === "leaf") return <LeafIcon />;
-  if (key === "gummy") return <GummyBearIcon />;
-  if (key === "vape") return <VapeIcon />;
-  if (key === "crystal") return <ConcentrateIcon />;
-  if (key === "flame") return <FlameIcon />;
+  const s = 36;
+  if (key === "leaf") return <LeafIcon size={s} />;
+  if (key === "gummy") return <GummyBearIcon size={s} />;
+  if (key === "vape") return <VapeIcon size={s} />;
+  if (key === "crystal") return <ConcentrateIcon size={s} />;
+  if (key === "flame") return <FlameIcon size={s} />;
   return null;
 }
 
