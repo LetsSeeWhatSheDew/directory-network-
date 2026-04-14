@@ -582,6 +582,12 @@ export default async function ListingPage({
                       <span className="dn-claim-trust-item">✓ Free forever</span>
                       <span className="dn-claim-trust-item">⚡ Live in 72hrs</span>
                     </div>
+                    <p style={{ marginTop: 12, fontSize: ".8rem", fontFamily: "system-ui, sans-serif", color: "rgba(226,232,240,.6)" }}>
+                      Need more options?{" "}
+                      <Link href={`/claim/${listing.slug}`} style={{ color: "#4ade80", textDecoration: "none" }}>
+                        Use the full claim form →
+                      </Link>
+                    </p>
                   </>
                 )}
               </div>
