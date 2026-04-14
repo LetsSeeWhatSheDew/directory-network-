@@ -95,8 +95,9 @@ function formatSavings(deal: any): string {
   return "Deal available";
 }
 
-export async function generateMetadata({ params }: { params: { category: string } }) {
-  const label = CATEGORY_LABELS[params.category] || "Cannabis deals";
+export async function generateMetadata({ params }: { params: Promise<{ category: string }> }) {
+  const { category } = await params;
+  const label = CATEGORY_LABELS[category] || "Cannabis deals";
   return {
     title: `${label} Deals Illinois | CleanList — Best Bud For Your Buck$`,
     description: `Find the cheapest ${label.toLowerCase()} deals at Illinois dispensaries right now. Real prices, real savings.`,
@@ -105,8 +106,8 @@ export async function generateMetadata({ params }: { params: { category: string 
 
 export const dynamic = "force-dynamic"; // Force SSR, never cache
 
-export default async function DealsPage({ params }: { params: { category: string } }) {
-  const { category } = params;
+export default async function DealsPage({ params }: { params: Promise<{ category: string }> }) {
+  const { category } = await params;
   const { deals, source } = await getDeals(category);
 
   const categoryLabel = CATEGORY_LABELS[category] || "Deals";

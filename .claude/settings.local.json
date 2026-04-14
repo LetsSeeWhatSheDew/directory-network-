@@ -6,7 +6,12 @@
       "Bash(timeout 20 npm run dev)",
       "Bash(npm run:*)",
       "Read(//tmp/**)",
-      "Bash(kill %1)"
+      "Bash(kill %1)",
+      "Bash(curl -s \"https://cleanlist.co/deals/flower\")",
+      "Bash(curl -s -o /tmp/dealpage.html -w \"HTTP: %{http_code}\\\\n\" \"https://cleanlist.co/deals/flower\")",
+      "Bash(curl -sL -o /tmp/dealpage.html \"https://cleanlist.co/deals/flower\")",
+      "Read(//private/tmp/**)",
+      "Bash(node -e 'const p=new URLSearchParams\\({select:\"*\",order:\"discount_value.desc\",limit:\"10\"}\\); p.set\\(\"category\",\"eq.flower\"\\); console.log\\(p.toString\\(\\)\\)')"
     ]
   }
 }
