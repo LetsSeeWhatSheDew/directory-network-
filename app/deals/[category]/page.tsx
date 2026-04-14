@@ -90,6 +90,21 @@ async function getDeals(category: string) {
 
 const formatSavings = (deal: any) => formatSavingsDollars(deal);
 
+function getExpiryUrgency(expiresAt?: string | null) {
+  if (!expiresAt) return null;
+  const now = Date.now();
+  const expiry = new Date(expiresAt).getTime();
+  if (!Number.isFinite(expiry) || expiry < now) return null;
+  const hoursLeft = (expiry - now) / (1000 * 60 * 60);
+  if (hoursLeft < 24) return { key: "today", text: "⚡ Expires today", bg: "#fee2e2", fg: "#991b1b" };
+  if (hoursLeft < 48) return { key: "soon", text: "⏱ Expires soon", bg: "#fef3c7", fg: "#92400e" };
+  if (hoursLeft < 168) {
+    const weekday = new Date(expiresAt).toLocaleDateString("en-US", { weekday: "short" });
+    return { key: "week", text: `Expires ${weekday}`, bg: "#f1f5f9", fg: "#475569" };
+  }
+  return null;
+}
+
 type Trend = "better" | "worse" | "stable" | "unknown";
 
 async function getTrendsForSlugs(slugs: string[]): Promise<Record<string, Trend>> {
@@ -386,8 +401,17 @@ export default async function DealsPage({ params }: { params: Promise<{ category
                 </div>
               </div>
 
-              <div className="deal-title-big">
-                {topDeal.deal_title || topDeal.title || `${topDeal.discount_value}% off ${topDeal.category}`}
+              <div className="deal-title-big" style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
+                <span>{topDeal.deal_title || topDeal.title || `${topDeal.discount_value}% off ${topDeal.category}`}</span>
+                {(() => {
+                  const u = getExpiryUrgency(topDeal.expires_at);
+                  if (!u) return null;
+                  return (
+                    <span style={{ fontSize: ".72rem", fontFamily: "system-ui,sans-serif", fontWeight: 700, color: u.fg, background: u.bg, padding: "3px 10px", borderRadius: 100, whiteSpace: "nowrap" }}>
+                      {u.text}
+                    </span>
+                  );
+                })()}
               </div>
               {(() => {
                 const t = trends[topDeal.slug || topDeal.listing_slug];
@@ -468,6 +492,15 @@ export default async function DealsPage({ params }: { params: Promise<{ category
                           <div className="alt-deal">
                             {deal.deal_title || deal.title || `${deal.discount_value}% off`}
                           </div>
+                          {(() => {
+                            const u = getExpiryUrgency(deal.expires_at);
+                            if (!u) return null;
+                            return (
+                              <div style={{ marginTop: 4, display: "inline-block", fontSize: ".66rem", fontFamily: "system-ui,sans-serif", fontWeight: 700, color: u.fg, background: u.bg, padding: "2px 8px", borderRadius: 100 }}>
+                                {u.text}
+                              </div>
+                            );
+                          })()}
                           {(() => {
                             const t = trends[deal.slug || deal.listing_slug];
                             if (t === "better") return <div style={{ fontSize: ".72rem", fontFamily: "system-ui,sans-serif", color: "#16a34a", fontWeight: 600, marginTop: 2 }}>↓ Better than last week</div>;
