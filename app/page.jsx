@@ -699,17 +699,28 @@ export default async function HomePage() {
           .nav-links .nav-link{display:none}
         }
         @media(max-width:480px){
-          .hero h1{font-size:2.2rem}
+          .hero{padding:32px 14px 28px}
+          .hero h1{font-size:2.2rem;max-width:100%}
           .hero-badge{font-size:.66rem;padding:4px 10px}
+          .hero-save{flex-direction:column;align-items:stretch;gap:6px;padding:10px 14px;font-size:.82rem;text-align:center;margin:0 auto 16px}
+          .hero-save-amt{font-size:1.02rem}
+          .hero-save-link{border-left:0;padding-left:0;margin-left:0;width:100%;text-align:center}
           .cat-btn.primary{font-size:.95rem;padding:14px 18px}
           .cat-btn{padding:10px 8px;font-size:.8rem}
-          .hero-search{flex-direction:row}
-          .hero-search-input{font-size:.88rem;padding:8px 10px}
+          .hero-search{flex-direction:row;width:100%;max-width:100%}
+          .hero-search-input{font-size:.9rem;padding:10px 12px}
           .hero-search-btn{padding:0 12px}
-          .ticker{padding:6px 0 6px 48px}
-          .ticker a,.ticker .sep{font-size:.7rem}
-          .stats-inner{grid-template-columns:1fr;gap:12px;text-align:center}
-          .stat-num{font-size:1.4rem}
+          .ticker{padding:8px 0 8px 52px;max-width:100%}
+          .ticker a,.ticker .sep{font-size:.72rem}
+          .ticker a strong{font-size:.72rem}
+          .stats{padding:18px 16px}
+          .stats-inner{grid-template-columns:1fr;gap:10px;text-align:center}
+          .stat-num{font-size:1.3rem}
+          .deal-cards{grid-template-columns:1fr}
+          .deal-card{padding:16px}
+          .savings-num{font-size:1.75rem}
+          .nav-cta{padding:5px 11px;font-size:.78rem}
+          .nav .logo-text{font-size:1.02rem}
         }
       `}</style>
 

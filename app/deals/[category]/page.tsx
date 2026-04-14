@@ -290,12 +290,19 @@ export default async function DealsPage({ params }: { params: Promise<{ category
         @media(max-width:600px){.page{padding:24px 14px}.nav{padding:12px 16px}}
         @media(max-width:480px){
           .page-title{font-size:1.35rem}
-          .savings-bar{padding:14px 16px;gap:10px}
-          .save-amount{font-size:2.1rem}
-          .top-card{padding:18px}
+          .top-card{padding:18px;width:100%}
           .deal-title-big{font-size:1.15rem}
-          .cat-pill{font-size:.75rem;padding:5px 11px}
-          .alt-card{padding:14px}
+          .savings-bar{padding:12px 14px;gap:10px}
+          .save-amount{font-size:1.6rem}
+          .cat-switch{padding:12px 10px}
+          .cat-pills{flex-wrap:nowrap;overflow-x:auto;gap:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+          .cat-pills::-webkit-scrollbar{display:none}
+          .cat-pill{font-size:.78rem;padding:6px 12px;flex-shrink:0;white-space:nowrap}
+          .alt-cards{gap:8px}
+          .alt-card{padding:12px;flex-direction:column;align-items:stretch;gap:10px}
+          .alt-card .alt-right{text-align:left;display:flex;gap:10px;align-items:baseline;justify-content:space-between}
+          .alt-grade{min-width:28px;height:28px;font-size:.72rem}
+          .deal-grade{top:10px;right:10px;min-width:32px;height:32px;font-size:.82rem}
         }
       `}</style>
 
