@@ -195,6 +195,9 @@ export default async function DealsPage({ params }: { params: Promise<{ category
         .cat-pill:hover:not(.active){border-color:#9ca3af;color:#374151}
         .top-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#16a34a;font-family:system-ui,sans-serif;margin-bottom:10px}
         .top-card{background:#fff;border:2px solid #16a34a;border-radius:16px;padding:24px;position:relative;margin-bottom:24px}
+        .deal-grade{position:absolute;top:14px;right:14px;min-width:40px;height:40px;padding:0 10px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;font-family:system-ui,sans-serif;font-weight:800;font-size:1rem;letter-spacing:-.01em;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+        .alt-card{position:relative}
+        .alt-grade{min-width:32px;height:32px;padding:0 7px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-family:system-ui,sans-serif;font-weight:800;font-size:.8rem;margin-right:10px}
         .verdict-badge{display:inline-flex;align-items:center;gap:6px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:100px;padding:4px 12px;margin-bottom:16px;font-size:.72rem;font-family:system-ui,sans-serif;font-weight:600;color:#166534}
         .vdot{width:5px;height:5px;border-radius:50%;background:#16a34a}
         .card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
@@ -270,6 +273,19 @@ export default async function DealsPage({ params }: { params: Promise<{ category
             <TrackView event="deal_view" params={{ dispensary: topDeal.name || topDeal.listing_slug, category }} />
             <div className="top-label">Our recommendation</div>
             <div className="top-card">
+              {(() => {
+                const g = gradeDeal(topDeal);
+                return (
+                  <span
+                    className="deal-grade"
+                    style={{ background: g.color.bg, color: g.color.fg }}
+                    title={`${g.label} · score ${g.score}/100`}
+                    aria-label={`Deal score ${g.grade}, ${g.label}`}
+                  >
+                    {g.grade}
+                  </span>
+                );
+              })()}
               <div className="verdict-badge">
                 <span className="vdot" />
                 Best value right now
@@ -349,21 +365,33 @@ export default async function DealsPage({ params }: { params: Promise<{ category
               <>
                 <div className="alt-label">Also worth considering</div>
                 <div className="alt-cards">
-                  {alternatives.map((deal: any, i: number) => (
+                  {alternatives.map((deal: any, i: number) => {
+                    const g = gradeDeal(deal);
+                    return (
                     <Link
                       key={deal.id || deal.deal_id || i}
                       href={`/l/${deal.slug || deal.listing_slug}`}
                       className="alt-card"
                     >
-                      <div>
-                        <div className="alt-name">{deal.name || deal.listing_slug}</div>
-                        <div className="alt-deal">
-                          {deal.deal_title || deal.title || `${deal.discount_value}% off`}
-                        </div>
-                        <div className="alt-meta">
-                          {deal.city || "Illinois"}
-                          {deal.accepts_credit ? " · Cards OK" : ""}
-                          {deal.drive_thru ? " · Drive-thru" : ""}
+                      <div style={{ display: "flex", alignItems: "center", gap: 0, flex: 1, minWidth: 0 }}>
+                        <span
+                          className="alt-grade"
+                          style={{ background: g.color.bg, color: g.color.fg }}
+                          title={`${g.label} · score ${g.score}/100`}
+                          aria-label={`Deal score ${g.grade}, ${g.label}`}
+                        >
+                          {g.grade}
+                        </span>
+                        <div>
+                          <div className="alt-name">{deal.name || deal.listing_slug}</div>
+                          <div className="alt-deal">
+                            {deal.deal_title || deal.title || `${deal.discount_value}% off`}
+                          </div>
+                          <div className="alt-meta">
+                            {deal.city || "Illinois"}
+                            {deal.accepts_credit ? " · Cards OK" : ""}
+                            {deal.drive_thru ? " · Drive-thru" : ""}
+                          </div>
                         </div>
                       </div>
                       <div className="alt-right">
@@ -371,7 +399,7 @@ export default async function DealsPage({ params }: { params: Promise<{ category
                         <div className="alt-savings-label">savings</div>
                       </div>
                     </Link>
-                  ))}
+                  )})}
                 </div>
               </>
             )}

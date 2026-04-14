@@ -267,7 +267,7 @@ export default async function ListingPage({
     getAttributes(listing.id),
     getProducts(listing.id),
     listing.city ? getRelated(listing.city, listing.id) : Promise.resolve([]),
-    getTopActiveDeal(listing.slug),
+    listing.slug ? getTopActiveDeal(listing.slug) : Promise.resolve(null),
   ]);
 
   const todayStatus = getTodayStatus(hours);

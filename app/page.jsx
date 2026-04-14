@@ -1,7 +1,7 @@
 import Link from "next/link";
 import LocationAware from "./components/LocationAware";
 import TrackedLink from "./components/TrackedLink";
-import { formatSavingsDollars } from "../lib/dealScoring";
+import { formatSavingsDollars, gradeDeal } from "../lib/dealScoring";
 
 // ============================================================
 // CLEANLIST HOMEPAGE — Cannabis visual identity overhaul
@@ -545,6 +545,15 @@ export default async function HomePage() {
           font-weight:700;letter-spacing:.08em;text-transform:uppercase;
           padding:3px 10px;border-radius:100px;
         }
+        .deal-grade{
+          position:absolute;top:12px;right:12px;
+          min-width:36px;height:36px;padding:0 8px;
+          display:inline-flex;align-items:center;justify-content:center;
+          border-radius:10px;
+          font-family:system-ui,sans-serif;font-weight:800;font-size:.95rem;
+          letter-spacing:-.01em;
+          box-shadow:0 1px 3px rgba(0,0,0,.12);
+        }
         .deal-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
         .deal-name{font-size:.95rem;font-weight:700;color:#0f1f3d}
         .deal-city{font-size:.75rem;color:#9ca3af;font-family:system-ui,sans-serif;margin-top:2px}
@@ -867,6 +876,19 @@ export default async function HomePage() {
                   params={{ dispensary: name, category: d.category || "all", position: i + 1 }}
                 >
                   {i === 0 && <div className="top-pick-badge">Best value today</div>}
+                  {(() => {
+                    const g = gradeDeal(d);
+                    return (
+                      <span
+                        className="deal-grade"
+                        style={{ background: g.color.bg, color: g.color.fg }}
+                        title={`${g.label} · score ${g.score}/100`}
+                        aria-label={`Deal score ${g.grade}, ${g.label}`}
+                      >
+                        {g.grade}
+                      </span>
+                    );
+                  })()}
                   <div className="deal-card-header">
                     <div>
                       <div className="deal-name">{name}</div>
