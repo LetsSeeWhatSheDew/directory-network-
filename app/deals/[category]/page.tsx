@@ -25,8 +25,24 @@ const CATEGORY_SUBTITLES: Record<string, string> = {
   all: "Every active cannabis deal in Illinois right now",
 };
 
-async function getDeals(category: string) {
-  // Try the view first
+function citySubtitle(category: string, city: string) {
+  const label = CATEGORY_LABELS[category] || "deals";
+  if (category === "all") return `Best cannabis deals near ${city} right now`;
+  return `Best ${label.toLowerCase()} deals near ${city} right now`;
+}
+
+function toCityCase(raw: string) {
+  return raw
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+    .join(" ");
+}
+
+async function getDeals(category: string, city?: string | null) {
+  // Try the view first — active_deals_with_listings already joins
+  // master_listings, so we can filter by city directly on the view.
   try {
     const viewParams = new URLSearchParams({
       select: "*",
@@ -37,6 +53,11 @@ async function getDeals(category: string) {
     if (category !== "all") {
       viewParams.set("category", `eq.${category}`);
     }
+    if (city) {
+      // PostgREST ILIKE: `*` is the wildcard, translates to SQL
+      // `city ILIKE '%Peoria%'`. Case-insensitive substring match.
+      viewParams.set("city", `ilike.*${city}*`);
+    }
 
     const viewRes = await fetch(
       `${SUPABASE_URL}/rest/v1/active_deals_with_listings?${viewParams}`,
@@ -45,7 +66,7 @@ async function getDeals(category: string) {
           apikey: SUPABASE_ANON_KEY,
           Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
         },
-        cache: "no-store", // Force fresh data every request
+        cache: "no-store",
       }
     );
 
@@ -54,12 +75,19 @@ async function getDeals(category: string) {
       if (Array.isArray(data) && data.length > 0) {
         return { deals: data, source: "view" };
       }
+      // View query returned 0 rows (likely no matches for this city/cat
+      // combo). Don't fall through to the direct-table query — that path
+      // can't filter by city, so it would silently show statewide deals
+      // as if they were local.
+      if (city) return { deals: [], source: "view" };
     }
   } catch {
     // fall through to direct table query below
   }
 
-  // Fallback: query deals table directly
+  // Fallback: query deals table directly (no city filter available here
+  // because the deals table doesn't carry a city column; only reached
+  // when the view itself errors out).
   const params = new URLSearchParams({
     select: "id,title,description,category,discount_type,discount_value,discount_unit,original_price,sale_price,unit,is_recurring,recurring_days,expires_at,source,listing_slug",
     project_tag: "eq.green",
@@ -155,9 +183,24 @@ async function getTrendsForSlugs(slugs: string[]): Promise<Record<string, Trend>
   }
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ category: string }> }) {
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ category: string }>;
+  searchParams: Promise<{ city?: string | string[] }>;
+}) {
   const { category } = await params;
+  const sp = await searchParams;
+  const rawCity = Array.isArray(sp?.city) ? sp.city[0] : sp?.city;
+  const city = rawCity ? toCityCase(rawCity) : null;
   const label = CATEGORY_LABELS[category] || "Cannabis deals";
+  if (city) {
+    return {
+      title: `${label} Deals near ${city}, IL | CleanList — Best Bud For Your Buck$`,
+      description: `Best ${label.toLowerCase()} deals near ${city}, IL right now. Real prices, real savings.`,
+    };
+  }
   return {
     title: `${label} Deals Illinois | CleanList — Best Bud For Your Buck$`,
     description: `Find the cheapest ${label.toLowerCase()} deals at Illinois dispensaries right now. Real prices, real savings.`,
@@ -215,9 +258,19 @@ function buildBreadcrumbSchema(categoryLabel: string, category: string) {
   };
 }
 
-export default async function DealsPage({ params }: { params: Promise<{ category: string }> }) {
+export default async function DealsPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ category: string }>;
+  searchParams: Promise<{ city?: string | string[] }>;
+}) {
   const { category } = await params;
-  const { deals, source } = await getDeals(category);
+  const sp = await searchParams;
+  const rawCity = Array.isArray(sp?.city) ? sp.city[0] : sp?.city;
+  const city = rawCity ? toCityCase(rawCity) : null;
+
+  const { deals, source } = await getDeals(category, city);
   const slugs = Array.from(
     new Set(
       deals
@@ -228,9 +281,13 @@ export default async function DealsPage({ params }: { params: Promise<{ category
   const trends = await getTrendsForSlugs(slugs);
 
   const categoryLabel = CATEGORY_LABELS[category] || "Deals";
-  const subtitle = CATEGORY_SUBTITLES[category] || "Best deals near you";
+  const subtitle = city
+    ? citySubtitle(category, city)
+    : CATEGORY_SUBTITLES[category] || "Best deals near you";
   const topDeal = deals[0] || null;
   const alternatives = deals.slice(1, 4);
+  const showStatewideFallback = !!city && deals.length > 0 && deals.length < 3;
+  const noLocalMatches = !!city && deals.length === 0;
   const itemListSchema = deals.length > 0 ? buildItemListSchema(deals, categoryLabel, category) : null;
   const breadcrumbSchema = buildBreadcrumbSchema(categoryLabel, category);
 
@@ -303,6 +360,13 @@ export default async function DealsPage({ params }: { params: Promise<{ category
         .no-deals-title{font-size:1.2rem;font-weight:700;color:#0f1f3d;margin-bottom:8px}
         .no-deals-sub{font-size:.875rem;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:20px}
         .no-deals-link{display:inline-block;background:#0f1f3d;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:700;font-size:.875rem}
+        .city-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:10px 14px;margin-bottom:18px;font-family:system-ui,sans-serif;font-size:.82rem;color:#166534;flex-wrap:wrap}
+        .city-banner-pin{font-weight:600}
+        .city-banner-clear{color:#16a34a;text-decoration:none;font-weight:600;font-size:.78rem}
+        .city-banner-clear:hover{text-decoration:underline}
+        .statewide-fallback{background:#fff;border:1px solid #e8e4da;border-radius:12px;padding:16px 18px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-family:system-ui,sans-serif;font-size:.85rem;color:#374151}
+        .statewide-fallback-link{color:#16a34a;text-decoration:none;font-weight:700;white-space:nowrap}
+        .statewide-fallback-link:hover{text-decoration:underline}
         .source-note{font-size:.68rem;color:#d1cfc6;font-family:system-ui,sans-serif;text-align:center;margin-top:24px}
         @media(max-width:600px){.page{padding:24px 14px}.nav{padding:12px 16px}}
         @media(max-width:480px){
@@ -336,15 +400,35 @@ export default async function DealsPage({ params }: { params: Promise<{ category
         <h1 className="page-title">{subtitle}</h1>
         <p className="page-sub">
           {deals.length > 0
-            ? `${deals.length} active deal${deals.length !== 1 ? "s" : ""} found in Illinois`
+            ? city
+              ? `${deals.length} active deal${deals.length !== 1 ? "s" : ""} found near ${city}`
+              : `${deals.length} active deal${deals.length !== 1 ? "s" : ""} found in Illinois`
+            : city
+            ? `No active deals near ${city} right now`
             : "No active deals right now — check back soon"}
         </p>
+
+        {city && (
+          <div className="city-banner">
+            <span>
+              <span className="city-banner-pin">📍 Filtered to {city}</span>
+              {" · showing deals within the city"}
+            </span>
+            <Link href={`/deals/${category}`} className="city-banner-clear">
+              See all Illinois deals →
+            </Link>
+          </div>
+        )}
 
         <div className="cat-switch">
           <div className="cat-switch-label">Switch category</div>
           <div className="cat-pills">
             {Object.entries(CATEGORY_LABELS).map(([slug, label]) => (
-              <Link key={slug} href={`/deals/${slug}`} className={`cat-pill ${slug === category ? "active" : ""}`}>
+              <Link
+                key={slug}
+                href={city ? `/deals/${slug}?city=${encodeURIComponent(city)}` : `/deals/${slug}`}
+                className={`cat-pill ${slug === category ? "active" : ""}`}
+              >
                 {label}
               </Link>
             ))}
@@ -490,6 +574,18 @@ export default async function DealsPage({ params }: { params: Promise<{ category
               </>
             )}
 
+            {showStatewideFallback && (
+              <div className="statewide-fallback">
+                <span>
+                  Only {deals.length} local deal{deals.length === 1 ? "" : "s"} near {city} today.
+                  Want to see more options?
+                </span>
+                <Link href={`/deals/${category}`} className="statewide-fallback-link">
+                  See all Illinois deals →
+                </Link>
+              </div>
+            )}
+
             <p className="source-note">
               Data from Leafly, Weedmaps + dispensary sites ·{" "}
               <Link href="/dispensary/submit-deal" style={{ color: "#16a34a", textDecoration: "none" }}>
@@ -499,13 +595,30 @@ export default async function DealsPage({ params }: { params: Promise<{ category
           </>
         ) : (
           <div className="no-deals">
-            <div className="no-deals-title">No active {categoryLabel.toLowerCase()} deals right now</div>
+            <div className="no-deals-title">
+              {noLocalMatches
+                ? `No active ${categoryLabel.toLowerCase()} deals near ${city} right now`
+                : `No active ${categoryLabel.toLowerCase()} deals right now`}
+            </div>
             <p className="no-deals-sub">
-              We&apos;re adding dispensary deals daily. Get notified the moment one goes live near you.
+              {noLocalMatches
+                ? "Try a wider search, or get notified when a deal goes live in your city."
+                : "We're adding dispensary deals daily. Get notified the moment one goes live near you."}
             </p>
-            <Link href="/alerts" className="no-deals-link">
-              Get deal alerts →
-            </Link>
+            {noLocalMatches ? (
+              <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+                <Link href={`/deals/${category}`} className="no-deals-link" style={{ background: "#16a34a" }}>
+                  See all Illinois deals →
+                </Link>
+                <Link href="/alerts" className="no-deals-link">
+                  Get deal alerts →
+                </Link>
+              </div>
+            ) : (
+              <Link href="/alerts" className="no-deals-link">
+                Get deal alerts →
+              </Link>
+            )}
           </div>
         )}
       </div>

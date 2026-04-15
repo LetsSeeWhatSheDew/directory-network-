@@ -165,7 +165,10 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
           GO HERE →
         </TrackedLink>
       </div>
-      <Link href="/deals/all" className="hero-deal-more">
+      <Link
+        href={city ? `/deals/all?city=${encodeURIComponent(city)}` : "/deals/all"}
+        className="hero-deal-more"
+      >
         {city ? `3 other deals near ${city} →` : "3 other deals near you →"}
       </Link>
     </div>
