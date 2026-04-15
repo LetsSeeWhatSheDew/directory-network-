@@ -1,6 +1,7 @@
 "use client";
 
 import Script from "next/script";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 type Point = {
@@ -26,9 +27,21 @@ declare global {
 export default function MapClient({ points }: { points: Point[] }) {
   const mapRef = useRef<HTMLDivElement>(null);
   const [leafletReady, setLeafletReady] = useState(false);
+  const [loadFailed, setLoadFailed] = useState(false);
   const [dealsOnly, setDealsOnly] = useState(false);
   const mapInstance = useRef<any>(null);
   const markersLayer = useRef<any>(null);
+
+  // If Leaflet hasn't loaded in 10 seconds assume it's blocked or the
+  // CDN is unreachable and surface an escape route instead of leaving
+  // the user staring at a spinner.
+  useEffect(() => {
+    if (leafletReady) return;
+    const t = setTimeout(() => {
+      if (!leafletReady) setLoadFailed(true);
+    }, 10_000);
+    return () => clearTimeout(t);
+  }, [leafletReady]);
 
   function humanize(slug: string) {
     return slug
@@ -114,9 +127,48 @@ export default function MapClient({ points }: { points: Point[] }) {
         referrerPolicy="no-referrer"
         strategy="afterInteractive"
         onLoad={() => setLeafletReady(true)}
+        onError={() => setLoadFailed(true)}
       />
 
-      <div ref={mapRef} style={{ width: "100%", height: "100%" }} />
+      <div ref={mapRef} style={{ width: "100%", height: "100%", position: "relative", zIndex: 2 }} />
+
+      {loadFailed && (
+        <div style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 10,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 14,
+          background: "#f5f4f0",
+          padding: "20px",
+          fontFamily: "system-ui, sans-serif",
+          textAlign: "center",
+        }}>
+          <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "#0f1f3d" }}>
+            Map couldn&apos;t load
+          </div>
+          <div style={{ fontSize: ".9rem", color: "#6b7280", maxWidth: 360 }}>
+            We couldn&apos;t reach the map tiles. You can still browse every Illinois dispensary in a list.
+          </div>
+          <Link
+            href="/dispensaries"
+            style={{
+              background: "#16a34a",
+              color: "#fff",
+              padding: "10px 20px",
+              borderRadius: 10,
+              textDecoration: "none",
+              fontWeight: 700,
+              fontSize: ".9rem",
+            }}
+          >
+            Browse dispensaries →
+          </Link>
+        </div>
+      )}
 
       <div
         style={{

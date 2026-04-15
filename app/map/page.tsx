@@ -99,21 +99,33 @@ export default async function MapPage() {
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        html,body{height:100%;font-family:Georgia,serif;background:#0f1f3d}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#0f1f3d;border-bottom:1px solid rgba(255,255,255,.06)}
-        .logo{color:#fff;text-decoration:none;font-weight:700;letter-spacing:-.02em}
-        .logo span{color:#4ade80}
-        .back{font-size:.82rem;color:rgba(255,255,255,.55);text-decoration:none;font-family:system-ui,sans-serif}
-        .back:hover{color:#fff}
-        .map-shell{position:relative;width:100%;height:calc(100vh - 56px);min-height:520px;background:#0b172f}
+        html,body{height:100%;font-family:Georgia,serif;background:#f5f4f0}
+        .top-stripe{height:4px;background:#16a34a;width:100%}
+        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #e8e4da}
+        .logo{color:#0f1f3d;text-decoration:none;font-weight:700;letter-spacing:-.02em}
+        .logo span{color:#16a34a}
+        .back{font-size:.82rem;color:#6b7280;text-decoration:none;font-family:system-ui,sans-serif}
+        .back:hover{color:#0f1f3d}
+        .map-shell{position:relative;width:100%;height:calc(100vh - 60px);min-height:520px;background:#e8e4da}
+        .map-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#e8e4da;font-family:system-ui,sans-serif;color:#6b7280;z-index:1;pointer-events:none}
+        .map-loading-spinner{width:36px;height:36px;border:3px solid #d1cfc6;border-top-color:#16a34a;border-radius:50%;animation:mapspin 1s linear infinite}
+        @keyframes mapspin{to{transform:rotate(360deg)}}
       `}</style>
 
+      <div className="top-stripe" aria-hidden="true" />
       <nav className="nav">
         <Link href="/" className="logo">clean<span>list</span></Link>
         <Link href="/" className="back">← Home</Link>
       </nav>
 
       <div className="map-shell">
+        {/* Baseline loader rendered at the page level so the user sees
+            feedback even if Leaflet fails to download. MapClient paints
+            on top of this as soon as tiles arrive. */}
+        <div className="map-loading">
+          <div className="map-loading-spinner" />
+          <div>Loading Illinois map…</div>
+        </div>
         <MapClient points={points} />
       </div>
     </>
