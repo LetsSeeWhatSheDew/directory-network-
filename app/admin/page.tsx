@@ -43,8 +43,8 @@ type Listing = {
 /* ─── Data fetching ─── */
 
 function supabase() {
-  const url = process.env.SUPABASE_URL?.replace(/\/$/, "");
-  const key = process.env.SUPABASE_SERVICE_KEY;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   return { url, key };
 }
 

@@ -21,8 +21,8 @@ export async function fetchCityListings(
   city: string,
   state = "IL"
 ): Promise<CityListing[]> {
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_KEY;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!url || !key) {
     // Gracefully degrade — static content still renders

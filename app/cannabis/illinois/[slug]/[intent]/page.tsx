@@ -3,7 +3,7 @@ export async function generateStaticParams() { return []; }
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-const SB=process.env.SUPABASE_URL;const SK=process.env.SUPABASE_SERVICE_KEY;
+const SB=process.env.NEXT_PUBLIC_SUPABASE_URL;const SK=process.env.SUPABASE_SERVICE_ROLE_KEY;
 type L={id:string;name:string|null;slug:string|null;city:string|null;state:string|null;address1:string|null;short_description:string|null;logo_url:string|null;plan:string|null;delivery:boolean|null;online_ordering:boolean|null;};
 type H={listing_id:string;weekday:number;opens_at:string|null;closes_at:string|null;is_closed:boolean|null;};
 async function fj<T>(p:string):Promise<T>{const r=await fetch(`${SB}/rest/v1${p}`,{headers:{apikey:SK!,Authorization:`Bearer ${SK}`},cache:"no-store"});if(!r.ok)return[]as unknown as T;return r.json();}

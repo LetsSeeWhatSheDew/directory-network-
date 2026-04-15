@@ -66,8 +66,8 @@ type ProductOrService = {
   available: boolean | null;
 };
 
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const REST_BASE = `${SUPABASE_URL}/rest/v1`;
 
 async function fetchJson<T>(path: string): Promise<T> {

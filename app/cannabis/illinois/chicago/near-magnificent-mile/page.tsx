@@ -1,7 +1,7 @@
 export const revalidate = 86400;
 import { Metadata } from "next";
 import Link from "next/link";
-const SB=process.env.SUPABASE_URL;const SK=process.env.SUPABASE_SERVICE_KEY;
+const SB=process.env.NEXT_PUBLIC_SUPABASE_URL;const SK=process.env.SUPABASE_SERVICE_ROLE_KEY;
 type L={id:string;name:string|null;slug:string|null;address1:string|null;short_description:string|null;logo_url:string|null;};
 async function fj<T>(p:string):Promise<T>{const r=await fetch(`${SB}/rest/v1${p}`,{headers:{apikey:SK!,Authorization:`Bearer ${SK}`},next:{revalidate:86400}});if(!r.ok)return[]as unknown as T;return r.json();}
 const LM:Record<string,{name:string;desc:string}>={

@@ -5,7 +5,7 @@ import "./globals.css";
 import UtmCapture from "./components/UtmCapture";
 import { brand } from "../lib/brand";
 
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-PLACEHOLDER";
+const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-TML9Y6VMC2";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
