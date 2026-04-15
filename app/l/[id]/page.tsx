@@ -110,15 +110,77 @@ async function getProducts(listingId: string): Promise<ProductOrService[]> {
   );
 }
 
-async function getTopActiveDeal(slug: string): Promise<{ title: string } | null> {
+type ActiveDeal = {
+  id?: string;
+  title?: string;
+  description?: string | null;
+  category?: string | null;
+  discount_value?: number | null;
+  discount_unit?: string | null;
+  discount_type?: string | null;
+  original_price?: number | null;
+  sale_price?: number | null;
+  expires_at?: string | null;
+  is_recurring?: boolean | null;
+};
+
+async function getTopActiveDeal(slug: string): Promise<ActiveDeal | null> {
   try {
-    const rows = await fetchJson<Array<{ title: string; discount_value?: number }>>(
-      `/deals?listing_slug=eq.${encodeURIComponent(slug)}&is_active=eq.true&project_tag=eq.green&select=title,discount_value&order=discount_value.desc&limit=1`
+    const rows = await fetchJson<ActiveDeal[]>(
+      `/deals?listing_slug=eq.${encodeURIComponent(slug)}&is_active=eq.true&project_tag=eq.green&select=id,title,description,category,discount_value,discount_unit,discount_type,original_price,sale_price,expires_at,is_recurring&order=discount_value.desc&limit=1`
     );
-    return rows?.[0] ? { title: rows[0].title } : null;
+    return rows?.[0] ?? null;
   } catch {
     return null;
   }
+}
+
+async function getAllActiveDeals(slug: string): Promise<ActiveDeal[]> {
+  try {
+    const rows = await fetchJson<ActiveDeal[]>(
+      `/deals?listing_slug=eq.${encodeURIComponent(slug)}&is_active=eq.true&project_tag=eq.green&select=id,title,description,category,discount_value,discount_unit,discount_type,original_price,sale_price,expires_at,is_recurring&order=discount_value.desc&limit=10`
+    );
+    // Dedup by (title) just in case the DB dedupe migration hasn't run yet
+    const seen = new Set<string>();
+    return (rows ?? []).filter((d) => {
+      const k = d.title || "";
+      if (seen.has(k)) return false;
+      seen.add(k);
+      return true;
+    });
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Extract a promo code or produce a plain-English instruction.
+ * Used on every deal card so "information" becomes "action".
+ */
+function howToUseDeal(d: ActiveDeal | null | undefined): string {
+  if (!d) return "No code needed — deal applies at checkout";
+  const body = `${d.title || ""} ${d.description || ""}`.toLowerCase();
+  // Look for common promo code patterns: "code XXXX", "use XXXX", "promo XXXX"
+  const codeMatch = body.match(/\b(?:code|use|promo)\s+([A-Z0-9]{3,15})\b/i);
+  if (codeMatch) return `Use code ${codeMatch[1].toUpperCase()} at checkout`;
+  if (/first[\s-]?time|new\s+customer/i.test(body)) {
+    return "For new customers only — mention CleanList at checkout";
+  }
+  if (/specific|select|chosen|only on|limited to/i.test(body)) {
+    return "Ask the budtender for this deal by name";
+  }
+  // Default — applies automatically / verbal mention
+  return "No code needed — deal applies at checkout";
+}
+
+/**
+ * Map a Google Maps search URL for a dispensary address. Works with
+ * partial addresses ("504 Riverside Dr, East Peoria, IL") — Google
+ * resolves whatever is available.
+ */
+function mapsHref(parts: Array<string | null | undefined>): string {
+  const q = parts.filter(Boolean).join(", ");
+  return `https://maps.google.com/?q=${encodeURIComponent(q)}`;
 }
 
 async function getRelated(city: string, currentId: string): Promise<Listing[]> {
@@ -268,13 +330,14 @@ export default async function ListingPage({
     );
   }
 
-  const [hours, attributes, products, related, activeDeal] = await Promise.all([
+  const [hours, attributes, products, related, activeDeals] = await Promise.all([
     getHours(listing.id),
     getAttributes(listing.id),
     getProducts(listing.id),
     listing.city ? getRelated(listing.city, listing.id) : Promise.resolve([]),
-    listing.slug ? getTopActiveDeal(listing.slug) : Promise.resolve(null),
+    listing.slug ? getAllActiveDeals(listing.slug) : Promise.resolve([] as ActiveDeal[]),
   ]);
+  const activeDeal: ActiveDeal | null = activeDeals[0] ?? null;
 
   const todayStatus = getTodayStatus(hours);
   const isClaimed = listing.claimed === true;
@@ -425,21 +488,79 @@ export default async function ListingPage({
           </div>
         )}
 
-        {activeDeal && (
+        {activeDeals.length > 0 && (
           <div style={{
-            background: "linear-gradient(90deg, #16a34a, #22c55e)",
-            color: "#fff",
-            padding: "10px 20px",
-            display: "flex",
-            alignItems: "center",
-            gap: 10,
+            maxWidth: 900,
+            margin: "20px auto 0",
+            padding: "0 20px",
             fontFamily: "system-ui, sans-serif",
-            fontSize: ".88rem",
-            fontWeight: 600,
           }}>
-            <span style={{ fontSize: ".8rem" }} aria-hidden="true">🟢</span>
-            <span style={{ opacity: 0.9 }}>Active deal today —</span>
-            <span>{activeDeal.title}</span>
+            <div style={{
+              background: "#fff",
+              border: "1px solid #e8e5de",
+              borderLeft: "4px solid #16a34a",
+              borderRadius: 14,
+              padding: "22px 22px 18px",
+              boxShadow: "0 4px 16px rgba(15,31,61,.06)",
+            }}>
+              <div style={{
+                fontSize: ".68rem",
+                letterSpacing: ".14em",
+                textTransform: "uppercase",
+                fontWeight: 700,
+                color: "#16a34a",
+                marginBottom: 6,
+              }}>
+                Active deal{activeDeals.length > 1 ? "s" : ""} today
+              </div>
+              <div style={{
+                fontSize: "1.25rem",
+                fontWeight: 700,
+                color: "#0f1f3d",
+                lineHeight: 1.3,
+                marginBottom: 4,
+              }}>
+                {activeDeal!.title}
+              </div>
+              {activeDeal!.description && (
+                <p style={{
+                  fontSize: ".88rem",
+                  color: "#374151",
+                  lineHeight: 1.5,
+                  marginBottom: 10,
+                }}>
+                  {activeDeal!.description}
+                </p>
+              )}
+              <div style={{
+                fontSize: ".82rem",
+                color: "#16a34a",
+                fontWeight: 600,
+                marginBottom: 4,
+              }}>
+                → {howToUseDeal(activeDeal)}
+              </div>
+              {activeDeals.length > 1 && (
+                <details style={{ marginTop: 10 }}>
+                  <summary style={{ fontSize: ".8rem", color: "#6b7280", cursor: "pointer" }}>
+                    +{activeDeals.length - 1} more active deal{activeDeals.length - 1 > 1 ? "s" : ""}
+                  </summary>
+                  <ul style={{ listStyle: "none", marginTop: 10, display: "flex", flexDirection: "column", gap: 10 }}>
+                    {activeDeals.slice(1).map((d) => (
+                      <li key={d.id || d.title} style={{ padding: "10px 12px", background: "#f5f4f0", borderRadius: 8 }}>
+                        <div style={{ fontWeight: 600, color: "#0f1f3d", fontSize: ".9rem" }}>{d.title}</div>
+                        {d.description && (
+                          <div style={{ fontSize: ".78rem", color: "#6b7280", marginTop: 2 }}>{d.description}</div>
+                        )}
+                        <div style={{ fontSize: ".74rem", color: "#16a34a", marginTop: 4 }}>
+                          → {howToUseDeal(d)}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              )}
+            </div>
           </div>
         )}
 
@@ -473,9 +594,19 @@ export default async function ListingPage({
                   ) : null}
                 </div>
                 <h1 className="dn-hero-name">{listing.name ?? "Unnamed Listing"}</h1>
-                <p className="dn-hero-location">
-                  {[listing.address1, listing.city, listing.state].filter(Boolean).join(", ")}
-                </p>
+                {(listing.address1 || listing.city) ? (
+                  <a
+                    href={mapsHref([listing.address1, listing.city, listing.state])}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="dn-hero-location"
+                    style={{ textDecoration: "none", color: "#16a34a", fontWeight: 600 }}
+                  >
+                    📍 {[listing.address1, listing.city, listing.state].filter(Boolean).join(", ")} · Get directions →
+                  </a>
+                ) : (
+                  <p className="dn-hero-location">Illinois</p>
+                )}
                 {listing.short_description && (
                   <p className="dn-hero-tagline">{listing.short_description}</p>
                 )}
