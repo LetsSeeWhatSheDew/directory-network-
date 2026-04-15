@@ -4,6 +4,7 @@ import TrackedLink from "./components/TrackedLink";
 import HomeDealCards from "./components/HomeDealCards";
 import HeroDealCard from "./components/HeroDealCard";
 import MobileNavMenu from "./components/MobileNavMenu";
+import SavingsCallout from "./components/SavingsCallout";
 import SearchTracker from "./components/SearchTracker";
 import { formatSavingsDollars, gradeDeal } from "../lib/dealScoring";
 
@@ -734,6 +735,9 @@ export default async function HomePage() {
 
               {/* THE big deal card — the hero element */}
               <HeroDealCard initial={topDeals[0] || null} />
+
+              {/* City-aware savings callout — muted supporting copy */}
+              <SavingsCallout />
             </div>
 
             {/* Desktop-only right column: category shortcuts */}

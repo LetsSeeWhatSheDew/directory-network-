@@ -166,7 +166,7 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
         </TrackedLink>
       </div>
       <Link href="/deals/all" className="hero-deal-more">
-        3 other deals near you →
+        {city ? `3 other deals near ${city} →` : "3 other deals near you →"}
       </Link>
     </div>
   );
