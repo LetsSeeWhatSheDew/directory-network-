@@ -45,37 +45,94 @@ function endsToday(expiresAt?: string | null) {
   return hoursLeft > 0 && hoursLeft < 24;
 }
 
+function fetchDealForCity(c: string, signal?: AbortSignal): Promise<Deal | null> {
+  return fetch(
+    `/api/deals/recommend?category=all&limit=1&city=${encodeURIComponent(c)}`,
+    { cache: "no-store", signal }
+  )
+    .then((r) => (r.ok ? r.json() : null))
+    .then((data) => data?.topPick || (Array.isArray(data?.deals) ? data.deals[0] : null) || null)
+    .catch(() => null);
+}
+
 export default function HeroDealCard({ initial }: { initial: Deal | null }) {
-  const [deal, setDeal] = useState<Deal | null>(initial);
+  // We deliberately DO NOT seed state with `initial`. `initial` is the
+  // server-rendered statewide top deal, which is almost always a Chicago
+  // dispensary — showing that to a Peoria user while GPS is resolving is
+  // the "wrong-city flash" we're fixing here. We only fall back to
+  // `initial` once location detection has finished *without* producing
+  // a city.
+  const [deal, setDeal] = useState<Deal | null>(null);
   const [city, setCity] = useState<string | null>(null);
+  const [resolved, setResolved] = useState(false);
 
   useEffect(() => {
-    let c: string | null = null;
-    try {
-      c = sessionStorage.getItem("cl_city");
-    } catch {}
-    if (!c) return;
-    setCity(c);
-    fetch(`/api/deals/recommend?category=all&limit=1&city=${encodeURIComponent(c)}`, { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        const top = data?.topPick || (Array.isArray(data?.deals) ? data.deals[0] : null);
-        if (top) setDeal(top);
-      })
-      .catch(() => {});
-  }, []);
+    const controller = new AbortController();
+    let cancelled = false;
 
-  if (!deal) {
+    // If a city was cached earlier this session, use it immediately.
+    let cached: string | null = null;
+    try {
+      cached = sessionStorage.getItem("cl_city");
+    } catch {}
+
+    if (cached) {
+      setCity(cached);
+      setResolved(true);
+      fetchDealForCity(cached, controller.signal).then((d) => {
+        if (cancelled) return;
+        setDeal(d || initial);
+      });
+      return () => {
+        cancelled = true;
+        controller.abort();
+      };
+    }
+
+    // No cached city — wait for LocationAware to dispatch its event.
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent).detail as { city?: string } | null;
+      if (cancelled) return;
+      setResolved(true);
+      if (detail?.city) {
+        setCity(detail.city);
+        fetchDealForCity(detail.city, controller.signal).then((d) => {
+          if (cancelled) return;
+          setDeal(d || initial);
+        });
+      } else {
+        // Detection finished with no city. Fall back to the server's
+        // statewide top deal so the page is still useful.
+        setDeal(initial);
+      }
+    };
+
+    window.addEventListener("cl:location-resolved", handler);
+    return () => {
+      cancelled = true;
+      controller.abort();
+      window.removeEventListener("cl:location-resolved", handler);
+    };
+  }, [initial]);
+
+  if (!resolved || !deal) {
     return (
-      <div className="hero-deal-card skeleton" aria-hidden="true">
-        <div className="hero-deal-label" style={{ color: "#c4c0b6" }}>
+      <div className="hero-deal-card skeleton" aria-busy="true" aria-live="polite">
+        <div className="hero-deal-label" style={{ color: "#9ca3af" }}>
           Finding the best deal near you…
         </div>
-        <div style={{ height: 54, width: "60%", background: "#f0ece3", borderRadius: 8, margin: "8px 0 4px" }} />
-        <div style={{ height: 14, width: "40%", background: "#f5f4f0", borderRadius: 6, marginBottom: 20 }} />
-        <div style={{ height: 20, width: "70%", background: "#f0ece3", borderRadius: 6, marginBottom: 8 }} />
-        <div style={{ height: 14, width: "85%", background: "#f5f4f0", borderRadius: 6, marginBottom: 20 }} />
-        <div style={{ height: 48, background: "#f0ece3", borderRadius: 10 }} />
+        <div className="skeleton-savings" />
+        <div className="skeleton-subline" />
+        <div className="skeleton-name" />
+        <div className="skeleton-subline" style={{ width: "85%" }} />
+        <div className="skeleton-cta" />
+        <style>{`
+          .skeleton-savings{height:54px;width:62%;background:linear-gradient(90deg,#f0ece3 0%,#f8f6f0 50%,#f0ece3 100%);background-size:200% 100%;animation:cl-shimmer 1.4s linear infinite;border-radius:8px;margin:8px 0 4px}
+          .skeleton-subline{height:12px;width:40%;background:#f5f4f0;border-radius:6px;margin-bottom:18px}
+          .skeleton-name{height:18px;width:70%;background:#f0ece3;border-radius:6px;margin-bottom:8px}
+          .skeleton-cta{height:46px;background:#f0ece3;border-radius:10px;margin-top:18px}
+          @keyframes cl-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+        `}</style>
       </div>
     );
   }

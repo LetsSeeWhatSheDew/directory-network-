@@ -91,10 +91,23 @@ export default function LocationAware() {
     setLoc(next);
     applyPlaceholder(next.city);
     try {
+      window.dispatchEvent(
+        new CustomEvent("cl:location-resolved", { detail: next })
+      );
+    } catch {}
+    try {
       const w = window as any;
       if (typeof w.gtag === "function") {
         w.gtag("event", "location_detected", { method: next.source, city: next.city });
       }
+    } catch {}
+  }, []);
+
+  const finishUnresolved = useCallback(() => {
+    try {
+      window.dispatchEvent(
+        new CustomEvent("cl:location-resolved", { detail: null })
+      );
     } catch {}
   }, []);
 
@@ -130,9 +143,19 @@ export default function LocationAware() {
         if (!cancelled) {
           setLoc(cached);
           applyPlaceholder(cached.city);
+          try {
+            window.dispatchEvent(
+              new CustomEvent("cl:location-resolved", { detail: cached })
+            );
+          } catch {}
         }
         return;
       }
+
+      // Show "Detecting…" until we have a confirmed city. This prevents
+      // the flash where an IP city (often Chicago via ISP hub) briefly
+      // displays before GPS finishes resolving Peoria.
+      if (!cancelled) setBusy(true);
 
       // Try GPS unless the user previously declined this session
       let gpsDeclined = false;
@@ -148,6 +171,7 @@ export default function LocationAware() {
           const city = await reverseGeocode(latitude, longitude);
           if (cancelled) return;
           if (city) {
+            setBusy(false);
             commit({ city, source: "gps" }, latitude, longitude);
             return;
           }
@@ -158,16 +182,21 @@ export default function LocationAware() {
         }
       }
 
-      // Fall back to IP
+      // Fall back to IP ONLY after GPS has failed / been denied.
       const { city } = await ipLookup();
       if (cancelled) return;
-      if (city) commit({ city, source: "ip" });
+      setBusy(false);
+      if (city) {
+        commit({ city, source: "ip" });
+      } else {
+        finishUnresolved();
+      }
     })();
 
     return () => {
       cancelled = true;
     };
-  }, [commit]);
+  }, [commit, finishUnresolved]);
 
   // Manual-override shortcut: listen for the hero search submit and treat
   // the typed query as a city if it doesn't look like a dispensary name.
@@ -234,7 +263,7 @@ export default function LocationAware() {
   }
 
   if (busy && !loc) {
-    return <div style={wrapperStyle}>📍 Detecting your location…</div>;
+    return <div style={detectingStyle}>📍 Detecting location…</div>;
   }
 
   if (!loc) return null;
@@ -291,6 +320,19 @@ const wrapperStyle: React.CSSProperties = {
   justifyContent: "flex-start",
   alignItems: "center",
   flexWrap: "wrap",
+  gap: 4,
+};
+
+const detectingStyle: React.CSSProperties = {
+  margin: 0,
+  fontSize: ".8rem",
+  fontFamily: "system-ui, sans-serif",
+  color: "#9ca3af",
+  fontWeight: 500,
+  letterSpacing: ".01em",
+  display: "flex",
+  justifyContent: "flex-start",
+  alignItems: "center",
   gap: 4,
 };
 
