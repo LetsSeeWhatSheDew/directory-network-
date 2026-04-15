@@ -454,18 +454,12 @@ export default async function DealsPage({
 
         {city && (
           <div className="city-banner">
-            <span>
-              <span className="city-banner-pin">📍 Filtered to {city}</span>
-              {" · showing deals within the city"}
-            </span>
-            <Link href={`/deals/${category}`} className="city-banner-clear">
-              See all Illinois deals →
-            </Link>
+            <span className="city-banner-pin">📍 Deals near {city}, IL</span>
           </div>
         )}
 
         <div className="cat-switch">
-          <div className="cat-switch-label">Switch category</div>
+          <div className="cat-switch-label">What are you looking for?</div>
           <div className="cat-pills">
             {Object.entries(CATEGORY_LABELS).map(([slug, label]) => (
               <Link
@@ -651,10 +645,27 @@ export default async function DealsPage({
             {showStatewideFallback && (
               <div className="statewide-fallback">
                 <span>
-                  Only {deals.length} local deal{deals.length === 1 ? "" : "s"} near {city} today.
-                  Want to see more options?
+                  {deals.length} deal{deals.length === 1 ? "" : "s"} near {city} right now.
+                  More coming soon — get alerts for new deals.
                 </span>
-                <Link href={`/deals/${category}`} className="statewide-fallback-link">
+                <Link href="/alerts" className="statewide-fallback-link">
+                  Get free alerts →
+                </Link>
+              </div>
+            )}
+
+            {city && (
+              <div style={{ textAlign: "center", margin: "8px 0 20px" }}>
+                <Link
+                  href={`/deals/${category}`}
+                  style={{
+                    fontSize: ".9rem",
+                    color: "#16a34a",
+                    fontFamily: "system-ui, sans-serif",
+                    fontWeight: 600,
+                    textDecoration: "none",
+                  }}
+                >
                   See all Illinois deals →
                 </Link>
               </div>
