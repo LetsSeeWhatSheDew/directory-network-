@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `Lincoln Park Chicago Dispensaries (${YEAR})`,
     description: `Your guide to cannabis dispensaries in Lincoln Park, Chicago. Local tips, pricing, and curated listings near the park and DePaul University.`,
-    siteName: "Project Green",
+    siteName: "CleanList",
     type: "website",
     locale: "en_US",
   },

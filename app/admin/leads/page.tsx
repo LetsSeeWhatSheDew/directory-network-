@@ -16,7 +16,7 @@ type Lead = {
 };
 
 const NICHE_LABELS: Record<string, string> = {
-  cannabis: "Project Green · Cannabis",
+  cannabis: "CleanList · Cannabis",
   holistic: "Project Heal · Holistic",
   wellness: "Project Her · Women's Wellness",
   ai: "Project Machine · AI Tools",
@@ -106,7 +106,7 @@ export default async function AdminLeadsPage({
             </div>
             <div className="flex flex-col">
               <span className="text-sm font-semibold tracking-tight">
-                Project Green · Admin
+                CleanList · Admin
               </span>
               <span className="text-xs text-slate-400">
                 Leads inbox · listing requests

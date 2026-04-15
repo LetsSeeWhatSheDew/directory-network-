@@ -3,7 +3,7 @@
 import { useState, FormEvent } from "react";
 
 const DIRECTORY_OPTIONS = [
-  { value: "green", label: "Project Green · Cannabis" },
+  { value: "green", label: "CleanList · Cannabis" },
   { value: "heal", label: "Project Heal · Holistic" },
   { value: "her", label: "Project Her · Women’s Wellness" },
   { value: "machine", label: "Project Machine · AI Tools" },
@@ -65,7 +65,7 @@ export function GetListedForm() {
     <div className="space-y-4">
       <div className="space-y-1">
         <h1 className="text-xl font-semibold tracking-tight text-slate-900 md:text-2xl">
-          Get listed in the Directory Network
+          Get listed in the CleanList
         </h1>
         <p className="text-sm text-slate-600">
           Tell us about your business and which directory you belong in. We&apos;ll

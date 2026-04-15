@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `Cannabis Dispensary Guides by State`,
     description: `State-by-state cannabis guides covering legalization status, local laws, dispensary directories, and regulatory info.`,
-    siteName: "Project Green",
+    siteName: "CleanList",
     type: "website",
     locale: "en_US",
   },
@@ -30,10 +30,10 @@ export default function CannabisCentralHub() {
             </div>
             <div className="flex flex-col">
               <span className="text-sm font-semibold tracking-tight">
-                Project Green
+                CleanList
               </span>
               <span className="text-[11px] text-slate-400">
-                Cannabis Directory Network
+                Cannabis CleanList
               </span>
             </div>
           </Link>
@@ -85,7 +85,7 @@ export default function CannabisCentralHub() {
           </h1>
 
           <p className="mt-4 max-w-3xl text-sm leading-relaxed text-slate-300 md:text-base">
-            Project Green is building comprehensive cannabis guides for every
+            CleanList is building comprehensive cannabis guides for every
             state with legal cannabis sales. Each state guide covers local
             regulations, dispensary directories, first-timer tips, and current
             market information. Start with a state below, or{" "}
@@ -206,7 +206,7 @@ export default function CannabisCentralHub() {
           </h2>
           <p className="mb-6 max-w-3xl text-sm leading-relaxed text-slate-300">
             A quick snapshot of recreational cannabis legalization in the states
-            where Project Green operates guides.
+            where CleanList operates guides.
           </p>
 
           <div className="grid gap-4 md:grid-cols-2">
@@ -348,7 +348,7 @@ export default function CannabisCentralHub() {
             </h2>
             <p className="mb-6 text-sm leading-relaxed text-slate-300">
               If you operate a cannabis dispensary or are a dispensary owner,
-              Project Green can help you reach new customers across Illinois and
+              CleanList can help you reach new customers across Illinois and
               beyond. Get listed, manage your profile, and connect with
               cannabis shoppers in your area.
             </p>
@@ -401,7 +401,7 @@ export default function CannabisCentralHub() {
                 <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#7FE3C7]/10 text-[10px] font-semibold text-[#7FE3C7]">
                   PG
                 </div>
-                <span>Project Green · Cannabis Directory Network</span>
+                <span>CleanList · Cannabis CleanList</span>
               </div>
               <div className="flex flex-wrap gap-3">
                 <Link

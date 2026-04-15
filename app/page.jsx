@@ -6,7 +6,7 @@ import HeroDealCard from "./components/HeroDealCard";
 import MobileNavMenu from "./components/MobileNavMenu";
 import SavingsCallout from "./components/SavingsCallout";
 import SearchTracker from "./components/SearchTracker";
-import { formatSavingsDollars, gradeDeal } from "../lib/dealScoring";
+import { estimateSavings, formatSavingsDollars, gradeDeal } from "../lib/dealScoring";
 
 // ============================================================
 // CLEANLIST HOMEPAGE — Cannabis visual identity overhaul
@@ -737,7 +737,7 @@ export default async function HomePage() {
               <HeroDealCard initial={topDeals[0] || null} />
 
               {/* City-aware savings callout — muted supporting copy */}
-              <SavingsCallout />
+              <SavingsCallout initialSavings={topDeals[0] ? estimateSavings(topDeals[0]) : null} />
             </div>
 
             {/* Desktop-only right column: category shortcuts */}

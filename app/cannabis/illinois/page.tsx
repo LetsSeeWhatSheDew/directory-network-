@@ -4,14 +4,14 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Illinois Cannabis Dispensaries — Complete Directory | Directory Network",
+  title: "Illinois Cannabis Dispensaries — Complete Directory | CleanList",
   description: "Find licensed cannabis dispensaries across Illinois. Browse by city, view real hours, and discover deals. 270+ dispensaries listed across 35+ Illinois cities.",
   alternates: { canonical: "https://cleanlist.co/cannabis/illinois" },
   openGraph: {
     title: "Illinois Cannabis Dispensaries — Complete Directory",
     description: "Find licensed cannabis dispensaries across Illinois. Browse by city, view real hours, and discover deals.",
     url: "https://cleanlist.co/cannabis/illinois",
-    siteName: "Directory Network",
+    siteName: "CleanList",
     type: "website",
   },
   robots: { index: true, follow: true },
@@ -263,7 +263,7 @@ export default function IllinoisHubPage() {
             </div>
             <div className="il-faq-item">
               <p className="il-faq-q">How many dispensaries are in Illinois?</p>
-              <p className="il-faq-a">Illinois has over 270 licensed cannabis dispensaries operating statewide, with the largest concentration in the Chicago metro area. Directory Network lists dispensaries across 35+ Illinois cities.</p>
+              <p className="il-faq-a">Illinois has over 270 licensed cannabis dispensaries operating statewide, with the largest concentration in the Chicago metro area. CleanList lists dispensaries across 35+ Illinois cities.</p>
             </div>
             <div className="il-faq-item">
               <p className="il-faq-q">Can tourists buy cannabis in Illinois?</p>
@@ -280,7 +280,7 @@ export default function IllinoisHubPage() {
 
         <footer className="il-footer">
           <span className="il-footer-brand">Directory<span style={{ color: "#16a34a" }}>Network</span></span>
-          <span className="il-footer-note">© {new Date().getFullYear()} Directory Network · Illinois Cannabis Directory</span>
+          <span className="il-footer-note">© {new Date().getFullYear()} CleanList · Illinois Cannabis Directory</span>
         </footer>
       </div>
     </>

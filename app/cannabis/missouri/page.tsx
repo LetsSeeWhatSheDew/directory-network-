@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `Missouri Cannabis Dispensary Guide (${YEAR})`,
     description: `Find dispensaries in every major Missouri city. Local laws, first-timer tips, pricing, and curated directory listings.`,
-    siteName: "Project Green",
+    siteName: "CleanList",
     type: "website",
     locale: "en_US",
   },
@@ -74,7 +74,7 @@ export default function MissouriHubPage() {
             </div>
             <div className="flex flex-col">
               <span className="text-sm font-semibold tracking-tight">
-                Project Green
+                CleanList
               </span>
               <span className="text-[11px] text-slate-400">
                 Missouri Cannabis Directory
@@ -243,14 +243,14 @@ export default function MissouriHubPage() {
               <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#7FE3C7]/10 text-[10px] font-semibold text-[#7FE3C7]">
                 PG
               </div>
-              <span>Project Green · Missouri Cannabis Directory</span>
+              <span>CleanList · Missouri Cannabis Directory</span>
             </div>
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/"
                 className="text-slate-300 underline-offset-2 hover:text-slate-100 hover:underline"
               >
-                Directory Network
+                CleanList
               </Link>
               <span className="hidden text-slate-600 md:inline">·</span>
               <Link

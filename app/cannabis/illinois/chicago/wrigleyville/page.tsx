@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `Wrigleyville Chicago Dispensaries (${YEAR})`,
     description: `Your guide to cannabis dispensaries in Wrigleyville, Chicago. Local tips, pricing, and curated listings near Clark Street and Wrigley Field.`,
-    siteName: "Project Green",
+    siteName: "CleanList",
     type: "website",
     locale: "en_US",
   },

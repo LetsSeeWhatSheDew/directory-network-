@@ -157,7 +157,7 @@ export default function NeighborhoodPage({ config, listings = [] }: Props) {
               </div>
               <div className="flex flex-col">
                 <span className="text-sm font-semibold tracking-tight">
-                  Project Green
+                  CleanList
                 </span>
                 <span className="text-[11px] text-slate-400">
                   {state} Cannabis Directory
@@ -507,7 +507,7 @@ export default function NeighborhoodPage({ config, listings = [] }: Props) {
                   PG
                 </div>
                 <span>
-                  Project Green · {neighborhood}, {city} Cannabis Guide
+                  CleanList · {neighborhood}, {city} Cannabis Guide
                 </span>
               </div>
               <div className="flex flex-wrap gap-3">
@@ -515,7 +515,7 @@ export default function NeighborhoodPage({ config, listings = [] }: Props) {
                   href="/"
                   className="text-slate-300 underline-offset-2 hover:text-slate-100 hover:underline"
                 >
-                  Directory Network
+                  CleanList
                 </Link>
                 <span className="hidden text-slate-600 md:inline">·</span>
                 <Link

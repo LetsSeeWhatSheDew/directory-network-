@@ -146,10 +146,10 @@ export async function generateMetadata({
   }
 
   const title = listing.meta_title ||
-    `${listing.name} — ${listing.city}, IL Cannabis Dispensary | Directory Network`;
+    `${listing.name} — ${listing.city}, IL Cannabis Dispensary | CleanList`;
   const description = listing.meta_description ||
     listing.short_description ||
-    `Find hours, directions, and deals for ${listing.name} in ${listing.city}, Illinois. View the full listing on Directory Network.`;
+    `Find hours, directions, and deals for ${listing.name} in ${listing.city}, Illinois. View the full listing on CleanList.`;
   const canonicalUrl = `https://cleanlist.co/l/${listing.slug}`;
   const image = listing.logo_url || listing.hero_image_url;
 
@@ -161,7 +161,7 @@ export async function generateMetadata({
       title,
       description,
       url: canonicalUrl,
-      siteName: "Directory Network",
+      siteName: "CleanList",
       type: "website",
       ...(image ? { images: [{ url: image, alt: (listing.name ?? "") + " logo" }] } : {}),
     },
@@ -241,10 +241,16 @@ function buildSchemaOrg(listing: Listing, hours: ListingHour[]) {
 
 export default async function ListingPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { id } = await params;
+  const sp = await searchParams;
+  const rawFromCity = Array.isArray(sp?.from) ? sp.from[0] : sp?.from;
+  const rawCity = Array.isArray(sp?.city) ? sp.city[0] : sp?.city;
+  const fromCity = rawFromCity || rawCity || null;
   const isNoIndex = NOINDEX_SLUGS.includes(id);
   const listing = await getListing(id);
 
@@ -274,6 +280,15 @@ export default async function ListingPage({
   const isClaimed = listing.claimed === true;
   const initial = (listing.name ?? "?").charAt(0).toUpperCase();
   const schemaOrg = buildSchemaOrg(listing, hours);
+
+  // Back link context — honor ?from= / ?city= if the GO HERE click
+  // came from a city-filtered deal page. Otherwise fall back to the
+  // listing's own city, finally the generic deals page.
+  const backCity = fromCity || listing.city || null;
+  const backHref = backCity
+    ? `/deals/all?city=${encodeURIComponent(backCity)}`
+    : "/deals/all";
+  const backLabel = backCity ? `← Back to ${backCity} deals` : "← Back to deals";
 
   const productsByCategory = products.reduce<Record<string, ProductOrService[]>>((acc, p) => {
     const cat = p.category || "Other";
@@ -395,12 +410,13 @@ export default async function ListingPage({
       `}</style>
 
       <div className="dn-root">
+        <div className="top-stripe" aria-hidden="true" style={{ height: 4, background: "#16a34a", width: "100%" }} />
         <nav className="dn-nav">
           <Link href="/" className="dn-nav-brand">
             <span className="dn-nav-dot" />
-            <span className="dn-nav-name">Directory<span className="dn-nav-accent">Network</span></span>
+            <span className="dn-nav-name">clean<span className="dn-nav-accent">list</span></span>
           </Link>
-          <Link href="/" className="dn-nav-back">← All Directories</Link>
+          <Link href={backHref} className="dn-nav-back">{backLabel}</Link>
         </nav>
 
         {isNoIndex && (
@@ -623,7 +639,7 @@ export default async function ListingPage({
               </div>
 
               <div className="dn-trust-card">
-                <p className="dn-trust-title">Why Directory Network?</p>
+                <p className="dn-trust-title">Why CleanList?</p>
                 <ul className="dn-trust-list">
                   <li className="dn-trust-item">✓ Verified Illinois cannabis listings</li>
                   <li className="dn-trust-item">✓ Real hours updated by owners</li>
@@ -635,14 +651,14 @@ export default async function ListingPage({
           </div>
 
           <div className="dn-footer-nav">
-            <Link href="/" className="dn-footer-back">← Back to all directories</Link>
+            <Link href={backHref} className="dn-footer-back">{backLabel}</Link>
             <Link href="/cannabis/illinois" className="dn-footer-fwd">Browse Illinois dispensaries →</Link>
           </div>
         </div>
 
         <footer className="dn-footer">
-          <span className="dn-footer-brand">Directory<span className="dn-nav-accent">Network</span></span>
-          <span className="dn-footer-note">© {new Date().getFullYear()} Directory Network · Illinois Cannabis Directory</span>
+          <span className="dn-footer-brand">clean<span className="dn-nav-accent">list</span></span>
+          <span className="dn-footer-note">© {new Date().getFullYear()} CleanList · Illinois Cannabis Directory</span>
         </footer>
       </div>
     </>

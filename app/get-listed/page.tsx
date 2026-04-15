@@ -20,7 +20,7 @@ export default function GetListedPage() {
             </div>
             <div className="flex flex-col">
               <span className="text-sm font-semibold tracking-tight text-slate-900">
-                Directory Network
+                CleanList
               </span>
               <span className="text-xs text-slate-500">
                 New listing request

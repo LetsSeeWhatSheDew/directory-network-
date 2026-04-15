@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `Pilsen Chicago Dispensaries (${YEAR})`,
     description: `Your guide to cannabis dispensaries in Pilsen, Chicago. Local tips, pricing, and curated listings on 18th Street in this vibrant arts hub.`,
-    siteName: "Project Green",
+    siteName: "CleanList",
     type: "website",
     locale: "en_US",
   },

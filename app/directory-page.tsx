@@ -28,7 +28,7 @@ const PROJECTS: Record<
   }
 > = {
   green: {
-    label: "Project Green · Cannabis",
+    label: "CleanList · Cannabis",
     tagline: "Licensed dispensaries, delivery services & patient-first cannabis brands.",
     badge: "Cannabis",
     color: "#16a34a",
@@ -66,7 +66,7 @@ const PROJECTS: Record<
 };
 
 function getProjectLabel(tag: string) {
-  return PROJECTS[tag]?.label ?? "Directory Network";
+  return PROJECTS[tag]?.label ?? "CleanList";
 }
 
 function getLocation(listing: Listing) {
@@ -132,7 +132,7 @@ export default async function Home({
       <header className="relative z-10 border-b border-white/5 bg-black/40 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:py-4">
           <div className="flex items-center gap-3">
-            <Image src="/brand/logo.svg" alt="Project Green" width={160} height={28} className="h-7 w-auto" />
+            <Image src="/brand/logo.svg" alt="CleanList" width={160} height={28} className="h-7 w-auto" />
           </div>
 
           <nav className="hidden items-center gap-4 text-xs text-slate-300 md:flex">
@@ -199,7 +199,7 @@ export default async function Home({
             </h1>
 
             <p className="max-w-xl text-sm leading-relaxed text-[#8a9490] md:text-base">
-              Project Green is an editorially curated directory of dispensaries,
+              CleanList is an editorially curated directory of dispensaries,
               brands, and cannabis businesses across Illinois and Missouri.
               Verified listings only. No pay-to-play. Built for operators
               who take their market seriously.
@@ -460,7 +460,7 @@ export default async function Home({
       <footer className="border-t border-white/5 bg-black">
         <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-5 text-[11px] text-slate-500 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-2">
-            <Image src="/brand/logo.svg" alt="Project Green" width={120} height={20} className="h-4 w-auto opacity-60" />
+            <Image src="/brand/logo.svg" alt="CleanList" width={120} height={20} className="h-4 w-auto opacity-60" />
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <Link href="/cannabis/illinois" className="text-[#8a9490] hover:text-[#f0ede8] transition-colors">Illinois</Link>

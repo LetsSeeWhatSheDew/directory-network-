@@ -18,7 +18,7 @@ const city=s2c(slug);
 const url=`https://cleanlist.co/cannabis/illinois/${slug}/${intent}`;
 const titles:Record<string,string>={best:`Best Cannabis Dispensaries in ${city}, IL`,["open-now"]:`${city} Dispensaries Open Right Now`,recreational:`Recreational Dispensaries in ${city}, IL`,deals:`Cannabis Deals in ${city}, IL`};
 const descs:Record<string,string>={best:`Best cannabis dispensaries in ${city}, Illinois. All licensed, real hours.`,["open-now"]:`Cannabis dispensaries open right now in ${city}, IL. Real-time hours.`,recreational:`Recreational cannabis in ${city}, IL. Adults 21+, no medical card needed.`,deals:`Dispensary deals and first-time discounts in ${city}, IL.`};
-return{title:titles[intent]??city,description:descs[intent]??"",alternates:{canonical:url},openGraph:{title:titles[intent]??city,url,siteName:"Directory Network",type:"website"},robots:{index:true,follow:true}};}
+return{title:titles[intent]??city,description:descs[intent]??"",alternates:{canonical:url},openGraph:{title:titles[intent]??city,url,siteName:"CleanList",type:"website"},robots:{index:true,follow:true}};}
 export default async function Page({params}:{params:Promise<{slug:string;intent:string}>}){
 const{slug,intent}=await params;
 if(!VALID_INTENTS.includes(intent))notFound();
@@ -43,5 +43,5 @@ return(<><style>{`*{box-sizing:border-box;margin:0;padding:0}.r{min-height:100vh
 {intent==="deals"&&<><p className="lbl">Dispensary Deals</p><h1 className="h1">Cannabis Deals in {city}, Illinois</h1><div className="tip">💡 <strong>First-time tip:</strong> Most Illinois dispensaries offer 10–25% off your first visit. Ask at check-in.</div>{listings.map(l=><Link key={l.id} href={`/l/${l.slug}`} className="card"><div className="logo">{l.logo_url?<img src={l.logo_url} alt={(l.name??"")+" logo"} className="li"/>:(l.name??"?").charAt(0)}</div><div className="info"><p className="nm">{l.name}</p>{l.address1&&<p className="addr">{l.address1}, {l.city}, {l.state}</p>}{l.short_description&&<p className="desc">{l.short_description}</p>}</div><span className="arr">→</span></Link>)}</>}
 <div className="cta"><div><p className="ct">Own a dispensary in {city}?</p><p className="cs">Claim free or get featured for $49/month.</p></div><Link href="/get-listed" className="cb">Claim →</Link></div>
 </div>
-<footer className="ft"><span className="fb">Directory<span className="na">Network</span></span><span className="fn">© {new Date().getFullYear()} Directory Network</span></footer>
+<footer className="ft"><span className="fb">Directory<span className="na">Network</span></span><span className="fn">© {new Date().getFullYear()} CleanList</span></footer>
 </div></>);}

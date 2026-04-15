@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `Lakeview Chicago Dispensaries (${YEAR})`,
     description: `Your guide to cannabis dispensaries in Lakeview, Chicago. Local tips, pricing, and curated listings near the lakefront and Belmont Ave.`,
-    siteName: "Project Green",
+    siteName: "CleanList",
     type: "website",
     locale: "en_US",
   },

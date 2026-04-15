@@ -2,14 +2,14 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Illinois Cannabis Laws 2025 — What's Legal, What's Not | Directory Network",
+  title: "Illinois Cannabis Laws 2025 — What's Legal, What's Not | CleanList",
   description: "Complete guide to Illinois cannabis laws. Legal age, possession limits, where you can smoke, driving rules, and what happens if you break the law. Updated for 2025.",
   alternates: { canonical: "https://cleanlist.co/cannabis/illinois/laws" },
   openGraph: {
     title: "Illinois Cannabis Laws 2025 — Complete Guide",
     description: "Everything you need to know about Illinois cannabis laws. Possession limits, consumption rules, driving, and more.",
     url: "https://cleanlist.co/cannabis/illinois/laws",
-    siteName: "Directory Network",
+    siteName: "CleanList",
     type: "article",
   },
   robots: { index: true, follow: true },
@@ -196,7 +196,7 @@ export default function IllinoisLawsPage() {
         </div>
         <footer className="laws-footer">
           <span className="laws-footer-brand">Directory<span style={{ color: "#16a34a" }}>Network</span></span>
-          <span className="laws-footer-note">© {new Date().getFullYear()} Directory Network · For informational purposes only, not legal advice.</span>
+          <span className="laws-footer-note">© {new Date().getFullYear()} CleanList · For informational purposes only, not legal advice.</span>
         </footer>
       </div>
     </>

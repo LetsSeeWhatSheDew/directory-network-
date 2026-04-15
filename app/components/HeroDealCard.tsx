@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { formatSavingsDollars } from "../../lib/dealScoring";
+import { estimateSavings, formatSavingsDollars } from "../../lib/dealScoring";
 import TrackedLink from "./TrackedLink";
 
 type Deal = {
@@ -55,6 +55,15 @@ function fetchDealForCity(c: string, signal?: AbortSignal): Promise<Deal | null>
     .catch(() => null);
 }
 
+function dispatchSavings(d: Deal | null) {
+  const savings = d ? estimateSavings(d) : null;
+  try {
+    window.dispatchEvent(
+      new CustomEvent("cl:top-deal-resolved", { detail: { savings } })
+    );
+  } catch {}
+}
+
 export default function HeroDealCard({ initial }: { initial: Deal | null }) {
   // We deliberately DO NOT seed state with `initial`. `initial` is the
   // server-rendered statewide top deal, which is almost always a Chicago
@@ -81,7 +90,9 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
       setResolved(true);
       fetchDealForCity(cached, controller.signal).then((d) => {
         if (cancelled) return;
-        setDeal(d || initial);
+        const next = d || initial;
+        setDeal(next);
+        dispatchSavings(next);
       });
       return () => {
         cancelled = true;
@@ -98,12 +109,15 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
         setCity(detail.city);
         fetchDealForCity(detail.city, controller.signal).then((d) => {
           if (cancelled) return;
-          setDeal(d || initial);
+          const next = d || initial;
+          setDeal(next);
+          dispatchSavings(next);
         });
       } else {
         // Detection finished with no city. Fall back to the server's
         // statewide top deal so the page is still useful.
         setDeal(initial);
+        dispatchSavings(initial);
       }
     };
 

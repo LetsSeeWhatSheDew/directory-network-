@@ -13,7 +13,7 @@ const LM:Record<string,{name:string;desc:string}>={
 export async function generateMetadata({params}:{params:Promise<{landmark:string}>}):Promise<Metadata>{
 const{landmark}=await params;const lm=LM[landmark]??{name:landmark,desc:"near this Chicago landmark"};
 const url=`https://cleanlist.co/cannabis/illinois/chicago/${landmark}`;
-return{title:`Cannabis Dispensaries Near ${lm.name}, Chicago | Directory Network`,description:`Find cannabis dispensaries ${lm.desc}. Licensed Illinois dispensaries, adults 21+.`,alternates:{canonical:url},openGraph:{title:`Dispensaries Near ${lm.name}, Chicago`,url,siteName:"Directory Network",type:"website"},robots:{index:true,follow:true}};}
+return{title:`Cannabis Dispensaries Near ${lm.name}, Chicago | CleanList`,description:`Find cannabis dispensaries ${lm.desc}. Licensed Illinois dispensaries, adults 21+.`,alternates:{canonical:url},openGraph:{title:`Dispensaries Near ${lm.name}, Chicago`,url,siteName:"CleanList",type:"website"},robots:{index:true,follow:true}};}
 export default async function Page({params}:{params:Promise<{landmark:string}>}){
 const{landmark}=await params;const lm=LM[landmark]??{name:landmark,desc:"near this Chicago landmark"};
 const listings=await fj<L[]>(`/master_listings?city=ilike.Chicago&state=eq.IL&select=id,name,slug,address1,short_description,logo_url&order=name.asc&limit=20`);
@@ -25,4 +25,4 @@ return(<><style>{`*{box-sizing:border-box;margin:0;padding:0}.r{min-height:100vh
 <p className="intro">Licensed cannabis dispensaries {lm.desc}. Adults 21+ welcome, no medical card needed.</p>
 {listings.length===0?(<p style={{color:"#6b7280",fontFamily:"system-ui,sans-serif"}}>No listings found. <Link href="/cannabis/illinois/chicago" style={{color:"#16a34a"}}>Browse all Chicago dispensaries →</Link></p>):listings.map(l=>(<Link key={l.id} href={`/l/${l.slug}`} className="card"><div className="logo">{l.logo_url?<img src={l.logo_url} alt={(l.name??"")+" logo"} className="li"/>:(l.name??"?").charAt(0)}</div><div className="info"><p className="nm">{l.name}</p>{l.address1&&<p className="addr">{l.address1}, Chicago, IL</p>}{l.short_description&&<p className="desc">{l.short_description}</p>}</div><span className="arr">→</span></Link>))}
 <div className="cta"><div><p className="ct">Own a Chicago dispensary?</p><p className="cs">Get featured near {lm.name} for $49/month.</p></div><Link href="/get-listed" className="cb">Claim →</Link></div>
-</div><footer className="ft"><span className="fb">Directory<span className="na">Network</span></span><span className="fn">© {new Date().getFullYear()} Directory Network</span></footer></div></>);}
+</div><footer className="ft"><span className="fb">Directory<span className="na">Network</span></span><span className="fn">© {new Date().getFullYear()} CleanList</span></footer></div></>);}

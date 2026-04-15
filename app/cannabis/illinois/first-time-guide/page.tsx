@@ -2,14 +2,14 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "First Time Buying Cannabis in Illinois — Complete Beginner's Guide | Directory Network",
+  title: "First Time Buying Cannabis in Illinois — Complete Beginner's Guide | CleanList",
   description: "Everything first-time cannabis buyers need to know in Illinois. Laws, what to bring, how much you can buy, what to expect, and where to find dispensaries near you.",
   alternates: { canonical: "https://cleanlist.co/cannabis/illinois/first-time-guide" },
   openGraph: {
     title: "First Time Buying Cannabis in Illinois — Complete Guide",
     description: "Everything first-time buyers need to know: Illinois cannabis laws, what to bring, how much you can buy, and where to find dispensaries.",
     url: "https://cleanlist.co/cannabis/illinois/first-time-guide",
-    siteName: "Directory Network",
+    siteName: "CleanList",
     type: "article",
   },
   robots: { index: true, follow: true },
@@ -338,7 +338,7 @@ export default function FirstTimeGuidePage() {
           <div id="find">
             <h2 className="guide-h2">Find Dispensaries Near You</h2>
             <p className="guide-p">
-              Directory Network lists every licensed cannabis dispensary in Illinois with real hours,
+              CleanList lists every licensed cannabis dispensary in Illinois with real hours,
               phone numbers, and directions. Browse by city or search for dispensaries near specific
               locations.
             </p>
@@ -367,14 +367,14 @@ export default function FirstTimeGuidePage() {
 
           <div className="guide-cta">
             <p className="guide-cta-title">Own a dispensary in Illinois?</p>
-            <p className="guide-cta-sub">Get your free listing on Directory Network. Claim your page, update your hours, and reach customers searching for dispensaries near them.</p>
+            <p className="guide-cta-sub">Get your free listing on CleanList. Claim your page, update your hours, and reach customers searching for dispensaries near them.</p>
             <Link href="/get-listed" className="guide-cta-btn">Claim your free listing →</Link>
           </div>
         </div>
 
         <footer className="guide-footer">
           <span className="guide-footer-brand">Directory<span style={{ color: "#16a34a" }}>Network</span></span>
-          <span className="guide-footer-note">© {new Date().getFullYear()} Directory Network · Illinois Cannabis Directory</span>
+          <span className="guide-footer-note">© {new Date().getFullYear()} CleanList · Illinois Cannabis Directory</span>
         </footer>
       </div>
     </>

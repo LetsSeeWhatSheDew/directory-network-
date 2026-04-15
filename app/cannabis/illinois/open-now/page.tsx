@@ -4,14 +4,14 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Illinois Dispensaries Open Right Now | Directory Network",
+  title: "Illinois Dispensaries Open Right Now | CleanList",
   description: "Find cannabis dispensaries open right now in Illinois. Real-time hours for every licensed dispensary. Updated continuously.",
   alternates: { canonical: "https://cleanlist.co/cannabis/illinois/open-now" },
   openGraph: {
     title: "Illinois Dispensaries Open Right Now",
     description: "Find cannabis dispensaries open right now in Illinois. Real-time hours updated continuously.",
     url: "https://cleanlist.co/cannabis/illinois/open-now",
-    siteName: "Directory Network",
+    siteName: "CleanList",
     type: "website",
   },
   robots: { index: true, follow: true },
@@ -258,7 +258,7 @@ export default async function OpenNowPage() {
 
         <footer className="on-footer">
           <span className="on-footer-brand">Directory<span style={{ color: "#16a34a" }}>Network</span></span>
-          <span className="on-footer-note">© {new Date().getFullYear()} Directory Network · Hours sourced from verified dispensary listings</span>
+          <span className="on-footer-note">© {new Date().getFullYear()} CleanList · Hours sourced from verified dispensary listings</span>
         </footer>
       </div>
     </>

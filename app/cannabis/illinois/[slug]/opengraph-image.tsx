@@ -64,7 +64,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             marginTop: "auto",
           }}
         >
-          <span style={{ color: "white" }}>Project Green</span>
+          <span style={{ color: "white" }}>CleanList</span>
         </div>
       </div>
     ),
