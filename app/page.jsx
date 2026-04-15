@@ -593,7 +593,7 @@ export default async function HomePage() {
           white-space:nowrap;
         }
         .open-badge.open{color:#166534;background:#dcfce7}
-        .open-badge.closed{color:#991b1b;background:#fee2e2}
+        .open-badge.closed{color:#6b7280;background:#f1f5f9}
         .deal-highlight{
           font-size:.95rem;font-weight:700;color:#16a34a;
           margin-bottom:6px;

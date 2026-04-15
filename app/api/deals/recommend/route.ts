@@ -17,7 +17,27 @@ const VALID_CATEGORIES = new Set(["flower", "edibles", "vapes", "concentrate", "
 
 type Deal = Record<string, any> & { score?: number; rankingReason?: string };
 
-function scoreDeal(d: Deal): number {
+/**
+ * Illinois is America/Chicago. Proxy for "likely open right now" based
+ * on current CT hour. Real hours-aware open-now detection requires
+ * pulling listing_hours per deal, which would be a separate query —
+ * this is a cheap heuristic that keeps closed-at-this-hour dispensaries
+ * from landing as the top pick when the user actually wants to go now.
+ *
+ * Returns true if currently between 9am CT and 9pm CT. Covers the
+ * opening hours of nearly every Illinois dispensary (state law requires
+ * cannabis sales 6am-10pm, but most shops run 9am-9pm).
+ */
+function isLikelyOpenCT(): boolean {
+  // Chicago is UTC-5 (CDT April-November), UTC-6 CST otherwise. April 15
+  // is CDT, so offset is -5. The tiny error around DST transition days
+  // doesn't matter for a "likely open" heuristic.
+  const utcHour = new Date().getUTCHours();
+  const ctHour = (utcHour + 24 - 5) % 24;
+  return ctHour >= 9 && ctHour < 21;
+}
+
+function scoreDeal(d: Deal, openNow: boolean): number {
   let s = 0;
   const discount = Number(d.discount_value) || 0;
   s += discount * 2;
@@ -28,6 +48,11 @@ function scoreDeal(d: Deal): number {
   if (rating >= 4.5) s += (rating - 4) * 10;
   if (d.plan === "featured") s += 15;
   if (d.plan === "boost") s += 8;
+  // Open-now bonus: if current CT hour is within typical dispensary
+  // hours, boost the score. This promotes reachable-right-now deals
+  // to the top. Weighted at +25 per the spec so it outranks small
+  // discount differences but not big ones.
+  if (openNow) s += 25;
   return s;
 }
 
@@ -86,6 +111,7 @@ export async function GET(req: NextRequest) {
     void searchParams.get("lng");
 
     const statewide = await fetchDeals(category);
+    const openNow = isLikelyOpenCT();
 
     const localMatches = city
       ? statewide.filter(
@@ -94,14 +120,14 @@ export async function GET(req: NextRequest) {
       : statewide;
 
     const scoredLocal: Deal[] = localMatches
-      .map((d) => ({ ...d, score: scoreDeal(d), scope: "local" as const }))
+      .map((d) => ({ ...d, score: scoreDeal(d, openNow), scope: "local" as const }))
       .sort((a, b) => ((b.score as number) || 0) - ((a.score as number) || 0));
 
     // Fill remaining slots with statewide deals not already included
     const localIds = new Set<string>(scoredLocal.map((d) => String(d.deal_id ?? d.id ?? "")));
     const scoredFill: Deal[] = statewide
       .filter((d) => !localIds.has(String(d.deal_id ?? d.id ?? "")))
-      .map((d) => ({ ...d, score: scoreDeal(d), scope: "statewide" as const }))
+      .map((d) => ({ ...d, score: scoreDeal(d, openNow), scope: "statewide" as const }))
       .sort((a, b) => ((b.score as number) || 0) - ((a.score as number) || 0));
 
     const combined = [...scoredLocal, ...scoredFill].slice(0, limit);

@@ -187,7 +187,7 @@ export default function HomeDealCards({ initial }: { initial: Deal[] }) {
                   </div>
                 </div>
                 <span className={`open-badge ${likelyOpen ? "open" : "closed"}`}>
-                  {likelyOpen ? "Likely open" : "Closed"}
+                  {likelyOpen ? "Open today" : "May be closed"}
                 </span>
               </div>
               <div className="deal-highlight">{d.deal_title || "Active deal"}</div>
