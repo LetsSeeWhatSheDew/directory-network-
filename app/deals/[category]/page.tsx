@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { estimateSavings, formatSavingsDollars, gradeDeal, shouldShowGrade } from "../../../lib/dealScoring";
+import { isInMetro, metroCities } from "../../../lib/cityNormalize";
 import TrackView from "../../components/TrackView";
 import DealCtaLink from "../../components/DealCtaLink";
 
@@ -68,19 +69,20 @@ async function getDeals(category: string, city?: string | null) {
   // Try the view first — active_deals_with_listings already joins
   // master_listings, so we can filter by city directly on the view.
   try {
+    // When a city is requested we pull the full statewide result set
+    // and filter in JS. That's because (a) we need metro aliasing
+    // (Peoria → {Peoria, East Peoria, Bartonville}) and (b) we need
+    // a slug-derived city fallback for orphan rows the view reports
+    // as "Illinois". Both are awkward to express in a PostgREST
+    // single-column filter.
     const viewParams = new URLSearchParams({
       select: "*",
       order: "discount_value.desc",
-      limit: "10",
+      limit: city ? "100" : "10",
     });
 
     if (category !== "all") {
       viewParams.set("category", `eq.${category}`);
-    }
-    if (city) {
-      // PostgREST ILIKE: `*` is the wildcard, translates to SQL
-      // `city ILIKE '%Peoria%'`. Case-insensitive substring match.
-      viewParams.set("city", `ilike.*${city}*`);
     }
 
     const viewRes = await fetch(
@@ -96,14 +98,19 @@ async function getDeals(category: string, city?: string | null) {
 
     if (viewRes.ok) {
       const data = await viewRes.json();
-      if (Array.isArray(data) && data.length > 0) {
-        return { deals: data, source: "view" };
+      if (Array.isArray(data)) {
+        if (!city) return { deals: data, source: "view" };
+
+        const metroFiltered = data.filter((d: any) =>
+          isInMetro(d.city, d.slug || d.listing_slug, city)
+        );
+        if (metroFiltered.length > 0) {
+          return { deals: metroFiltered.slice(0, 10), source: "view" };
+        }
+        // City filter matched nothing — don't fall through to the
+        // direct-table path (it can't filter by city at all).
+        return { deals: [], source: "view", metroAliases: metroCities(city) };
       }
-      // View query returned 0 rows (likely no matches for this city/cat
-      // combo). Don't fall through to the direct-table query — that path
-      // can't filter by city, so it would silently show statewide deals
-      // as if they were local.
-      if (city) return { deals: [], source: "view" };
     }
   } catch {
     // fall through to direct table query below

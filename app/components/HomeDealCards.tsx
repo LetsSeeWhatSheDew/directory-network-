@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { estimateSavings, formatSavingsDollars, gradeDeal, shouldShowGrade } from "../../lib/dealScoring";
+import { displayCity } from "../../lib/cityNormalize";
 import TrackedLink from "./TrackedLink";
 
 type Deal = {
@@ -182,8 +183,8 @@ export default function HomeDealCards({ initial }: { initial: Deal[] }) {
                 <div>
                   <div className="deal-name">{name}</div>
                   <div className="deal-city">
-                    {d.city || "Illinois"}
-                    {d.scope === "statewide" && city ? " · statewide" : ""}
+                    {displayCity(d)}
+                    {d.scope === "statewide" && city ? " · nearby" : ""}
                   </div>
                 </div>
                 <span className={`open-badge ${likelyOpen ? "open" : "closed"}`}>

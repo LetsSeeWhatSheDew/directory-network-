@@ -5,6 +5,7 @@
 // GET /api/deals/recommend?category=flower&city=peoria
 
 import { NextRequest, NextResponse } from "next/server";
+import { isInMetro } from "../../../../lib/cityNormalize";
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL ||
@@ -113,9 +114,13 @@ export async function GET(req: NextRequest) {
     const statewide = await fetchDeals(category);
     const openNow = isLikelyOpenCT();
 
+    // Broaden to the whole metro: Peoria matches East Peoria +
+    // Bartonville, Chicago matches Chicago Heights + Oak Park, etc.
+    // Also falls back to the slug-derived city for rows where the view
+    // returned generic "Illinois" because the listing wasn't joined.
     const localMatches = city
-      ? statewide.filter(
-          (d) => typeof d.city === "string" && d.city.toLowerCase().includes(city.toLowerCase())
+      ? statewide.filter((d) =>
+          isInMetro(d.city as string | null | undefined, (d.slug || d.listing_slug) as string | null | undefined, city)
         )
       : statewide;
 

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { estimateSavings, formatSavingsDollars } from "../../lib/dealScoring";
+import { displayCity } from "../../lib/cityNormalize";
 import TrackedLink from "./TrackedLink";
 
 type Deal = {
@@ -167,7 +168,7 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
       <div className="hero-deal-title">{deal.deal_title || "Active deal"}</div>
       <div className="hero-deal-row">
         <div className="hero-deal-meta">
-          <span>📍 {deal.city || "Illinois"}</span>
+          <span>📍 {displayCity(deal)}</span>
           {expiresToday && <span className="hero-deal-urgent">⚡ Ends today</span>}
         </div>
         <TrackedLink
