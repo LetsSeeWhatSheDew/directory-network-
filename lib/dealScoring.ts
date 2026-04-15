@@ -139,31 +139,73 @@ export interface GradeResult {
   label: string;
 }
 
+// ---------------------------------------------------------------------
+// SCORING (April 15, 2026 rewrite)
+// ---------------------------------------------------------------------
+// Discount-first weighting. Missing data (null rating, null accepts_credit)
+// does NOT cost points — it just doesn't earn them. Previous algorithm
+// was effectively penalizing any dispensary without a Google rating,
+// which tanked great deals to a D.
+//
+// Weights:
+//   discount_value ≥ 40%   : 50
+//   discount_value 25-39%  : 35
+//   discount_value 10-24%  : 20
+//   discount_value < 10%   : 5
+//   is_recurring           : +15 (reliability)
+//   expires_at = today     : +20 (urgency)
+//   expires_at ≤ 7 days    : +10
+//   google_rating ≥ 4.5    : +15
+//   google_rating ≥ 4.0    : +8
+//   google_rating is null  : 0 (don't penalize missing data)
+//   accepts_credit = true  : +5 (else 0)
+//   drive_thru = true      : +5
+//   plan = 'featured'      : +20
+//   plan = 'boost'         : +10
+//
+// Grade thresholds:
+//   ≥ 70 → A (Excellent)
+//   ≥ 50 → B (Good deal)
+//   ≥ 30 → C (Decent)
+//   <  30 → D (Weak)
+//
+// FLOOR RULE: if discount_value ≥ 30%, grade cannot drop below C.
+// A 30%-off deal is genuinely a good deal regardless of other signals.
+
 export function scoreDeal(d: Deal): number {
   let s = 0;
   const discount = Number(d?.discount_value) || 0;
   const unit = (d?.discount_unit || "").toLowerCase();
   const pct = unit === "percent" ? discount : unit === "dollars" ? inferPercent(d) : discount;
 
-  if (pct >= 40) s += 40;
-  else if (pct >= 25) s += 30;
+  if (pct >= 40) s += 50;
+  else if (pct >= 25) s += 35;
   else if (pct >= 10) s += 20;
-  else s += 10;
+  else s += 5;
 
-  const rating = Number(d?.google_rating) || 0;
-  if (rating >= 4.8) s += 20;
-  else if (rating >= 4.5) s += 15;
-
-  if (d?.accepts_credit) s += 10;
-  if (d?.drive_thru) s += 5;
-  if (d?.is_recurring) s += 5;
+  if (d?.is_recurring) s += 15;
 
   if (d?.expires_at) {
     const expires = new Date(d.expires_at).getTime();
     const now = Date.now();
     const oneDay = 24 * 60 * 60 * 1000;
-    if (expires > now && expires - now <= oneDay) s += 10;
+    const diff = expires - now;
+    if (diff > 0 && diff <= oneDay) s += 20;
+    else if (diff > 0 && diff <= 7 * oneDay) s += 10;
   }
+
+  const rating = Number(d?.google_rating);
+  if (Number.isFinite(rating) && rating > 0) {
+    if (rating >= 4.5) s += 15;
+    else if (rating >= 4.0) s += 8;
+  }
+
+  if (d?.accepts_credit === true) s += 5;
+  if (d?.drive_thru === true) s += 5;
+
+  const plan = (d?.plan || "").toLowerCase();
+  if (plan === "featured") s += 20;
+  else if (plan === "boost") s += 10;
 
   return Math.max(0, Math.min(100, s));
 }
@@ -178,9 +220,19 @@ function inferPercent(d: Deal): number {
 
 export function gradeDeal(d: Deal): GradeResult {
   const score = scoreDeal(d);
-  if (score >= 80) return { score, grade: "A+", label: "Outstanding", color: { bg: "#16a34a", fg: "#ffffff" } };
-  if (score >= 65) return { score, grade: "A", label: "Excellent", color: { bg: "#22c55e", fg: "#ffffff" } };
-  if (score >= 50) return { score, grade: "B", label: "Good deal", color: { bg: "#2563eb", fg: "#ffffff" } };
-  if (score >= 35) return { score, grade: "C", label: "Decent", color: { bg: "#f59e0b", fg: "#1f2937" } };
-  return { score, grade: "D", label: "Weak", color: { bg: "#d1d5db", fg: "#1f2937" } };
+  // Floor rule: big-discount deals can't drop below C regardless of score.
+  const discount = Number(d?.discount_value) || 0;
+  const unit = (d?.discount_unit || "").toLowerCase();
+  const pct = unit === "percent" ? discount : unit === "dollars" ? inferPercent(d) : discount;
+  const flooredScore = pct >= 30 ? Math.max(score, 30) : score;
+
+  if (flooredScore >= 70) return { score: flooredScore, grade: "A", label: "Excellent", color: { bg: "#16a34a", fg: "#ffffff" } };
+  if (flooredScore >= 50) return { score: flooredScore, grade: "B", label: "Good deal", color: { bg: "#2563eb", fg: "#ffffff" } };
+  if (flooredScore >= 30) return { score: flooredScore, grade: "C", label: "Decent", color: { bg: "#f59e0b", fg: "#1f2937" } };
+  return { score: flooredScore, grade: "D", label: "Weak", color: { bg: "#d1d5db", fg: "#1f2937" } };
+}
+
+/** Should a grade badge render? D grades undermine trust — hide them. */
+export function shouldShowGrade(d: Deal): boolean {
+  return gradeDeal(d).grade !== "D";
 }

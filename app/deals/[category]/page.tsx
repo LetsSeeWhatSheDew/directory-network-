@@ -2,7 +2,7 @@
 // Fixed v2: force no-cache + correct Supabase query format
 
 import Link from "next/link";
-import { estimateSavings, formatSavingsDollars, gradeDeal } from "../../../lib/dealScoring";
+import { estimateSavings, formatSavingsDollars, gradeDeal, shouldShowGrade } from "../../../lib/dealScoring";
 import TrackView from "../../components/TrackView";
 import DealCtaLink from "../../components/DealCtaLink";
 
@@ -466,6 +466,7 @@ export default async function DealsPage({
             <div className="top-label">Our recommendation</div>
             <div className="top-card">
               {(() => {
+                if (!shouldShowGrade(topDeal)) return null;
                 const g = gradeDeal(topDeal);
                 return (
                   <span
@@ -539,7 +540,7 @@ export default async function DealsPage({
               )}
 
               <DealCtaLink
-                href={`/l/${topDeal.slug || topDeal.listing_slug}`}
+                href={city ? `/l/${topDeal.slug || topDeal.listing_slug}?city=${encodeURIComponent(city)}` : `/l/${topDeal.slug || topDeal.listing_slug}`}
                 className="card-cta"
                 deal={{
                   dispensary: topDeal.name || topDeal.listing_slug || "Illinois dispensary",
@@ -561,16 +562,16 @@ export default async function DealsPage({
                     return (
                     <Link
                       key={deal.id || deal.deal_id || i}
-                      href={`/l/${deal.slug || deal.listing_slug}`}
+                      href={city ? `/l/${deal.slug || deal.listing_slug}?city=${encodeURIComponent(city)}` : `/l/${deal.slug || deal.listing_slug}`}
                       className="alt-card"
                     >
-                      <span
+                      {shouldShowGrade(deal) && <span
                         className="alt-grade"
                         title={`${g.label} · score ${g.score}/100`}
                         aria-label={`Deal score ${g.grade}, ${g.label}`}
                       >
                         {g.grade}
-                      </span>
+                      </span>}
                       <div className="alt-savings-block">
                         <div className="alt-savings-label-top">You save</div>
                         <div className="alt-savings">{formatSavings(deal)}</div>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { formatSavingsDollars, gradeDeal } from "../../lib/dealScoring";
+import { formatSavingsDollars, gradeDeal, shouldShowGrade } from "../../lib/dealScoring";
 import TrackedLink from "./TrackedLink";
 
 type Deal = {
@@ -163,21 +163,21 @@ export default function HomeDealCards({ initial }: { initial: Deal[] }) {
           return (
             <TrackedLink
               key={d.deal_id || d.id || i}
-              href={`/l/${slug}`}
+              href={city ? `/l/${slug}?city=${encodeURIComponent(city)}` : `/l/${slug}`}
               className={`deal-card${i === 0 ? " top-pick" : ""}`}
               style={{ textDecoration: "none", color: "inherit" }}
               event="deal_click"
               params={{ dispensary: name, category: d.category || "all", position: i + 1 }}
             >
               {i === 0 && <div className="top-pick-badge">Best value today</div>}
-              <span
+              {shouldShowGrade(d) && <span
                 className="deal-grade"
                 style={{ background: g.color.bg, color: g.color.fg }}
                 title={`${g.label} · score ${g.score}/100`}
                 aria-label={`Deal score ${g.grade}, ${g.label}`}
               >
                 {g.grade}
-              </span>
+              </span>}
               <div className="deal-card-header">
                 <div>
                   <div className="deal-name">{name}</div>
