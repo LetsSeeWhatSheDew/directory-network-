@@ -480,9 +480,26 @@ export default async function DealsPage({
                 );
               })()}
 
-              <div className="you-save-label">You save</div>
-              <div className="save-amount">{formatSavings(topDeal)}</div>
-              <div className="save-vs">vs. Illinois average</div>
+              {(() => {
+                const dollars = estimateSavings(topDeal);
+                const formatted = formatSavings(topDeal);
+                if (formatted === "Deal active") return null;
+                if (dollars != null) {
+                  return (
+                    <>
+                      <div className="you-save-label">You save</div>
+                      <div className="save-amount">${dollars}</div>
+                      <div className="save-vs">vs. area average</div>
+                    </>
+                  );
+                }
+                return (
+                  <>
+                    <div className="save-amount">{formatted}</div>
+                    <div className="save-vs">on this deal</div>
+                  </>
+                );
+              })()}
 
               <div className="disp-name">
                 {topDeal.name || topDeal.listing_slug}
@@ -572,10 +589,24 @@ export default async function DealsPage({
                       >
                         {g.grade}
                       </span>}
-                      <div className="alt-savings-block">
-                        <div className="alt-savings-label-top">You save</div>
-                        <div className="alt-savings">{formatSavings(deal)}</div>
-                      </div>
+                      {(() => {
+                        const dollars = estimateSavings(deal);
+                        const formatted = formatSavings(deal);
+                        if (formatted === "Deal active") return null;
+                        if (dollars != null) {
+                          return (
+                            <div className="alt-savings-block">
+                              <div className="alt-savings-label-top">You save</div>
+                              <div className="alt-savings">${dollars}</div>
+                            </div>
+                          );
+                        }
+                        return (
+                          <div className="alt-savings-block">
+                            <div className="alt-savings" style={{ fontSize: "1.1rem" }}>{formatted}</div>
+                          </div>
+                        );
+                      })()}
                       <div className="alt-body">
                         <div className="alt-name">{deal.name || deal.listing_slug}</div>
                         <div className="alt-deal">

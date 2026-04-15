@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { formatSavingsDollars, gradeDeal, shouldShowGrade } from "../../lib/dealScoring";
+import { estimateSavings, formatSavingsDollars, gradeDeal, shouldShowGrade } from "../../lib/dealScoring";
 import TrackedLink from "./TrackedLink";
 
 type Deal = {
@@ -206,13 +206,29 @@ export default function HomeDealCards({ initial }: { initial: Deal[] }) {
                 {d.google_rating && d.google_rating > 0 && <span className="deal-attr">{d.google_rating} ★</span>}
                 {d.is_recurring && <span className="deal-attr">Recurring</span>}
               </div>
-              <div className="deal-savings">
-                <div className="savings-copy">
-                  <span className="savings-label">You save</span>
-                  <span className="savings-sub">vs. Illinois average</span>
-                </div>
-                <span className="savings-num">{formatSavingsDollars(d)}</span>
-              </div>
+              {(() => {
+                const dollars = estimateSavings(d);
+                const formatted = formatSavingsDollars(d);
+                if (formatted === "Deal active") return null;
+                if (dollars != null) {
+                  return (
+                    <div className="deal-savings">
+                      <div className="savings-copy">
+                        <span className="savings-label">You save</span>
+                        <span className="savings-sub">vs. area average</span>
+                      </div>
+                      <span className="savings-num">${dollars}</span>
+                    </div>
+                  );
+                }
+                return (
+                  <div className="deal-savings">
+                    <span className="savings-num" style={{ fontSize: "1.5rem" }}>
+                      {formatted}
+                    </span>
+                  </div>
+                );
+              })()}
             </TrackedLink>
           );
         })}
