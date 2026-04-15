@@ -30,6 +30,24 @@ function slugToName(s: string) {
   return s.split("-").filter(Boolean).map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
 }
 
+function dealKey(d: Deal): string {
+  if (d.deal_id) return `id:${d.deal_id}`;
+  if (d.id) return `id:${d.id}`;
+  return `st:${d.listing_slug || d.slug || "?"}|${d.deal_title || ""}`;
+}
+
+function dedupeDeals(list: Deal[]): Deal[] {
+  const seen = new Set<string>();
+  const out: Deal[] = [];
+  for (const d of list) {
+    const k = dealKey(d);
+    if (seen.has(k)) continue;
+    seen.add(k);
+    out.push(d);
+  }
+  return out;
+}
+
 function displayName(d: Deal) {
   const name = d.name;
   const slug = d.slug || d.listing_slug || "";
@@ -61,7 +79,7 @@ function getExpiryUrgency(expiresAt?: string | null) {
 }
 
 export default function HomeDealCards({ initial }: { initial: Deal[] }) {
-  const [deals, setDeals] = useState<Deal[]>(initial || []);
+  const [deals, setDeals] = useState<Deal[]>(dedupeDeals(initial || []).slice(0, 3));
   const [city, setCity] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -74,12 +92,13 @@ export default function HomeDealCards({ initial }: { initial: Deal[] }) {
     setCity(c);
     setLoading(true);
     fetch(
-      `/api/deals/recommend?category=all&limit=3&city=${encodeURIComponent(c)}`,
+      `/api/deals/recommend?category=all&limit=6&city=${encodeURIComponent(c)}`,
       { cache: "no-store" }
     )
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
-        const arr: Deal[] = Array.isArray(data?.deals) ? data.deals.slice(0, 3) : [];
+        const raw: Deal[] = Array.isArray(data?.deals) ? data.deals : [];
+        const arr = dedupeDeals(raw).slice(0, 3);
         if (arr.length > 0) setDeals(arr);
       })
       .catch(() => {})

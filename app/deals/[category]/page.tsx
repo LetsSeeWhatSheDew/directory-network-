@@ -31,6 +31,30 @@ function citySubtitle(category: string, city: string) {
   return `Best ${label.toLowerCase()} deals near ${city} right now`;
 }
 
+/**
+ * Identity key for a deal. Prefer deal_id/id (unique), fall back to
+ * slug + title (survives DB-level duplicates where the same deal was
+ * inserted twice with different IDs).
+ */
+function dealKey(d: any): string {
+  if (d?.deal_id) return `id:${d.deal_id}`;
+  if (d?.id) return `id:${d.id}`;
+  return `st:${d?.listing_slug || d?.slug || "unknown"}|${d?.title || d?.deal_title || ""}`;
+}
+
+/** Remove rows that share the same dealKey, keeping the first. */
+function dedupeDeals<T>(list: T[]): T[] {
+  const seen = new Set<string>();
+  const out: T[] = [];
+  for (const d of list) {
+    const k = dealKey(d);
+    if (seen.has(k)) continue;
+    seen.add(k);
+    out.push(d);
+  }
+  return out;
+}
+
 function toCityCase(raw: string) {
   return raw
     .trim()
@@ -270,7 +294,8 @@ export default async function DealsPage({
   const rawCity = Array.isArray(sp?.city) ? sp.city[0] : sp?.city;
   const city = rawCity ? toCityCase(rawCity) : null;
 
-  const { deals, source } = await getDeals(category, city);
+  const { deals: rawDeals, source } = await getDeals(category, city);
+  const deals = dedupeDeals(rawDeals);
   const slugs = Array.from(
     new Set(
       deals
