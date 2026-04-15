@@ -142,17 +142,36 @@ async function getDeals(category: string, city?: string | null) {
 
 const formatSavings = (deal: any) => formatSavingsDollars(deal);
 
+/**
+ * Single source of truth for expiration copy. Returns null when the
+ * deal has no expiration, when it's already expired, or when the date
+ * is far enough out that highlighting it would be noise (>30 days).
+ *
+ * Never render two of these at once on the same card.
+ *   today     → ⚡ Expires today  (red)
+ *   tomorrow  → ⏱ Expires tomorrow (amber)
+ *   < 7 days  → Expires Tuesday   (slate)
+ *   < 30 days → Expires Apr 28    (slate)
+ */
 function getExpiryUrgency(expiresAt?: string | null) {
   if (!expiresAt) return null;
-  const now = Date.now();
-  const expiry = new Date(expiresAt).getTime();
-  if (!Number.isFinite(expiry) || expiry < now) return null;
-  const hoursLeft = (expiry - now) / (1000 * 60 * 60);
-  if (hoursLeft < 24) return { key: "today", text: "⚡ Expires today", bg: "#fee2e2", fg: "#991b1b" };
-  if (hoursLeft < 48) return { key: "soon", text: "⏱ Expires soon", bg: "#fef3c7", fg: "#92400e" };
-  if (hoursLeft < 168) {
-    const weekday = new Date(expiresAt).toLocaleDateString("en-US", { weekday: "short" });
-    return { key: "week", text: `Expires ${weekday}`, bg: "#f1f5f9", fg: "#475569" };
+  const now = new Date();
+  const expiry = new Date(expiresAt);
+  if (!Number.isFinite(expiry.getTime())) return null;
+  const diffMs = expiry.getTime() - now.getTime();
+  if (diffMs < 0) return null;
+  const dayMs = 24 * 60 * 60 * 1000;
+  const daysLeft = Math.floor(diffMs / dayMs);
+
+  if (daysLeft === 0) return { key: "today", text: "⚡ Expires today", bg: "#fee2e2", fg: "#991b1b" };
+  if (daysLeft === 1) return { key: "tomorrow", text: "⏱ Expires tomorrow", bg: "#fef3c7", fg: "#92400e" };
+  if (daysLeft < 7) {
+    const weekday = expiry.toLocaleDateString("en-US", { weekday: "long" });
+    return { key: "weekday", text: `Expires ${weekday}`, bg: "#f1f5f9", fg: "#475569" };
+  }
+  if (daysLeft < 30) {
+    const md = expiry.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    return { key: "date", text: `Expires ${md}`, bg: "#f1f5f9", fg: "#475569" };
   }
   return null;
 }
@@ -540,11 +559,9 @@ export default async function DealsPage({
                       : topDeal.recurring_days}
                   </span>
                 )}
-                {topDeal.expires_at && (
-                  <span className="attr">
-                    Expires {new Date(topDeal.expires_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-                  </span>
-                )}
+                {/* Expiration is rendered once, next to the deal title,
+                    by getExpiryUrgency() above. Do NOT also show a
+                    duplicate "Expires Apr 21" attribute pill here. */}
               </div>
 
               {(topDeal.deal_description || topDeal.description) && (
