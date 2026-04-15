@@ -1,4 +1,5 @@
 import { MetadataRoute } from "next";
+import { brand } from "../lib/brand";
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -76,20 +77,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ]);
 
   const base: MetadataRoute.Sitemap = [
-    { url: "https://cleanlist.co", lastModified: new Date(), changeFrequency: "daily", priority: 1.0 },
-    { url: "https://cleanlist.co/cannabis", lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
-    { url: "https://cleanlist.co/cannabis/illinois", lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
-    { url: "https://cleanlist.co/alerts", lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
-    { url: "https://cleanlist.co/dispensaries", lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
-    { url: "https://cleanlist.co/about", lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: "https://cleanlist.co/get-listed", lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: "https://cleanlist.co/early-access", lastModified: new Date(), changeFrequency: "weekly", priority: 0.6 },
-    { url: "https://cleanlist.co/upgrade", lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
+    { url: `${brand.url}`, lastModified: new Date(), changeFrequency: "daily", priority: 1.0 },
+    { url: `${brand.url}/cannabis`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
+    { url: `${brand.url}/cannabis/illinois`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
+    { url: `${brand.url}/alerts`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
+    { url: `${brand.url}/dispensaries`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
+    { url: `${brand.url}/about`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+    { url: `${brand.url}/get-listed`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+    { url: `${brand.url}/early-access`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.6 },
+    { url: `${brand.url}/upgrade`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
   ];
 
   // Deal engine category pages
   const dealUrls: MetadataRoute.Sitemap = DEAL_CATEGORIES.map((c) => ({
-    url: `https://cleanlist.co/deals/${c}`,
+    url: `${brand.url}/deals/${c}`,
     lastModified: new Date(),
     changeFrequency: "hourly" as const,
     priority: 0.9,
@@ -97,7 +98,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Static IL guide pages
   const staticPages: MetadataRoute.Sitemap = STATIC_PAGES.map((p) => ({
-        url: `https://cleanlist.co/cannabis/illinois/${p.path}`,
+        url: `${brand.url}/cannabis/illinois/${p.path}`,
         lastModified: new Date(),
         changeFrequency: p.freq,
         priority: p.pri,
@@ -107,7 +108,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const listingUrls: MetadataRoute.Sitemap = listings
       .filter((l: { slug: string }) => l.slug && !NOINDEX_SLUGS.includes(l.slug))
       .map((l: { slug: string; updated_at: string }) => ({
-              url: `https://cleanlist.co/l/${l.slug}`,
+              url: `${brand.url}/l/${l.slug}`,
               lastModified: l.updated_at ? new Date(l.updated_at) : new Date(),
               changeFrequency: "weekly" as const,
               priority: 0.8,
@@ -115,7 +116,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // City hub pages
   const cityUrls: MetadataRoute.Sitemap = (cities as string[]).map((city) => ({
-        url: `https://cleanlist.co/cannabis/illinois/${city.toLowerCase().replace(/\s+/g, "-")}`,
+        url: `${brand.url}/cannabis/illinois/${city.toLowerCase().replace(/\s+/g, "-")}`,
         lastModified: new Date(),
         changeFrequency: "daily" as const,
         priority: 0.85,
@@ -124,7 +125,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Intent pages — best, open-now, recreational, deals for every city
   const intentUrls: MetadataRoute.Sitemap = (cities as string[]).flatMap((city) =>
         INTENTS.map((intent) => ({
-                url: `https://cleanlist.co/cannabis/illinois/${city.toLowerCase().replace(/\s+/g, "-")}/${intent}`,
+                url: `${brand.url}/cannabis/illinois/${city.toLowerCase().replace(/\s+/g, "-")}/${intent}`,
                 lastModified: new Date(),
                 changeFrequency: intent === "open-now" ? ("hourly" as const) : ("daily" as const),
                 priority: intent === "best" || intent === "open-now" ? 0.9 : 0.8,
@@ -133,7 +134,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Chicago landmark pages
   const landmarkUrls: MetadataRoute.Sitemap = CHICAGO_LANDMARKS.map((lm) => ({
-        url: `https://cleanlist.co/cannabis/illinois/chicago/${lm}`,
+        url: `${brand.url}/cannabis/illinois/chicago/${lm}`,
         lastModified: new Date(),
         changeFrequency: "weekly" as const,
         priority: 0.8,

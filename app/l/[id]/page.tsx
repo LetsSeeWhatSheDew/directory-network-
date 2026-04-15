@@ -164,7 +164,7 @@ function howToUseDeal(d: ActiveDeal | null | undefined): string {
   const codeMatch = body.match(/\b(?:code|use|promo)\s+([A-Z0-9]{3,15})\b/i);
   if (codeMatch) return `Use code ${codeMatch[1].toUpperCase()} at checkout`;
   if (/first[\s-]?time|new\s+customer/i.test(body)) {
-    return "For new customers only — mention CleanList at checkout";
+    return "For new customers only — mention PuffPrice at checkout";
   }
   if (/specific|select|chosen|only on|limited to/i.test(body)) {
     return "Ask the budtender for this deal by name";
@@ -208,11 +208,11 @@ export async function generateMetadata({
   }
 
   const title = listing.meta_title ||
-    `${listing.name} — ${listing.city}, IL Cannabis Dispensary | CleanList`;
+    `${listing.name} — Current Deals & Directions | PuffPrice`;
   const description = listing.meta_description ||
     listing.short_description ||
-    `Find hours, directions, and deals for ${listing.name} in ${listing.city}, Illinois. View the full listing on CleanList.`;
-  const canonicalUrl = `https://cleanlist.co/l/${listing.slug}`;
+    `Current deals and directions for ${listing.name}. Save on cannabis in ${listing.city}, IL.`;
+  const canonicalUrl = `https://puffprice.com/l/${listing.slug}`;
   const image = listing.logo_url || listing.hero_image_url;
 
   return {
@@ -223,7 +223,7 @@ export async function generateMetadata({
       title,
       description,
       url: canonicalUrl,
-      siteName: "CleanList",
+      siteName: "PuffPrice",
       type: "website",
       ...(image ? { images: [{ url: image, alt: (listing.name ?? "") + " logo" }] } : {}),
     },
@@ -293,11 +293,11 @@ function buildSchemaOrg(listing: Listing, hours: ListingHour[]) {
       }
     } : {}),
     ...(listing.phone ? { telephone: listing.phone } : {}),
-    url: listing.website ?? `https://cleanlist.co/l/${listing.slug}`,
+    url: listing.website ?? `https://puffprice.com/l/${listing.slug}`,
     ...(listing.logo_url ? { image: listing.logo_url } : {}),
     ...(openingHours.length > 0 ? { openingHoursSpecification: openingHours } : {}),
     ...(listing.short_description ? { description: listing.short_description } : {}),
-    sameAs: [`https://cleanlist.co/l/${listing.slug}`],
+    sameAs: [`https://puffprice.com/l/${listing.slug}`],
   });
 }
 
@@ -343,6 +343,19 @@ export default async function ListingPage({
   const isClaimed = listing.claimed === true;
   const initial = (listing.name ?? "?").charAt(0).toUpperCase();
   const schemaOrg = buildSchemaOrg(listing, hours);
+  const dealAnnouncements = activeDeals.slice(0, 3).map((d) => JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "SpecialAnnouncement",
+    name: d.title || "Cannabis deal",
+    text: d.description || d.title || "Deal at this dispensary",
+    ...(d.expires_at ? { expires: d.expires_at } : {}),
+    category: "https://schema.org/SpecialAnnouncement",
+    announcementLocation: {
+      "@type": "LocalBusiness",
+      name: listing.name,
+      address: `${listing.city || "Illinois"}, IL`,
+    },
+  }));
 
   // Back link context — honor ?from= / ?city= if the GO HERE click
   // came from a city-filtered deal page. Otherwise fall back to the
@@ -378,6 +391,13 @@ export default async function ListingPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: schemaOrg }}
       />
+      {dealAnnouncements.map((s, i) => (
+        <script
+          key={`sa-${i}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: s }}
+        />
+      ))}
       <style>{`
         * { box-sizing: border-box; margin: 0; padding: 0; }
         .dn-root { min-height: 100vh; background: #f7f6f2; font-family: Georgia, 'Times New Roman', serif; color: #1a1a1a; }
@@ -477,7 +497,7 @@ export default async function ListingPage({
         <nav className="dn-nav">
           <Link href="/" className="dn-nav-brand">
             <span className="dn-nav-dot" />
-            <span className="dn-nav-name">clean<span className="dn-nav-accent">list</span></span>
+            <span className="dn-nav-name">puff<span className="dn-nav-accent">price</span></span>
           </Link>
           <Link href={backHref} className="dn-nav-back">{backLabel}</Link>
         </nav>
@@ -770,7 +790,7 @@ export default async function ListingPage({
               </div>
 
               <div className="dn-trust-card">
-                <p className="dn-trust-title">Why CleanList?</p>
+                <p className="dn-trust-title">Why PuffPrice?</p>
                 <ul className="dn-trust-list">
                   <li className="dn-trust-item">✓ Verified Illinois cannabis listings</li>
                   <li className="dn-trust-item">✓ Real hours updated by owners</li>
@@ -788,8 +808,8 @@ export default async function ListingPage({
         </div>
 
         <footer className="dn-footer">
-          <span className="dn-footer-brand">clean<span className="dn-nav-accent">list</span></span>
-          <span className="dn-footer-note">© {new Date().getFullYear()} CleanList · Illinois Cannabis Directory</span>
+          <span className="dn-footer-brand">puff<span className="dn-nav-accent">price</span></span>
+          <span className="dn-footer-note">© {new Date().getFullYear()} PuffPrice · Illinois Cannabis Directory</span>
         </footer>
       </div>
     </>

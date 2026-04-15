@@ -87,8 +87,8 @@ export async function generateMetadata({
   const query = q.trim();
   return {
     title: query
-      ? `Search results for "${query}" | CleanList`
-      : "Search | CleanList",
+      ? `Search results for "${query}" | PuffPrice`
+      : "Search | PuffPrice",
     description: query
       ? `Illinois cannabis dispensaries matching "${query}".`
       : "Search Illinois cannabis dispensaries.",
@@ -138,7 +138,7 @@ export default async function SearchPage({
       `}</style>
 
       <nav className="nav">
-        <Link href="/" className="logo">clean<span>list</span></Link>
+        <Link href="/" className="logo">puff<span>price</span></Link>
         <Link href="/" className="back">← Home</Link>
       </nav>
 

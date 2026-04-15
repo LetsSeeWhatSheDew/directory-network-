@@ -27,7 +27,7 @@ const MISSED_MULT: Record<DealHabit, number> = {
   never: 1.0,
 };
 
-// What a CleanList user with the same profile saves of that same 15%:
+// What a PuffPrice user with the same profile saves of that same 15%:
 const CAPTURED_MULT: Record<DealHabit, number> = {
   always: 0.9,
   sometimes: 0.85,
@@ -102,7 +102,7 @@ export default function SavingsCalculator() {
             <span style={{ color: "#dc2626" }}>${result.overpaying}</span> per year.
           </div>
           <p style={resultBody}>
-            CleanList users who match your profile save an average of{" "}
+            PuffPrice users who match your profile save an average of{" "}
             <strong style={{ color: "#16a34a" }}>${result.cleanlistSaves} / year</strong>.
           </p>
           {result.eighths > 0 && (

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `South Loop Chicago Dispensaries (${YEAR})`,
     description: `Your guide to cannabis dispensaries in South Loop, Chicago. Growing neighborhood, convenient access, and competitive pricing.`,
-    siteName: "CleanList",
+    siteName: "PuffPrice",
     type: "website",
     locale: "en_US",
   },

@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Pricing — Featured dispensary listings & consumer alerts | CleanList",
+  title: "Pricing — Featured dispensary listings & consumer alerts | PuffPrice",
   description:
     "Free dispensary listings always. Featured placement from $49/month. Pro consumer alerts from $4.99/month.",
 };

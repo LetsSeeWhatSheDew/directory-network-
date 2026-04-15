@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
     const ip = extractIp(req);
     const url = ip ? `https://ipapi.co/${encodeURIComponent(ip)}/json/` : "https://ipapi.co/json/";
     const res = await fetch(url, {
-      headers: { "User-Agent": "cleanlist.co/1.0" },
+      headers: { "User-Agent": "puffprice.com/1.0" },
       next: { revalidate: 3600 },
     });
     if (!res.ok) {

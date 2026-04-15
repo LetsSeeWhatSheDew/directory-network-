@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import UtmCapture from "./components/UtmCapture";
+import { brand } from "../lib/brand";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-PLACEHOLDER";
 
@@ -17,39 +18,38 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://cleanlist.co"),
+  metadataBase: new URL(brand.url),
   verification: {
     google: ["FdgiJxqm6nBTT1I37dPrrFMNTWkDMLX4-T386WUgFjg", "07gWVtJUIV3VbVxvKmo3NbCPu1_oiH7aYOC9FoF5H6Y"],
   },
   title: {
-    default: "CleanList — Best Bud For Your Buck$",
-    template: "%s | CleanList",
+    default: `Cannabis Deals Near You in Illinois | ${brand.name}`,
+    template: `%s | ${brand.name}`,
   },
-  description:
-    "Find the best cannabis deals near you in Illinois. Best Bud For Your Buck$ — Low Prices. High Times.",
+  description: brand.description,
   icons: {
     icon: "/favicon.svg",
   },
   openGraph: {
-    title: "CleanList — Best Bud For Your Buck$",
-    description: "Find the best cannabis deals near you in Illinois. Low Prices. High Times.",
-    url: "https://cleanlist.co",
-    siteName: "CleanList",
+    title: `Cannabis Deals Near You in Illinois | ${brand.name}`,
+    description: brand.description,
+    url: brand.url,
+    siteName: brand.name,
     type: "website",
     images: [
       {
-        url: "https://cleanlist.co/og-image.png",
+        url: `${brand.url}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: "CleanList — Best Bud For Your Buck$",
+        alt: `${brand.name} — ${brand.tagline}`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "CleanList — Best Bud For Your Buck$",
-    description: "Find the best cannabis deals near you in Illinois.",
-    images: ["https://cleanlist.co/og-image.png"],
+    title: `Cannabis Deals Near You in Illinois | ${brand.name}`,
+    description: brand.description,
+    images: [`${brand.url}/og-image.png`],
   },
 };
 

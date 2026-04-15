@@ -116,10 +116,10 @@ function weekStartLabel(): string {
 
 // Render the digest as plain-text + simple HTML body for email send.
 export function renderDigestEmail(payload: DigestPayload): { subject: string; html: string; text: string } {
-  const subject = `CleanList weekly: ${payload.totalDeals} active IL dispensary deals`;
+  const subject = `PuffPrice weekly: ${payload.totalDeals} active IL dispensary deals`;
 
   const text = [
-    `CleanList Weekly Digest — week of ${payload.weekOf}`,
+    `PuffPrice Weekly Digest — week of ${payload.weekOf}`,
     `${payload.totalDeals} active deals across Illinois`,
     "",
     payload.topDealOverall
@@ -131,13 +131,13 @@ export function renderDigestEmail(payload: DigestPayload): { subject: string; ht
       ...s.deals.map((d) => `  • ${d.deal_title} — ${d.name} (save $${d.savings_amount.toFixed(2)})`),
       "",
     ]),
-    `Browse all deals: https://cleanlist.co/deals/all`,
+    `Browse all deals: https://puffprice.com/deals/all`,
   ].filter(Boolean).join("\n");
 
   const html = `
     <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #0f1f3d;">
       <div style="background: #0f1f3d; color: #fff; padding: 24px; border-radius: 12px 12px 0 0;">
-        <h1 style="margin: 0; font-size: 1.4rem;">CleanList Weekly</h1>
+        <h1 style="margin: 0; font-size: 1.4rem;">PuffPrice Weekly</h1>
         <p style="margin: 6px 0 0; color: rgba(255,255,255,0.7); font-family: system-ui, sans-serif; font-size: .85rem;">
           ${payload.totalDeals} active deals · week of ${payload.weekOf}
         </p>
@@ -163,7 +163,7 @@ export function renderDigestEmail(payload: DigestPayload): { subject: string; ht
           </div>
         `).join("")}
         <p style="text-align: center; margin-top: 28px;">
-          <a href="https://cleanlist.co/deals/all" style="background: #16a34a; color: #fff; padding: 10px 22px; border-radius: 8px; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 700;">Browse all deals</a>
+          <a href="https://puffprice.com/deals/all" style="background: #16a34a; color: #fff; padding: 10px 22px; border-radius: 8px; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 700;">Browse all deals</a>
         </p>
       </div>
     </div>

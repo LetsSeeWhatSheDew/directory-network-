@@ -12,9 +12,9 @@ const SUPABASE_ANON_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300";
 
 export const metadata = {
-  title: "All Illinois Dispensaries | CleanList",
+  title: "All Illinois Dispensaries | PuffPrice",
   description: "Browse every licensed Illinois cannabis dispensary by city. Hours, ratings, and live deals updated daily.",
-  alternates: { canonical: "https://cleanlist.co/dispensaries" },
+  alternates: { canonical: "https://puffprice.com/dispensaries" },
 };
 
 export const dynamic = "force-dynamic";
@@ -80,7 +80,7 @@ export default async function DispensariesIndexPage() {
     <div style={{ fontFamily: "Georgia, serif", background: "#f5f4f0", minHeight: "100vh", color: "#0f1f3d" }}>
       <nav style={{ padding: "14px 28px", background: "#0f1f3d", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Link href="/" style={{ color: "#fff", textDecoration: "none", fontWeight: 700, fontSize: "1.15rem" }}>
-          clean<span style={{ color: "#4ade80" }}>list</span>
+          puff<span style={{ color: "#4ade80" }}>price</span>
         </Link>
         <Link href="/deals/all" style={{ color: "rgba(255,255,255,0.7)", textDecoration: "none", fontSize: ".85rem", fontFamily: "system-ui, sans-serif" }}>
           See today&apos;s deals →
@@ -177,7 +177,7 @@ export default async function DispensariesIndexPage() {
 
       <footer style={{ background: "#0f1f3d", padding: "20px 28px", textAlign: "center" }}>
         <span style={{ color: "#fff", fontSize: ".9rem" }}>
-          clean<span style={{ color: "#4ade80" }}>list</span>
+          puff<span style={{ color: "#4ade80" }}>price</span>
         </span>
       </footer>
     </div>

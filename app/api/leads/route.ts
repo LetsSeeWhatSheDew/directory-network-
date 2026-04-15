@@ -107,7 +107,7 @@ export async function POST(request: Request) {
           const emailHtml = `
             <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 560px; margin: 0 auto; color: #1a1a1a;">
               <div style="border-bottom: 2px solid #50c878; padding-bottom: 12px; margin-bottom: 24px;">
-                <span style="font-size: 13px; color: #8a9490; letter-spacing: 1px; text-transform: uppercase;">CleanList</span>
+                <span style="font-size: 13px; color: #8a9490; letter-spacing: 1px; text-transform: uppercase;">PuffPrice</span>
                 <span style="font-size: 13px; color: #ccc; margin: 0 8px;">|</span>
                 <span style="font-size: 13px; color: #50c878; font-weight: 600;">New Lead</span>
               </div>
@@ -134,7 +134,7 @@ export async function POST(request: Request) {
               </div>
 
               <p style="color: #bbb; font-size: 11px; margin-top: 32px; border-top: 1px solid #eee; padding-top: 12px;">
-                CleanList &middot; Operator notifications
+                PuffPrice &middot; Operator notifications
               </p>
             </div>
           `;
@@ -146,7 +146,7 @@ export async function POST(request: Request) {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              from: "CleanList <notifications@updates.jacarandapeoria.com>",
+              from: "PuffPrice <notifications@updates.jacarandapeoria.com>",
               to: ["matthew@jacarandapeoria.com"],
               subject: `New Lead: ${businessName}`,
               html: emailHtml,

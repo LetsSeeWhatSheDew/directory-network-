@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Deal submitted — thanks! | CleanList",
-  description: "Your deal has been submitted to CleanList and will be reviewed within 24 hours.",
+  title: "Deal submitted — thanks! | PuffPrice",
+  description: "Your deal has been submitted to PuffPrice and will be reviewed within 24 hours.",
   robots: { index: false, follow: true },
 };
 
@@ -38,7 +38,7 @@ export default async function ConfirmedPage({
       `}</style>
 
       <nav className="nav">
-        <Link href="/" className="logo">clean<span>list</span></Link>
+        <Link href="/" className="logo">puff<span>price</span></Link>
         <Link href="/dispensary/submit-deal" className="back">← Submit another</Link>
       </nav>
 
@@ -47,7 +47,7 @@ export default async function ConfirmedPage({
         <h1>Your deal has been submitted.</h1>
         <p>
           We&apos;ll review and post it within <strong>24 hours</strong>. You&apos;ll see it
-          on the homepage, the relevant category page, and your CleanList listing
+          on the homepage, the relevant category page, and your PuffPrice listing
           as soon as it&apos;s live.
         </p>
 
@@ -55,7 +55,7 @@ export default async function ConfirmedPage({
           <h2>Want to appear first in {cityLabel} searches?</h2>
           <p>
             Featured placement puts your deal at the top of every{" "}
-            <strong>{cityLabel}</strong> search and deal page on CleanList —
+            <strong>{cityLabel}</strong> search and deal page on PuffPrice —
             $49/month, cancel anytime. First month free for dispensaries that
             sign up this week.
           </p>

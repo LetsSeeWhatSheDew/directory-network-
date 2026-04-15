@@ -2,9 +2,9 @@ import Link from "next/link";
 import SavingsCalculator from "./SavingsCalculator";
 
 export const metadata = {
-  title: "How much are you leaving on the table? | CleanList",
+  title: "How much are you leaving on the table? | PuffPrice",
   description:
-    "Quick calculator: see how much Illinois cannabis shoppers with your habits are overpaying — and how much CleanList users save.",
+    "Quick calculator: see how much Illinois cannabis shoppers with your habits are overpaying — and how much PuffPrice users save.",
 };
 
 export default function SavingsPage() {
@@ -25,7 +25,7 @@ export default function SavingsPage() {
       `}</style>
 
       <nav className="nav">
-        <Link href="/" className="logo">clean<span>list</span></Link>
+        <Link href="/" className="logo">puff<span>price</span></Link>
         <Link href="/" className="back">← Home</Link>
       </nav>
 
@@ -34,7 +34,7 @@ export default function SavingsPage() {
         <h1>How much are you leaving on the table?</h1>
         <p className="sub">
           Three quick questions. We&apos;ll estimate how much cannabis shoppers with
-          your habits overpay each year — and what CleanList users with the same
+          your habits overpay each year — and what PuffPrice users with the same
           profile save.
         </p>
         <SavingsCalculator />

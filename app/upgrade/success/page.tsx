@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Thanks — you're in",
-  description: "Your CleanList subscription is active.",
+  description: "Your PuffPrice subscription is active.",
 };
 
 export default async function UpgradeSuccessPage({
@@ -23,7 +23,7 @@ export default async function UpgradeSuccessPage({
     <div style={{ fontFamily: "Georgia, serif", background: "#0f1f3d", minHeight: "100vh", color: "#fff", display: "flex", flexDirection: "column" }}>
       <nav style={{ padding: "14px 28px" }}>
         <Link href="/" style={{ color: "#fff", textDecoration: "none", fontWeight: 700, fontSize: "1.15rem" }}>
-          clean<span style={{ color: "#4ade80" }}>list</span>
+          puff<span style={{ color: "#4ade80" }}>price</span>
         </Link>
       </nav>
 

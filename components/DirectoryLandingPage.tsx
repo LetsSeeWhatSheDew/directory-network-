@@ -332,7 +332,7 @@ export default function DirectoryLandingPage({ config }: Props) {
               Illinois City Guides →
             </a>
             <a href="/" className="hover:text-slate-300 transition-colors">
-              CleanList →
+              PuffPrice →
             </a>
           </div>
         </div>

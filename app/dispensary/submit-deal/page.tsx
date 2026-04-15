@@ -127,7 +127,7 @@ export default function SubmitDealPage() {
     <div style={{ fontFamily: "Georgia, serif", background: "#f5f4f0", minHeight: "100vh", color: "#0f1f3d" }}>
       <nav style={{ padding: "14px 28px", background: "#0f1f3d" }}>
         <Link href="/" style={{ color: "#fff", textDecoration: "none", fontWeight: 700 }}>
-          clean<span style={{ color: "#4ade80" }}>list</span>
+          puff<span style={{ color: "#4ade80" }}>price</span>
         </Link>
       </nav>
 
@@ -177,7 +177,7 @@ export default function SubmitDealPage() {
           </Field>
 
           <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 16 }}>
-            <Field label="CleanList listing slug">
+            <Field label="PuffPrice listing slug">
               <input value={form.listing_slug} onChange={(e) => update("listing_slug", e.target.value)} style={input} placeholder="auto-filled when you pick above" />
             </Field>
             <Field label="City">

@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin", "/api/"],
       },
     ],
-    sitemap: "https://cleanlist.co/sitemap.xml",
-    host: "https://cleanlist.co",
+    sitemap: "https://puffprice.com/sitemap.xml",
+    host: "https://puffprice.com",
   };
 }

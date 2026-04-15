@@ -3,7 +3,7 @@ import Link from "next/link";
 import { CollapsibleSection, StatusPill } from "./components";
 
 export const metadata: Metadata = {
-  title: "Admin | CleanList",
+  title: "Admin | PuffPrice",
   robots: "noindex, nofollow",
 };
 

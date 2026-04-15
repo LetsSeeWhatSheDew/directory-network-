@@ -247,12 +247,12 @@ export async function generateMetadata({
   const label = CATEGORY_LABELS[category] || "Cannabis deals";
   if (city) {
     return {
-      title: `${label} Deals near ${city}, IL | CleanList — Best Bud For Your Buck$`,
-      description: `Best ${label.toLowerCase()} deals near ${city}, IL right now. Real prices, real savings.`,
+      title: `${city} Dispensary Deals Today | PuffPrice`,
+      description: `Browse today's best dispensary deals in ${city}, Illinois. Save money on cannabis with live offers.`,
     };
   }
   return {
-    title: `${label} Deals Illinois | CleanList — Best Bud For Your Buck$`,
+    title: `${label} Deals Illinois | PuffPrice`,
     description: `Find the cheapest ${label.toLowerCase()} deals at Illinois dispensaries right now. Real prices, real savings.`,
   };
 }
@@ -296,14 +296,32 @@ function buildItemListSchema(deals: any[], categoryLabel: string, category: stri
   };
 }
 
+function buildSpecialAnnouncements(deals: any[]) {
+  // SpecialAnnouncement signals to AI crawlers that deals are live, fresh,
+  // time-boxed. The expires date is the key Zone 4 signal.
+  return deals.slice(0, 10).map((d) => ({
+    "@context": "https://schema.org",
+    "@type": "SpecialAnnouncement",
+    name: d.deal_title || d.title || "Cannabis deal",
+    text: d.deal_description || d.description || `${d.discount_value ?? ""}${d.discount_unit === "percent" ? "%" : ""} off ${d.category || "cannabis"} at ${d.name || d.listing_slug || "Illinois dispensary"}`,
+    ...(d.expires_at ? { expires: d.expires_at } : {}),
+    category: "https://schema.org/SpecialAnnouncement",
+    announcementLocation: {
+      "@type": "LocalBusiness",
+      name: d.name || d.listing_slug || "Illinois cannabis dispensary",
+      address: `${d.city || "Illinois"}, IL`,
+    },
+  }));
+}
+
 function buildBreadcrumbSchema(categoryLabel: string, category: string) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://cleanlist.co" },
-      { "@type": "ListItem", position: 2, name: "Deals", item: "https://cleanlist.co/deals/all" },
-      { "@type": "ListItem", position: 3, name: categoryLabel, item: `https://cleanlist.co/deals/${category}` },
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://puffprice.com" },
+      { "@type": "ListItem", position: 2, name: "Deals", item: "https://puffprice.com/deals/all" },
+      { "@type": "ListItem", position: 3, name: categoryLabel, item: `https://puffprice.com/deals/${category}` },
     ],
   };
 }
@@ -341,6 +359,17 @@ export default async function DealsPage({
   const noLocalMatches = !!city && deals.length === 0;
   const itemListSchema = deals.length > 0 ? buildItemListSchema(deals, categoryLabel, category) : null;
   const breadcrumbSchema = buildBreadcrumbSchema(categoryLabel, category);
+  const specialAnnouncements = deals.length > 0 ? buildSpecialAnnouncements(deals) : [];
+
+  // Zone 4 Phase 1: direct factual answer above the fold.
+  // Count unique dispensaries from the current result set.
+  const dispensaryCount = new Set(
+    deals.map((d: any) => d.listing_slug || d.slug).filter(Boolean)
+  ).size;
+  const answerCity = city || "Illinois";
+  const answerText = deals.length > 0
+    ? `${deals.length} active deal${deals.length !== 1 ? "s" : ""} at ${dispensaryCount} dispensar${dispensaryCount !== 1 ? "ies" : "y"} in ${answerCity}${city ? ", IL" : ""} right now.`
+    : `No active deals in ${answerCity}${city ? ", IL" : ""} right now — check back soon.`;
 
   return (
     <>
@@ -354,6 +383,13 @@ export default async function DealsPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
+      {specialAnnouncements.map((s, i) => (
+        <script
+          key={`sa-${i}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }}
+        />
+      ))}
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
         body{font-family:Georgia,serif;background:#f5f4f0;color:#0f1f3d;min-height:100vh}
@@ -441,12 +477,25 @@ export default async function DealsPage({
       <nav className="nav">
         <Link href="/" className="logo">
           <span className="logo-dot" />
-          <span className="logo-text">clean<span>list</span></span>
+          <span className="logo-text">puff<span>price</span></span>
         </Link>
         <Link href="/" className="back">← Back</Link>
       </nav>
 
       <div className="page">
+        {/* Zone 4 Phase 1: direct factual answer for AI crawlers */}
+        <p
+          style={{
+            fontSize: "1rem",
+            color: "#6b7280",
+            fontFamily: "system-ui, sans-serif",
+            textAlign: "left",
+            marginBottom: "18px",
+            lineHeight: 1.5,
+          }}
+        >
+          {answerText}
+        </p>
         <div className="cat-tag">{categoryLabel}</div>
         <h1 className="page-title">{subtitle}</h1>
         <p className="page-sub">

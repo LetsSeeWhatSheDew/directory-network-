@@ -50,7 +50,7 @@ export default function UpgradePage() {
     <div style={{ fontFamily: "Georgia, serif", background: "#f5f4f0", minHeight: "100vh", color: "#0f1f3d" }}>
       <nav style={{ padding: "14px 28px", background: "#0f1f3d", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Link href="/" style={{ color: "#fff", textDecoration: "none", fontWeight: 700, fontSize: "1.15rem" }}>
-          clean<span style={{ color: "#4ade80" }}>list</span>
+          puff<span style={{ color: "#4ade80" }}>price</span>
         </Link>
         <Link href="/" style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none", fontSize: ".85rem", fontFamily: "system-ui, sans-serif" }}>
           ← Home
@@ -223,16 +223,16 @@ export default function UpgradePage() {
 
       <section style={{ maxWidth: 760, margin: "0 auto", padding: "40px 28px 60px" }}>
         <h2 style={{ fontSize: "1.4rem", letterSpacing: "-0.02em", marginBottom: 18 }}>FAQ</h2>
-        <Faq q="How does Featured compare to Leafly?" a="Leafly charges dispensaries $600+/month for basic placement. CleanList Featured is $49/month with city exclusivity — meaning no other dispensary in your city can buy this slot while you hold it." />
+        <Faq q="How does Featured compare to Leafly?" a="Leafly charges dispensaries $600+/month for basic placement. PuffPrice Featured is $49/month with city exclusivity — meaning no other dispensary in your city can buy this slot while you hold it." />
         <Faq q="Is there a contract?" a="No. Everything is month-to-month. Cancel in one click from your Stripe portal anytime." />
         <Faq q="When do Pro SMS alerts start?" a="Within 24 hours of signup. You&apos;ll get a confirmation text first, then start receiving alerts based on your ZIP code and chosen categories." />
-        <Faq q="What payment methods do you accept?" a="Credit and debit cards via Stripe. Stripe handles all payment processing — CleanList never sees your card details." />
+        <Faq q="What payment methods do you accept?" a="Credit and debit cards via Stripe. Stripe handles all payment processing — PuffPrice never sees your card details." />
         <Faq q="Can I try Featured on a trial?" a="Email matthew@jacarandapeoria.com. We&apos;re happy to set up a 2-week trial for Illinois dispensaries that have been open more than 6 months." />
       </section>
 
       <footer style={{ background: "#0f1f3d", padding: "20px 28px", textAlign: "center" }}>
         <span style={{ color: "#fff", fontSize: ".9rem" }}>
-          clean<span style={{ color: "#4ade80" }}>list</span>
+          puff<span style={{ color: "#4ade80" }}>price</span>
         </span>
       </footer>
     </div>

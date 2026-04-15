@@ -58,9 +58,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { city: citySlug } = await params;
   const city = slugToCity(citySlug);
-  const canonicalUrl = `https://cleanlist.co/cannabis/illinois/${citySlug}`;
+  const canonicalUrl = `https://puffprice.com/cannabis/illinois/${citySlug}`;
 
-  const title = `Cannabis Dispensaries in ${city}, Illinois — CleanList`;
+  const title = `Cannabis Dispensaries in ${city}, Illinois — PuffPrice`;
   const description = `Find licensed cannabis dispensaries in ${city}, IL. Browse hours, directions, and deals for every dispensary in ${city}. Updated regularly.`;
 
   return {
@@ -71,7 +71,7 @@ export async function generateMetadata({
       title,
       description,
       url: canonicalUrl,
-      siteName: "CleanList",
+      siteName: "PuffPrice",
       type: "website",
     },
     twitter: { card: "summary", title, description },
@@ -107,12 +107,12 @@ export default async function CityPage({
     "@type": "ItemList",
     name: `Cannabis Dispensaries in ${city}, Illinois`,
     description: `Directory of licensed cannabis dispensaries in ${city}, IL`,
-    url: `https://cleanlist.co/cannabis/illinois/${citySlug}`,
+    url: `https://puffprice.com/cannabis/illinois/${citySlug}`,
     numberOfItems: listings.length,
     itemListElement: listings.map((l, i) => ({
       "@type": "ListItem",
       position: i + 1,
-      url: `https://cleanlist.co/l/${l.slug}`,
+      url: `https://puffprice.com/l/${l.slug}`,
       name: l.name,
     })),
   });
@@ -126,7 +126,7 @@ export default async function CityPage({
         name: `How many dispensaries are in ${city}, Illinois?`,
         acceptedAnswer: {
           "@type": "Answer",
-          text: `There are ${listings.length} licensed cannabis dispensaries listed in ${city}, IL on CleanList.`,
+          text: `There are ${listings.length} licensed cannabis dispensaries listed in ${city}, IL on PuffPrice.`,
         },
       },
       {
@@ -321,7 +321,7 @@ export default async function CityPage({
                 </div>
                 <div className="faq-item">
                   <p className="faq-q">How many dispensaries are in {city}?</p>
-                  <p className="faq-a">There are {listings.length} licensed dispensaries listed in {city} on CleanList.</p>
+                  <p className="faq-a">There are {listings.length} licensed dispensaries listed in {city} on PuffPrice.</p>
                 </div>
                 <div className="faq-item">
                   <p className="faq-q">What do I need to buy cannabis?</p>
@@ -371,7 +371,7 @@ export default async function CityPage({
 
         <footer className="city-footer">
           <span className="city-footer-brand">Directory<span className="city-nav-accent">Network</span></span>
-          <span className="city-footer-note">© {new Date().getFullYear()} CleanList · Illinois Cannabis Directory</span>
+          <span className="city-footer-note">© {new Date().getFullYear()} PuffPrice · Illinois Cannabis Directory</span>
         </footer>
       </div>
     </>

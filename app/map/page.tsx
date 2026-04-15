@@ -11,7 +11,7 @@ const SUPABASE_ANON_KEY =
 export const revalidate = 600;
 
 export const metadata = {
-  title: "Illinois cannabis map — every dispensary + live deals | CleanList",
+  title: "Illinois cannabis map — every dispensary + live deals | PuffPrice",
   description:
     "Every Illinois cannabis dispensary on one map. Green pins mark live deals. Click any pin to see the best deal today.",
 };
@@ -114,7 +114,7 @@ export default async function MapPage() {
 
       <div className="top-stripe" aria-hidden="true" />
       <nav className="nav">
-        <Link href="/" className="logo">clean<span>list</span></Link>
+        <Link href="/" className="logo">puff<span>price</span></Link>
         <Link href="/" className="back">← Home</Link>
       </nav>
 

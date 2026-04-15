@@ -8,7 +8,7 @@ import AlertsCalculator from "./AlertsCalculator";
 import ProCheckoutButton from "./ProCheckoutButton";
 
 export const metadata = {
-  title: "Never overpay for weed again | CleanList deal alerts",
+  title: "Get Deal Alerts | PuffPrice",
   description:
     "Illinois cannabis deal alerts. Free forever, no account needed. Pro is $0.99/month — instant SMS the moment a deal drops near you.",
 };
@@ -99,7 +99,7 @@ export default function AlertsPage() {
       `}</style>
 
       <nav className="nav">
-        <Link href="/" className="logo">clean<span>list</span></Link>
+        <Link href="/" className="logo">puff<span>price</span></Link>
         <Link href="/" className="back">← Home</Link>
       </nav>
 

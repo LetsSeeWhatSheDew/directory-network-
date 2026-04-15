@@ -18,7 +18,7 @@ export function buildCityMetadata(config: CityConfig): Metadata {
     openGraph: {
       title: `Dispensaries in ${config.city}, MO | Find Cannabis Near You (${YEAR})`,
       description: `Your guide to licensed dispensaries in ${config.city}, Missouri. Local cannabis laws, first-visit tips, and a curated directory of recreational & medical shops.`,
-      siteName: "CleanList",
+      siteName: "PuffPrice",
       type: "website",
       locale: "en_US",
     },

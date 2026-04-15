@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "About CleanList — Built in Peoria, Illinois",
-  description: "We built the thing we wished existed. CleanList finds the best cannabis deals near you in Illinois.",
+  title: "About PuffPrice — Built in Peoria, Illinois",
+  description: "We built the thing we wished existed. PuffPrice finds the best cannabis deals near you in Illinois.",
 };
 
 export default function AboutPage() {
@@ -32,7 +32,7 @@ export default function AboutPage() {
       `}</style>
 
       <nav className="nav">
-        <Link href="/" className="logo" aria-label="CleanList home">
+        <Link href="/" className="logo" aria-label="PuffPrice home">
           <span className="logo-mark">
             <svg width="28" height="28" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <rect x="0" y="0" width="28" height="28" rx="6" fill="#0b172f" stroke="rgba(255,255,255,.12)" strokeWidth="1" />
@@ -42,7 +42,7 @@ export default function AboutPage() {
             </svg>
             <span className="logo-dot" aria-hidden="true" />
           </span>
-          <span className="logo-text">clean<span>list</span></span>
+          <span className="logo-text">puff<span>price</span></span>
         </Link>
         <Link href="/" className="back">← Back</Link>
       </nav>
@@ -62,7 +62,7 @@ export default function AboutPage() {
         </p>
 
         <p>
-          CleanList aggregates deals from Illinois dispensaries, normalizes
+          PuffPrice aggregates deals from Illinois dispensaries, normalizes
           pricing to price-per-gram, and gives you one recommendation with how
           much you save vs the area average. No menus. No strain databases.
           No ads. Just: here&apos;s the best deal near you today.

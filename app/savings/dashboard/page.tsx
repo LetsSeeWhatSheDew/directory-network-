@@ -47,10 +47,10 @@ export default function SavingsDashboard() {
   }, [records]);
 
   async function share() {
-    const text = `I've saved $${monthly} on cannabis this month with CleanList → https://cleanlist.co/savings/dashboard`;
+    const text = `I've saved $${monthly} on cannabis this month with PuffPrice → https://puffprice.com/savings/dashboard`;
     try {
       if (navigator.share) {
-        await navigator.share({ text, url: "https://cleanlist.co/savings/dashboard" });
+        await navigator.share({ text, url: "https://puffprice.com/savings/dashboard" });
         return;
       }
       await navigator.clipboard.writeText(text);
@@ -102,13 +102,13 @@ export default function SavingsDashboard() {
       `}</style>
 
       <nav className="nav">
-        <Link href="/" className="logo">clean<span>list</span></Link>
+        <Link href="/" className="logo">puff<span>price</span></Link>
         <Link href="/deals/all" className="back">← Browse deals</Link>
       </nav>
 
       <div className="wrap">
         <div className="eyebrow">My savings</div>
-        <h1>Your CleanList savings</h1>
+        <h1>Your PuffPrice savings</h1>
 
         {records === null ? (
           <div className="empty"><div className="empty-title">Loading…</div></div>

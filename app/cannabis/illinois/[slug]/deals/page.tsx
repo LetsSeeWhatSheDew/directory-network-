@@ -13,9 +13,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const cityName = slugToCity(slug);
   return {
-    title: `Best dispensary deals in ${cityName}, IL | CleanList`,
+    title: `Best dispensary deals in ${cityName}, IL | PuffPrice`,
     description: `Live cannabis deals at ${cityName} dispensaries. Compare discounts, prices, and savings — updated daily.`,
-    alternates: { canonical: `https://cleanlist.co/cannabis/illinois/${slug}/deals` },
+    alternates: { canonical: `https://puffprice.com/cannabis/illinois/${slug}/deals` },
   };
 }
 
@@ -82,7 +82,7 @@ export default async function CityDealsPage({ params }: { params: Promise<{ slug
     <div style={{ fontFamily: "Georgia, serif", background: "#f5f4f0", minHeight: "100vh", color: "#0f1f3d" }}>
       <nav style={{ padding: "14px 28px", background: "#0f1f3d", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Link href="/" style={{ color: "#fff", textDecoration: "none", fontWeight: 700, fontSize: "1.15rem" }}>
-          clean<span style={{ color: "#4ade80" }}>list</span>
+          puff<span style={{ color: "#4ade80" }}>price</span>
         </Link>
         <Link href={`/cannabis/illinois/${slug}`} style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none", fontSize: ".85rem", fontFamily: "system-ui, sans-serif" }}>
           All {cityName} dispensaries
@@ -121,7 +121,7 @@ export default async function CityDealsPage({ params }: { params: Promise<{ slug
 
       <footer style={{ background: "#0f1f3d", padding: "20px 28px", textAlign: "center" }}>
         <span style={{ color: "#fff", fontSize: ".9rem" }}>
-          clean<span style={{ color: "#4ade80" }}>list</span>
+          puff<span style={{ color: "#4ade80" }}>price</span>
         </span>
       </footer>
     </div>
@@ -132,7 +132,6 @@ function DealCard({ deal, slug }: { deal: Deal; slug: string }) {
   const featured = deal.plan === "featured";
   return (
     <article style={{
-      background: "#fff",
       border: featured ? "2px solid #16a34a" : "1px solid #e8e4da",
       borderRadius: 14,
       padding: 18,

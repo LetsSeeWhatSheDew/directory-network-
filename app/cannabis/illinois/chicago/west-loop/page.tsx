@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `West Loop Chicago Dispensaries (${YEAR})`,
     description: `Your guide to cannabis dispensaries in West Loop, Chicago. Local tips, pricing, and curated listings near Randolph Street and Fulton Market.`,
-    siteName: "CleanList",
+    siteName: "PuffPrice",
     type: "website",
     locale: "en_US",
   },

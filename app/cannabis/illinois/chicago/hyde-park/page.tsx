@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `Hyde Park Chicago Dispensaries (${YEAR})`,
     description: `Your guide to cannabis dispensaries in Hyde Park, Chicago. Local tips, pricing, and curated listings near the University of Chicago.`,
-    siteName: "CleanList",
+    siteName: "PuffPrice",
     type: "website",
     locale: "en_US",
   },

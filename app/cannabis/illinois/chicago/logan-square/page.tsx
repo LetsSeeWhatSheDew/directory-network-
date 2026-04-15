@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `Logan Square Chicago Dispensaries (${YEAR})`,
     description: `Your guide to cannabis dispensaries in Logan Square, Chicago. Local tips, pricing, and curated listings on Milwaukee Avenue.`,
-    siteName: "CleanList",
+    siteName: "PuffPrice",
     type: "website",
     locale: "en_US",
   },

@@ -43,11 +43,11 @@ export default function SavingsCallout({ initialSavings }: { initialSavings: num
       <p className="savings-callout">
         {city ? (
           <>
-            <strong>{city}</strong> buyers use CleanList to find the best deal
+            <strong>{city}</strong> buyers use PuffPrice to find the best deal
             every trip.
           </>
         ) : (
-          <>Illinois cannabis buyers use CleanList to find the best deal every trip.</>
+          <>Illinois cannabis buyers use PuffPrice to find the best deal every trip.</>
         )}
         {calloutStyles}
       </p>
@@ -59,12 +59,12 @@ export default function SavingsCallout({ initialSavings }: { initialSavings: num
       {city ? (
         <>
           <strong>{city}</strong> buyers save up to{" "}
-          <strong className="savings-amt">${savings} per trip</strong> using CleanList
+          <strong className="savings-amt">${savings} per trip</strong> using PuffPrice
         </>
       ) : (
         <>
           Illinois cannabis buyers save up to{" "}
-          <strong className="savings-amt">${savings} per trip</strong> using CleanList
+          <strong className="savings-amt">${savings} per trip</strong> using PuffPrice
         </>
       )}
       {calloutStyles}

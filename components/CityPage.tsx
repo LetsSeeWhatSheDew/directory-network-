@@ -162,7 +162,7 @@ export default function CityPage({ config, listings = [] }: Props) {
               </div>
               <div className="flex flex-col">
                 <span className="text-sm font-semibold tracking-tight">
-                  CleanList
+                  PuffPrice
                 </span>
                 <span className="text-[11px] text-slate-400">
                   {state} Cannabis Directory
@@ -533,7 +533,7 @@ export default function CityPage({ config, listings = [] }: Props) {
                   PG
                 </div>
                 <span>
-                  CleanList · {city}, {state} Cannabis Guide
+                  PuffPrice · {city}, {state} Cannabis Guide
                 </span>
               </div>
               <div className="flex flex-wrap gap-3">
@@ -541,7 +541,7 @@ export default function CityPage({ config, listings = [] }: Props) {
                   href="/"
                   className="text-slate-300 underline-offset-2 hover:text-slate-100 hover:underline"
                 >
-                  CleanList
+                  PuffPrice
                 </Link>
                 <span className="hidden text-slate-600 md:inline">·</span>
                 <Link

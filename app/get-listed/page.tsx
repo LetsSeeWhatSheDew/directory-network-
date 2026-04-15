@@ -3,7 +3,7 @@ import Link from "next/link";
 import { GetListedForm } from "../components/GetListedForm";
 
 export const metadata = {
-  title: "Get your dispensary listed | CleanList",
+  title: "Get your dispensary listed | PuffPrice",
   description:
     "Free listing for every Illinois cannabis dispensary. Get discovered on city pages, search, and deal pages. Claim or add your dispensary in under 2 minutes.",
 };
@@ -20,7 +20,7 @@ export default function GetListedPage() {
             </div>
             <div className="flex flex-col">
               <span className="text-sm font-semibold tracking-tight text-slate-900">
-                CleanList
+                PuffPrice
               </span>
               <span className="text-xs text-slate-500">
                 New listing request

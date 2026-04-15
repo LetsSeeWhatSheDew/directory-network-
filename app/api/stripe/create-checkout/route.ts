@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 type Tier = "featured" | "pro_consumer";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://cleanlist.co";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://puffprice.com";
 const STRIPE_API = "https://api.stripe.com/v1";
 
 function priceIdForTier(tier: Tier): string | undefined {

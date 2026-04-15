@@ -9,14 +9,14 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Early access to CleanList — Illinois cannabis deal alerts",
+  title: "Early access to PuffPrice — Illinois cannabis deal alerts",
   description:
-    "Get free early access to CleanList deal alerts for Illinois cannabis dispensaries. Weekly digest, no account needed.",
-  alternates: { canonical: "https://cleanlist.co/early-access" },
+    "Get free early access to PuffPrice deal alerts for Illinois cannabis dispensaries. Weekly digest, no account needed.",
+  alternates: { canonical: "https://puffprice.com/early-access" },
   openGraph: {
-    title: "Early access to CleanList",
+    title: "Early access to PuffPrice",
     description: "Free early access to Illinois cannabis deal alerts.",
-    url: "https://cleanlist.co/early-access",
+    url: "https://puffprice.com/early-access",
     type: "website",
   },
   robots: { index: true, follow: true },
@@ -47,7 +47,7 @@ export default function EarlyAccessPage() {
           marginBottom: 32,
           display: "inline-block",
         }}>
-          clean<span style={{ color: "#4ade80" }}>list</span>
+          puff<span style={{ color: "#4ade80" }}>price</span>
         </Link>
 
         {/* Personal headline */}
@@ -68,7 +68,7 @@ export default function EarlyAccessPage() {
           lineHeight: 1.65,
           marginBottom: 36,
         }}>
-          I&apos;m building CleanList — it texts you when dispensaries near you post deals.
+          I&apos;m building PuffPrice — it texts you when dispensaries near you post deals.
           You&apos;re one of the first people I&apos;m telling.
         </p>
 

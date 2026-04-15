@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `Wicker Park Chicago Dispensaries (${YEAR})`,
     description: `Your guide to cannabis dispensaries in Wicker Park, Chicago. Independent shops, craft products, and vibrant neighborhood vibe.`,
-    siteName: "CleanList",
+    siteName: "PuffPrice",
     type: "website",
     locale: "en_US",
   },

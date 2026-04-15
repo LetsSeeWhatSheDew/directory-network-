@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `River North Chicago Dispensaries (${YEAR})`,
     description: `Your guide to cannabis dispensaries in River North, Chicago. Premium options, curated selections, and upscale retail experience.`,
-    siteName: "CleanList",
+    siteName: "PuffPrice",
     type: "website",
     locale: "en_US",
   },

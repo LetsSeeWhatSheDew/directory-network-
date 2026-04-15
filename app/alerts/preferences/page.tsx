@@ -94,7 +94,7 @@ export default function AlertPreferencesPage() {
       `}</style>
 
       <nav className="nav">
-        <Link href="/" className="logo">clean<span>list</span></Link>
+        <Link href="/" className="logo">puff<span>price</span></Link>
         <Link href="/alerts" className="back">← Back</Link>
       </nav>
 

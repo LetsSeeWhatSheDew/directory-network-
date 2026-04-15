@@ -30,8 +30,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const listing = await getListing(slug);
   const name = listing?.name || slug;
   return {
-    title: `Claim ${name} | CleanList`,
-    description: `Dispensary owner? Claim your CleanList listing for ${name} and take control of your deals.`,
+    title: `Claim ${name} | PuffPrice`,
+    description: `Dispensary owner? Claim your PuffPrice listing for ${name} and take control of your deals.`,
     robots: { index: false, follow: true },
   };
 }
@@ -59,7 +59,7 @@ export default async function ClaimPage({ params }: { params: Promise<{ slug: st
       `}</style>
 
       <nav className="nav">
-        <Link href="/" className="logo">clean<span>list</span></Link>
+        <Link href="/" className="logo">puff<span>price</span></Link>
         <Link href={`/l/${slug}`} className="back">← Back to listing</Link>
       </nav>
 

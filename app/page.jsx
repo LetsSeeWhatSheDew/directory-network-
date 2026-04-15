@@ -6,10 +6,12 @@ import HeroDealCard from "./components/HeroDealCard";
 import MobileNavMenu from "./components/MobileNavMenu";
 import SavingsCallout from "./components/SavingsCallout";
 import SearchTracker from "./components/SearchTracker";
+import FourTwentyBanner from "./components/FourTwentyBanner";
+import { brand } from "../lib/brand";
 import { estimateSavings, formatSavingsDollars, gradeDeal } from "../lib/dealScoring";
 
 // ============================================================
-// CLEANLIST HOMEPAGE — Cannabis visual identity overhaul
+// PUFFPRICE HOMEPAGE — Cannabis visual identity overhaul
 //
 // Design philosophy:
 // - Unmistakably cannabis within 1 second of landing
@@ -191,25 +193,6 @@ const CATEGORIES = [
   { label: "Concentrates", slug: "concentrate", icon: "crystal" },
   { label: "All deals", slug: "all", icon: "flame" },
 ];
-
-function FourTwentyBanner() {
-  const now = new Date();
-  const show = now >= new Date("2026-04-17") && now <= new Date("2026-04-20T23:59:59");
-  if (!show) return null;
-  return (
-    <div className="promo-banner">
-      <div className="promo-inner">
-        <span className="promo-left">
-          <span className="promo-dot" aria-hidden="true" />
-          <span className="promo-text">
-            🌿 4/20 DEALS WEEK — Best discounts of the year at Illinois dispensaries
-          </span>
-        </span>
-        <Link href="/deals/all" className="promo-cta">See all deals →</Link>
-      </div>
-    </div>
-  );
-}
 
 function renderIcon(key) {
   const s = 36;
@@ -694,7 +677,7 @@ export default async function HomePage() {
 
       {/* NAV */}
       <nav className="nav">
-        <Link href="/" className="logo" aria-label="CleanList home">
+        <Link href="/" className="logo" aria-label="PuffPrice home">
           <span className="logo-mark">
             <svg width="28" height="28" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <rect x="0" y="0" width="28" height="28" rx="6" fill="#0f1f3d" />
@@ -704,7 +687,7 @@ export default async function HomePage() {
             </svg>
             <span className="logo-mark-dot" aria-hidden="true" />
           </span>
-          <span className="logo-text">clean<span>list</span></span>
+          <span className="logo-text">puff<span>price</span></span>
         </Link>
         <div className="nav-links desktop-only-nav">
           <Link href="/cannabis/illinois/open-now" className="nav-link">Open now</Link>
@@ -839,14 +822,14 @@ export default async function HomePage() {
 
       {/* FOOTER */}
       <footer className="footer">
-        <span className="footer-logo">clean<span>list</span></span>
+        <span className="footer-logo">puff<span>price</span></span>
         <div className="footer-links">
           <Link href="/cannabis/illinois" className="footer-link">Illinois</Link>
           <Link href="/cannabis/illinois/first-time-guide" className="footer-link">First-time guide</Link>
           <Link href="/cannabis/illinois/laws" className="footer-link">IL laws</Link>
           <Link href="/dispensaries" className="footer-link">For dispensaries</Link>
         </div>
-        <span className="footer-copy">© {new Date().getFullYear()} CleanList</span>
+        <span className="footer-copy">© {new Date().getFullYear()} PuffPrice</span>
       </footer>
     </>
   );
