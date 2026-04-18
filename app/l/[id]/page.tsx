@@ -3,6 +3,7 @@ export const revalidate = 0;
 import Link from "next/link";
 import { Metadata } from "next";
 import ClaimForm from "../../components/ClaimForm";
+import RecentlyViewedTracker from "../../components/RecentlyViewedTracker";
 
 const NOINDEX_SLUGS = [
   "emerald-city-dispensary-chicago-il",
@@ -398,6 +399,13 @@ export default async function ListingPage({
           dangerouslySetInnerHTML={{ __html: s }}
         />
       ))}
+      {!isNoIndex && listing.slug && (
+        <RecentlyViewedTracker
+          slug={listing.slug}
+          name={listing.name ?? listing.slug}
+          city={listing.city ?? ""}
+        />
+      )}
       <style>{`
         * { box-sizing: border-box; margin: 0; padding: 0; }
         .dn-root { min-height: 100vh; background: #f7f6f2; font-family: Georgia, 'Times New Roman', serif; color: #1a1a1a; }
@@ -539,8 +547,36 @@ export default async function ListingPage({
                 color: "#0f1f3d",
                 lineHeight: 1.3,
                 marginBottom: 4,
+                display: "flex",
+                alignItems: "baseline",
+                gap: 8,
+                flexWrap: "wrap",
               }}>
-                {activeDeal!.title}
+                <span>{activeDeal!.title}</span>
+                {(() => {
+                  const exp = activeDeal!.expires_at;
+                  if (!exp) return null;
+                  const t = new Date(exp).getTime();
+                  if (!Number.isFinite(t)) return null;
+                  const hoursLeft = Math.floor((t - Date.now()) / 3_600_000);
+                  if (hoursLeft <= 0 || hoursLeft > 24) return null;
+                  return (
+                    <span
+                      style={{
+                        fontSize: ".68rem",
+                        fontFamily: "system-ui,sans-serif",
+                        fontWeight: 700,
+                        color: "#92400e",
+                        background: "#fef3c7",
+                        padding: "2px 9px",
+                        borderRadius: 100,
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      ⚡ Expires in {hoursLeft}h
+                    </span>
+                  );
+                })()}
               </div>
               {activeDeal!.description && (
                 <p style={{

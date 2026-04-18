@@ -85,13 +85,34 @@ export async function generateMetadata({
 }) {
   const { q = "" } = await searchParams;
   const query = q.trim();
+  const title = query
+    ? `Search results for "${query}" | PuffPrice`
+    : "Search | PuffPrice";
+  const description = query
+    ? `Illinois cannabis dispensaries matching "${query}".`
+    : "Search Illinois cannabis dispensaries.";
+  const ogImage = "https://puffprice.com/og-image.png";
+  const url = query
+    ? `https://puffprice.com/search?q=${encodeURIComponent(query)}`
+    : "https://puffprice.com/search";
   return {
-    title: query
-      ? `Search results for "${query}" | PuffPrice`
-      : "Search | PuffPrice",
-    description: query
-      ? `Illinois cannabis dispensaries matching "${query}".`
-      : "Search Illinois cannabis dispensaries.",
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: "PuffPrice",
+      images: [{ url: ogImage, width: 1200, height: 630 }],
+      locale: "en_US",
+      type: "website" as const,
+    },
+    twitter: {
+      card: "summary_large_image" as const,
+      title,
+      description,
+      images: [ogImage],
+    },
     robots: { index: false, follow: true },
   };
 }

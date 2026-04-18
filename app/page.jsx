@@ -7,6 +7,7 @@ import MobileNavMenu from "./components/MobileNavMenu";
 import SavingsCallout from "./components/SavingsCallout";
 import SearchTracker from "./components/SearchTracker";
 import FourTwentyBanner from "./components/FourTwentyBanner";
+import RecentlyViewedRow from "./components/RecentlyViewedRow";
 import { brand } from "../lib/brand";
 import { estimateSavings, formatSavingsDollars, gradeDeal } from "../lib/dealScoring";
 
@@ -229,6 +230,18 @@ function displayName(d) {
   return name;
 }
 
+// Defensive filter: strip any deal whose expires_at has already passed.
+// The view already filters is_active=true, but if the flag wasn't flipped
+// promptly we still render an expired deal — this guards the UI.
+function filterExpired(list) {
+  const now = Date.now();
+  return list.filter((d) => {
+    if (!d?.expires_at) return true;
+    const t = new Date(d.expires_at).getTime();
+    return !Number.isFinite(t) || t > now;
+  });
+}
+
 async function getTopDeals() {
   // ISR: cache the Supabase response for 60s. Cold starts and repeat
   // visitors both read the cached payload instead of round-tripping
@@ -236,7 +249,7 @@ async function getTopDeals() {
   // refresh roughly once a minute.
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&order=discount_value.desc&limit=3`,
+      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&order=discount_value.desc&limit=6`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,
@@ -247,7 +260,7 @@ async function getTopDeals() {
     );
     if (!res.ok) return [];
     const data = await res.json();
-    return Array.isArray(data) ? data : [];
+    return Array.isArray(data) ? filterExpired(data).slice(0, 3) : [];
   } catch {
     return [];
   }
@@ -269,6 +282,43 @@ function isLikelyOpen() {
   const utcHour = new Date().getUTCHours();
   const ctHour = (utcHour + 24 - 5) % 24; // rough CT (ignores DST)
   return ctHour >= 9 && ctHour < 21;
+}
+
+/**
+ * Total estimated savings across all active IL deals. Fetches the fields
+ * needed by estimateSavings() for the full active set and sums what passes.
+ * Used for the "$X in active savings across N deals" trust line below the
+ * hero. 300s cache — this moves slowly.
+ */
+async function getTotalSavings() {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/deals?select=discount_value,discount_unit,discount_type,original_price,sale_price,category&is_active=eq.true&project_tag=eq.green&limit=200`,
+      {
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+        next: { revalidate: 300, tags: ["deals"] },
+      }
+    );
+    if (!res.ok) return null;
+    const rows = await res.json();
+    if (!Array.isArray(rows) || rows.length === 0) return null;
+    let total = 0;
+    let counted = 0;
+    for (const d of rows) {
+      const v = estimateSavings(d);
+      if (typeof v === "number" && v > 0) {
+        total += v;
+        counted += 1;
+      }
+    }
+    if (counted === 0 || total <= 0) return null;
+    return { total, counted };
+  } catch {
+    return null;
+  }
 }
 
 async function getActiveDealCount() {
@@ -296,13 +346,57 @@ async function getActiveDealCount() {
   return null;
 }
 
+const FAQ_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "How do I find dispensary deals near me in Illinois?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "PuffPrice shows you the best active dispensary deals in Illinois based on your location. Allow location access or select your city to see deals near you instantly.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Are these dispensary deals updated in real time?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. PuffPrice tracks active deals from Illinois dispensaries and updates daily. Each deal shows how much you save and links directly to the dispensary.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Is PuffPrice free to use?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. Browsing deals on PuffPrice is always free with no account required. A Pro tier with deal alerts and price history is available for $0.99/month.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Which Illinois cities have dispensary deals on PuffPrice?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "PuffPrice covers dispensary deals across Illinois including Chicago, Peoria, Rockford, Springfield, Aurora, and dozens of other cities.",
+      },
+    },
+  ],
+};
+
 export default async function HomePage() {
-  const [dealCount, topDeals] = await Promise.all([
+  const [dealCount, topDeals, savingsTotal] = await Promise.all([
     getActiveDealCount(),
     getTopDeals(),
+    getTotalSavings(),
   ]);
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_SCHEMA) }}
+      />
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
         html{scroll-behavior:smooth}
@@ -756,6 +850,29 @@ export default async function HomePage() {
 
               {/* City-aware savings callout — muted supporting copy */}
               <SavingsCallout initialSavings={topDeals[0] ? estimateSavings(topDeals[0]) : null} />
+
+              {/* Trust line: running savings total across all active IL deals */}
+              {savingsTotal && (
+                <p
+                  aria-live="polite"
+                  style={{
+                    fontSize: "0.875rem",
+                    color: "#6b7280",
+                    fontFamily: "system-ui, sans-serif",
+                    margin: "2px 0 0",
+                    lineHeight: 1.5,
+                  }}
+                >
+                  <strong style={{ color: "#0f1f3d", fontWeight: 700 }}>
+                    ${savingsTotal.total.toLocaleString()}
+                  </strong>{" "}
+                  in active savings across{" "}
+                  <strong style={{ color: "#0f1f3d", fontWeight: 700 }}>
+                    {savingsTotal.counted}
+                  </strong>{" "}
+                  deals in Illinois right now.
+                </p>
+              )}
             </div>
 
             {/* Desktop-only right column: category shortcuts */}
@@ -816,6 +933,9 @@ export default async function HomePage() {
           </div>
         </div>
       </div>
+
+      {/* Recently-visited row (hidden on first visit, renders client-side) */}
+      <RecentlyViewedRow />
 
       {/* Section 3: More deals near you (existing card grid) */}
       <div className="deals-section">

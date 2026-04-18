@@ -7,10 +7,28 @@ import Link from "next/link";
 import AlertsCalculator from "./AlertsCalculator";
 import ProCheckoutButton from "./ProCheckoutButton";
 
+const OG_IMAGE = "https://puffprice.com/og-image.png";
+const OG_DESC =
+  "Illinois cannabis deal alerts. Free forever, no account needed. Pro is $0.99/month — instant SMS the moment a deal drops near you.";
+
 export const metadata = {
   title: "Get Deal Alerts | PuffPrice",
-  description:
-    "Illinois cannabis deal alerts. Free forever, no account needed. Pro is $0.99/month — instant SMS the moment a deal drops near you.",
+  description: OG_DESC,
+  openGraph: {
+    title: "Get Deal Alerts | PuffPrice",
+    description: OG_DESC,
+    url: "https://puffprice.com/alerts",
+    siteName: "PuffPrice",
+    images: [{ url: OG_IMAGE, width: 1200, height: 630 }],
+    locale: "en_US",
+    type: "website" as const,
+  },
+  twitter: {
+    card: "summary_large_image" as const,
+    title: "Get Deal Alerts | PuffPrice",
+    description: OG_DESC,
+    images: [OG_IMAGE],
+  },
 };
 
 const FREE_FEATURES = [

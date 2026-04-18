@@ -1,8 +1,27 @@
 import Link from "next/link";
 
+const OG_DESC =
+  "We built the thing we wished existed. PuffPrice finds the best cannabis deals near you in Illinois.";
+const OG_IMAGE = "https://puffprice.com/og-image.png";
+
 export const metadata = {
   title: "About PuffPrice — Built in Peoria, Illinois",
-  description: "We built the thing we wished existed. PuffPrice finds the best cannabis deals near you in Illinois.",
+  description: OG_DESC,
+  openGraph: {
+    title: "About PuffPrice — Built in Peoria, Illinois",
+    description: OG_DESC,
+    url: "https://puffprice.com/about",
+    siteName: "PuffPrice",
+    images: [{ url: OG_IMAGE, width: 1200, height: 630 }],
+    locale: "en_US",
+    type: "website" as const,
+  },
+  twitter: {
+    card: "summary_large_image" as const,
+    title: "About PuffPrice",
+    description: OG_DESC,
+    images: [OG_IMAGE],
+  },
 };
 
 export default function AboutPage() {

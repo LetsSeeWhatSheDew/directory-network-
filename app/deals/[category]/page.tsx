@@ -57,6 +57,22 @@ function dedupeDeals<T>(list: T[]): T[] {
   return out;
 }
 
+/**
+ * Defensive filter: strip deals whose expires_at has already passed.
+ * The Supabase query filters by is_active=true, but we've seen deals
+ * where the flag wasn't flipped promptly after expiry (CDN cache lag
+ * or a missed scheduled job). This guards the UI against showing a
+ * user an expired deal they can't actually use.
+ */
+function filterExpired<T extends { expires_at?: string | null }>(list: T[]): T[] {
+  const now = Date.now();
+  return list.filter((d) => {
+    if (!d?.expires_at) return true;
+    const t = new Date(d.expires_at).getTime();
+    return !Number.isFinite(t) || t > now;
+  });
+}
+
 function toCityCase(raw: string) {
   return raw
     .trim()
@@ -246,15 +262,34 @@ export async function generateMetadata({
   const rawCity = Array.isArray(sp?.city) ? sp.city[0] : sp?.city;
   const city = rawCity ? toCityCase(rawCity) : null;
   const label = CATEGORY_LABELS[category] || "Cannabis deals";
-  if (city) {
-    return {
-      title: `${city} Dispensary Deals Today | PuffPrice`,
-      description: `Browse today's best dispensary deals in ${city}, Illinois. Save money on cannabis with live offers.`,
-    };
-  }
+  const ogImage = "https://puffprice.com/og-image.png";
+  const title = city
+    ? `${city} Dispensary Deals Today | PuffPrice`
+    : `${label} Deals Illinois | PuffPrice`;
+  const description = city
+    ? `Browse today's best dispensary deals in ${city}, Illinois. Save money on cannabis with live offers.`
+    : `Find the cheapest ${label.toLowerCase()} deals at Illinois dispensaries right now. Real prices, real savings.`;
+  const url = city
+    ? `https://puffprice.com/deals/${category}?city=${encodeURIComponent(city)}`
+    : `https://puffprice.com/deals/${category}`;
   return {
-    title: `${label} Deals Illinois | PuffPrice`,
-    description: `Find the cheapest ${label.toLowerCase()} deals at Illinois dispensaries right now. Real prices, real savings.`,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: "PuffPrice",
+      images: [{ url: ogImage, width: 1200, height: 630 }],
+      locale: "en_US",
+      type: "website" as const,
+    },
+    twitter: {
+      card: "summary_large_image" as const,
+      title,
+      description,
+      images: [ogImage],
+    },
   };
 }
 
@@ -359,7 +394,7 @@ export default async function DealsPage({
   const city = rawCity ? toCityCase(rawCity) : null;
 
   const { deals: rawDeals, source } = await getDeals(category, city);
-  const deals = dedupeDeals(rawDeals);
+  const deals = dedupeDeals(filterExpired(rawDeals));
   const slugs = Array.from(
     new Set(
       deals
