@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import ClaimForm from "../../components/ClaimForm";
 import RecentlyViewedTracker from "../../components/RecentlyViewedTracker";
 import ShareDealButton from "../../components/ShareDealButton";
+import ReportIssue from "../../components/ReportIssue";
 import { estimateSavings } from "../../../lib/dealScoring";
 
 const NOINDEX_SLUGS = [
@@ -880,6 +881,13 @@ export default async function ListingPage({
           <div className="dn-footer-nav">
             <Link href={backHref} className="dn-footer-back">{backLabel}</Link>
             <Link href={`/dispensary/${listing.slug}`} className="dn-footer-fwd">Full profile →</Link>
+          </div>
+
+          <div style={{ marginTop: 18, textAlign: "center", fontFamily: "system-ui, sans-serif", fontSize: ".75rem", color: "#64748b" }}>
+            <ReportIssue
+              dispensaryName={listing.name || listing.slug || "this dispensary"}
+              context={`/l/${listing.slug}`}
+            />
           </div>
         </div>
 

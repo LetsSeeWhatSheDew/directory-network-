@@ -9,7 +9,11 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
+import { scoreDeal as scoreDealValue } from "../../../lib/dealScore";
+import { timeAgo, formatVerified } from "../../../lib/timeAgo";
 import ShareDealButton from "../../components/ShareDealButton";
+import DealValueBadge from "../../components/DealValueBadge";
+import ReportIssue from "../../components/ReportIssue";
 
 export const revalidate = 60;
 
@@ -36,6 +40,8 @@ type Deal = {
   recurring_days?: string[] | null;
   source_url: string | null;
   is_active: boolean | null;
+  updated_at?: string | null;
+  created_at?: string | null;
 };
 
 type ListingMini = {
@@ -307,6 +313,26 @@ export default async function DealPage({
               </>
             )
           )}
+          {(() => {
+            const s = scoreDealValue(deal);
+            return (
+              <div
+                style={{
+                  marginBottom: 12,
+                  padding: "8px 12px",
+                  borderRadius: 8,
+                  background: "#f7f6f1",
+                  fontFamily: "system-ui, sans-serif",
+                  fontSize: ".82rem",
+                }}
+              >
+                <span style={{ fontWeight: 700, color: s.color, marginRight: 6 }}>
+                  ● {s.label}
+                </span>
+                <span style={{ color: "#6b7280" }}>— {s.reason}</span>
+              </div>
+            );
+          })()}
           <span
             className="expires"
             style={{
@@ -344,6 +370,31 @@ export default async function DealPage({
           <Link href={`/dispensary/${deal.listing_slug}`} className="secondary">
             See full {disp} profile
           </Link>
+        </div>
+
+        <div
+          style={{
+            marginTop: 28,
+            paddingTop: 18,
+            borderTop: "1px solid #e8e4da",
+            fontSize: ".78rem",
+            color: "#9ca3af",
+            fontFamily: "system-ui, sans-serif",
+            lineHeight: 1.6,
+          }}
+        >
+          {(deal.updated_at || deal.created_at) && (
+            <div style={{ marginBottom: 4 }}>
+              Last verified {formatVerified(deal.updated_at || deal.created_at)}
+            </div>
+          )}
+          <div style={{ marginBottom: 10 }}>
+            Source: {disp} public listing
+            {(deal.updated_at || deal.created_at) && (
+              <> · Updated {timeAgo(deal.updated_at || deal.created_at)}</>
+            )}
+          </div>
+          <ReportIssue dealId={id} dispensaryName={disp} context={`/deal/${id}`} />
         </div>
       </main>
     </>

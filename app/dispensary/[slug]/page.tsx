@@ -10,6 +10,10 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
+import { timeAgo } from "../../../lib/timeAgo";
+import { deriveVibeTags, VIBE_TAG_LABELS } from "../../../lib/vibeTags";
+import DealValueBadge from "../../components/DealValueBadge";
+import ReportIssue from "../../components/ReportIssue";
 
 export const revalidate = 300;
 
@@ -66,6 +70,8 @@ type Deal = {
   expires_at: string | null;
   is_recurring: boolean | null;
   source_url: string | null;
+  updated_at?: string | null;
+  created_at?: string | null;
 };
 
 async function sbFetch<T>(path: string): Promise<T | null> {
@@ -100,7 +106,7 @@ async function getHours(listingId: string): Promise<Hours[]> {
 
 async function getDeals(slug: string): Promise<Deal[]> {
   const rows = await sbFetch<Deal[]>(
-    `deals?listing_slug=eq.${encodeURIComponent(slug)}&is_active=eq.true&project_tag=eq.green&select=id,title,description,category,discount_value,discount_unit,discount_type,original_price,sale_price,expires_at,is_recurring,source_url&order=discount_value.desc&limit=10`
+    `deals?listing_slug=eq.${encodeURIComponent(slug)}&is_active=eq.true&project_tag=eq.green&select=id,title,description,category,discount_value,discount_unit,discount_type,original_price,sale_price,expires_at,is_recurring,source_url,updated_at,created_at&order=discount_value.desc&limit=10`
   );
   // Defensive: strip expired rows even if is_active wasn't flipped yet
   const now = Date.now();
@@ -223,6 +229,7 @@ export default async function DispensaryProfilePage({
   const name = listing.name || slug;
   const city = listing.city || "Illinois";
   const todayIdx = (new Date().getDay() + 6) % 7;
+  const vibeTags = deriveVibeTags(listing, deals.length, hours).slice(0, 3);
 
   // LocalBusiness schema — mirrors /l/[slug] so both pages give Google the
   // same canonical entity data.
@@ -373,6 +380,36 @@ export default async function DispensaryProfilePage({
         <h1>{name}</h1>
         <div className="city-line">{city}, IL</div>
 
+        {vibeTags.length > 0 && (
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 6,
+              marginBottom: 16,
+            }}
+            aria-label="Dispensary notes"
+          >
+            {vibeTags.map((t) => (
+              <span
+                key={t}
+                style={{
+                  fontSize: ".72rem",
+                  fontFamily: "system-ui, sans-serif",
+                  fontWeight: 600,
+                  color: "var(--color-text-secondary, #6b7280)",
+                  background: "var(--color-background-secondary, #f5f4f0)",
+                  padding: "3px 10px",
+                  borderRadius: 100,
+                  border: "1px solid #e8e4da",
+                }}
+              >
+                {VIBE_TAG_LABELS[t]}
+              </span>
+            ))}
+          </div>
+        )}
+
         <div className="status-row">
           <span className={`status ${status.open ? "status-open" : "status-closed"}`}>
             <span className={`status-dot ${status.open ? "status-dot-open" : "status-dot-closed"}`} />
@@ -446,14 +483,30 @@ export default async function DispensaryProfilePage({
               return (
                 <div className="deal-card" key={d.id}>
                   <div className="deal-title">{formatDealTitle(d)}</div>
+                  {(d.updated_at || d.created_at) && (
+                    <div
+                      style={{
+                        fontSize: ".72rem",
+                        color: "var(--color-text-tertiary, #9ca3af)",
+                        fontFamily: "system-ui, sans-serif",
+                        marginBottom: 6,
+                      }}
+                    >
+                      Updated {timeAgo(d.updated_at || d.created_at)}
+                    </div>
+                  )}
                   <div className="deal-meta">
                     {dollars != null ? (
                       <>
                         <span className="deal-savings-label">You save</span>
                         <span className="deal-savings">${dollars}</span>
+                        <DealValueBadge deal={d} />
                       </>
                     ) : (
-                      savingsLabel !== "Deal active" && <span className="deal-savings">{savingsLabel}</span>
+                      <>
+                        {savingsLabel !== "Deal active" && <span className="deal-savings">{savingsLabel}</span>}
+                        <DealValueBadge deal={d} />
+                      </>
                     )}
                     {expiresLabel && <span className="deal-expires">{expiresLabel}</span>}
                   </div>
@@ -523,6 +576,23 @@ export default async function DispensaryProfilePage({
         <div className="claim-cta">
           Own {name}?{" "}
           <Link href={`/claim/${slug}`}>Claim this listing →</Link>
+        </div>
+
+        <div
+          style={{
+            marginTop: 24,
+            paddingTop: 18,
+            borderTop: "1px solid #e8e4da",
+            fontSize: ".76rem",
+            color: "#9ca3af",
+            fontFamily: "system-ui, sans-serif",
+            lineHeight: 1.6,
+          }}
+        >
+          <div style={{ marginBottom: 8 }}>
+            Deal data sourced from {name}&rsquo;s public menu and website.
+          </div>
+          <ReportIssue dispensaryName={name} context={`/dispensary/${slug}`} />
         </div>
       </main>
     </>

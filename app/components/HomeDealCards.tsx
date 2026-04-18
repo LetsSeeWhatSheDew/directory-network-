@@ -4,8 +4,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { estimateSavings, formatSavingsDollars, gradeDeal, shouldShowGrade } from "../../lib/dealScoring";
 import { displayCity } from "../../lib/cityNormalize";
+import { timeAgo } from "../../lib/timeAgo";
 import TrackedLink from "./TrackedLink";
 import ShareDealButton from "./ShareDealButton";
+import DealValueBadge from "./DealValueBadge";
 
 type Deal = {
   deal_id?: string;
@@ -25,6 +27,10 @@ type Deal = {
   google_rating?: number | null;
   is_recurring?: boolean | null;
   expires_at?: string | null;
+  updated_at?: string | null;
+  created_at?: string | null;
+  original_price?: number | null;
+  sale_price?: number | null;
   scope?: "local" | "statewide";
 };
 
@@ -301,6 +307,19 @@ export default function HomeDealCards({
                 </div>
               </div>
               <div className="deal-highlight">{d.deal_title || "Active deal"}</div>
+              {(d.updated_at || d.created_at) && (
+                <div
+                  style={{
+                    fontSize: ".7rem",
+                    color: "var(--color-text-tertiary, #9ca3af)",
+                    fontFamily: "system-ui, sans-serif",
+                    marginTop: 2,
+                    marginBottom: 2,
+                  }}
+                >
+                  Updated {timeAgo(d.updated_at || d.created_at)}
+                </div>
+              )}
               {urgency && (
                 <div style={{ display: "inline-block", marginTop: 4, marginBottom: 6, fontSize: ".7rem", fontFamily: "system-ui,sans-serif", fontWeight: 700, color: urgency.fg, background: urgency.bg, padding: "2px 9px", borderRadius: 100 }}>
                   {urgency.text}
@@ -326,6 +345,9 @@ export default function HomeDealCards({
                       <div className="savings-copy">
                         <span className="savings-label">You save</span>
                         <span className="savings-sub">vs. area average</span>
+                        <span style={{ marginTop: 4, display: "inline-flex" }}>
+                          <DealValueBadge deal={d} />
+                        </span>
                       </div>
                       <span className="savings-num">${dollars}</span>
                     </div>
@@ -333,9 +355,12 @@ export default function HomeDealCards({
                 }
                 return (
                   <div className="deal-savings">
-                    <span className="savings-num" style={{ fontSize: "1.5rem" }}>
-                      {formatted}
-                    </span>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                      <span className="savings-num" style={{ fontSize: "1.5rem" }}>
+                        {formatted}
+                      </span>
+                      <DealValueBadge deal={d} />
+                    </div>
                   </div>
                 );
               })()}

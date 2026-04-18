@@ -7,6 +7,11 @@
   --brand-accent: #50c878;
   --brand-text: #f0ede8;
   --brand-muted: #8a9490;
+  /* Shared text tokens used by dealScore.ts and freshness/report UI */
+  --color-text-success: #16a34a;
+  --color-text-secondary: #6b7280;
+  --color-text-tertiary: #9ca3af;
+  --color-background-secondary: #f5f4f0;
 }
 
 @theme inline {

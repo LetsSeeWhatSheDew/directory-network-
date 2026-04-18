@@ -4,10 +4,13 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { estimateSavings, formatSavingsDollars, gradeDeal, shouldShowGrade } from "../../../lib/dealScoring";
+import { scoreDeal as scoreDealValue } from "../../../lib/dealScore";
 import { isInMetro, metroCities } from "../../../lib/cityNormalize";
+import { timeAgo } from "../../../lib/timeAgo";
 import TrackView from "../../components/TrackView";
 import DealCtaLink from "../../components/DealCtaLink";
 import ShareDealButton from "../../components/ShareDealButton";
+import DealValueBadge from "../../components/DealValueBadge";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://hnbjufmtmrhexmdrfubw.supabase.co';
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300';
@@ -615,6 +618,9 @@ export default async function DealsPage({
                       <div className="you-save-label">You save</div>
                       <div className="save-amount">${dollars}</div>
                       <div className="save-vs">vs. area average</div>
+                      <div style={{ marginTop: 4, marginBottom: 4 }}>
+                        <DealValueBadge deal={topDeal} />
+                      </div>
                     </>
                   );
                 }
@@ -622,9 +628,24 @@ export default async function DealsPage({
                   <>
                     <div className="save-amount">{formatted}</div>
                     <div className="save-vs">on this deal</div>
+                    <div style={{ marginTop: 4, marginBottom: 4 }}>
+                      <DealValueBadge deal={topDeal} />
+                    </div>
                   </>
                 );
               })()}
+              {(topDeal.updated_at || topDeal.created_at) && (
+                <div
+                  style={{
+                    fontSize: ".7rem",
+                    color: "var(--color-text-tertiary, #9ca3af)",
+                    fontFamily: "system-ui, sans-serif",
+                    marginBottom: 10,
+                  }}
+                >
+                  Updated {timeAgo(topDeal.updated_at || topDeal.created_at)}
+                </div>
+              )}
 
               <div className="disp-name">
                 {topDeal.name || topDeal.listing_slug}
@@ -771,17 +792,23 @@ export default async function DealsPage({
                         <div className="alt-deal">
                           {deal.deal_title || deal.title || `${deal.discount_value}% off`}
                         </div>
-                        {(() => {
-                          const u = getExpiryUrgency(deal.expires_at);
-                          if (!u) return null;
-                          return (
-                            <div style={{ marginTop: 4, display: "inline-block", fontSize: ".64rem", fontFamily: "system-ui,sans-serif", fontWeight: 700, color: u.fg, background: u.bg, padding: "2px 8px", borderRadius: 100 }}>
-                              {u.text}
-                            </div>
-                          );
-                        })()}
+                        <div style={{ marginTop: 4, display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+                          <DealValueBadge deal={deal} />
+                          {(() => {
+                            const u = getExpiryUrgency(deal.expires_at);
+                            if (!u) return null;
+                            return (
+                              <span style={{ display: "inline-block", fontSize: ".64rem", fontFamily: "system-ui,sans-serif", fontWeight: 700, color: u.fg, background: u.bg, padding: "2px 8px", borderRadius: 100 }}>
+                                {u.text}
+                              </span>
+                            );
+                          })()}
+                        </div>
                         <div className="alt-meta">
                           {deal.city || "Illinois"}
+                          {(deal.updated_at || deal.created_at) && (
+                            <> · Updated {timeAgo(deal.updated_at || deal.created_at)}</>
+                          )}
                         </div>
                       </div>
                     </Link>

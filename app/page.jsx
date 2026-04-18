@@ -1073,11 +1073,24 @@ export default async function HomePage() {
       </div>
 
       {/* FOOTER */}
+      <div style={{
+        maxWidth: 900,
+        margin: "32px auto 0",
+        padding: "0 20px",
+        fontFamily: "system-ui, sans-serif",
+        fontSize: ".78rem",
+        color: "#9ca3af",
+        lineHeight: 1.6,
+        textAlign: "center",
+      }}>
+        PuffPrice tracks Illinois dispensary deals daily. Data sourced from
+        public dispensary menus and websites. Verify with the dispensary before visiting.
+      </div>
       <footer className="footer">
         <span className="footer-logo">puff<span>price</span></span>
         <div className="footer-links">
+          <Link href="/start" className="footer-link">First time? Start here →</Link>
           <Link href="/cannabis/illinois" className="footer-link">Illinois</Link>
-          <Link href="/cannabis/illinois/first-time-guide" className="footer-link">First-time guide</Link>
           <Link href="/cannabis/illinois/laws" className="footer-link">IL laws</Link>
           <Link href="/dispensaries" className="footer-link">For dispensaries</Link>
         </div>

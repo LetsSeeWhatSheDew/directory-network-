@@ -54,6 +54,7 @@ export default function MobileNavMenu() {
             <Link href="/alerts" className="mobile-menu-link highlight">Get deal alerts →</Link>
             <Link href="/about" className="mobile-menu-link">About PuffPrice</Link>
             <Link href="/dispensaries" className="mobile-menu-link">For dispensaries</Link>
+            <Link href="/start" className="mobile-menu-link">New to dispensaries? →</Link>
           </div>
         </>
       )}

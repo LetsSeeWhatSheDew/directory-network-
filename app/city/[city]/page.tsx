@@ -10,7 +10,10 @@ import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
 import { metroCities, isInMetro } from "../../../lib/cityNormalize";
 import { estimateSavings } from "../../../lib/dealScoring";
+import { scoreDeal as scoreDealValue } from "../../../lib/dealScore";
+import { timeAgo, formatVerified } from "../../../lib/timeAgo";
 import EndingSoonRow, { type EndingSoonDeal } from "../../components/EndingSoonRow";
+import DealValueBadge from "../../components/DealValueBadge";
 
 export const revalidate = 300;
 
@@ -63,6 +66,8 @@ type DealRow = {
   original_price?: number | null;
   sale_price?: number | null;
   expires_at?: string | null;
+  updated_at?: string | null;
+  created_at?: string | null;
 };
 
 function toCityCase(raw: string) {
@@ -181,10 +186,27 @@ export default async function CityPage({
   const city = toCityCase(raw);
   if (!city) notFound();
 
-  const [deals, listings] = await Promise.all([
+  const [rawDeals, listings] = await Promise.all([
     getCityDeals(city),
     getCityListings(city),
   ]);
+
+  // Secondary sort by quality score so "Great value" deals bubble up
+  // within the already savings-sorted list.
+  const GRADE_RANK: Record<string, number> = { great: 0, solid: 1, okay: 2, weak: 3 };
+  const deals = [...rawDeals].sort((a, b) => {
+    const sa = estimateSavings(a) ?? 0;
+    const sb = estimateSavings(b) ?? 0;
+    if (sb !== sa) return sb - sa;
+    return GRADE_RANK[scoreDealValue(a).grade] - GRADE_RANK[scoreDealValue(b).grade];
+  });
+
+  const latestUpdate = deals.reduce<string | null>((acc, d) => {
+    const t = d.updated_at || d.created_at;
+    if (!t) return acc;
+    if (!acc) return t;
+    return new Date(t).getTime() > new Date(acc).getTime() ? t : acc;
+  }, null);
 
   const dispensaryCount = new Set(
     deals.map((d) => d.listing_slug).filter(Boolean)
@@ -260,7 +282,19 @@ export default async function CityPage({
       <main className="wrap">
         <p className="answer">{answerText}</p>
         <div className="eyebrow">Illinois · City page</div>
-        <h1>{city} dispensary deals today</h1>
+        <h1>Best deals in {city}</h1>
+        {latestUpdate && (
+          <p
+            style={{
+              fontSize: ".78rem",
+              color: "#9ca3af",
+              fontFamily: "system-ui, sans-serif",
+              marginBottom: 14,
+            }}
+          >
+            Data current as of {formatVerified(latestUpdate)}
+          </p>
+        )}
         {intro && <p className="intro">{intro}</p>}
 
         {/* Ending-soon urgency row, scoped to this city */}
@@ -298,6 +332,14 @@ export default async function CityPage({
                   <div className="deal-body">
                     <div className="deal-name">{name}</div>
                     <div className="deal-title">{title}</div>
+                    <div style={{ marginTop: 4, display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+                      <DealValueBadge deal={d} />
+                      {(d.updated_at || d.created_at) && (
+                        <span style={{ fontSize: ".7rem", color: "#9ca3af", fontFamily: "system-ui, sans-serif" }}>
+                          Updated {timeAgo(d.updated_at || d.created_at)}
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <div className="deal-right">
                     {dollars != null ? (
