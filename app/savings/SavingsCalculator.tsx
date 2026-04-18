@@ -50,9 +50,9 @@ export default function SavingsCalculator() {
     const yearly = visits * spendPer;
     const savingsPool = yearly * AVG_DISCOUNT_RATE;
     const overpaying = Math.round(savingsPool * MISSED_MULT[dealHabit]);
-    const cleanlistSaves = Math.round(savingsPool * CAPTURED_MULT[dealHabit]);
-    const eighths = Math.floor(cleanlistSaves / 40);
-    return { overpaying, cleanlistSaves, eighths, yearly: Math.round(yearly) };
+    const puffpriceSaves = Math.round(savingsPool * CAPTURED_MULT[dealHabit]);
+    const eighths = Math.floor(puffpriceSaves / 40);
+    return { overpaying, puffpriceSaves, eighths, yearly: Math.round(yearly) };
   }, [frequency, spend, dealHabit, complete]);
 
   return (
@@ -103,7 +103,7 @@ export default function SavingsCalculator() {
           </div>
           <p style={resultBody}>
             PuffPrice users who match your profile save an average of{" "}
-            <strong style={{ color: "#16a34a" }}>${result.cleanlistSaves} / year</strong>.
+            <strong style={{ color: "#16a34a" }}>${result.puffpriceSaves} / year</strong>.
           </p>
           {result.eighths > 0 && (
             <p style={resultSub}>That&apos;s <strong>{result.eighths} free eighth{result.eighths === 1 ? "" : "s"} of flower.</strong></p>

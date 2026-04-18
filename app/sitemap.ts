@@ -72,8 +72,12 @@ async function getIllinoisCities() {
 
 async function getActiveDeals() {
   try {
+    // Only emit /deal/[id] URLs for deals still live — Google treats
+    // crawling a 404-or-notFound page for an expired deal as a quality
+    // signal against the site. `expires_at.is.null` keeps evergreen deals.
+    const nowIso = new Date().toISOString();
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/deals?select=id,updated_at&is_active=eq.true&project_tag=eq.green&limit=200`,
+      `${SUPABASE_URL}/rest/v1/deals?select=id,updated_at,expires_at&is_active=eq.true&project_tag=eq.green&or=(expires_at.gt.${nowIso},expires_at.is.null)&limit=500`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY!,
@@ -107,6 +111,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${brand.url}/early-access`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.6 },
     { url: `${brand.url}/upgrade`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     { url: `${brand.url}/claim`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+    { url: `${brand.url}/start`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
+    { url: `${brand.url}/terms`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
+    { url: `${brand.url}/privacy`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
   ];
 
   // Deal engine category pages

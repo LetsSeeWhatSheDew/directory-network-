@@ -1,7 +1,7 @@
 export const metadata = {
-  title: "Pricing — Featured dispensary listings & consumer alerts | PuffPrice",
+  title: "Go Pro — $0.99/mo | PuffPrice",
   description:
-    "Free dispensary listings always. Featured placement from $49/month. Pro consumer alerts from $4.99/month.",
+    "Instant SMS when cannabis deals drop near you in Illinois. $0.99 a month. Cancel anytime.",
 };
 
 export default function UpgradeLayout({ children }: { children: React.ReactNode }) {

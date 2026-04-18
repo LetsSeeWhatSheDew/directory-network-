@@ -154,7 +154,7 @@ export default function AlertPreferencesPage() {
               {[
                 { v: "weekly", t: "Weekly digest", d: "Free · every Monday" },
                 { v: "daily", t: "Daily email", d: "$3.99/mo · every morning" },
-                { v: "sms", t: "Instant SMS", d: "$4.99/mo · text alerts the moment a deal goes live" },
+                { v: "sms", t: "Instant SMS", d: "$0.99/mo · text alerts the moment a deal goes live" },
               ].map((f) => (
                 <label key={f.v} className={frequency === f.v ? "active" : ""}>
                   <input type="radio" name="frequency" value={f.v} checked={frequency === f.v} onChange={() => setFrequency(f.v)} />

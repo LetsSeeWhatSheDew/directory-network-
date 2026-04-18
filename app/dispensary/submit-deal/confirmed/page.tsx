@@ -52,15 +52,14 @@ export default async function ConfirmedPage({
         </p>
 
         <div className="card">
-          <h2>Want to appear first in {cityLabel} searches?</h2>
+          <h2>Your listing in {cityLabel}</h2>
           <p>
-            Featured placement puts your deal at the top of every{" "}
-            <strong>{cityLabel}</strong> search and deal page on PuffPrice —
-            $49/month, cancel anytime. First month free for dispensaries that
-            sign up this week.
+            Every listing on PuffPrice is free, forever — no paid tier, no
+            upsell. If you haven&apos;t claimed yours yet, do it now so you
+            can update your hours and submit more deals in seconds.
           </p>
           <div>
-            <Link href="/upgrade" className="cta">See Featured pricing →</Link>
+            <Link href="/get-listed" className="cta">Claim your free listing →</Link>
             <Link href="/dispensaries" className="cta-secondary">View dispensaries</Link>
           </div>
         </div>

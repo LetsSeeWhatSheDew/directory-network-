@@ -1,6 +1,8 @@
 // components/FeaturedDispensary.tsx
-// Shows a "Featured" dispensary slot on city pages
-// Business owners pay $49/mo to be featured in their city
+// Shows a "Featured" dispensary slot on city pages. The badge is a
+// ranking signal from the DB `plan === "featured"` enum — not a paid
+// tier that's being sold today. Keep the rendering; empty-state copy
+// points to the free listing claim flow.
 
 import Link from "next/link";
 
@@ -85,7 +87,7 @@ export default function FeaturedDispensary({ listing, city }: FeaturedDispensary
           maxWidth: "480px",
         }}>
           Be the first dispensary customers see when they search for cannabis in {city}.
-          Featured listings get priority placement, logo display, and direct contact links.
+          Your listing is free, forever. Claim it and manage your hours, deals, and contact info.
         </p>
         <Link
           href="/get-listed"
@@ -103,7 +105,7 @@ export default function FeaturedDispensary({ listing, city }: FeaturedDispensary
             fontSize: "0.875rem",
           }}
         >
-          Get featured — $49/mo →
+          Claim your listing (free) →
         </Link>
         <p style={{
           fontSize: "0.72rem",
@@ -111,7 +113,7 @@ export default function FeaturedDispensary({ listing, city }: FeaturedDispensary
           fontFamily: "system-ui, sans-serif",
           marginTop: "12px",
         }}>
-          Cancel anytime · No contract · Live within 48 hours
+          Always free · No contract · Live within 48 hours
         </p>
       </div>
     );

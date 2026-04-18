@@ -5,8 +5,8 @@ export const brand = {
   name: "PuffPrice",
   tagline: "Real deals. Right now. Near you.",
   headline: "Best Bud For Your Buck$ — Low Prices. High Times.",
-  domain: "puffprice.com",
-  url: "https://puffprice.com",
+  domain: "www.puffprice.com",
+  url: "https://www.puffprice.com",
   supportEmail: "hi@puffprice.com",
   social: {
     twitter: "@puffprice",

@@ -1,23 +1,19 @@
 // app/upgrade/success/page.tsx
-// Thank-you page after a successful Stripe Checkout.
-// Shows a different message based on the ?tier=... query param.
+// Thank-you page after a successful Stripe Checkout. Single-tier Pro model.
 
 import Link from "next/link";
 
 export const metadata = {
-  title: "Thanks — you're in",
-  description: "Your PuffPrice subscription is active.",
+  title: "You're Pro — welcome | PuffPrice",
+  description: "Your PuffPrice Pro subscription is active.",
 };
 
 export default async function UpgradeSuccessPage({
   searchParams,
 }: {
-  searchParams: Promise<{ tier?: string; session_id?: string }>;
+  searchParams: Promise<{ welcome?: string; session_id?: string }>;
 }) {
-  const { tier } = await searchParams;
-
-  const isDispensary = tier === "featured";
-  const isConsumer = tier === "pro_consumer";
+  await searchParams;
 
   return (
     <div style={{ fontFamily: "Georgia, serif", background: "#0f1f3d", minHeight: "100vh", color: "#fff", display: "flex", flexDirection: "column" }}>
@@ -41,19 +37,12 @@ export default async function UpgradeSuccessPage({
           </div>
 
           <h1 style={{ fontSize: "clamp(2rem, 5vw, 3rem)", letterSpacing: "-0.04em", marginBottom: 14, lineHeight: 1.05 }}>
-            {isDispensary ? "You're featured." : isConsumer ? "You're Pro." : "You're in."}
+            You&apos;re Pro.
           </h1>
 
           <p style={{ fontSize: "1.1rem", color: "rgba(255,255,255,0.7)", fontFamily: "system-ui, sans-serif", lineHeight: 1.6, marginBottom: 32 }}>
-            {isDispensary && (
-              <>Your deal now shows first on your city&apos;s deals page. Expect lead traffic to start within 24 hours.</>
-            )}
-            {isConsumer && (
-              <>You&apos;ll get instant SMS alerts when dispensaries near you post a deal worth knowing about.</>
-            )}
-            {!isDispensary && !isConsumer && (
-              <>Your subscription is active. Welcome aboard.</>
-            )}
+            You&apos;ll get instant SMS alerts when dispensaries near you post
+            a deal worth knowing about.
           </p>
 
           <div style={{
@@ -69,24 +58,9 @@ export default async function UpgradeSuccessPage({
               What happens next
             </h2>
             <ol style={{ paddingLeft: 20, margin: 0, display: "flex", flexDirection: "column", gap: 10, color: "rgba(255,255,255,0.85)", fontSize: ".9rem" }}>
-              {isDispensary ? (
-                <>
-                  <li>We&apos;ll email you within 24 hours to confirm your featured placement and collect your first deal submission.</li>
-                  <li>Your store appears at the top of your city&apos;s deals page and earns a &quot;Featured&quot; badge.</li>
-                  <li>You&apos;ll get a lead alert email every time someone clicks through to your listing.</li>
-                </>
-              ) : isConsumer ? (
-                <>
-                  <li>Watch for a confirmation text to the phone number you gave us.</li>
-                  <li>Reply with your ZIP code to set your deal-alert radius.</li>
-                  <li>Alerts start within 24 hours — usually 2-5 per week, never more than one per day.</li>
-                </>
-              ) : (
-                <>
-                  <li>Check your email for a receipt from Stripe.</li>
-                  <li>You&apos;ll hear from Matthew within 24 hours with onboarding details.</li>
-                </>
-              )}
+              <li>Watch for a confirmation text to the phone number you gave us.</li>
+              <li>Reply with your ZIP code to set your deal-alert radius.</li>
+              <li>Alerts start within 24 hours — usually 2&ndash;5 per week, never more than one per day.</li>
             </ol>
           </div>
 

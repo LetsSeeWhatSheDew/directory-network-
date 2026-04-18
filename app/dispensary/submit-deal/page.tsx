@@ -134,8 +134,8 @@ export default function SubmitDealPage() {
       <div style={{ maxWidth: 680, margin: "0 auto", padding: "48px 24px" }}>
         <h1 style={{ fontSize: "2rem", marginBottom: 8, letterSpacing: "-0.02em" }}>Submit your deal</h1>
         <p style={{ color: "#6b7280", fontFamily: "system-ui, sans-serif", marginBottom: 28 }}>
-          Free for all Illinois dispensaries. Your deal appears on the homepage, your
-          city page, and the relevant category page within a few hours of approval.
+          Free to submit. We verify within 24 hours. Your deal goes live to
+          PuffPrice users across Illinois.
         </p>
 
         {status === "err" && (
@@ -297,7 +297,7 @@ export default function SubmitDealPage() {
           </button>
 
           <p style={{ fontSize: ".8rem", color: "#9ca3af", fontFamily: "system-ui, sans-serif", textAlign: "center" }}>
-            Free to submit. We review each deal before it goes live (usually within a few hours).
+            Free to submit. We verify within 24 hours before your deal goes live.
           </p>
         </form>
       </div>

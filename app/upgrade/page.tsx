@@ -1,359 +1,163 @@
-// app/upgrade/page.tsx
-// Three-tier pricing with live Stripe Checkout wiring.
-// "use client" because each CTA POSTs to /api/stripe/create-checkout
-// and redirects on success.
+// app/upgrade/page.tsx — v2: single $0.99 PRO tier, Featured removed.
+// CTA uses NEXT_PUBLIC_STRIPE_PRO_CHECKOUT_URL (Stripe Payment Link).
+// Fallback: mailto — so page never looks broken before env var is set.
 
-"use client";
-
-import { useState } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 
-type TierKey = "free" | "featured" | "pro_consumer";
+export const metadata: Metadata = {
+  title: "Go Pro — $0.99/mo | PuffPrice",
+  description:
+    "Instant SMS when cannabis deals drop near you in Illinois. $0.99 a month. Cancel anytime.",
+  alternates: { canonical: "https://www.puffprice.com/upgrade" },
+  openGraph: {
+    title: "PuffPrice Pro — $0.99/mo",
+    description:
+      "Never miss a deal. Instant SMS the moment prices drop near you in Illinois.",
+    url: "https://www.puffprice.com/upgrade",
+    siteName: "PuffPrice",
+    type: "website",
+  },
+};
+
+const FEATURES: string[] = [
+  "Instant SMS the moment a deal goes live near you",
+  'Price drop alerts — "Flower just dropped below $30 near you"',
+  "Flash-sale early access — 15 minutes before public",
+  "Your total-savings dashboard",
+  "First to know when a new dispensary opens",
+];
+
+const FAQ: { q: string; a: string }[] = [
+  {
+    q: "When do Pro SMS alerts start?",
+    a: "Within 24 hours of signup. You'll get a confirmation text first, then start receiving alerts based on your ZIP code and chosen categories.",
+  },
+  {
+    q: "Is there a contract?",
+    a: "No. Everything is month-to-month. Cancel in one click from your Stripe billing portal anytime.",
+  },
+  {
+    q: "What payment methods do you accept?",
+    a: "Credit and debit cards via Stripe. Stripe handles all payment processing — PuffPrice never sees your card details.",
+  },
+  {
+    q: "What if I don't like it?",
+    a: "Cancel any time, no questions. You keep every dollar you've already saved — those are real transactions at real dispensaries.",
+  },
+  {
+    q: "Do dispensaries pay you?",
+    a: "No. Dispensary listings are free, forever. PuffPrice is funded by Pro subscribers only. That's why you can trust the deal ranking.",
+  },
+];
+
+const CHECKOUT_URL =
+  process.env.NEXT_PUBLIC_STRIPE_PRO_CHECKOUT_URL ||
+  "mailto:matthew@jacarandapeoria.com?subject=PuffPrice%20Pro%20interest";
 
 export default function UpgradePage() {
-  const [email, setEmail] = useState("");
-  const [slug, setSlug] = useState("");
-  const [loadingTier, setLoadingTier] = useState<TierKey | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  async function startCheckout(tier: Exclude<TierKey, "free">) {
-    setError(null);
-    if (!email || !email.includes("@")) {
-      setError("Please enter your email first.");
-      return;
-    }
-    setLoadingTier(tier);
-    try {
-      try {
-        const w = window as any;
-        if (typeof w.gtag === "function") w.gtag("event", "upgrade_click", { tier });
-      } catch {}
-      const res = await fetch("/api/stripe/create-checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tier, email, slug: slug || undefined }),
-      });
-      const data = await res.json();
-      if (res.ok && data.url) {
-        window.location.href = data.url;
-        return;
-      }
-      setError(data.error || "Checkout failed. Please try again or email matthew@jacarandapeoria.com.");
-    } catch {
-      setError("Network error. Please try again.");
-    } finally {
-      setLoadingTier(null);
-    }
-  }
-
   return (
-    <div style={{ fontFamily: "Georgia, serif", background: "#f5f4f0", minHeight: "100vh", color: "#0f1f3d" }}>
-      <nav style={{ padding: "14px 28px", background: "#0f1f3d", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <Link href="/" style={{ color: "#fff", textDecoration: "none", fontWeight: 700, fontSize: "1.15rem" }}>
-          puff<span style={{ color: "#4ade80" }}>price</span>
+    <main className="min-h-screen bg-[#faf7f0] text-gray-900">
+      <nav className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
+        <Link href="/" className="font-serif text-xl tracking-tight">
+          puffprice
         </Link>
-        <Link href="/" style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none", fontSize: ".85rem", fontFamily: "system-ui, sans-serif" }}>
+        <Link href="/" className="text-sm text-gray-600 hover:text-gray-900">
           ← Home
         </Link>
       </nav>
 
-      <header style={{ background: "#0f1f3d", color: "#fff", padding: "56px 28px", textAlign: "center" }}>
-        <p style={{ fontSize: ".7rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#4ade80", fontFamily: "system-ui, sans-serif", fontWeight: 700, marginBottom: 10 }}>
-          Plans & pricing
+      <section className="max-w-2xl mx-auto px-6 pt-8 pb-16 text-center">
+        <p className="text-xs tracking-[0.2em] uppercase text-gray-500 mb-4">
+          PuffPrice Pro
         </p>
-        <h1 style={{ fontSize: "clamp(2rem, 5vw, 3rem)", letterSpacing: "-0.04em", marginBottom: 12, lineHeight: 1.1 }}>
-          Low Prices.<br /><em style={{ color: "#4ade80", fontStyle: "normal" }}>High Times.</em>
+        <h1 className="font-serif text-5xl md:text-6xl leading-[1.05] mb-5">
+          Low Prices.{" "}
+          <em className="italic text-green-700 font-serif">High Times.</em>
         </h1>
-        <p style={{ color: "rgba(255,255,255,0.65)", fontFamily: "system-ui, sans-serif", maxWidth: 520, margin: "0 auto", lineHeight: 1.6, fontSize: "1rem" }}>
-          Free for every Illinois dispensary. Optional upgrades for dispensaries who want more visibility — and for customers who want instant deal alerts.
+        <p className="text-lg text-gray-700 mb-10 max-w-xl mx-auto leading-relaxed">
+          Get texted the instant a deal drops near you.
+          <br className="hidden md:inline" />
+          $0.99 a month. Cancel any time.
         </p>
-      </header>
 
-      <section style={{ maxWidth: 1100, margin: "-32px auto 0", padding: "0 28px 40px", position: "relative" }}>
-        {/* Email + slug input — shared across tiers */}
-        <div style={{
-          background: "#fff", border: "1px solid #e8e4da", borderRadius: 14,
-          padding: 20, marginBottom: 28,
-          display: "flex", flexDirection: "column", gap: 10,
-          fontFamily: "system-ui, sans-serif",
-        }}>
-          <label style={{ fontSize: ".85rem", fontWeight: 600, color: "#0f1f3d" }}>
-            Your email
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              style={{
-                width: "100%", padding: "10px 12px", marginTop: 6,
-                border: "1px solid #d1cfc6", borderRadius: 8,
-                fontSize: "1rem", fontFamily: "system-ui, sans-serif",
-                color: "#0f1f3d", background: "#fff", fontWeight: 400,
-              }}
-            />
-          </label>
-          <label style={{ fontSize: ".85rem", fontWeight: 600, color: "#0f1f3d" }}>
-            Your dispensary slug <span style={{ color: "#9ca3af", fontWeight: 400 }}>(optional — dispensary plans only)</span>
-            <input
-              value={slug}
-              onChange={(e) => setSlug(e.target.value)}
-              placeholder="e.g. rise-joliet-rock-creek"
-              style={{
-                width: "100%", padding: "10px 12px", marginTop: 6,
-                border: "1px solid #d1cfc6", borderRadius: 8,
-                fontSize: "1rem", fontFamily: "system-ui, sans-serif",
-                color: "#0f1f3d", background: "#fff", fontWeight: 400,
-              }}
-            />
-          </label>
-          {error && (
-            <div style={{ background: "#fee2e2", border: "1px solid #ef4444", color: "#991b1b", padding: 10, borderRadius: 8, fontSize: ".85rem" }}>
-              {error}
+        <div className="bg-white border border-gray-200 rounded-2xl p-8 md:p-10 shadow-sm text-left">
+          <div className="flex items-start justify-between mb-6 gap-4">
+            <div>
+              <p className="text-xs tracking-[0.15em] uppercase text-green-700 font-semibold mb-1">
+                Pro
+              </p>
+              <p className="font-serif text-5xl leading-none">
+                $0.99
+                <span className="text-base text-gray-500 font-sans font-normal">
+                  {" "}
+                  / month
+                </span>
+              </p>
             </div>
-          )}
+            <span className="shrink-0 text-xs bg-green-50 text-green-800 border border-green-200 rounded-full px-3 py-1 font-medium">
+              Cancel anytime
+            </span>
+          </div>
+
+          <ul className="space-y-3 mb-8">
+            {FEATURES.map((f) => (
+              <li key={f} className="flex items-start gap-3 text-gray-800">
+                <span className="text-green-600 mt-0.5 font-bold">✓</span>
+                <span>{f}</span>
+              </li>
+            ))}
+          </ul>
+
+          <a
+            href={CHECKOUT_URL}
+            className="block w-full text-center bg-green-700 hover:bg-green-800 text-white font-semibold rounded-xl py-3.5 transition"
+          >
+            Go Pro — $0.99/mo
+          </a>
+
+          <p className="text-center text-xs text-gray-500 mt-4">
+            Less than a single pre-roll — every three years.
+          </p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 16 }}>
+        <figure className="mt-10 text-sm text-gray-600">
+          <blockquote className="italic">
+            &ldquo;I saved $23 on my last order just from a Tuesday morning
+            text. Worth every penny.&rdquo;
+          </blockquote>
+          <figcaption className="text-xs mt-2 text-gray-500 not-italic">
+            — K.M., Peoria IL · Beta user
+          </figcaption>
+        </figure>
+      </section>
 
-          {/* FREE */}
-          <article style={tierCard}>
-            <div style={tierLabel}>For dispensaries</div>
-            <h2 style={tierName}>Listed</h2>
-            <div style={tierPrice}>
-              <span style={priceBig}>$0</span>
-              <span style={pricePeriod}>/month</span>
+      <section className="max-w-2xl mx-auto px-6 pb-16">
+        <h2 className="font-serif text-2xl mb-6">FAQ</h2>
+        <div className="space-y-6">
+          {FAQ.map(({ q, a }) => (
+            <div key={q}>
+              <p className="font-semibold mb-1">{q}</p>
+              <p className="text-gray-700 leading-relaxed">{a}</p>
             </div>
-            <p style={tierDesc}>
-              Get discovered by local customers at no cost. Your store appears on every relevant city page automatically.
-            </p>
-            <ul style={featureList}>
-              <li>Basic dispensary listing with hours &amp; address</li>
-              <li>Appears on city pages and search</li>
-              <li>Google rating &amp; review count displayed</li>
-              <li>Claim &amp; self-edit your listing anytime</li>
-              <li>Submit your deals at <Link href="/dispensary/submit-deal" style={{ color: "#16a34a" }}>/dispensary/submit-deal</Link></li>
-            </ul>
-            <Link href="/get-listed" style={ctaSecondary}>
-              Claim free listing →
-            </Link>
-          </article>
-
-          {/* FEATURED */}
-          <article style={{ ...tierCard, ...tierCardHighlighted }}>
-            <div style={popularBadge}>Most popular</div>
-            <div style={{ ...tierLabel, color: "#4ade80" }}>For dispensaries</div>
-            <h2 style={{ ...tierName, color: "#fff" }}>Featured</h2>
-            <div style={tierPrice}>
-              <span style={{ ...priceBig, color: "#fff" }}>$49</span>
-              <span style={{ ...pricePeriod, color: "rgba(255,255,255,0.5)" }}>/month</span>
-            </div>
-            <p style={{ ...tierDesc, color: "rgba(255,255,255,0.7)" }}>
-              One Featured slot per city. Pinned to the top of every city page and the deals page. Direct lead alerts.
-            </p>
-            <ul style={{ ...featureList, color: "rgba(255,255,255,0.8)" }}>
-              <li>Pinned #1 on your city&apos;s deals page</li>
-              <li>&quot;Featured&quot; badge on your profile</li>
-              <li>Lead alert email when someone clicks through</li>
-              <li>City exclusivity — no other Featured in your city</li>
-              <li>Priority support &amp; onboarding</li>
-              <li>Cancel anytime, month-to-month</li>
-            </ul>
-            <button
-              onClick={() => startCheckout("featured")}
-              disabled={loadingTier === "featured"}
-              style={{
-                ...ctaPrimary,
-                background: loadingTier === "featured" ? "#15803d" : "#16a34a",
-                cursor: loadingTier === "featured" ? "not-allowed" : "pointer",
-              }}
-            >
-              {loadingTier === "featured" ? "Redirecting…" : "Start Featured — $49/mo"}
-            </button>
-          </article>
-
-          {/* PRO CONSUMER */}
-          <article style={tierCard}>
-            <div style={tierLabel}>For customers</div>
-            <h2 style={tierName}>Pro</h2>
-            <div style={tierPrice}>
-              <span style={priceBig}>$4.99</span>
-              <span style={pricePeriod}>/month</span>
-            </div>
-            <p style={tierDesc}>
-              Instant SMS the moment a deal goes live near you. Cancel anytime.
-            </p>
-            <ul style={featureList}>
-              <li>Everything in Standard</li>
-              <li>Instant SMS the moment a deal goes live near you</li>
-              <li>Price drop alerts: &ldquo;Flower just dropped below $30 near you&rdquo;</li>
-              <li>Flash sale early access (15 min before public)</li>
-              <li>Your total savings dashboard</li>
-              <li>First to know about new dispensary openings</li>
-            </ul>
-            <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 10, padding: "12px 14px", marginBottom: 12, textAlign: "center" }}>
-              <div style={{ fontSize: "1.4rem", fontWeight: 700, color: "#16a34a", fontFamily: "Georgia, serif", lineHeight: 1 }}>$400–$800</div>
-              <div style={{ fontSize: ".72rem", color: "#166534", fontFamily: "system-ui, sans-serif", marginTop: 5 }}>typical Pro user saves per year</div>
-            </div>
-            <div style={{ fontSize: ".72rem", color: "#6b7280", fontFamily: "system-ui, sans-serif", fontStyle: "italic", textAlign: "center", marginBottom: 10 }}>
-              💡 Less than one pre-roll per month
-            </div>
-            <button
-              onClick={() => startCheckout("pro_consumer")}
-              disabled={loadingTier === "pro_consumer"}
-              style={{
-                ...ctaOutline,
-                opacity: loadingTier === "pro_consumer" ? 0.6 : 1,
-                cursor: loadingTier === "pro_consumer" ? "not-allowed" : "pointer",
-              }}
-            >
-              {loadingTier === "pro_consumer" ? "Redirecting…" : "Go Pro — $4.99/mo"}
-            </button>
-            <figure style={{ marginTop: 16, padding: "14px 16px", background: "#fff", borderLeft: "3px solid #16a34a", borderRadius: 8, border: "1px solid #e8e4da" }}>
-              <blockquote style={{ fontFamily: "Georgia, serif", fontStyle: "italic", fontSize: ".92rem", color: "#0f1f3d", lineHeight: 1.5, margin: 0 }}>
-                &ldquo;I saved $23 on my last order just from a Tuesday morning text. Worth every penny.&rdquo;
-              </blockquote>
-              <figcaption style={{ fontFamily: "system-ui, sans-serif", fontSize: ".75rem", color: "#6b7280", marginTop: 8 }}>
-                — <strong style={{ color: "#0f1f3d" }}>K.M., Peoria IL</strong> <span style={{ color: "#16a34a", fontWeight: 600 }}>· Beta user</span>
-              </figcaption>
-            </figure>
-          </article>
+          ))}
         </div>
       </section>
 
-      <section style={{ maxWidth: 760, margin: "0 auto", padding: "40px 28px 60px" }}>
-        <h2 style={{ fontSize: "1.4rem", letterSpacing: "-0.02em", marginBottom: 18 }}>FAQ</h2>
-        <Faq q="How does Featured compare to Leafly?" a="Leafly charges dispensaries $600+/month for basic placement. PuffPrice Featured is $49/month with city exclusivity — meaning no other dispensary in your city can buy this slot while you hold it." />
-        <Faq q="Is there a contract?" a="No. Everything is month-to-month. Cancel in one click from your Stripe portal anytime." />
-        <Faq q="When do Pro SMS alerts start?" a="Within 24 hours of signup. You&apos;ll get a confirmation text first, then start receiving alerts based on your ZIP code and chosen categories." />
-        <Faq q="What payment methods do you accept?" a="Credit and debit cards via Stripe. Stripe handles all payment processing — PuffPrice never sees your card details." />
-        <Faq q="Can I try Featured on a trial?" a="Email matthew@jacarandapeoria.com. We&apos;re happy to set up a 2-week trial for Illinois dispensaries that have been open more than 6 months." />
+      <section className="max-w-2xl mx-auto px-6 pb-24 text-center border-t border-gray-200 pt-10">
+        <p className="text-xs tracking-wider uppercase text-gray-500 mb-2">
+          For dispensaries
+        </p>
+        <p className="text-gray-800 mb-4">
+          Your listing on PuffPrice is always free. No Featured tier. No upsell.
+        </p>
+        <Link
+          href="/get-listed"
+          className="inline-block text-green-700 hover:text-green-900 font-medium underline underline-offset-4"
+        >
+          Claim your free listing →
+        </Link>
       </section>
-
-      <footer style={{ background: "#0f1f3d", padding: "20px 28px", textAlign: "center" }}>
-        <span style={{ color: "#fff", fontSize: ".9rem" }}>
-          puff<span style={{ color: "#4ade80" }}>price</span>
-        </span>
-      </footer>
-    </div>
+    </main>
   );
 }
-
-function Faq({ q, a }: { q: string; a: string }) {
-  return (
-    <div style={{ borderBottom: "1px solid #e8e4da", padding: "16px 0" }}>
-      <h3 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: 6 }}>{q}</h3>
-      <p style={{ fontFamily: "system-ui, sans-serif", fontSize: ".92rem", color: "#6b7280", lineHeight: 1.6 }}>{a}</p>
-    </div>
-  );
-}
-
-const tierCard: React.CSSProperties = {
-  background: "#fff",
-  border: "1px solid #e8e4da",
-  borderRadius: 14,
-  padding: 28,
-  display: "flex",
-  flexDirection: "column",
-  position: "relative",
-};
-const tierCardHighlighted: React.CSSProperties = {
-  background: "#0f1f3d",
-  border: "2px solid #16a34a",
-  color: "#fff",
-};
-const popularBadge: React.CSSProperties = {
-  position: "absolute", top: -12, left: 22,
-  background: "#16a34a", color: "#fff",
-  fontSize: ".68rem", fontFamily: "system-ui, sans-serif",
-  fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase",
-  padding: "4px 12px", borderRadius: 100,
-};
-const tierLabel: React.CSSProperties = {
-  fontSize: ".68rem",
-  fontWeight: 700,
-  letterSpacing: ".14em",
-  textTransform: "uppercase",
-  color: "#16a34a",
-  fontFamily: "system-ui, sans-serif",
-  marginBottom: 10,
-};
-const tierName: React.CSSProperties = {
-  fontSize: "1.8rem",
-  letterSpacing: "-0.03em",
-  marginBottom: 10,
-  color: "#0f1f3d",
-};
-const tierPrice: React.CSSProperties = {
-  display: "flex",
-  alignItems: "baseline",
-  gap: 4,
-  marginBottom: 12,
-};
-const priceBig: React.CSSProperties = {
-  fontSize: "2.4rem",
-  fontWeight: 700,
-  color: "#0f1f3d",
-  letterSpacing: "-0.04em",
-};
-const pricePeriod: React.CSSProperties = {
-  fontSize: "1rem",
-  color: "#9ca3af",
-  fontFamily: "system-ui, sans-serif",
-};
-const tierDesc: React.CSSProperties = {
-  fontSize: ".92rem",
-  color: "#6b7280",
-  fontFamily: "system-ui, sans-serif",
-  lineHeight: 1.6,
-  marginBottom: 18,
-};
-const featureList: React.CSSProperties = {
-  listStyle: "none",
-  padding: 0,
-  margin: "0 0 20px",
-  display: "flex",
-  flexDirection: "column",
-  gap: 8,
-  fontSize: ".9rem",
-  color: "#374151",
-  fontFamily: "system-ui, sans-serif",
-};
-const ctaPrimary: React.CSSProperties = {
-  background: "#16a34a",
-  color: "#fff",
-  border: "none",
-  padding: "12px 20px",
-  borderRadius: 10,
-  fontSize: "1rem",
-  fontFamily: "system-ui, sans-serif",
-  fontWeight: 700,
-  textAlign: "center",
-  textDecoration: "none",
-  marginTop: "auto",
-};
-const ctaSecondary: React.CSSProperties = {
-  background: "#0f1f3d",
-  color: "#fff",
-  padding: "12px 20px",
-  borderRadius: 10,
-  fontSize: "1rem",
-  fontFamily: "system-ui, sans-serif",
-  fontWeight: 700,
-  textAlign: "center",
-  textDecoration: "none",
-  marginTop: "auto",
-};
-const ctaOutline: React.CSSProperties = {
-  background: "transparent",
-  color: "#16a34a",
-  border: "2px solid #16a34a",
-  padding: "10px 20px",
-  borderRadius: 10,
-  fontSize: "1rem",
-  fontFamily: "system-ui, sans-serif",
-  fontWeight: 700,
-  textAlign: "center",
-  textDecoration: "none",
-  marginTop: "auto",
-};

@@ -336,8 +336,8 @@ export default async function CityPage({
               <div className="cta-card">
                 <p className="cta-title">Own a dispensary in {city}?</p>
                 <p className="cta-body">
-                  Claim your free listing or get featured at the top of this page.
-                  Featured spots start at $49/mo.
+                  Claim your free listing in under a minute — every listing is
+                  free, forever.
                 </p>
                 <Link href="/get-listed" className="cta-btn">
                   Claim your listing →

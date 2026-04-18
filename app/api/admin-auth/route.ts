@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "cleanlist2026";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+if (!ADMIN_PASSWORD) {
+  throw new Error("ADMIN_PASSWORD env required");
+}
+
 const COOKIE_NAME = "dn_admin_auth";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
 

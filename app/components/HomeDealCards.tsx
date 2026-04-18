@@ -80,22 +80,20 @@ function getExpiryUrgency(expiresAt?: string | null) {
   return null;
 }
 
-function relativeTime(iso: string | null | undefined): string | null {
+// Freshness label from a MAX(updated_at) timestamp.
+//   < 24h  → "Updated today"
+//   < 72h  → "Updated Xh ago"
+//   ≥ 72h  → null (hide the line entirely — stale indicators hurt trust
+//             on a price-comparison product more than missing ones)
+function freshnessLabel(iso: string | null | undefined): string | null {
   if (!iso) return null;
   const t = new Date(iso).getTime();
   if (!Number.isFinite(t)) return null;
-  const diffSec = Math.max(0, (Date.now() - t) / 1000);
-  if (diffSec < 60) return "just now";
-  if (diffSec < 3600) {
-    const m = Math.floor(diffSec / 60);
-    return `${m} minute${m === 1 ? "" : "s"} ago`;
-  }
-  if (diffSec < 86400) {
-    const h = Math.floor(diffSec / 3600);
-    return `${h} hour${h === 1 ? "" : "s"} ago`;
-  }
-  const d = Math.floor(diffSec / 86400);
-  return `${d} day${d === 1 ? "" : "s"} ago`;
+  const ageHours = (Date.now() - t) / 3_600_000;
+  if (ageHours < 0) return "Updated today";
+  if (ageHours < 24) return "Updated today";
+  if (ageHours < 72) return `Updated ${Math.round(ageHours)}h ago`;
+  return null;
 }
 
 type Mode = "near" | "all";
@@ -142,7 +140,7 @@ export default function HomeDealCards({
 
   const deals =
     mode === "near" && dealsNear && dealsNear.length > 0 ? dealsNear : dealsAll;
-  const updated = relativeTime(mostRecent);
+  const updated = freshnessLabel(mostRecent);
 
   const likelyOpen = isLikelyOpen();
 
@@ -177,8 +175,8 @@ export default function HomeDealCards({
           <p className="section-eyebrow">Live deals</p>
           <h2 className="section-title">{headline}</h2>
           <p className="section-sub">
-            {updated ? `Updated ${updated}` : "Updated continuously"}
-            {typeof dealCount === "number" && dealCount > 0 && ` · ${dealCount} active deals`}
+            {updated || (typeof dealCount === "number" && dealCount > 0 ? `${dealCount} active deals` : "Live deal feed")}
+            {updated && typeof dealCount === "number" && dealCount > 0 && ` · ${dealCount} active deals`}
             {loading && " · Refreshing…"}
           </p>
           {city && (

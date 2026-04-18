@@ -89,9 +89,9 @@ export default function AboutPage() {
 
         <p>
           We cover all 293 licensed cannabis dispensaries across 162 Illinois
-          cities. Free for consumers, always. Dispensaries pay $49/month to
-          feature their deals — which puts them first when someone searches in
-          their city. That&apos;s it.
+          cities. Every listing is free for dispensaries, forever. PuffPrice
+          is funded by Pro subscribers ($0.99/month) who want instant SMS
+          when prices drop. That&apos;s the whole model.
         </p>
 
         <div className="contact">

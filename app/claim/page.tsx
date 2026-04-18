@@ -89,10 +89,6 @@ export default function ClaimLandingPage() {
           </div>
           <div className="benefit">
             <span className="benefit-check">✓</span>
-            <span>Upgrade to Featured ($49/mo) for priority placement in your city</span>
-          </div>
-          <div className="benefit">
-            <span className="benefit-check">✓</span>
             <span>Free — no card required to claim. We verify by phone or email.</span>
           </div>
         </div>

@@ -290,12 +290,17 @@ function isLikelyOpen() {
 // each card carries the savings signal — the aggregate was misleading
 // and added noise. Do not re-add without a product conversation.
 
-/** Most recent created_at across active deals — powers the "Updated X ago"
- * freshness indicator on the deal feed. Cached 60s with the 'deals' tag. */
+/** MAX(updated_at) across active, unexpired deals — powers the freshness
+ * indicator on the deal feed. Previously read created_at of the first row,
+ * which drifted stale fast and left "Updated 3 days ago" showing on
+ * genuinely fresh data. We filter expires_at > now() so that deals kept
+ * alive by touching updated_at don't anchor the indicator.
+ * Cached 60s with the 'deals' tag. */
 async function getMostRecentDealTs() {
   try {
+    const nowIso = new Date().toISOString();
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/deals?select=created_at&is_active=eq.true&project_tag=eq.green&order=created_at.desc&limit=1`,
+      `${SUPABASE_URL}/rest/v1/deals?select=updated_at&is_active=eq.true&project_tag=eq.green&or=(expires_at.gt.${nowIso},expires_at.is.null)&order=updated_at.desc&limit=1`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,
@@ -306,7 +311,7 @@ async function getMostRecentDealTs() {
     );
     if (!res.ok) return null;
     const rows = await res.json();
-    return Array.isArray(rows) && rows[0]?.created_at ? rows[0].created_at : null;
+    return Array.isArray(rows) && rows[0]?.updated_at ? rows[0].updated_at : null;
   } catch {
     return null;
   }
@@ -1061,14 +1066,13 @@ export default async function HomePage() {
 
       {/* DISPENSARY CTA */}
       <div className="biz-strip">
-        <div className="biz-title">Own a dispensary?</div>
+        <div className="biz-title">Own an Illinois dispensary?</div>
         <p className="biz-sub">
-          Get your daily deals in front of people actively looking to buy right now.
-          Featured placement from $49/month.
+          Your listing is always free — claim it in under a minute.
         </p>
         <div className="biz-btns">
-          <Link href="/upgrade" className="biz-btn-primary">Submit your deals →</Link>
-          <Link href="/get-listed" className="biz-btn-secondary">Claim free listing</Link>
+          <Link href="/get-listed" className="biz-btn-primary">Claim your free listing →</Link>
+          <Link href="/dispensary/submit-deal" className="biz-btn-secondary">Submit a deal</Link>
         </div>
       </div>
 

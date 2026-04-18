@@ -1,16 +1,17 @@
 // app/api/stripe/create-checkout/route.ts
-// Creates a Stripe Checkout session and returns the URL for redirect.
-// Uses Stripe REST directly (no SDK dependency) so nothing new to install.
+// Creates a Stripe Checkout session for PuffPrice Pro ($0.99/mo).
+// The old "featured" dispensary tier was retired — dispensary listings
+// are free, so nothing on the dispensary side needs a checkout session.
+// Uses Stripe REST directly (no SDK dependency).
 
 import { NextRequest, NextResponse } from "next/server";
 
-type Tier = "featured" | "pro_consumer";
+type Tier = "pro_consumer";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://puffprice.com";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.puffprice.com";
 const STRIPE_API = "https://api.stripe.com/v1";
 
 function priceIdForTier(tier: Tier): string | undefined {
-  if (tier === "featured") return process.env.STRIPE_FEATURED_PRICE_ID;
   if (tier === "pro_consumer") return process.env.STRIPE_PRO_PRICE_ID;
   return undefined;
 }
@@ -20,9 +21,8 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const tier = body.tier as Tier;
     const email = (body.email as string | undefined)?.trim();
-    const slug = (body.slug as string | undefined)?.trim();
 
-    if (!tier || !["featured", "pro_consumer"].includes(tier)) {
+    if (tier !== "pro_consumer") {
       return NextResponse.json({ error: "Invalid tier." }, { status: 400 });
     }
     if (!email) {
@@ -45,21 +45,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Build the form-encoded body Stripe expects
     const params = new URLSearchParams();
     params.set("mode", "subscription");
-    params.set("success_url", `${SITE_URL}/upgrade/success?session_id={CHECKOUT_SESSION_ID}&tier=${tier}`);
+    params.set("success_url", `${SITE_URL}/upgrade/success?session_id={CHECKOUT_SESSION_ID}`);
     params.set("cancel_url", `${SITE_URL}/upgrade`);
     params.set("customer_email", email);
     params.set("line_items[0][price]", priceId);
     params.set("line_items[0][quantity]", "1");
     params.set("allow_promotion_codes", "true");
     params.set("billing_address_collection", "auto");
-    // Metadata so the webhook (when we add it) knows what to provision
     params.set("metadata[tier]", tier);
-    if (slug) params.set("metadata[listing_slug]", slug);
     params.set("subscription_data[metadata][tier]", tier);
-    if (slug) params.set("subscription_data[metadata][listing_slug]", slug);
 
     const res = await fetch(`${STRIPE_API}/checkout/sessions`, {
       method: "POST",
