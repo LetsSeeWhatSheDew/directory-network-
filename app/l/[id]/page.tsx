@@ -67,23 +67,49 @@ type ProductOrService = {
   available: boolean | null;
 };
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+// Env var resolution — resilient to the SUPABASE_SERVICE_KEY →
+// SUPABASE_SERVICE_ROLE_KEY rename that landed in code but may not have
+// landed in Vercel yet, AND to the case where neither service-role key
+// is configured at all. Falls back to the anon key (same hardcoded
+// fallback used across the rest of the app) so public read paths on
+// master_listings / listing_hours / deals continue to work.
+const SUPABASE_URL =
+  process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  process.env.SUPABASE_URL ||
+  "https://hnbjufmtmrhexmdrfubw.supabase.co";
+
+const SUPABASE_ANON_KEY_FALLBACK =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300";
+
+const SUPABASE_KEY =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.SUPABASE_SERVICE_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  SUPABASE_ANON_KEY_FALLBACK;
+
 const REST_BASE = `${SUPABASE_URL}/rest/v1`;
 
-async function fetchJson<T>(path: string): Promise<T> {
-  const res = await fetch(`${REST_BASE}${path}`, {
-    headers: {
-      apikey: SUPABASE_SERVICE_KEY!,
-      Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
-    },
-    cache: "no-store",
-  });
-  if (!res.ok) {
-    const err = await res.json();
-    throw new Error(`Failed to fetch: ${JSON.stringify(err)}`);
+async function fetchJson<T>(path: string): Promise<T | null> {
+  // Returns null on error instead of throwing. The listing page has many
+  // data calls; one row-level failure shouldn't crash the entire Server
+  // Component. Callers fall back to empty/null and the page still renders.
+  try {
+    const res = await fetch(`${REST_BASE}${path}`, {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+      },
+      cache: "no-store",
+    });
+    if (!res.ok) {
+      console.error("[/l/[id]] fetch failed", res.status, path);
+      return null;
+    }
+    return (await res.json()) as T;
+  } catch (err) {
+    console.error("[/l/[id]] fetch error", path, err);
+    return null;
   }
-  return res.json();
 }
 
 async function getListing(id: string): Promise<Listing | null> {
@@ -94,21 +120,24 @@ async function getListing(id: string): Promise<Listing | null> {
 }
 
 async function getHours(listingId: string): Promise<ListingHour[]> {
-  return fetchJson<ListingHour[]>(
+  const rows = await fetchJson<ListingHour[]>(
     `/listing_hours?listing_id=eq.${encodeURIComponent(listingId)}&select=*&order=weekday.asc`
   );
+  return rows ?? [];
 }
 
 async function getAttributes(listingId: string): Promise<ListingAttribute[]> {
-  return fetchJson<ListingAttribute[]>(
+  const rows = await fetchJson<ListingAttribute[]>(
     `/listing_attributes?listing_id=eq.${encodeURIComponent(listingId)}&select=*&order=tag.asc`
   );
+  return rows ?? [];
 }
 
 async function getProducts(listingId: string): Promise<ProductOrService[]> {
-  return fetchJson<ProductOrService[]>(
+  const rows = await fetchJson<ProductOrService[]>(
     `/products_or_services?listing_id=eq.${encodeURIComponent(listingId)}&select=*&order=category.asc,subcategory.asc`
   );
+  return rows ?? [];
 }
 
 type ActiveDeal = {
