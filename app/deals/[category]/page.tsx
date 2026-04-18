@@ -2,6 +2,7 @@
 // Fixed v2: force no-cache + correct Supabase query format
 
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { estimateSavings, formatSavingsDollars, gradeDeal, shouldShowGrade } from "../../../lib/dealScoring";
 import { isInMetro, metroCities } from "../../../lib/cityNormalize";
 import TrackView from "../../components/TrackView";
@@ -326,6 +327,8 @@ function buildBreadcrumbSchema(categoryLabel: string, category: string) {
   };
 }
 
+const VALID_CATEGORIES = new Set(["flower", "edibles", "vapes", "concentrate", "all"]);
+
 export default async function DealsPage({
   params,
   searchParams,
@@ -335,6 +338,23 @@ export default async function DealsPage({
 }) {
   const { category } = await params;
   const sp = await searchParams;
+
+  // Flow C fix: users landing on /deals/chicago (or any non-category path)
+  // from Google previously saw "No active deals" — the category filter
+  // matched nothing. Treat an unknown category segment that looks like a
+  // city name as a city filter instead, and redirect to /deals/all?city=X.
+  // Heuristic: alphabetic + hyphens + short (<= 40 chars), not a recognized
+  // category slug.
+  if (!VALID_CATEGORIES.has(category)) {
+    const looksLikeCity =
+      category.length <= 40 && /^[a-z][a-z-]*$/i.test(category);
+    if (looksLikeCity) {
+      const cityParam = category.replace(/-/g, " ");
+      redirect(`/deals/all?city=${encodeURIComponent(cityParam)}`);
+    }
+    // Otherwise fall through — the page will render its empty state.
+  }
+
   const rawCity = Array.isArray(sp?.city) ? sp.city[0] : sp?.city;
   const city = rawCity ? toCityCase(rawCity) : null;
 

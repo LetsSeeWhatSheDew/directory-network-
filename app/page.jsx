@@ -528,6 +528,37 @@ export default async function HomePage() {
 
         /* DEALS SECTION */
         .deals-section{max-width:1100px;margin:0 auto;padding:52px 28px}
+
+        /* HOMEPAGE SEARCH — compact, dependable entry point */
+        .home-search{
+          display:flex;align-items:center;gap:8px;
+          background:#fff;border:1px solid #e8e4da;border-radius:12px;
+          padding:6px 6px 6px 14px;margin-bottom:24px;
+          transition:border-color .15s, box-shadow .15s;
+          max-width:560px;
+        }
+        .home-search:focus-within{
+          border-color:#16a34a;
+          box-shadow:0 0 0 3px rgba(22,163,74,.12);
+        }
+        .home-search-icon{flex-shrink:0}
+        .home-search-input{
+          flex:1;min-width:0;border:none;outline:none;background:transparent;
+          padding:12px 4px;color:#0f1f3d;
+          font-family:system-ui,sans-serif;font-size:.95rem;
+          min-height:44px;
+        }
+        .home-search-input::placeholder{color:#9ca3af}
+        .home-search-btn{
+          background:#0f1f3d;color:#fff;border:none;border-radius:8px;
+          padding:10px 18px;font-family:system-ui,sans-serif;font-weight:700;
+          font-size:.88rem;cursor:pointer;min-height:44px;flex-shrink:0;
+        }
+        .home-search-btn:hover{background:#1e3a5f}
+        @media(max-width:520px){
+          .home-search{padding:4px 4px 4px 12px}
+          .home-search-btn{padding:10px 14px;font-size:.85rem}
+        }
         .section-eyebrow{
           font-size:.7rem;font-weight:700;letter-spacing:.14em;
           text-transform:uppercase;color:#16a34a;
@@ -788,6 +819,38 @@ export default async function HomePage() {
 
       {/* Section 3: More deals near you (existing card grid) */}
       <div className="deals-section">
+        {/* Quick search — lands users directly on a dispensary or city */}
+        <form
+          action="/search"
+          method="get"
+          role="search"
+          className="home-search"
+          aria-label="Search dispensaries"
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#9ca3af"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+            className="home-search-icon"
+          >
+            <circle cx="11" cy="11" r="7" />
+            <line x1="20" y1="20" x2="16.65" y2="16.65" />
+          </svg>
+          <input
+            type="search"
+            name="q"
+            placeholder="Search deals, dispensaries, or city…"
+            autoComplete="off"
+            className="home-search-input"
+          />
+          <button type="submit" className="home-search-btn">Search</button>
+        </form>
         <HomeDealCards initial={topDeals} />
       </div>
 

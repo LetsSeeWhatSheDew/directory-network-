@@ -76,7 +76,8 @@ export default function AboutPage() {
         </p>
 
         <div className="contact">
-          Questions? <a href="mailto:matthew@jacarandapeoria.com">matthew@jacarandapeoria.com</a>
+          Questions, tips, or a deal we missed?{" "}
+          <a href="mailto:matthew@jacarandapeoria.com">matthew@jacarandapeoria.com</a>
         </div>
 
         <div className="built">Built in Peoria, Illinois. 🌿</div>

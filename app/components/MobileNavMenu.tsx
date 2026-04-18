@@ -38,21 +38,37 @@ export default function MobileNavMenu() {
         </svg>
       </button>
       {open && (
-        <div className="mobile-menu-panel" role="menu" onClick={() => setOpen(false)}>
-          <Link href="/cannabis/illinois/open-now" className="mobile-menu-link">Open now</Link>
-          <Link href="/savings/dashboard" className="mobile-menu-link">My savings</Link>
-          <Link href="/map" className="mobile-menu-link">Map view</Link>
-          <Link href="/cannabis/illinois" className="mobile-menu-link">Browse Illinois</Link>
-          <Link href="/alerts" className="mobile-menu-link">Get alerts</Link>
-          <Link href="/dispensaries" className="mobile-menu-link highlight">For dispensaries →</Link>
-        </div>
+        <>
+          {/* Backdrop — tap outside to close */}
+          <button
+            type="button"
+            aria-label="Close menu"
+            className="mobile-menu-backdrop"
+            onClick={() => setOpen(false)}
+          />
+          <div className="mobile-menu-panel" role="menu" onClick={() => setOpen(false)}>
+            <Link href="/" className="mobile-menu-link">Home (deals feed)</Link>
+            <Link href="/cannabis/illinois" className="mobile-menu-link">Browse by city</Link>
+            <Link href="/cannabis/illinois/open-now" className="mobile-menu-link">Open now</Link>
+            <Link href="/map" className="mobile-menu-link">Map view</Link>
+            <Link href="/alerts" className="mobile-menu-link highlight">Get deal alerts →</Link>
+            <Link href="/about" className="mobile-menu-link">About PuffPrice</Link>
+            <Link href="/dispensaries" className="mobile-menu-link">For dispensaries</Link>
+          </div>
+        </>
       )}
       <style>{`
         .mobile-hamburger{
           display:none;background:transparent;border:none;cursor:pointer;
-          padding:6px;margin:0;border-radius:6px;
+          padding:8px;margin:0;border-radius:6px;
+          min-width:44px;min-height:44px;
+          align-items:center;justify-content:center;
         }
         .mobile-hamburger:hover{background:#f5f4f0}
+        .mobile-menu-backdrop{
+          position:fixed;inset:0;background:rgba(15,31,61,.25);
+          border:none;cursor:pointer;z-index:98;
+        }
         .mobile-menu-panel{
           position:absolute;top:100%;left:0;right:0;
           background:#fff;border-bottom:1px solid #e8e4da;
@@ -61,16 +77,18 @@ export default function MobileNavMenu() {
           z-index:99;
         }
         .mobile-menu-link{
-          padding:14px 20px;
+          padding:16px 20px;
           font-family:system-ui,sans-serif;
           font-size:.95rem;color:#0f1f3d;
           text-decoration:none;
           border-bottom:1px solid #f5f4f0;
+          min-height:44px;
+          display:flex;align-items:center;
         }
         .mobile-menu-link:hover{background:#f5f4f0}
-        .mobile-menu-link.highlight{color:#16a34a;font-weight:600}
+        .mobile-menu-link.highlight{color:#16a34a;font-weight:700}
         @media(max-width:768px){
-          .mobile-hamburger{display:inline-flex;align-items:center;justify-content:center}
+          .mobile-hamburger{display:inline-flex}
           .desktop-only-nav{display:none !important}
         }
       `}</style>
