@@ -8,6 +8,8 @@ import SavingsCallout from "./components/SavingsCallout";
 import SearchTracker from "./components/SearchTracker";
 import FourTwentyBanner from "./components/FourTwentyBanner";
 import RecentlyViewedRow from "./components/RecentlyViewedRow";
+import EndingSoonRow from "./components/EndingSoonRow";
+import TopDealsRow from "./components/TopDealsRow";
 import { brand } from "../lib/brand";
 import { estimateSavings, formatSavingsDollars, gradeDeal } from "../lib/dealScoring";
 
@@ -310,6 +312,66 @@ async function getMostRecentDealTs() {
   }
 }
 
+/** Wider active deal pool (up to 20) used by TopDealsRow to rank by
+ *  computed savings. Separate from getTopDeals() so the hero card still
+ *  uses a tight top-3 fetch while the social-proof row sees more. */
+async function getDealPool() {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&order=discount_value.desc&limit=20`,
+      {
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+        next: { revalidate: 60, tags: ["deals"] },
+      }
+    );
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data) ? filterExpired(data) : [];
+  } catch {
+    return [];
+  }
+}
+
+/** Deals whose expires_at is between now() and now()+24h.
+ *  Uses the active_deals_with_listings view so dispensary name + city
+ *  come back in the same roundtrip. Cached 60s with 'deals' tag — when
+ *  is_active flips or expires_at is updated, revalidateTag('deals') will
+ *  flush this. Returns [] when nothing qualifies so the UI hides. */
+async function getEndingSoonDeals() {
+  const now = new Date();
+  const cutoff = new Date(now.getTime() + 24 * 3600 * 1000);
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_id,id,listing_slug,slug,name,city,deal_title,title,expires_at&expires_at=gt.${encodeURIComponent(now.toISOString())}&expires_at=lt.${encodeURIComponent(cutoff.toISOString())}&order=expires_at.asc&limit=5`,
+      {
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+        next: { revalidate: 60, tags: ["deals"] },
+      }
+    );
+    if (!res.ok) return [];
+    const rows = await res.json();
+    if (!Array.isArray(rows)) return [];
+    return rows
+      .filter((r) => r.expires_at && (r.deal_id || r.id) && (r.listing_slug || r.slug))
+      .map((r) => ({
+        id: r.deal_id || r.id,
+        listing_slug: r.listing_slug || r.slug,
+        dispensary_name: r.name || r.listing_slug || r.slug || "Dispensary",
+        city: r.city || "",
+        title: r.deal_title || r.title || "Active deal",
+        expires_at: r.expires_at,
+      }));
+  } catch {
+    return [];
+  }
+}
+
 async function getActiveDealCount() {
   try {
     const res = await fetch(
@@ -375,10 +437,12 @@ const FAQ_SCHEMA = {
 };
 
 export default async function HomePage() {
-  const [dealCount, topDeals, mostRecentTs] = await Promise.all([
+  const [dealCount, topDeals, mostRecentTs, endingSoon, dealPool] = await Promise.all([
     getActiveDealCount(),
     getTopDeals(),
     getMostRecentDealTs(),
+    getEndingSoonDeals(),
+    getDealPool(),
   ]);
   return (
     <>
@@ -901,6 +965,10 @@ export default async function HomePage() {
       </div>
 
       {/* Recently-visited row (hidden on first visit, renders client-side) */}
+      {/* Ending-soon urgency row — honest or invisible. Only renders when
+          there's at least one real <24h expiring deal. */}
+      <EndingSoonRow deals={endingSoon} />
+
       <RecentlyViewedRow />
 
       {/* Section 3: More deals near you (existing card grid) */}
@@ -939,6 +1007,10 @@ export default async function HomePage() {
         </form>
         <HomeDealCards initial={topDeals} dealCount={dealCount} mostRecent={mostRecentTs} />
       </div>
+
+      {/* Social-proof row — ranked by computed savings until click data
+          aggregates. Label is "Top deals", not "most popular". */}
+      <TopDealsRow deals={dealPool} />
 
       {/* Section 4: Get alerts CTA */}
       <div className="alerts-strip">

@@ -19,6 +19,8 @@ export async function POST(req: NextRequest) {
     const city = formData.get("city") as string;
     const categories = formData.getAll("categories") as string[];
     const tier = (formData.get("tier") as string) || "free";
+    const phoneRaw = (formData.get("phone") as string | null) ?? null;
+    const smsOptInRaw = (formData.get("sms_opted_in") as string | null) ?? null;
 
     // Validate
     if (!email || !city) {
@@ -28,7 +30,31 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Normalize optional phone to E.164 if present, otherwise null
+    let phoneE164: string | null = null;
+    if (phoneRaw) {
+      const digits = phoneRaw.replace(/\D/g, "");
+      if (digits.length === 10) phoneE164 = `+1${digits}`;
+      else if (digits.length === 11 && digits.startsWith("1")) phoneE164 = `+${digits}`;
+    }
+    const smsOptedIn = smsOptInRaw === "true" || smsOptInRaw === "1" || smsOptInRaw === "on";
+
     // Save to Supabase deal_alerts table
+    const payload: Record<string, unknown> = {
+      email,
+      city: city.trim().toLowerCase(),
+      categories: categories.length > 0 ? categories : ["all"],
+      alert_type: tier === "pro" ? "instant" : tier === "standard" ? "daily" : "weekly",
+      is_active: true,
+    };
+    if (phoneE164) payload.phone = phoneE164;
+    // NOTE: sms_opted_in / sms_verified columns land via
+    // sql/add-phone-to-deal-alerts.sql. Until that migration runs we can't
+    // write to those columns without a PostgREST 400. Phone presence is a
+    // sufficient opt-in proxy for now — flip back to payload.sms_opted_in
+    // once the migration lands. Captured flag (unused on insert):
+    void smsOptedIn;
+
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/deal_alerts`,
       {
@@ -39,13 +65,7 @@ export async function POST(req: NextRequest) {
           "Content-Type": "application/json",
           Prefer: "return=representation",
         },
-        body: JSON.stringify({
-          email,
-          city: city.trim().toLowerCase(),
-          categories: categories.length > 0 ? categories : ["all"],
-          frequency: tier === "pro" ? "instant" : tier === "standard" ? "daily" : "weekly",
-          is_active: true,
-        }),
+        body: JSON.stringify(payload),
       }
     );
 

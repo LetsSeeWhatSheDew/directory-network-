@@ -10,6 +10,7 @@ import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
 import { metroCities, isInMetro } from "../../../lib/cityNormalize";
 import { estimateSavings } from "../../../lib/dealScoring";
+import EndingSoonRow, { type EndingSoonDeal } from "../../components/EndingSoonRow";
 
 export const revalidate = 300;
 
@@ -261,6 +262,28 @@ export default async function CityPage({
         <div className="eyebrow">Illinois · City page</div>
         <h1>{city} dispensary deals today</h1>
         {intro && <p className="intro">{intro}</p>}
+
+        {/* Ending-soon urgency row, scoped to this city */}
+        <EndingSoonRow
+          deals={deals
+            .filter((d) => {
+              if (!d.expires_at) return false;
+              const t = new Date(d.expires_at).getTime();
+              const now = Date.now();
+              return Number.isFinite(t) && t > now && t < now + 24 * 3600 * 1000;
+            })
+            .slice(0, 5)
+            .map(
+              (d): EndingSoonDeal => ({
+                id: d.id,
+                listing_slug: d.slug || d.listing_slug,
+                dispensary_name: d.name || d.listing_slug || "Dispensary",
+                city: d.city || city,
+                title: d.deal_title || d.title || "Active deal",
+                expires_at: d.expires_at!,
+              })
+            )}
+        />
 
         {deals.length > 0 && (
           <>

@@ -13,21 +13,24 @@ type Status =
   | { kind: "waitlisted" }
   | { kind: "error"; message: string };
 
-async function joinWaitlist(email: string): Promise<boolean> {
+async function joinWaitlist(
+  email: string,
+  phone: string,
+  smsOptIn: boolean
+): Promise<boolean> {
   try {
     const form = new FormData();
     form.set("email", email);
     form.set("city", "_waitlist_");
     form.set("tier", "pro");
     form.append("categories", "all");
+    if (phone) form.set("phone", phone);
+    if (smsOptIn) form.set("sms_opted_in", "true");
     const res = await fetch("/api/alerts/signup", {
       method: "POST",
       body: form,
       redirect: "manual",
     });
-    // API responds 303 on success (then redirects to /alerts/confirmed).
-    // `redirect: "manual"` makes fetch return opaqueredirect (status 0) on the
-    // 303 — treat that as success. Also accept plain 2xx.
     return res.ok || res.type === "opaqueredirect" || res.status === 0;
   } catch {
     return false;
@@ -36,6 +39,8 @@ async function joinWaitlist(email: string): Promise<boolean> {
 
 export default function ProCheckoutButton() {
   const [email, setEmail] = useState("");
+  const [smsOptIn, setSmsOptIn] = useState(false);
+  const [phone, setPhone] = useState("");
   const [status, setStatus] = useState<Status>({ kind: "idle" });
 
   async function onClick() {
@@ -58,7 +63,7 @@ export default function ProCheckoutButton() {
       // 503 = Stripe not configured yet. Convert to a waitlist capture so the
       // user still gets value (we'll email them when Pro goes live).
       if (res.status === 503) {
-        const ok = await joinWaitlist(e);
+        const ok = await joinWaitlist(e, phone.trim(), smsOptIn);
         if (ok) {
           try {
             const w = window as any;
@@ -144,6 +149,49 @@ export default function ProCheckoutButton() {
           minHeight: 44,
         }}
       />
+      <label
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          fontSize: ".82rem",
+          color: "rgba(255,255,255,.78)",
+          fontFamily: "system-ui, sans-serif",
+          cursor: "pointer",
+          userSelect: "none",
+          paddingTop: 2,
+        }}
+      >
+        <input
+          type="checkbox"
+          checked={smsOptIn}
+          onChange={(e) => setSmsOptIn(e.target.checked)}
+          style={{ accentColor: "#16a34a", width: 16, height: 16 }}
+        />
+        Text me when new deals drop near me
+      </label>
+      {smsOptIn && (
+        <input
+          type="tel"
+          inputMode="tel"
+          placeholder="(309) 555-0100 — optional, SMS coming soon"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          autoComplete="tel"
+          aria-label="Phone number for SMS alerts (optional)"
+          style={{
+            background: "rgba(255,255,255,.08)",
+            border: "1px solid rgba(255,255,255,.18)",
+            borderRadius: 10,
+            padding: "12px 12px",
+            color: "#fff",
+            fontFamily: "system-ui, sans-serif",
+            fontSize: ".95rem",
+            outline: "none",
+            minHeight: 44,
+          }}
+        />
+      )}
       <button type="button" className="cta cta-pro" onClick={onClick} disabled={busy}>
         {busy ? "One sec…" : "Get Pro for $0.99/month →"}
       </button>

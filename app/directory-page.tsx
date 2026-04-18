@@ -77,12 +77,17 @@ function getLocation(listing: Listing) {
 }
 
 async function fetchListings(tag: string): Promise<Listing[]> {
-  const { SUPABASE_URL, SUPABASE_SERVICE_KEY } = process.env;
-
-  if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-    console.error("Missing SUPABASE_URL or SUPABASE_SERVICE_KEY");
-    return [];
-  }
+  // Env fallback chain — tolerates the pre/post rename on Vercel and falls
+  // back to anon on public reads so this page never crashes silently.
+  const SUPABASE_URL =
+    process.env.NEXT_PUBLIC_SUPABASE_URL ??
+    process.env.SUPABASE_URL ??
+    "https://hnbjufmtmrhexmdrfubw.supabase.co";
+  const SUPABASE_SERVICE_KEY =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ??
+    process.env.SUPABASE_SERVICE_KEY ??
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300";
 
   const baseUrl = SUPABASE_URL.replace(/\/$/, "");
   const url =

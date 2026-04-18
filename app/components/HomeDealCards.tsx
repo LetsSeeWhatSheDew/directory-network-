@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { estimateSavings, formatSavingsDollars, gradeDeal, shouldShowGrade } from "../../lib/dealScoring";
 import { displayCity } from "../../lib/cityNormalize";
 import TrackedLink from "./TrackedLink";
+import ShareDealButton from "./ShareDealButton";
 
 type Deal = {
   deal_id?: string;
@@ -284,9 +285,20 @@ export default function HomeDealCards({
                     {d.scope === "statewide" && city ? " · nearby" : ""}
                   </div>
                 </div>
-                <span className={`open-badge ${likelyOpen ? "open" : "closed"}`}>
-                  {likelyOpen ? "Open today" : "May be closed"}
-                </span>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span className={`open-badge ${likelyOpen ? "open" : "closed"}`}>
+                    {likelyOpen ? "Open today" : "May be closed"}
+                  </span>
+                  {(d.id || d.deal_id) && (
+                    <ShareDealButton
+                      dealId={(d.id || d.deal_id) as string}
+                      dispensaryName={name}
+                      dealTitle={d.deal_title || "Deal"}
+                      savings={estimateSavings(d) ?? null}
+                      variant="icon"
+                    />
+                  )}
+                </div>
               </div>
               <div className="deal-highlight">{d.deal_title || "Active deal"}</div>
               {urgency && (

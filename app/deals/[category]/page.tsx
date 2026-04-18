@@ -7,6 +7,7 @@ import { estimateSavings, formatSavingsDollars, gradeDeal, shouldShowGrade } fro
 import { isInMetro, metroCities } from "../../../lib/cityNormalize";
 import TrackView from "../../components/TrackView";
 import DealCtaLink from "../../components/DealCtaLink";
+import ShareDealButton from "../../components/ShareDealButton";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://hnbjufmtmrhexmdrfubw.supabase.co';
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300';
@@ -716,6 +717,15 @@ export default async function DealsPage({
                 >
                   {topDeal.name || "Dispensary"} profile →
                 </Link>
+                {(topDeal.id || topDeal.deal_id) && (
+                  <ShareDealButton
+                    dealId={topDeal.id || topDeal.deal_id}
+                    dispensaryName={topDeal.name || topDeal.listing_slug || "Dispensary"}
+                    dealTitle={topDeal.deal_title || topDeal.title || "Active deal"}
+                    savings={estimateSavings(topDeal) ?? null}
+                    variant="inline"
+                  />
+                )}
               </div>
             </div>
 

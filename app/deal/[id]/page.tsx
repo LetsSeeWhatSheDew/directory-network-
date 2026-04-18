@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
+import ShareDealButton from "../../components/ShareDealButton";
 
 export const revalidate = 60;
 
@@ -104,15 +105,36 @@ function formatDealHeadline(d: Deal): string {
   return "Cannabis deal";
 }
 
-function formatExpires(exp: string | null): string {
-  if (!exp) return "Ongoing deal";
+type ExpiryBadge = {
+  text: string;
+  tone: "none" | "ongoing" | "soft" | "warning" | "urgent";
+};
+
+// Tiered urgency for the /deal/[id] expiry badge:
+//   <6h   → red "urgent"    "Ends in Xh Ym — don't wait"
+//   <24h  → orange "warning" "Ends in Xh"
+//   ≤30d  → slate "soft"     "Expires Apr 28"
+//   no expiry → green "ongoing"
+function computeExpiry(exp: string | null): ExpiryBadge {
+  if (!exp) return { text: "Ongoing deal", tone: "ongoing" };
   const d = new Date(exp);
-  if (!Number.isFinite(d.getTime())) return "Ongoing deal";
-  const now = new Date();
-  const diffHours = (d.getTime() - now.getTime()) / 3_600_000;
-  if (diffHours < 0) return "Expired";
-  if (diffHours < 24) return `Expires in ${Math.max(1, Math.floor(diffHours))}h`;
-  return `Expires ${d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`;
+  if (!Number.isFinite(d.getTime())) return { text: "Ongoing deal", tone: "ongoing" };
+  const diffMs = d.getTime() - Date.now();
+  if (diffMs <= 0) return { text: "Expired", tone: "none" };
+  const hours = diffMs / 3_600_000;
+  if (hours < 6) {
+    const h = Math.floor(hours);
+    const m = Math.floor((diffMs % 3_600_000) / 60_000);
+    const body = h >= 1 ? `${h}h ${m}m` : `${m}m`;
+    return { text: `Ends in ${body} — don't wait`, tone: "urgent" };
+  }
+  if (hours < 24) {
+    return { text: `Ends in ${Math.max(1, Math.floor(hours))}h`, tone: "warning" };
+  }
+  return {
+    text: `Expires ${d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`,
+    tone: "soft",
+  };
 }
 
 export async function generateMetadata({
@@ -173,7 +195,14 @@ export default async function DealPage({
   const dollars = estimateSavings(deal);
   const savingsFormatted = formatSavingsDollars(deal);
   const code = extractPromoCode(deal.description) || extractPromoCode(deal.title);
-  const expiresLabel = formatExpires(deal.expires_at);
+  const expiry = computeExpiry(deal.expires_at);
+  const expiryStyle: Record<ExpiryBadge["tone"], React.CSSProperties> = {
+    none:     { display: "none" },
+    ongoing:  { color: "#166534", background: "#dcfce7" },
+    soft:     { color: "#475569", background: "#f1f5f9" },
+    warning:  { color: "#92400e", background: "#fef3c7" },
+    urgent:   { color: "#fff",    background: "#dc2626" },
+  };
   const disp = listing?.name || deal.listing_slug;
   const city = listing?.city || "Illinois";
 
@@ -278,8 +307,17 @@ export default async function DealPage({
               </>
             )
           )}
-          <span className={`expires ${!deal.expires_at ? "ongoing" : ""}`}>
-            {expiresLabel}
+          <span
+            className="expires"
+            style={{
+              ...expiryStyle[expiry.tone],
+              fontWeight: expiry.tone === "urgent" ? 800 : 700,
+              padding: expiry.tone === "urgent" ? "6px 14px" : "3px 10px",
+              fontSize: expiry.tone === "urgent" ? ".88rem" : ".74rem",
+              display: expiry.tone === "none" ? "none" : "inline-block",
+            }}
+          >
+            {expiry.text}
           </span>
           {deal.description && <p className="desc">{deal.description}</p>}
           {code && (
@@ -294,6 +332,15 @@ export default async function DealPage({
           <Link href={`/l/${deal.listing_slug}?city=${encodeURIComponent(city)}`} className="cta">
             GO HERE →
           </Link>
+          <div style={{ marginTop: 10 }}>
+            <ShareDealButton
+              dealId={id}
+              dispensaryName={disp}
+              dealTitle={headline}
+              savings={dollars}
+              variant="block"
+            />
+          </div>
           <Link href={`/dispensary/${deal.listing_slug}`} className="secondary">
             See full {disp} profile
           </Link>

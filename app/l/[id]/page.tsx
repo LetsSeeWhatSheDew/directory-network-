@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Metadata } from "next";
 import ClaimForm from "../../components/ClaimForm";
 import RecentlyViewedTracker from "../../components/RecentlyViewedTracker";
+import ShareDealButton from "../../components/ShareDealButton";
+import { estimateSavings } from "../../../lib/dealScoring";
 
 const NOINDEX_SLUGS = [
   "emerald-city-dispensary-chicago-il",
@@ -621,10 +623,19 @@ export default async function ListingPage({
                 fontSize: ".82rem",
                 color: "#16a34a",
                 fontWeight: 600,
-                marginBottom: 4,
+                marginBottom: 12,
               }}>
                 → {howToUseDeal(activeDeal)}
               </div>
+              {activeDeal!.id && (
+                <ShareDealButton
+                  dealId={activeDeal!.id}
+                  dispensaryName={listing.name || listing.slug || "Dispensary"}
+                  dealTitle={activeDeal!.title || "Deal"}
+                  savings={estimateSavings(activeDeal) ?? null}
+                  variant="block"
+                />
+              )}
               {activeDeals.length > 1 && (
                 <details style={{ marginTop: 10 }}>
                   <summary style={{ fontSize: ".8rem", color: "#6b7280", cursor: "pointer" }}>
