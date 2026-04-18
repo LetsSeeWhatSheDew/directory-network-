@@ -132,11 +132,11 @@ function DealCard({ deal, slug }: { deal: Deal; slug: string }) {
   const featured = deal.plan === "featured";
   return (
     <article style={{
+      background: featured ? "linear-gradient(135deg, #f0fdf4 0%, #fff 60%)" : "#fff",
       border: featured ? "2px solid #16a34a" : "1px solid #e8e4da",
       borderRadius: 14,
       padding: 18,
       position: "relative",
-      background: featured ? "linear-gradient(135deg, #f0fdf4 0%, #fff 60%)" : "#fff",
     }}>
       {featured && (
         <div style={{
