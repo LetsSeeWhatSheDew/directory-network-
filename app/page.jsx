@@ -284,38 +284,27 @@ function isLikelyOpen() {
   return ctHour >= 9 && ctHour < 21;
 }
 
-/**
- * Total estimated savings across all active IL deals. Fetches the fields
- * needed by estimateSavings() for the full active set and sums what passes.
- * Used for the "$X in active savings across N deals" trust line below the
- * hero. 300s cache — this moves slowly.
- */
-async function getTotalSavings() {
+// NOTE: getTotalSavings() removed 2026-04-18. The per-deal "Save $X" on
+// each card carries the savings signal — the aggregate was misleading
+// and added noise. Do not re-add without a product conversation.
+
+/** Most recent created_at across active deals — powers the "Updated X ago"
+ * freshness indicator on the deal feed. Cached 60s with the 'deals' tag. */
+async function getMostRecentDealTs() {
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/deals?select=discount_value,discount_unit,discount_type,original_price,sale_price,category&is_active=eq.true&project_tag=eq.green&limit=200`,
+      `${SUPABASE_URL}/rest/v1/deals?select=created_at&is_active=eq.true&project_tag=eq.green&order=created_at.desc&limit=1`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,
           Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
         },
-        next: { revalidate: 300, tags: ["deals"] },
+        next: { revalidate: 60, tags: ["deals"] },
       }
     );
     if (!res.ok) return null;
     const rows = await res.json();
-    if (!Array.isArray(rows) || rows.length === 0) return null;
-    let total = 0;
-    let counted = 0;
-    for (const d of rows) {
-      const v = estimateSavings(d);
-      if (typeof v === "number" && v > 0) {
-        total += v;
-        counted += 1;
-      }
-    }
-    if (counted === 0 || total <= 0) return null;
-    return { total, counted };
+    return Array.isArray(rows) && rows[0]?.created_at ? rows[0].created_at : null;
   } catch {
     return null;
   }
@@ -386,10 +375,10 @@ const FAQ_SCHEMA = {
 };
 
 export default async function HomePage() {
-  const [dealCount, topDeals, savingsTotal] = await Promise.all([
+  const [dealCount, topDeals, mostRecentTs] = await Promise.all([
     getActiveDealCount(),
     getTopDeals(),
-    getTotalSavings(),
+    getMostRecentDealTs(),
   ]);
   return (
     <>
@@ -850,29 +839,6 @@ export default async function HomePage() {
 
               {/* City-aware savings callout — muted supporting copy */}
               <SavingsCallout initialSavings={topDeals[0] ? estimateSavings(topDeals[0]) : null} />
-
-              {/* Trust line: running savings total across all active IL deals */}
-              {savingsTotal && (
-                <p
-                  aria-live="polite"
-                  style={{
-                    fontSize: "0.875rem",
-                    color: "#6b7280",
-                    fontFamily: "system-ui, sans-serif",
-                    margin: "2px 0 0",
-                    lineHeight: 1.5,
-                  }}
-                >
-                  <strong style={{ color: "#0f1f3d", fontWeight: 700 }}>
-                    ${savingsTotal.total.toLocaleString()}
-                  </strong>{" "}
-                  in active savings across{" "}
-                  <strong style={{ color: "#0f1f3d", fontWeight: 700 }}>
-                    {savingsTotal.counted}
-                  </strong>{" "}
-                  deals in Illinois right now.
-                </p>
-              )}
             </div>
 
             {/* Desktop-only right column: category shortcuts */}
@@ -971,7 +937,7 @@ export default async function HomePage() {
           />
           <button type="submit" className="home-search-btn">Search</button>
         </form>
-        <HomeDealCards initial={topDeals} />
+        <HomeDealCards initial={topDeals} dealCount={dealCount} mostRecent={mostRecentTs} />
       </div>
 
       {/* Section 4: Get alerts CTA */}
@@ -990,6 +956,33 @@ export default async function HomePage() {
             <strong>{dealCount !== null ? dealCount : "100"}</strong> active deals · <strong>293</strong> dispensaries · <strong>162</strong> cities
           </span>
         </div>
+      </div>
+
+      {/* City shortcuts — internal linking for SEO and user discovery */}
+      <div
+        style={{
+          maxWidth: 1100,
+          margin: "0 auto",
+          padding: "16px 28px 36px",
+          fontFamily: "system-ui, sans-serif",
+          fontSize: ".85rem",
+          color: "#6b7280",
+          textAlign: "center",
+          lineHeight: 1.8,
+        }}
+      >
+        Browse deals by city:{" "}
+        <Link href="/city/chicago" style={{ color: "#16a34a", fontWeight: 600, textDecoration: "none" }}>Chicago</Link>
+        {" · "}
+        <Link href="/city/peoria" style={{ color: "#16a34a", fontWeight: 600, textDecoration: "none" }}>Peoria</Link>
+        {" · "}
+        <Link href="/city/rockford" style={{ color: "#16a34a", fontWeight: 600, textDecoration: "none" }}>Rockford</Link>
+        {" · "}
+        <Link href="/city/springfield" style={{ color: "#16a34a", fontWeight: 600, textDecoration: "none" }}>Springfield</Link>
+        {" · "}
+        <Link href="/city/aurora" style={{ color: "#16a34a", fontWeight: 600, textDecoration: "none" }}>Aurora</Link>
+        {" · "}
+        <Link href="/city/joliet" style={{ color: "#16a34a", fontWeight: 600, textDecoration: "none" }}>Joliet</Link>
       </div>
 
       <SearchTracker />

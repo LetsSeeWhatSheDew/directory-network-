@@ -79,8 +79,41 @@ function getExpiryUrgency(expiresAt?: string | null) {
   return null;
 }
 
-export default function HomeDealCards({ initial }: { initial: Deal[] }) {
-  const [deals, setDeals] = useState<Deal[]>(dedupeDeals(initial || []).slice(0, 3));
+function relativeTime(iso: string | null | undefined): string | null {
+  if (!iso) return null;
+  const t = new Date(iso).getTime();
+  if (!Number.isFinite(t)) return null;
+  const diffSec = Math.max(0, (Date.now() - t) / 1000);
+  if (diffSec < 60) return "just now";
+  if (diffSec < 3600) {
+    const m = Math.floor(diffSec / 60);
+    return `${m} minute${m === 1 ? "" : "s"} ago`;
+  }
+  if (diffSec < 86400) {
+    const h = Math.floor(diffSec / 3600);
+    return `${h} hour${h === 1 ? "" : "s"} ago`;
+  }
+  const d = Math.floor(diffSec / 86400);
+  return `${d} day${d === 1 ? "" : "s"} ago`;
+}
+
+type Mode = "near" | "all";
+
+export default function HomeDealCards({
+  initial,
+  dealCount,
+  mostRecent,
+}: {
+  initial: Deal[];
+  dealCount?: number | null;
+  mostRecent?: string | null;
+}) {
+  // "near" (GPS city) vs "all" (statewide best savings). The default
+  // mirrors the prior behavior: use GPS if available, else statewide.
+  const [mode, setMode] = useState<Mode>("near");
+  const initialDeduped = dedupeDeals(initial || []).slice(0, 3);
+  const [dealsNear, setDealsNear] = useState<Deal[] | null>(null);
+  const [dealsAll, setDealsAll] = useState<Deal[]>(initialDeduped);
   const [city, setCity] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -100,11 +133,15 @@ export default function HomeDealCards({ initial }: { initial: Deal[] }) {
       .then((data) => {
         const raw: Deal[] = Array.isArray(data?.deals) ? data.deals : [];
         const arr = dedupeDeals(raw).slice(0, 3);
-        if (arr.length > 0) setDeals(arr);
+        if (arr.length > 0) setDealsNear(arr);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
+
+  const deals =
+    mode === "near" && dealsNear && dealsNear.length > 0 ? dealsNear : dealsAll;
+  const updated = relativeTime(mostRecent);
 
   const likelyOpen = isLikelyOpen();
 
@@ -125,18 +162,78 @@ export default function HomeDealCards({ initial }: { initial: Deal[] }) {
     );
   }
 
+  const headline =
+    mode === "all"
+      ? "Top deals in Illinois today"
+      : city
+      ? `Best deals near ${city} today`
+      : "Top deals in Illinois today";
+
   return (
     <>
       <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: 14 }}>
         <div>
           <p className="section-eyebrow">Live deals</p>
-          <h2 className="section-title">
-            {city ? `Best deals near ${city} today` : "Top deals in Illinois today"}
-          </h2>
+          <h2 className="section-title">{headline}</h2>
           <p className="section-sub">
-            Updated continuously · Verified against dispensary sites
+            {updated ? `Updated ${updated}` : "Updated continuously"}
+            {typeof dealCount === "number" && dealCount > 0 && ` · ${dealCount} active deals`}
             {loading && " · Refreshing…"}
           </p>
+          {city && (
+            <div
+              role="tablist"
+              aria-label="Filter deals"
+              style={{
+                display: "inline-flex",
+                gap: 6,
+                padding: 4,
+                background: "#f0ece3",
+                borderRadius: 100,
+                marginTop: 12,
+                fontFamily: "system-ui, sans-serif",
+              }}
+            >
+              <button
+                type="button"
+                role="tab"
+                aria-selected={mode === "near"}
+                onClick={() => setMode("near")}
+                style={{
+                  background: mode === "near" ? "#16a34a" : "transparent",
+                  color: mode === "near" ? "#fff" : "#6b7280",
+                  border: "none",
+                  borderRadius: 100,
+                  padding: "6px 14px",
+                  fontSize: ".82rem",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  minHeight: 32,
+                }}
+              >
+                Near me
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={mode === "all"}
+                onClick={() => setMode("all")}
+                style={{
+                  background: mode === "all" ? "#16a34a" : "transparent",
+                  color: mode === "all" ? "#fff" : "#6b7280",
+                  border: "none",
+                  borderRadius: 100,
+                  padding: "6px 14px",
+                  fontSize: ".82rem",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  minHeight: 32,
+                }}
+              >
+                All Illinois
+              </button>
+            </div>
+          )}
         </div>
         {city && (
           <Link

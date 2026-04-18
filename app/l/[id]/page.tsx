@@ -839,7 +839,7 @@ export default async function ListingPage({
 
           <div className="dn-footer-nav">
             <Link href={backHref} className="dn-footer-back">{backLabel}</Link>
-            <Link href="/cannabis/illinois" className="dn-footer-fwd">Browse Illinois dispensaries →</Link>
+            <Link href={`/dispensary/${listing.slug}`} className="dn-footer-fwd">Full profile →</Link>
           </div>
         </div>
 

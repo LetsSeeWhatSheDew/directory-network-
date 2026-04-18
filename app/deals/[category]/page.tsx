@@ -690,6 +690,33 @@ export default async function DealsPage({
               >
                 GO HERE →
               </DealCtaLink>
+              {/* Secondary links — internal link graph for SEO and curious users */}
+              <div
+                style={{
+                  display: "flex",
+                  gap: 18,
+                  justifyContent: "center",
+                  marginTop: 10,
+                  fontSize: ".78rem",
+                  fontFamily: "system-ui,sans-serif",
+                  flexWrap: "wrap",
+                }}
+              >
+                {(topDeal.id || topDeal.deal_id) && (
+                  <Link
+                    href={`/deal/${topDeal.id || topDeal.deal_id}`}
+                    style={{ color: "#6b7280", textDecoration: "none" }}
+                  >
+                    Details →
+                  </Link>
+                )}
+                <Link
+                  href={`/dispensary/${topDeal.slug || topDeal.listing_slug}`}
+                  style={{ color: "#6b7280", textDecoration: "none" }}
+                >
+                  {topDeal.name || "Dispensary"} profile →
+                </Link>
+              </div>
             </div>
 
             {alternatives.length > 0 && (

@@ -70,10 +70,30 @@ async function getIllinoisCities() {
     }
 }
 
+async function getActiveDeals() {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/deals?select=id,updated_at&is_active=eq.true&project_tag=eq.green&limit=200`,
+      {
+        headers: {
+          apikey: SUPABASE_ANON_KEY!,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+        next: { revalidate: 3600 },
+      }
+    );
+    if (!res.ok) return [];
+    return res.json();
+  } catch {
+    return [];
+  }
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const [listings, cities] = await Promise.all([
+    const [listings, cities, activeDeals] = await Promise.all([
           getAllListings(),
           getIllinoisCities(),
+          getActiveDeals(),
         ]);
 
   const base: MetadataRoute.Sitemap = [
@@ -86,6 +106,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${brand.url}/get-listed`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${brand.url}/early-access`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.6 },
     { url: `${brand.url}/upgrade`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
+    { url: `${brand.url}/claim`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
   ];
 
   // Deal engine category pages
@@ -140,5 +161,44 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.8,
   }));
 
-  return [...base, ...dealUrls, ...staticPages, ...listingUrls, ...cityUrls, ...intentUrls, ...landmarkUrls];
+  // NEW — /dispensary/[slug] full profile pages (parallel to /l/[slug])
+  const dispensaryProfileUrls: MetadataRoute.Sitemap = listings
+    .filter((l: { slug: string }) => l.slug && !NOINDEX_SLUGS.includes(l.slug))
+    .map((l: { slug: string; updated_at: string }) => ({
+      url: `${brand.url}/dispensary/${l.slug}`,
+      lastModified: l.updated_at ? new Date(l.updated_at) : new Date(),
+      changeFrequency: "daily" as const,
+      priority: 0.85,
+    }));
+
+  // NEW — /city/[city] clean landing pages
+  const cityLandingUrls: MetadataRoute.Sitemap = (cities as string[]).map((city) => ({
+    url: `${brand.url}/city/${city.toLowerCase().replace(/\s+/g, "-")}`,
+    lastModified: new Date(),
+    changeFrequency: "daily" as const,
+    priority: 0.9,
+  }));
+
+  // NEW — /deal/[id] per-deal pages (active deals only)
+  const dealDetailUrls: MetadataRoute.Sitemap = (activeDeals as Array<{ id: string; updated_at?: string }>)
+    .filter((d) => d.id)
+    .map((d) => ({
+      url: `${brand.url}/deal/${d.id}`,
+      lastModified: d.updated_at ? new Date(d.updated_at) : new Date(),
+      changeFrequency: "daily" as const,
+      priority: 0.7,
+    }));
+
+  return [
+    ...base,
+    ...dealUrls,
+    ...staticPages,
+    ...listingUrls,
+    ...cityUrls,
+    ...intentUrls,
+    ...landmarkUrls,
+    ...dispensaryProfileUrls,
+    ...cityLandingUrls,
+    ...dealDetailUrls,
+  ];
 }

@@ -7,6 +7,43 @@ import Link from "next/link";
 import AlertsCalculator from "./AlertsCalculator";
 import ProCheckoutButton from "./ProCheckoutButton";
 
+const SUPABASE_URL =
+  process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  "https://hnbjufmtmrhexmdrfubw.supabase.co";
+const SUPABASE_ANON_KEY =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300";
+
+// Social proof count — total active alert subscribers. Runs on the
+// server, cached 300s. If the fetch fails we render nothing rather
+// than show a misleading zero.
+async function getAlertCount(): Promise<number | null> {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/deal_alerts?select=id&is_active=eq.true`,
+      {
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          Prefer: "count=exact",
+          "Range-Unit": "items",
+          Range: "0-0",
+        },
+        next: { revalidate: 300, tags: ["alerts"] },
+      }
+    );
+    const range = res.headers.get("content-range");
+    if (range) {
+      const total = range.split("/")[1];
+      const n = Number.parseInt(total, 10);
+      if (Number.isFinite(n)) return n;
+    }
+  } catch {}
+  return null;
+}
+
+export const revalidate = 300;
+
 const OG_IMAGE = "https://puffprice.com/og-image.png";
 const OG_DESC =
   "Illinois cannabis deal alerts. Free forever, no account needed. Pro is $0.99/month — instant SMS the moment a deal drops near you.";
@@ -52,7 +89,8 @@ const PRO_FEATURES = [
   "First to know about new dispensary openings near you",
 ];
 
-export default function AlertsPage() {
+export default async function AlertsPage() {
+  const alertCount = await getAlertCount();
   return (
     <>
       <style>{`
@@ -126,6 +164,21 @@ export default function AlertsPage() {
         <p className="hero-sub">
           Check this before you buy. You might be leaving money on the table.
         </p>
+        {alertCount !== null && alertCount > 0 && (
+          <p
+            style={{
+              marginTop: 14,
+              fontSize: ".85rem",
+              color: "rgba(255,255,255,.65)",
+              fontFamily: "system-ui, sans-serif",
+            }}
+          >
+            <span style={{ color: "#4ade80", fontWeight: 700 }}>
+              {alertCount.toLocaleString()}
+            </span>{" "}
+            {alertCount === 1 ? "person is" : "people are"} already getting deal alerts in Illinois.
+          </p>
+        )}
       </header>
 
       <section className="tiers">
