@@ -26,6 +26,17 @@ See HANDOFF.md for the detailed Code session state (user journey, per-task statu
 
 ---
 
+## Stack (full detail)
+
+- **Framework:** Next.js 16 (App Router) · React 19 · TypeScript 5
+- **Styling:** Tailwind v4 (PostCSS plugin) plus a lot of inline `style={...}` for one-off layouts
+- **Data:** Supabase (Postgres + RLS) — anon key for reads, service_role for admin/scripts
+- **Payments:** Stripe (Pro $0.99/mo + Featured $49/mo — both wired via env-driven Price IDs)
+- **Hosting:** Vercel (production = main branch, previews per PR)
+- **Repo:** github.com/LetsSeeWhatSheDew/directory-network-
+
+---
+
 ## Current Deployment Status
 
 Two Vercel projects for the same repo (different domains):
@@ -120,6 +131,37 @@ Files at root that should be reviewed for cleanup:
 - column-audit.txt — likely temp audit file, safe to archive or delete
 - correct — appears to be a temp/test file, safe to delete
 - top-10-illinois-cities-content-plan.md — content strategy doc, could move to docs/
+
+### Sprint deltas (April 15 Cowork run)
+
+- **Fixed** duplicate `background` property on `app/cannabis/illinois/[slug]/deals/page.tsx:140`
+- **Fixed** `next.config.ts` — removed the `eslint` block that Next 16's `NextConfig` type no longer accepts (eslint-config-next + flat config still drives lint via `npm run lint`)
+- **Created** `docs/ENV-VARS.md`
+- **Created** `docs/LAUNCH-CHECKLIST.md`
+- **Created** this file (`HANDOFF-UPDATE.md`)
+- **Moved** `top-10-illinois-cities-content-plan.md` → `docs/`
+- **Moved** `PROJECT_STATE.md` → `docs/`
+- **Moved** `column-audit.txt` → `docs/audits/`
+- **Removed** empty stub file `correct`
+
+Nothing in `app/`, `lib/`, `components/`, `scripts/`, `sql/`, or `public/` was touched beyond the two TS-error fixes above. Claude Code's in-flight work is undisturbed.
+
+### Commit context as of April 15
+
+```
+8005886 docs: handoff updated — user journey verified clean April 15
+f695d74 fix: full walk-through verification — all user journey issues resolved
+d35ab6f fix: data audit — expired deals deactivated, orphaned deals flagged, null cities noted
+28ec4db fix: map page loading + error states, brand-matched white nav
+b892957 fix: listing page is now a GO HERE confirmation screen with deal, directions, hours, instructions
+abd899c fix: open/closed display — muted "May be closed" not red, open-now ranking bonus
+7e27e5c fix: human language throughout — no developer-speak visible to users
+f9db91c fix: single expiration label — never duplicate day and date
+b4f4089 fix: never show $0 savings + align savings math with $23 callout
+84b6383 fix: deal score algorithm — discount-first weighting, no D badge on hero card
+```
+
+The user journey was verified clean as of April 15. Any regression introduced after that commit needs a re-walk before launch.
 
 ---
 

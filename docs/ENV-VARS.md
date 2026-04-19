@@ -45,6 +45,7 @@ Fix: Vercel → directory-network- project → Settings → Environment Variable
 - What it does: Supabase project URL used in server-side fetch() calls
 - Note: Same value as NEXT_PUBLIC_SUPABASE_URL — identical string
 - Status: Set in both Vercel environments
+- **Action (alias cleanup):** Standardize on `NEXT_PUBLIC_SUPABASE_URL` project-wide. For now set both to the same value if used.
 
 ### SUPABASE_SERVICE_KEY
 - Type: Server-only — NEVER add NEXT_PUBLIC_ prefix, never commit to code
@@ -53,6 +54,7 @@ Fix: Vercel → directory-network- project → Settings → Environment Variable
 - What it does: Service role key that bypasses Row Level Security for server writes
 - Where to get it: Supabase Dashboard → Settings → API → service_role key
 - Status: Set in both Vercel environments
+- **Action (alias cleanup):** `SUPABASE_SERVICE_KEY` is a legacy alias for `SUPABASE_SERVICE_ROLE_KEY`. Both names appear in code — standardize on `SUPABASE_SERVICE_ROLE_KEY` and remove references to `SUPABASE_SERVICE_KEY` over time. For now, set BOTH to the same value to avoid breakage.
 
 ### NEXT_PUBLIC_GA_ID
 - Type: NEXT_PUBLIC_ (exposed to browser)
@@ -88,6 +90,20 @@ Fix: Vercel → directory-network- project → Settings → Environment Variable
 - What it does: Stripe Price ID for the $49/month Featured dispensary subscription
 - Where to get it: Stripe Dashboard → Products → create Featured product → copy Price ID
 - Status: NOT SET
+
+### STRIPE_PUBLISHABLE_KEY / NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+- Type: `NEXT_PUBLIC_` variant is client-side, non-prefixed is server-only
+- Declared in `.env.example`, **not yet referenced in code**
+- What it does: Publishable Stripe key for client-side Stripe.js when we move to embedded checkout
+- Action: Set on Vercel preemptively — costs nothing and unblocks the moment we wire client-side Stripe. Use `pk_live_` in production.
+- Status: NOT SET — preemptive Phase 2 slot
+
+### STRIPE_WEBHOOK_SECRET
+- Type: Server-only
+- Declared in `.env.example`, **not yet referenced in code**
+- What it does: Webhook signing secret used to verify incoming Stripe events
+- Action: Required as soon as the webhook handler (Code Task 6) goes live. Get from Stripe → Developers → Webhooks → your endpoint → Signing secret.
+- Status: NOT SET — needed for Code Task 6 activation
 
 ### NEXT_PUBLIC_SITE_URL
 - Type: NEXT_PUBLIC_ (exposed to browser)
@@ -147,3 +163,38 @@ Pre-launch (needed for full functionality):
 - [ ] NEXT_PUBLIC_GA_ID (real value, not G-PLACEHOLDER)
 - [ ] RESEND_API_KEY
 - [ ] ADMIN_PASSWORD (changed from default)
+
+---
+
+## Planned but not yet wired
+
+These names appear in launch/strategy docs but the code does not reference them yet. Set them on Vercel ahead of the corresponding feature build; they are not currently load-bearing.
+
+- `RESEND_API_KEY` — required when transactional email (deal alerts, claim confirmations, weekly digest) lands. Get from [resend.com/api-keys](https://resend.com/api-keys).
+- `STRIPE_PUBLISHABLE_KEY` / `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` — set ahead of any client-side Stripe move.
+- `STRIPE_WEBHOOK_SECRET` — set ahead of the webhook skeleton going live.
+
+---
+
+## Sanity check before deploys
+
+```bash
+# Local dev — confirm all required vars are loaded
+node -e "['NEXT_PUBLIC_SUPABASE_URL','NEXT_PUBLIC_SUPABASE_ANON_KEY','SUPABASE_SERVICE_ROLE_KEY','NEXT_PUBLIC_SITE_URL','STRIPE_SECRET_KEY','STRIPE_PRO_PRICE_ID','STRIPE_FEATURED_PRICE_ID','ADMIN_PASSWORD'].forEach(k => console.log(k.padEnd(38), process.env[k] ? 'OK' : 'MISSING'))"
+```
+
+Run before any production deploy:
+
+```bash
+vercel env ls production
+```
+
+Look for `MISSING` rows or any value that is still the `.env.example` placeholder.
+
+---
+
+## Naming standards going forward
+
+- **`NEXT_PUBLIC_*`** — only when the value MUST be available in the browser. Anything secret never gets this prefix.
+- **No alias creep.** If you rename a variable, do a project-wide replace in the same commit. The `SUPABASE_SERVICE_KEY` / `SUPABASE_SERVICE_ROLE_KEY` split that this audit found is the cautionary tale.
+- **`.env.example`** — keep it in sync with this doc. If a new var lands in code, add a placeholder line to `.env.example` in the same PR.

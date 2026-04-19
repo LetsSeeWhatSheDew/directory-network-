@@ -1,9 +1,28 @@
 # PuffPrice Phase 1 — Live Status Dashboard
 
-**Last updated:** April 18, 2026 · seeded by Cowork sprint
+**Last updated:** April 19, 2026 · Cowork weekend sprint
 **Living doc:** Chrome updates the `/Chrome` rows as each wave lands. Code updates the `/Code` rows as each task lands. Matthew updates the `/Matthew` rows.
 
 > **Ground-truth note:** Cowork's sandbox blocks all egress to `puffprice.com` / `www.puffprice.com` (`HTTP/1.1 403 Forbidden · X-Proxy-Error: blocked-by-allowlist`). Every row marked "⚠️ needs verification from Chrome/Code" requires someone with browser or local-CLI access to confirm. Do not trust anything in this doc that isn't timestamped by a human or agent that could actually see the live site.
+
+---
+
+## Reality check — April 19, 2026 (Sunday evening)
+
+Phase 1 is proceeding **without Stripe**. Stripe account creation is deferred until Monday; Matthew owns it and will supply keys tomorrow. The rest of Phase 1 ships tonight on Code's push.
+
+| Input | State |
+|---|---|
+| Stripe account / Pro Payment Link / Customer Portal / Webhook endpoint | ⛔ **BLOCKED** — deferred to Monday. Requires Matthew. Waves 1, 2, 3 skipped tonight. |
+| `/upgrade` CTA | 🟡 **mailto fallback interim** — Code Task 1 ships the `$0.99/mo` single-tier page with a mailto CTA instead of a Stripe Payment Link button. Acceptable for overnight; swap in `PAYMENT_LINK_URL` Monday. |
+| Wave 10 incognito end-to-end test | ⏸️ **DEFERRED** — not testable until Stripe lands. Re-queue Monday after Payment Link is live. |
+| Resend API key (`RESEND_API_KEY`) | ✅ **in Vercel Production** (Matthew confirmed Apr 19) |
+| Resend DNS records at Namecheap | ⏳ **pending Chrome Wave 5** |
+| Resend domain verification + test email | ⏳ **pending Chrome Wave 7** (blocked on Wave 5) |
+| GSC sitemap submission | ⏳ **pending Chrome Wave 8** + **Code Task 4** (sitemap canonical rewrite) |
+| `ADMIN_PASSWORD` in Vercel Production | ✅ **added** by Matthew Apr 19. Code Task 8 removes the `"cleanlist2026"` hardcoded fallback from `middleware.ts` on the same push. |
+| CleanList → PuffPrice residual copy (40 files) | ⏳ **pending Code Task 2** tonight |
+| `.bak` file merges (4 files) | ✅ **done** this Cowork run — content spliced into canonical `HANDOFF-UPDATE.md`, `docs/ENV-VARS.md`, `docs/LAUNCH-CHECKLIST.md`, `docs/ZONE4-strategy.md`. Four `.local.bak` files stay on disk until Code's push lands, then delete. |
 
 ---
 
@@ -13,12 +32,12 @@ When all six are ✅, Phase 1 ships. Chrome runs Wave 10 as the integration chec
 
 | # | Signal | Owner check | Status |
 |---|---|---|---|
-| 1 | `/upgrade` shows single-tier Pro at `$0.99/mo` — no Featured, no `$4.99`, no `$49` anywhere on the page | Chrome Wave 10 | ⚠️ unknown — last confirmed: "still pre-sprint version" (Matthew, Apr 18) |
-| 2 | Homepage no longer displays "Updated 3 days ago" on fresh data | Chrome Wave 10 | ⚠️ unknown — last confirmed: "still says 3 days ago" (Matthew, Apr 18) |
-| 3 | Site footer does not say "Featured placement from $49/month" | Chrome Wave 10 | ⚠️ unknown — last confirmed: "still says $49" (Matthew, Apr 18) |
-| 4 | Stripe Payment Link flow works end-to-end: `/upgrade` CTA → `buy.stripe.com/...` → `$0.99` recurring monthly | Chrome Waves 1+10 | ⬜ not started |
-| 5 | Resend domain verified (SPF + DKIM passing), test email delivered to `matthew@jacarandapeoria.com` with SPF: PASS / DKIM: PASS headers | Chrome Wave 7 | ⬜ not started |
-| 6 | Sitemap submitted to GSC, returning ≥200 URLs, all URLs return 200 on spot-check | Chrome Wave 8 + Code Task 4 | ⚠️ sitemap emits `cleanlist.co` URLs — canonical misalignment must be fixed first |
+| 1 | `/upgrade` shows single-tier Pro at `$0.99/mo` — no Featured, no `$4.99`, no `$49` anywhere on the page | Chrome Wave 10 (Monday) | ⏳ in flight — Code Task 1 lands tonight with mailto fallback. Wave 10 confirms Monday after Stripe keys land. |
+| 2 | Homepage no longer displays "Updated 3 days ago" on fresh data | Chrome Wave 10 (Monday) | ⏳ in flight — Code Task 3 lands tonight. Wave 10 confirms Monday. |
+| 3 | Site footer does not say "Featured placement from $49/month" | Chrome Wave 10 (Monday) | ⏳ in flight — Code Task 2 lands tonight (40 files). Wave 10 confirms Monday. |
+| 4 | Stripe Payment Link flow works end-to-end: `/upgrade` CTA → `buy.stripe.com/...` → `$0.99` recurring monthly | Chrome Waves 1+10 | ⛔ **BLOCKED — deferred to Monday.** Stripe account creation is Matthew's Monday pickup. Interim: mailto CTA on `/upgrade`. |
+| 5 | Resend domain verified (SPF + DKIM passing), test email delivered to `matthew@jacarandapeoria.com` with SPF: PASS / DKIM: PASS headers | Chrome Wave 7 | ⏳ API key in Vercel; DNS pending Chrome Wave 5 → Wave 7 verify |
+| 6 | Sitemap submitted to GSC, returning ≥200 URLs, all URLs return 200 on spot-check | Chrome Wave 8 + Code Task 4 | ⏳ pending — Code Task 4 aligns sitemap canonical to `www.puffprice.com` first; Chrome Wave 8 submits after Code push |
 
 ---
 
@@ -91,11 +110,17 @@ Infrastructure that's been set up on one side but isn't end-to-end functional ye
 
 ### Chrome (Claude in Chrome)
 
-**No blockers for Waves 1–9.** Can start immediately with Stripe → Resend → Namecheap → Vercel → GSC in the documented order.
+**Waves 1, 2, 3 skipped tonight** — Stripe deferred to Monday. Matthew handles Stripe account creation and provides keys.
 
-Wave 10 (incognito final verification) is blocked on:
-- Chrome Wave 6 complete (Vercel redeploy shows Ready)
-- **AND** Code Task 7 lands (the main push with /upgrade rewrite + copy cleanup + freshness fix + sitemap canonical + webhook handler + legal pages)
+**Waves 4–9 active tonight** in this order:
+- Wave 4: Confirm Resend domain `puffprice.com` exists + `RESEND_API_KEY` in Vercel (✅ confirmed). Capture DNS records Resend lists.
+- Wave 5: Namecheap Advanced DNS — add Resend records. Screenshot existing DNS first for rollback. Halt and report if SPF conflict.
+- Wave 6 (revised): Skip Stripe env vars. Only confirm `RESEND_API_KEY` present. **No redeploy** — Code's push triggers one.
+- Wave 7: Resend domain verify + test email to matthew@jacarandapeoria.com. Confirm SPF/DKIM PASS in headers.
+- Wave 8: GSC sitemap submission to property `puffprice.com` + request indexing on 12 URLs. Capture coverage errors.
+- Wave 9: Google Business Profile create/locate + start verification (postcard fine).
+
+**Wave 10 DEFERRED to Monday** — incognito $0.99 test not runnable without live Payment Link.
 
 ### Code (Claude Code)
 
@@ -107,8 +132,9 @@ Wave 10 (incognito final verification) is blocked on:
 
 ### Matthew
 
+- **Stripe account creation (Monday pickup)** — creates Stripe account, Pro product at `$0.99/mo`, Payment Link, Customer Portal config (pointing at `/terms` + `/privacy`), and Webhook endpoint. Supplies `STRIPE_SECRET_KEY`, `STRIPE_PRO_PRICE_ID`, `STRIPE_WEBHOOK_SECRET`, `PAYMENT_LINK_URL` to Vercel. Chrome Wave 10 can run immediately after.
 - **Canonical-domain decision** — www vs apex. Blocks Code Task 4 (sitemap rewrite). Cowork audit recommendation: `www.puffprice.com` (matches `/upgrade` canonical). Chrome Wave 6 verifies which is Vercel-primary; Matthew ties-breaks if they disagree.
-- **Admin password rotation** — pick a new `ADMIN_PASSWORD` (≥24 chars), set in Vercel, then Code removes the `"cleanlist2026"` fallback from `middleware.ts`.
+- **Admin password rotation** — ✅ **done Apr 19.** `ADMIN_PASSWORD` set in Vercel Production. Code Task 8 removes the `"cleanlist2026"` hardcoded fallback from `middleware.ts` on tonight's push.
 - **Missouri-pages decision** — 4 MO-branded pages at `app/cannabis/missouri/*`. Keep and rebrand, or retire. Blocks nothing critical; cleanup-only.
 - **`outreach/420-drafts.md` decision** — archive, rewrite, or ignore. Not phase-1-blocking.
 - **Supabase migration run** — Code can stage the migration via `sql/migrations/2026-04-18-pro-users.sql`, but applying it against production Supabase requires Matthew or Code with service-role. Phase 2 cutover.

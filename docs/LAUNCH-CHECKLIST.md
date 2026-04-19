@@ -106,6 +106,54 @@ Status key: [x] = done/verified  [ ] = still needed  [~] = partial/pending
 
 ---
 
+## Verification scripts (run before banner deploy)
+
+```bash
+# 1. Build is green
+npm run build
+
+# 2. Types are clean
+npx tsc --noEmit
+
+# 3. Required env vars present in production
+vercel env ls production | grep -E "(SUPABASE|STRIPE|GA_ID|SITE_URL|ADMIN_PASSWORD)"
+
+# 4. Live homepage warms in <1s
+for i in 1 2 3; do curl -L -o /dev/null -s -w "TTFB: %{time_starttransfer}s\n" https://puffprice.com/; done
+
+# 5. Sitemap returns 200 and contains city pages
+curl -sI https://puffprice.com/sitemap.xml | head -1
+curl -s https://puffprice.com/sitemap.xml | grep -c "/cannabis/illinois/"
+
+# 6. Stripe price IDs resolve
+node -e "require('stripe')(process.env.STRIPE_SECRET_KEY).prices.retrieve(process.env.STRIPE_PRO_PRICE_ID).then(p => console.log('Pro:', p.id, p.unit_amount, p.currency))"
+node -e "require('stripe')(process.env.STRIPE_SECRET_KEY).prices.retrieve(process.env.STRIPE_FEATURED_PRICE_ID).then(p => console.log('Featured:', p.id, p.unit_amount, p.currency))"
+```
+
+### Performance baseline (measured April 15, 2026)
+
+| Page | Warm TTFB | Total | Payload |
+|---|---|---|---|
+| `/` (homepage) | 0.55s | 0.63s | 100 KB |
+| `/cannabis/illinois/peoria` | 0.91s | 1.00s | 79 KB |
+| `/deals/all` | 0.92s | 0.98s | 43 KB |
+
+Cold-start penalty observed: homepage first hit was 10.8s. Mitigation: ISR or cache the homepage Supabase reads.
+
+When Lighthouse is available (`npm i -g lighthouse` or via Chrome devtools), capture LCP / TBT / CLS scores and append them here so we have a real before/after for the SEO push.
+
+---
+
+## Anything in this list that requires Matthew specifically
+
+- Domain registration (puffprice.com)
+- DNS changes (Namecheap Advanced DNS + Vercel domain add)
+- Vercel env var entry (Stripe, GA, Resend keys he holds)
+- Supabase service-role SQL run for dedupe (anon is RLS-blocked)
+- Manual send of Wave 2 outreach + Monday digest (Cowork does not auto-send)
+
+---
+
 ## Current Deployment Status
 
 | Environment | URL | Build Status |
