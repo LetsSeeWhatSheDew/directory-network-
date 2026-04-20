@@ -186,6 +186,39 @@ async function getAllActiveDeals(slug: string): Promise<ActiveDeal[]> {
   }
 }
 
+type RecentDealRow = {
+  discount_value: number | null;
+  discount_unit: string | null;
+  discount_type: string | null;
+  original_price: number | null;
+  sale_price: number | null;
+};
+
+type RecentDealStats = {
+  count: number;
+  avgSavings: number | null;
+};
+
+async function getRecentDealStats(slug: string): Promise<RecentDealStats> {
+  try {
+    const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    const rows = await fetchJson<RecentDealRow[]>(
+      `/deals?listing_slug=eq.${encodeURIComponent(slug)}&project_tag=eq.green&created_at=gte.${encodeURIComponent(since)}&select=discount_value,discount_unit,discount_type,original_price,sale_price`
+    );
+    if (!rows || rows.length === 0) return { count: 0, avgSavings: null };
+    const savings = rows
+      .map((r) => estimateSavings(r))
+      .filter((v): v is number => typeof v === "number" && v > 0);
+    if (savings.length === 0) {
+      return { count: rows.length, avgSavings: null };
+    }
+    const avg = savings.reduce((a, b) => a + b, 0) / savings.length;
+    return { count: rows.length, avgSavings: Math.round(avg) };
+  } catch {
+    return { count: 0, avgSavings: null };
+  }
+}
+
 /**
  * Extract a promo code or produce a plain-English instruction.
  * Used on every deal card so "information" becomes "action".
@@ -350,12 +383,13 @@ export default async function ListingPage({
     );
   }
 
-  const [hours, attributes, products, related, activeDeals] = await Promise.all([
+  const [hours, attributes, products, related, activeDeals, recentStats] = await Promise.all([
     getHours(listing.id),
     getAttributes(listing.id),
     getProducts(listing.id),
     listing.city ? getRelated(listing.city, listing.id) : Promise.resolve([]),
     listing.slug ? getAllActiveDeals(listing.slug) : Promise.resolve([] as ActiveDeal[]),
+    listing.slug ? getRecentDealStats(listing.slug) : Promise.resolve({ count: 0, avgSavings: null } as RecentDealStats),
   ]);
   const activeDeal: ActiveDeal | null = activeDeals[0] ?? null;
 
@@ -789,12 +823,57 @@ export default async function ListingPage({
                 </div>
               )}
 
-              {listing.long_description && (
+              {recentStats.count > 0 && (
                 <div className="dn-card">
-                  <p className="dn-card-title">About</p>
-                  <p className="dn-about">{listing.long_description}</p>
+                  <p className="dn-card-title">Deal history · last 30 days</p>
+                  <p className="dn-about">
+                    {listing.name ?? "This dispensary"} ran <strong>{recentStats.count}</strong> deal{recentStats.count === 1 ? "" : "s"} in the last 30 days
+                    {recentStats.avgSavings != null ? (
+                      <> — averaging <strong>${recentStats.avgSavings}</strong> in savings per deal.</>
+                    ) : (
+                      <>.</>
+                    )}
+                  </p>
                 </div>
               )}
+
+              {(listing.long_description || listing.short_description) ? (
+                <div className="dn-card">
+                  <p className="dn-card-title">About</p>
+                  {listing.long_description ? (
+                    <div
+                      className="dn-about"
+                      style={{ whiteSpace: "pre-line" }}
+                    >
+                      {listing.long_description}
+                    </div>
+                  ) : (
+                    <>
+                      <p className="dn-about">{listing.short_description}</p>
+                      <p style={{
+                        fontSize: ".78rem",
+                        color: "#9ca3af",
+                        fontFamily: "system-ui, sans-serif",
+                        marginTop: 10,
+                      }}>
+                        More details coming soon.
+                      </p>
+                    </>
+                  )}
+                </div>
+              ) : null}
+
+              <div className="dn-card" style={{ padding: "16px 24px" }}>
+                <p style={{ fontSize: ".8rem", color: "#6b7280", fontFamily: "system-ui, sans-serif" }}>
+                  Something off?{" "}
+                  <a
+                    href={`mailto:hello@puffprice.com?subject=Outdated%20info%20for%20${encodeURIComponent(listing.name ?? listing.slug ?? "listing")}&body=Tell%20us%20what%20looks%20wrong%20on%20this%20page%3A%20${encodeURIComponent(`https://puffprice.com/l/${listing.slug}`)}%0A%0A`}
+                    style={{ color: "#16a34a", textDecoration: "none", fontWeight: 600 }}
+                  >
+                    Report outdated info →
+                  </a>
+                </p>
+              </div>
 
               {related.length > 0 && (
                 <div className="dn-card dn-related">

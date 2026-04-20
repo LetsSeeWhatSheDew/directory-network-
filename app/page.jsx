@@ -13,6 +13,7 @@ import TopDealsRow from "./components/TopDealsRow";
 import { brand } from "../lib/brand";
 import { estimateSavings, formatSavingsDollars, gradeDeal } from "../lib/dealScoring";
 import { getServerLocation } from "../lib/location";
+import { getLiveDealsValueThisMonth, getDealsRunThisMonth } from "../lib/stats";
 
 // ============================================================
 // PUFFPRICE HOMEPAGE — Cannabis visual identity overhaul
@@ -456,13 +457,15 @@ function preferLocalDeals(deals, userCity) {
 }
 
 export default async function HomePage() {
-  const [dealCount, topDeals, mostRecentTs, endingSoon, dealPool, userLoc] = await Promise.all([
+  const [dealCount, topDeals, mostRecentTs, endingSoon, dealPool, userLoc, liveValue, dealsThisMonth] = await Promise.all([
     getActiveDealCount(),
     getTopDeals(),
     getMostRecentDealTs(),
     getEndingSoonDeals(),
     getDealPool(),
     getServerLocation(),
+    getLiveDealsValueThisMonth().catch(() => null),
+    getDealsRunThisMonth().catch(() => null),
   ]);
   const userCity = userLoc?.city || null;
   const localizedTopDeals = preferLocalDeals(topDeals, userCity);
@@ -1093,6 +1096,33 @@ export default async function HomePage() {
           <Link href="/dispensary/submit-deal" className="biz-btn-secondary">Submit a deal</Link>
         </div>
       </div>
+
+      {/* LIVE STATS STRIP — factual, month-to-date */}
+      {(liveValue || dealsThisMonth) && (
+        <div style={{
+          maxWidth: 1100,
+          margin: "0 auto",
+          padding: "18px 24px 0",
+          fontFamily: "system-ui, sans-serif",
+          fontSize: ".82rem",
+          color: "#6b7280",
+          textAlign: "center",
+        }}>
+          {liveValue && liveValue.totalDollars > 0 && (
+            <span>
+              <strong style={{ color: "#0f1f3d" }}>${liveValue.totalDollars.toLocaleString()}</strong> in deals live across Illinois this month
+            </span>
+          )}
+          {liveValue && liveValue.totalDollars > 0 && dealsThisMonth && dealsThisMonth.count > 0 && (
+            <span style={{ margin: "0 10px", color: "#d1d5db" }}>·</span>
+          )}
+          {dealsThisMonth && dealsThisMonth.count > 0 && (
+            <span>
+              Illinois dispensaries ran <strong style={{ color: "#0f1f3d" }}>{dealsThisMonth.count}</strong> deal{dealsThisMonth.count === 1 ? "" : "s"} in {dealsThisMonth.monthName}
+            </span>
+          )}
+        </div>
+      )}
 
       {/* FOOTER */}
       <footer className="footer">

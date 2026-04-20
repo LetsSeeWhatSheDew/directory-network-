@@ -482,7 +482,7 @@ export default async function DealsPage({
         .deal-grade{position:absolute;top:12px;right:12px;min-width:28px;height:24px;padding:0 8px;display:inline-flex;align-items:center;justify-content:center;border-radius:100px;font-family:system-ui,sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.02em;opacity:.7}
         .you-save-label{font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:2px}
         .save-amount{font-size:clamp(2.2rem,8vw,3rem);font-weight:700;color:#16a34a;letter-spacing:-.04em;line-height:1;margin-bottom:2px}
-        .save-vs{font-size:.72rem;color:#9ca3af;font-family:system-ui,sans-serif;margin-bottom:18px}
+        .save-context{font-size:.72rem;color:#9ca3af;font-family:system-ui,sans-serif;margin-bottom:18px}
         .disp-name{font-size:1.1rem;font-weight:700;color:#0f1f3d;margin-top:4px}
         .disp-detail{font-size:.8rem;color:#9ca3af;font-family:system-ui,sans-serif;margin-top:2px;margin-bottom:6px}
         .deal-title-big{font-size:.92rem;font-weight:600;color:#374151;margin-bottom:14px;font-family:system-ui,sans-serif;line-height:1.4;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
@@ -628,7 +628,7 @@ export default async function DealsPage({
                 return (
                   <>
                     <div className="save-amount">{formatted}</div>
-                    <div className="save-vs">on this deal</div>
+                    <div className="save-context">on this deal</div>
                   </>
                 );
               })()}

@@ -152,13 +152,14 @@ export async function generateMetadata({
   const listing = await getListing(deal.listing_slug);
   const headline = formatDealHeadline(deal);
   const disp = displayDispensaryName({ name: listing?.name, slug: deal.listing_slug, listing_slug: deal.listing_slug });
-  const city = listing?.city || "Illinois";
+  const rawCity = listing?.city && listing.city !== "Illinois" ? listing.city : null;
+  const cityPhrase = rawCity ? `${rawCity}, IL` : "Illinois";
   const dollars = estimateSavings(deal);
   const savingsSuffix = dollars ? ` — Save $${dollars}` : "";
   const title = `${headline} at ${disp}${savingsSuffix} | ${brand.name}`;
   const description = deal.description
     ? deal.description.slice(0, 180)
-    : `${headline} at ${disp} in ${city}, IL. ${brand.name} tracks active cannabis deals across Illinois.`;
+    : `${headline} at ${disp} in ${cityPhrase}. ${brand.name} tracks active cannabis deals across Illinois.`;
   const url = `${brand.url}/deal/${id}`;
   const ogImage = `${brand.url}/og-image.png`;
   return {
@@ -206,7 +207,9 @@ export default async function DealPage({
     urgent:   { color: "#fff",    background: "#dc2626" },
   };
   const disp = displayDispensaryName({ name: listing?.name, slug: deal.listing_slug, listing_slug: deal.listing_slug });
-  const city = listing?.city || "Illinois";
+  const rawCity = listing?.city && listing.city !== "Illinois" ? listing.city : null;
+  const city = rawCity || "Illinois";
+  const cityLabel = rawCity ? `${rawCity}, IL` : "IL";
 
   // SpecialAnnouncement schema — Zone 4 Phase 1 "fresh & live" signal
   const schemaAnnouncement = {
@@ -219,7 +222,7 @@ export default async function DealPage({
     announcementLocation: {
       "@type": "LocalBusiness",
       name: disp,
-      address: `${city}, IL`,
+      address: cityLabel,
     },
     url: `${brand.url}/deal/${id}`,
   };
@@ -291,7 +294,11 @@ export default async function DealPage({
           </Link>
         </p>
         <p className="city">
-          <Link href={`/city/${encodeURIComponent(city.toLowerCase())}`}>{city}, IL</Link>
+          {rawCity ? (
+            <Link href={`/city/${encodeURIComponent(rawCity.toLowerCase())}`}>{rawCity}, IL</Link>
+          ) : (
+            <Link href="/cannabis/illinois">Illinois</Link>
+          )}
         </p>
 
         <div className="savings-block">
