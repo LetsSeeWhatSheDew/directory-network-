@@ -10,6 +10,7 @@ import DealCtaLink from "../../components/DealCtaLink";
 import ShareDealButton from "../../components/ShareDealButton";
 import { getServerLocation } from "../../../lib/location";
 import { listingHref } from "../../../lib/links";
+import { displayDispensaryName } from "../../../lib/dispensaryName";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://hnbjufmtmrhexmdrfubw.supabase.co';
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300';
@@ -633,7 +634,7 @@ export default async function DealsPage({
               })()}
 
               <div className="disp-name">
-                {topDeal.name || topDeal.listing_slug}
+                {displayDispensaryName(topDeal)}
               </div>
               <div className="disp-detail">
                 {topDeal.city ? `${topDeal.city}, ${topDeal.state_abbrev || 'IL'}` : 'IL'}
@@ -723,12 +724,14 @@ export default async function DealsPage({
                     Details →
                   </Link>
                 )}
-                <Link
-                  href={`/dispensary/${topDeal.slug || topDeal.listing_slug}`}
-                  style={{ color: "#6b7280", textDecoration: "none" }}
-                >
-                  {topDeal.name || "Dispensary"} profile →
-                </Link>
+                {(topDeal.slug || topDeal.listing_slug) && (
+                  <Link
+                    href={`/dispensary/${topDeal.slug || topDeal.listing_slug}`}
+                    style={{ color: "#6b7280", textDecoration: "none" }}
+                  >
+                    {topDeal.name || "Dispensary"} profile →
+                  </Link>
+                )}
                 {(topDeal.id || topDeal.deal_id) && (
                   <ShareDealButton
                     dealId={topDeal.id || topDeal.deal_id}
@@ -781,7 +784,7 @@ export default async function DealsPage({
                         );
                       })()}
                       <div className="alt-body">
-                        <div className="alt-name">{deal.name || deal.listing_slug}</div>
+                        <div className="alt-name">{displayDispensaryName(deal)}</div>
                         <div className="alt-deal">
                           {deal.deal_title || deal.title || `${deal.discount_value}% off`}
                         </div>

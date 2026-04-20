@@ -12,6 +12,7 @@ import EndingSoonRow from "./components/EndingSoonRow";
 import TopDealsRow from "./components/TopDealsRow";
 import { brand } from "../lib/brand";
 import { estimateSavings, formatSavingsDollars, gradeDeal } from "../lib/dealScoring";
+import { getServerLocation } from "../lib/location";
 
 // ============================================================
 // PUFFPRICE HOMEPAGE — Cannabis visual identity overhaul
@@ -441,14 +442,31 @@ const FAQ_SCHEMA = {
   ],
 };
 
+// Prefer user-city deals when we know the city; otherwise fall back to the
+// statewide list. Haversine scoring would be ideal but only 1 of 61 IL
+// dispensaries has lat/lng populated — city-match is the strongest signal
+// we have until the Google Places backfill runs.
+function preferLocalDeals(deals, userCity) {
+  if (!userCity) return deals;
+  const target = userCity.toLowerCase();
+  const local = deals.filter(
+    (d) => typeof d?.city === "string" && d.city.toLowerCase() === target
+  );
+  return local.length > 0 ? local : deals;
+}
+
 export default async function HomePage() {
-  const [dealCount, topDeals, mostRecentTs, endingSoon, dealPool] = await Promise.all([
+  const [dealCount, topDeals, mostRecentTs, endingSoon, dealPool, userLoc] = await Promise.all([
     getActiveDealCount(),
     getTopDeals(),
     getMostRecentDealTs(),
     getEndingSoonDeals(),
     getDealPool(),
+    getServerLocation(),
   ]);
+  const userCity = userLoc?.city || null;
+  const localizedTopDeals = preferLocalDeals(topDeals, userCity);
+  const localizedDealPool = preferLocalDeals(dealPool, userCity);
   return (
     <>
       <script
@@ -904,10 +922,10 @@ export default async function HomePage() {
               <p className="hero-sub">Low Prices. High Times.</p>
 
               {/* THE big deal card — the hero element */}
-              <HeroDealCard initial={topDeals[0] || null} />
+              <HeroDealCard initial={localizedTopDeals[0] || null} />
 
               {/* City-aware savings callout — muted supporting copy */}
-              <SavingsCallout initialSavings={topDeals[0] ? estimateSavings(topDeals[0]) : null} />
+              <SavingsCallout initialSavings={localizedTopDeals[0] ? estimateSavings(localizedTopDeals[0]) : null} />
             </div>
 
             {/* Desktop-only right column: category shortcuts */}
@@ -1010,12 +1028,12 @@ export default async function HomePage() {
           />
           <button type="submit" className="home-search-btn">Search</button>
         </form>
-        <HomeDealCards initial={topDeals} dealCount={dealCount} mostRecent={mostRecentTs} />
+        <HomeDealCards initial={localizedTopDeals} dealCount={dealCount} mostRecent={mostRecentTs} />
       </div>
 
       {/* Social-proof row — ranked by computed savings until click data
           aggregates. Label is "Top deals", not "most popular". */}
-      <TopDealsRow deals={dealPool} />
+      <TopDealsRow deals={localizedDealPool} userCity={userCity} />
 
       {/* Section 4: Get alerts CTA */}
       <div className="alerts-strip">

@@ -40,9 +40,17 @@ function dispName(d: Deal): string {
   return name;
 }
 
-export default function TopDealsRow({ deals }: { deals: Deal[] }) {
-  // Rank by computed savings (honest proxy for "best" without click data).
-  // Skip rows where we can't compute a dollar figure.
+export default function TopDealsRow({
+  deals,
+  userCity,
+}: {
+  deals: Deal[];
+  userCity?: string | null;
+}) {
+  // Parent pre-filters `deals` to user-city when possible (app/page.jsx
+  // preferLocalDeals) so this component only ranks by savings within the
+  // already-localized set. If the parent could not localize, `deals` is
+  // statewide — we fall through to that honestly and adjust the heading.
   const ranked = deals
     .map((d) => ({ d, savings: estimateSavings(d) }))
     .filter((x): x is { d: Deal; savings: number } => typeof x.savings === "number" && x.savings > 0)
@@ -51,9 +59,21 @@ export default function TopDealsRow({ deals }: { deals: Deal[] }) {
 
   if (ranked.length === 0) return null;
 
+  const allInUserCity =
+    !!userCity &&
+    ranked.every(
+      (x) =>
+        typeof x.d.city === "string" &&
+        x.d.city.toLowerCase() === userCity.toLowerCase()
+    );
+  const heading =
+    allInUserCity && userCity
+      ? `Top deals in ${userCity} right now`
+      : "Top deals in Illinois right now";
+
   return (
     <section
-      aria-label="Top deals in Illinois"
+      aria-label={allInUserCity && userCity ? `Top deals in ${userCity}` : "Top deals in Illinois"}
       style={{
         maxWidth: 1100,
         margin: "0 auto",
@@ -71,7 +91,7 @@ export default function TopDealsRow({ deals }: { deals: Deal[] }) {
           marginBottom: 10,
         }}
       >
-        Top deals in Illinois right now
+        {heading}
       </div>
       <div
         style={{
@@ -83,10 +103,13 @@ export default function TopDealsRow({ deals }: { deals: Deal[] }) {
         {ranked.map(({ d, savings }) => {
           const slug = d.slug || d.listing_slug || "";
           const id = d.id || d.deal_id;
+          // Guard against null/undefined slug producing /l/undefined 404s.
+          const href = id ? `/deal/${id}` : slug ? `/l/${slug}` : null;
+          if (!href) return null;
           return (
             <Link
               key={id || slug}
-              href={id ? `/deal/${id}` : `/l/${slug}`}
+              href={href}
               style={{
                 background: "#fff",
                 border: "1px solid #e8e4da",

@@ -34,11 +34,13 @@ type Listing = {
 type DealRow = { listing_slug: string };
 
 async function getListings(): Promise<Listing[]> {
+  // Missing project_tag=eq.green filter was the "0 dispensaries" bug —
+  // without it, RLS policies on master_listings returned an empty set.
   // select=* so a missing optional column (google_rating, accepts_credit,
   // drive_thru, delivery — any of which may not exist on master_listings)
   // doesn't 400 the whole query and silently leave the page empty.
   // Filter narrowed to slug NOT NULL so /l/null cards never render.
-  const url = `${SUPABASE_URL}/rest/v1/master_listings?select=*&state=eq.IL&slug=not.is.null&order=city.asc&limit=500`;
+  const url = `${SUPABASE_URL}/rest/v1/master_listings?select=*&state=eq.IL&project_tag=eq.green&slug=not.is.null&order=city.asc&limit=500`;
   const res = await fetch(url, {
     headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
     cache: "no-store",

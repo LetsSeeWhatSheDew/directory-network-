@@ -685,9 +685,14 @@ export default async function ListingPage({
                     target="_blank"
                     rel="noopener noreferrer"
                     className="dn-hero-location"
-                    style={{ textDecoration: "none", color: "#16a34a", fontWeight: 600 }}
+                    style={{ textDecoration: "none", color: "#16a34a", fontWeight: 600, display: "block" }}
                   >
-                    📍 {[listing.address1, listing.city, listing.state].filter(Boolean).join(", ")} · Get directions →
+                    {listing.address1 && <span style={{ display: "block" }}>📍 {listing.address1}</span>}
+                    {(listing.city || listing.state) && (
+                      <span style={{ display: "block", whiteSpace: "nowrap" }}>
+                        {[listing.city, listing.state].filter(Boolean).join(", ")} · Get directions →
+                      </span>
+                    )}
                   </a>
                 ) : (
                   <p className="dn-hero-location">Illinois</p>

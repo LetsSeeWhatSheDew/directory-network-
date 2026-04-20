@@ -10,6 +10,7 @@ import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
 import { listingHref } from "../../../lib/links";
+import { displayDispensaryName } from "../../../lib/dispensaryName";
 import ShareDealButton from "../../components/ShareDealButton";
 
 export const revalidate = 60;
@@ -150,7 +151,7 @@ export async function generateMetadata({
   }
   const listing = await getListing(deal.listing_slug);
   const headline = formatDealHeadline(deal);
-  const disp = listing?.name || deal.listing_slug;
+  const disp = displayDispensaryName({ name: listing?.name, slug: deal.listing_slug, listing_slug: deal.listing_slug });
   const city = listing?.city || "Illinois";
   const dollars = estimateSavings(deal);
   const savingsSuffix = dollars ? ` — Save $${dollars}` : "";
@@ -204,7 +205,7 @@ export default async function DealPage({
     warning:  { color: "#92400e", background: "#fef3c7" },
     urgent:   { color: "#fff",    background: "#dc2626" },
   };
-  const disp = listing?.name || deal.listing_slug;
+  const disp = displayDispensaryName({ name: listing?.name, slug: deal.listing_slug, listing_slug: deal.listing_slug });
   const city = listing?.city || "Illinois";
 
   // SpecialAnnouncement schema — Zone 4 Phase 1 "fresh & live" signal

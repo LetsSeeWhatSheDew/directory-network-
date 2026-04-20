@@ -11,15 +11,62 @@ type Loc = {
 
 const CITY_KEY = "cl_city";
 const SRC_KEY = "cl_city_src";
+const TS_KEY = "cl_city_ts";
 const LAT_KEY = "cl_lat";
 const LNG_KEY = "cl_lng";
 const DECLINED_KEY = "cl_gps_declined";
+const CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000; // 24h
+
+// Read the pp_loc cookie that save() writes. Server components read this
+// via lib/location.ts — keep shape in sync. Returns null if cookie missing
+// or malformed.
+function readCookieCity(): string | null {
+  if (typeof document === "undefined") return null;
+  try {
+    const m = document.cookie.match(/(?:^|;\s*)pp_loc=([^;]+)/);
+    if (!m) return null;
+    const payload = JSON.parse(decodeURIComponent(m[1]));
+    return typeof payload?.city === "string" && payload.city.trim() ? payload.city : null;
+  } catch {
+    return null;
+  }
+}
+
+function clearCache() {
+  try {
+    sessionStorage.removeItem(CITY_KEY);
+    sessionStorage.removeItem(SRC_KEY);
+    sessionStorage.removeItem(TS_KEY);
+    sessionStorage.removeItem(LAT_KEY);
+    sessionStorage.removeItem(LNG_KEY);
+  } catch {}
+}
 
 function readCached(): Loc | null {
   try {
     const city = sessionStorage.getItem(CITY_KEY);
+    if (!city) return null;
+    // Stale-cache check: if the timestamp is older than 24h, re-detect.
+    // Timestamp is missing on caches written before this field was added —
+    // treat those as stale too so stale IP detections get one chance to
+    // upgrade to GPS.
+    const tsRaw = sessionStorage.getItem(TS_KEY);
+    const ts = tsRaw ? Number.parseInt(tsRaw, 10) : 0;
+    if (!ts || Date.now() - ts > CACHE_MAX_AGE_MS) {
+      clearCache();
+      return null;
+    }
+    // Cookie reconciliation: if a fresher pp_loc cookie disagrees with
+    // sessionStorage (server edge case: cookie set by a server action,
+    // or user switched networks and IP detection ran elsewhere), trust
+    // the cookie and drop the cache.
+    const cookieCity = readCookieCity();
+    if (cookieCity && cookieCity.toLowerCase() !== city.toLowerCase()) {
+      clearCache();
+      return null;
+    }
     const src = (sessionStorage.getItem(SRC_KEY) as Source) || "ip";
-    if (city) return { city, source: src };
+    return { city, source: src };
   } catch {}
   return null;
 }
@@ -28,6 +75,7 @@ function save(loc: Loc, lat?: number, lng?: number) {
   try {
     sessionStorage.setItem(CITY_KEY, loc.city);
     sessionStorage.setItem(SRC_KEY, loc.source);
+    sessionStorage.setItem(TS_KEY, String(Date.now()));
     if (lat != null) sessionStorage.setItem(LAT_KEY, String(lat));
     if (lng != null) sessionStorage.setItem(LNG_KEY, String(lng));
   } catch {}
@@ -158,6 +206,26 @@ export default function LocationAware() {
               new CustomEvent("cl:location-resolved", { detail: cached })
             );
           } catch {}
+        }
+        // Silent GPS upgrade: if cached city came from an IP lookup,
+        // attempt to quietly upgrade to GPS in the background. If GPS
+        // resolves to a different city, commit() reconciles — hero card
+        // and deal feed see the corrected city on the next event.
+        if (cached.source === "ip") {
+          let gpsDeclined = false;
+          try {
+            gpsDeclined = sessionStorage.getItem(DECLINED_KEY) === "1";
+          } catch {}
+          if (!gpsDeclined) {
+            const pos = await requestGps();
+            if (cancelled) return;
+            if (pos) {
+              const { latitude, longitude } = pos.coords;
+              const city = await reverseGeocode(latitude, longitude);
+              if (cancelled) return;
+              if (city) commit({ city, source: "gps" }, latitude, longitude);
+            }
+          }
         }
         return;
       }

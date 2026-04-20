@@ -48,18 +48,19 @@ function supabase() {
   return { url, key };
 }
 
-async function fetchTable<T>(table: string): Promise<T[]> {
+async function fetchTable<T>(table: string, queryString?: string): Promise<T[]> {
   const { url, key } = supabase();
   if (!url || !key) return [];
 
+  // master_listings has no created_at column — ordering by it 400s and
+  // silently empties the admin dashboard. Each table supplies its own
+  // query string; default stays created_at for other tables (leads).
+  const qs = queryString ?? "select=*&order=created_at.desc";
   try {
-    const res = await fetch(
-      `${url}/rest/v1/${table}?select=*&order=created_at.desc`,
-      {
-        headers: { apikey: key, Authorization: `Bearer ${key}` },
-        next: { revalidate: 30 },
-      }
-    );
+    const res = await fetch(`${url}/rest/v1/${table}?${qs}`, {
+      headers: { apikey: key, Authorization: `Bearer ${key}` },
+      next: { revalidate: 30 },
+    });
     if (!res.ok) {
       console.error(`Failed to fetch ${table}:`, await res.text());
       return [];
@@ -108,7 +109,12 @@ function cityFrom(lead: Lead): string {
 
 /* ─── Constants ─── */
 
-const PAGES_LIVE = 56; // counted from app directory
+// Rough count of live routes. Counted from app directory:
+// static pages (~30) + IL city/dispensary landing pages generated per
+// green-tag master_listings row (~293) + category deal pages (5).
+// Exact number requires sitemap introspection — this is an approximation
+// useful for dashboard sanity, not a reporting metric.
+const PAGES_LIVE = 400;
 const LAST_DEPLOY = new Date().toISOString(); // approximation for "today's focus"
 
 /* ─── Page ─── */
@@ -116,7 +122,12 @@ const LAST_DEPLOY = new Date().toISOString(); // approximation for "today's focu
 export default async function AdminDashboard() {
   const [leads, listings] = await Promise.all([
     fetchTable<Lead>("leads"),
-    fetchTable<Listing>("master_listings"),
+    // master_listings: project_tag filter to scope to Green project, and
+    // order by name (not created_at, which doesn't exist on this table).
+    fetchTable<Listing>(
+      "master_listings",
+      "select=*&project_tag=eq.green&order=name.asc&limit=500"
+    ),
   ]);
 
   const now = new Date();

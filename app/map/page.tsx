@@ -20,8 +20,8 @@ type Listing = {
   slug: string;
   name: string | null;
   city: string | null;
-  latitude: number | null;
-  longitude: number | null;
+  lat: number | null;
+  lng: number | null;
 };
 
 type Deal = {
@@ -33,9 +33,11 @@ type Deal = {
 };
 
 async function getListings(): Promise<Listing[]> {
+  // Column names are lat/lng, NOT latitude/longitude — wrong column names
+  // were 400ing the PostgREST query and emptying the map silently.
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/master_listings?select=slug,name,city,latitude,longitude&project_tag=eq.green&state=eq.IL&latitude=not.is.null&limit=500`,
+      `${SUPABASE_URL}/rest/v1/master_listings?select=slug,name,city,lat,lng&project_tag=eq.green&state=eq.IL&lat=not.is.null&limit=500`,
       {
         headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
         next: { revalidate: 600 },
@@ -85,13 +87,13 @@ export default async function MapPage() {
   }
 
   const points = listings
-    .filter((l) => l.latitude && l.longitude)
+    .filter((l) => l.lat && l.lng)
     .map((l) => ({
       slug: l.slug,
       name: l.name || l.slug,
       city: l.city || "Illinois",
-      lat: Number(l.latitude),
-      lng: Number(l.longitude),
+      lat: Number(l.lat),
+      lng: Number(l.lng),
       deal: bestDeal[l.slug] || null,
     }));
 
@@ -118,16 +120,62 @@ export default async function MapPage() {
         <Link href="/" className="back">← Home</Link>
       </nav>
 
-      <div className="map-shell">
-        {/* Baseline loader rendered at the page level so the user sees
-            feedback even if Leaflet fails to download. MapClient paints
-            on top of this as soon as tiles arrive. */}
-        <div className="map-loading">
-          <div className="map-loading-spinner" />
-          <div>Loading Illinois map…</div>
+      {/* When we have fewer than 3 geocoded dispensaries there's nothing
+          a map adds over the list view — most dispensaries have null
+          lat/lng until the Google Places backfill runs. Show a prominent
+          link to /dispensaries rather than an empty map. */}
+      {points.length < 3 ? (
+        <div
+          style={{
+            padding: "64px 28px",
+            textAlign: "center",
+            fontFamily: "system-ui, sans-serif",
+            background: "#fff",
+            borderTop: "1px solid #e8e4da",
+          }}
+        >
+          <h2
+            style={{
+              fontSize: "1.5rem",
+              color: "#0f1f3d",
+              fontFamily: "Georgia, serif",
+              marginBottom: 10,
+              letterSpacing: "-0.02em",
+            }}
+          >
+            Map view coming soon
+          </h2>
+          <p style={{ color: "#6b7280", marginBottom: 22, maxWidth: 480, margin: "0 auto 22px", lineHeight: 1.5 }}>
+            We&apos;re adding map pins for every Illinois dispensary. Browse the full list below while we finish geocoding.
+          </p>
+          <Link
+            href="/dispensaries"
+            style={{
+              display: "inline-block",
+              background: "#16a34a",
+              color: "#fff",
+              padding: "12px 28px",
+              borderRadius: 10,
+              textDecoration: "none",
+              fontWeight: 700,
+              fontSize: ".95rem",
+            }}
+          >
+            Browse all Illinois dispensaries →
+          </Link>
         </div>
-        <MapClient points={points} />
-      </div>
+      ) : (
+        <div className="map-shell">
+          {/* Baseline loader rendered at the page level so the user sees
+              feedback even if Leaflet fails to download. MapClient paints
+              on top of this as soon as tiles arrive. */}
+          <div className="map-loading">
+            <div className="map-loading-spinner" />
+            <div>Loading Illinois map…</div>
+          </div>
+          <MapClient points={points} />
+        </div>
+      )}
     </>
   );
 }
