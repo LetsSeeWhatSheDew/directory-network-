@@ -117,7 +117,7 @@ From the prior sprint flag: `/api/digest/preview` and `/cannabis/illinois/[slug]
 
 ### Step 9 — Carry-over: `/dispensaries` and `/about`
 
-- `app/dispensaries/page.tsx` — file exists. Verify it renders cleanly; if not, wire up a minimal listings index (293 rows). Confirm it's in `app/sitemap.ts` (line 108 — already there).
+- `app/dispensaries/page.tsx` — file exists. Verify it renders cleanly; if not, wire up a minimal listings index (61 active IL rows; 82 green-tag rows total). Confirm it's in `app/sitemap.ts` (line 108 — already there).
 - `app/about/page.tsx` — directory does NOT exist per `ls app/ | grep about`. Create minimal page with the PuffPrice Promise copy. Add to `app/sitemap.ts` (line 109 — already there but points to a non-existent route).
 
 ## Build + ship checklist

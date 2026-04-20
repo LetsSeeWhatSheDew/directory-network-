@@ -62,5 +62,5 @@ After Vercel deploys `3a07841`:
 2. Scroll to below-the-fold "Top deals in Peoria right now" — heading should include your city if the local pool has deals; otherwise falls back honestly to Illinois-wide.
 3. Tap any "Flower" deal → should go to a real `/l/[slug]` URL, not `/l/undefined`.
 4. Visit `/dispensaries` — should show 61 dispensaries grouped by city, not "0 across 0 cities."
-5. Visit `/admin`, enter password — should show roughly `293` total listings (post-fix), not `0`.
+5. Visit `/admin`, enter password — should show roughly `61` active IL listings (or `82` total green-tag listings, depending on filter — confirm with `docs/audits/293-reconciliation-20260420.md`), not `0`.
 6. Visit `/map` — should show either a real map (if backfill run) or a clean "Browse all dispensaries" CTA (today's state until backfill).

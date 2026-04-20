@@ -99,7 +99,7 @@ Grep:
 Fix: Replace opening paragraph with Variant A (see bugfix-sprint-summary-20260420.md).
 Replace contact email: matthew@jacarandapeoria.com -> hello@puffprice.com
 
-Keep: "PuffPrice aggregates deals..." and "We cover all 293 licensed..." paragraphs.
+Keep: "PuffPrice aggregates deals..." paragraph. **Replace** the "We cover all 293 licensed..." paragraph with: "We cover Illinois dispensaries that share their deals with us — and we add new ones every week." (See `docs/audits/293-reconciliation-20260420.md` — the 293 figure is IL CROO's licensed-dispensary count, not our directory coverage.)
 Keep: "Built in Peoria, Illinois. Plant" closing line.
 
 ---

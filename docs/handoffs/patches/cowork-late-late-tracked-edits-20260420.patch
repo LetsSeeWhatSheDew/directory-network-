@@ -1,0 +1,71 @@
+diff --git a/HANDOFF-UPDATE.md b/HANDOFF-UPDATE.md
+index b58fada..aa2ea5c 100644
+--- a/HANDOFF-UPDATE.md
++++ b/HANDOFF-UPDATE.md
+@@ -69,8 +69,8 @@ The following MCP tools are configured for Claude Code sessions:
+ 
+ - **Project URL:** https://hnbjufmtmrhexmdrfubw.supabase.co
+ - **Active deals:** 56 (post data-audit deactivation of expired deals)
+-- **Master listings (dispensaries):** 293+ (shown on live site as "293 dispensaries")
+-- **Cities covered:** 162 cities shown on live site
++- **Master listings (dispensaries):** 61 IL active / 82 total green-tag rows (was previously documented as "293+", which conflated IL CROO licensed-dispensary count with our directory coverage — see `docs/audits/293-reconciliation-20260420.md`)
++- **Cities covered:** 34 IL cities with config records under `config/cities/illinois/` (Illinois has ~162 cities with at least one licensed dispensary in the state register — those are not all in our directory)
+ 
+ Pending SQL migrations (Matthew must run these — anon key is RLS-blocked):
+ - sql/dedupe-deals-2026-04-15.sql — deactivates 44 duplicate deal rows
+diff --git a/docs/audits/bugfix-sprint-summary-20260419.md b/docs/audits/bugfix-sprint-summary-20260419.md
+index 3669494..181d726 100644
+--- a/docs/audits/bugfix-sprint-summary-20260419.md
++++ b/docs/audits/bugfix-sprint-summary-20260419.md
+@@ -117,7 +117,7 @@ From the prior sprint flag: `/api/digest/preview` and `/cannabis/illinois/[slug]
+ 
+ ### Step 9 — Carry-over: `/dispensaries` and `/about`
+ 
+-- `app/dispensaries/page.tsx` — file exists. Verify it renders cleanly; if not, wire up a minimal listings index (293 rows). Confirm it's in `app/sitemap.ts` (line 108 — already there).
++- `app/dispensaries/page.tsx` — file exists. Verify it renders cleanly; if not, wire up a minimal listings index (61 active IL rows; 82 green-tag rows total). Confirm it's in `app/sitemap.ts` (line 108 — already there).
+ - `app/about/page.tsx` — directory does NOT exist per `ls app/ | grep about`. Create minimal page with the PuffPrice Promise copy. Add to `app/sitemap.ts` (line 109 — already there but points to a non-existent route).
+ 
+ ## Build + ship checklist
+diff --git a/docs/audits/copy-audit-20260420.md b/docs/audits/copy-audit-20260420.md
+index 3caf3bd..36be0d8 100644
+--- a/docs/audits/copy-audit-20260420.md
++++ b/docs/audits/copy-audit-20260420.md
+@@ -99,7 +99,7 @@ Grep:
+ Fix: Replace opening paragraph with Variant A (see bugfix-sprint-summary-20260420.md).
+ Replace contact email: matthew@jacarandapeoria.com -> hello@puffprice.com
+ 
+-Keep: "PuffPrice aggregates deals..." and "We cover all 293 licensed..." paragraphs.
++Keep: "PuffPrice aggregates deals..." paragraph. **Replace** the "We cover all 293 licensed..." paragraph with: "We cover Illinois dispensaries that share their deals with us — and we add new ones every week." (See `docs/audits/293-reconciliation-20260420.md` — the 293 figure is IL CROO's licensed-dispensary count, not our directory coverage.)
+ Keep: "Built in Peoria, Illinois. Plant" closing line.
+ 
+ ---
+diff --git a/docs/session-reports/2026-04-20-evening-sprint.md b/docs/session-reports/2026-04-20-evening-sprint.md
+index ef268af..8e51622 100644
+--- a/docs/session-reports/2026-04-20-evening-sprint.md
++++ b/docs/session-reports/2026-04-20-evening-sprint.md
+@@ -62,5 +62,5 @@ After Vercel deploys `3a07841`:
+ 2. Scroll to below-the-fold "Top deals in Peoria right now" — heading should include your city if the local pool has deals; otherwise falls back honestly to Illinois-wide.
+ 3. Tap any "Flower" deal → should go to a real `/l/[slug]` URL, not `/l/undefined`.
+ 4. Visit `/dispensaries` — should show 61 dispensaries grouped by city, not "0 across 0 cities."
+-5. Visit `/admin`, enter password — should show roughly `293` total listings (post-fix), not `0`.
++5. Visit `/admin`, enter password — should show roughly `61` active IL listings (or `82` total green-tag listings, depending on filter — confirm with `docs/audits/293-reconciliation-20260420.md`), not `0`.
+ 6. Visit `/map` — should show either a real map (if backfill run) or a clean "Browse all dispensaries" CTA (today's state until backfill).
+diff --git a/sql/migrations/add-is-medical-friendly.sql b/sql/migrations/add-is-medical-friendly.sql
+index b557e93..87b2f87 100644
+--- a/sql/migrations/add-is-medical-friendly.sql
++++ b/sql/migrations/add-is-medical-friendly.sql
+@@ -1,4 +1,14 @@
+ -- NOT YET APPLIED — scaffolding only.
++--
++-- Cowork 2026-04-20 late-late attempt: blocked.
++-- Supabase MCP surfaced read-only this session (both
++-- `apply_migration` and `execute_sql` rejected DDL with
++-- "cannot execute ALTER TABLE in a read-only transaction").
++-- Verified via information_schema that the column does NOT yet
++-- exist on master_listings (107 rows, unchanged schema as of tonight).
++-- Apply via Supabase SQL editor. Once applied, bump the header to
++-- "APPLIED <timestamp>" and leave this comment trail.
++--
+ -- Purpose: expose whether a dispensary charges the lower medical tax
+ -- rate (1% IL state tax + local) vs. the recreational rate (10–25%
+ -- depending on product). "Medical-friendly" here means the dispensary

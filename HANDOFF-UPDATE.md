@@ -69,8 +69,8 @@ The following MCP tools are configured for Claude Code sessions:
 
 - **Project URL:** https://hnbjufmtmrhexmdrfubw.supabase.co
 - **Active deals:** 56 (post data-audit deactivation of expired deals)
-- **Master listings (dispensaries):** 293+ (shown on live site as "293 dispensaries")
-- **Cities covered:** 162 cities shown on live site
+- **Master listings (dispensaries):** 61 IL active / 82 total green-tag rows (was previously documented as "293+", which conflated IL CROO licensed-dispensary count with our directory coverage — see `docs/audits/293-reconciliation-20260420.md`)
+- **Cities covered:** 34 IL cities with config records under `config/cities/illinois/` (Illinois has ~162 cities with at least one licensed dispensary in the state register — those are not all in our directory)
 
 Pending SQL migrations (Matthew must run these — anon key is RLS-blocked):
 - sql/dedupe-deals-2026-04-15.sql — deactivates 44 duplicate deal rows

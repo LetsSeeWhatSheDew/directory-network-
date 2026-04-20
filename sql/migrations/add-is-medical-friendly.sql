@@ -1,4 +1,14 @@
 -- NOT YET APPLIED — scaffolding only.
+--
+-- Cowork 2026-04-20 late-late attempt: blocked.
+-- Supabase MCP surfaced read-only this session (both
+-- `apply_migration` and `execute_sql` rejected DDL with
+-- "cannot execute ALTER TABLE in a read-only transaction").
+-- Verified via information_schema that the column does NOT yet
+-- exist on master_listings (107 rows, unchanged schema as of tonight).
+-- Apply via Supabase SQL editor. Once applied, bump the header to
+-- "APPLIED <timestamp>" and leave this comment trail.
+--
 -- Purpose: expose whether a dispensary charges the lower medical tax
 -- rate (1% IL state tax + local) vs. the recreational rate (10–25%
 -- depending on product). "Medical-friendly" here means the dispensary
