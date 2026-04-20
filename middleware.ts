@@ -1,20 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
-if (!ADMIN_PASSWORD) {
-  throw new Error("ADMIN_PASSWORD env required");
-}
-
 const COOKIE_NAME = "dn_admin_auth";
 const INTENTS = ["best", "open-now", "recreational", "deals"];
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Admin auth
+  // Admin auth — read env at request time, never at module eval, so a
+  // missing ADMIN_PASSWORD doesn't kill `next build`. If unset, the
+  // /admin paths still redirect to login (no auth cookie can match an
+  // empty expected value).
   if (pathname.startsWith("/admin")) {
+    const adminPassword = process.env.ADMIN_PASSWORD;
     const authCookie = req.cookies.get(COOKIE_NAME);
-    if (authCookie?.value === ADMIN_PASSWORD) return NextResponse.next();
+    if (adminPassword && authCookie?.value === adminPassword) return NextResponse.next();
     if (req.method === "POST") return NextResponse.next();
     const loginUrl = new URL("/admin-login", req.url);
     loginUrl.searchParams.set("from", pathname);
