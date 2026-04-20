@@ -350,7 +350,7 @@ function buildSpecialAnnouncements(deals: any[]) {
     announcementLocation: {
       "@type": "LocalBusiness",
       name: d.name || d.listing_slug || "Illinois cannabis dispensary",
-      address: `${d.city || "Illinois"}, IL`,
+      address: `${d.city ? `${d.city}, ${d.state_abbrev || 'IL'}` : 'IL'}, IL`,
     },
   }));
 }
@@ -621,8 +621,7 @@ export default async function DealsPage({
                     <>
                       <div className="you-save-label">You save</div>
                       <div className="save-amount">${dollars}</div>
-                      <div className="save-vs">vs. area average</div>
-                    </>
+                      </>
                   );
                 }
                 return (
@@ -637,7 +636,7 @@ export default async function DealsPage({
                 {topDeal.name || topDeal.listing_slug}
               </div>
               <div className="disp-detail">
-                {topDeal.city || "Illinois"}
+                {topDeal.city ? `${topDeal.city}, ${topDeal.state_abbrev || 'IL'}` : 'IL'}
                 {topDeal.google_rating > 0 && ` · ${topDeal.google_rating}★`}
               </div>
 
@@ -796,7 +795,7 @@ export default async function DealsPage({
                           );
                         })()}
                         <div className="alt-meta">
-                          {deal.city || "Illinois"}
+                          {deal.city ? `${deal.city}, ${deal.state_abbrev || 'IL'}` : 'IL'}
                         </div>
                       </div>
                     </Link>

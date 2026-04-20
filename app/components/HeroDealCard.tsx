@@ -165,7 +165,6 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
         {city ? `Best deal near ${city} right now` : "Best deal near you right now"}
       </div>
       <div className="hero-deal-savings">{savings}</div>
-      <div className="hero-deal-vs">vs. area average</div>
       <div className="hero-deal-name">{name}</div>
       <div className="hero-deal-title">{deal.deal_title || "Active deal"}</div>
       <div className="hero-deal-row">

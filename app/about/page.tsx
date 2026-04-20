@@ -71,32 +71,33 @@ export default function AboutPage() {
         <h1>We built the thing we wished existed.</h1>
 
         <p>
-          I&apos;m Matthew Burns. I live in Peoria, Illinois. I got tired of
-          driving to a dispensary only to find out the deal I saw on Instagram
-          was expired, or didn&apos;t apply to what I wanted, or was only for
-          first-time customers. Cannabis deals are everywhere — on Instagram,
-          on websites, on chalkboards — but nobody had put them in one place
-          with a clear answer to one question: where should I go right now,
-          and why?
+          PuffPrice was built in Peoria, Illinois by people who got tired
+          of driving to a dispensary only to find out the deal they saw on
+          Instagram was expired, didn&apos;t apply to what they wanted, or
+          was only for first-time customers. Cannabis deals are everywhere
+          — on Instagram, on websites, on chalkboards — but nobody had put
+          them in one place with a clear answer to one question: where
+          should I go right now, and why?
         </p>
 
         <p>
           PuffPrice aggregates deals from Illinois dispensaries, normalizes
-          pricing to price-per-gram, and gives you one recommendation with how
-          much you save vs the area average. No menus. No strain databases.
-          No ads. Just: here&apos;s the best deal near you today.
+          pricing to price-per-gram, and shows you the best deal near you
+          right now. No menus. No strain databases. No ads. Just: here&apos;s
+          the best deal near you today.
         </p>
 
         <p>
-          We cover all 293 licensed cannabis dispensaries across 162 Illinois
-          cities. Every listing is free for dispensaries, forever. PuffPrice
-          is funded by Pro subscribers ($0.99/month) who want instant SMS
-          when prices drop. That&apos;s the whole model.
+          We&apos;re covering Illinois dispensaries one city at a time. If
+          yours isn&apos;t in our directory yet, email us and we&apos;ll add
+          you within 48 hours. Every listing is free for dispensaries,
+          forever. PuffPrice is funded by Pro subscribers ($0.99/month) who
+          want instant SMS when prices drop. That&apos;s the whole model.
         </p>
 
         <div className="contact">
           Questions, tips, or a deal we missed?{" "}
-          <a href="mailto:matthew@jacarandapeoria.com">matthew@jacarandapeoria.com</a>
+          <a href="mailto:hello@puffprice.com">hello@puffprice.com</a>
         </div>
 
         <div className="built">Built in Peoria, Illinois. 🌿</div>

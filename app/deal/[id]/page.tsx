@@ -298,8 +298,7 @@ export default async function DealPage({
             <>
               <div className="sv-label">You save</div>
               <div className="sv-amt">${dollars}</div>
-              <div className="sv-vs">vs. area average</div>
-            </>
+              </>
           ) : (
             savingsFormatted !== "Deal active" && (
               <>

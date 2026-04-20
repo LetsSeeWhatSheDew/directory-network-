@@ -288,7 +288,7 @@ export default function HomeDealCards({
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                   <span className={`open-badge ${likelyOpen ? "open" : "closed"}`}>
-                    {likelyOpen ? "Open today" : "May be closed"}
+                    {likelyOpen ? "Open today" : "Check hours"}
                   </span>
                   {(d.id || d.deal_id) && (
                     <ShareDealButton
@@ -326,8 +326,7 @@ export default function HomeDealCards({
                     <div className="deal-savings">
                       <div className="savings-copy">
                         <span className="savings-label">You save</span>
-                        <span className="savings-sub">vs. area average</span>
-                      </div>
+                        </div>
                       <span className="savings-num">${dollars}</span>
                     </div>
                   );
