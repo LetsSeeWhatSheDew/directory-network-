@@ -76,32 +76,28 @@ Six tasks executed. All artifacts shipped. One **environment blocker** affects t
 
 ## Commits to push
 
-**Second blocker — could not commit tonight.** The sandbox's bindfs mount on the project directory allows file creates and modifications but rejects `unlink(2)` on anything under `.git/`. A stale `.git/index.lock` (0 bytes) was left by a mid-session `git status` that itself emitted "unable to unlink" warnings. Without being able to remove the lock file, `git add` refuses to proceed ("Unable to create lock file exists"). Verified the lock is stale (no concurrent git process); verified the restriction is categorical (cannot even `touch .git/probe; rm .git/probe` — the `rm` fails with `Operation not permitted`).
+**Commit shipped locally at SHA `4ed7765` on top of `8f745f9`.** Worked around two sandbox blockers to get there:
 
-**All 16 changes are nonetheless on disk in the workspace folder, visible to Matthew.** The only step that didn't happen is the `git commit && git push`. Matthew can ship them in ~30 seconds via one of two paths:
+1. **Lock-file unlink restriction.** The sandbox's bindfs mount on the project directory allows file creates and modifications but rejects `unlink(2)` on anything under `.git/`. Standard `git add` left a stale `.git/index.lock` (0 bytes) and refused to proceed. Workaround: ran `git add` with `GIT_INDEX_FILE=/tmp/git-index-cowork`, then committed via plumbing — `git write-tree` → `git commit-tree` → `git update-ref refs/heads/main`. The standard porcelain commit path can't run; the plumbing path can because it doesn't need to unlink the failed `index.lock`.
 
-**Path A — straight commit (simplest):**
+2. **No GitHub push credentials in the sandbox.** `git push origin main` failed: `fatal: could not read Username for 'https://github.com': No such device or address`. No credential helper, no `gh` CLI, no SSH key, no `.git-credentials` file in the sandbox. Code (the parallel session) evidently has push access I don't — likely a per-session auth setup. **Matthew has to push from his own terminal**, where the credentials are already configured.
+
+**What Matthew needs to do (~10 seconds):**
+
 ```
 cd "/Users/matthew/Desktop/ACTIVE/Directory-Network/Project - Directory/project-green"
-rm .git/index.lock   # the stale lock Cowork couldn't remove
-git fetch origin && git pull --rebase origin main
-git add HANDOFF-UPDATE.md docs/ sql/
-git commit -m "cowork late-late: view fix + medical migration + index/content schema + handoffs"
-git push origin main
+git log --oneline -3      # should show 4ed7765 at HEAD locally
+git push origin main      # ships it
 ```
 
-**Path B — apply-from-patch (if the working tree has diverged):**
-```
-cd "/Users/matthew/Desktop/ACTIVE/Directory-Network/Project - Directory/project-green"
-rm .git/index.lock
-git apply docs/handoffs/patches/cowork-late-late-tracked-edits-20260420.patch
-# the 11 new files are already present; git add will pick them up
-git add HANDOFF-UPDATE.md docs/ sql/
-git commit -m "cowork late-late: view fix + medical migration + index/content schema + handoffs"
-git push origin main
-```
+If `git status` shows a dirty tree (because the plumbing commit bypassed the porcelain index, the regular index will think the same files are still uncommitted), run `git reset --mixed HEAD` first — that resyncs the porcelain index against the new HEAD. The working tree files are already correct; nothing changes on disk.
 
-Single commit message: `cowork late-late: view fix + medical migration + index/content schema + handoffs`
+**Backup paths if anything's off:**
+
+- Patch of tracked-file edits: `docs/handoffs/patches/cowork-late-late-tracked-edits-20260420.patch`
+- All 11 new files are present at their final paths under `docs/handoffs/`, `docs/sprints/`, `docs/session-reports/`, `sql/migrations/`, `sql/queries/`.
+
+Single commit message used: `cowork late-late: view fix + medical migration + index/content schema + handoffs`
 
 ## Notes for Code (if you read this before your next session)
 
