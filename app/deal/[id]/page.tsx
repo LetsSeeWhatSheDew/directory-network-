@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
+import { listingHref } from "../../../lib/links";
 import ShareDealButton from "../../components/ShareDealButton";
 
 export const revalidate = 60;
@@ -329,9 +330,15 @@ export default async function DealPage({
           <div className="how-to">
             → {code ? `Show this code at checkout: ${code}` : "No code needed — deal applies at checkout"}
           </div>
-          <Link href={`/l/${deal.listing_slug}?city=${encodeURIComponent(city)}`} className="cta">
-            GO HERE →
-          </Link>
+          {(() => {
+            const goHref = listingHref(deal.listing_slug, city);
+            if (!goHref) return null;
+            return (
+              <Link href={goHref} className="cta">
+                GO HERE →
+              </Link>
+            );
+          })()}
           <div style={{ marginTop: 10 }}>
             <ShareDealButton
               dealId={id}

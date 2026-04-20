@@ -94,7 +94,7 @@ export default function IllinoisLawsPage() {
         <nav className="laws-nav">
           <Link href="/" className="laws-nav-brand">
             <span className="laws-nav-dot" />
-            <span className="laws-nav-name">Directory<span className="laws-nav-accent">Network</span></span>
+            <span className="laws-nav-name">puff<span className="laws-nav-accent">price</span></span>
           </Link>
           <Link href="/cannabis/illinois" className="laws-nav-back">← Illinois</Link>
         </nav>
@@ -195,7 +195,7 @@ export default function IllinoisLawsPage() {
           </div>
         </div>
         <footer className="laws-footer">
-          <span className="laws-footer-brand">Directory<span style={{ color: "#16a34a" }}>Network</span></span>
+          <span className="laws-footer-brand">puff<span style={{ color: "#16a34a" }}>price</span></span>
           <span className="laws-footer-note">© {new Date().getFullYear()} PuffPrice · For informational purposes only, not legal advice.</span>
         </footer>
       </div>

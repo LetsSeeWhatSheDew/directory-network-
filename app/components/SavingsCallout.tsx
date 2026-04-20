@@ -5,10 +5,10 @@ import { useEffect, useState } from "react";
 /**
  * Supporting copy under the hero deal card. Reads cl_city from
  * sessionStorage for the city name and listens for
- * cl:top-deal-resolved so the "save up to $X per trip" number stays
- * in lockstep with whatever deal is actually showing in the hero
- * card. No hardcoded $23 — the number you see here is always equal
- * to the savings on the best deal surfaced above.
+ * cl:top-deal-resolved so the dollar number stays in lockstep with
+ * the deal showing in the hero. We say "Best deal in {city} right
+ * now saves $X" — a statement of fact about the visible deal, not
+ * an aggregate ("buyers save") that overclaims.
  */
 export default function SavingsCallout({ initialSavings }: { initialSavings: number | null }) {
   const [city, setCity] = useState<string | null>(null);
@@ -42,12 +42,9 @@ export default function SavingsCallout({ initialSavings }: { initialSavings: num
     return (
       <p className="savings-callout">
         {city ? (
-          <>
-            <strong>{city}</strong> buyers use PuffPrice to find the best deal
-            every trip.
-          </>
+          <>Showing the best deal in <strong>{city}</strong> right now.</>
         ) : (
-          <>Illinois cannabis buyers use PuffPrice to find the best deal every trip.</>
+          <>Showing the best active deal in Illinois right now.</>
         )}
         {calloutStyles}
       </p>
@@ -58,13 +55,13 @@ export default function SavingsCallout({ initialSavings }: { initialSavings: num
     <p className="savings-callout">
       {city ? (
         <>
-          <strong>{city}</strong> buyers save up to{" "}
-          <strong className="savings-amt">${savings} per trip</strong> using PuffPrice
+          Best deal in <strong>{city}</strong> right now saves{" "}
+          <strong className="savings-amt">${savings}</strong>.
         </>
       ) : (
         <>
-          Illinois cannabis buyers save up to{" "}
-          <strong className="savings-amt">${savings} per trip</strong> using PuffPrice
+          Best deal in Illinois right now saves{" "}
+          <strong className="savings-amt">${savings}</strong>.
         </>
       )}
       {calloutStyles}

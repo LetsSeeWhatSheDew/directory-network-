@@ -229,7 +229,7 @@ export default async function CityPage({
         <nav className="city-nav">
           <Link href="/" className="city-nav-brand">
             <span className="city-nav-dot" />
-            <span className="city-nav-name">Directory<span className="city-nav-accent">Network</span></span>
+            <span className="city-nav-name">puff<span className="city-nav-accent">price</span></span>
           </Link>
           <Link href="/cannabis/illinois" className="city-nav-back">← Illinois</Link>
         </nav>
@@ -370,7 +370,7 @@ export default async function CityPage({
         </div>
 
         <footer className="city-footer">
-          <span className="city-footer-brand">Directory<span className="city-nav-accent">Network</span></span>
+          <span className="city-footer-brand">puff<span className="city-nav-accent">price</span></span>
           <span className="city-footer-note">© {new Date().getFullYear()} PuffPrice · Illinois Cannabis Directory</span>
         </footer>
       </div>

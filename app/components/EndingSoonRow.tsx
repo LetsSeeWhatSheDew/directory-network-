@@ -7,6 +7,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { listingHref } from "../../lib/links";
 
 export type EndingSoonDeal = {
   id: string;
@@ -75,10 +76,13 @@ export default function EndingSoonRow({ deals }: { deals: EndingSoonDeal[] }) {
           scrollbarWidth: "none",
         }}
       >
-        {live.map(({ d, left }) => (
+        {live.map(({ d, left }) => {
+          const href = listingHref(d.listing_slug, d.city);
+          if (!href) return null;
+          return (
           <Link
             key={d.id}
-            href={`/l/${d.listing_slug}${d.city ? `?city=${encodeURIComponent(d.city)}` : ""}`}
+            href={href}
             style={{
               flexShrink: 0,
               background: "#fff",
@@ -145,7 +149,8 @@ export default function EndingSoonRow({ deals }: { deals: EndingSoonDeal[] }) {
               </div>
             )}
           </Link>
-        ))}
+          );
+        })}
       </div>
       <style>{`
         section[aria-label="Deals ending soon"] > div::-webkit-scrollbar{display:none}

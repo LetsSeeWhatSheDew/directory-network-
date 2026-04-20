@@ -19,8 +19,7 @@ export const AVG_SPEND_BY_CATEGORY: Record<string, number> = {
   vapes: 55,
   concentrate: 60,
   concentrates: 60,
-  // storewide = full-shop visit. Matched to the "$23 per trip" callout:
-  // 30% off $75 ≈ $22.50 ≈ $23. Same math for both numbers, no contradiction.
+  // storewide = full-shop visit basket assumption.
   all: 75,
   storewide: 75,
 };

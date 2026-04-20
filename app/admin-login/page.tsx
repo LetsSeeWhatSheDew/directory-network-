@@ -29,7 +29,7 @@ function LoginForm() {
       <div style={{background:"#fff",borderRadius:"16px",border:"1px solid #e8e5de",padding:"40px",width:"100%",maxWidth:"380px"}}>
         <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"28px"}}>
           <div style={{width:"10px",height:"10px",borderRadius:"50%",background:"#16a34a"}}/>
-          <span style={{fontSize:"1rem",fontWeight:700,color:"#0f1f3d",letterSpacing:"-.02em"}}>Directory<span style={{color:"#16a34a"}}>Network</span></span>
+          <span style={{fontSize:"1rem",fontWeight:700,color:"#0f1f3d",letterSpacing:"-.02em"}}>puff<span style={{color:"#16a34a"}}>price</span></span>
         </div>
         <h1 style={{fontSize:"1.3rem",fontWeight:700,color:"#0f1f3d",marginBottom:"6px",letterSpacing:"-.02em"}}>Admin access</h1>
         <p style={{fontSize:".85rem",color:"#6b7280",marginBottom:"24px"}}>Enter your password to continue</p>

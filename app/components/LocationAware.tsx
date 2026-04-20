@@ -31,6 +31,16 @@ function save(loc: Loc, lat?: number, lng?: number) {
     if (lat != null) sessionStorage.setItem(LAT_KEY, String(lat));
     if (lng != null) sessionStorage.setItem(LNG_KEY, String(lng));
   } catch {}
+  // Mirror to a cookie so server components (RSC) can read the city
+  // without sessionStorage. See lib/location.ts:getServerLocation.
+  try {
+    const payload: Record<string, string | number> = { city: loc.city, source: loc.source };
+    if (lat != null) payload.lat = lat;
+    if (lng != null) payload.lng = lng;
+    const value = encodeURIComponent(JSON.stringify(payload));
+    const maxAge = 30 * 24 * 60 * 60; // 30 days
+    document.cookie = `pp_loc=${value}; path=/; max-age=${maxAge}; samesite=lax`;
+  } catch {}
 }
 
 function applyPlaceholder(city: string) {

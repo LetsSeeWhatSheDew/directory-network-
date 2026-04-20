@@ -6,6 +6,7 @@ import ClaimForm from "../../components/ClaimForm";
 import RecentlyViewedTracker from "../../components/RecentlyViewedTracker";
 import ShareDealButton from "../../components/ShareDealButton";
 import { estimateSavings } from "../../../lib/dealScoring";
+import { nowInCT, isOpen, formatTime as formatHourTime } from "../../../lib/hours";
 
 const NOINDEX_SLUGS = [
   "emerald-city-dispensary-chicago-il",
@@ -269,33 +270,20 @@ export async function generateMetadata({
   };
 }
 
-function formatTime(t: string | null | undefined): string {
-  if (!t) return "";
-  const [h, m] = t.split(":");
-  const hour = parseInt(h, 10);
-  const ampm = hour >= 12 ? "PM" : "AM";
-  const h12 = hour % 12 || 12;
-  return `${h12}:${m} ${ampm}`;
-}
+const formatTime = formatHourTime;
 
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-function getTodayStatus(hours: ListingHour[]): { open: boolean; label: string } {
-  const now = new Date();
-  const dayIdx = (now.getDay() + 6) % 7;
-  const row = hours.find((h) => h.weekday === dayIdx);
+function getTodayStatus(hours: ListingHour[], ct: ReturnType<typeof nowInCT>): { open: boolean; label: string } {
+  const row = hours.find((h) => h.weekday === ct.weekday);
   if (!row || row.is_closed || !row.opens_at || !row.closes_at) {
     return { open: false, label: "Closed today" };
   }
-  const [oh, om] = row.opens_at.split(":").map(Number);
-  const [ch, cm] = row.closes_at.split(":").map(Number);
-  const nowMins = now.getHours() * 60 + now.getMinutes();
-  const openMins = oh * 60 + om;
-  const closeMins = ch * 60 + cm;
-  if (nowMins >= openMins && nowMins < closeMins) {
+  if (isOpen(row, ct)) {
     return { open: true, label: `Open until ${formatTime(row.closes_at)}` };
   }
-  if (nowMins < openMins) {
+  const [oh, om] = row.opens_at.split(":").map(Number);
+  if (ct.minutes < oh * 60 + om) {
     return { open: false, label: `Opens at ${formatTime(row.opens_at)}` };
   }
   return { open: false, label: "Closed now" };
@@ -371,7 +359,8 @@ export default async function ListingPage({
   ]);
   const activeDeal: ActiveDeal | null = activeDeals[0] ?? null;
 
-  const todayStatus = getTodayStatus(hours);
+  const ct = nowInCT();
+  const todayStatus = getTodayStatus(hours, ct);
   const isClaimed = listing.claimed === true;
   const initial = (listing.name ?? "?").charAt(0).toUpperCase();
   const schemaOrg = buildSchemaOrg(listing, hours);
@@ -743,7 +732,7 @@ export default async function ListingPage({
                   <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
                     {DAYS.map((day, idx) => {
                       const row = hours.find((h) => h.weekday === idx);
-                      const isToday = ((new Date().getDay() + 6) % 7) === idx;
+                      const isToday = ct.weekday === idx;
                       const closed = !row || row.is_closed || (!row.opens_at && !row.closes_at);
                       return (
                         <div key={day} className={`dn-hours-row${isToday ? " dn-hours-row-today" : ""}`}>

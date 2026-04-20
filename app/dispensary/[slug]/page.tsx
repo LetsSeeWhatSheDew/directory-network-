@@ -10,6 +10,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
+import { nowInCT, isOpen, formatTime as formatHourTime } from "../../../lib/hours";
+import { listingHref } from "../../../lib/links";
 
 export const revalidate = 300;
 
@@ -109,31 +111,20 @@ async function getDeals(slug: string): Promise<Deal[]> {
   );
 }
 
-function formatTime(t: string | null): string {
-  if (!t) return "";
-  const [h, m] = t.split(":");
-  const hour = parseInt(h, 10);
-  const ampm = hour >= 12 ? "PM" : "AM";
-  const h12 = hour % 12 || 12;
-  return `${h12}:${m} ${ampm}`;
-}
+const formatTime = formatHourTime;
 
 const DAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-function todayOpenStatus(hours: Hours[]): { open: boolean; label: string } {
-  const now = new Date();
-  const dayIdx = (now.getDay() + 6) % 7; // Mon=0
-  const row = hours.find((h) => h.weekday === dayIdx);
+function todayOpenStatus(hours: Hours[], ct: ReturnType<typeof nowInCT>): { open: boolean; label: string } {
+  const row = hours.find((h) => h.weekday === ct.weekday);
   if (!row || row.is_closed || !row.opens_at || !row.closes_at) {
     return { open: false, label: "Closed today" };
   }
-  const [oh, om] = row.opens_at.split(":").map(Number);
-  const [ch, cm] = row.closes_at.split(":").map(Number);
-  const nowMin = now.getHours() * 60 + now.getMinutes();
-  if (nowMin >= oh * 60 + om && nowMin < ch * 60 + cm) {
+  if (isOpen(row, ct)) {
     return { open: true, label: `Open until ${formatTime(row.closes_at)}` };
   }
-  if (nowMin < oh * 60 + om) {
+  const [oh, om] = row.opens_at.split(":").map(Number);
+  if (ct.minutes < oh * 60 + om) {
     return { open: false, label: `Opens at ${formatTime(row.opens_at)}` };
   }
   return { open: false, label: "Closed now" };
@@ -219,10 +210,11 @@ export default async function DispensaryProfilePage({
     getDeals(slug),
   ]);
 
-  const status = todayOpenStatus(hours);
+  const ct = nowInCT();
+  const status = todayOpenStatus(hours, ct);
   const name = listing.name || slug;
   const city = listing.city || "Illinois";
-  const todayIdx = (new Date().getDay() + 6) % 7;
+  const todayIdx = ct.weekday;
 
   // LocalBusiness schema — mirrors /l/[slug] so both pages give Google the
   // same canonical entity data.
@@ -458,12 +450,15 @@ export default async function DispensaryProfilePage({
                     {expiresLabel && <span className="deal-expires">{expiresLabel}</span>}
                   </div>
                   {d.description && <p className="deal-desc">{d.description}</p>}
-                  <Link
-                    href={`/l/${slug}${city && city !== "Illinois" ? `?city=${encodeURIComponent(city)}` : ""}`}
-                    className="deal-cta"
-                  >
-                    GO HERE →
-                  </Link>
+                  {(() => {
+                    const href = listingHref(slug, city && city !== "Illinois" ? city : null);
+                    if (!href) return null;
+                    return (
+                      <Link href={href} className="deal-cta">
+                        GO HERE →
+                      </Link>
+                    );
+                  })()}
                   <Link href={`/deal/${d.id}`} className="deal-details">
                     Deal details →
                   </Link>

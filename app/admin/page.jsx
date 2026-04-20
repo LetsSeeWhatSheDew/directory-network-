@@ -191,7 +191,7 @@ export default function AdminPage() {
     <div style={{ minHeight: "100vh", background: "#f8f7f4", fontFamily: "system-ui, sans-serif" }}>
       <div style={{ background: "#0f1f3d", padding: "16px 40px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <span style={{ fontFamily: "Georgia, serif", fontSize: "1.1rem", fontWeight: 700, color: "#fff" }}>
-          Directory<span style={{ color: "#16a34a" }}>Network</span>
+          puff<span style={{ color: "#16a34a" }}>price</span>
           <span style={{ fontSize: "0.7rem", fontWeight: 400, color: "#64748b", marginLeft: "12px", fontFamily: "system-ui", letterSpacing: "0.1em", textTransform: "uppercase" }}>Admin</span>
         </span>
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>

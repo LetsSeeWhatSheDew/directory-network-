@@ -8,6 +8,8 @@ import { isInMetro, metroCities } from "../../../lib/cityNormalize";
 import TrackView from "../../components/TrackView";
 import DealCtaLink from "../../components/DealCtaLink";
 import ShareDealButton from "../../components/ShareDealButton";
+import { getServerLocation } from "../../../lib/location";
+import { listingHref } from "../../../lib/links";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://hnbjufmtmrhexmdrfubw.supabase.co';
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300';
@@ -261,7 +263,9 @@ export async function generateMetadata({
   const { category } = await params;
   const sp = await searchParams;
   const rawCity = Array.isArray(sp?.city) ? sp.city[0] : sp?.city;
-  const city = rawCity ? toCityCase(rawCity) : null;
+  const cityFromUrl = rawCity ? toCityCase(rawCity) : null;
+  const cookieLoc = await getServerLocation();
+  const city = cityFromUrl || (cookieLoc?.city ? toCityCase(cookieLoc.city) : null);
   const label = CATEGORY_LABELS[category] || "Cannabis deals";
   const ogImage = "https://puffprice.com/og-image.png";
   const title = city
@@ -392,7 +396,9 @@ export default async function DealsPage({
   }
 
   const rawCity = Array.isArray(sp?.city) ? sp.city[0] : sp?.city;
-  const city = rawCity ? toCityCase(rawCity) : null;
+  const cityFromUrl = rawCity ? toCityCase(rawCity) : null;
+  const cookieLoc = await getServerLocation();
+  const city = cityFromUrl || (cookieLoc?.city ? toCityCase(cookieLoc.city) : null);
 
   const { deals: rawDeals, source } = await getDeals(category, city);
   const deals = dedupeDeals(filterExpired(rawDeals));
@@ -481,8 +487,9 @@ export default async function DealsPage({
         .deal-title-big{font-size:.92rem;font-weight:600;color:#374151;margin-bottom:14px;font-family:system-ui,sans-serif;line-height:1.4;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
         .attrs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:16px}
         .attr{font-size:.66rem;color:#9ca3af;background:#f5f4f0;border-radius:100px;padding:2px 8px;font-family:system-ui,sans-serif}
-        .deal-more-toggle{font-size:.78rem;color:#16a34a;font-family:system-ui,sans-serif;margin-bottom:16px;cursor:pointer;text-decoration:none;display:inline-block}
-        .deal-more-toggle:hover{text-decoration:underline}
+        .deal-more-toggle{font-size:.78rem;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:16px;cursor:pointer;text-decoration:none;display:inline-block;list-style:none}
+        .deal-more-toggle::-webkit-details-marker{display:none}
+        .deal-more-toggle:hover{color:#0f1f3d}
         .card-cta{display:block;width:100%;text-align:center;background:#16a34a;color:#fff;padding:14px;border-radius:10px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:800;font-size:.95rem;letter-spacing:.02em;transition:background .15s}
         .card-cta:hover{background:#15803d}
 
@@ -672,25 +679,31 @@ export default async function DealsPage({
 
               {(topDeal.deal_description || topDeal.description) && (
                 <details style={{ marginBottom: 16 }}>
-                  <summary className="deal-more-toggle">See details →</summary>
+                  <summary className="deal-more-toggle">Show more ▾</summary>
                   <div style={{ fontSize: ".82rem", color: "#374151", fontFamily: "system-ui,sans-serif", marginTop: 8, lineHeight: 1.5 }}>
                     {topDeal.deal_description || topDeal.description}
                   </div>
                 </details>
               )}
 
-              <DealCtaLink
-                href={city ? `/l/${topDeal.slug || topDeal.listing_slug}?city=${encodeURIComponent(city)}` : `/l/${topDeal.slug || topDeal.listing_slug}`}
-                className="card-cta"
-                deal={{
-                  dispensary: topDeal.name || topDeal.listing_slug || "Illinois dispensary",
-                  dealTitle: topDeal.deal_title || topDeal.title || "",
-                  savingsAmount: estimateSavings(topDeal) ?? 0,
-                  category: topDeal.category || null,
-                }}
-              >
-                GO HERE →
-              </DealCtaLink>
+              {(() => {
+                const topGoHref = listingHref(topDeal.slug || topDeal.listing_slug, city);
+                if (!topGoHref) return null;
+                return (
+                  <DealCtaLink
+                    href={topGoHref}
+                    className="card-cta"
+                    deal={{
+                      dispensary: topDeal.name || topDeal.listing_slug || "Illinois dispensary",
+                      dealTitle: topDeal.deal_title || topDeal.title || "",
+                      savingsAmount: estimateSavings(topDeal) ?? 0,
+                      category: topDeal.category || null,
+                    }}
+                  >
+                    GO HERE →
+                  </DealCtaLink>
+                );
+              })()}
               {/* Secondary links — internal link graph for SEO and curious users */}
               <div
                 style={{
@@ -735,10 +748,12 @@ export default async function DealsPage({
                 <div className="alt-cards">
                   {alternatives.map((deal: any, i: number) => {
                     const g = gradeDeal(deal);
+                    const altHref = listingHref(deal.slug || deal.listing_slug, city);
+                    if (!altHref) return null;
                     return (
                     <Link
                       key={deal.id || deal.deal_id || i}
-                      href={city ? `/l/${deal.slug || deal.listing_slug}?city=${encodeURIComponent(city)}` : `/l/${deal.slug || deal.listing_slug}`}
+                      href={altHref}
                       className="alt-card"
                     >
                       {shouldShowGrade(deal) && <span

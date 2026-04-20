@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { estimateSavings, formatSavingsDollars, gradeDeal, shouldShowGrade } from "../../lib/dealScoring";
 import { displayCity } from "../../lib/cityNormalize";
+import { listingHref } from "../../lib/links";
 import TrackedLink from "./TrackedLink";
 import ShareDealButton from "./ShareDealButton";
 
@@ -254,13 +255,15 @@ export default function HomeDealCards({
       <div className="deal-cards">
         {deals.map((d, i) => {
           const slug = d.slug || d.listing_slug || "";
+          const href = listingHref(slug, city);
+          if (!href) return null;
           const name = displayName(d);
           const g = gradeDeal(d);
           const urgency = getExpiryUrgency(d.expires_at);
           return (
             <TrackedLink
               key={d.deal_id || d.id || i}
-              href={city ? `/l/${slug}?city=${encodeURIComponent(city)}` : `/l/${slug}`}
+              href={href}
               className={`deal-card${i === 0 ? " top-pick" : ""}`}
               style={{ textDecoration: "none", color: "inherit" }}
               event="deal_click"

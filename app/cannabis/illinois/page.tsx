@@ -140,7 +140,7 @@ export default function IllinoisHubPage() {
         <nav className="il-nav">
           <Link href="/" className="il-nav-brand">
             <span className="il-nav-dot" />
-            <span className="il-nav-name">Directory<span className="il-nav-accent">Network</span></span>
+            <span className="il-nav-name">puff<span className="il-nav-accent">price</span></span>
           </Link>
           <Link href="/cannabis" className="il-nav-back">← Cannabis</Link>
         </nav>
@@ -279,7 +279,7 @@ export default function IllinoisHubPage() {
         </div>
 
         <footer className="il-footer">
-          <span className="il-footer-brand">Directory<span style={{ color: "#16a34a" }}>Network</span></span>
+          <span className="il-footer-brand">puff<span style={{ color: "#16a34a" }}>price</span></span>
           <span className="il-footer-note">© {new Date().getFullYear()} PuffPrice · Illinois Cannabis Directory</span>
         </footer>
       </div>

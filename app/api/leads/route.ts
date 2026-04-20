@@ -130,7 +130,7 @@ export async function POST(request: Request) {
               ${message ? `<div style="background: #f8f8f6; padding: 16px; border-left: 3px solid #50c878; margin: 20px 0; font-size: 13px; color: #444; line-height: 1.6;">${message}</div>` : ""}
 
               <div style="margin-top: 28px;">
-                <a href="https://directory-network-eta.vercel.app/admin" style="background-color: #050f09; color: #50c878; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-size: 13px; font-weight: 600; letter-spacing: 0.3px;">Open Dashboard &rarr;</a>
+                <a href="https://www.puffprice.com/admin" style="background-color: #050f09; color: #50c878; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-size: 13px; font-weight: 600; letter-spacing: 0.3px;">Open Dashboard &rarr;</a>
               </div>
 
               <p style="color: #bbb; font-size: 11px; margin-top: 32px; border-top: 1px solid #eee; padding-top: 12px;">

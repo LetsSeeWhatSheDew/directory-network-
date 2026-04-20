@@ -3,7 +3,7 @@
 // returns false and logs what it would have sent so we can see the
 // queue build up in Vercel logs.
 //
-// Required env vars (add in Vercel → directory-network- → Settings → Env Vars):
+// Required env vars (add in Vercel → puffprice → Settings → Env Vars):
 //   TWILIO_ACCOUNT_SID   — starts with "AC…"
 //   TWILIO_AUTH_TOKEN    — long opaque string
 //   TWILIO_FROM_NUMBER   — the E.164-formatted Twilio-provisioned number

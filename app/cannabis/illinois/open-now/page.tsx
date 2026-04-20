@@ -2,6 +2,9 @@ export const revalidate = 300; // revalidate every 5 minutes — hours change th
 
 import { Metadata } from "next";
 import Link from "next/link";
+import { nowInCT, isOpen, formatTime as formatHourTime } from "../../../../lib/hours";
+import { getServerLocation } from "../../../../lib/location";
+import { isInMetro } from "../../../../lib/cityNormalize";
 
 export const metadata: Metadata = {
   title: "Illinois Dispensaries Open Right Now | PuffPrice",
@@ -54,40 +57,30 @@ async function fetchJson<T>(path: string): Promise<T> {
   return res.json();
 }
 
-function isOpenNow(hours: Hour[], listingId: string): { open: boolean; closes: string | null } {
-  const now = new Date();
-  const dayIdx = (now.getDay() + 6) % 7; // 0=Mon
-  const row = hours.find((h) => h.listing_id === listingId && h.weekday === dayIdx);
-  if (!row || row.is_closed || !row.opens_at || !row.closes_at) return { open: false, closes: null };
-  const [oh, om] = row.opens_at.split(":").map(Number);
-  const [ch, cm] = row.closes_at.split(":").map(Number);
-  const nowMins = now.getHours() * 60 + now.getMinutes();
-  const openMins = oh * 60 + om;
-  const closeMins = ch * 60 + cm;
-  if (nowMins >= openMins && nowMins < closeMins) return { open: true, closes: row.closes_at };
+function isOpenNow(
+  hours: Hour[],
+  listingId: string,
+  ct: ReturnType<typeof nowInCT>
+): { open: boolean; closes: string | null } {
+  const row = hours.find((h) => h.listing_id === listingId && h.weekday === ct.weekday);
+  if (isOpen(row, ct)) return { open: true, closes: row!.closes_at };
   return { open: false, closes: null };
 }
 
-function formatTime(t: string | null): string {
-  if (!t) return "";
-  const [h, m] = t.split(":");
-  const hour = parseInt(h, 10);
-  const ampm = hour >= 12 ? "PM" : "AM";
-  const h12 = hour % 12 || 12;
-  return `${h12}:${m} ${ampm}`;
-}
+const formatTime = formatHourTime;
 
 export default async function OpenNowPage() {
-  const now = new Date();
-  const dayIdx = (now.getDay() + 6) % 7;
-  const timeStr = now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/Chicago" });
+  const ct = nowInCT();
+  const cookieLoc = await getServerLocation();
+  const userCity = cookieLoc?.city ?? null;
+  const timeStr = new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/Chicago" });
 
   const [listings, hours] = await Promise.all([
     fetchJson<Listing[]>(
       `/master_listings?state=eq.IL&select=id,name,slug,city,state,address1,phone,type,logo_url,delivery,online_ordering&order=city.asc,name.asc&limit=100`
     ),
     fetchJson<Hour[]>(
-      `/listing_hours?weekday=eq.${dayIdx}&select=listing_id,weekday,opens_at,closes_at,is_closed`
+      `/listing_hours?weekday=eq.${ct.weekday}&select=listing_id,weekday,opens_at,closes_at,is_closed`
     ),
   ]);
 
@@ -98,7 +91,7 @@ export default async function OpenNowPage() {
 
   const withStatus = dispensaries.map(l => ({
     ...l,
-    ...isOpenNow(hours, l.id),
+    ...isOpenNow(hours, l.id, ct),
   }));
 
   const openNow = withStatus.filter(l => l.open);
@@ -171,7 +164,7 @@ export default async function OpenNowPage() {
         <nav className="on-nav">
           <Link href="/" className="on-nav-brand">
             <span className="on-nav-dot" />
-            <span className="on-nav-name">Directory<span className="on-nav-accent">Network</span></span>
+            <span className="on-nav-name">puff<span className="on-nav-accent">price</span></span>
           </Link>
           <Link href="/cannabis/illinois" className="on-nav-back">← Illinois</Link>
         </nav>
@@ -214,7 +207,15 @@ export default async function OpenNowPage() {
           ) : (
             <>
               <p className="on-section-title">Open dispensaries by city</p>
-              {Object.entries(byCity).sort(([a], [b]) => a.localeCompare(b)).map(([city, dispensaries]) => (
+              {Object.entries(byCity).sort(([a, listA], [b, listB]) => {
+                // Bring the user's metro to the top when we know their city.
+                if (userCity) {
+                  const aIn = isInMetro(listA[0]?.city, listA[0]?.slug, userCity);
+                  const bIn = isInMetro(listB[0]?.city, listB[0]?.slug, userCity);
+                  if (aIn !== bIn) return aIn ? -1 : 1;
+                }
+                return a.localeCompare(b);
+              }).map(([city, dispensaries]) => (
                 <div key={city}>
                   <p className="on-city-title">{city} <span style={{ fontWeight: 400, color: "#6b7280", fontSize: "0.85rem" }}>({dispensaries.length} open)</span></p>
                   {dispensaries.map(l => {
@@ -257,7 +258,7 @@ export default async function OpenNowPage() {
         </div>
 
         <footer className="on-footer">
-          <span className="on-footer-brand">Directory<span style={{ color: "#16a34a" }}>Network</span></span>
+          <span className="on-footer-brand">puff<span style={{ color: "#16a34a" }}>price</span></span>
           <span className="on-footer-note">© {new Date().getFullYear()} PuffPrice · Hours sourced from verified dispensary listings</span>
         </footer>
       </div>

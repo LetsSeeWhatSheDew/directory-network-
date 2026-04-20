@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { estimateSavings, formatSavingsDollars } from "../../lib/dealScoring";
 import { displayCity } from "../../lib/cityNormalize";
+import { listingHref } from "../../lib/links";
 import TrackedLink from "./TrackedLink";
 
 type Deal = {
@@ -153,6 +154,7 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
   }
 
   const slug = deal.slug || deal.listing_slug || "";
+  const goHref = listingHref(slug, city);
   const name = displayName(deal);
   const savings = formatSavingsDollars(deal);
   const expiresToday = endsToday(deal.expires_at);
@@ -171,14 +173,16 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
           <span>📍 {displayCity(deal)}</span>
           {expiresToday && <span className="hero-deal-urgent">⚡ Ends today</span>}
         </div>
-        <TrackedLink
-          href={city ? `/l/${slug}?city=${encodeURIComponent(city)}` : `/l/${slug}`}
-          className="hero-deal-cta"
-          event="deal_cta_click"
-          params={{ dispensary: name, position: 1, source: "hero_recommendation" }}
-        >
-          GO HERE →
-        </TrackedLink>
+        {goHref && (
+          <TrackedLink
+            href={goHref}
+            className="hero-deal-cta"
+            event="deal_cta_click"
+            params={{ dispensary: name, position: 1, source: "hero_recommendation" }}
+          >
+            GO HERE →
+          </TrackedLink>
+        )}
       </div>
       <Link
         href={city ? `/deals/all?city=${encodeURIComponent(city)}` : "/deals/all"}

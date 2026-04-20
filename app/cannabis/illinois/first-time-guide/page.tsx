@@ -132,7 +132,7 @@ export default function FirstTimeGuidePage() {
         <nav className="guide-nav">
           <Link href="/" className="guide-nav-brand">
             <span className="guide-nav-dot" />
-            <span className="guide-nav-name">Directory<span className="guide-nav-accent">Network</span></span>
+            <span className="guide-nav-name">puff<span className="guide-nav-accent">price</span></span>
           </Link>
           <Link href="/cannabis/illinois" className="guide-nav-back">← Illinois</Link>
         </nav>
@@ -373,7 +373,7 @@ export default function FirstTimeGuidePage() {
         </div>
 
         <footer className="guide-footer">
-          <span className="guide-footer-brand">Directory<span style={{ color: "#16a34a" }}>Network</span></span>
+          <span className="guide-footer-brand">puff<span style={{ color: "#16a34a" }}>price</span></span>
           <span className="guide-footer-note">© {new Date().getFullYear()} PuffPrice · Illinois Cannabis Directory</span>
         </footer>
       </div>
