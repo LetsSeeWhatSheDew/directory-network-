@@ -119,7 +119,37 @@ From the DB, right now:
 
 ## Git path used
 
-Sandbox-blocked porcelain paths are the standard blocker for this environment. This session's push will attempt the same plumbing path the last late-late session used if porcelain fails. Documenting which path works in the commit message section below.
+Same plumbing path as last session. Porcelain `git commit` fails on the sandbox's bindfs .git/ mount (`unable to unlink .git/index.lock: Operation not permitted`). Working path:
+
+```
+# Copy the existing index to a writable location and reset it against current HEAD
+mkdir -p /sessions/loving-serene-hopper/tmp-git
+rm -f /sessions/loving-serene-hopper/tmp-git/git-index-cowork
+GIT_INDEX_FILE=/sessions/loving-serene-hopper/tmp-git/git-index-cowork git read-tree HEAD
+
+# Stage the 11 new / modified files
+GIT_INDEX_FILE=/sessions/loving-serene-hopper/tmp-git/git-index-cowork git add <paths...>
+
+# Plumbing commit path
+TREE=$(GIT_INDEX_FILE=/sessions/loving-serene-hopper/tmp-git/git-index-cowork git write-tree)
+PARENT=$(git rev-parse HEAD)
+NEWCOMMIT=$(printf "<msg>" | git commit-tree $TREE -p $PARENT)
+git update-ref refs/heads/main $NEWCOMMIT
+```
+
+Commit shipped locally at **SHA `6551741`** on top of `af77d38` (Code's latest). `git status` now reports `ahead of 'origin/main' by 1 commit` and `working tree clean`.
+
+**Push still blocks** — no GitHub credentials in the sandbox (no `gh` CLI, no `~/.ssh/`, no credential helper). Confirmed unchanged from last session.
+
+## Matthew to push (~10 seconds)
+
+```
+cd "/Users/matthew/Desktop/ACTIVE/Directory-Network/Project - Directory/project-green"
+git log --oneline -3      # should show 6551741 at HEAD locally
+git push origin main      # ships it
+```
+
+If `git status` shows dirty tree locally because your porcelain index drifted from the plumbing commit, `git reset --mixed HEAD` resyncs the index without touching working-tree files. None of tonight's files need any on-disk change — just the push.
 
 ## Time accounting
 
