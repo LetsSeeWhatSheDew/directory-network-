@@ -16,6 +16,13 @@ export const metadata: Metadata = {
     url: "https://puffprice.com/cannabis/illinois/open-now",
     siteName: "PuffPrice",
     type: "website",
+    images: [{ url: "https://puffprice.com/og-image.png", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Illinois Dispensaries Open Right Now",
+    description: "Find cannabis dispensaries open right now in Illinois. Real-time hours updated continuously.",
+    images: ["https://puffprice.com/og-image.png"],
   },
   robots: { index: true, follow: true },
 };

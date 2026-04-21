@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { brand } from "../lib/brand";
+import { getAllBrands } from "../lib/brands";
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -94,10 +95,11 @@ async function getActiveDeals() {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const [listings, cities, activeDeals] = await Promise.all([
+    const [listings, cities, activeDeals, brands] = await Promise.all([
           getAllListings(),
           getIllinoisCities(),
           getActiveDeals(),
+          getAllBrands(),
         ]);
 
   const base: MetadataRoute.Sitemap = [
@@ -189,6 +191,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.9,
   }));
 
+  // NEW — /brand/[slug] per-brand pages. Returns [] until brands table lands,
+  // so the shape is live but the section is empty today.
+  const brandDetailUrls: MetadataRoute.Sitemap = brands
+    .filter((b) => b.slug)
+    .map((b) => ({
+      url: `${brand.url}/brand/${b.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    }));
+
   // NEW — /deal/[id] per-deal pages (active deals only)
   const dealDetailUrls: MetadataRoute.Sitemap = (activeDeals as Array<{ id: string; updated_at?: string }>)
     .filter((d) => d.id)
@@ -209,6 +222,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...landmarkUrls,
     ...dispensaryProfileUrls,
     ...cityLandingUrls,
+    ...brandDetailUrls,
     ...dealDetailUrls,
   ];
 }

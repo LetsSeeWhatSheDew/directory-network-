@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getBrand } from "../../../lib/brands";
+import { getBrand, getAllBrands } from "../../../lib/brands";
 import { brand as site } from "../../../lib/brand";
 
 type Params = { slug: string };
@@ -17,10 +18,25 @@ export async function generateMetadata({
   const description =
     data?.description ??
     `${name} deals at Illinois dispensaries. Coming soon on PuffPrice.`;
+  const ogImage = `${site.url}/og-image.png`;
   return {
     title,
     description,
     alternates: { canonical: `${site.url}/brand/${slug}` },
+    openGraph: {
+      title,
+      description,
+      url: `${site.url}/brand/${slug}`,
+      siteName: "PuffPrice",
+      type: "website",
+      images: [{ url: ogImage, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
+    },
     robots: { index: false, follow: true },
   };
 }
@@ -40,6 +56,13 @@ export default async function BrandPage({
 }) {
   const { slug } = await params;
   const data = await getBrand(slug);
+  // Once the brands table populates, a miss = a real 404.
+  // While the table is empty, every slug gets the placeholder card,
+  // since the page is intentionally discoverable as a shape preview.
+  if (!data) {
+    const existing = await getAllBrands();
+    if (existing.length > 0) notFound();
+  }
   const name = data?.name ?? prettySlug(slug);
 
   return (

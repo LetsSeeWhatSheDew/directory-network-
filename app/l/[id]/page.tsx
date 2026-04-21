@@ -564,8 +564,9 @@ export default async function ListingPage({
         /* REPORT OUTDATED — footer-style, subtle */
         .dn-report-row { margin-top: 8px; padding: 12px 0 0; text-align: center; }
         .dn-report-text { font-family: system-ui, sans-serif; font-size: 0.76rem; color: #9ca3af; }
-        .dn-report-link { color: #6b7280; text-decoration: underline; text-decoration-color: #e8e5de; text-underline-offset: 3px; font-weight: 500; }
+        .dn-report-link { color: #6b7280; text-decoration: underline; text-decoration-color: #e8e5de; text-underline-offset: 3px; font-weight: 500; border-radius: 2px; }
         .dn-report-link:hover { color: #16a34a; text-decoration-color: #16a34a; }
+        .dn-report-link:focus-visible { outline: 2px solid #16a34a; outline-offset: 3px; color: #16a34a; }
 
         /* LOGO refinements — 64px with cleaner monogram fallback */
         .dn-logo-wrap { width: 64px; height: 64px; border-radius: 14px; }
@@ -594,7 +595,7 @@ export default async function ListingPage({
         <div className="top-stripe" aria-hidden="true" style={{ height: 4, background: "#16a34a", width: "100%" }} />
         <nav className="dn-nav">
           <Link href="/" className="dn-nav-brand">
-            <span className="dn-nav-dot" />
+            <span className="dn-nav-dot" aria-hidden="true" />
             <span className="dn-nav-name">puff<span className="dn-nav-accent">price</span></span>
           </Link>
           <Link href={backHref} className="dn-nav-back">{backLabel}</Link>
@@ -721,7 +722,7 @@ export default async function ListingPage({
 
         {!isClaimed && !isNoIndex && (
           <div className="dn-banner">
-            <span className="dn-banner-dot" />
+            <span className="dn-banner-dot" aria-hidden="true" />
             <span className="dn-banner-text">
               This listing hasn&apos;t been claimed yet.{" "}
               <a href="#claim" className="dn-banner-link">Is this your business? Claim it free →</a>
@@ -735,9 +736,9 @@ export default async function ListingPage({
               <div className="dn-logo-wrap">
                 {listing.logo_url ? (
                   /* eslint-disable-next-line @next/next/no-img-element */
-                  <img src={listing.logo_url} alt={listing.name + " logo"} className="dn-logo-img" />
+                  <img src={listing.logo_url} alt={`${listing.name ?? "Dispensary"} logo`} className="dn-logo-img" />
                 ) : (
-                  <span className="dn-logo-fallback-mono" aria-label={`${listing.name ?? "Dispensary"} monogram`}>{initial}</span>
+                  <span className="dn-logo-fallback-mono" role="img" aria-label={`${listing.name ?? "Dispensary"} monogram`}>{initial}</span>
                 )}
               </div>
 
@@ -774,7 +775,7 @@ export default async function ListingPage({
 
               <div className="dn-hero-actions">
                 <span className={`dn-status ${todayStatus.open ? "dn-status-open" : "dn-status-closed"}`}>
-                  <span className={`dn-status-dot ${todayStatus.open ? "dn-status-dot-open" : "dn-status-dot-closed"}`} />
+                  <span className={`dn-status-dot ${todayStatus.open ? "dn-status-dot-open" : "dn-status-dot-closed"}`} aria-hidden="true" />
                   {todayStatus.label}
                 </span>
                 {listing.phone && (
@@ -934,10 +935,10 @@ export default async function ListingPage({
                   <div className="dn-related-grid">
                     {related.map((r) => (
                       <Link key={r.id} href={`/l/${r.slug}`} className="dn-related-card">
-                        <div className="dn-related-logo">
+                        <div className="dn-related-logo" aria-hidden={r.logo_url ? undefined : "true"}>
                           {r.logo_url ? (
                             /* eslint-disable-next-line @next/next/no-img-element */
-                            <img src={r.logo_url} alt={r.name + " logo"} className="dn-related-img" />
+                            <img src={r.logo_url} alt={`${r.name ?? "Dispensary"} logo`} className="dn-related-img" />
                           ) : (
                             (r.name ?? "?").charAt(0)
                           )}
@@ -1009,6 +1010,7 @@ export default async function ListingPage({
               <a
                 href={`mailto:hello@puffprice.com?subject=Outdated%20info%20for%20${encodeURIComponent(listing.name ?? listing.slug ?? "listing")}&body=Tell%20us%20what%20looks%20wrong%20on%20this%20page%3A%20${encodeURIComponent(`https://puffprice.com/l/${listing.slug}`)}%0A%0A`}
                 className="dn-report-link"
+                aria-label={`Email PuffPrice to report outdated info for ${listing.name ?? "this listing"}`}
               >
                 Report outdated info
               </a>

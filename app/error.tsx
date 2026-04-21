@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
+import * as Sentry from "@sentry/nextjs";
 
 export default function RouteError({
   error,
@@ -12,6 +13,8 @@ export default function RouteError({
 }) {
   useEffect(() => {
     console.error("[route error]", error);
+    // No-op when NEXT_PUBLIC_SENTRY_DSN is unset — Sentry.init skipped.
+    Sentry.captureException(error);
   }, [error]);
 
   return (

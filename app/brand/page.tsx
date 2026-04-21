@@ -8,6 +8,20 @@ export const metadata: Metadata = {
   description:
     "Every cannabis brand at Illinois dispensaries — coming soon on PuffPrice.",
   alternates: { canonical: `${site.url}/brand` },
+  openGraph: {
+    title: "Illinois cannabis brands",
+    description: "Every cannabis brand at Illinois dispensaries — coming soon on PuffPrice.",
+    url: `${site.url}/brand`,
+    siteName: "PuffPrice",
+    type: "website",
+    images: [{ url: `${site.url}/og-image.png`, width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Illinois cannabis brands",
+    description: "Every cannabis brand at Illinois dispensaries — coming soon on PuffPrice.",
+    images: [`${site.url}/og-image.png`],
+  },
   robots: { index: false, follow: true },
 };
 

@@ -15,6 +15,20 @@ export const metadata = {
   title: "All Illinois Dispensaries | PuffPrice",
   description: "Browse every licensed Illinois cannabis dispensary by city. Hours, ratings, and live deals updated daily.",
   alternates: { canonical: "https://puffprice.com/dispensaries" },
+  openGraph: {
+    title: "All Illinois Dispensaries",
+    description: "Browse every licensed Illinois cannabis dispensary by city. Hours, ratings, and live deals updated daily.",
+    url: "https://puffprice.com/dispensaries",
+    siteName: "PuffPrice",
+    type: "website" as const,
+    images: [{ url: "https://puffprice.com/og-image.png", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image" as const,
+    title: "All Illinois Dispensaries",
+    description: "Browse every licensed Illinois cannabis dispensary by city. Hours, ratings, and live deals updated daily.",
+    images: ["https://puffprice.com/og-image.png"],
+  },
 };
 
 export const dynamic = "force-dynamic";

@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PuffPrice — Illinois cannabis deal intelligence
 
-## Getting Started
+Live at [puffprice.com](https://puffprice.com). GPS-aware deal finder for Illinois dispensaries — built for a real person in a parking lot who wants to save money on weed.
 
-First, run the development server:
+## Current state (April 2026)
+
+- **61 dispensaries** across **25 Illinois cities**
+- **56 active deals** / 82 master listings
+- Three deal categories (flower / edibles / vapes / concentrate / all)
+- PuffPrice Index — weekly statewide flower price-per-gram benchmark (`/about/index`)
+- Full listing detail pages at `/l/[slug]` with map, hours, deals, deal history
+- Brand pages scaffolded at `/brand` and `/brand/[slug]` (populate when brands table lands)
+
+## Stack
+
+- **Next.js 16** (App Router, Turbopack)
+- **Supabase** — project ref `hnbjufmtmrhexmdrfubw`
+- **Vercel** — hosting + deployment
+- **Stripe** — Pro subscription ($0.99/mo)
+- **Resend** — transactional email
+- **Sentry** — error monitoring (scaffolded, DSN pending)
+
+Brand config lives in `lib/brand.ts` — one string change renames the entire site.
+
+## Business model
+
+- **FREE** — no account, full deal access, always
+- **PRO** — $0.99/mo for SMS alerts, daily digest, price history, savings dashboard
+
+## Development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev         # local dev server
+npm run build       # production build — verify before push
+npm run lint        # ESLint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Required Vercel environment variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` — Supabase public
+- `SUPABASE_SERVICE_ROLE_KEY` — server-side Supabase
+- `STRIPE_SECRET_KEY`, `STRIPE_PRO_PRICE_ID`, `NEXT_PUBLIC_STRIPE_PRO_CHECKOUT_URL`
+- `RESEND_API_KEY`
+- `NEXT_PUBLIC_GA_MEASUREMENT_ID`
+- `NEXT_PUBLIC_SENTRY_DSN` / `SENTRY_DSN` — optional; Sentry no-ops if unset
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Three-agent workflow
 
-## Learn More
+Work is split across three lanes to stay out of each other's way:
 
-To learn more about Next.js, take a look at the following resources:
+- **Cowork** — owns `docs/`, `sql/`, `scripts/`. Schema migrations, SQL research, handoff docs.
+- **Code** — owns `app/`, `lib/`, `components/`. Feature work, hardening, shipping.
+- **Chrome** — owns browser verification. Manual QA against production after every push.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Lane rule: do not cross. If a shared file needs to change, coordinate via `docs/handoffs/`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Migration pattern
 
-## Deploy on Vercel
+SQL migrations land in `sql/` (owned by Cowork). Apply pattern:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Cowork writes migration → commits to `sql/migrations/YYYY-MM-DD-name.sql`
+2. Matthew reviews and applies via Supabase SQL Editor (or MCP)
+3. Code confirms expected schema with a read-only query before relying on new columns
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Never apply a migration from Code without explicit sign-off.
+
+## Working agreement
+
+**Watch Vercel to Ready before verifying.** After any push to `main`, the Vercel deploy takes 30–90s. Do not test against production until the deploy has flipped to Ready — you will be verifying the previous build and wasting everyone's time.
+
+**The experience must work for a real person in a parking lot.** Not a developer. Not a PM. Every decision defers to that.
+
+Matthew owns business decisions. Claude Code owns technical execution. Direct and honest. No cheerleading.
+
+## Key routes
+
+- `/` — homepage, deal cards, PuffPrice Index
+- `/deals/[category]` — deal engine (flower / edibles / vapes / concentrate / all)
+- `/cannabis/illinois` — state directory
+- `/cannabis/illinois/[city]` — city landing with intent pages (best / open-now / recreational / deals)
+- `/l/[slug]` — listing detail (deals, hours, map, deal history)
+- `/dispensary/[slug]` — full profile
+- `/brand`, `/brand/[slug]` — brand pages (scaffolded, empty until brands table lands)
+- `/about`, `/about/index` — company + Index methodology
+- `/upgrade` — Pro subscription
+
+## Session reports
+
+Each autonomous session writes a report to `docs/session-reports/`. Read the most recent one to understand what just shipped before starting new work.
