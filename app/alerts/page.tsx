@@ -70,7 +70,7 @@ export const metadata = {
 
 const FREE_FEATURES = [
   "Best deal near you right now — always",
-  "Browse all 293 Illinois dispensaries",
+  "Browse every Illinois dispensary in our directory — 61 today, growing weekly",
   "Deal Score grade (A/B/C/D) on every deal",
   "Map view with deal pins",
   "Search by city or dispensary name",

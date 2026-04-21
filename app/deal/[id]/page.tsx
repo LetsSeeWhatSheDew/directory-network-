@@ -208,7 +208,7 @@ export default async function DealPage({
   };
   const disp = displayDispensaryName({ name: listing?.name, slug: deal.listing_slug, listing_slug: deal.listing_slug });
   const rawCity = listing?.city && listing.city !== "Illinois" ? listing.city : null;
-  const city = rawCity || "Illinois";
+  const city = rawCity; // null when we don't have a real city — avoid "Illinois" sentinel
   const cityLabel = rawCity ? `${rawCity}, IL` : "IL";
 
   // SpecialAnnouncement schema — Zone 4 Phase 1 "fresh & live" signal
@@ -277,10 +277,10 @@ export default async function DealPage({
           <span className="logo-text">puff<span>price</span></span>
         </Link>
         <Link
-          href={city !== "Illinois" ? `/city/${encodeURIComponent(city.toLowerCase())}` : "/deals/all"}
+          href={city ? `/city/${encodeURIComponent(city.toLowerCase())}` : "/deals/all"}
           className="back"
         >
-          ← {city !== "Illinois" ? `${city} deals` : "All deals"}
+          ← {city ? `${city} deals` : "All deals"}
         </Link>
       </nav>
 

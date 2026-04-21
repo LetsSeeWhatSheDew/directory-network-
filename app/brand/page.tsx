@@ -1,0 +1,84 @@
+import Link from "next/link";
+import type { Metadata } from "next";
+import { getAllBrands } from "../../lib/brands";
+import { brand as site } from "../../lib/brand";
+
+export const metadata: Metadata = {
+  title: "Illinois cannabis brands | PuffPrice",
+  description:
+    "Every cannabis brand at Illinois dispensaries — coming soon on PuffPrice.",
+  alternates: { canonical: `${site.url}/brand` },
+  robots: { index: false, follow: true },
+};
+
+export default async function BrandIndex() {
+  const brands = await getAllBrands();
+
+  return (
+    <>
+      <style>{`
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:Georgia,serif;background:#f5f4f0;color:#0f1f3d;min-height:100vh}
+        .top-stripe{height:4px;background:#16a34a}
+        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #e8e4da}
+        .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+        .logo-text{font-size:1.1rem;font-weight:700;color:#0f1f3d}
+        .logo-text span{color:#16a34a}
+        .back{font-size:.82rem;color:#6b7280;text-decoration:none;font-family:system-ui,sans-serif}
+        .wrap{max-width:720px;margin:0 auto;padding:56px 28px 80px}
+        .eyebrow{font-family:system-ui,sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#16a34a;margin-bottom:14px}
+        h1{font-size:clamp(2rem,5vw,2.8rem);font-weight:700;letter-spacing:-.04em;line-height:1.08;margin-bottom:18px}
+        .lede{font-family:system-ui,sans-serif;font-size:1.05rem;color:#374151;line-height:1.55;margin-bottom:28px;max-width:58ch}
+        .stub-card{background:#fff;border:1px solid #e8e4da;border-left:4px solid #16a34a;border-radius:14px;padding:28px 28px 24px;box-shadow:0 4px 16px rgba(15,31,61,.06)}
+        .stub-title{font-family:Georgia,serif;font-size:1.2rem;font-weight:700;color:#0f1f3d;margin-bottom:8px}
+        .stub-body{font-family:system-ui,sans-serif;font-size:.95rem;color:#374151;line-height:1.6;max-width:52ch}
+        .stub-foot{margin-top:18px;font-family:system-ui,sans-serif;font-size:.85rem}
+        .stub-foot a{color:#16a34a;text-decoration:none;font-weight:600}
+        .stub-foot a:hover{text-decoration:underline}
+      `}</style>
+
+      <div className="top-stripe" aria-hidden="true" />
+      <nav className="nav">
+        <Link href="/" className="logo">
+          <span className="logo-text">puff<span>price</span></span>
+        </Link>
+        <Link href="/" className="back">← Home</Link>
+      </nav>
+
+      <div className="wrap">
+        <div className="eyebrow">Brands</div>
+        <h1>Illinois cannabis brands</h1>
+        <p className="lede">
+          We&apos;re building pages for every brand carried at Illinois
+          dispensaries — so you can see where they&apos;re sold, what the
+          price is today, and which shops are running a deal.
+        </p>
+
+        {brands.length === 0 ? (
+          <div className="stub-card">
+            <div className="stub-title">Coming soon</div>
+            <p className="stub-body">
+              Brand pages are in progress. They&apos;ll land as Cowork&apos;s
+              affiliate research lands — we won&apos;t ship a list of brands
+              until the list is honest and complete.
+            </p>
+            <p className="stub-foot">
+              Meanwhile:{" "}
+              <Link href="/deals/all">browse every active Illinois deal →</Link>
+            </p>
+          </div>
+        ) : (
+          <ul style={{ listStyle: "none", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 12 }}>
+            {brands.map((b) => (
+              <li key={b.slug}>
+                <Link href={`/brand/${b.slug}`} style={{ display: "block", padding: 14, background: "#fff", border: "1px solid #e8e4da", borderRadius: 10, textDecoration: "none", color: "#0f1f3d", fontFamily: "system-ui, sans-serif", fontWeight: 600 }}>
+                  {b.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </>
+  );
+}

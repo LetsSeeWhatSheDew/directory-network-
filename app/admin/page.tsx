@@ -111,10 +111,13 @@ function cityFrom(lead: Lead): string {
 
 // Rough count of live routes. Counted from app directory:
 // static pages (~30) + IL city/dispensary landing pages generated per
-// green-tag master_listings row (~293) + category deal pages (5).
+// green-tag master_listings row (82 total / 61 active IL) + category
+// deal pages (5). Each dispensary spawns ~2 routes (/l/[slug] +
+// /dispensary/[slug]) so listings contribute ~164. Adjust if route
+// generators change.
 // Exact number requires sitemap introspection — this is an approximation
 // useful for dashboard sanity, not a reporting metric.
-const PAGES_LIVE = 400;
+const PAGES_LIVE = 200;
 const LAST_DEPLOY = new Date().toISOString(); // approximation for "today's focus"
 
 /* ─── Page ─── */

@@ -146,18 +146,59 @@ export default function HomeDealCards({
   const likelyOpen = isLikelyOpen();
 
   if (!deals || deals.length === 0) {
+    // Real empty state, not skeletons. Skeletons imply loading; by the
+    // time this runs we've already resolved an empty initial set, and the
+    // client-side "near me" fetch has either failed or returned nothing.
+    // Tell the truth and hand the user something to do.
+    if (loading) {
+      return (
+        <div className="deal-cards">
+          {[0, 1, 2].map((i) => (
+            <div key={`skel-${i}`} className="deal-card" style={{ padding: 18, minHeight: 220 }} aria-hidden="true">
+              <div style={{ height: 14, width: "55%", borderRadius: 6, background: "#e8e4da", marginBottom: 8 }} />
+              <div style={{ height: 10, width: "35%", borderRadius: 5, background: "#f0ece3", marginBottom: 18 }} />
+              <div style={{ height: 16, width: "75%", borderRadius: 6, background: "#e8e4da", marginBottom: 10 }} />
+              <div style={{ height: 10, width: "92%", borderRadius: 5, background: "#f0ece3", marginBottom: 6 }} />
+              <div style={{ height: 10, width: "68%", borderRadius: 5, background: "#f0ece3", marginBottom: 18 }} />
+              <div style={{ height: 42, width: "100%", borderRadius: 10, background: "#f0fdf4", border: "1px solid #bbf7d0" }} />
+            </div>
+          ))}
+        </div>
+      );
+    }
     return (
-      <div className="deal-cards">
-        {[0, 1, 2].map((i) => (
-          <div key={`skel-${i}`} className="deal-card" style={{ padding: 18, minHeight: 220 }} aria-hidden="true">
-            <div style={{ height: 14, width: "55%", borderRadius: 6, background: "#e8e4da", marginBottom: 8 }} />
-            <div style={{ height: 10, width: "35%", borderRadius: 5, background: "#f0ece3", marginBottom: 18 }} />
-            <div style={{ height: 16, width: "75%", borderRadius: 6, background: "#e8e4da", marginBottom: 10 }} />
-            <div style={{ height: 10, width: "92%", borderRadius: 5, background: "#f0ece3", marginBottom: 6 }} />
-            <div style={{ height: 10, width: "68%", borderRadius: 5, background: "#f0ece3", marginBottom: 18 }} />
-            <div style={{ height: 42, width: "100%", borderRadius: 10, background: "#f0fdf4", border: "1px solid #bbf7d0" }} />
-          </div>
-        ))}
+      <div
+        style={{
+          background: "#fff",
+          border: "1px solid #e8e4da",
+          borderRadius: 14,
+          padding: "28px 24px",
+          textAlign: "center",
+          fontFamily: "system-ui, sans-serif",
+        }}
+      >
+        <div style={{ fontFamily: "Georgia, serif", fontSize: "1.1rem", fontWeight: 700, color: "#0f1f3d", marginBottom: 6 }}>
+          No active deals right now
+        </div>
+        <p style={{ fontSize: ".9rem", color: "#6b7280", margin: "0 auto 14px", maxWidth: 420, lineHeight: 1.5 }}>
+          Check back tomorrow — Illinois dispensaries post fresh deals overnight.
+          Or get an alert the moment a deal drops near you.
+        </p>
+        <Link
+          href="/alerts"
+          style={{
+            display: "inline-block",
+            background: "#16a34a",
+            color: "#fff",
+            padding: "10px 20px",
+            borderRadius: 10,
+            fontWeight: 700,
+            fontSize: ".88rem",
+            textDecoration: "none",
+          }}
+        >
+          Get free alerts →
+        </Link>
       </div>
     );
   }

@@ -40,7 +40,7 @@ export default async function ClaimPage({ params }: { params: Promise<{ slug: st
   const { slug } = await params;
   const listing = await getListing(slug);
   const displayName = listing?.name || slug;
-  const city = listing?.city || "Illinois";
+  const city = listing?.city || null;
 
   return (
     <>
@@ -66,7 +66,7 @@ export default async function ClaimPage({ params }: { params: Promise<{ slug: st
       <div className="wrap">
         <div className="eyebrow">Claim listing</div>
         <h1>Claim {displayName}</h1>
-        <div className="city">{city}, IL</div>
+        <div className="city">{city ? `${city}, IL` : "Illinois"}</div>
         <ClaimForm slug={slug} />
       </div>
     </>

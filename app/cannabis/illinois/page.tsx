@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Illinois Cannabis Dispensaries — Complete Directory | PuffPrice",
-  description: "Find licensed cannabis dispensaries across Illinois. Browse by city, view real hours, and discover deals. 270+ dispensaries listed across 35+ Illinois cities.",
+  description: "Find licensed cannabis dispensaries across Illinois. Browse by city, view real hours, and discover deals — 61 listed across 25 Illinois cities, growing weekly.",
   alternates: { canonical: "https://puffprice.com/cannabis/illinois" },
   openGraph: {
     title: "Illinois Cannabis Dispensaries — Complete Directory",
@@ -52,7 +52,7 @@ const faqSchema = JSON.stringify({
       name: "How many cannabis dispensaries are in Illinois?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Illinois has over 270 licensed cannabis dispensaries operating across the state, with the highest concentration in the Chicago metro area.",
+        text: "Illinois has roughly 290 licensed adult-use cannabis dispensaries operating across the state (per IDFPR), with the highest concentration in the Chicago metro area. PuffPrice currently tracks 61 across 25 Illinois cities.",
       },
     },
     {
@@ -263,7 +263,7 @@ export default function IllinoisHubPage() {
             </div>
             <div className="il-faq-item">
               <p className="il-faq-q">How many dispensaries are in Illinois?</p>
-              <p className="il-faq-a">Illinois has over 270 licensed cannabis dispensaries operating statewide, with the largest concentration in the Chicago metro area. PuffPrice lists dispensaries across 35+ Illinois cities.</p>
+              <p className="il-faq-a">Illinois has roughly 290 licensed adult-use cannabis dispensaries operating statewide (per IDFPR), with the largest concentration in the Chicago metro area. PuffPrice currently lists 61 of them across 25 Illinois cities, and we add more weekly.</p>
             </div>
             <div className="il-faq-item">
               <p className="il-faq-q">Can tourists buy cannabis in Illinois?</p>

@@ -117,7 +117,7 @@ export default function DispensaryAutocomplete({
             >
               <div style={{ fontSize: ".9rem", fontWeight: 700, color: "#0f1f3d" }}>{m.name}</div>
               <div style={{ fontSize: ".75rem", color: "#6b7280" }}>
-                {(m.city || "Illinois") + ", IL · " + m.slug}
+                {m.city ? `${m.city}, IL · ${m.slug}` : m.slug}
               </div>
             </button>
           ))}

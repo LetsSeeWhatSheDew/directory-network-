@@ -83,7 +83,7 @@ export default function RecentlyViewedRow() {
                 marginTop: 2,
               }}
             >
-              {it.city || "Illinois"}
+              {it.city || ""}
             </div>
           </Link>
         ))}

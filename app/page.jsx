@@ -10,6 +10,7 @@ import FourTwentyBanner from "./components/FourTwentyBanner";
 import RecentlyViewedRow from "./components/RecentlyViewedRow";
 import EndingSoonRow from "./components/EndingSoonRow";
 import TopDealsRow from "./components/TopDealsRow";
+import PuffPriceIndexCard from "./components/PuffPriceIndexCard";
 import { brand } from "../lib/brand";
 import { estimateSavings, formatSavingsDollars, gradeDeal } from "../lib/dealScoring";
 import { getServerLocation } from "../lib/location";
@@ -951,6 +952,11 @@ export default async function HomePage() {
         </div>
       </div>
 
+      {/* PUFFPRICE INDEX — price-per-gram benchmark card.
+          Live when sample threshold crosses (migration pending);
+          renders a coming-soon progress state in the meantime. */}
+      <PuffPriceIndexCard />
+
       {/* BELOW FOLD — Section 1: Browse by category (mobile-first) */}
       <div className="below-section below-categories">
         <div className="below-inner">
@@ -1051,7 +1057,7 @@ export default async function HomePage() {
       <div className="stats">
         <div className="stats-inner">
           <span className="stats-line">
-            <strong>{dealCount !== null ? dealCount : "100"}</strong> active deals · <strong>293</strong> dispensaries · <strong>162</strong> cities
+            <strong>{dealCount !== null ? dealCount : "—"}</strong> active deals · <strong>61</strong> Illinois dispensaries · <strong>25</strong> cities
           </span>
         </div>
       </div>

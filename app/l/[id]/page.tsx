@@ -31,6 +31,8 @@ type Listing = {
   claimed: boolean | null;
   logo_url: string | null;
   hero_image_url: string | null;
+  lat: number | string | null;
+  lng: number | string | null;
   delivery: boolean | null;
   drive_thru: boolean | null;
   online_ordering: boolean | null;
@@ -408,7 +410,9 @@ export default async function ListingPage({
     announcementLocation: {
       "@type": "LocalBusiness",
       name: listing.name,
-      address: `${listing.city || "Illinois"}, IL`,
+      ...(listing.city
+        ? { address: `${listing.city}, IL` }
+        : {}),
     },
   }));
 
@@ -544,6 +548,38 @@ export default async function ListingPage({
         .dn-footer { background: #0f1f3d; padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
         .dn-footer-brand { font-size: 1rem; font-weight: 700; color: #fff; letter-spacing: -0.02em; font-family: Georgia, serif; }
         .dn-footer-note { font-size: 0.78rem; color: #475569; font-family: system-ui, sans-serif; }
+        /* DEAL HISTORY STAT STRIP — matches homepage stats treatment */
+        .dn-stats-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 4px; }
+        .dn-stat-cell { padding: 4px 0; }
+        .dn-stat-num { font-family: Georgia, serif; font-size: clamp(1.8rem, 4vw, 2.3rem); font-weight: 700; color: #0f1f3d; letter-spacing: -0.03em; line-height: 1; }
+        .dn-stat-num-accent { color: #16a34a; }
+        .dn-stat-label { font-family: system-ui, sans-serif; font-size: 0.78rem; color: #6b7280; margin-top: 6px; letter-spacing: 0.01em; }
+        .dn-stat-foot { font-family: system-ui, sans-serif; font-size: 0.74rem; color: #9ca3af; margin-top: 14px; }
+
+        /* ABOUT (structured description) — serif prose, proper measure */
+        .dn-about-prose { font-family: Georgia, serif; font-size: 1rem; line-height: 1.65; color: #1f2937; max-width: 65ch; }
+        .dn-about-prose p + p { margin-top: 12px; }
+        .dn-about-foot { font-family: system-ui, sans-serif; font-size: 0.76rem; color: #9ca3af; margin-top: 16px; padding-top: 12px; border-top: 1px solid #f0ede6; }
+
+        /* REPORT OUTDATED — footer-style, subtle */
+        .dn-report-row { margin-top: 8px; padding: 12px 0 0; text-align: center; }
+        .dn-report-text { font-family: system-ui, sans-serif; font-size: 0.76rem; color: #9ca3af; }
+        .dn-report-link { color: #6b7280; text-decoration: underline; text-decoration-color: #e8e5de; text-underline-offset: 3px; font-weight: 500; }
+        .dn-report-link:hover { color: #16a34a; text-decoration-color: #16a34a; }
+
+        /* LOGO refinements — 64px with cleaner monogram fallback */
+        .dn-logo-wrap { width: 64px; height: 64px; border-radius: 14px; }
+        .dn-logo-fallback { font-size: 1.7rem; }
+        .dn-logo-fallback-mono { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #0f1f3d, #1e3a5f); color: #4ade80; font-family: Georgia, serif; font-weight: 700; font-size: 1.7rem; letter-spacing: -0.02em; }
+
+        /* MAP EMBED */
+        .dn-map-card { padding: 0; overflow: hidden; }
+        .dn-map-header { padding: 20px 24px 14px; border-bottom: 1px solid #f0ede6; }
+        .dn-map-iframe { display: block; width: 100%; height: 200px; border: 0; }
+        @media (min-width: 900px) {
+          .dn-map-iframe { height: 300px; }
+        }
+
         @media (max-width: 768px) {
           .dn-nav { padding: 14px 20px; }
           .dn-inner { padding: 20px 16px 48px; }
@@ -701,7 +737,7 @@ export default async function ListingPage({
                   /* eslint-disable-next-line @next/next/no-img-element */
                   <img src={listing.logo_url} alt={listing.name + " logo"} className="dn-logo-img" />
                 ) : (
-                  <span className="dn-logo-fallback">{initial}</span>
+                  <span className="dn-logo-fallback-mono" aria-label={`${listing.name ?? "Dispensary"} monogram`}>{initial}</span>
                 )}
               </div>
 
@@ -826,54 +862,71 @@ export default async function ListingPage({
               {recentStats.count > 0 && (
                 <div className="dn-card">
                   <p className="dn-card-title">Deal history · last 30 days</p>
-                  <p className="dn-about">
-                    {listing.name ?? "This dispensary"} ran <strong>{recentStats.count}</strong> deal{recentStats.count === 1 ? "" : "s"} in the last 30 days
-                    {recentStats.avgSavings != null ? (
-                      <> — averaging <strong>${recentStats.avgSavings}</strong> in savings per deal.</>
-                    ) : (
-                      <>.</>
+                  <div className="dn-stats-strip">
+                    <div className="dn-stat-cell">
+                      <div className="dn-stat-num">{recentStats.count}</div>
+                      <div className="dn-stat-label">
+                        deal{recentStats.count === 1 ? "" : "s"} posted
+                      </div>
+                    </div>
+                    {recentStats.avgSavings != null && (
+                      <div className="dn-stat-cell">
+                        <div className="dn-stat-num dn-stat-num-accent">${recentStats.avgSavings}</div>
+                        <div className="dn-stat-label">average savings per deal</div>
+                      </div>
                     )}
+                  </div>
+                  <p className="dn-stat-foot">
+                    Based on deals {listing.name ?? "this dispensary"} has run on PuffPrice in the last 30 days.
                   </p>
                 </div>
               )}
 
               {(listing.long_description || listing.short_description) ? (
                 <div className="dn-card">
-                  <p className="dn-card-title">About</p>
+                  <p className="dn-card-title">About {listing.name ?? "this dispensary"}</p>
                   {listing.long_description ? (
-                    <div
-                      className="dn-about"
-                      style={{ whiteSpace: "pre-line" }}
-                    >
+                    <div className="dn-about-prose" style={{ whiteSpace: "pre-line" }}>
                       {listing.long_description}
                     </div>
                   ) : (
                     <>
-                      <p className="dn-about">{listing.short_description}</p>
-                      <p style={{
-                        fontSize: ".78rem",
-                        color: "#9ca3af",
-                        fontFamily: "system-ui, sans-serif",
-                        marginTop: 10,
-                      }}>
-                        More details coming soon.
-                      </p>
+                      <div className="dn-about-prose">
+                        <p>{listing.short_description}</p>
+                      </div>
+                      <p className="dn-about-foot">More details coming soon.</p>
                     </>
                   )}
                 </div>
               ) : null}
 
-              <div className="dn-card" style={{ padding: "16px 24px" }}>
-                <p style={{ fontSize: ".8rem", color: "#6b7280", fontFamily: "system-ui, sans-serif" }}>
-                  Something off?{" "}
-                  <a
-                    href={`mailto:hello@puffprice.com?subject=Outdated%20info%20for%20${encodeURIComponent(listing.name ?? listing.slug ?? "listing")}&body=Tell%20us%20what%20looks%20wrong%20on%20this%20page%3A%20${encodeURIComponent(`https://puffprice.com/l/${listing.slug}`)}%0A%0A`}
-                    style={{ color: "#16a34a", textDecoration: "none", fontWeight: 600 }}
-                  >
-                    Report outdated info →
-                  </a>
-                </p>
-              </div>
+              {(() => {
+                const lat = listing.lat != null ? Number(listing.lat) : NaN;
+                const lng = listing.lng != null ? Number(listing.lng) : NaN;
+                if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+                const q = [listing.name, listing.address1, listing.city, listing.state]
+                  .filter(Boolean)
+                  .join(", ") || `${lat},${lng}`;
+                const src = `https://maps.google.com/maps?q=${encodeURIComponent(q)}&ll=${lat},${lng}&z=15&output=embed`;
+                return (
+                  <div className="dn-card dn-map-card">
+                    <div className="dn-map-header">
+                      <p className="dn-card-title" style={{ marginBottom: 4 }}>Find it on the map</p>
+                      <p style={{ fontFamily: "system-ui, sans-serif", fontSize: ".82rem", color: "#6b7280" }}>
+                        {[listing.address1, listing.city, listing.state].filter(Boolean).join(", ")}
+                      </p>
+                    </div>
+                    <iframe
+                      title={`Map of ${listing.name ?? "dispensary"}`}
+                      className="dn-map-iframe"
+                      src={src}
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      allowFullScreen={false}
+                    />
+                  </div>
+                );
+              })()}
 
               {related.length > 0 && (
                 <div className="dn-card dn-related">
@@ -948,6 +1001,18 @@ export default async function ListingPage({
                 </ul>
               </div>
             </div>
+          </div>
+
+          <div className="dn-report-row">
+            <p className="dn-report-text">
+              Something off?{" "}
+              <a
+                href={`mailto:hello@puffprice.com?subject=Outdated%20info%20for%20${encodeURIComponent(listing.name ?? listing.slug ?? "listing")}&body=Tell%20us%20what%20looks%20wrong%20on%20this%20page%3A%20${encodeURIComponent(`https://puffprice.com/l/${listing.slug}`)}%0A%0A`}
+                className="dn-report-link"
+              >
+                Report outdated info
+              </a>
+            </p>
           </div>
 
           <div className="dn-footer-nav">

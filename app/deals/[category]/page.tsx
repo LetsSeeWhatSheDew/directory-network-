@@ -320,7 +320,7 @@ function buildItemListSchema(deals: any[], categoryLabel: string, category: stri
             name: d.name || d.listing_slug || "Illinois cannabis dispensary",
             address: {
               "@type": "PostalAddress",
-              addressLocality: d.city || "Illinois",
+              ...(d.city ? { addressLocality: d.city } : {}),
               addressRegion: "IL",
               addressCountry: "US",
             },
@@ -429,10 +429,15 @@ export default async function DealsPage({
   const dispensaryCount = new Set(
     deals.map((d: any) => d.listing_slug || d.slug).filter(Boolean)
   ).size;
-  const answerCity = city || "Illinois";
+  // When `city` is null the user hit the statewide deal page — phrase
+  // the headline as statewide Illinois rather than a city. Keeping
+  // "Illinois" as the scope here is correct because the result set is
+  // genuinely statewide; we just avoid the `|| "Illinois"` sentinel
+  // pattern so the surrounding code isn't misread as fallback lying.
+  const scopeLabel = city ? `${city}, IL` : "Illinois";
   const answerText = deals.length > 0
-    ? `${deals.length} active deal${deals.length !== 1 ? "s" : ""} at ${dispensaryCount} dispensar${dispensaryCount !== 1 ? "ies" : "y"} in ${answerCity}${city ? ", IL" : ""} right now.`
-    : `No active deals in ${answerCity}${city ? ", IL" : ""} right now — check back soon.`;
+    ? `${deals.length} active deal${deals.length !== 1 ? "s" : ""} at ${dispensaryCount} dispensar${dispensaryCount !== 1 ? "ies" : "y"} in ${scopeLabel} right now.`
+    : `No active deals in ${scopeLabel} right now — check back soon.`;
 
   return (
     <>
@@ -852,8 +857,8 @@ export default async function DealsPage({
             </div>
             <p className="no-deals-sub">
               {noLocalMatches
-                ? "Try a wider search, or get notified when a deal goes live in your city."
-                : "We're adding dispensary deals daily. Get notified the moment one goes live near you."}
+                ? "Try a wider search, or get notified the moment one goes live in your city."
+                : "Check back tomorrow — dispensaries post fresh deals overnight. Or get an alert the moment one goes live."}
             </p>
             {noLocalMatches ? (
               <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>

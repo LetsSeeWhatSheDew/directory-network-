@@ -254,7 +254,7 @@ export default function SubmitDealPage() {
                     {form.dispensary_name || "Your dispensary"}
                   </div>
                   <div style={{ fontSize: ".78rem", color: "#9ca3af", fontFamily: "system-ui,sans-serif" }}>
-                    {form.city || "Illinois"}, IL
+                    {form.city ? `${form.city}, IL` : "Your city, IL"}
                   </div>
                 </div>
                 <span style={{ fontSize: ".66rem", background: "#dcfce7", color: "#166534", padding: "2px 8px", borderRadius: 100, fontFamily: "system-ui,sans-serif", fontWeight: 600 }}>

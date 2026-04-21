@@ -12,6 +12,7 @@ import { brand } from "../../../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
 import { nowInCT, isOpen, formatTime as formatHourTime } from "../../../lib/hours";
 import { listingHref } from "../../../lib/links";
+import { cityFromSlug } from "../../../lib/cityNormalize";
 
 export const revalidate = 300;
 
@@ -169,9 +170,11 @@ export async function generateMetadata({
     return { title: "Dispensary not found | PuffPrice", robots: { index: false } };
   }
   const name = listing.name || slug;
-  const city = listing.city || "Illinois";
+  const city = listing.city || cityFromSlug(slug) || null;
   const title = `${name} — Deals, Hours & Directions | PuffPrice`;
-  const description = `${name} in ${city}, IL. See current cannabis deals, full week hours, phone, and directions. Updated daily.`;
+  const description = city
+    ? `${name} in ${city}, IL. See current cannabis deals, full week hours, phone, and directions. Updated daily.`
+    : `${name} — Illinois cannabis dispensary. See current deals, full week hours, phone, and directions. Updated daily.`;
   const url = `${brand.url}/dispensary/${slug}`;
   const ogImage = listing.logo_url || `${brand.url}/og-image.png`;
   return {
@@ -213,7 +216,7 @@ export default async function DispensaryProfilePage({
   const ct = nowInCT();
   const status = todayOpenStatus(hours, ct);
   const name = listing.name || slug;
-  const city = listing.city || "Illinois";
+  const city = listing.city || cityFromSlug(slug) || null;
   const todayIdx = ct.weekday;
 
   // LocalBusiness schema — mirrors /l/[slug] so both pages give Google the
@@ -353,17 +356,17 @@ export default async function DispensaryProfilePage({
           <span className="logo-text">puff<span>price</span></span>
         </Link>
         <Link
-          href={city !== "Illinois" ? `/city/${encodeURIComponent(city.toLowerCase())}` : "/deals/all"}
+          href={city ? `/city/${encodeURIComponent(city.toLowerCase())}` : "/deals/all"}
           className="back"
         >
-          {city !== "Illinois" ? `← ${city} deals` : "← All deals"}
+          {city ? `← ${city} deals` : "← All deals"}
         </Link>
       </nav>
 
       <main className="wrap">
         <div className="eyebrow">{listing.type || "Dispensary"}</div>
         <h1>{name}</h1>
-        <div className="city-line">{city}, IL</div>
+        <div className="city-line">{city ? `${city}, IL` : "Illinois"}</div>
 
         <div className="status-row">
           <span className={`status ${status.open ? "status-open" : "status-closed"}`}>
@@ -451,7 +454,7 @@ export default async function DispensaryProfilePage({
                   </div>
                   {d.description && <p className="deal-desc">{d.description}</p>}
                   {(() => {
-                    const href = listingHref(slug, city && city !== "Illinois" ? city : null);
+                    const href = listingHref(slug, city);
                     if (!href) return null;
                     return (
                       <Link href={href} className="deal-cta">

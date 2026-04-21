@@ -128,7 +128,7 @@ export default function CannabisCentralHub() {
 
               <div className="mb-4 space-y-1 text-[11px] text-slate-400">
                 <p>
-                  <span className="text-[#7FE3C7]">35 cities</span> covered
+                  <span className="text-[#7FE3C7]">25 Illinois cities</span> covered
                 </p>
                 <p>
                   <span className="text-[#7FE3C7]">10 neighborhoods</span> in

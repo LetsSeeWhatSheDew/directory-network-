@@ -114,6 +114,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${brand.url}/start`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     { url: `${brand.url}/terms`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
     { url: `${brand.url}/privacy`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
+    // Brand index — placeholder today, data-driven once the brands table lands.
+    { url: `${brand.url}/brand`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.6 },
+    { url: `${brand.url}/about/index`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
   ];
 
   // Deal engine category pages

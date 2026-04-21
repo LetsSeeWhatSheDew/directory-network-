@@ -1,5 +1,6 @@
 import Link from "next/link";
 import MapClient from "./MapClient";
+import { cityFromSlug } from "@/lib/cityNormalize";
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL ||
@@ -91,7 +92,7 @@ export default async function MapPage() {
     .map((l) => ({
       slug: l.slug,
       name: l.name || l.slug,
-      city: l.city || "Illinois",
+      city: l.city || cityFromSlug(l.slug) || "",
       lat: Number(l.lat),
       lng: Number(l.lng),
       deal: bestDeal[l.slug] || null,
