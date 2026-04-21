@@ -5,6 +5,7 @@
 // /l/[slug], which carries the full destination-screen UX.
 
 import Link from "next/link";
+import Logo from "../../components/Logo";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
@@ -12,6 +13,7 @@ import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring"
 import { listingHref } from "../../../lib/links";
 import { displayDispensaryName } from "../../../lib/dispensaryName";
 import ShareDealButton from "../../components/ShareDealButton";
+import DealFreshnessBadge from "../../components/DealFreshnessBadge";
 
 export const revalidate = 60;
 
@@ -309,9 +311,8 @@ export default async function DealPage({
 
       <div className="top-stripe" aria-hidden="true" />
       <nav className="nav">
-        <Link href="/" className="logo">
-          <span className="logo-dot" />
-          <span className="logo-text">puff<span>price</span></span>
+        <Link href="/" className="logo" aria-label="PuffPrice home">
+          <Logo />
         </Link>
         <Link
           href={city ? `/city/${encodeURIComponent(city.toLowerCase())}` : "/deals/all"}
@@ -365,6 +366,9 @@ export default async function DealPage({
             {expiry.text}
           </span>
           {deal.description && <p className="desc">{deal.description}</p>}
+          <div style={{ marginTop: 8, marginBottom: 8 }}>
+            <DealFreshnessBadge verifiedAt={(deal as any).verified_at} variant="detail" />
+          </div>
           {code && (
             <div className="code-box">
               <span className="code-label">Use code at checkout</span>

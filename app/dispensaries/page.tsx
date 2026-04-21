@@ -13,11 +13,11 @@ const SUPABASE_ANON_KEY =
 
 export const metadata = {
   title: "All Illinois Dispensaries | PuffPrice",
-  description: "Browse every licensed Illinois cannabis dispensary by city. Hours, ratings, and live deals updated daily.",
+  description: "Browse every licensed Illinois cannabis dispensary by city. Hours, ratings, and active deals from shops across the state.",
   alternates: { canonical: "https://puffprice.com/dispensaries" },
   openGraph: {
     title: "All Illinois Dispensaries",
-    description: "Browse every licensed Illinois cannabis dispensary by city. Hours, ratings, and live deals updated daily.",
+    description: "Browse every licensed Illinois cannabis dispensary by city. Hours, ratings, and active deals from shops across the state.",
     url: "https://puffprice.com/dispensaries",
     siteName: "PuffPrice",
     type: "website" as const,
@@ -26,7 +26,7 @@ export const metadata = {
   twitter: {
     card: "summary_large_image" as const,
     title: "All Illinois Dispensaries",
-    description: "Browse every licensed Illinois cannabis dispensary by city. Hours, ratings, and live deals updated daily.",
+    description: "Browse every licensed Illinois cannabis dispensary by city. Hours, ratings, and active deals from shops across the state.",
     images: ["https://puffprice.com/og-image.png"],
   },
 };

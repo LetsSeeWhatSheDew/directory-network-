@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Logo from "../../../components/Logo";
 
 export const metadata = {
   title: "Deal submitted — thanks! | PuffPrice",
@@ -38,7 +39,7 @@ export default async function ConfirmedPage({
       `}</style>
 
       <nav className="nav">
-        <Link href="/" className="logo">puff<span>price</span></Link>
+        <Link href="/" className="logo" aria-label="PuffPrice home"><Logo /></Link>
         <Link href="/dispensary/submit-deal" className="back">← Submit another</Link>
       </nav>
 

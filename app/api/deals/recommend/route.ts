@@ -88,6 +88,34 @@ async function fetchDeals(category: string): Promise<Deal[]> {
   return Array.isArray(json) ? json : [];
 }
 
+// Fetch lat/lng for a dispensary slug. Returns {lat,lng} or nulls. The
+// active_deals_with_listings view doesn't carry these, so the hero card
+// gets distance info via this secondary fetch. Best-effort; missing
+// coords just mean the card shows city only — no fake distance.
+async function fetchListingCoords(slug: string): Promise<{ lat: number | null; lng: number | null }> {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/master_listings?select=lat,lng&slug=eq.${encodeURIComponent(slug)}&limit=1`,
+      {
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+        cache: "no-store",
+      }
+    );
+    if (!res.ok) return { lat: null, lng: null };
+    const rows = await res.json();
+    const row = Array.isArray(rows) ? rows[0] : null;
+    return {
+      lat: typeof row?.lat === "number" ? row.lat : null,
+      lng: typeof row?.lng === "number" ? row.lng : null,
+    };
+  } catch {
+    return { lat: null, lng: null };
+  }
+}
+
 function emptyResponse(category: string, city: string) {
   return {
     topPick: null,
@@ -142,7 +170,14 @@ export async function GET(req: NextRequest) {
     }
 
     const top = combined[0];
-    const topPick = { ...top, rankingReason: rankingReason(top, category, city) };
+    const topSlug = String(top.slug || top.listing_slug || "");
+    const coords = topSlug ? await fetchListingCoords(topSlug) : { lat: null, lng: null };
+    const topPick = {
+      ...top,
+      rankingReason: rankingReason(top, category, city),
+      lat: coords.lat,
+      lng: coords.lng,
+    };
     const alternatives = combined.slice(1, Math.max(4, limit));
 
     return NextResponse.json({
@@ -153,6 +188,7 @@ export async function GET(req: NextRequest) {
       localCount: scoredLocal.length,
       city,
       category,
+      likelyOpen: openNow,
       generatedAt: new Date().toISOString(),
     });
   } catch (err) {

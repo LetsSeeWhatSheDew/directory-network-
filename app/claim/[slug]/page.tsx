@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Logo from "../../components/Logo";
 import ClaimForm from "./ClaimForm";
 
 const SUPABASE_URL =
@@ -59,7 +60,7 @@ export default async function ClaimPage({ params }: { params: Promise<{ slug: st
       `}</style>
 
       <nav className="nav">
-        <Link href="/" className="logo">puff<span>price</span></Link>
+        <Link href="/" className="logo" aria-label="PuffPrice home"><Logo /></Link>
         <Link href={`/l/${slug}`} className="back">← Back to listing</Link>
       </nav>
 

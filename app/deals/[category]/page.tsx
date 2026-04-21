@@ -2,8 +2,11 @@
 // Fixed v2: force no-cache + correct Supabase query format
 
 import Link from "next/link";
+import Logo from "../../components/Logo";
 import { redirect } from "next/navigation";
-import { estimateSavings, formatSavingsDollars, gradeDeal, shouldShowGrade } from "../../../lib/dealScoring";
+import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
+import DealBadge from "../../components/DealBadge";
+import DealFreshnessBadge from "../../components/DealFreshnessBadge";
 import { isInMetro, metroCities } from "../../../lib/cityNormalize";
 import TrackView from "../../components/TrackView";
 import DealCtaLink from "../../components/DealCtaLink";
@@ -24,10 +27,10 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 const CATEGORY_SUBTITLES: Record<string, string> = {
-  flower: "Best price per gram on flower near you right now",
-  edibles: "Cheapest edibles deals in Illinois today",
-  vapes: "Best vape deals and discounts near you",
-  concentrate: "Top concentrate deals near you",
+  flower: "Biggest flower deals in Illinois today",
+  edibles: "Biggest edibles deals in Illinois today",
+  vapes: "Biggest vape deals in Illinois today",
+  concentrate: "Biggest concentrate deals in Illinois today",
   all: "Every active cannabis deal in Illinois right now",
 };
 
@@ -544,9 +547,8 @@ export default async function DealsPage({
 
       <div className="top-stripe" aria-hidden="true" />
       <nav className="nav">
-        <Link href="/" className="logo">
-          <span className="logo-dot" />
-          <span className="logo-text">puff<span>price</span></span>
+        <Link href="/" className="logo" aria-label="PuffPrice home">
+          <Logo />
         </Link>
         <Link href="/" className="back">← Back</Link>
       </nav>
@@ -603,20 +605,9 @@ export default async function DealsPage({
             <TrackView event="deal_view" params={{ dispensary: topDeal.name || topDeal.listing_slug, category }} />
             <div className="top-label">Our recommendation</div>
             <div className="top-card">
-              {(() => {
-                if (!shouldShowGrade(topDeal)) return null;
-                const g = gradeDeal(topDeal);
-                return (
-                  <span
-                    className="deal-grade"
-                    style={{ background: g.color.bg, color: g.color.fg }}
-                    title={`${g.label} · score ${g.score}/100`}
-                    aria-label={`Deal score ${g.grade}, ${g.label}`}
-                  >
-                    {g.grade}
-                  </span>
-                );
-              })()}
+              <div style={{ position: "absolute", top: 12, right: 12, zIndex: 2 }}>
+                <DealBadge dealId={topDeal.deal_id || topDeal.id} />
+              </div>
 
               {(() => {
                 const dollars = estimateSavings(topDeal);
@@ -665,6 +656,10 @@ export default async function DealsPage({
                 if (t === "worse") return <div style={{ fontSize: ".78rem", fontFamily: "system-ui,sans-serif", color: "#f59e0b", fontWeight: 600, marginBottom: 10 }}>↑ Not as good as last week</div>;
                 return null;
               })()}
+
+              <div style={{ marginBottom: 10 }}>
+                <DealFreshnessBadge verifiedAt={topDeal.verified_at} />
+              </div>
 
               <div className="attrs">
                 {topDeal.accepts_credit && <span className="attr">Cards OK</span>}
@@ -754,7 +749,6 @@ export default async function DealsPage({
                 <div className="alt-label">Also worth considering</div>
                 <div className="alt-cards">
                   {alternatives.map((deal: any, i: number) => {
-                    const g = gradeDeal(deal);
                     const altHref = listingHref(deal.slug || deal.listing_slug, city);
                     if (!altHref) return null;
                     return (
@@ -763,13 +757,9 @@ export default async function DealsPage({
                       href={altHref}
                       className="alt-card"
                     >
-                      {shouldShowGrade(deal) && <span
-                        className="alt-grade"
-                        title={`${g.label} · score ${g.score}/100`}
-                        aria-label={`Deal score ${g.grade}, ${g.label}`}
-                      >
-                        {g.grade}
-                      </span>}
+                      <div style={{ position: "absolute", top: 8, right: 8, zIndex: 2 }}>
+                        <DealBadge dealId={deal.deal_id || deal.id} />
+                      </div>
                       {(() => {
                         const dollars = estimateSavings(deal);
                         const formatted = formatSavings(deal);
@@ -804,6 +794,9 @@ export default async function DealsPage({
                         })()}
                         <div className="alt-meta">
                           {deal.city ? `${deal.city}, ${deal.state_abbrev || 'IL'}` : 'IL'}
+                        </div>
+                        <div style={{ marginTop: 4 }}>
+                          <DealFreshnessBadge verifiedAt={deal.verified_at} />
                         </div>
                       </div>
                     </Link>

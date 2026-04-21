@@ -102,7 +102,8 @@ export default function SavingsCalculator() {
             <span style={{ color: "#dc2626" }}>${result.overpaying}</span> per year.
           </div>
           <p style={resultBody}>
-            PuffPrice users who match your profile save an average of{" "}
+            At a typical {Math.round(AVG_DISCOUNT_RATE * 100)}% discount on tracked deals, your
+            profile would save about{" "}
             <strong style={{ color: "#16a34a" }}>${result.puffpriceSaves} / year</strong>.
           </p>
           {result.eighths > 0 && (

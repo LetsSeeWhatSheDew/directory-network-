@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Logo from "../components/Logo";
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -36,6 +37,50 @@ async function searchListings(q: string): Promise<Listing[]> {
   if (!q) return [];
   try {
     const url = `${SUPABASE_URL}/rest/v1/master_listings?select=id,slug,name,city,address1,short_description&${orFilter(q)}&project_tag=eq.green&limit=30`;
+    const res = await fetch(url, {
+      headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
+      cache: "no-store",
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
+
+// Product/category search: find active deals whose title or category matches
+// the query, return their listing_slugs. The caller fetches master_listings
+// by those slugs to merge into search results. This powers the third axis
+// of the search bar ("city / dispensary / product").
+async function searchListingSlugsByProduct(q: string): Promise<string[]> {
+  if (!q) return [];
+  try {
+    const safe = q.replace(/[(),]/g, "").trim();
+    const esc = safe.replace(/%/g, "\\%");
+    const url = `${SUPABASE_URL}/rest/v1/deals?select=listing_slug&or=(title.ilike.*${esc}*,category.ilike.*${esc}*)&is_active=eq.true&project_tag=eq.green&limit=100`;
+    const res = await fetch(url, {
+      headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
+      cache: "no-store",
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    if (!Array.isArray(data)) return [];
+    const slugs = new Set<string>();
+    for (const row of data) {
+      if (row?.listing_slug && typeof row.listing_slug === "string") slugs.add(row.listing_slug);
+    }
+    return Array.from(slugs);
+  } catch {
+    return [];
+  }
+}
+
+async function fetchListingsBySlug(slugs: string[]): Promise<Listing[]> {
+  if (slugs.length === 0) return [];
+  try {
+    const inList = slugs.map((s) => `"${s}"`).join(",");
+    const url = `${SUPABASE_URL}/rest/v1/master_listings?select=id,slug,name,city,address1,short_description&slug=in.(${inList})&project_tag=eq.green&limit=50`;
     const res = await fetch(url, {
       headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
       cache: "no-store",
@@ -124,7 +169,13 @@ export default async function SearchPage({
 }) {
   const { q = "" } = await searchParams;
   const query = q.trim();
-  const listings = query ? await searchListings(query) : [];
+  const [directListings, productSlugs] = query
+    ? await Promise.all([searchListings(query), searchListingSlugsByProduct(query)])
+    : [[], []];
+  const directSlugs = new Set(directListings.map((l) => l.slug));
+  const extraSlugs = productSlugs.filter((s) => !directSlugs.has(s));
+  const extraListings = await fetchListingsBySlug(extraSlugs);
+  const listings: Listing[] = [...directListings, ...extraListings];
   const dealMap = await dealsForSlugs(listings.map((l) => l.slug));
 
   return (
@@ -159,7 +210,7 @@ export default async function SearchPage({
       `}</style>
 
       <nav className="nav">
-        <Link href="/" className="logo">puff<span>price</span></Link>
+        <Link href="/" className="logo" aria-label="PuffPrice home"><Logo /></Link>
         <Link href="/" className="back">← Home</Link>
       </nav>
 
@@ -170,11 +221,11 @@ export default async function SearchPage({
         <p className="sub">
           {query && listings.length > 0
             ? `${listings.length} dispensar${listings.length === 1 ? "y" : "ies"} found`
-            : "Enter a city, zip code, or dispensary name below."}
+            : "Enter a city, dispensary, or product below."}
         </p>
 
         <form action="/search" method="get" role="search">
-          <input type="search" name="q" defaultValue={query} placeholder="Search city, zip code, or dispensary name…" autoComplete="off" />
+          <input type="search" name="q" defaultValue={query} placeholder="Search by city, dispensary, or product" autoComplete="off" />
           <button type="submit" className="sbtn">Search</button>
         </form>
 

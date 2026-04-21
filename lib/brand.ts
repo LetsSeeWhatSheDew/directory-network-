@@ -12,7 +12,7 @@ export const brand = {
     twitter: "@puffprice",
   },
   description:
-    "Find the best cannabis deals near you in Illinois. Real-time dispensary offers, updated daily.",
+    "Illinois cannabis deal finder. Find dispensary deals near you, all in one place.",
 } as const;
 
 export type Brand = typeof brand;

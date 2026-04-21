@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Logo from "../../components/Logo";
 import { useEffect, useMemo, useState } from "react";
 
 type Record = {
@@ -102,7 +103,7 @@ export default function SavingsDashboard() {
       `}</style>
 
       <nav className="nav">
-        <Link href="/" className="logo">puff<span>price</span></Link>
+        <Link href="/" className="logo" aria-label="PuffPrice home"><Logo /></Link>
         <Link href="/deals/all" className="back">← Browse deals</Link>
       </nav>
 

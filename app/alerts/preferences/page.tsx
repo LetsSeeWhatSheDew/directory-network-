@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Logo from "../../components/Logo";
 import { useState } from "react";
 
 export default function AlertPreferencesPage() {
@@ -94,7 +95,7 @@ export default function AlertPreferencesPage() {
       `}</style>
 
       <nav className="nav">
-        <Link href="/" className="logo">puff<span>price</span></Link>
+        <Link href="/" className="logo" aria-label="PuffPrice home"><Logo /></Link>
         <Link href="/alerts" className="back">← Back</Link>
       </nav>
 

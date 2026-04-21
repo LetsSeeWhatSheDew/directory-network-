@@ -4,6 +4,7 @@
 // at this stage.
 
 import Link from "next/link";
+import Logo from "../components/Logo";
 import AlertsCalculator from "./AlertsCalculator";
 import ProCheckoutButton from "./ProCheckoutButton";
 
@@ -46,7 +47,7 @@ export const revalidate = 300;
 
 const OG_IMAGE = "https://puffprice.com/og-image.png";
 const OG_DESC =
-  "Illinois cannabis deal alerts. Free forever, no account needed. Pro is $0.99/month — instant SMS the moment a deal drops near you.";
+  "Illinois cannabis deal alerts. Free forever, no account needed. Pro is $0.99/month. Deal alerts within minutes.";
 
 export const metadata = {
   title: "Get Deal Alerts | PuffPrice",
@@ -71,7 +72,6 @@ export const metadata = {
 const FREE_FEATURES = [
   "Best deal near you right now — always",
   "Browse every Illinois dispensary in our directory — 61 today, growing weekly",
-  "Deal Score grade (A/B/C/D) on every deal",
   "Map view with deal pins",
   "Search by city or dispensary name",
   "Weekly Monday digest (just email + city, no account)",
@@ -79,11 +79,10 @@ const FREE_FEATURES = [
 
 const PRO_FEATURES = [
   "Everything free",
-  "Instant SMS the moment a deal drops near you",
+  "Deal alerts within minutes of dispensary updates",
   "Daily 8am deal digest personalized to your city + categories",
   'Price history — "this eighth was $45 last week, today $28"',
   '"Beat My Last Price" alerts — set your price, we tell you when it\'s beaten',
-  "Flash sale early access — 15 min before public",
   'Monthly savings report: "You saved $84 this month"',
   "Annual savings dashboard with shareable stats",
   "First to know about new dispensary openings near you",
@@ -155,7 +154,7 @@ export default async function AlertsPage() {
       `}</style>
 
       <nav className="nav">
-        <Link href="/" className="logo">puff<span>price</span></Link>
+        <Link href="/" className="logo" aria-label="PuffPrice home"><Logo /></Link>
         <Link href="/" className="back">← Home</Link>
       </nav>
 
@@ -209,7 +208,7 @@ export default async function AlertsPage() {
             <span className="tier-price-period">/month</span>
           </div>
           <p className="tier-anchor">
-            <strong>Less than a dollar a week.</strong> You&apos;ll save that in your first trip.
+            <strong>$0.99/month. That&apos;s it.</strong>
           </p>
           <ul className="tier-features">
             {PRO_FEATURES.map((f) => (

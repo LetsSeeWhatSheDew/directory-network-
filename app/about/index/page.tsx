@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Logo from "../../components/Logo";
 
 const OG_DESC =
   "How the PuffPrice Index is calculated — our weekly Illinois flower price-per-gram benchmark.";
@@ -80,7 +81,7 @@ export default function AboutIndexPage() {
 
       <nav className="nav">
         <Link href="/" className="logo" aria-label="PuffPrice home">
-          <span className="logo-text">puff<span>price</span></span>
+          <Logo />
         </Link>
         <Link href="/" className="back">← Back to deals</Link>
       </nav>

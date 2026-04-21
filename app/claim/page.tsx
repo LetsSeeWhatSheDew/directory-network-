@@ -5,6 +5,7 @@
 // general inquiry with listing_slug="_generic_" — admin reconciles.
 
 import Link from "next/link";
+import Logo from "../components/Logo";
 import type { Metadata } from "next";
 import { brand } from "../../lib/brand";
 import GenericClaimForm from "./GenericClaimForm";
@@ -62,9 +63,8 @@ export default function ClaimLandingPage() {
 
       <div className="top-stripe" aria-hidden="true" />
       <nav className="nav">
-        <Link href="/" className="logo">
-          <span className="logo-dot" />
-          <span className="logo-text">puff<span>price</span></span>
+        <Link href="/" className="logo" aria-label="PuffPrice home">
+          <Logo />
         </Link>
         <Link href="/dispensaries" className="back">For dispensaries</Link>
       </nav>

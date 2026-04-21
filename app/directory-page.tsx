@@ -137,7 +137,7 @@ export default async function Home({
       <header className="relative z-10 border-b border-white/5 bg-black/40 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:py-4">
           <div className="flex items-center gap-3">
-            <Image src="/brand/logo.svg" alt="PuffPrice" width={160} height={28} className="h-7 w-auto" />
+            <Image src="/logo-512.png" alt="PuffPrice" width={32} height={32} className="h-8 w-8" />
           </div>
 
           <nav className="hidden items-center gap-4 text-xs text-slate-300 md:flex">
@@ -465,7 +465,7 @@ export default async function Home({
       <footer className="border-t border-white/5 bg-black">
         <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-5 text-[11px] text-slate-500 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-2">
-            <Image src="/brand/logo.svg" alt="PuffPrice" width={120} height={20} className="h-4 w-auto opacity-60" />
+            <Image src="/logo-512.png" alt="PuffPrice" width={20} height={20} className="h-5 w-5 opacity-60" />
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <Link href="/cannabis/illinois" className="text-[#8a9490] hover:text-[#f0ede8] transition-colors">Illinois</Link>

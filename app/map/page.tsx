@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Logo from "../components/Logo";
 import MapClient from "./MapClient";
 import { cityFromSlug } from "@/lib/cityNormalize";
 
@@ -117,7 +118,7 @@ export default async function MapPage() {
 
       <div className="top-stripe" aria-hidden="true" />
       <nav className="nav">
-        <Link href="/" className="logo">puff<span>price</span></Link>
+        <Link href="/" className="logo" aria-label="PuffPrice home"><Logo /></Link>
         <Link href="/" className="back">← Home</Link>
       </nav>
 

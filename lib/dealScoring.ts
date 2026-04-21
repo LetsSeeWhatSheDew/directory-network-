@@ -51,8 +51,14 @@ export function hasExactSavings(d: Deal): boolean {
 
 /**
  * Best estimate of dollar savings for a given deal.
- * Returns null when we shouldn't show a dollar amount (sub-threshold, or
- * we genuinely can't estimate). Callers should fall back to percent copy.
+ * Returns a dollar number ONLY when we can compute it honestly:
+ *   R1. Exact: original_price - sale_price (both present)
+ *   R1b. Explicit savings_amount field populated
+ *   R1c. Flat-dollar discount_unit (e.g. "$10 off")
+ * Otherwise returns null — caller falls back to percent copy
+ * (see formatSavingsDollars). The earlier R2 fallback that multiplied
+ * discount_value% × AVG_SPEND_BY_CATEGORY produced fabricated dollars
+ * for 53 of 56 active deals (2026-04-21 audit). Gated off.
  */
 export function estimateSavings(d: Deal): number | null {
   // R1: exact prices — trust them
@@ -61,7 +67,7 @@ export function estimateSavings(d: Deal): number | null {
     return exact >= MIN_DOLLAR_SAVINGS ? exact : null;
   }
 
-  // Explicit savings_amount override (rare, but respect it)
+  // R1b: explicit savings_amount (from view or scraper)
   if (d?.savings_amount && Number(d.savings_amount) > 0) {
     const n = Math.round(Number(d.savings_amount));
     return n >= MIN_DOLLAR_SAVINGS ? n : null;
@@ -71,24 +77,15 @@ export function estimateSavings(d: Deal): number | null {
   if (!Number.isFinite(value) || value <= 0) return null;
 
   const unit = (d?.discount_unit || "").toLowerCase();
-  const cat = (d?.category || "all").toLowerCase();
-  const avg = AVG_SPEND_BY_CATEGORY[cat] ?? AVG_SPEND_BY_CATEGORY.all;
 
-  // Flat dollar discount
-  if (unit === "dollars") {
-    if (d?.discount_type === "fixed_price") {
-      // "5 for $100" style — rough lower bound vs average basket
-      const saved = avg - value;
-      return saved >= MIN_DOLLAR_SAVINGS ? Math.round(saved) : null;
-    }
+  // R1c: flat-dollar discount — the number IS the savings ("$10 off" = $10)
+  if (unit === "dollars" && d?.discount_type !== "fixed_price") {
     return value >= MIN_DOLLAR_SAVINGS ? Math.round(value) : null;
   }
 
-  // R2: percent → average basket spend
-  // (unit === "percent", or unit missing but value looks like a percent)
-  const pct = value > 100 ? 100 : value;
-  const saved = (pct / 100) * avg;
-  return saved >= MIN_DOLLAR_SAVINGS ? Math.round(saved) : null;
+  // Percent-off without exact prices: honest answer is null. Caller
+  // renders "X% off" instead of fabricating a dollar figure.
+  return null;
 }
 
 /**

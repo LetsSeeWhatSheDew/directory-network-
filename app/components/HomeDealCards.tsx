@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { estimateSavings, formatSavingsDollars, gradeDeal, shouldShowGrade } from "../../lib/dealScoring";
+import { estimateSavings, formatSavingsDollars } from "../../lib/dealScoring";
 import { displayCity } from "../../lib/cityNormalize";
 import { listingHref } from "../../lib/links";
 import TrackedLink from "./TrackedLink";
 import ShareDealButton from "./ShareDealButton";
+import DealBadge from "./DealBadge";
+import DealFreshnessBadge, { isFreshnessHidden, isFreshnessStale } from "./DealFreshnessBadge";
 
 type Deal = {
   deal_id?: string;
@@ -26,6 +28,7 @@ type Deal = {
   google_rating?: number | null;
   is_recurring?: boolean | null;
   expires_at?: string | null;
+  verified_at?: string | null;
   scope?: "local" | "statewide";
 };
 
@@ -294,31 +297,25 @@ export default function HomeDealCards({
       </div>
 
       <div className="deal-cards">
-        {deals.map((d, i) => {
+        {deals.filter((d) => !isFreshnessHidden(d.verified_at)).map((d, i) => {
           const slug = d.slug || d.listing_slug || "";
           const href = listingHref(slug, city);
           if (!href) return null;
           const name = displayName(d);
-          const g = gradeDeal(d);
           const urgency = getExpiryUrgency(d.expires_at);
+          const stale = isFreshnessStale(d.verified_at);
           return (
             <TrackedLink
               key={d.deal_id || d.id || i}
               href={href}
               className={`deal-card${i === 0 ? " top-pick" : ""}`}
-              style={{ textDecoration: "none", color: "inherit" }}
+              style={{ textDecoration: "none", color: "inherit", ...(stale ? { opacity: 0.75, filter: "grayscale(25%)" } : {}) }}
               event="deal_click"
               params={{ dispensary: name, category: d.category || "all", position: i + 1 }}
             >
-              {i === 0 && <div className="top-pick-badge">Best value today</div>}
-              {shouldShowGrade(d) && <span
-                className="deal-grade"
-                style={{ background: g.color.bg, color: g.color.fg }}
-                title={`${g.label} · score ${g.score}/100`}
-                aria-label={`Deal score ${g.grade}, ${g.label}`}
-              >
-                {g.grade}
-              </span>}
+              <div style={{ position: "absolute", top: 12, right: 12, zIndex: 2 }}>
+                <DealBadge dealId={d.deal_id || d.id} />
+              </div>
               <div className="deal-card-header">
                 <div>
                   <div className="deal-name">{name}</div>
@@ -380,6 +377,9 @@ export default function HomeDealCards({
                   </div>
                 );
               })()}
+              <div style={{ marginTop: 6 }}>
+                <DealFreshnessBadge verifiedAt={d.verified_at} />
+              </div>
             </TrackedLink>
           );
         })}

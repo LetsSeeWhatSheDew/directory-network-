@@ -6,6 +6,7 @@ import ClaimForm from "../../components/ClaimForm";
 import RecentlyViewedTracker from "../../components/RecentlyViewedTracker";
 import ShareDealButton from "../../components/ShareDealButton";
 import { estimateSavings } from "../../../lib/dealScoring";
+import DealFreshnessBadge from "../../components/DealFreshnessBadge";
 import { nowInCT, isOpen, formatTime as formatHourTime } from "../../../lib/hours";
 
 const NOINDEX_SLUGS = [
@@ -686,6 +687,9 @@ export default async function ListingPage({
                 marginBottom: 12,
               }}>
                 → {howToUseDeal(activeDeal)}
+              </div>
+              <div style={{ marginBottom: 12 }}>
+                <DealFreshnessBadge verifiedAt={(activeDeal as any).verified_at} />
               </div>
               {activeDeal!.id && (
                 <ShareDealButton

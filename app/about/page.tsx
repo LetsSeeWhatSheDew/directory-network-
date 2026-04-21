@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Logo from "../components/Logo";
 
 const OG_DESC =
   "We built the thing we wished existed. PuffPrice finds the best cannabis deals near you in Illinois.";
@@ -52,16 +53,7 @@ export default function AboutPage() {
 
       <nav className="nav">
         <Link href="/" className="logo" aria-label="PuffPrice home">
-          <span className="logo-mark">
-            <svg width="28" height="28" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <rect x="0" y="0" width="28" height="28" rx="6" fill="#0b172f" stroke="rgba(255,255,255,.12)" strokeWidth="1" />
-              <rect x="7" y="9" width="14" height="1.8" rx="0.9" fill="#fff" />
-              <rect x="7" y="13.2" width="14" height="1.8" rx="0.9" fill="#fff" />
-              <rect x="7" y="17.4" width="14" height="1.8" rx="0.9" fill="#fff" />
-            </svg>
-            <span className="logo-dot" aria-hidden="true" />
-          </span>
-          <span className="logo-text">puff<span>price</span></span>
+          <Logo />
         </Link>
         <Link href="/" className="back">← Back</Link>
       </nav>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Logo from "../../components/Logo";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getBrand, type Brand } from "../../../lib/brands";
@@ -40,7 +41,7 @@ export async function generateMetadata({
   const title = `${data.name} — Illinois dispensary deals | PuffPrice`;
   const description =
     data.description?.slice(0, 180) ||
-    `${data.name} deals at Illinois dispensaries, tracked in real time by PuffPrice.`;
+    `${data.name} deals at Illinois dispensaries, all in one place on PuffPrice.`;
   const url = `${site.url}/brand/${data.slug}`;
   const ogImage = `${site.url}/og-image.png`;
   return {
@@ -177,8 +178,8 @@ export default async function BrandPage({
 
       <div className="top-stripe" aria-hidden="true" />
       <nav className="nav">
-        <Link href="/" className="logo">
-          <span className="logo-text">puff<span>price</span></span>
+        <Link href="/" className="logo" aria-label="PuffPrice home">
+          <Logo />
         </Link>
         <Link href="/brand" className="back">← All brands</Link>
       </nav>

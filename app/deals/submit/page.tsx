@@ -9,6 +9,7 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
+import Logo from "../../components/Logo";
 import SubmitForm from "./SubmitForm";
 import { brand } from "../../../lib/brand";
 
@@ -97,8 +98,8 @@ export default async function SubmitDealPage() {
 
       <div className="top-stripe" aria-hidden="true" />
       <nav className="nav">
-        <Link href="/" className="logo">
-          <span className="logo-text">puff<span>price</span></span>
+        <Link href="/" className="logo" aria-label="PuffPrice home">
+          <Logo />
         </Link>
         <Link href="/deals/all" className="back">← All deals</Link>
       </nav>

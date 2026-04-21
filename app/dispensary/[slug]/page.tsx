@@ -6,6 +6,7 @@
 // serves as the bookmark/permalink destination for repeat visitors.
 
 import Link from "next/link";
+import Logo from "../../components/Logo";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
@@ -173,8 +174,8 @@ export async function generateMetadata({
   const city = listing.city || cityFromSlug(slug) || null;
   const title = `${name} — Deals, Hours & Directions | PuffPrice`;
   const description = city
-    ? `${name} in ${city}, IL. See current cannabis deals, full week hours, phone, and directions. Updated daily.`
-    : `${name} — Illinois cannabis dispensary. See current deals, full week hours, phone, and directions. Updated daily.`;
+    ? `${name} in ${city}, IL. See current cannabis deals, full week hours, phone, and directions.`
+    : `${name} — Illinois cannabis dispensary. See current deals, full week hours, phone, and directions.`;
   const url = `${brand.url}/dispensary/${slug}`;
   const ogImage = listing.logo_url || `${brand.url}/og-image.png`;
   return {
@@ -351,9 +352,8 @@ export default async function DispensaryProfilePage({
 
       <div className="top-stripe" aria-hidden="true" />
       <nav className="nav">
-        <Link href="/" className="logo">
-          <span className="logo-dot" />
-          <span className="logo-text">puff<span>price</span></span>
+        <Link href="/" className="logo" aria-label="PuffPrice home">
+          <Logo />
         </Link>
         <Link
           href={city ? `/city/${encodeURIComponent(city.toLowerCase())}` : "/deals/all"}

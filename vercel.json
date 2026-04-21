@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/mark-stale-deals",
+      "schedule": "0 4 * * *"
+    }
+  ]
+}

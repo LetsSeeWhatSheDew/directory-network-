@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { estimateSavings, formatSavingsDollars } from "../../lib/dealScoring";
+import { estimateSavings, formatSavingsDollars, hasExactSavings } from "../../lib/dealScoring";
 import { displayCity } from "../../lib/cityNormalize";
 import { listingHref } from "../../lib/links";
 import TrackedLink from "./TrackedLink";
+import DealFreshnessBadge from "./DealFreshnessBadge";
 
 type Deal = {
   deal_id?: string;
@@ -18,8 +19,19 @@ type Deal = {
   deal_title?: string;
   discount_value?: number;
   discount_unit?: string;
+  original_price?: number | null;
+  sale_price?: number | null;
   expires_at?: string | null;
+  verified_at?: string | null;
+  lat?: number | null;
+  lng?: number | null;
   scope?: "local" | "statewide";
+};
+
+type Recommendation = {
+  topPick: Deal | null;
+  deals?: Deal[];
+  likelyOpen?: boolean;
 };
 
 function slugToName(s: string) {
@@ -47,13 +59,42 @@ function endsToday(expiresAt?: string | null) {
   return hoursLeft > 0 && hoursLeft < 24;
 }
 
-function fetchDealForCity(c: string, signal?: AbortSignal): Promise<Deal | null> {
+// Haversine distance in miles. Returns null if either coord missing/invalid.
+function distanceMiles(
+  a: { lat: number | null | undefined; lng: number | null | undefined },
+  b: { lat: number | null | undefined; lng: number | null | undefined }
+): number | null {
+  if (a.lat == null || a.lng == null || b.lat == null || b.lng == null) return null;
+  const lat1 = Number(a.lat), lng1 = Number(a.lng);
+  const lat2 = Number(b.lat), lng2 = Number(b.lng);
+  if (![lat1, lng1, lat2, lng2].every(Number.isFinite)) return null;
+  const R = 3958.8; // Earth radius in miles
+  const toRad = (x: number) => (x * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const s =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.min(1, Math.sqrt(s)));
+}
+
+function readUserCoords(): { lat: number | null; lng: number | null } {
+  try {
+    const lat = Number(sessionStorage.getItem("cl_lat"));
+    const lng = Number(sessionStorage.getItem("cl_lng"));
+    if (Number.isFinite(lat) && Number.isFinite(lng) && (lat !== 0 || lng !== 0)) {
+      return { lat, lng };
+    }
+  } catch {}
+  return { lat: null, lng: null };
+}
+
+function fetchRecommendation(c: string, signal?: AbortSignal): Promise<Recommendation | null> {
   return fetch(
     `/api/deals/recommend?category=all&limit=1&city=${encodeURIComponent(c)}`,
     { cache: "no-store", signal }
   )
     .then((r) => (r.ok ? r.json() : null))
-    .then((data) => data?.topPick || (Array.isArray(data?.deals) ? data.deals[0] : null) || null)
     .catch(() => null);
 }
 
@@ -67,21 +108,15 @@ function dispatchSavings(d: Deal | null) {
 }
 
 export default function HeroDealCard({ initial }: { initial: Deal | null }) {
-  // We deliberately DO NOT seed state with `initial`. `initial` is the
-  // server-rendered statewide top deal, which is almost always a Chicago
-  // dispensary — showing that to a Peoria user while GPS is resolving is
-  // the "wrong-city flash" we're fixing here. We only fall back to
-  // `initial` once location detection has finished *without* producing
-  // a city.
   const [deal, setDeal] = useState<Deal | null>(null);
   const [city, setCity] = useState<string | null>(null);
+  const [likelyOpen, setLikelyOpen] = useState<boolean | null>(null);
   const [resolved, setResolved] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
     let cancelled = false;
 
-    // If a city was cached earlier this session, use it immediately.
     let cached: string | null = null;
     try {
       cached = sessionStorage.getItem("cl_city");
@@ -90,10 +125,11 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
     if (cached) {
       setCity(cached);
       setResolved(true);
-      fetchDealForCity(cached, controller.signal).then((d) => {
+      fetchRecommendation(cached, controller.signal).then((data) => {
         if (cancelled) return;
-        const next = d || initial;
+        const next = data?.topPick || initial;
         setDeal(next);
+        if (typeof data?.likelyOpen === "boolean") setLikelyOpen(data.likelyOpen);
         dispatchSavings(next);
       });
       return () => {
@@ -102,22 +138,20 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
       };
     }
 
-    // No cached city — wait for LocationAware to dispatch its event.
     const handler = (e: Event) => {
       const detail = (e as CustomEvent).detail as { city?: string } | null;
       if (cancelled) return;
       setResolved(true);
       if (detail?.city) {
         setCity(detail.city);
-        fetchDealForCity(detail.city, controller.signal).then((d) => {
+        fetchRecommendation(detail.city, controller.signal).then((data) => {
           if (cancelled) return;
-          const next = d || initial;
+          const next = data?.topPick || initial;
           setDeal(next);
+          if (typeof data?.likelyOpen === "boolean") setLikelyOpen(data.likelyOpen);
           dispatchSavings(next);
         });
       } else {
-        // Detection finished with no city. Fall back to the server's
-        // statewide top deal so the page is still useful.
         setDeal(initial);
         dispatchSavings(initial);
       }
@@ -158,6 +192,11 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
   const name = displayName(deal);
   const savings = formatSavingsDollars(deal);
   const expiresToday = endsToday(deal.expires_at);
+  const exact = hasExactSavings(deal);
+  const regular = exact && deal.original_price != null ? Number(deal.original_price) : null;
+  const sale = exact && deal.sale_price != null ? Number(deal.sale_price) : null;
+  const userCoords = readUserCoords();
+  const miles = distanceMiles(userCoords, { lat: deal.lat, lng: deal.lng });
 
   return (
     <div className="hero-deal-card">
@@ -165,11 +204,18 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
         {city ? `Best deal near ${city} right now` : "Top Illinois deal right now"}
       </div>
       <div className="hero-deal-savings">{savings}</div>
+      {regular != null && sale != null && (
+        <div className="hero-deal-price">
+          was <span className="strike">${regular.toFixed(0)}</span>, now <strong>${sale.toFixed(0)}</strong>
+        </div>
+      )}
       <div className="hero-deal-name">{name}</div>
       <div className="hero-deal-title">{deal.deal_title || "Active deal"}</div>
       <div className="hero-deal-row">
         <div className="hero-deal-meta">
-          <span>📍 {displayCity(deal)}</span>
+          <span>📍 {displayCity(deal)}{miles != null && miles < 500 ? ` · ${miles.toFixed(1)} mi from you` : ""}</span>
+          {likelyOpen === true && <span className="hero-deal-open">● Likely open now</span>}
+          {likelyOpen === false && <span className="hero-deal-closed">Typical hours 9am–9pm CT</span>}
           {expiresToday && <span className="hero-deal-urgent">⚡ Ends today</span>}
         </div>
         {goHref && (
@@ -183,12 +229,22 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
           </TrackedLink>
         )}
       </div>
+      <div style={{ marginTop: 8 }}>
+        <DealFreshnessBadge verifiedAt={deal.verified_at} />
+      </div>
       <Link
         href={city ? `/deals/all?city=${encodeURIComponent(city)}` : "/deals/all"}
         className="hero-deal-more"
       >
         {city ? `3 other deals near ${city} →` : "See more Illinois deals →"}
       </Link>
+      <style>{`
+        .hero-deal-price{font-size:.9rem;color:#6b7280;font-family:system-ui,sans-serif;margin:-4px 0 8px}
+        .hero-deal-price .strike{text-decoration:line-through}
+        .hero-deal-price strong{color:#16a34a;font-weight:700}
+        .hero-deal-open{color:#16a34a;font-size:.75rem;font-weight:600;background:#f0fdf4;padding:2px 8px;border-radius:100px}
+        .hero-deal-closed{color:#9ca3af;font-size:.72rem;font-family:system-ui,sans-serif}
+      `}</style>
     </div>
   );
 }

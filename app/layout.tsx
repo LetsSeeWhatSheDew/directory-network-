@@ -28,7 +28,12 @@ export const metadata: Metadata = {
   },
   description: brand.description,
   icons: {
-    icon: "/favicon.svg",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
   },
   openGraph: {
     title: `Cannabis Deals Near You in Illinois | ${brand.name}`,
@@ -38,9 +43,9 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: `${brand.url}/og-image.png`,
-        width: 1200,
-        height: 630,
+        url: `${brand.url}/logo-512.png`,
+        width: 512,
+        height: 512,
         alt: `${brand.name} — ${brand.tagline}`,
       },
     ],
@@ -49,7 +54,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `Cannabis Deals Near You in Illinois | ${brand.name}`,
     description: brand.description,
-    images: [`${brand.url}/og-image.png`],
+    images: [`${brand.url}/logo-512.png`],
   },
 };
 

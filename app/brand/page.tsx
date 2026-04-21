@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Logo from "../components/Logo";
 import type { Metadata } from "next";
 import { getAllBrands } from "../../lib/brands";
 import { brand as site } from "../../lib/brand";
@@ -52,8 +53,8 @@ export default async function BrandIndex() {
 
       <div className="top-stripe" aria-hidden="true" />
       <nav className="nav">
-        <Link href="/" className="logo">
-          <span className="logo-text">puff<span>price</span></span>
+        <Link href="/" className="logo" aria-label="PuffPrice home">
+          <Logo />
         </Link>
         <Link href="/" className="back">← Home</Link>
       </nav>

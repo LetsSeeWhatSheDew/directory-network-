@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Logo from "./components/Logo";
 import LocationAware from "./components/LocationAware";
 import TrackedLink from "./components/TrackedLink";
 import HomeDealCards from "./components/HomeDealCards";
@@ -12,7 +13,7 @@ import EndingSoonRow from "./components/EndingSoonRow";
 import TopDealsRow from "./components/TopDealsRow";
 import PuffPriceIndexCard from "./components/PuffPriceIndexCard";
 import { brand } from "../lib/brand";
-import { estimateSavings, formatSavingsDollars, gradeDeal } from "../lib/dealScoring";
+import { estimateSavings, formatSavingsDollars } from "../lib/dealScoring";
 import { getServerLocation } from "../lib/location";
 import { getLiveDealsValueThisMonth, getDealsRunThisMonth } from "../lib/stats";
 
@@ -882,16 +883,7 @@ export default async function HomePage() {
       {/* NAV */}
       <nav className="nav">
         <Link href="/" className="logo" aria-label="PuffPrice home">
-          <span className="logo-mark">
-            <svg width="28" height="28" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <rect x="0" y="0" width="28" height="28" rx="6" fill="#0f1f3d" />
-              <rect x="7" y="9" width="14" height="1.8" rx="0.9" fill="#fff" />
-              <rect x="7" y="13.2" width="14" height="1.8" rx="0.9" fill="#fff" />
-              <rect x="7" y="17.4" width="14" height="1.8" rx="0.9" fill="#fff" />
-            </svg>
-            <span className="logo-mark-dot" aria-hidden="true" />
-          </span>
-          <span className="logo-text">puff<span>price</span></span>
+          <Logo priority />
         </Link>
         <div className="nav-links desktop-only-nav">
           <Link href="/cannabis/illinois/open-now" className="nav-link">Open now</Link>
@@ -1030,7 +1022,7 @@ export default async function HomePage() {
           <input
             type="search"
             name="q"
-            placeholder="Search deals, dispensaries, or city…"
+            placeholder="Search by city, dispensary, or product"
             autoComplete="off"
             className="home-search-input"
           />
@@ -1193,7 +1185,7 @@ export default async function HomePage() {
 
       {/* FOOTER */}
       <footer className="footer">
-        <span className="footer-logo">puff<span>price</span></span>
+        <span className="footer-logo" aria-label="PuffPrice"><Logo size={28} /></span>
         <div className="footer-links">
           <Link href="/cannabis/illinois" className="footer-link">Illinois</Link>
           <Link href="/cannabis/illinois/first-time-guide" className="footer-link">First-time guide</Link>

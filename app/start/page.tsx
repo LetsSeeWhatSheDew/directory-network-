@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Logo from "../components/Logo";
 import type { Metadata } from "next";
 import { brand } from "../../lib/brand";
 
@@ -60,9 +61,8 @@ export default function StartPage() {
 
       <div className="top-stripe" aria-hidden="true" />
       <nav className="nav">
-        <Link href="/" className="logo">
-          <span className="logo-dot" />
-          <span className="logo-text">puff<span>price</span></span>
+        <Link href="/" className="logo" aria-label="PuffPrice home">
+          <Logo />
         </Link>
         <Link href="/" className="back">← Back</Link>
       </nav>
@@ -182,7 +182,7 @@ export default function StartPage() {
           </p>
           <ul>
             <li>Every deal card links straight to directions, hours, and the dispensary&rsquo;s menu.</li>
-            <li>We grade deals honestly: great, solid, okay, or low savings.</li>
+            <li>We flag genuinely extraordinary deals with a 🔥 badge. No letter grades, no padding.</li>
             <li>It&rsquo;s free and no account is needed.</li>
             <li>
               Optional <strong>Pro alerts ($0.99/month)</strong> text you when a new

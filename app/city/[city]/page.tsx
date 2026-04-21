@@ -5,6 +5,7 @@
 // all three via internal linking.
 
 import Link from "next/link";
+import Logo from "../../components/Logo";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
@@ -146,8 +147,8 @@ export async function generateMetadata({
   const title = `${city} Dispensary Deals Today | ${brand.name}`;
   const description =
     deals.length > 0
-      ? `Browse ${deals.length} active dispensary deals at ${dispensaryCount} dispensar${dispensaryCount === 1 ? "y" : "ies"} in ${city}, IL. Updated daily.`
-      : `Browse active dispensary deals in ${city}, IL. Updated daily.`;
+      ? `Browse ${deals.length} active dispensary deals at ${dispensaryCount} dispensar${dispensaryCount === 1 ? "y" : "ies"} in ${city}, IL.`
+      : `Browse active dispensary deals in ${city}, IL.`;
   const url = `${brand.url}/city/${encodeURIComponent(raw.toLowerCase())}`;
   const ogImage = `${brand.url}/og-image.png`;
   return {
@@ -250,9 +251,8 @@ export default async function CityPage({
 
       <div className="top-stripe" aria-hidden="true" />
       <nav className="nav">
-        <Link href="/" className="logo">
-          <span className="logo-dot" />
-          <span className="logo-text">puff<span>price</span></span>
+        <Link href="/" className="logo" aria-label="PuffPrice home">
+          <Logo />
         </Link>
         <Link href="/deals/all" className="back">← All Illinois deals</Link>
       </nav>
