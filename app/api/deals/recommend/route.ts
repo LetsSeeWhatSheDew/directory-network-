@@ -89,14 +89,20 @@ async function fetchDeals(category: string): Promise<Deal[]> {
   return Array.isArray(json) ? json : [];
 }
 
-// Fetch full weekly hours for a single listing_id. 7 rows at most — runs in
-// parallel with fetchListingCoords. Used to render real "Open until X" /
-// "Closed · Opens at X" on the hero card instead of the 9–21 CT heuristic.
-async function fetchListingHours(listingId: string): Promise<HoursRow[]> {
-  if (!listingId) return [];
+// Fetch lat/lng + weekly hours for a dispensary slug in a single roundtrip
+// via PostgREST relationship embed. Returns {lat,lng,hours} with graceful
+// nulls/empties when master_listings has no matching row (several
+// active_deals rows carry synthesized slugs that don't join back — those
+// just render without coords or open-now status, never a lie).
+async function fetchListingMeta(slug: string): Promise<{
+  lat: number | null;
+  lng: number | null;
+  hours: HoursRow[];
+}> {
+  if (!slug) return { lat: null, lng: null, hours: [] };
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/listing_hours?listing_id=eq.${encodeURIComponent(listingId)}&select=weekday,opens_at,closes_at,is_closed&order=weekday.asc`,
+      `${SUPABASE_URL}/rest/v1/master_listings?slug=eq.${encodeURIComponent(slug)}&select=lat,lng,listing_hours(weekday,opens_at,closes_at,is_closed)&limit=1`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,
@@ -105,39 +111,16 @@ async function fetchListingHours(listingId: string): Promise<HoursRow[]> {
         cache: "no-store",
       }
     );
-    if (!res.ok) return [];
-    const rows = await res.json();
-    return Array.isArray(rows) ? rows : [];
-  } catch {
-    return [];
-  }
-}
-
-// Fetch lat/lng for a dispensary slug. Returns {lat,lng} or nulls. The
-// active_deals_with_listings view doesn't carry these, so the hero card
-// gets distance info via this secondary fetch. Best-effort; missing
-// coords just mean the card shows city only — no fake distance.
-async function fetchListingCoords(slug: string): Promise<{ lat: number | null; lng: number | null }> {
-  try {
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/master_listings?select=lat,lng&slug=eq.${encodeURIComponent(slug)}&limit=1`,
-      {
-        headers: {
-          apikey: SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-        },
-        cache: "no-store",
-      }
-    );
-    if (!res.ok) return { lat: null, lng: null };
+    if (!res.ok) return { lat: null, lng: null, hours: [] };
     const rows = await res.json();
     const row = Array.isArray(rows) ? rows[0] : null;
     return {
       lat: typeof row?.lat === "number" ? row.lat : null,
       lng: typeof row?.lng === "number" ? row.lng : null,
+      hours: Array.isArray(row?.listing_hours) ? (row.listing_hours as HoursRow[]) : [],
     };
   } catch {
-    return { lat: null, lng: null };
+    return { lat: null, lng: null, hours: [] };
   }
 }
 
@@ -196,17 +179,15 @@ export async function GET(req: NextRequest) {
 
     const top = combined[0];
     const topSlug = String(top.slug || top.listing_slug || "");
-    const topListingId = top.listing_id ? String(top.listing_id) : "";
-    const [coords, hours] = await Promise.all([
-      topSlug ? fetchListingCoords(topSlug) : Promise.resolve({ lat: null as number | null, lng: null as number | null }),
-      topListingId ? fetchListingHours(topListingId) : Promise.resolve([] as HoursRow[]),
-    ]);
-    const openStatus = computeOpenStatus(hours);
+    const meta = topSlug
+      ? await fetchListingMeta(topSlug)
+      : { lat: null as number | null, lng: null as number | null, hours: [] as HoursRow[] };
+    const openStatus = computeOpenStatus(meta.hours);
     const topPick = {
       ...top,
       rankingReason: rankingReason(top, category, city),
-      lat: coords.lat,
-      lng: coords.lng,
+      lat: meta.lat,
+      lng: meta.lng,
     };
     const alternatives = combined.slice(1, Math.max(4, limit));
 
