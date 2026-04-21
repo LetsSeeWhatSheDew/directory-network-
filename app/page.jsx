@@ -405,43 +405,38 @@ async function getActiveDealCount() {
   return null;
 }
 
+// FAQPage schema. Google requires the Q&A text here to be visibly
+// rendered on the page — the FAQ section below mirrors these entries
+// verbatim. GSC flagged items as invalid while the schema existed
+// without matching visible content; keeping these strings aligned is
+// what makes the markup eligible for rich results.
+const FAQ_ENTRIES = [
+  {
+    q: "How do I find dispensary deals near me in Illinois?",
+    a: "Allow location access or select your city and you'll see the cheapest active dispensary deals in your area. Every deal is tagged with how much you save and the exact dispensary running it.",
+  },
+  {
+    q: "How often are deals updated?",
+    a: "Deals are reviewed and refreshed daily. Expired deals are removed automatically the moment their expiry time passes, so what you see is what's live today.",
+  },
+  {
+    q: "Is PuffPrice free to use?",
+    a: "Yes. Browsing deals is always free with no account required. Pro is $0.99 a month and adds SMS alerts, a daily digest, price history, and a savings dashboard.",
+  },
+  {
+    q: "Which Illinois cities have dispensary deals?",
+    a: "Coverage spans dozens of Illinois cities including Chicago, Peoria, Rockford, Springfield, Aurora, Joliet, Naperville, Champaign, Bloomington, and many more.",
+  },
+];
+
 const FAQ_SCHEMA = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "How do I find dispensary deals near me in Illinois?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "PuffPrice shows you the best active dispensary deals in Illinois based on your location. Allow location access or select your city to see deals near you instantly.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Are these dispensary deals updated in real time?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Yes. PuffPrice tracks active deals from Illinois dispensaries and updates daily. Each deal shows how much you save and links directly to the dispensary.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Is PuffPrice free to use?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Yes. Browsing deals on PuffPrice is always free with no account required. A Pro tier with deal alerts and price history is available for $0.99/month.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Which Illinois cities have dispensary deals on PuffPrice?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "PuffPrice covers dispensary deals across Illinois including Chicago, Peoria, Rockford, Springfield, Aurora, and dozens of other cities.",
-      },
-    },
-  ],
+  mainEntity: FAQ_ENTRIES.map((e) => ({
+    "@type": "Question",
+    name: e.q,
+    acceptedAnswer: { "@type": "Answer", text: e.a },
+  })),
 };
 
 // Prefer user-city deals when we know the city; otherwise fall back to the
@@ -1133,6 +1128,68 @@ export default async function HomePage() {
           )}
         </div>
       )}
+
+      {/* FAQ — visible content that matches FAQ_SCHEMA. Google requires
+          FAQPage rich-result text to be rendered on the page; the schema
+          above was flagged as invalid without this. */}
+      <section
+        aria-labelledby="faq-heading"
+        style={{
+          background: "#fff",
+          borderTop: "1px solid #e8e4da",
+          padding: "52px 28px 44px",
+        }}
+      >
+        <div style={{ maxWidth: 760, margin: "0 auto" }}>
+          <h2
+            id="faq-heading"
+            style={{
+              fontSize: "clamp(1.3rem,3vw,1.7rem)",
+              fontWeight: 700,
+              color: "#0f1f3d",
+              letterSpacing: "-.03em",
+              marginBottom: 24,
+            }}
+          >
+            Frequently asked
+          </h2>
+          <dl style={{ display: "grid", gap: 18 }}>
+            {FAQ_ENTRIES.map((e, i) => (
+              <div
+                key={i}
+                style={{
+                  background: "#f5f4f0",
+                  border: "1px solid #e8e4da",
+                  borderRadius: 12,
+                  padding: "16px 18px",
+                }}
+              >
+                <dt
+                  style={{
+                    fontSize: "1rem",
+                    fontWeight: 700,
+                    color: "#0f1f3d",
+                    fontFamily: "system-ui, sans-serif",
+                    marginBottom: 6,
+                  }}
+                >
+                  {e.q}
+                </dt>
+                <dd
+                  style={{
+                    fontSize: ".92rem",
+                    color: "#374151",
+                    fontFamily: "system-ui, sans-serif",
+                    lineHeight: 1.55,
+                  }}
+                >
+                  {e.a}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
 
       {/* FOOTER */}
       <footer className="footer">

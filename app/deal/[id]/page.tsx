@@ -227,11 +227,48 @@ export default async function DealPage({
     url: `${brand.url}/deal/${id}`,
   };
 
+  // Offer schema — competitive moat vs Leafly/Weedmaps/iHeartJane.
+  // None of them publish indexable per-deal pages with Offer markup.
+  // CannaSaver does; we match + beat with LocalBusiness offeredBy.
+  const schemaOffer: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Offer",
+    name: headline,
+    description: deal.description || headline,
+    url: `${brand.url}/deal/${id}`,
+    availability: "https://schema.org/InStock",
+    category: deal.category || "Cannabis",
+    offeredBy: {
+      "@type": "LocalBusiness",
+      name: disp,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: rawCity || "Illinois",
+        addressRegion: "IL",
+        addressCountry: "US",
+      },
+    },
+  };
+  if (deal.sale_price != null && Number.isFinite(Number(deal.sale_price))) {
+    schemaOffer.price = Number(deal.sale_price);
+    schemaOffer.priceCurrency = "USD";
+  }
+  if (deal.expires_at) {
+    // Schema.org prefers ISO date (YYYY-MM-DD). Trim time if present.
+    const iso = String(deal.expires_at).slice(0, 10);
+    schemaOffer.priceValidUntil = iso;
+    schemaOffer.validThrough = iso;
+  }
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaAnnouncement) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOffer) }}
       />
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}

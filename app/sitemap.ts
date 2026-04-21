@@ -10,6 +10,51 @@ const SUPABASE_ANON_KEY =
 
 const DEAL_CATEGORIES = ["flower", "edibles", "vapes", "concentrate", "all"] as const;
 
+// Canonical list of /cannabis/illinois/[city] static pages. Mirrors
+// `app/cannabis/illinois/<slug>/` folders. Kept here (not in DB) because
+// the static pages render regardless of DB state and GSC flagged several
+// missing from the sitemap (including /cannabis/illinois/chicago, which
+// existed but wasn't emitted when the DB query missed a listing-city
+// join). Any new folder added under app/cannabis/illinois/ must also
+// land here to be discoverable.
+const IL_CITY_PAGES = [
+  "addison",
+  "aurora",
+  "bloomington-normal",
+  "canton",
+  "carbondale",
+  "champaign",
+  "champaign-urbana",
+  "chicago",
+  "collinsville",
+  "danville",
+  "decatur",
+  "east-peoria",
+  "effingham",
+  "elgin",
+  "galesburg",
+  "jacksonville",
+  "joliet",
+  "litchfield",
+  "marion",
+  "moline",
+  "morris",
+  "mundelein",
+  "naperville",
+  "normal",
+  "north-aurora",
+  "ottawa",
+  "peoria",
+  "quincy",
+  "rock-island",
+  "rockford",
+  "schaumburg",
+  "springfield",
+  "sterling",
+  "sycamore",
+  "waukegan",
+] as const;
+
 const NOINDEX_SLUGS = [
     "emerald-city-dispensary-chicago-il",
     "emerald-leaf-collective-chicago-il",
@@ -114,6 +159,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${brand.url}/upgrade`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     { url: `${brand.url}/claim`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${brand.url}/start`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
+    { url: `${brand.url}/deals/submit`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${brand.url}/terms`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
     { url: `${brand.url}/privacy`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
     // Brand index — placeholder today, data-driven once the brands table lands.
@@ -147,18 +193,32 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
               priority: 0.8,
       }));
 
+  // Merge DB cities with the canonical static-page list. GSC flagged
+  // /cannabis/illinois/chicago as missing from the sitemap earlier today,
+  // even though the static page exists — the DB query can miss a city
+  // if no master_listing row is tagged with that city. Using the union
+  // of (DB rows) ∪ (IL_CITY_PAGES) guarantees every static city page
+  // we serve is also indexable.
+  const citySlugsFromDb = (cities as string[]).map((c) =>
+    c.toLowerCase().replace(/\s+/g, "-")
+  );
+  const mergedCitySlugs = Array.from(new Set([...citySlugsFromDb, ...IL_CITY_PAGES]));
+
   // City hub pages
-  const cityUrls: MetadataRoute.Sitemap = (cities as string[]).map((city) => ({
-        url: `${brand.url}/cannabis/illinois/${city.toLowerCase().replace(/\s+/g, "-")}`,
+  const cityUrls: MetadataRoute.Sitemap = mergedCitySlugs.map((slug) => ({
+        url: `${brand.url}/cannabis/illinois/${slug}`,
         lastModified: new Date(),
         changeFrequency: "daily" as const,
         priority: 0.85,
   }));
 
-  // Intent pages — best, open-now, recreational, deals for every city
-  const intentUrls: MetadataRoute.Sitemap = (cities as string[]).flatMap((city) =>
+  // Intent pages — best, open-now, recreational, deals for every city.
+  // Only emit for cities we actually have listings for (intent pages
+  // need data to render meaningfully); static-only cities get their
+  // landing page above but not the intent matrix.
+  const intentUrls: MetadataRoute.Sitemap = citySlugsFromDb.flatMap((slug) =>
         INTENTS.map((intent) => ({
-                url: `${brand.url}/cannabis/illinois/${city.toLowerCase().replace(/\s+/g, "-")}/${intent}`,
+                url: `${brand.url}/cannabis/illinois/${slug}/${intent}`,
                 lastModified: new Date(),
                 changeFrequency: intent === "open-now" ? ("hourly" as const) : ("daily" as const),
                 priority: intent === "best" || intent === "open-now" ? 0.9 : 0.8,

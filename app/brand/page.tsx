@@ -6,11 +6,11 @@ import { brand as site } from "../../lib/brand";
 export const metadata: Metadata = {
   title: "Illinois cannabis brands | PuffPrice",
   description:
-    "Every cannabis brand at Illinois dispensaries — coming soon on PuffPrice.",
+    "Cannabis brands carried at Illinois dispensaries, with live deals pulled from every shop PuffPrice tracks.",
   alternates: { canonical: `${site.url}/brand` },
   openGraph: {
     title: "Illinois cannabis brands",
-    description: "Every cannabis brand at Illinois dispensaries — coming soon on PuffPrice.",
+    description: "Cannabis brands carried at Illinois dispensaries, with live deals pulled from every shop PuffPrice tracks.",
     url: `${site.url}/brand`,
     siteName: "PuffPrice",
     type: "website",
@@ -19,10 +19,9 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Illinois cannabis brands",
-    description: "Every cannabis brand at Illinois dispensaries — coming soon on PuffPrice.",
+    description: "Cannabis brands carried at Illinois dispensaries, with live deals pulled from every shop PuffPrice tracks.",
     images: [`${site.url}/og-image.png`],
   },
-  robots: { index: false, follow: true },
 };
 
 export default async function BrandIndex() {
