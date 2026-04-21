@@ -158,8 +158,39 @@ Build passes. Commit + push next.
 2. **Optional — add Postgres functions** `mark_stale_deals()` and `refresh_deal_rankings()` so the cron can run them via `supa.rpc()`. Current implementation does the UPDATEs via Supabase JS `.update().in('id', ids)` which works with REST PATCH; the matview refresh is the only piece that falls through. Non-blocking.
 
 ## Risks & known tradeoffs
-- **Open-now hint on hero card is heuristic-only** (9am–9pm CT), not per-listing `listing_hours`. Schema exists for real hours (table `listing_hours` keyed by `listing_id`) but joining per-recommendation would add ~1 round-trip per card; deferred. Flag with Cowork if per-listing open-now on hero becomes a priority.
+- **Open-now hint on hero card is heuristic-only** (9am–9pm CT), not per-listing `listing_hours`. Schema exists for real hours (table `listing_hours` keyed by `listing_id`) but joining per-recommendation would add ~1 round-trip per card; deferred. Flag with Cowork if per-listing open-now on hero becomes a priority. **UPDATE (apr21 night):** fixed — see appendix below.
 - **DealBadge won't render until Cowork's ranking migration is applied** — this is by design (spec says: if view missing, render nothing).
 - **Dead CSS** for `.logo-mark`, `.logo-dot`, `.logo-text`, `.deal-grade`, `.top-pick-badge`, `.alt-grade` left in the inline `<style>` blocks across 20+ pages. No render impact; cleanup pass is a future chore.
 - **`verified_at` not in `active_deals_with_listings` view** means the freshness badge on HomeDealCards and deals/[category] feeds always shows "Verification pending" until Cowork's view update lands. Acceptable since 0/56 active deals have `verified_at` today.
 - **Logo source PNG is 272×299** for `public/logo.png` (wordmark+icon). Lower-than-ideal density for retina displays; the icon-only `logo-512.png` derived from 900×900 crop of the 1404×1676 source is sharp.
+
+---
+
+## Appendix — Apr 21 night fix (commits 4f49129, 552fd1a)
+
+Two surgical follow-ups applied after Matthew's prod review:
+
+### Logo size
+- Before: `<Logo priority />` on [app/page.jsx:886](app/page.jsx:886) → default 40px square.
+- After: `<Logo size={56} priority />` + CSS override `.logo img{width:56px!important;height:56px!important}` in the desktop block, `.logo img{width:44px!important;height:44px!important}` inside the existing `@media (max-width: 640px)` block.
+- No change to [app/components/Logo.tsx](app/components/Logo.tsx) (no refactor).
+
+### Real open/closed hours on hero
+- Replaces the 9am–9pm CT heuristic display ("Likely open now" / "Typical hours 9am–9pm CT") with real data from `listing_hours`.
+- New `computeOpenStatus(rows, ct)` helper in [lib/hours.ts](lib/hours.ts:75) returns `{ isOpen, label }` or null. Label format: `Open until 9:45 PM` / `Closed · Opens at 10:00 AM` / `Closed · Opens tomorrow at 10:00 AM`. Null ⇒ hero renders nothing (no heuristic fallback — a wrong label is worse than no label).
+- [app/api/deals/recommend/route.ts](app/api/deals/recommend/route.ts): replaced `fetchListingCoords` with `fetchListingMeta` that uses a PostgREST relationship embed — `master_listings?slug=eq.X&select=lat,lng,listing_hours(...)` — returning coords **and** 7 hours rows in a single roundtrip (net: **one fewer** Supabase call than before, not one more).
+- [app/components/HeroDealCard.tsx](app/components/HeroDealCard.tsx): state `likelyOpen` → `openStatus`; two render spans rewired.
+- Scoring heuristic `isLikelyOpenCT()` preserved — still drives the +25 scoring bonus (applies to all deals cheaply; separate from display accuracy).
+
+### Gotcha that bit me
+First pass looked up `top.listing_id` — but `active_deals_with_listings` has **no `listing_id` column**, only `listing_slug` / `slug`. Prod returned `openStatus: null` for every request. Fixed via slug→master_listings embed (commit 552fd1a).
+
+### Production verification
+```
+curl https://www.puffprice.com/api/deals/recommend?city=champaign
+→ topPick: nuEra Champaign, openStatus: { isOpen: true, label: "Open until 9:45 PM" }
+```
+Several cities (peoria, chicago statewide top pick) still show `openStatus: null` — those deal rows carry synthesized slugs (`ivy-hall-peoria`, `bisa-lina-carol-stream`, `perception-cannabis-chicago`) that don't join back to `master_listings`. **Pre-existing data problem**, not a code issue; the same rows also return null coords. Flag for Cowork: audit deals whose `listing_slug` doesn't resolve, and either fix the slug or insert the missing master_listings row.
+
+### Latency
+Net change: **one fewer** Supabase roundtrip per recommend call (combined coords+hours into one embed query vs. the previous separate coords query). No measurable latency delta.
