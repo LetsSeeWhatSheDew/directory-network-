@@ -71,3 +71,35 @@ export function formatTime(t: string | null | undefined): string {
   const h12 = hour % 12 || 12;
   return `${h12}:${m} ${ampm}`;
 }
+
+export type OpenStatus = { isOpen: boolean; label: string };
+
+// Turns a dispensary's full listing_hours rows into a display label for the
+// hero card. Returns null when data is missing — caller renders nothing
+// rather than falling back to a heuristic (a wrong label is worse than none).
+export function computeOpenStatus(
+  rows: HoursRow[] | null | undefined,
+  ct: CTNow = nowInCT()
+): OpenStatus | null {
+  if (!rows || rows.length === 0) return null;
+  const today = rows.find((r) => r.weekday === ct.weekday);
+  const tomorrow = rows.find((r) => r.weekday === (ct.weekday + 1) % 7);
+
+  if (today && isOpen(today, ct) && today.closes_at) {
+    return { isOpen: true, label: `Open until ${formatTime(today.closes_at)}` };
+  }
+
+  // Before today's opening?
+  if (today && !today.is_closed && today.opens_at) {
+    const [oh, om] = today.opens_at.split(":").map(Number);
+    if (!Number.isNaN(oh) && !Number.isNaN(om) && ct.minutes < oh * 60 + om) {
+      return { isOpen: false, label: `Closed · Opens at ${formatTime(today.opens_at)}` };
+    }
+  }
+
+  if (tomorrow && !tomorrow.is_closed && tomorrow.opens_at) {
+    return { isOpen: false, label: `Closed · Opens tomorrow at ${formatTime(tomorrow.opens_at)}` };
+  }
+
+  return null;
+}

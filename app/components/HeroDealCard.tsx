@@ -110,7 +110,7 @@ function dispatchSavings(d: Deal | null) {
 export default function HeroDealCard({ initial }: { initial: Deal | null }) {
   const [deal, setDeal] = useState<Deal | null>(null);
   const [city, setCity] = useState<string | null>(null);
-  const [likelyOpen, setLikelyOpen] = useState<boolean | null>(null);
+  const [openStatus, setOpenStatus] = useState<{ isOpen: boolean; label: string } | null>(null);
   const [resolved, setResolved] = useState(false);
 
   useEffect(() => {
@@ -129,7 +129,9 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
         if (cancelled) return;
         const next = data?.topPick || initial;
         setDeal(next);
-        if (typeof data?.likelyOpen === "boolean") setLikelyOpen(data.likelyOpen);
+        if (data?.openStatus && typeof data.openStatus.label === "string") {
+          setOpenStatus(data.openStatus);
+        }
         dispatchSavings(next);
       });
       return () => {
@@ -148,7 +150,9 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
           if (cancelled) return;
           const next = data?.topPick || initial;
           setDeal(next);
-          if (typeof data?.likelyOpen === "boolean") setLikelyOpen(data.likelyOpen);
+          if (data?.openStatus && typeof data.openStatus.label === "string") {
+            setOpenStatus(data.openStatus);
+          }
           dispatchSavings(next);
         });
       } else {
@@ -214,8 +218,12 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
       <div className="hero-deal-row">
         <div className="hero-deal-meta">
           <span>📍 {displayCity(deal)}{miles != null && miles < 500 ? ` · ${miles.toFixed(1)} mi from you` : ""}</span>
-          {likelyOpen === true && <span className="hero-deal-open">● Likely open now</span>}
-          {likelyOpen === false && <span className="hero-deal-closed">Typical hours 9am–9pm CT</span>}
+          {openStatus?.isOpen === true && (
+            <span className="hero-deal-open">● {openStatus.label}</span>
+          )}
+          {openStatus?.isOpen === false && (
+            <span className="hero-deal-closed">{openStatus.label}</span>
+          )}
           {expiresToday && <span className="hero-deal-urgent">⚡ Ends today</span>}
         </div>
         {goHref && (

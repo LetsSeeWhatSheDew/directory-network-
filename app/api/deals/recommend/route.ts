@@ -6,6 +6,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { isInMetro } from "../../../../lib/cityNormalize";
+import { computeOpenStatus, type HoursRow } from "../../../../lib/hours";
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL ||
@@ -86,6 +87,30 @@ async function fetchDeals(category: string): Promise<Deal[]> {
   if (!res.ok) return [];
   const json = await res.json();
   return Array.isArray(json) ? json : [];
+}
+
+// Fetch full weekly hours for a single listing_id. 7 rows at most — runs in
+// parallel with fetchListingCoords. Used to render real "Open until X" /
+// "Closed · Opens at X" on the hero card instead of the 9–21 CT heuristic.
+async function fetchListingHours(listingId: string): Promise<HoursRow[]> {
+  if (!listingId) return [];
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/listing_hours?listing_id=eq.${encodeURIComponent(listingId)}&select=weekday,opens_at,closes_at,is_closed&order=weekday.asc`,
+      {
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+        cache: "no-store",
+      }
+    );
+    if (!res.ok) return [];
+    const rows = await res.json();
+    return Array.isArray(rows) ? rows : [];
+  } catch {
+    return [];
+  }
 }
 
 // Fetch lat/lng for a dispensary slug. Returns {lat,lng} or nulls. The
@@ -171,7 +196,12 @@ export async function GET(req: NextRequest) {
 
     const top = combined[0];
     const topSlug = String(top.slug || top.listing_slug || "");
-    const coords = topSlug ? await fetchListingCoords(topSlug) : { lat: null, lng: null };
+    const topListingId = top.listing_id ? String(top.listing_id) : "";
+    const [coords, hours] = await Promise.all([
+      topSlug ? fetchListingCoords(topSlug) : Promise.resolve({ lat: null as number | null, lng: null as number | null }),
+      topListingId ? fetchListingHours(topListingId) : Promise.resolve([] as HoursRow[]),
+    ]);
+    const openStatus = computeOpenStatus(hours);
     const topPick = {
       ...top,
       rankingReason: rankingReason(top, category, city),
@@ -189,6 +219,7 @@ export async function GET(req: NextRequest) {
       city,
       category,
       likelyOpen: openNow,
+      openStatus,
       generatedAt: new Date().toISOString(),
     });
   } catch (err) {

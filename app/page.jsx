@@ -489,6 +489,7 @@ export default async function HomePage() {
           border-bottom:1px solid #e8e4da;
         }
         .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+        .logo img{width:56px!important;height:56px!important}
         .logo-mark{position:relative;width:28px;height:28px;display:inline-block;flex-shrink:0}
         .logo-mark-dot{position:absolute;top:-2px;right:-2px;width:10px;height:10px;border-radius:50%;background:#16a34a;border:2px solid #fff;animation:pulse 2.5s infinite}
         .logo-dot{width:8px;height:8px;border-radius:50%;background:#16a34a;animation:pulse 2.5s infinite}
@@ -874,6 +875,7 @@ export default async function HomePage() {
           .savings-num{font-size:1.75rem}
           .nav-cta{padding:5px 11px;font-size:.78rem}
           .nav .logo-text{font-size:1.02rem}
+          .logo img{width:44px!important;height:44px!important}
         }
       `}</style>
 
@@ -883,7 +885,7 @@ export default async function HomePage() {
       {/* NAV */}
       <nav className="nav">
         <Link href="/" className="logo" aria-label="PuffPrice home">
-          <Logo priority />
+          <Logo size={56} priority />
         </Link>
         <div className="nav-links desktop-only-nav">
           <Link href="/cannabis/illinois/open-now" className="nav-link">Open now</Link>
