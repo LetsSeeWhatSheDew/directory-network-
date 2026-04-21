@@ -923,7 +923,11 @@ export default async function HomePage() {
 
               {/* Headline */}
               <h1>Best Bud For <em>Your Buck$</em></h1>
-              <p className="hero-sub">Low Prices. High Times.</p>
+              <p className="hero-sub">
+                Low Prices.
+                <br />
+                High Times.
+              </p>
 
               {/* THE big deal card — the hero element */}
               <HeroDealCard initial={localizedTopDeals[0] || null} />

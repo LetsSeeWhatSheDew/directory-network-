@@ -72,7 +72,8 @@ export default function UpgradePage() {
           PuffPrice Pro
         </p>
         <h1 className="font-serif text-5xl md:text-6xl leading-[1.05] mb-5">
-          Low Prices.{" "}
+          Low Prices.
+          <br />
           <em className="italic text-green-700 font-serif">High Times.</em>
         </h1>
         <p className="text-lg text-gray-700 mb-10 max-w-xl mx-auto leading-relaxed">
