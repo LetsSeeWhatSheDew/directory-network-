@@ -232,7 +232,7 @@ export default async function OpenNowPage() {
                         <div className="on-logo">
                           {l.logo_url ? (
                             /* eslint-disable-next-line @next/next/no-img-element */
-                            <img src={l.logo_url} alt={l.name + " logo"} className="on-logo-img" />
+                            <img src={l.logo_url} alt={l.name + " logo"} className="on-logo-img" width={48} height={48} loading="lazy" decoding="async" />
                           ) : initial}
                         </div>
                         <div className="on-info">

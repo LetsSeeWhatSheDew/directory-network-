@@ -286,7 +286,7 @@ export default async function CityPage({
                     <div className="listing-logo">
                       {l.logo_url ? (
                         /* eslint-disable-next-line @next/next/no-img-element */
-                        <img src={l.logo_url} alt={l.name + " logo"} className="listing-logo-img" />
+                        <img src={l.logo_url} alt={l.name + " logo"} className="listing-logo-img" width={48} height={48} loading="lazy" decoding="async" />
                       ) : (
                         <span className="listing-logo-initial">{initial}</span>
                       )}

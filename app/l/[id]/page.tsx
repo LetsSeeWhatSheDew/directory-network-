@@ -743,7 +743,7 @@ export default async function ListingPage({
               <div className="dn-logo-wrap">
                 {listing.logo_url ? (
                   /* eslint-disable-next-line @next/next/no-img-element */
-                  <img src={listing.logo_url} alt={`${listing.name ?? "Dispensary"} logo`} className="dn-logo-img" />
+                  <img src={listing.logo_url} alt={`${listing.name ?? "Dispensary"} logo`} className="dn-logo-img" width={80} height={80} loading="lazy" decoding="async" />
                 ) : (
                   <span className="dn-logo-fallback-mono" role="img" aria-label={`${listing.name ?? "Dispensary"} monogram`}>{initial}</span>
                 )}
@@ -945,7 +945,7 @@ export default async function ListingPage({
                         <div className="dn-related-logo" aria-hidden={r.logo_url ? undefined : "true"}>
                           {r.logo_url ? (
                             /* eslint-disable-next-line @next/next/no-img-element */
-                            <img src={r.logo_url} alt={`${r.name ?? "Dispensary"} logo`} className="dn-related-img" />
+                            <img src={r.logo_url} alt={`${r.name ?? "Dispensary"} logo`} className="dn-related-img" width={48} height={48} loading="lazy" decoding="async" />
                           ) : (
                             (r.name ?? "?").charAt(0)
                           )}
