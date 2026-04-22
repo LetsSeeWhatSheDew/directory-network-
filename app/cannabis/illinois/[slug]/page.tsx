@@ -58,7 +58,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { city: citySlug } = await params;
   const city = slugToCity(citySlug);
-  const canonicalUrl = `https://puffprice.com/cannabis/illinois/${citySlug}`;
+  const canonicalUrl = `https://www.puffprice.com/cannabis/illinois/${citySlug}`;
 
   const title = `Cannabis Dispensaries in ${city}, Illinois — PuffPrice`;
   const description = `Find licensed cannabis dispensaries in ${city}, IL. Browse hours, directions, and deals for every dispensary in ${city}. Updated regularly.`;
@@ -107,12 +107,12 @@ export default async function CityPage({
     "@type": "ItemList",
     name: `Cannabis Dispensaries in ${city}, Illinois`,
     description: `Directory of licensed cannabis dispensaries in ${city}, IL`,
-    url: `https://puffprice.com/cannabis/illinois/${citySlug}`,
+    url: `https://www.puffprice.com/cannabis/illinois/${citySlug}`,
     numberOfItems: listings.length,
     itemListElement: listings.map((l, i) => ({
       "@type": "ListItem",
       position: i + 1,
-      url: `https://puffprice.com/l/${l.slug}`,
+      url: `https://www.puffprice.com/l/${l.slug}`,
       name: l.name,
     })),
   });
@@ -286,7 +286,7 @@ export default async function CityPage({
                     <div className="listing-logo">
                       {l.logo_url ? (
                         /* eslint-disable-next-line @next/next/no-img-element */
-                        <img src={l.logo_url} alt={l.name + " logo"} className="listing-logo-img" />
+                        <img src={l.logo_url} alt={l.name + " logo"} className="listing-logo-img" width={48} height={48} loading="lazy" decoding="async" />
                       ) : (
                         <span className="listing-logo-initial">{initial}</span>
                       )}

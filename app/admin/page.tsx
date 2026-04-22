@@ -203,9 +203,17 @@ export default async function AdminDashboard() {
               Operator Dashboard
             </h1>
           </div>
-          <div className="flex items-baseline gap-1.5 text-sm">
-            <span className="text-[#8a9490]">Project</span>
-            <span className="font-semibold text-[#50c878]">Green</span>
+          <div className="flex items-center gap-4 text-sm">
+            <Link
+              href="/admin/submissions"
+              className="text-[11px] uppercase tracking-widest text-[#8a9490] transition-colors hover:text-[#50c878]"
+            >
+              Submissions →
+            </Link>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-[#8a9490]">Project</span>
+              <span className="font-semibold text-[#50c878]">Green</span>
+            </div>
           </div>
         </div>
       </header>

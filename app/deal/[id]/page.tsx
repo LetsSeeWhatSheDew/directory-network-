@@ -367,7 +367,11 @@ export default async function DealPage({
           </span>
           {deal.description && <p className="desc">{deal.description}</p>}
           <div style={{ marginTop: 8, marginBottom: 8 }}>
-            <DealFreshnessBadge verifiedAt={(deal as any).verified_at} variant="detail" />
+            <DealFreshnessBadge
+              verifiedAt={(deal as any).verified_at}
+              statusReason={(deal as any).status_reason}
+              variant="detail"
+            />
           </div>
           {code && (
             <div className="code-box">

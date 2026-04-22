@@ -3,7 +3,7 @@ import Logo from "../components/Logo";
 
 const OG_DESC =
   "We built the thing we wished existed. PuffPrice finds the best cannabis deals near you in Illinois.";
-const OG_IMAGE = "https://puffprice.com/og-image.png";
+const OG_IMAGE = "https://www.puffprice.com/og-image.png";
 
 export const metadata = {
   title: "About PuffPrice — Built in Peoria, Illinois",
@@ -11,7 +11,7 @@ export const metadata = {
   openGraph: {
     title: "About PuffPrice — Built in Peoria, Illinois",
     description: OG_DESC,
-    url: "https://puffprice.com/about",
+    url: "https://www.puffprice.com/about",
     siteName: "PuffPrice",
     images: [{ url: OG_IMAGE, width: 1200, height: 630 }],
     locale: "en_US",

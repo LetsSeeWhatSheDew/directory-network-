@@ -281,7 +281,7 @@ export async function generateMetadata({
   const description = listing.meta_description ||
     listing.short_description ||
     `Current deals and directions for ${listing.name}. Save on cannabis in ${listing.city}, IL.`;
-  const canonicalUrl = `https://puffprice.com/l/${listing.slug}`;
+  const canonicalUrl = `https://www.puffprice.com/l/${listing.slug}`;
   const image = listing.logo_url || listing.hero_image_url;
 
   return {
@@ -349,11 +349,11 @@ function buildSchemaOrg(listing: Listing, hours: ListingHour[]) {
       }
     } : {}),
     ...(listing.phone ? { telephone: listing.phone } : {}),
-    url: listing.website ?? `https://puffprice.com/l/${listing.slug}`,
+    url: listing.website ?? `https://www.puffprice.com/l/${listing.slug}`,
     ...(listing.logo_url ? { image: listing.logo_url } : {}),
     ...(openingHours.length > 0 ? { openingHoursSpecification: openingHours } : {}),
     ...(listing.short_description ? { description: listing.short_description } : {}),
-    sameAs: [`https://puffprice.com/l/${listing.slug}`],
+    sameAs: [`https://www.puffprice.com/l/${listing.slug}`],
   });
 }
 
@@ -689,7 +689,10 @@ export default async function ListingPage({
                 → {howToUseDeal(activeDeal)}
               </div>
               <div style={{ marginBottom: 12 }}>
-                <DealFreshnessBadge verifiedAt={(activeDeal as any).verified_at} />
+                <DealFreshnessBadge
+                  verifiedAt={(activeDeal as any).verified_at}
+                  statusReason={(activeDeal as any).status_reason}
+                />
               </div>
               {activeDeal!.id && (
                 <ShareDealButton
@@ -740,7 +743,7 @@ export default async function ListingPage({
               <div className="dn-logo-wrap">
                 {listing.logo_url ? (
                   /* eslint-disable-next-line @next/next/no-img-element */
-                  <img src={listing.logo_url} alt={`${listing.name ?? "Dispensary"} logo`} className="dn-logo-img" />
+                  <img src={listing.logo_url} alt={`${listing.name ?? "Dispensary"} logo`} className="dn-logo-img" width={80} height={80} loading="lazy" decoding="async" />
                 ) : (
                   <span className="dn-logo-fallback-mono" role="img" aria-label={`${listing.name ?? "Dispensary"} monogram`}>{initial}</span>
                 )}
@@ -942,7 +945,7 @@ export default async function ListingPage({
                         <div className="dn-related-logo" aria-hidden={r.logo_url ? undefined : "true"}>
                           {r.logo_url ? (
                             /* eslint-disable-next-line @next/next/no-img-element */
-                            <img src={r.logo_url} alt={`${r.name ?? "Dispensary"} logo`} className="dn-related-img" />
+                            <img src={r.logo_url} alt={`${r.name ?? "Dispensary"} logo`} className="dn-related-img" width={48} height={48} loading="lazy" decoding="async" />
                           ) : (
                             (r.name ?? "?").charAt(0)
                           )}
@@ -1012,7 +1015,7 @@ export default async function ListingPage({
             <p className="dn-report-text">
               Something off?{" "}
               <a
-                href={`mailto:hello@puffprice.com?subject=Outdated%20info%20for%20${encodeURIComponent(listing.name ?? listing.slug ?? "listing")}&body=Tell%20us%20what%20looks%20wrong%20on%20this%20page%3A%20${encodeURIComponent(`https://puffprice.com/l/${listing.slug}`)}%0A%0A`}
+                href={`mailto:hello@puffprice.com?subject=Outdated%20info%20for%20${encodeURIComponent(listing.name ?? listing.slug ?? "listing")}&body=Tell%20us%20what%20looks%20wrong%20on%20this%20page%3A%20${encodeURIComponent(`https://www.puffprice.com/l/${listing.slug}`)}%0A%0A`}
                 className="dn-report-link"
                 aria-label={`Email PuffPrice to report outdated info for ${listing.name ?? "this listing"}`}
               >

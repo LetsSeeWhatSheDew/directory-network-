@@ -4,11 +4,11 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "First Time Buying Cannabis in Illinois — Complete Beginner's Guide | PuffPrice",
   description: "Everything first-time cannabis buyers need to know in Illinois. Laws, what to bring, how much you can buy, what to expect, and where to find dispensaries near you.",
-  alternates: { canonical: "https://puffprice.com/cannabis/illinois/first-time-guide" },
+  alternates: { canonical: "https://www.puffprice.com/cannabis/illinois/first-time-guide" },
   openGraph: {
     title: "First Time Buying Cannabis in Illinois — Complete Guide",
     description: "Everything first-time buyers need to know: Illinois cannabis laws, what to bring, how much you can buy, and where to find dispensaries.",
-    url: "https://puffprice.com/cannabis/illinois/first-time-guide",
+    url: "https://www.puffprice.com/cannabis/illinois/first-time-guide",
     siteName: "PuffPrice",
     type: "article",
   },

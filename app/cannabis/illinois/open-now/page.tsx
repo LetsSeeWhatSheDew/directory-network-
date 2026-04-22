@@ -9,20 +9,20 @@ import { isInMetro } from "../../../../lib/cityNormalize";
 export const metadata: Metadata = {
   title: "Illinois Dispensaries Open Right Now | PuffPrice",
   description: "Find cannabis dispensaries open right now in Illinois. Real-time hours for every licensed dispensary. Updated continuously.",
-  alternates: { canonical: "https://puffprice.com/cannabis/illinois/open-now" },
+  alternates: { canonical: "https://www.puffprice.com/cannabis/illinois/open-now" },
   openGraph: {
     title: "Illinois Dispensaries Open Right Now",
     description: "Find cannabis dispensaries open right now in Illinois. Real-time hours updated continuously.",
-    url: "https://puffprice.com/cannabis/illinois/open-now",
+    url: "https://www.puffprice.com/cannabis/illinois/open-now",
     siteName: "PuffPrice",
     type: "website",
-    images: [{ url: "https://puffprice.com/og-image.png", width: 1200, height: 630 }],
+    images: [{ url: "https://www.puffprice.com/og-image.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Illinois Dispensaries Open Right Now",
     description: "Find cannabis dispensaries open right now in Illinois. Real-time hours updated continuously.",
-    images: ["https://puffprice.com/og-image.png"],
+    images: ["https://www.puffprice.com/og-image.png"],
   },
   robots: { index: true, follow: true },
 };
@@ -232,7 +232,7 @@ export default async function OpenNowPage() {
                         <div className="on-logo">
                           {l.logo_url ? (
                             /* eslint-disable-next-line @next/next/no-img-element */
-                            <img src={l.logo_url} alt={l.name + " logo"} className="on-logo-img" />
+                            <img src={l.logo_url} alt={l.name + " logo"} className="on-logo-img" width={48} height={48} loading="lazy" decoding="async" />
                           ) : initial}
                         </div>
                         <div className="on-info">

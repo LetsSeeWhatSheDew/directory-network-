@@ -12,7 +12,7 @@ const LM:Record<string,{name:string;desc:string}>={
 };
 export async function generateMetadata({params}:{params:Promise<{landmark:string}>}):Promise<Metadata>{
 const{landmark}=await params;const lm=LM[landmark]??{name:landmark,desc:"near this Chicago landmark"};
-const url=`https://puffprice.com/cannabis/illinois/chicago/${landmark}`;
+const url=`https://www.puffprice.com/cannabis/illinois/chicago/${landmark}`;
 return{title:`Cannabis Dispensaries Near ${lm.name}, Chicago | PuffPrice`,description:`Find cannabis dispensaries ${lm.desc}. Licensed Illinois dispensaries, adults 21+.`,alternates:{canonical:url},openGraph:{title:`Dispensaries Near ${lm.name}, Chicago`,url,siteName:"PuffPrice",type:"website"},robots:{index:true,follow:true}};}
 export default async function Page({params}:{params:Promise<{landmark:string}>}){
 const{landmark}=await params;const lm=LM[landmark]??{name:landmark,desc:"near this Chicago landmark"};

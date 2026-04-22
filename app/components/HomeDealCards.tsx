@@ -29,6 +29,7 @@ type Deal = {
   is_recurring?: boolean | null;
   expires_at?: string | null;
   verified_at?: string | null;
+  status_reason?: string | null;
   scope?: "local" | "statewide";
 };
 
@@ -378,7 +379,7 @@ export default function HomeDealCards({
                 );
               })()}
               <div style={{ marginTop: 6 }}>
-                <DealFreshnessBadge verifiedAt={d.verified_at} />
+                <DealFreshnessBadge verifiedAt={d.verified_at} statusReason={d.status_reason} />
               </div>
             </TrackedLink>
           );

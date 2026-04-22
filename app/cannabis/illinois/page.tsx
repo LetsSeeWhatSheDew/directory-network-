@@ -6,20 +6,20 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Illinois Cannabis Dispensaries — Complete Directory | PuffPrice",
   description: "Find licensed cannabis dispensaries across Illinois. Browse by city, view real hours, and discover deals — 61 listed across 25 Illinois cities, growing weekly.",
-  alternates: { canonical: "https://puffprice.com/cannabis/illinois" },
+  alternates: { canonical: "https://www.puffprice.com/cannabis/illinois" },
   openGraph: {
     title: "Illinois Cannabis Dispensaries — Complete Directory",
     description: "Find licensed cannabis dispensaries across Illinois. Browse by city, view real hours, and discover deals.",
-    url: "https://puffprice.com/cannabis/illinois",
+    url: "https://www.puffprice.com/cannabis/illinois",
     siteName: "PuffPrice",
     type: "website",
-    images: [{ url: "https://puffprice.com/og-image.png", width: 1200, height: 630 }],
+    images: [{ url: "https://www.puffprice.com/og-image.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Illinois Cannabis Dispensaries — Complete Directory",
     description: "Find licensed cannabis dispensaries across Illinois. Browse by city, view real hours, and discover deals.",
-    images: ["https://puffprice.com/og-image.png"],
+    images: ["https://www.puffprice.com/og-image.png"],
   },
   robots: { index: true, follow: true },
 };
