@@ -245,7 +245,7 @@ export default async function DealPage({
       name: disp,
       address: {
         "@type": "PostalAddress",
-        addressLocality: rawCity || "Illinois",
+        ...(rawCity ? { addressLocality: rawCity } : {}),
         addressRegion: "IL",
         addressCountry: "US",
       },

@@ -10,7 +10,11 @@ export type DigestDeal = {
   deal_title: string;
   category: string;
   name: string;
-  city: string;
+  // Nullable post-`active_deals_with_listings` view fix (2026-04-20). Orphan
+  // deals (listing_slug not joining to master_listings) surface as null
+  // instead of the old "Illinois" sentinel. Renderers must guard on null
+  // before emitting city text.
+  city: string | null;
   slug: string;
   savings_amount: number;
   savings_percent: number | null;
@@ -57,9 +61,12 @@ export async function buildWeeklyDigest(): Promise<DigestPayload> {
   // Top deal overall — highest savings_amount
   const topDealOverall = all[0] || null;
 
-  // Group by city, take top N per city
+  // Group by city, take top N per city. Skip orphan deals (city=null from
+  // the view) — they don't belong on any city list and the whitelist below
+  // wouldn't match them anyway.
   const cityBuckets = new Map<string, DigestDeal[]>();
   for (const d of all) {
+    if (!d.city) continue;
     if (!cityBuckets.has(d.city)) cityBuckets.set(d.city, []);
     cityBuckets.get(d.city)!.push(d);
   }
@@ -123,7 +130,7 @@ export function renderDigestEmail(payload: DigestPayload): { subject: string; ht
     `${payload.totalDeals} active deals across Illinois`,
     "",
     payload.topDealOverall
-      ? `TOP DEAL: ${payload.topDealOverall.deal_title} at ${payload.topDealOverall.name} (${payload.topDealOverall.city}) — save $${payload.topDealOverall.savings_amount.toFixed(2)}`
+      ? `TOP DEAL: ${payload.topDealOverall.deal_title} at ${payload.topDealOverall.name}${payload.topDealOverall.city ? ` (${payload.topDealOverall.city})` : ""} — save $${payload.topDealOverall.savings_amount.toFixed(2)}`
       : "",
     "",
     ...payload.byCity.flatMap((s) => [
@@ -148,7 +155,7 @@ export function renderDigestEmail(payload: DigestPayload): { subject: string; ht
             <p style="margin: 0 0 4px; font-size: .7rem; text-transform: uppercase; letter-spacing: .12em; color: #166534; font-family: system-ui, sans-serif; font-weight: 700;">Best deal this week</p>
             <p style="margin: 0; font-size: 1.05rem; font-weight: 700;">${escapeHtml(payload.topDealOverall.deal_title)}</p>
             <p style="margin: 4px 0 0; font-family: system-ui, sans-serif; font-size: .85rem; color: #6b7280;">
-              ${escapeHtml(payload.topDealOverall.name)} · ${escapeHtml(payload.topDealOverall.city)} · save $${payload.topDealOverall.savings_amount.toFixed(2)}
+              ${escapeHtml(payload.topDealOverall.name)}${payload.topDealOverall.city ? ` · ${escapeHtml(payload.topDealOverall.city)}` : ""} · save $${payload.topDealOverall.savings_amount.toFixed(2)}
             </p>
           </div>
         ` : ""}

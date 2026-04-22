@@ -9,12 +9,12 @@ export type WeeklyIndexResult =
     }
   | {
       available: false;
-      reason: "insufficient_data" | "query_error";
+      reason: "sample_too_small" | "query_error";
       sample_size: number;
       week_of: string;
     };
 
-const MIN_SAMPLE = 10;
+export const PUFFPRICE_INDEX_MIN_SAMPLE = 10;
 
 function weekStart(d = new Date()): string {
   const day = d.getUTCDay();
@@ -42,8 +42,8 @@ export async function computeWeeklyIndex(): Promise<WeeklyIndexResult> {
       typeof r.price_per_gram === "number" && r.price_per_gram > 0 && r.price_per_gram < 100
   );
 
-  if (rows.length < MIN_SAMPLE) {
-    return { available: false, reason: "insufficient_data", sample_size: rows.length, week_of };
+  if (rows.length < PUFFPRICE_INDEX_MIN_SAMPLE) {
+    return { available: false, reason: "sample_too_small", sample_size: rows.length, week_of };
   }
 
   const sum = rows.reduce((acc, r) => acc + (r.price_per_gram as number), 0);
@@ -55,4 +55,48 @@ export async function computeWeeklyIndex(): Promise<WeeklyIndexResult> {
     sample_size: rows.length,
     week_of,
   };
+}
+
+// Server-component convenience. Mirrors the get* naming the rest of the
+// codebase uses (getListing, getHours, getRelated). Safe to await inside
+// any Server Component or Route Handler. Catches to keep the page
+// render-robust when the deals table is momentarily unreachable.
+export async function getWeeklyIndex(): Promise<WeeklyIndexResult> {
+  try {
+    return await computeWeeklyIndex();
+  } catch {
+    return {
+      available: false,
+      reason: "query_error",
+      sample_size: 0,
+      week_of: weekStart(),
+    };
+  }
+}
+
+/**
+ * Copy helpers — drop-in strings for the eventual Index consumer. Keeps
+ * the empty-state language consistent across homepage, /about/index, and
+ * any future widget. All return plain text (no JSX) so they can live
+ * anywhere.
+ */
+export function indexHeadlineCopy(r: WeeklyIndexResult): string {
+  if (r.available) {
+    return `$${r.puffprice_index_per_gram.toFixed(2)} / gram`;
+  }
+  return "Index baseline pending";
+}
+
+export function indexSupportCopy(r: WeeklyIndexResult): string {
+  if (r.available) {
+    const n = r.sample_size;
+    return `Weekly PuffPrice Index across ${n} active Illinois flower deal${n === 1 ? "" : "s"}.`;
+  }
+  if (r.reason === "query_error") {
+    return "Index unavailable — check back shortly.";
+  }
+  // sample_too_small — show progress rather than silence.
+  const n = r.sample_size;
+  const need = PUFFPRICE_INDEX_MIN_SAMPLE;
+  return `Building: ${n} of ${need} flower price points tracked. Index publishes when we cross ${need}.`;
 }

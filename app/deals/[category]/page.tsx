@@ -354,7 +354,12 @@ function buildSpecialAnnouncements(deals: any[]) {
     announcementLocation: {
       "@type": "LocalBusiness",
       name: d.name || d.listing_slug || "Illinois cannabis dispensary",
-      address: `${d.city ? `${d.city}, ${d.state_abbrev || 'IL'}` : 'IL'}, IL`,
+      address: {
+        "@type": "PostalAddress",
+        ...(d.city ? { addressLocality: d.city } : {}),
+        addressRegion: d.state_abbrev || "IL",
+        addressCountry: "US",
+      },
     },
   }));
 }
