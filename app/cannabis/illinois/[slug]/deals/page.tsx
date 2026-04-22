@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `Best dispensary deals in ${cityName}, IL | PuffPrice`,
     description: `Live cannabis deals at ${cityName} dispensaries. Compare discounts, prices, and savings — updated daily.`,
-    alternates: { canonical: `https://puffprice.com/cannabis/illinois/${slug}/deals` },
+    alternates: { canonical: `https://www.puffprice.com/cannabis/illinois/${slug}/deals` },
   };
 }
 

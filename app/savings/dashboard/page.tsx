@@ -48,10 +48,10 @@ export default function SavingsDashboard() {
   }, [records]);
 
   async function share() {
-    const text = `I've saved $${monthly} on cannabis this month with PuffPrice → https://puffprice.com/savings/dashboard`;
+    const text = `I've saved $${monthly} on cannabis this month with PuffPrice → https://www.puffprice.com/savings/dashboard`;
     try {
       if (navigator.share) {
-        await navigator.share({ text, url: "https://puffprice.com/savings/dashboard" });
+        await navigator.share({ text, url: "https://www.puffprice.com/savings/dashboard" });
         return;
       }
       await navigator.clipboard.writeText(text);

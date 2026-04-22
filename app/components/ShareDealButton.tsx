@@ -31,7 +31,7 @@ export default function ShareDealButton({
       typeof savings === "number" && savings > 0 ? `Save $${savings} at ` : "";
     return `${savingsPart}${dispensaryName} — ${dealTitle}`;
   })();
-  const url = `https://puffprice.com/deal/${dealId}`;
+  const url = `https://www.puffprice.com/deal/${dealId}`;
 
   async function onClick(e: React.MouseEvent) {
     e.preventDefault();

@@ -138,7 +138,7 @@ export function renderDigestEmail(payload: DigestPayload): { subject: string; ht
       ...s.deals.map((d) => `  • ${d.deal_title} — ${d.name} (save $${d.savings_amount.toFixed(2)})`),
       "",
     ]),
-    `Browse all deals: https://puffprice.com/deals/all`,
+    `Browse all deals: https://www.puffprice.com/deals/all`,
   ].filter(Boolean).join("\n");
 
   const html = `
@@ -170,7 +170,7 @@ export function renderDigestEmail(payload: DigestPayload): { subject: string; ht
           </div>
         `).join("")}
         <p style="text-align: center; margin-top: 28px;">
-          <a href="https://puffprice.com/deals/all" style="background: #16a34a; color: #fff; padding: 10px 22px; border-radius: 8px; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 700;">Browse all deals</a>
+          <a href="https://www.puffprice.com/deals/all" style="background: #16a34a; color: #fff; padding: 10px 22px; border-radius: 8px; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 700;">Browse all deals</a>
         </p>
       </div>
     </div>

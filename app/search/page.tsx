@@ -136,10 +136,10 @@ export async function generateMetadata({
   const description = query
     ? `Illinois cannabis dispensaries matching "${query}".`
     : "Search Illinois cannabis dispensaries.";
-  const ogImage = "https://puffprice.com/og-image.png";
+  const ogImage = "https://www.puffprice.com/og-image.png";
   const url = query
-    ? `https://puffprice.com/search?q=${encodeURIComponent(query)}`
-    : "https://puffprice.com/search";
+    ? `https://www.puffprice.com/search?q=${encodeURIComponent(query)}`
+    : "https://www.puffprice.com/search";
   return {
     title,
     description,

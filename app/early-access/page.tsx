@@ -12,11 +12,11 @@ export const metadata = {
   title: "Early access to PuffPrice — Illinois cannabis deal alerts",
   description:
     "Get free early access to PuffPrice deal alerts for Illinois cannabis dispensaries. Weekly digest, no account needed.",
-  alternates: { canonical: "https://puffprice.com/early-access" },
+  alternates: { canonical: "https://www.puffprice.com/early-access" },
   openGraph: {
     title: "Early access to PuffPrice",
     description: "Free early access to Illinois cannabis deal alerts.",
-    url: "https://puffprice.com/early-access",
+    url: "https://www.puffprice.com/early-access",
     type: "website",
   },
   robots: { index: true, follow: true },

@@ -281,7 +281,7 @@ export async function generateMetadata({
   const description = listing.meta_description ||
     listing.short_description ||
     `Current deals and directions for ${listing.name}. Save on cannabis in ${listing.city}, IL.`;
-  const canonicalUrl = `https://puffprice.com/l/${listing.slug}`;
+  const canonicalUrl = `https://www.puffprice.com/l/${listing.slug}`;
   const image = listing.logo_url || listing.hero_image_url;
 
   return {
@@ -349,11 +349,11 @@ function buildSchemaOrg(listing: Listing, hours: ListingHour[]) {
       }
     } : {}),
     ...(listing.phone ? { telephone: listing.phone } : {}),
-    url: listing.website ?? `https://puffprice.com/l/${listing.slug}`,
+    url: listing.website ?? `https://www.puffprice.com/l/${listing.slug}`,
     ...(listing.logo_url ? { image: listing.logo_url } : {}),
     ...(openingHours.length > 0 ? { openingHoursSpecification: openingHours } : {}),
     ...(listing.short_description ? { description: listing.short_description } : {}),
-    sameAs: [`https://puffprice.com/l/${listing.slug}`],
+    sameAs: [`https://www.puffprice.com/l/${listing.slug}`],
   });
 }
 
@@ -1015,7 +1015,7 @@ export default async function ListingPage({
             <p className="dn-report-text">
               Something off?{" "}
               <a
-                href={`mailto:hello@puffprice.com?subject=Outdated%20info%20for%20${encodeURIComponent(listing.name ?? listing.slug ?? "listing")}&body=Tell%20us%20what%20looks%20wrong%20on%20this%20page%3A%20${encodeURIComponent(`https://puffprice.com/l/${listing.slug}`)}%0A%0A`}
+                href={`mailto:hello@puffprice.com?subject=Outdated%20info%20for%20${encodeURIComponent(listing.name ?? listing.slug ?? "listing")}&body=Tell%20us%20what%20looks%20wrong%20on%20this%20page%3A%20${encodeURIComponent(`https://www.puffprice.com/l/${listing.slug}`)}%0A%0A`}
                 className="dn-report-link"
                 aria-label={`Email PuffPrice to report outdated info for ${listing.name ?? "this listing"}`}
               >

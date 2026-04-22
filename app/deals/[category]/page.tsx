@@ -271,7 +271,7 @@ export async function generateMetadata({
   const cookieLoc = await getServerLocation();
   const city = cityFromUrl || (cookieLoc?.city ? toCityCase(cookieLoc.city) : null);
   const label = CATEGORY_LABELS[category] || "Cannabis deals";
-  const ogImage = "https://puffprice.com/og-image.png";
+  const ogImage = "https://www.puffprice.com/og-image.png";
   const title = city
     ? `${city} Dispensary Deals Today | PuffPrice`
     : `${label} Deals Illinois | PuffPrice`;
@@ -279,8 +279,8 @@ export async function generateMetadata({
     ? `Browse today's best dispensary deals in ${city}, Illinois. Save money on cannabis with live offers.`
     : `Find the cheapest ${label.toLowerCase()} deals at Illinois dispensaries right now. Real prices, real savings.`;
   const url = city
-    ? `https://puffprice.com/deals/${category}?city=${encodeURIComponent(city)}`
-    : `https://puffprice.com/deals/${category}`;
+    ? `https://www.puffprice.com/deals/${category}?city=${encodeURIComponent(city)}`
+    : `https://www.puffprice.com/deals/${category}`;
   return {
     title,
     description,
@@ -369,9 +369,9 @@ function buildBreadcrumbSchema(categoryLabel: string, category: string) {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://puffprice.com" },
-      { "@type": "ListItem", position: 2, name: "Deals", item: "https://puffprice.com/deals/all" },
-      { "@type": "ListItem", position: 3, name: categoryLabel, item: `https://puffprice.com/deals/${category}` },
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.puffprice.com" },
+      { "@type": "ListItem", position: 2, name: "Deals", item: "https://www.puffprice.com/deals/all" },
+      { "@type": "ListItem", position: 3, name: categoryLabel, item: `https://www.puffprice.com/deals/${category}` },
     ],
   };
 }

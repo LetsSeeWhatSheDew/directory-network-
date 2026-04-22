@@ -16,7 +16,7 @@ export async function generateMetadata({params}:{params:Promise<{slug:string;int
 const{slug,intent}=await params;
 if(!VALID_INTENTS.includes(intent))return{robots:{index:false,follow:false}};
 const city=s2c(slug);
-const url=`https://puffprice.com/cannabis/illinois/${slug}/${intent}`;
+const url=`https://www.puffprice.com/cannabis/illinois/${slug}/${intent}`;
 const titles:Record<string,string>={best:`Best Cannabis Dispensaries in ${city}, IL`,["open-now"]:`${city} Dispensaries Open Right Now`,recreational:`Recreational Dispensaries in ${city}, IL`,deals:`Cannabis Deals in ${city}, IL`};
 const descs:Record<string,string>={best:`Best cannabis dispensaries in ${city}, Illinois. All licensed, real hours.`,["open-now"]:`Cannabis dispensaries open right now in ${city}, IL. Real-time hours.`,recreational:`Recreational cannabis in ${city}, IL. Adults 21+, no medical card needed.`,deals:`Dispensary deals and first-time discounts in ${city}, IL.`};
 return{title:titles[intent]??city,description:descs[intent]??"",alternates:{canonical:url},openGraph:{title:titles[intent]??city,url,siteName:"PuffPrice",type:"website"},robots:{index:true,follow:true}};}

@@ -17,14 +17,14 @@ export const metadata: Metadata = {
     url: "https://www.puffprice.com/upgrade",
     siteName: "PuffPrice",
     type: "website",
-    images: [{ url: "https://puffprice.com/og-image.png", width: 1200, height: 630 }],
+    images: [{ url: "https://www.puffprice.com/og-image.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "PuffPrice Pro — $0.99/mo",
     description:
       "Never miss a deal. Instant SMS the moment prices drop near you in Illinois.",
-    images: ["https://puffprice.com/og-image.png"],
+    images: ["https://www.puffprice.com/og-image.png"],
   },
 };
 

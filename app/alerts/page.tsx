@@ -45,7 +45,7 @@ async function getAlertCount(): Promise<number | null> {
 
 export const revalidate = 300;
 
-const OG_IMAGE = "https://puffprice.com/og-image.png";
+const OG_IMAGE = "https://www.puffprice.com/og-image.png";
 const OG_DESC =
   "Illinois cannabis deal alerts. Free forever, no account needed. Pro is $0.99/month. Deal alerts within minutes.";
 
@@ -55,7 +55,7 @@ export const metadata = {
   openGraph: {
     title: "Get Deal Alerts | PuffPrice",
     description: OG_DESC,
-    url: "https://puffprice.com/alerts",
+    url: "https://www.puffprice.com/alerts",
     siteName: "PuffPrice",
     images: [{ url: OG_IMAGE, width: 1200, height: 630 }],
     locale: "en_US",
