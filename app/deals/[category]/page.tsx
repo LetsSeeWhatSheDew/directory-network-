@@ -663,7 +663,7 @@ export default async function DealsPage({
               })()}
 
               <div style={{ marginBottom: 10 }}>
-                <DealFreshnessBadge verifiedAt={topDeal.verified_at} />
+                <DealFreshnessBadge verifiedAt={topDeal.verified_at} statusReason={topDeal.status_reason} />
               </div>
 
               <div className="attrs">
@@ -801,7 +801,7 @@ export default async function DealsPage({
                           {deal.city ? `${deal.city}, ${deal.state_abbrev || 'IL'}` : 'IL'}
                         </div>
                         <div style={{ marginTop: 4 }}>
-                          <DealFreshnessBadge verifiedAt={deal.verified_at} />
+                          <DealFreshnessBadge verifiedAt={deal.verified_at} statusReason={deal.status_reason} />
                         </div>
                       </div>
                     </Link>

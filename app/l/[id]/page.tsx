@@ -689,7 +689,10 @@ export default async function ListingPage({
                 → {howToUseDeal(activeDeal)}
               </div>
               <div style={{ marginBottom: 12 }}>
-                <DealFreshnessBadge verifiedAt={(activeDeal as any).verified_at} />
+                <DealFreshnessBadge
+                  verifiedAt={(activeDeal as any).verified_at}
+                  statusReason={(activeDeal as any).status_reason}
+                />
               </div>
               {activeDeal!.id && (
                 <ShareDealButton

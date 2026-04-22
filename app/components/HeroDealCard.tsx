@@ -23,6 +23,7 @@ type Deal = {
   sale_price?: number | null;
   expires_at?: string | null;
   verified_at?: string | null;
+  status_reason?: string | null;
   lat?: number | null;
   lng?: number | null;
   scope?: "local" | "statewide";
@@ -238,7 +239,7 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
         )}
       </div>
       <div style={{ marginTop: 8 }}>
-        <DealFreshnessBadge verifiedAt={deal.verified_at} />
+        <DealFreshnessBadge verifiedAt={deal.verified_at} statusReason={deal.status_reason} />
       </div>
       <Link
         href={city ? `/deals/all?city=${encodeURIComponent(city)}` : "/deals/all"}
