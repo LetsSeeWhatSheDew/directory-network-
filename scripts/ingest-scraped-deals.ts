@@ -9,6 +9,8 @@
 // review, or — with --auto-approve — get promoted to `deals` immediately.
 //
 // Implements the rules in docs/ops/scrape-dedup-strategy-20260422.md:
+//   - Pre-flight shape check (required fields + soft warnings) — NEW 2026-04-23
+//   - Dispensary slug must exist in master_listings — NEW 2026-04-23 (reject, no auto-create)
 //   - Strict dedup vs deal_submissions (7-day window) → skip
 //   - Cross-table collision vs deals.is_active → UPDATE-in-place
 //   - Sanity guards reject + audit in-place
@@ -109,8 +111,15 @@ type ScrapedDeal = {
   is_recurring?: boolean;
   recurring_days?: string[] | null;
   source_url?: string | null;
+  scraped_at?: string | null;
   notes?: string | null;
   raw_text?: string | null;
+};
+
+type PreflightIssue = {
+  severity: "error" | "warning";
+  field: string;
+  message: string;
 };
 
 type Anchor = {
@@ -248,6 +257,66 @@ function validate(d: ScrapedDeal): ValidateResult {
   return { ok: true };
 }
 
+// Stricter pre-flight shape check that runs BEFORE the semantic validator.
+// Required fields reflect the scraper contract: every deal must carry a known
+// dispensary_slug, a human-readable title/description, both price points, the
+// source URL it was pulled from, and the scraped_at timestamp.
+// Errors reject; warnings flow through to the report but do NOT block ingest.
+function preflightShape(d: ScrapedDeal): PreflightIssue[] {
+  const issues: PreflightIssue[] = [];
+
+  if (!d.dispensary_slug || d.dispensary_slug.trim() === "") {
+    issues.push({ severity: "error", field: "dispensary_slug", message: "missing" });
+  }
+  if (!d.deal_title || d.deal_title.trim().length < 3) {
+    issues.push({ severity: "error", field: "deal_title", message: "missing or <3 chars" });
+  }
+  if (!d.deal_description || d.deal_description.trim() === "") {
+    issues.push({ severity: "error", field: "deal_description", message: "missing" });
+  }
+  if (d.regular_price_usd == null) {
+    issues.push({ severity: "error", field: "regular_price_usd", message: "missing" });
+  }
+  if (d.sale_price_usd == null) {
+    issues.push({ severity: "error", field: "sale_price_usd", message: "missing" });
+  }
+  if (!d.source_url || d.source_url.trim() === "") {
+    issues.push({ severity: "error", field: "source_url", message: "missing" });
+  }
+  if (!d.scraped_at || d.scraped_at.trim() === "") {
+    issues.push({ severity: "error", field: "scraped_at", message: "missing" });
+  }
+
+  // Warnings — flagged in the report, do NOT block the deal
+  if (d.sale_price_usd != null && d.sale_price_usd > 500) {
+    issues.push({
+      severity: "warning",
+      field: "sale_price_usd",
+      message: `price $${d.sale_price_usd} > $500 — likely scrape error on a multi-pack`,
+    });
+  }
+  if (
+    d.sale_price_usd != null &&
+    d.regular_price_usd != null &&
+    d.sale_price_usd >= d.regular_price_usd
+  ) {
+    issues.push({
+      severity: "warning",
+      field: "sale_price_usd",
+      message: `sale_price ($${d.sale_price_usd}) >= original_price ($${d.regular_price_usd}) — not actually a deal`,
+    });
+  }
+  if (d.deal_description && d.deal_description.length > 500) {
+    issues.push({
+      severity: "warning",
+      field: "deal_description",
+      message: `description length ${d.deal_description.length} > 500 chars — scrape probably captured wrong DOM element`,
+    });
+  }
+
+  return issues;
+}
+
 function computePpg(d: ScrapedDeal): number | null {
   if (
     d.weight_grams != null &&
@@ -325,6 +394,12 @@ async function main() {
   }
   console.log(`Loaded ${anchors.length} anchor_skus brands for normalization`);
 
+  // master_listings slug sanity set — deals with unknown slugs are REJECTED
+  // (the orphan-research path is a human-in-the-loop workflow, not auto-create).
+  const listings = await restGet<{ slug: string }>("master_listings?select=slug");
+  const validSlugs = new Set(listings.map((l) => l.slug));
+  console.log(`Loaded ${validSlugs.size} master_listings slugs for sanity check`);
+
   // Pull every recent submission + every active deal once. Keeps per-row
   // dedup as a Map lookup instead of a round-trip per deal.
   const sevenDaysAgoIso = new Date(
@@ -364,9 +439,35 @@ async function main() {
   // -------- Plan each input row --------
 
   const plans: Plan[] = [];
+  const invalidShape: { d: ScrapedDeal; issues: PreflightIssue[] }[] = [];
+  const invalidSlug: { d: ScrapedDeal; reason: string }[] = [];
+  const warnings: { d: ScrapedDeal; issues: PreflightIssue[] }[] = [];
   const invalid: { d: ScrapedDeal; reason: string }[] = [];
 
   for (const d of scraped) {
+    // 0) Pre-flight shape check (required fields + soft warnings).
+    //    Hard errors reject the deal outright; warnings flow through.
+    const issues = preflightShape(d);
+    const errors = issues.filter((i) => i.severity === "error");
+    const warns = issues.filter((i) => i.severity === "warning");
+    if (errors.length > 0) {
+      invalidShape.push({ d, issues: errors });
+      continue;
+    }
+    if (warns.length > 0) {
+      warnings.push({ d, issues: warns });
+    }
+
+    // 0b) Dispensary slug must exist in master_listings. Reject otherwise
+    //     — do NOT auto-create listings. Orphan research is human-in-the-loop.
+    if (d.dispensary_slug && !validSlugs.has(d.dispensary_slug)) {
+      invalidSlug.push({
+        d,
+        reason: `dispensary_slug "${d.dispensary_slug}" not in master_listings`,
+      });
+      continue;
+    }
+
     const v = validate(d);
     if (!v.ok) {
       invalid.push({ d, reason: v.reason });
@@ -412,19 +513,15 @@ async function main() {
 
   // -------- Report --------
 
-  const counts = {
-    total: scraped.length,
-    valid: scraped.length - invalid.length,
-    invalid: invalid.length,
-    dedupSkip: plans.filter((p) => p.kind === "skip_dedup_strict").length,
-    collisions: plans.filter((p) => p.kind === "update_in_place").length,
-    freshSubs: plans.filter(
-      (p) => p.kind === "insert_submission" && !p.rejectedAs
-    ).length,
-    sanityReject: plans.filter(
-      (p) => p.kind === "insert_submission" && !!p.rejectedAs
-    ).length,
-  };
+  const collisionCount = plans.filter((p) => p.kind === "update_in_place").length;
+  const dedupSkipCount = plans.filter((p) => p.kind === "skip_dedup_strict").length;
+  const insertCount = plans.filter(
+    (p) => p.kind === "insert_submission" && !p.rejectedAs
+  ).length;
+  const sanityRejectCount = plans.filter(
+    (p) => p.kind === "insert_submission" && !!p.rejectedAs
+  ).length;
+  const validCount = collisionCount + insertCount;
 
   const byDisp = new Map<string, number>();
   const byBrand = new Map<string, number>();
@@ -443,10 +540,6 @@ async function main() {
     }
   }
 
-  const invalidReasons = new Map<string, number>();
-  for (const r of invalid) {
-    invalidReasons.set(r.reason, (invalidReasons.get(r.reason) ?? 0) + 1);
-  }
   const rejectReasons = new Map<string, number>();
   for (const p of plans) {
     if (p.kind === "insert_submission" && p.rejectedAs) {
@@ -457,16 +550,63 @@ async function main() {
     }
   }
 
-  console.log("\n=== INGEST REPORT ===");
-  console.log(`Input: ${INPUT_PATH} (${counts.total} deals)`);
-  console.log(`Valid: ${counts.valid}`);
-  console.log(`Invalid: ${counts.invalid}`);
-  for (const [k, v] of invalidReasons) console.log(`  - ${k}: ${v}`);
-  console.log(`Dedup-strict skips: ${counts.dedupSkip}`);
-  console.log(`Apr-14 collisions (UPDATE in place): ${counts.collisions}`);
-  console.log(`Fresh submissions: ${counts.freshSubs}`);
-  console.log(`Sanity-rejected submissions: ${counts.sanityReject}`);
-  for (const [k, v] of rejectReasons) console.log(`  - ${k}: ${v}`);
+  console.log("\n=== INGEST PRE-FLIGHT REPORT ===");
+  console.log(`Input: ${INPUT_PATH}`);
+  console.log(`Total deals in scrape: ${scraped.length}`);
+  console.log(`Valid deals: ${validCount} (will be ingested)`);
+
+  console.log(`\nInvalid deals (bad slug): ${invalidSlug.length}`);
+  for (const row of invalidSlug) {
+    console.log(
+      `  - ${row.reason} | title="${row.d.deal_title ?? "(none)"}" | source=${row.d.source_url ?? "(none)"}`
+    );
+  }
+
+  console.log(`\nInvalid deals (shape errors): ${invalidShape.length}`);
+  for (const row of invalidShape) {
+    const fields = row.issues
+      .map((i) => `${i.field}(${i.message})`)
+      .join(", ");
+    console.log(
+      `  - slug=${row.d.dispensary_slug ?? "(none)"} title="${row.d.deal_title ?? "(none)"}" → ${fields}`
+    );
+  }
+
+  console.log(`\nInvalid deals (semantic): ${invalid.length}`);
+  for (const row of invalid) {
+    console.log(
+      `  - slug=${row.d.dispensary_slug ?? "(none)"} title="${row.d.deal_title ?? "(none)"}" → ${row.reason}`
+    );
+  }
+
+  const totalWarningIssues = warnings.reduce((n, r) => n + r.issues.length, 0);
+  console.log(`\nValidation warnings: ${totalWarningIssues}`);
+  for (const row of warnings) {
+    for (const w of row.issues) {
+      console.log(
+        `  - slug=${row.d.dispensary_slug ?? "(none)"} title="${row.d.deal_title ?? "(none)"}" → ${w.field}: ${w.message}`
+      );
+    }
+  }
+
+  console.log(
+    `\nDuplicate detection: ${collisionCount} collisions with active deals (UPDATE-in-place)`
+  );
+  console.log(
+    `  ${dedupSkipCount} strict-dedup skips against last-7-days submissions`
+  );
+
+  console.log(`\nEstimated Supabase inserts: ${insertCount} fresh submissions`);
+  if (sanityRejectCount > 0) {
+    console.log(
+      `  (+ ${sanityRejectCount} sanity-rejected rows audited into submissions)`
+    );
+    for (const [k, v] of rejectReasons) console.log(`    - ${k}: ${v}`);
+  }
+  console.log(
+    `Estimated Supabase updates (Apr-14 records): ${collisionCount}`
+  );
+
   console.log("\nBy dispensary:");
   for (const [k, v] of [...byDisp.entries()].sort((a, b) => b[1] - a[1]).slice(0, 20)) {
     console.log(`  ${k}: ${v}`);
@@ -478,6 +618,16 @@ async function main() {
   console.log("\nBy category:");
   for (const [k, v] of [...byCategory.entries()].sort((a, b) => b[1] - a[1])) {
     console.log(`  ${k}: ${v}`);
+  }
+
+  // Hard-stop in --apply if any shape errors or bad slugs appeared. Matthew
+  // has asked for human review before writing junk to Supabase.
+  if (APPLY && (invalidShape.length > 0 || invalidSlug.length > 0)) {
+    console.error(
+      `\nERROR: ${invalidShape.length} shape errors + ${invalidSlug.length} bad slugs. ` +
+        `Fix the scrape or remove those rows before re-running --apply.`
+    );
+    exit(1);
   }
 
   if (!APPLY) {
