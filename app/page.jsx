@@ -960,7 +960,7 @@ export default async function HomePage() {
               <p className="hero-sub">
                 Low Prices. High Times.
                 <br />
-                Live dispensary deals across Peoria, Bloomington-Normal, Champaign-Urbana, Springfield, and the rest of Central&nbsp;IL.
+                Live dispensary deals for Central Illinois.
               </p>
 
               {/* THE big deal card — the hero element */}
