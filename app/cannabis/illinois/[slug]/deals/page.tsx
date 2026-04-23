@@ -3,8 +3,7 @@
 // Queries the active_deals_with_listings view and filters by city.
 
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 import { getCityContent } from "@/lib/cityContent";
 import { CitySeoSection } from "@/components/CitySeoSection";
 
@@ -56,18 +55,27 @@ export default async function CityDealsPage({ params }: { params: Promise<{ slug
   const { slug } = await params;
   const cityName = slugToCity(slug);
 
-  const { data: deals, error } = await supabase
-    .from("active_deals_with_listings")
-    .select("*")
-    .ilike("city", cityName)
-    .order("plan", { ascending: false }) // featured first
-    .order("savings_amount", { ascending: false });
+  // Instantiate at request time, not at module-evaluation. Throwing
+  // inside the query body is caught below so a misconfigured env
+  // renders the graceful empty state rather than a 500.
+  let dealList: Deal[] = [];
+  try {
+    const supabase = getSupabase();
+    const { data: deals, error } = await supabase
+      .from("active_deals_with_listings")
+      .select("*")
+      .ilike("city", cityName)
+      .order("plan", { ascending: false }) // featured first
+      .order("savings_amount", { ascending: false });
 
-  if (error) {
-    console.error("[city-deals] query error:", error);
+    if (error) {
+      console.error("[city-deals] query error:", error);
+    } else if (Array.isArray(deals)) {
+      dealList = deals as Deal[];
+    }
+  } catch (err) {
+    console.error("[city-deals] supabase exception:", err);
   }
-
-  const dealList = (deals as Deal[] | null) || [];
   const content = getCityContent(slug);
 
   // If we have neither deals nor city copy, render a graceful empty state

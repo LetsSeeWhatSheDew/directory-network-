@@ -3,7 +3,7 @@
 // grouped by city, ranked by savings. Used by the digest cron and
 // by /api/digest/preview for live preview.
 
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 
 export type DigestDeal = {
   deal_id: string;
@@ -44,6 +44,12 @@ const CITIES_TO_INCLUDE = [
 ];
 
 export async function buildWeeklyDigest(): Promise<DigestPayload> {
+  // Instantiate the client at call time, not at module-evaluation. Keeps
+  // env-less builds (Next's type-checking pass, isolated test runs)
+  // from crashing on the import graph; the preview route also returns
+  // its generic 500 JSON if this throws, so the failure mode stays
+  // consistent with before.
+  const supabase = getSupabase();
   const { data: deals, error } = await supabase
     .from("active_deals_with_listings")
     .select("deal_id, deal_title, category, name, city, slug, savings_amount, savings_percent, google_rating, plan")
