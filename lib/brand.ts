@@ -12,7 +12,7 @@ export const brand = {
     twitter: "@puffprice",
   },
   description:
-    "Illinois cannabis deal finder. Find dispensary deals near you, all in one place.",
+    "Central Illinois cannabis deal finder. Live dispensary deals across Peoria, Bloomington-Normal, Champaign-Urbana, Springfield, and the rest of Central IL — all in one place.",
 } as const;
 
 export type Brand = typeof brand;

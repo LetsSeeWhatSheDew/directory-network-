@@ -16,6 +16,34 @@ import { brand } from "../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../lib/dealScoring";
 import { getServerLocation } from "../lib/location";
 import { getLiveDealsValueThisMonth, getDealsRunThisMonth } from "../lib/stats";
+import { CENTRAL_IL_CITIES } from "../lib/constants/regions";
+
+// Metadata — Central IL framing. The full IL footprint stays discoverable
+// via the "Browse all Illinois" link below; out-of-scope city pages keep
+// their own city-specific metadata for SEO retention.
+export const metadata = {
+  title: `Cannabis Deals in Central Illinois | ${brand.name}`,
+  description:
+    "Live dispensary deals across Peoria, Bloomington-Normal, Champaign-Urbana, Springfield, and the rest of Central Illinois — updated continuously and always free to browse.",
+  alternates: { canonical: brand.url },
+};
+
+// The 6 anchor cities shown in the homepage "browse by city" strip. The
+// full 11-city Central IL list drives positioning elsewhere; here we cap
+// at 6 so the row still reads at-a-glance on a phone.
+const HOMEPAGE_CITY_SHORTCUT_SLUGS = [
+  "peoria",
+  "east-peoria",
+  "bloomington",
+  "normal",
+  "champaign",
+  "springfield",
+];
+
+const HOMEPAGE_CITY_SHORTCUTS = HOMEPAGE_CITY_SHORTCUT_SLUGS.map((slug) => {
+  const found = CENTRAL_IL_CITIES.find((c) => c.slug === slug);
+  return { slug, name: found?.name || slug };
+});
 
 // ============================================================
 // PUFFPRICE HOMEPAGE — Cannabis visual identity overhaul
@@ -426,7 +454,7 @@ const FAQ_ENTRIES = [
   },
   {
     q: "Which Illinois cities have dispensary deals?",
-    a: "Coverage spans dozens of Illinois cities including Chicago, Peoria, Rockford, Springfield, Aurora, Joliet, Naperville, Champaign, Bloomington, and many more.",
+    a: "Coverage is strongest across Central Illinois — Peoria, East Peoria, Pekin, Bloomington-Normal, Champaign-Urbana, Springfield, and neighboring cities. Dispensaries in Chicago, Rockford, Aurora, Joliet, Naperville, and other Illinois markets are also listed.",
   },
 ];
 
@@ -910,12 +938,29 @@ export default async function HomePage() {
               {/* Location line — tiny, first */}
               <LocationAware />
 
+              {/* Regional eyebrow — Central IL is the current focus market.
+                  Out-of-scope cities stay reachable via the footer and
+                  /cannabis/illinois hub link. */}
+              <div
+                style={{
+                  fontSize: ".68rem",
+                  fontWeight: 700,
+                  letterSpacing: ".14em",
+                  textTransform: "uppercase",
+                  color: "#16a34a",
+                  fontFamily: "system-ui, sans-serif",
+                  marginBottom: 4,
+                }}
+              >
+                Serving Central Illinois
+              </div>
+
               {/* Headline */}
               <h1>Best Bud For <em>Your Buck$</em></h1>
               <p className="hero-sub">
-                Low Prices.
+                Low Prices. High Times.
                 <br />
-                High Times.
+                Live dispensary deals across Peoria, Bloomington-Normal, Champaign-Urbana, Springfield, and the rest of Central&nbsp;IL.
               </p>
 
               {/* THE big deal card — the hero element */}
@@ -1055,7 +1100,9 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* City shortcuts — internal linking for SEO and user discovery */}
+      {/* City shortcuts — Central IL anchor cities. Out-of-scope cities
+          stay reachable via the "Browse all Illinois" link and the
+          /cannabis/illinois hub. */}
       <div
         style={{
           maxWidth: 1100,
@@ -1069,17 +1116,24 @@ export default async function HomePage() {
         }}
       >
         Browse deals by city:{" "}
-        <Link href="/city/chicago" style={{ color: "#16a34a", fontWeight: 600, textDecoration: "none" }}>Chicago</Link>
+        {HOMEPAGE_CITY_SHORTCUTS.map((c, i) => (
+          <span key={c.slug}>
+            {i > 0 && " · "}
+            <Link
+              href={`/city/${c.slug}`}
+              style={{ color: "#16a34a", fontWeight: 600, textDecoration: "none" }}
+            >
+              {c.name}
+            </Link>
+          </span>
+        ))}
         {" · "}
-        <Link href="/city/peoria" style={{ color: "#16a34a", fontWeight: 600, textDecoration: "none" }}>Peoria</Link>
-        {" · "}
-        <Link href="/city/rockford" style={{ color: "#16a34a", fontWeight: 600, textDecoration: "none" }}>Rockford</Link>
-        {" · "}
-        <Link href="/city/springfield" style={{ color: "#16a34a", fontWeight: 600, textDecoration: "none" }}>Springfield</Link>
-        {" · "}
-        <Link href="/city/aurora" style={{ color: "#16a34a", fontWeight: 600, textDecoration: "none" }}>Aurora</Link>
-        {" · "}
-        <Link href="/city/joliet" style={{ color: "#16a34a", fontWeight: 600, textDecoration: "none" }}>Joliet</Link>
+        <Link
+          href="/cannabis/illinois"
+          style={{ color: "#6b7280", fontWeight: 500, textDecoration: "underline", textDecorationStyle: "dotted" }}
+        >
+          Browse all Illinois →
+        </Link>
       </div>
 
       <SearchTracker />

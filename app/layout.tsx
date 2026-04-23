@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     google: ["FdgiJxqm6nBTT1I37dPrrFMNTWkDMLX4-T386WUgFjg", "07gWVtJUIV3VbVxvKmo3NbCPu1_oiH7aYOC9FoF5H6Y"],
   },
   title: {
-    default: `Cannabis Deals Near You in Illinois | ${brand.name}`,
+    default: `Cannabis Deals in Central Illinois | ${brand.name}`,
     template: `%s | ${brand.name}`,
   },
   description: brand.description,
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   openGraph: {
-    title: `Cannabis Deals Near You in Illinois | ${brand.name}`,
+    title: `Cannabis Deals in Central Illinois | ${brand.name}`,
     description: brand.description,
     url: brand.url,
     siteName: brand.name,
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `Cannabis Deals Near You in Illinois | ${brand.name}`,
+    title: `Cannabis Deals in Central Illinois | ${brand.name}`,
     description: brand.description,
     images: [`${brand.url}/logo-512.png`],
   },
