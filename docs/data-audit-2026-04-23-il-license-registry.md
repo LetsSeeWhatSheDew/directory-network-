@@ -287,21 +287,10 @@ After the migration is applied, the Google Places logo + GPS
 backfill (`scripts/backfill-logos-from-google-places.ts`) should be
 re-run with `--cities=` that includes these:
 
-- 0 Springfield
-- 12 Fox Lake
-- 12 e
-- 1st Fl Chicago
-- 1st Floor, Chicago
-- 20 W East Dubuque
-- 30 Oswego
-- 31 land Shopping Center e
-- 41 th
 - Addison
 - Alton
 - Anna
 - Arlington Heights
-- B, Antioch
-- B, Glendale Heights
 - Belvidere
 - Berwyn
 - Blue Island
@@ -339,7 +328,6 @@ re-run with `--cities=` that includes these:
 - Harvey
 - Highland Park
 - Highwood
-- Hodgkins
 - Hoffman Estates
 - Hometown
 - Homewood
@@ -375,11 +363,8 @@ re-run with `--cities=` that includes these:
 - Oswego
 - Ottawa
 - Palatine
-- Park
-- Park Ridge
 - Pekin
 - Peoria Heights
-- Peru
 - Pontiac
 - Posen
 - Richton Park
@@ -393,37 +378,14 @@ re-run with `--cities=` that includes these:
 - South Beloit
 - SteC Addison
 - Streamwood
-- Suite A ria
-- Suites B&C ity
 - Summit
 - Tilton
 - Villa Park
 - Westchester
 - Wheeling
-- Winthrop Harbor
 - Woodstock
 - Worth
-- d
-- e
-- es
-- gn
-- go Heights
-- ille
-- ills
-- is
-- le
-- loit
-- m
-- n
-- od Heights
-- of the Cities Moline
-- on
 - rook
-- s
-- sville
-- urich
-- wood
-- y
 
 Whether any of these cities should enter `CENTRAL_IL_CITIES` (the
 homepage scope anchor) is a separate scope decision — not part of

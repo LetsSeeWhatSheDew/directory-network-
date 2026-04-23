@@ -1070,13 +1070,16 @@ function detectPdfUpdatedDate(layoutText: string): string {
   console.log("[5/5] Write report + migration");
   const date = todayIsoDate();
   // Surface cities not currently covered in our DB so the human-readable
-  // report can flag the downstream backfill step.
+  // report can flag the downstream backfill step. Use clean records only
+  // — suspect rows have garbled city fragments ("0 Springfield", "12 e",
+  // etc.) that would pollute the list.
   const dbCities = new Set(
     listings.map((l) => normalizeCity(l.city || ""))
   );
   const newCities = Array.from(
     new Set(
       inStateNotInDb
+        .filter((r) => r.quality === "clean")
         .map((r) => r.city.trim())
         .filter((c) => c && !dbCities.has(normalizeCity(c)))
     )
