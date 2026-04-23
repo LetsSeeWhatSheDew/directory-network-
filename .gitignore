@@ -36,3 +36,7 @@ yarn-error.log*
 .claude/worktrees/
 *.local.bak
 .env*.local
+
+# Local working tmp — used by scripts that download or extract source
+# artifacts (PDFs, CSVs) before parsing. Nothing in here should ship.
+/tmp/
