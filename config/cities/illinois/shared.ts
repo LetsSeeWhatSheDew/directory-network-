@@ -8,48 +8,34 @@
 import type { CityConfig } from "@/components/CityPage";
 
 /* ------------------------------------------------------------------ */
-/*  All Illinois city slugs (for cross-linking)                        */
+/*  Central IL city slugs (for cross-linking)                          */
 /* ------------------------------------------------------------------ */
+//
+// Scoped to the 12 Central Illinois cities publicly covered by the site.
+// Non-Central-IL slugs are kept in the database but every public route
+// for them 404s (see lib/visibility.ts), so listing them as city
+// footer links would produce dead clicks. The master list matches
+// lib/constants/regions.ts plus the two compound twin-metro slugs that
+// still own their own static pages.
 
 export const ALL_ILLINOIS_CITIES: { name: string; slug: string }[] = [
-  { name: "Chicago", slug: "chicago" },
-  { name: "Rockford", slug: "rockford" },
-  { name: "Springfield", slug: "springfield" },
   { name: "Peoria", slug: "peoria" },
-  { name: "Naperville", slug: "naperville" },
-  { name: "Champaign-Urbana", slug: "champaign-urbana" },
-  { name: "Bloomington-Normal", slug: "bloomington-normal" },
-  { name: "Joliet", slug: "joliet" },
-  { name: "Aurora", slug: "aurora" },
-  { name: "Collinsville", slug: "collinsville" },
-  { name: "Effingham", slug: "effingham" },
-  { name: "Quincy", slug: "quincy" },
-  { name: "Danville", slug: "danville" },
   { name: "East Peoria", slug: "east-peoria" },
-  { name: "Marion", slug: "marion" },
-  { name: "Sycamore", slug: "sycamore" },
-  { name: "Carbondale", slug: "carbondale" },
-  { name: "Decatur", slug: "decatur" },
-  { name: "Elgin", slug: "elgin" },
-  { name: "Waukegan", slug: "waukegan" },
-  { name: "Schaumburg", slug: "schaumburg" },
+  { name: "Peoria Heights", slug: "peoria-heights" },
+  { name: "Pekin", slug: "pekin" },
+  { name: "Bartonville", slug: "bartonville" },
+  { name: "Morton", slug: "morton" },
+  { name: "Washington", slug: "washington" },
+  { name: "Bloomington", slug: "bloomington" },
   { name: "Normal", slug: "normal" },
+  { name: "Bloomington-Normal", slug: "bloomington-normal" },
   { name: "Champaign", slug: "champaign" },
-  { name: "Addison", slug: "addison" },
-  { name: "North Aurora", slug: "north-aurora" },
-  { name: "Mundelein", slug: "mundelein" },
-  { name: "Ottawa", slug: "ottawa" },
-  { name: "Canton", slug: "canton" },
-  { name: "Galesburg", slug: "galesburg" },
-  { name: "Moline", slug: "moline" },
-  { name: "Rock Island", slug: "rock-island" },
-  { name: "Sterling", slug: "sterling" },
-  { name: "Morris", slug: "morris" },
-  { name: "Jacksonville", slug: "jacksonville" },
-  { name: "Litchfield", slug: "litchfield" },
+  { name: "Urbana", slug: "urbana" },
+  { name: "Champaign-Urbana", slug: "champaign-urbana" },
+  { name: "Springfield", slug: "springfield" },
 ];
 
-/** Return all cities except the one matching `slug` — for footer links. */
+/** Return all Central IL cities except the one matching `slug` — for footer links. */
 export function relatedCities(slug: string) {
   return ALL_ILLINOIS_CITIES.filter((c) => c.slug !== slug);
 }

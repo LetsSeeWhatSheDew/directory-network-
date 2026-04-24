@@ -88,7 +88,7 @@ function buildJsonLd(
   const localBusinesses = listings.map((l) => ({
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "@id": `${BASE_URL}/l/${l.id}`,
+    "@id": `${BASE_URL}/l/${l.slug || l.id}`,
     name: l.listing_title ?? l.listing_name,
     description: l.short_description ?? undefined,
     address: {
@@ -97,7 +97,7 @@ function buildJsonLd(
       addressRegion: l.state ?? "IL",
       addressCountry: "US",
     },
-    url: `${BASE_URL}/l/${l.id}`,
+    url: `${BASE_URL}/l/${l.slug || l.id}`,
     isAccessibleForFree: true,
     currenciesAccepted: "USD",
     paymentAccepted: "Cash, Debit Card",
@@ -136,6 +136,19 @@ export default function CityPage({ config, listings = [] }: Props) {
     relatedCities,
   } = config;
 
+  // When we have live listings, replace the config's hardcoded
+  // "Dispensaries: ~10" stat with the actual count. The config strings
+  // are authored for long-term SEO copy but drift quickly; rendering
+  // the truth at request time is the only way the card matches the
+  // listing grid below it.
+  const liveStats = listings.length > 0
+    ? stats.map((s) =>
+        /dispensar/i.test(s.label)
+          ? { ...s, value: String(listings.length) }
+          : s,
+      )
+    : stats;
+
   const jsonLdBlocks = buildJsonLd(config, listings);
 
   return (
@@ -165,7 +178,7 @@ export default function CityPage({ config, listings = [] }: Props) {
                   PuffPrice
                 </span>
                 <span className="text-[11px] text-slate-400">
-                  {state} Cannabis Directory
+                  Central {state} Cannabis Directory
                 </span>
               </div>
             </Link>
@@ -234,7 +247,7 @@ export default function CityPage({ config, listings = [] }: Props) {
 
             {/* Quick-reference stats */}
             <div className="mt-6 grid grid-cols-2 gap-3 text-xs text-slate-200 sm:flex sm:flex-wrap sm:gap-4">
-              {stats.map((stat) => (
+              {liveStats.map((stat) => (
                 <div
                   key={stat.label}
                   className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2"
@@ -301,7 +314,7 @@ export default function CityPage({ config, listings = [] }: Props) {
                   return (
                     <Link
                       key={listing.id}
-                      href={`/l/${listing.id}`}
+                      href={`/l/${listing.slug || listing.id}`}
                       className="group flex flex-col rounded-3xl border border-slate-800 bg-slate-900/60 p-4 text-xs text-slate-100 shadow-sm transition hover:border-[#7FE3C7]/60 hover:bg-slate-900"
                     >
                       <div className="mb-2 flex items-start justify-between gap-2">
@@ -508,10 +521,10 @@ export default function CityPage({ config, listings = [] }: Props) {
           <div className="mx-auto max-w-6xl px-4 py-8 md:py-10">
             <div className="mb-4">
               <h2 className="text-sm font-semibold tracking-tight text-slate-100">
-                Explore Other Illinois Cities
+                Explore Other Central Illinois Cities
               </h2>
               <p className="text-[11px] text-slate-400">
-                Find dispensaries and cannabis info across the state.
+                Find dispensaries and cannabis info across the Central IL metro belt.
               </p>
             </div>
 

@@ -16,9 +16,12 @@ export const CITY_CONFIG: CityConfig = {
   state: "Illinois",
   slug: "bloomington-normal",
   heroIntro:
-    "Bloomington-Normal is a cannabis hub at the I-55/I-74 crossroads, with the highest dispensary density in central Illinois. Whether you're passing through or a local, discover convenient access to recreational and medical cannabis, competitive pricing, and a thriving market shaped by travelers and students.",
+    "Bloomington-Normal is a cannabis hub at the I-55/I-74 crossroads, with one of the highest dispensary densities in Central Illinois. Whether you're passing through or a local, you'll find convenient access to recreational and medical cannabis, competitive pricing, and a market shaped by both travelers and the Illinois State University student body.",
   stats: [
-    { label: "Dispensaries", value: "~10" },
+    // The "Dispensaries" value is replaced at render time with the live
+    // count from master_listings; "\u2014" only shows during a transient
+    // fetch failure (see components/CityPage.tsx).
+    { label: "Dispensaries", value: "\u2014" },
     { label: "Population", value: "~133K" },
     { label: "Rec & Medical", value: "Both available" },
   ],
@@ -38,7 +41,7 @@ export const CITY_CONFIG: CityConfig = {
     {
       question: "How many dispensaries are in Bloomington-Normal?",
       answer:
-        "Bloomington-Normal has approximately 10 licensed cannabis dispensaries, with most concentrated in Normal. This makes it one of the densest cannabis markets in central Illinois relative to population. The cluster developed partly due to Normal's strategic location at the I-55/I-74 interchange, attracting both local residents and travelers.",
+        "The current directory is listed in full above. Most of the Bloomington-Normal cluster is concentrated in Normal, which makes it one of the densest cannabis markets in Central Illinois relative to population. The cluster developed partly due to Normal's strategic location at the I-55/I-74 interchange and the Illinois State University student population, attracting both local residents and travelers.",
     },
     {
       question: "Why are there so many dispensaries in Normal, IL?",
@@ -56,7 +59,7 @@ export const CITY_CONFIG: CityConfig = {
     {
       question: "Is Bloomington-Normal a good stop for travelers on I-55 or I-74?",
       answer:
-        "Absolutely. Bloomington-Normal's 10 dispensaries make it an ideal stop for travelers driving between Chicago, St. Louis, and the coasts. Many dispensaries are located near the highway interchange with ample parking. Visit during business hours, bring a valid government-issued photo ID proving you are 21 or older, and be aware of purchase limits: Illinois residents can buy up to 30g of flower, while out-of-state visitors are limited to 15g.",
+        "Yes. The Bloomington-Normal dispensary cluster is an easy stop for travelers driving between Chicago, St. Louis, and the coasts. Most shops sit near the highway interchange with ample parking. Visit during business hours, bring a valid government-issued photo ID proving you are 21 or older, and be aware of purchase limits: Illinois residents can buy up to 30g of flower, while out-of-state visitors are limited to 15g.",
     },
     statewideOnlineOrderFaq("Bloomington-Normal"),
   ],

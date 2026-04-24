@@ -1,9 +1,16 @@
 /**
  * Geographic data for Illinois cities.
  * Provides coordinates and functions to calculate nearby cities using the Haversine formula.
+ *
+ * The `CITY_COORDINATES` map keeps coordinates for every historical IL
+ * slug so Haversine math still works when a city page links back from a
+ * non-CIL URL (those pages 404 at runtime but some crawlers still follow
+ * the links). `getNearbyCities` filters the output to Central IL only —
+ * the public nearby-cities strip must never surface a slug we don't
+ * publish.
  */
 
-/** Approximate lat/lng coordinates for all 35 Illinois cities */
+/** Approximate lat/lng coordinates — includes every historical IL slug. */
 export const CITY_COORDINATES: Record<string, { lat: number; lng: number }> = {
   chicago: { lat: 41.8781, lng: -87.6298 },
   rockford: { lat: 42.2711, lng: -89.094 },
@@ -27,7 +34,14 @@ export const CITY_COORDINATES: Record<string, { lat: number; lng: number }> = {
   waukegan: { lat: 42.3629, lng: -87.8547 },
   schaumburg: { lat: 42.0339, lng: -88.0841 },
   normal: { lat: 40.4843, lng: -88.9936 },
+  bloomington: { lat: 40.4842, lng: -88.9937 },
   champaign: { lat: 40.1164, lng: -88.2434 },
+  urbana: { lat: 40.1106, lng: -88.2073 },
+  "peoria-heights": { lat: 40.7472, lng: -89.5711 },
+  pekin: { lat: 40.5672, lng: -89.6407 },
+  bartonville: { lat: 40.6497, lng: -89.6520 },
+  morton: { lat: 40.6130, lng: -89.4598 },
+  washington: { lat: 40.7034, lng: -89.4071 },
   addison: { lat: 41.9317, lng: -88.0364 },
   "north-aurora": { lat: 41.8095, lng: -88.3179 },
   mundelein: { lat: 42.3024, lng: -87.9333 },
@@ -41,6 +55,26 @@ export const CITY_COORDINATES: Record<string, { lat: number; lng: number }> = {
   jacksonville: { lat: 39.7398, lng: -90.2277 },
   litchfield: { lat: 39.1816, lng: -89.6548 },
 };
+
+// Central IL slugs eligible to appear in the "Nearby cities" strip.
+// Matches the 12 city slugs in lib/constants/regions.ts plus the two
+// compound twin-metro slugs that own their own static pages.
+const CIL_NEARBY_SLUGS = new Set<string>([
+  "peoria",
+  "east-peoria",
+  "peoria-heights",
+  "pekin",
+  "bartonville",
+  "morton",
+  "washington",
+  "bloomington",
+  "normal",
+  "bloomington-normal",
+  "champaign",
+  "urbana",
+  "champaign-urbana",
+  "springfield",
+]);
 
 /**
  * Calculate the distance between two lat/lng coordinates using the Haversine formula.
@@ -79,9 +113,11 @@ export function getNearbyCities(
     return [];
   }
 
-  // Calculate distances to all other cities
+  // Calculate distances only to other Central IL cities. Out-of-scope
+  // slugs stay in CITY_COORDINATES (some legacy callers still need the
+  // lookup) but the public nearby-cities strip only ever surfaces CIL.
   const distances = Object.entries(CITY_COORDINATES)
-    .filter(([otherSlug]) => otherSlug !== slug)
+    .filter(([otherSlug]) => otherSlug !== slug && CIL_NEARBY_SLUGS.has(otherSlug))
     .map(([otherSlug, coords]) => ({
       slug: otherSlug,
       distanceMi: haversineDistance(
@@ -131,7 +167,14 @@ function getCityName(slug: string): string {
     waukegan: "Waukegan",
     schaumburg: "Schaumburg",
     normal: "Normal",
+    bloomington: "Bloomington",
     champaign: "Champaign",
+    urbana: "Urbana",
+    "peoria-heights": "Peoria Heights",
+    pekin: "Pekin",
+    bartonville: "Bartonville",
+    morton: "Morton",
+    washington: "Washington",
     addison: "Addison",
     "north-aurora": "North Aurora",
     mundelein: "Mundelein",

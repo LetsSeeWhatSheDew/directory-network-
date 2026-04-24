@@ -17,10 +17,14 @@ export const CITY_CONFIG: CityConfig = {
   slug: "peoria",
 
   heroIntro:
-    "Peoria is central Illinois\u2019s largest metro and a growing hub for licensed cannabis retail. With roughly 10 dispensaries serving the city and surrounding Peoria County, visitors and residents have solid access to both recreational and medical options \u2014 from established chains like Ivy Hall and Aroma Hill to newer independent operators. Whether you\u2019re a first-time buyer or a seasoned consumer relocating to the area, this guide covers everything you need to know.",
+    "Peoria is central Illinois\u2019s largest metro and a hub for licensed cannabis retail \u2014 with established operators like Ivy Hall, Beyond Hello, Aroma Hill, and the Trinity Dispensaries network. Adults 21 and older can buy recreationally with a government-issued ID; medical patients are welcome at every operator. Whether you\u2019re a first-time buyer or relocating to the area, this guide covers what you need to know.",
 
   stats: [
-    { label: "Dispensaries", value: "~10" },
+    // The "Dispensaries" value is overridden at render time with the
+    // live count from master_listings. The fallback figure here is only
+    // used if the live fetch returns zero rows (usually a transient
+    // outage — see components/CityPage.tsx).
+    { label: "Dispensaries", value: "\u2014" },
     { label: "Population", value: "~113K" },
     { label: "Rec & Medical", value: "Both available" },
   ],
@@ -44,7 +48,7 @@ export const CITY_CONFIG: CityConfig = {
     {
       question: "How many dispensaries are in Peoria, IL?",
       answer:
-        "Peoria and the surrounding metro area are home to approximately 10 licensed dispensaries as of 2026. Options include both recreational and medical retailers, with several well-known chains like Ivy Hall and Aroma Hill operating in the area.",
+        "The Peoria directory is listed in full above \u2014 every licensed adult-use dispensary currently operating in the city. Both recreational and medical retailers are available, including well-known brands like Ivy Hall, Beyond Hello, Aroma Hill, and the Trinity Dispensaries (Trinity on University and Trinity on Glen).",
     },
     statewideOutOfStateFaq("Peoria"),
     statewideHoursFaq("Peoria"),

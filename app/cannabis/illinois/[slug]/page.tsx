@@ -326,7 +326,7 @@ export default async function CityPage({
 
         <div className="city-inner">
           <div className="city-hero">
-            <p className="city-hero-label">Illinois Cannabis Directory</p>
+            <p className="city-hero-label">Central Illinois Cannabis Directory</p>
             <h1 className="city-hero-h1">Cannabis Dispensaries<br />in {city}, Illinois</h1>
             <p className="city-hero-sub">
               Find licensed recreational and medical cannabis dispensaries in {city}, IL.
@@ -394,7 +394,7 @@ export default async function CityPage({
 
             <div className="city-sidebar">
               <div className="sidebar-card">
-                <p className="sidebar-title">Illinois Cannabis FAQ</p>
+                <p className="sidebar-title">Central IL Cannabis FAQ</p>
                 <div className="faq-item">
                   <p className="faq-q">Is cannabis legal in {city}?</p>
                   <p className="faq-a">Yes. Illinois legalized recreational cannabis in January 2020. Adults 21+ can purchase at any licensed dispensary.</p>
@@ -425,17 +425,26 @@ export default async function CityPage({
               </div>
 
               <div className="sidebar-card">
-                <p className="sidebar-title">More Illinois cities</p>
-                {["Chicago", "Aurora", "Bloomington", "Champaign", "Collinsville", "Peoria", "Springfield", "Rockford"]
-                  .filter((c) => c.toLowerCase() !== city.toLowerCase())
+                <p className="sidebar-title">More Central IL cities</p>
+                {[
+                  { name: "Peoria", slug: "peoria" },
+                  { name: "East Peoria", slug: "east-peoria" },
+                  { name: "Bloomington", slug: "bloomington" },
+                  { name: "Normal", slug: "normal" },
+                  { name: "Champaign", slug: "champaign" },
+                  { name: "Urbana", slug: "urbana" },
+                  { name: "Springfield", slug: "springfield" },
+                  { name: "Peoria Heights", slug: "peoria-heights" },
+                ]
+                  .filter((c) => c.slug !== citySlug.toLowerCase())
                   .slice(0, 6)
                   .map((c) => (
                     <Link
-                      key={c}
-                      href={`/cannabis/illinois/${c.toLowerCase()}`}
+                      key={c.slug}
+                      href={`/cannabis/illinois/${c.slug}`}
                       className="nearby-link"
                     >
-                      <span className="nearby-link-name">{c}</span>
+                      <span className="nearby-link-name">{c.name}</span>
                       <span className="nearby-link-arrow">→</span>
                     </Link>
                   ))}
