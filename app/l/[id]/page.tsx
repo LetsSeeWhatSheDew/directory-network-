@@ -1006,7 +1006,7 @@ export default async function ListingPage({
               <div className="dn-trust-card">
                 <p className="dn-trust-title">Why PuffPrice?</p>
                 <ul className="dn-trust-list">
-                  <li className="dn-trust-item">✓ Verified Illinois cannabis listings</li>
+                  <li className="dn-trust-item">✓ Verified Central IL cannabis listings</li>
                   <li className="dn-trust-item">✓ Real hours updated by owners</li>
                   <li className="dn-trust-item">✓ No spam, no fake reviews</li>
                   <li className="dn-trust-item">✓ Free base listing always</li>
