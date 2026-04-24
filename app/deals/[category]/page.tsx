@@ -847,7 +847,7 @@ export default async function DealsPage({
             )}
 
             <p className="source-note">
-              Data from Leafly, Weedmaps + dispensary sites ·{" "}
+              Data from direct dispensary sources ·{" "}
               <Link href="/dispensary/submit-deal" style={{ color: "#16a34a", textDecoration: "none" }}>
                 Submit your deal →
               </Link>
