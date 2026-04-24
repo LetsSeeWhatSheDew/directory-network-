@@ -182,11 +182,10 @@ export default function HomeDealCards({
         }}
       >
         <div style={{ fontFamily: "Georgia, serif", fontSize: "1.1rem", fontWeight: 700, color: "#0f1f3d", marginBottom: 6 }}>
-          No active deals right now
+          We're refreshing Central IL deals — check back soon.
         </div>
         <p style={{ fontSize: ".9rem", color: "#6b7280", margin: "0 auto 14px", maxWidth: 420, lineHeight: 1.5 }}>
-          Check back tomorrow — Central Illinois dispensaries post fresh deals overnight.
-          Or get an alert the moment a deal drops near you.
+          Or get an alert the moment a new deal drops near you.
         </p>
         <Link
           href="/alerts"

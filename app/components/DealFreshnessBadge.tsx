@@ -1,18 +1,14 @@
 /**
  * Renders a freshness indicator for a deal based on `verified_at` timestamp.
- * Uses the existing deals.verified_at column (NOT last_verified_at — the
- * staleness migration doesn't add a new column, it writes to verified_at
- * when the cron deactivates a deal).
  *
- * Tiers:
- *   - status_reason='imported_not_verified':
- *       "Imported {Mon Day}" (muted) — derived from verified_at + 7d
- *       (Option C in docs/handoffs/verified-at-strategy-20260422.md)
- *   - null verified_at:  "Verification pending"  (subtle gray)
- *   - ≤ 7 days:          "Verified N day(s) ago" (subtle gray)
- *   - 8–14 days:         "Verified N days ago"   (muted)
- *   - 15–30 days:        "⚠ Verified N days ago — may be outdated" (amber)
- *   - > 30 days:         null (parent should also filter; double-guard)
+ * Per 2026-04-26 scope lock:
+ *   - Fresh verified (<7 days): "Verified {Mon Day}" (subtle gray)
+ *   - Stale verified (7-14 days): "Last checked {Mon Day}" (muted)
+ *   - status_reason='imported_not_verified' & verified_at >7d old:
+ *       "Verification pending" (subtle gray)
+ *   - No verified_at: "Verification pending"
+ *   - 15-30 days: "⚠ Last checked N days ago — may be outdated" (amber)
+ *   - > 30 days: null (parent should also filter; double-guard)
  */
 
 import React from "react";
@@ -23,6 +19,12 @@ function daysSince(iso: string): number {
   const t = new Date(iso).getTime();
   if (!Number.isFinite(t)) return 9999;
   return Math.floor((Date.now() - t) / 86_400_000);
+}
+
+function shortDate(iso: string): string | null {
+  const t = new Date(iso);
+  if (!Number.isFinite(t.getTime())) return null;
+  return t.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
 type Props = {
@@ -46,30 +48,15 @@ export default function DealFreshnessBadge({
     fontWeight: 500,
   };
 
-  // Option C: imported-not-verified deals render the import date (not a
-  // fake "verified N days ago"). verified_at was backfilled to
-  // created_at - 7d, so +7d recovers the real import date.
-  const importedLabel = React.useMemo(() => {
-    if (statusReason !== "imported_not_verified") return null;
-    if (!verifiedAt) return null;
-    const ts = new Date(verifiedAt);
-    if (!Number.isFinite(ts.getTime())) return null;
-    const importDate = new Date(ts.getTime() + 7 * 24 * 60 * 60 * 1000);
-    return importDate.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-    });
-  }, [statusReason, verifiedAt]);
+  const days = verifiedAt ? daysSince(verifiedAt) : null;
+  const date = verifiedAt ? shortDate(verifiedAt) : null;
 
-  if (importedLabel) {
-    return (
-      <span style={{ ...baseStyle, color: "#6b7280" }}>
-        Imported {importedLabel}
-      </span>
-    );
-  }
-
-  if (!verifiedAt) {
+  // No verified_at at all — or imported-not-verified with stale verified_at
+  // (older than 7 days) — show "Verification pending".
+  if (
+    !verifiedAt ||
+    (statusReason === "imported_not_verified" && (days ?? 9999) > 7)
+  ) {
     return (
       <span style={{ ...baseStyle, color: "#9ca3af", background: "transparent" }}>
         Verification pending
@@ -77,7 +64,7 @@ export default function DealFreshnessBadge({
     );
   }
 
-  const days = daysSince(verifiedAt);
+  if (days === null) return null;
   if (days > 30) return null;
 
   if (days >= 15) {
@@ -91,23 +78,23 @@ export default function DealFreshnessBadge({
         }}
         title="Consider double-checking with the dispensary"
       >
-        ⚠ Verified {days} days ago — may be outdated
+        ⚠ Last checked {days} days ago — may be outdated
       </span>
     );
   }
 
-  if (days >= 8) {
+  if (days >= 7) {
     return (
       <span style={{ ...baseStyle, color: "#6b7280" }}>
-        Verified {days} days ago
+        Last checked {date}
       </span>
     );
   }
 
-  const whenText = days === 0 ? "today" : days === 1 ? "1 day ago" : `${days} days ago`;
+  // Fresh: < 7 days
   return (
     <span style={{ ...baseStyle, color: "#9ca3af" }}>
-      Verified {whenText}
+      Verified {date}
     </span>
   );
 }
