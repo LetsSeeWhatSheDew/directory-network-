@@ -10,6 +10,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
 import { metroCities, isInMetro } from "../../../lib/cityNormalize";
+import { isInCentralIL } from "../../../lib/visibility";
 import { estimateSavings } from "../../../lib/dealScoring";
 import EndingSoonRow, { type EndingSoonDeal } from "../../components/EndingSoonRow";
 
@@ -141,6 +142,10 @@ export async function generateMetadata({
   params: Promise<{ city: string }>;
 }): Promise<Metadata> {
   const { city: raw } = await params;
+  // Central IL scope gate — mirror the page component.
+  if (!isInCentralIL(raw)) {
+    return { robots: { index: false, follow: false } };
+  }
   const city = toCityCase(raw);
   const deals = await getCityDeals(city);
   const dispensaryCount = new Set(deals.map((d) => d.listing_slug).filter(Boolean)).size;
@@ -181,6 +186,8 @@ export default async function CityPage({
   const { city: raw } = await params;
   const city = toCityCase(raw);
   if (!city) notFound();
+  // Central IL scope gate — non-CIL city landings are hidden publicly.
+  if (!isInCentralIL(raw)) notFound();
 
   const [deals, listings] = await Promise.all([
     getCityDeals(city),

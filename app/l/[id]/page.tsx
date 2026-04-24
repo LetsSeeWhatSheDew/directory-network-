@@ -1,6 +1,7 @@
 export const revalidate = 0;
 
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import ClaimForm from "../../components/ClaimForm";
 import RecentlyViewedTracker from "../../components/RecentlyViewedTracker";
@@ -8,6 +9,7 @@ import ShareDealButton from "../../components/ShareDealButton";
 import { estimateSavings } from "../../../lib/dealScoring";
 import DealFreshnessBadge from "../../components/DealFreshnessBadge";
 import { nowInCT, isOpen, formatTime as formatHourTime } from "../../../lib/hours";
+import { isInCentralIL } from "../../../lib/visibility";
 
 const NOINDEX_SLUGS = [
   "emerald-city-dispensary-chicago-il",
@@ -275,6 +277,10 @@ export async function generateMetadata({
   if (!listing) {
     return { robots: { index: false, follow: false } };
   }
+  // Central IL scope gate — non-CIL listings are hidden publicly.
+  if (!isInCentralIL(listing.city)) {
+    return { robots: { index: false, follow: false } };
+  }
 
   const title = listing.meta_title ||
     `${listing.name} — Current Deals & Directions | PuffPrice`;
@@ -384,6 +390,11 @@ export default async function ListingPage({
         </div>
       </div>
     );
+  }
+
+  // Central IL scope gate — non-CIL listings are hidden publicly.
+  if (!isInCentralIL(listing.city)) {
+    notFound();
   }
 
   const [hours, attributes, products, related, activeDeals, recentStats] = await Promise.all([

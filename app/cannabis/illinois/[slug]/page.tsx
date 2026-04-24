@@ -4,6 +4,12 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import FeaturedDispensary from "../../../components/FeaturedDispensary";
+import {
+  isInCentralIL,
+  isEmptyCentralILCity,
+  EMPTY_CENTRAL_IL_CITIES,
+  CANNABIS_IL_NON_CITY_SLUGS,
+} from "../../../../lib/visibility";
 
 const SUPABASE_URL = (process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL ?? "https://hnbjufmtmrhexmdrfubw.supabase.co");
 const SUPABASE_SERVICE_KEY = (process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_KEY ?? (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300"));
@@ -57,6 +63,10 @@ export async function generateMetadata({
   params: Promise<{ city: string }>;
 }): Promise<Metadata> {
   const { city: citySlug } = await params;
+  // Central IL scope gate — non-CIL city pages are hidden publicly.
+  if (!CANNABIS_IL_NON_CITY_SLUGS.has(citySlug) && !isInCentralIL(citySlug)) {
+    return { robots: { index: false, follow: false } };
+  }
   const city = slugToCity(citySlug);
   const canonicalUrl = `https://www.puffprice.com/cannabis/illinois/${citySlug}`;
 
@@ -86,13 +96,83 @@ export default async function CityPage({
 }) {
   const { city: citySlug } = await params;
 
-  // Exclude known non-city routes — let their static pages handle these
-  const NON_CITY_SLUGS = ["first-time-guide", "laws", "open-now", "get-listed", "sitemap", "robots"];
-  if (NON_CITY_SLUGS.includes(citySlug)) {
+  // Exclude known non-city routes — let their static pages handle these.
+  if (CANNABIS_IL_NON_CITY_SLUGS.has(citySlug)) {
+    notFound();
+  }
+
+  // Central IL scope gate — non-CIL slugs never reach this dynamic route
+  // once middleware is live, but keep this as defense-in-depth.
+  if (!isInCentralIL(citySlug)) {
     notFound();
   }
 
   const city = slugToCity(citySlug);
+
+  // Empty Central IL cities (Bartonville, Morton, Pekin, Washington):
+  // no listings in master_listings, but the city IS in scope. Render a
+  // honest empty-state hub pointing to the nearest dispensary city.
+  if (isEmptyCentralILCity(citySlug)) {
+    const empty = EMPTY_CENTRAL_IL_CITIES[citySlug.toLowerCase()];
+    const nearestSlug = empty.nearestCity.toLowerCase().replace(/\s+/g, "-");
+    return (
+      <>
+        <style>{`
+          * { box-sizing: border-box; margin: 0; padding: 0; }
+          .ec-root { min-height: 100vh; background: #f7f6f2; font-family: Georgia, serif; }
+          .ec-nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 32px; background: #fff; border-bottom: 1px solid #e8e5de; }
+          .ec-nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+          .ec-nav-dot { width: 10px; height: 10px; border-radius: 50%; background: #16a34a; display: inline-block; }
+          .ec-nav-name { font-size: 1.1rem; font-weight: 700; color: #0f1f3d; letter-spacing: -0.02em; }
+          .ec-nav-accent { color: #16a34a; }
+          .ec-bc { padding: 12px 32px; background: #fff; border-bottom: 1px solid #f0ede6; font-size: 0.8rem; font-family: system-ui, sans-serif; color: #6b7280; display: flex; gap: 8px; flex-wrap: wrap; }
+          .ec-bc a { color: #6b7280; text-decoration: none; }
+          .ec-inner { max-width: 720px; margin: 0 auto; padding: 48px 24px 80px; }
+          .ec-label { font-size: 0.72rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #16a34a; margin-bottom: 12px; }
+          .ec-h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); font-weight: 700; color: #0f1f3d; letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 14px; }
+          .ec-intro { font-size: 1rem; color: #374151; font-family: system-ui, sans-serif; line-height: 1.7; margin-bottom: 28px; }
+          .ec-callout { background: #fff; border: 1px solid #e8e5de; border-radius: 14px; padding: 24px; margin-bottom: 24px; }
+          .ec-callout-label { font-size: 0.7rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #9ca3af; margin-bottom: 8px; }
+          .ec-callout-title { font-size: 1.1rem; font-weight: 700; color: #0f1f3d; margin-bottom: 6px; font-family: Georgia, serif; }
+          .ec-callout-sub { font-size: 0.9rem; color: #6b7280; font-family: system-ui, sans-serif; line-height: 1.6; margin-bottom: 14px; }
+          .ec-cta { display: inline-block; background: #16a34a; color: #fff; padding: 10px 22px; border-radius: 8px; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 700; font-size: 0.85rem; }
+          .ec-back { display: inline-block; margin-top: 12px; font-size: 0.85rem; color: #6b7280; font-family: system-ui, sans-serif; text-decoration: none; }
+        `}</style>
+        <div className="ec-root">
+          <nav className="ec-nav">
+            <Link href="/" className="ec-nav-brand">
+              <span className="ec-nav-dot" />
+              <span className="ec-nav-name">puff<span className="ec-nav-accent">price</span></span>
+            </Link>
+          </nav>
+          <div className="ec-bc">
+            <Link href="/">Home</Link><span>›</span>
+            <Link href="/cannabis/illinois">Central Illinois</Link><span>›</span>
+            <span style={{ color: "#374151" }}>{empty.name}</span>
+          </div>
+          <div className="ec-inner">
+            <p className="ec-label">Central Illinois Coverage</p>
+            <h1 className="ec-h1">No licensed dispensaries in {empty.name} yet</h1>
+            <p className="ec-intro">
+              {empty.name}, IL doesn&apos;t have a licensed adult-use dispensary today.
+              The nearest dispensaries are about {empty.nearestMiles} miles {empty.direction} in {empty.nearestCity}.
+              When a dispensary opens here or becomes licensed, we&apos;ll add it.
+            </p>
+            <div className="ec-callout">
+              <p className="ec-callout-label">Nearest dispensaries</p>
+              <p className="ec-callout-title">{empty.nearestCity}, IL · {empty.nearestMiles} mi {empty.direction}</p>
+              <p className="ec-callout-sub">See every licensed dispensary in {empty.nearestCity} with hours, directions, and current deals.</p>
+              <Link href={`/cannabis/illinois/${nearestSlug}`} className="ec-cta">
+                View {empty.nearestCity} dispensaries →
+              </Link>
+            </div>
+            <Link href="/cannabis/illinois" className="ec-back">← Back to Central Illinois</Link>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   const listings = await getCityListings(city);
 
   if (listings.length === 0) {

@@ -14,6 +14,7 @@ import { listingHref } from "../../../lib/links";
 import { displayDispensaryName } from "../../../lib/dispensaryName";
 import ShareDealButton from "../../components/ShareDealButton";
 import DealFreshnessBadge from "../../components/DealFreshnessBadge";
+import { isInCentralIL } from "../../../lib/visibility";
 
 export const revalidate = 60;
 
@@ -152,6 +153,10 @@ export async function generateMetadata({
     return { title: "Deal not found | PuffPrice", robots: { index: false } };
   }
   const listing = await getListing(deal.listing_slug);
+  // Central IL scope gate — mirror the page component below.
+  if (!isInCentralIL(listing?.city)) {
+    return { robots: { index: false, follow: false } };
+  }
   const headline = formatDealHeadline(deal);
   const disp = displayDispensaryName({ name: listing?.name, slug: deal.listing_slug, listing_slug: deal.listing_slug });
   const rawCity = listing?.city && listing.city !== "Illinois" ? listing.city : null;
@@ -196,6 +201,8 @@ export default async function DealPage({
   if (!deal || !deal.is_active) notFound();
 
   const listing = await getListing(deal.listing_slug);
+  // Central IL scope gate — deals on non-CIL listings are hidden publicly.
+  if (!isInCentralIL(listing?.city)) notFound();
   const headline = formatDealHeadline(deal);
   const dollars = estimateSavings(deal);
   const savingsFormatted = formatSavingsDollars(deal);

@@ -4,6 +4,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { nowInCT, isOpen, formatTime as formatHourTime } from "../../../../../lib/hours";
+import { isInCentralIL } from "../../../../../lib/visibility";
 const SB=(process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL ?? "https://hnbjufmtmrhexmdrfubw.supabase.co");const SK=(process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_KEY ?? (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300"));
 type L={id:string;name:string|null;slug:string|null;city:string|null;state:string|null;address1:string|null;short_description:string|null;logo_url:string|null;plan:string|null;delivery:boolean|null;online_ordering:boolean|null;};
 type H={listing_id:string;weekday:number;opens_at:string|null;closes_at:string|null;is_closed:boolean|null;};
@@ -15,6 +16,7 @@ const VALID_INTENTS=["best","open-now","recreational","deals"];
 export async function generateMetadata({params}:{params:Promise<{slug:string;intent:string}>}):Promise<Metadata>{
 const{slug,intent}=await params;
 if(!VALID_INTENTS.includes(intent))return{robots:{index:false,follow:false}};
+if(!isInCentralIL(slug))return{robots:{index:false,follow:false}};
 const city=s2c(slug);
 const url=`https://www.puffprice.com/cannabis/illinois/${slug}/${intent}`;
 const titles:Record<string,string>={best:`Best Cannabis Dispensaries in ${city}, IL`,["open-now"]:`${city} Dispensaries Open Right Now`,recreational:`Recreational Dispensaries in ${city}, IL`,deals:`Cannabis Deals in ${city}, IL`};
@@ -23,6 +25,7 @@ return{title:titles[intent]??city,description:descs[intent]??"",alternates:{cano
 export default async function Page({params}:{params:Promise<{slug:string;intent:string}>}){
 const{slug,intent}=await params;
 if(!VALID_INTENTS.includes(intent))notFound();
+if(!isInCentralIL(slug))notFound();
 const city=s2c(slug);
 const ts=new Date().toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit",timeZone:"America/Chicago"});
 const ct=nowInCT();

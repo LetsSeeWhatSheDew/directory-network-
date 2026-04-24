@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { brand } from "../lib/brand";
 import { getAllBrands } from "../lib/brands";
+import { isInCentralIL } from "../lib/visibility";
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -10,49 +11,25 @@ const SUPABASE_ANON_KEY =
 
 const DEAL_CATEGORIES = ["flower", "edibles", "vapes", "concentrate", "all"] as const;
 
-// Canonical list of /cannabis/illinois/[city] static pages. Mirrors
-// `app/cannabis/illinois/<slug>/` folders. Kept here (not in DB) because
-// the static pages render regardless of DB state and GSC flagged several
-// missing from the sitemap (including /cannabis/illinois/chicago, which
-// existed but wasn't emitted when the DB query missed a listing-city
-// join). Any new folder added under app/cannabis/illinois/ must also
-// land here to be discoverable.
+// Canonical list of /cannabis/illinois/[city] static pages in the
+// publicly-visible Central Illinois scope. Mirrors the 11 CENTRAL_IL_CITIES
+// plus the two twin-metro compound slugs (bloomington-normal, champaign-urbana).
+// Out-of-scope cities (Chicago, Aurora, etc.) are intentionally omitted —
+// middleware 404s those URLs, so they must NOT appear in the sitemap.
 const IL_CITY_PAGES = [
-  "addison",
-  "aurora",
+  "peoria",
+  "east-peoria",
+  "pekin",
+  "bartonville",
+  "morton",
+  "washington",
+  "bloomington",
   "bloomington-normal",
-  "canton",
-  "carbondale",
+  "normal",
   "champaign",
   "champaign-urbana",
-  "chicago",
-  "collinsville",
-  "danville",
-  "decatur",
-  "east-peoria",
-  "effingham",
-  "elgin",
-  "galesburg",
-  "jacksonville",
-  "joliet",
-  "litchfield",
-  "marion",
-  "moline",
-  "morris",
-  "mundelein",
-  "naperville",
-  "normal",
-  "north-aurora",
-  "ottawa",
-  "peoria",
-  "quincy",
-  "rock-island",
-  "rockford",
-  "schaumburg",
+  "urbana",
   "springfield",
-  "sterling",
-  "sycamore",
-  "waukegan",
 ] as const;
 
 const NOINDEX_SLUGS = [
@@ -79,7 +56,7 @@ const STATIC_PAGES = [
 async function getAllListings() {
     try {
           const res = await fetch(
-                  `${SUPABASE_URL}/rest/v1/master_listings?select=slug,updated_at&limit=200`,
+                  `${SUPABASE_URL}/rest/v1/master_listings?select=slug,city,updated_at&limit=200`,
             {
                       headers: {
                                   apikey: SUPABASE_ANON_KEY!,
@@ -121,9 +98,11 @@ async function getActiveDeals() {
     // Only emit /deal/[id] URLs for deals still live — Google treats
     // crawling a 404-or-notFound page for an expired deal as a quality
     // signal against the site. `expires_at.is.null` keeps evergreen deals.
+    // Join the listing's city so we can filter to Central IL only in
+    // the sitemap builder below.
     const nowIso = new Date().toISOString();
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/deals?select=id,updated_at,expires_at&is_active=eq.true&project_tag=eq.green&or=(expires_at.gt.${nowIso},expires_at.is.null)&limit=500`,
+      `${SUPABASE_URL}/rest/v1/deals?select=id,updated_at,expires_at,listing_slug&is_active=eq.true&project_tag=eq.green&or=(expires_at.gt.${nowIso},expires_at.is.null)&limit=500`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY!,
@@ -183,9 +162,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: p.pri,
   }));
 
-  // Individual listing pages
+  // Individual listing pages — Central IL only. Non-CIL listings are
+  // hidden from the public app (middleware + notFound() gates), so they
+  // must not appear in the sitemap either.
   const listingUrls: MetadataRoute.Sitemap = listings
-      .filter((l: { slug: string }) => l.slug && !NOINDEX_SLUGS.includes(l.slug))
+      .filter((l: { slug: string; city?: string | null }) =>
+        l.slug && !NOINDEX_SLUGS.includes(l.slug) && isInCentralIL(l.city))
       .map((l: { slug: string; updated_at: string }) => ({
               url: `${brand.url}/l/${l.slug}`,
               lastModified: l.updated_at ? new Date(l.updated_at) : new Date(),
@@ -193,15 +175,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
               priority: 0.8,
       }));
 
-  // Merge DB cities with the canonical static-page list. GSC flagged
-  // /cannabis/illinois/chicago as missing from the sitemap earlier today,
-  // even though the static page exists — the DB query can miss a city
-  // if no master_listing row is tagged with that city. Using the union
-  // of (DB rows) ∪ (IL_CITY_PAGES) guarantees every static city page
-  // we serve is also indexable.
-  const citySlugsFromDb = (cities as string[]).map((c) =>
-    c.toLowerCase().replace(/\s+/g, "-")
-  );
+  // Central IL city slugs — the intersection of (DB cities ∩ Central IL)
+  // plus the canonical IL_CITY_PAGES (which is already Central-IL-only).
+  const citySlugsFromDb = (cities as string[])
+    .map((c) => c.toLowerCase().replace(/\s+/g, "-"))
+    .filter((slug) => isInCentralIL(slug));
   const mergedCitySlugs = Array.from(new Set([...citySlugsFromDb, ...IL_CITY_PAGES]));
 
   // City hub pages
@@ -225,17 +203,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         }))
                                                                            );
 
-  // Chicago landmark pages
-  const landmarkUrls: MetadataRoute.Sitemap = CHICAGO_LANDMARKS.map((lm) => ({
-        url: `${brand.url}/cannabis/illinois/chicago/${lm}`,
-        lastModified: new Date(),
-        changeFrequency: "weekly" as const,
-        priority: 0.8,
-  }));
+  // Chicago landmark pages — OUT OF SCOPE. Chicago is not in Central IL,
+  // so these URLs 404 via middleware. Leave the constant for future
+  // reference but do not emit.
+  const landmarkUrls: MetadataRoute.Sitemap = [];
 
-  // NEW — /dispensary/[slug] full profile pages (parallel to /l/[slug])
+  // /dispensary/[slug] full profile pages — Central IL only.
   const dispensaryProfileUrls: MetadataRoute.Sitemap = listings
-    .filter((l: { slug: string }) => l.slug && !NOINDEX_SLUGS.includes(l.slug))
+    .filter((l: { slug: string; city?: string | null }) =>
+      l.slug && !NOINDEX_SLUGS.includes(l.slug) && isInCentralIL(l.city))
     .map((l: { slug: string; updated_at: string }) => ({
       url: `${brand.url}/dispensary/${l.slug}`,
       lastModified: l.updated_at ? new Date(l.updated_at) : new Date(),
@@ -243,13 +219,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.85,
     }));
 
-  // NEW — /city/[city] clean landing pages
-  const cityLandingUrls: MetadataRoute.Sitemap = (cities as string[]).map((city) => ({
-    url: `${brand.url}/city/${city.toLowerCase().replace(/\s+/g, "-")}`,
-    lastModified: new Date(),
-    changeFrequency: "daily" as const,
-    priority: 0.9,
-  }));
+  // /city/[city] clean landing pages — Central IL only.
+  const cityLandingUrls: MetadataRoute.Sitemap = (cities as string[])
+    .filter((city) => isInCentralIL(city))
+    .map((city) => ({
+      url: `${brand.url}/city/${city.toLowerCase().replace(/\s+/g, "-")}`,
+      lastModified: new Date(),
+      changeFrequency: "daily" as const,
+      priority: 0.9,
+    }));
 
   // NEW — /brand/[slug] per-brand pages. Returns [] until brands table lands,
   // so the shape is live but the section is empty today.
@@ -262,9 +240,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     }));
 
-  // NEW — /deal/[id] per-deal pages (active deals only)
-  const dealDetailUrls: MetadataRoute.Sitemap = (activeDeals as Array<{ id: string; updated_at?: string }>)
-    .filter((d) => d.id)
+  // /deal/[id] per-deal pages — active deals only, Central IL listings only.
+  // Build a slug→city map from `listings` so we can filter by the deal's
+  // listing_slug without another round-trip.
+  const listingCityBySlug = new Map<string, string | null>();
+  for (const l of listings as Array<{ slug: string; city?: string | null }>) {
+    if (l?.slug) listingCityBySlug.set(l.slug, l.city ?? null);
+  }
+  const dealDetailUrls: MetadataRoute.Sitemap = (activeDeals as Array<{ id: string; updated_at?: string; listing_slug?: string }>)
+    .filter((d) => {
+      if (!d.id) return false;
+      const city = d.listing_slug ? listingCityBySlug.get(d.listing_slug) : null;
+      return isInCentralIL(city);
+    })
     .map((d) => ({
       url: `${brand.url}/deal/${d.id}`,
       lastModified: d.updated_at ? new Date(d.updated_at) : new Date(),

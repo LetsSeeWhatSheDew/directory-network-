@@ -4,12 +4,12 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Illinois Cannabis Dispensaries — Complete Directory | PuffPrice",
-  description: "Find licensed cannabis dispensaries across Illinois. Browse by city, view real hours, and discover deals — 61 listed across 25 Illinois cities, growing weekly.",
+  title: "Central Illinois Cannabis Dispensaries — PuffPrice",
+  description: "Find licensed cannabis dispensaries across Central Illinois — Peoria, Bloomington-Normal, Champaign-Urbana, Springfield, and the rest of the Central IL metro belt.",
   alternates: { canonical: "https://www.puffprice.com/cannabis/illinois" },
   openGraph: {
-    title: "Illinois Cannabis Dispensaries — Complete Directory",
-    description: "Find licensed cannabis dispensaries across Illinois. Browse by city, view real hours, and discover deals.",
+    title: "Central Illinois Cannabis Dispensaries",
+    description: "Licensed cannabis dispensaries across Central Illinois. Browse by city, view real hours, and discover deals.",
     url: "https://www.puffprice.com/cannabis/illinois",
     siteName: "PuffPrice",
     type: "website",
@@ -17,29 +17,27 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Illinois Cannabis Dispensaries — Complete Directory",
-    description: "Find licensed cannabis dispensaries across Illinois. Browse by city, view real hours, and discover deals.",
+    title: "Central Illinois Cannabis Dispensaries",
+    description: "Licensed cannabis dispensaries across Central Illinois.",
     images: ["https://www.puffprice.com/og-image.png"],
   },
   robots: { index: true, follow: true },
 };
 
+// Central IL metros — the 11 cities we publish today. Grouped by metro
+// for scannability. Empty cities (Bartonville, Morton, Pekin, Washington)
+// are included — their hub pages render a honest "no dispensaries yet"
+// empty-state. See lib/visibility.ts.
 const IL_CITIES = [
-  "Aurora", "Bloomington", "Canton", "Carbondale", "Champaign",
-  "Chicago", "Collinsville", "Danville", "Decatur", "East Peoria",
-  "Effingham", "Elgin", "Galesburg", "Jacksonville", "Joliet",
-  "Litchfield", "Marion", "Moline", "Morris", "Mundelein",
-  "Naperville", "Normal", "North Aurora", "Ottawa", "Peoria",
-  "Quincy", "Rock Island", "Rockford", "Schaumburg", "Springfield",
-  "Sterling", "Sycamore", "Urbana", "Waukegan",
+  "Peoria", "East Peoria", "Pekin", "Bartonville", "Morton", "Washington",
+  "Bloomington", "Normal", "Champaign", "Urbana", "Springfield",
 ];
 
 const REGIONS: Record<string, string[]> = {
-  "Chicago area": ["Chicago", "Aurora", "Elgin", "Joliet", "Mundelein", "Naperville", "North Aurora", "Schaumburg"],
-  "Central Illinois": ["Bloomington", "Champaign", "Danville", "Decatur", "Normal", "Peoria", "East Peoria", "Canton", "Springfield", "Urbana"],
-  "Southern Illinois": ["Carbondale", "Collinsville", "Effingham", "Litchfield", "Marion"],
-  "Northern Illinois": ["Galesburg", "Moline", "Morris", "Ottawa", "Rock Island", "Rockford", "Sterling", "Sycamore", "Waukegan"],
-  "Western Illinois": ["Jacksonville", "Quincy"],
+  "Peoria metro": ["Peoria", "East Peoria", "Pekin", "Bartonville", "Morton", "Washington"],
+  "Bloomington-Normal": ["Bloomington", "Normal"],
+  "Champaign-Urbana": ["Champaign", "Urbana"],
+  "Springfield": ["Springfield"],
 };
 
 const faqSchema = JSON.stringify({
@@ -56,10 +54,10 @@ const faqSchema = JSON.stringify({
     },
     {
       "@type": "Question",
-      name: "How many cannabis dispensaries are in Illinois?",
+      name: "Why only Central Illinois?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Illinois has roughly 290 licensed adult-use cannabis dispensaries operating across the state (per IDFPR), with the highest concentration in the Chicago metro area. PuffPrice currently tracks 61 across 25 Illinois cities.",
+        text: "PuffPrice is built for Central Illinois — Peoria, Bloomington-Normal, Champaign-Urbana, Springfield, and the surrounding metro belt. Statewide Illinois has roughly 290 licensed dispensaries; we focus on the dispensaries Central IL residents actually drive to.",
       },
     },
     {
@@ -162,21 +160,19 @@ export default function IllinoisHubPage() {
 
         <div className="il-inner">
           <div className="il-hero">
-            <p className="il-label">Illinois Cannabis Directory</p>
-            <h1 className="il-h1">Cannabis Dispensaries in Illinois</h1>
+            <p className="il-label">Central Illinois Cannabis Directory</p>
+            <h1 className="il-h1">Cannabis Dispensaries in Central Illinois</h1>
             <p className="il-intro">
-              Find every licensed cannabis dispensary in Illinois. Browse by city, check real hours,
-              and discover deals near you. Illinois legalized recreational cannabis in January 2020 —
-              adults 21 and older can purchase at any licensed dispensary without a medical card.
+              Licensed cannabis dispensaries across the Central Illinois metro belt —
+              Peoria, Bloomington-Normal, Champaign-Urbana, Springfield, and the surrounding
+              cities that Central IL residents actually drive to. Illinois legalized
+              recreational cannabis in January 2020 — adults 21 and older can purchase at
+              any licensed dispensary without a medical card.
             </p>
             <div className="il-stats">
               <div>
-                <div className="il-stat-num">270+</div>
-                <div className="il-stat-label">Licensed dispensaries</div>
-              </div>
-              <div>
                 <div className="il-stat-num">{IL_CITIES.length}</div>
-                <div className="il-stat-label">Cities covered</div>
+                <div className="il-stat-label">Central IL cities</div>
               </div>
               <div>
                 <div className="il-stat-num">2020</div>
@@ -269,8 +265,8 @@ export default function IllinoisHubPage() {
               <p className="il-faq-a">No. Illinois has full recreational cannabis — no medical card required. You just need a valid government-issued ID showing you are 21 or older.</p>
             </div>
             <div className="il-faq-item">
-              <p className="il-faq-q">How many dispensaries are in Illinois?</p>
-              <p className="il-faq-a">Illinois has roughly 290 licensed adult-use cannabis dispensaries operating statewide (per IDFPR), with the largest concentration in the Chicago metro area. PuffPrice currently lists 61 of them across 25 Illinois cities, and we add more weekly.</p>
+              <p className="il-faq-q">Why does PuffPrice only cover Central Illinois?</p>
+              <p className="il-faq-a">Illinois has roughly 290 licensed adult-use cannabis dispensaries statewide, with the largest concentration in the Chicago metro. PuffPrice is focused on Central Illinois — Peoria, Bloomington-Normal, Champaign-Urbana, Springfield, and the surrounding metro belt — because that&apos;s where we can keep deals accurate, hours current, and drive times short. We&apos;ll expand when we can do the same quality of work elsewhere.</p>
             </div>
             <div className="il-faq-item">
               <p className="il-faq-q">Can tourists buy cannabis in Illinois?</p>
@@ -279,7 +275,7 @@ export default function IllinoisHubPage() {
           </div>
 
           <div className="il-cta">
-            <p className="il-cta-title">Own a dispensary in Illinois?</p>
+            <p className="il-cta-title">Own a dispensary in Central Illinois?</p>
             <p className="il-cta-sub">Claim your free listing, update your hours, and get in front of customers searching for dispensaries near them.</p>
             <Link href="/get-listed" className="il-cta-btn">Claim your free listing →</Link>
           </div>
@@ -287,7 +283,7 @@ export default function IllinoisHubPage() {
 
         <footer className="il-footer">
           <span className="il-footer-brand">puff<span style={{ color: "#16a34a" }}>price</span></span>
-          <span className="il-footer-note">© {new Date().getFullYear()} PuffPrice · Illinois Cannabis Directory</span>
+          <span className="il-footer-note">© {new Date().getFullYear()} PuffPrice · Central Illinois Cannabis Directory</span>
         </footer>
       </div>
     </>

@@ -14,6 +14,7 @@ import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring"
 import { nowInCT, isOpen, formatTime as formatHourTime } from "../../../lib/hours";
 import { listingHref } from "../../../lib/links";
 import { cityFromSlug } from "../../../lib/cityNormalize";
+import { isInCentralIL } from "../../../lib/visibility";
 
 export const revalidate = 300;
 
@@ -170,6 +171,10 @@ export async function generateMetadata({
   if (!listing) {
     return { title: "Dispensary not found | PuffPrice", robots: { index: false } };
   }
+  // Central IL scope gate — non-CIL profile pages are hidden publicly.
+  if (!isInCentralIL(listing.city)) {
+    return { robots: { index: false, follow: false } };
+  }
   const name = listing.name || slug;
   const city = listing.city || cityFromSlug(slug) || null;
   const title = `${name} — Deals, Hours & Directions | PuffPrice`;
@@ -208,6 +213,8 @@ export default async function DispensaryProfilePage({
   const { slug } = await params;
   const listing = await getListing(slug);
   if (!listing) notFound();
+  // Central IL scope gate — non-CIL listings are hidden publicly.
+  if (!isInCentralIL(listing.city)) notFound();
 
   const [hours, deals] = await Promise.all([
     getHours(listing.id),
