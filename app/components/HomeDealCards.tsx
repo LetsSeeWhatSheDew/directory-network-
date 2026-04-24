@@ -209,10 +209,10 @@ export default function HomeDealCards({
 
   const headline =
     mode === "all"
-      ? "Top deals in Illinois today"
+      ? "Top deals in Central Illinois today"
       : city
       ? `Best deals near ${city} today`
-      : "Top deals in Illinois today";
+      : "Top deals in Central Illinois today";
 
   return (
     <>
@@ -275,7 +275,7 @@ export default function HomeDealCards({
                   minHeight: 32,
                 }}
               >
-                All Illinois
+                All Central IL
               </button>
             </div>
           )}
@@ -292,7 +292,7 @@ export default function HomeDealCards({
               whiteSpace: "nowrap",
             }}
           >
-            See all Illinois deals →
+            See all Central IL deals →
           </Link>
         )}
       </div>

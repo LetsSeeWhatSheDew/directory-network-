@@ -71,9 +71,15 @@ function rankingReason(d: Deal, category: string, city?: string): string {
   return `Top-ranked ${cat} deal ${where} today`;
 }
 
+// Central IL city allow-list for the public deal feed. Must match the
+// 12 cities in lib/constants/regions.ts. Non-CIL deals stay in the DB
+// but never leave this endpoint.
+const CIL_CITY_IN_LIST = `("Peoria","East Peoria","Peoria Heights","Pekin","Bartonville","Morton","Washington","Bloomington","Normal","Champaign","Urbana","Springfield")`;
+
 async function fetchDeals(category: string): Promise<Deal[]> {
   const params = new URLSearchParams({ select: "*", order: "discount_value.desc", limit: "50" });
   if (category !== "all") params.set("category", `eq.${category}`);
+  params.set("city", `in.${CIL_CITY_IN_LIST}`);
   const res = await fetch(
     `${SUPABASE_URL}/rest/v1/active_deals_with_listings?${params.toString()}`,
     {

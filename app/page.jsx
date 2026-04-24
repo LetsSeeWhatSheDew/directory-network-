@@ -242,6 +242,12 @@ function renderIcon(key) {
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300";
 
+// PostgREST `in.()` value list of Central IL city names. Keeps the
+// homepage deal feed + stats scoped to the 12 publicly-visible cities;
+// any deal attached to a non-CIL dispensary stays in the DB but never
+// appears here. Matches CENTRAL_IL_CITIES in lib/constants/regions.ts.
+const CIL_CITY_IN_LIST = `("Peoria","East Peoria","Peoria Heights","Pekin","Bartonville","Morton","Washington","Bloomington","Normal","Champaign","Urbana","Springfield")`;
+
 export const revalidate = 300;
 
 // View's name column often mirrors the slug. Humanize anything that
@@ -283,7 +289,7 @@ async function getTopDeals() {
   // refresh roughly once a minute.
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&order=discount_value.desc&limit=6`,
+      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&city=in.${encodeURIComponent(CIL_CITY_IN_LIST)}&order=discount_value.desc&limit=6`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,
@@ -355,7 +361,7 @@ async function getMostRecentDealTs() {
 async function getDealPool() {
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&order=discount_value.desc&limit=20`,
+      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&city=in.${encodeURIComponent(CIL_CITY_IN_LIST)}&order=discount_value.desc&limit=20`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,
@@ -382,7 +388,7 @@ async function getEndingSoonDeals() {
   const cutoff = new Date(now.getTime() + 24 * 3600 * 1000);
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_id,id,listing_slug,slug,name,city,deal_title,title,expires_at&expires_at=gt.${encodeURIComponent(now.toISOString())}&expires_at=lt.${encodeURIComponent(cutoff.toISOString())}&order=expires_at.asc&limit=5`,
+      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_id,id,listing_slug,slug,name,city,deal_title,title,expires_at&city=in.${encodeURIComponent(CIL_CITY_IN_LIST)}&expires_at=gt.${encodeURIComponent(now.toISOString())}&expires_at=lt.${encodeURIComponent(cutoff.toISOString())}&order=expires_at.asc&limit=5`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,
@@ -410,9 +416,13 @@ async function getEndingSoonDeals() {
 }
 
 async function getActiveDealCount() {
+  // Count deals from the `active_deals_with_listings` view so we can
+  // filter by dispensary city — the raw `deals` table has no city column.
+  // Scoped to Central IL only; the stats line must match what the user
+  // actually sees in the deal feed above it.
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/deals?select=id&is_active=eq.true&project_tag=eq.green`,
+      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_id&city=in.${encodeURIComponent(CIL_CITY_IN_LIST)}`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,
@@ -470,8 +480,8 @@ async function getCentralILListingCount() {
 // what makes the markup eligible for rich results.
 const FAQ_ENTRIES = [
   {
-    q: "How do I find dispensary deals near me in Illinois?",
-    a: "Allow location access or select your city and you'll see the cheapest active dispensary deals in your area. Every deal is tagged with how much you save and the exact dispensary running it.",
+    q: "How do I find dispensary deals near me in Central Illinois?",
+    a: "Allow location access or select your city and you'll see the cheapest active dispensary deals in your area. Every deal is tagged with how much you save and the exact Central Illinois dispensary running it.",
   },
   {
     q: "How often are deals updated?",
@@ -482,8 +492,8 @@ const FAQ_ENTRIES = [
     a: "Yes. Browsing deals is always free with no account required. Pro is $0.99 a month and adds SMS alerts, a daily digest, price history, and a savings dashboard.",
   },
   {
-    q: "Which Illinois cities have dispensary deals?",
-    a: "Coverage is strongest across Central Illinois — Peoria, East Peoria, Pekin, Bloomington-Normal, Champaign-Urbana, Springfield, and neighboring cities. Dispensaries in Chicago, Rockford, Aurora, Joliet, Naperville, and other Illinois markets are also listed.",
+    q: "Which Central Illinois cities does PuffPrice cover?",
+    a: "Peoria, East Peoria, Peoria Heights, Pekin, Bartonville, Morton, Washington, Bloomington, Normal, Champaign, Urbana, and Springfield — the twelve cities that make up the Central Illinois cannabis market. Dispensaries outside this region are not listed here.",
   },
 ];
 
@@ -949,7 +959,7 @@ export default async function HomePage() {
           <Link href="/cannabis/illinois/open-now" className="nav-link">Open now</Link>
           <Link href="/savings/dashboard" className="nav-link">My savings</Link>
           <Link href="/map" className="nav-link">Map view</Link>
-          <Link href="/cannabis/illinois" className="nav-link">Browse Illinois</Link>
+          <Link href="/cannabis/illinois" className="nav-link">Browse Central IL</Link>
           <Link href="/dispensaries" className="nav-cta">For dispensaries</Link>
         </div>
         <MobileNavMenu />
@@ -1162,7 +1172,7 @@ export default async function HomePage() {
           href="/cannabis/illinois"
           style={{ color: "#6b7280", fontWeight: 500, textDecoration: "underline", textDecorationStyle: "dotted" }}
         >
-          Browse all Illinois →
+          Browse all Central IL cities →
         </Link>
       </div>
 
@@ -1170,7 +1180,7 @@ export default async function HomePage() {
 
       {/* DISPENSARY CTA */}
       <div className="biz-strip">
-        <div className="biz-title">Own an Illinois dispensary?</div>
+        <div className="biz-title">Own a Central Illinois dispensary?</div>
         <p className="biz-sub">
           Your listing is always free — claim it in under a minute.
         </p>
@@ -1193,7 +1203,7 @@ export default async function HomePage() {
         }}>
           {liveValue && liveValue.totalDollars > 0 && (
             <span>
-              <strong style={{ color: "#0f1f3d" }}>${liveValue.totalDollars.toLocaleString()}</strong> in deals live across Illinois this month
+              <strong style={{ color: "#0f1f3d" }}>${liveValue.totalDollars.toLocaleString()}</strong> in deals live across Central Illinois this month
             </span>
           )}
           {liveValue && liveValue.totalDollars > 0 && dealsThisMonth && dealsThisMonth.count > 0 && (
@@ -1201,7 +1211,7 @@ export default async function HomePage() {
           )}
           {dealsThisMonth && dealsThisMonth.count > 0 && (
             <span>
-              Illinois dispensaries ran <strong style={{ color: "#0f1f3d" }}>{dealsThisMonth.count}</strong> deal{dealsThisMonth.count === 1 ? "" : "s"} in {dealsThisMonth.monthName}
+              Central IL dispensaries ran <strong style={{ color: "#0f1f3d" }}>{dealsThisMonth.count}</strong> deal{dealsThisMonth.count === 1 ? "" : "s"} in {dealsThisMonth.monthName}
             </span>
           )}
         </div>
