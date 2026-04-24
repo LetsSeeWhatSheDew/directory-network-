@@ -6,7 +6,7 @@
     },
     {
       "path": "/api/cron/scrape-deals",
-      "schedule": "0 */6 * * *"
+      "schedule": "0 9 * * *"
     }
   ]
 }
