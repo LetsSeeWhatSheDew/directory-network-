@@ -10,6 +10,32 @@
 
 ---
 
+> ### CORRECTION — 2026-04-26 late session (Code reconciliation)
+>
+> Verified against live DB at 2026-04-26 17:20 UTC: **26 active CIL listings**, not 29 as the rollup below projects.
+>
+> Root cause of the gap: rows **#24 `flora-farms-springfield`, #26 `key-cannabis-springfield`, and #30 `terrabis-springfield`** are in Springfield, **MO** (state=`MO`), not Springfield, IL. They were pulled into this doc by a city-name-only filter that missed the state qualifier. They remain active in the DB but are **out of Central Illinois scope** and should not appear in CIL coverage tracking.
+>
+> True numbers:
+>
+> | stage | count | notes |
+> |---|---:|---|
+> | Rows in this doc | 31 | mixes IL + MO |
+> | MO miscategorizations | −3 | flora-farms, key-cannabis, terrabis (all Springfield, MO) |
+> | IL-only pre-deactivation | 28 | matches prior planning docs |
+> | `[DEACTIVATING]` rows | −2 | `ascend-springfield`, `consume-cannabis-champaign` |
+> | **IL-only post-deactivation** | **26** | matches live DB |
+>
+> The rollup below (29 post-deactivation) is off by 3. Treat **26** as the ground-truth CIL count until this doc is rewritten.
+>
+> The priority-list rankings at the bottom are unaffected — the 3 MO rows are not in it. Only the "Master coverage table" rollup numbers are wrong.
+>
+> Original analysis retained unedited below for audit trail.
+
+---
+
+---
+
 ## Difficulty legend
 
 - **EASY** — dispensary-owned website has a `/deals`, `/specials`, or equivalent URL with structured, parseable promotion data. Can be scraped with a straightforward HTML selector or embedded-JSON extractor.

@@ -262,6 +262,13 @@ function extractDealsFromHtml(html: string, sourceUrl: string, listingSlug: stri
       const re = new RegExp(pattern.source, pattern.flags.replace(/g/, "") + "g");
       let m: RegExpExecArray | null;
       while ((m = re.exec(hay)) !== null) {
+        // BOGO guard: "Buy one, get one 50% off: Select vape" is a BOGO deal,
+        // not a flat 50% off vape deal. Skip any match whose 40-char prefix
+        // contains BOGO signals — the dedicated BOGO pattern covers this case.
+        const prefix = hay.slice(Math.max(0, m.index - 40), m.index);
+        if (/buy\s+(one|1|two|2|a)[,\s]+get\s+(one|1|a)|\bbogo\b|\bb1g1\b/i.test(prefix)) {
+          continue;
+        }
         push(label(m as unknown as RegExpMatchArray));
       }
     }
