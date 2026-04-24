@@ -18,7 +18,8 @@ export const CITY_CONFIG: CityConfig = {
   heroIntro:
     "Home to the University of Illinois and a thriving young-adult population, Champaign-Urbana offers convenient access to cannabis with student-friendly pricing. Explore our guide to local dispensaries, consumption rules, and everything you need to know before your first visit.",
   stats: [
-    { label: "Dispensaries", value: "~8" },
+    // Value overridden at render time with live DB count (see CityPage).
+    { label: "Dispensaries", value: "\u2014" },
     { label: "Population", value: "~126K" },
     { label: "Rec & Medical", value: "Both available" },
   ],

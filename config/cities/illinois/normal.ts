@@ -15,9 +15,10 @@ export const CITY_CONFIG: CityConfig = {
   city: "Normal",
   state: "Illinois",
   slug: "normal",
-  heroIntro: "Normal, home to Illinois State University with 55,000 residents, boasts the highest concentration of dispensaries in central Illinois with 7-8 locations. This college town's vibrant cannabis market reflects strong student and community demand.",
+  heroIntro: "Normal, home to Illinois State University with 55,000 residents, has one of the densest licensed dispensary concentrations in Central Illinois. This college town's cannabis market reflects strong student and community demand.",
   stats: [
-    { label: "Dispensaries", value: "~7-8" },
+    // Value overridden at render time with live DB count (see CityPage).
+    { label: "Dispensaries", value: "\u2014" },
     { label: "Population", value: "~55K" },
     { label: "Rec & Medical", value: "Both available" },
   ],

@@ -19,7 +19,8 @@ export const CITY_CONFIG: CityConfig = {
     "East Peoria's concentrated dispensary strip makes it one of Illinois' densest cannabis retail hubs per capita. Located across the Illinois River from Peoria in Tazewell County, this city of ~23K offers competitive pricing and convenient access to a wide range of cannabis products.",
   stats: [
     { label: "Population", value: "~23,000" },
-    { label: "Dispensaries", value: "~8" },
+    // Value overridden at render time with live DB count (see CityPage).
+    { label: "Dispensaries", value: "\u2014" },
     { label: "County", value: "Tazewell" },
   ],
   laws: [

@@ -41,16 +41,57 @@ export interface CityConfig {
 
 const BASE_URL = "https://projectgreen.com";
 
+/**
+ * Rewrite the "how many dispensaries" FAQ answer with the live DB count.
+ * Also strips any other FAQ entries whose answers contain hardcoded
+ * dispensary counts that contradict the live count ("approximately N",
+ * "N-N dispensaries", etc). Keeps the question/answer contract clean.
+ */
+function normalizeFaqs(
+  faqs: CityFaq[],
+  city: string,
+  count: number
+): CityFaq[] {
+  const hasCountClaim = /approximately\s+[0-9–-]+|[0-9]+\s*[–-]\s*[0-9]+\s+(?:licensed\s+)?dispensar|approximately\s+[a-z]+\s+(?:licensed\s+)?dispensar/i;
+
+  return faqs.map((faq) => {
+    const q = faq.question.toLowerCase();
+    if (q.includes("how many dispensaries")) {
+      const noun = count === 1 ? "dispensary" : "dispensaries";
+      return {
+        question: faq.question,
+        answer:
+          count > 0
+            ? `PuffPrice currently lists ${count} ${noun} in ${city}. This reflects PuffPrice's Central Illinois coverage — you can see every one in the directory above.`
+            : `PuffPrice doesn't currently list any dispensaries in ${city}. Check the nearest-city suggestion or browse our full Central Illinois directory.`,
+      };
+    }
+    // For any other FAQ that embeds a count claim we can't verify, strip
+    // the count language but keep the surrounding answer intact.
+    if (hasCountClaim.test(faq.answer)) {
+      return {
+        question: faq.question,
+        answer: faq.answer
+          .replace(/\b(?:approximately\s+)?[0-9]+\s*[–-]\s*[0-9]+\s+(licensed\s+)?dispensar(?:ies|y)/gi, "licensed dispensaries")
+          .replace(/\bapproximately\s+[0-9]+\s+(licensed\s+)?dispensar(?:ies|y)/gi, "licensed dispensaries")
+          .replace(/\bapproximately\s+(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\s+(licensed\s+)?dispensar(?:ies|y)/gi, "licensed dispensaries"),
+      };
+    }
+    return faq;
+  });
+}
+
 function buildJsonLd(
   config: CityConfig,
   listings: CityListing[]
 ) {
   const { city, state, slug, faqs } = config;
+  const normalizedFaqs = normalizeFaqs(faqs, city, listings.length);
 
   const faqPage = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: faqs.map((faq) => ({
+    mainEntity: normalizedFaqs.map((faq) => ({
       "@type": "Question",
       name: faq.question,
       acceptedAnswer: {
@@ -148,6 +189,10 @@ export default function CityPage({ config, listings = [] }: Props) {
           : s,
       )
     : stats;
+
+  // Rewrite any hardcoded dispensary counts in FAQ answers to match the
+  // live listing count. Same reason as liveStats: configs drift.
+  const liveFaqs = normalizeFaqs(faqs, city, listings.length);
 
   const jsonLdBlocks = buildJsonLd(config, listings);
 
@@ -459,7 +504,7 @@ export default function CityPage({ config, listings = [] }: Props) {
             </p>
 
             <div className="space-y-4">
-              {faqs.map((faq) => (
+              {liveFaqs.map((faq) => (
                 <div
                   key={faq.question}
                   className="rounded-2xl border border-white/10 bg-slate-950/80 p-5"

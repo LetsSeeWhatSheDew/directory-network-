@@ -16,9 +16,10 @@ export const CITY_CONFIG: CityConfig = {
   state: "Illinois",
   slug: "springfield",
   heroIntro:
-    "Springfield, Illinois' vibrant capital city, offers a growing cannabis market tailored to government workers, tourists, and residents from the surrounding rural communities. With a population of approximately 114,000, Springfield features 5–15 dispensaries providing both recreational and medical cannabis options. The city's strategic position as a state hub makes it an accessible destination for cannabis enthusiasts across central Illinois.",
+    "Springfield, Illinois' capital city, offers a growing adult-use cannabis market serving government workers, tourists, and residents across central Illinois. With a population of approximately 114,000, Springfield is home to licensed recreational and medical dispensaries. The city's position as the state capital makes it an accessible destination for customers across Central Illinois.",
   stats: [
-    { label: "Dispensaries", value: "~5-15" },
+    // Value overridden at render time with live DB count (see CityPage).
+    { label: "Dispensaries", value: "\u2014" },
     { label: "Population", value: "~114K" },
     { label: "Rec & Medical", value: "Both available" },
   ],

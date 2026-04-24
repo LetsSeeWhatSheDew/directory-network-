@@ -15,9 +15,10 @@ export const CITY_CONFIG: CityConfig = {
   city: "Champaign",
   state: "Illinois",
   slug: "champaign",
-  heroIntro: "Champaign, home to the University of Illinois campus side with 88,000 residents, offers 5-6 dispensaries serving students and the greater community. The city's college-town culture drives robust cannabis retail activity and product diversity.",
+  heroIntro: "Champaign, home to the University of Illinois campus side with 88,000 residents, has licensed dispensaries serving students and the greater community. The city's college-town culture drives robust cannabis retail activity and product diversity.",
   stats: [
-    { label: "Dispensaries", value: "~5-6" },
+    // Value overridden at render time with live DB count (see CityPage).
+    { label: "Dispensaries", value: "\u2014" },
     { label: "Population", value: "~88K" },
     { label: "Rec & Medical", value: "Both available" },
   ],
