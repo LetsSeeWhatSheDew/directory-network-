@@ -16,8 +16,9 @@
 | 6 | Trust-leak audit + fixes | Done | `fcce6cf` |
 | 7 | Content floor application | Done (21 rows populated) | `d80b952` |
 | 8 | Final smoke + route-param bug fix | Done | `8b1a782` |
+| 8b | project_tag=green scope fix (cross-project leak) | Done | `007d402` |
 
-Eight commits, all pushed to `origin/main`. Worktree clean.
+Nine commits, all pushed to `origin/main`. Worktree clean.
 
 ---
 
@@ -153,7 +154,47 @@ Expected 404:
 - `/city/chicago` — 404
 - `/l/north-star-remedies-peoria-il` — 404 (deactivated)
 
-(Final 200/404 matrix confirmed on the deployed production build — see the Bash output earlier in this session's transcript.)
+One more bug surfaced in the re-smoke after fix `8b1a782`: the sitemap and `/l/[id]` fetches were missing `project_tag=eq.green`, so rows from other Cowork projects sharing `master_listings` (rentals, contractors in Peoria) were leaking onto the PuffPrice surface. Commit `007d402` added `project_tag=eq.green` to every remaining public query. After that deploy flipped Ready, the 200/404 matrix below passed cleanly.
+
+Final production matrix (32/32 pass):
+
+```
+EXPECT 200:
+  /                                       200
+  /cannabis/illinois                      200
+  /cannabis/illinois/peoria               200
+  /cannabis/illinois/east-peoria          200
+  /cannabis/illinois/peoria-heights       200   (new row Phase 3)
+  /cannabis/illinois/bloomington          200
+  /cannabis/illinois/normal               200
+  /cannabis/illinois/champaign            200
+  /cannabis/illinois/urbana               200
+  /cannabis/illinois/springfield          200
+  /cannabis/illinois/bartonville          200   (empty-state)
+  /cannabis/illinois/morton               200   (empty-state)
+  /cannabis/illinois/pekin                200   (empty-state)
+  /cannabis/illinois/washington           200   (empty-state)
+  /cannabis/illinois/peoria/best          200
+  /cannabis/illinois/peoria/open-now      200
+  /cannabis/illinois/first-time-guide     200
+  /city/peoria                            200
+  /l/beyond-hello-peoria                  200
+  /l/nuera-champaign                      200
+  /l/cookies-peoria-heights               200   (new row Phase 3)
+  /sitemap.xml                            200   (Central IL URLs only)
+
+EXPECT 404:
+  /cannabis/illinois/chicago              404
+  /cannabis/illinois/aurora               404
+  /cannabis/illinois/rockford             404
+  /cannabis/illinois/naperville           404
+  /cannabis/illinois/joliet               404
+  /cannabis/illinois/chicago/best         404
+  /cannabis/illinois/chicago/hyde-park    404
+  /city/chicago                           404
+  /l/north-star-remedies-peoria-il        404   (deactivated Phase 5)
+  /l/northline-public-works-peoria-il     404   (cross-project leak fix)
+```
 
 ---
 
