@@ -1,0 +1,42 @@
+-- 2026-04-26 stale-deal cleanup — NOT YET APPLIED
+-- ================================================================
+-- Apply after at least one full week of direct-source scrape runs
+-- (first run 2026-04-26 evening; eligible to apply 2026-05-03 or later).
+-- ================================================================
+--
+-- Purpose: deactivate deals that the direct-source scraper has
+-- repeatedly failed to re-see. A single missed run is not enough
+-- evidence (dispensary websites go down, deal pages move, our
+-- pattern set may not catch new wording). Three-plus consecutive
+-- misses across 72+ hours is strong enough to retire the row.
+--
+-- The scraper flips status_reason='not_seen_last_scrape' every run
+-- a previously-seen deal isn't found. If that flag has been sticky
+-- for 72h+ and the deal hasn't been re-verified in the same window,
+-- deactivate + set status_reason='scraper_not_seen_3_runs'.
+--
+-- We DON'T delete. is_active=false preserves the row for audit and
+-- lets a human reverse the call if the scraper was wrong.
+
+-- Dry-run preview:
+-- SELECT id, listing_slug, title, source, status_reason, verified_at, updated_at
+-- FROM deals
+-- WHERE is_active = true
+--   AND status_reason = 'not_seen_last_scrape'
+--   AND updated_at < now() - interval '72 hours'
+--   AND (verified_at IS NULL OR verified_at < now() - interval '72 hours')
+-- ORDER BY updated_at;
+
+-- Apply (after review):
+-- BEGIN;
+--
+-- UPDATE deals
+-- SET is_active     = false,
+--     status_reason = 'scraper_not_seen_3_runs',
+--     updated_at    = now()
+-- WHERE is_active = true
+--   AND status_reason = 'not_seen_last_scrape'
+--   AND updated_at < now() - interval '72 hours'
+--   AND (verified_at IS NULL OR verified_at < now() - interval '72 hours');
+--
+-- COMMIT;
