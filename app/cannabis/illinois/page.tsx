@@ -24,17 +24,17 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-// Central IL metros — the 11 cities we publish today. Grouped by metro
+// Central IL metros — the 12 cities we publish today. Grouped by metro
 // for scannability. Empty cities (Bartonville, Morton, Pekin, Washington)
 // are included — their hub pages render a honest "no dispensaries yet"
 // empty-state. See lib/visibility.ts.
 const IL_CITIES = [
-  "Peoria", "East Peoria", "Pekin", "Bartonville", "Morton", "Washington",
+  "Peoria", "East Peoria", "Peoria Heights", "Pekin", "Bartonville", "Morton", "Washington",
   "Bloomington", "Normal", "Champaign", "Urbana", "Springfield",
 ];
 
 const REGIONS: Record<string, string[]> = {
-  "Peoria metro": ["Peoria", "East Peoria", "Pekin", "Bartonville", "Morton", "Washington"],
+  "Peoria metro": ["Peoria", "East Peoria", "Peoria Heights", "Pekin", "Bartonville", "Morton", "Washington"],
   "Bloomington-Normal": ["Bloomington", "Normal"],
   "Champaign-Urbana": ["Champaign", "Urbana"],
   "Springfield": ["Springfield"],

@@ -19,6 +19,7 @@ const DEAL_CATEGORIES = ["flower", "edibles", "vapes", "concentrate", "all"] as 
 const IL_CITY_PAGES = [
   "peoria",
   "east-peoria",
+  "peoria-heights",
   "pekin",
   "bartonville",
   "morton",

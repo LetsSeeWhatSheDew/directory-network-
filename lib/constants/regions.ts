@@ -14,6 +14,7 @@ export type CityDef = {
 export const CENTRAL_IL_CITIES: ReadonlyArray<CityDef> = [
   { slug: "peoria", name: "Peoria", state: "IL" },
   { slug: "east-peoria", name: "East Peoria", state: "IL" },
+  { slug: "peoria-heights", name: "Peoria Heights", state: "IL" },
   { slug: "pekin", name: "Pekin", state: "IL" },
   { slug: "bartonville", name: "Bartonville", state: "IL" },
   { slug: "morton", name: "Morton", state: "IL" },
