@@ -135,7 +135,7 @@ export default function SubmitDealPage() {
         <h1 style={{ fontSize: "2rem", marginBottom: 8, letterSpacing: "-0.02em" }}>Submit your deal</h1>
         <p style={{ color: "#6b7280", fontFamily: "system-ui, sans-serif", marginBottom: 28 }}>
           Free to submit. We verify within 24 hours. Your deal goes live to
-          PuffPrice users across Illinois.
+          PuffPrice users across Central Illinois.
         </p>
 
         {status === "err" && (

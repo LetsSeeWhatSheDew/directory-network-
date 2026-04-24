@@ -166,7 +166,7 @@ export async function generateMetadata({
   const title = `${headline} at ${disp}${savingsSuffix} | ${brand.name}`;
   const description = deal.description
     ? deal.description.slice(0, 180)
-    : `${headline} at ${disp} in ${cityPhrase}. ${brand.name} tracks active cannabis deals across Illinois.`;
+    : `${headline} at ${disp} in ${cityPhrase}. ${brand.name} tracks active cannabis deals across Central Illinois.`;
   const url = `${brand.url}/deal/${id}`;
   const ogImage = `${brand.url}/og-image.png`;
   return {

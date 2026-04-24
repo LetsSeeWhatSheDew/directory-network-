@@ -113,7 +113,7 @@ export default function SavingsCalculator() {
             Start saving → Get free deal alerts
           </Link>
           <p style={resultFineprint}>
-            Based on an average {Math.round(AVG_DISCOUNT_RATE * 100)}% discount across Illinois
+            Based on an average {Math.round(AVG_DISCOUNT_RATE * 100)}% discount at Central Illinois
             dispensaries and {VISITS_PER_YEAR[frequency!]} visits per year
             (~${result.yearly}/yr total spend).
           </p>

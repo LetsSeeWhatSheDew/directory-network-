@@ -27,12 +27,18 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 const CATEGORY_SUBTITLES: Record<string, string> = {
-  flower: "Biggest flower deals in Illinois today",
-  edibles: "Biggest edibles deals in Illinois today",
-  vapes: "Biggest vape deals in Illinois today",
-  concentrate: "Biggest concentrate deals in Illinois today",
-  all: "Every active cannabis deal in Illinois right now",
+  flower: "Biggest flower deals in Central Illinois today",
+  edibles: "Biggest edibles deals in Central Illinois today",
+  vapes: "Biggest vape deals in Central Illinois today",
+  concentrate: "Biggest concentrate deals in Central Illinois today",
+  all: "Every active cannabis deal in Central Illinois right now",
 };
+
+// Central IL scope filter — all public deal queries restrict to the
+// 12 cities listed in lib/constants/regions.ts so out-of-scope deals
+// never surface. Duplicating the allow-list here keeps this route
+// self-contained; see app/page.jsx for the matching homepage filter.
+const CIL_CITY_IN_LIST = `("Peoria","East Peoria","Peoria Heights","Pekin","Bartonville","Morton","Washington","Bloomington","Normal","Champaign","Urbana","Springfield")`;
 
 function citySubtitle(category: string, city: string) {
   const label = CATEGORY_LABELS[category] || "deals";
@@ -108,6 +114,8 @@ async function getDeals(category: string, city?: string | null) {
     if (category !== "all") {
       viewParams.set("category", `eq.${category}`);
     }
+    // Central IL scope — never surface non-CIL deals on the public page.
+    viewParams.set("city", `in.${CIL_CITY_IN_LIST}`);
 
     const viewRes = await fetch(
       `${SUPABASE_URL}/rest/v1/active_deals_with_listings?${viewParams}`,
@@ -274,10 +282,10 @@ export async function generateMetadata({
   const ogImage = "https://www.puffprice.com/og-image.png";
   const title = city
     ? `${city} Dispensary Deals Today | PuffPrice`
-    : `${label} Deals Illinois | PuffPrice`;
+    : `${label} Deals Central Illinois | PuffPrice`;
   const description = city
     ? `Browse today's best dispensary deals in ${city}, Illinois. Save money on cannabis with live offers.`
-    : `Find the cheapest ${label.toLowerCase()} deals at Illinois dispensaries right now. Real prices, real savings.`;
+    : `Find the cheapest ${label.toLowerCase()} deals at Central Illinois dispensaries right now. Real prices, real savings.`;
   const url = city
     ? `https://www.puffprice.com/deals/${category}?city=${encodeURIComponent(city)}`
     : `https://www.puffprice.com/deals/${category}`;
@@ -437,12 +445,11 @@ export default async function DealsPage({
   const dispensaryCount = new Set(
     deals.map((d: any) => d.listing_slug || d.slug).filter(Boolean)
   ).size;
-  // When `city` is null the user hit the statewide deal page — phrase
-  // the headline as statewide Illinois rather than a city. Keeping
-  // "Illinois" as the scope here is correct because the result set is
-  // genuinely statewide; we just avoid the `|| "Illinois"` sentinel
-  // pattern so the surrounding code isn't misread as fallback lying.
-  const scopeLabel = city ? `${city}, IL` : "Illinois";
+  // The default result set is now scoped to the 12 Central IL cities
+  // (see CIL_CITY_IN_LIST above). Label without-city views accordingly
+  // so the "N deals at X dispensaries in …" answer string matches what
+  // the user actually sees in the cards below.
+  const scopeLabel = city ? `${city}, IL` : "Central Illinois";
   const answerText = deals.length > 0
     ? `${deals.length} active deal${deals.length !== 1 ? "s" : ""} at ${dispensaryCount} dispensar${dispensaryCount !== 1 ? "ies" : "y"} in ${scopeLabel} right now.`
     : `No active deals in ${scopeLabel} right now — check back soon.`;
@@ -578,7 +585,7 @@ export default async function DealsPage({
           {deals.length > 0
             ? city
               ? `${deals.length} active deal${deals.length !== 1 ? "s" : ""} found near ${city}`
-              : `${deals.length} active deal${deals.length !== 1 ? "s" : ""} found in Illinois`
+              : `${deals.length} active deal${deals.length !== 1 ? "s" : ""} found in Central Illinois`
             : city
             ? `No active deals near ${city} right now`
             : "No active deals right now — check back soon"}
@@ -834,7 +841,7 @@ export default async function DealsPage({
                     textDecoration: "none",
                   }}
                 >
-                  See all Illinois deals →
+                  See all Central IL deals →
                 </Link>
               </div>
             )}
@@ -861,7 +868,7 @@ export default async function DealsPage({
             {noLocalMatches ? (
               <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
                 <Link href={`/deals/${category}`} className="no-deals-link" style={{ background: "#16a34a" }}>
-                  See all Illinois deals →
+                  See all Central IL deals →
                 </Link>
                 <Link href="/alerts" className="no-deals-link">
                   Get deal alerts →

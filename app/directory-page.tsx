@@ -205,10 +205,10 @@ export default async function Home({
             </h1>
 
             <p className="max-w-xl text-sm leading-relaxed text-[#8a9490] md:text-base">
-              PuffPrice is an editorially curated directory of dispensaries,
-              brands, and cannabis businesses across Illinois and Missouri.
-              Verified listings only. No pay-to-play. Built for operators
-              who take their market seriously.
+              PuffPrice is an editorially curated directory of licensed
+              cannabis dispensaries across Central Illinois. Verified
+              listings only. No pay-to-play. Built for operators who take
+              their market seriously.
             </p>
 
             {/* Stats strip */}

@@ -305,9 +305,11 @@ export default function FirstTimeGuidePage() {
               <p className="guide-warning-text">Transporting cannabis across state lines is a federal crime, even between two states where cannabis is legal. Consume what you purchase in Illinois before you leave.</p>
             </div>
             <p className="guide-p">
-              Chicago is the most visited city for cannabis tourism, with dozens of dispensaries
-              throughout the city including major locations in Wrigleyville, Wicker Park, and the
-              Loop. Many Chicago dispensaries are within walking distance of hotels and transit.
+              Across Central Illinois, Peoria, Bloomington-Normal, Champaign-Urbana, and
+              Springfield all have licensed dispensaries that serve out-of-state visitors.
+              Travelers driving between Chicago and St. Louis on I-55 frequently stop in
+              Bloomington-Normal — the cluster sits near the I-55/I-74 interchange and is
+              one of the easier access points off the highway.
             </p>
           </div>
 
@@ -338,15 +340,24 @@ export default function FirstTimeGuidePage() {
           <div id="find">
             <h2 className="guide-h2">Find Dispensaries Near You</h2>
             <p className="guide-p">
-              PuffPrice lists every licensed cannabis dispensary in Illinois with real hours,
+              PuffPrice lists every licensed cannabis dispensary in Central Illinois with real hours,
               phone numbers, and directions. Browse by city or search for dispensaries near specific
               locations.
             </p>
             <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginTop: "20px" }}>
-              {["Chicago", "Aurora", "Bloomington", "Champaign", "Collinsville", "Peoria", "Springfield", "Rockford"].map((city) => (
+              {[
+                { name: "Peoria", slug: "peoria" },
+                { name: "East Peoria", slug: "east-peoria" },
+                { name: "Bloomington", slug: "bloomington" },
+                { name: "Normal", slug: "normal" },
+                { name: "Champaign", slug: "champaign" },
+                { name: "Urbana", slug: "urbana" },
+                { name: "Springfield", slug: "springfield" },
+                { name: "Peoria Heights", slug: "peoria-heights" },
+              ].map((city) => (
                 <Link
-                  key={city}
-                  href={`/cannabis/illinois/${city.toLowerCase()}`}
+                  key={city.slug}
+                  href={`/cannabis/illinois/${city.slug}`}
                   style={{
                     background: "#fff",
                     border: "1px solid #e8e5de",
@@ -359,7 +370,7 @@ export default function FirstTimeGuidePage() {
                     fontWeight: 500,
                   }}
                 >
-                  {city} →
+                  {city.name} →
                 </Link>
               ))}
             </div>

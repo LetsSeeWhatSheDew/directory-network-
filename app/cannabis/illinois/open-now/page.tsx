@@ -82,9 +82,13 @@ export default async function OpenNowPage() {
   const userCity = cookieLoc?.city ?? null;
   const timeStr = new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/Chicago" });
 
+  // Central IL scope — match the 12-city allow-list so non-CIL
+  // dispensaries never surface on the public open-now page.
+  const CIL_CITY_IN_LIST = `("Peoria","East Peoria","Peoria Heights","Pekin","Bartonville","Morton","Washington","Bloomington","Normal","Champaign","Urbana","Springfield")`;
+
   const [listings, hours] = await Promise.all([
     fetchJson<Listing[]>(
-      `/master_listings?state=eq.IL&project_tag=eq.green&is_active=eq.true&select=id,name,slug,city,state,address1,phone,type,logo_url,delivery,online_ordering&order=city.asc,name.asc&limit=100`
+      `/master_listings?state=eq.IL&project_tag=eq.green&is_active=eq.true&city=in.${encodeURIComponent(CIL_CITY_IN_LIST)}&select=id,name,slug,city,state,address1,phone,type,logo_url,delivery,online_ordering&order=city.asc,name.asc&limit=100`
     ),
     fetchJson<Hour[]>(
       `/listing_hours?weekday=eq.${ct.weekday}&select=listing_id,weekday,opens_at,closes_at,is_closed`

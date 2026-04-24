@@ -140,13 +140,13 @@ export default function CannabisCentralHub() {
 
               <p className="mb-4 flex-1 text-xs leading-relaxed text-slate-300">
                 Illinois legalized recreational cannabis on January 1, 2020.
-                Browse city guides, local laws, dispensary listings, pricing, and
-                first-timer tips for every major market in the state. Over $1.5B
-                in annual sales across the state.
+                Browse Central Illinois city guides, local laws, dispensary
+                listings, pricing, and first-timer tips across Peoria,
+                Bloomington-Normal, Champaign-Urbana, and Springfield.
               </p>
 
               <div className="flex items-center justify-between pt-2 text-[11px] text-slate-400">
-                <span>Browse Illinois</span>
+                <span>Browse Central Illinois</span>
                 <span className="text-slate-500 group-hover:text-[#7FE3C7]">
                   →
                 </span>
