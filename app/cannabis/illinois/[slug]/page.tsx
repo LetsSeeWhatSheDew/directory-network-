@@ -3,7 +3,6 @@ export const revalidate = 86400; // revalidate once per day
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import FeaturedDispensary from "../../../components/FeaturedDispensary";
 import {
   isInCentralIL,
   isEmptyCentralILCity,
@@ -179,8 +178,9 @@ export default async function CityPage({
     notFound();
   }
 
-  const featured = listings.find((l) => l.plan === "featured" || l.plan === "boost") ?? null;
-  const regular = listings.filter((l) => l.id !== featured?.id);
+  // Featured tier was retired — no special slot. Render every listing
+  // in the main grid, ranked by claimed status then name.
+  const regular = listings;
 
   const schemaOrg = JSON.stringify({
     "@context": "https://schema.org",
@@ -347,8 +347,6 @@ export default async function CityPage({
               </div>
             </div>
           </div>
-
-          <FeaturedDispensary listing={featured} city={city} />
 
           <div className="city-grid">
             <div className="city-main">
