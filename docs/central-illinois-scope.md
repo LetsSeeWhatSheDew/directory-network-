@@ -32,6 +32,7 @@ The April 24 hardening cuts that surface. Non-Central-IL is hidden everywhere pu
 |---|---|---|
 | Peoria | Peoria-area | Core market |
 | East Peoria | Peoria-area | Across the Illinois River from Peoria |
+| Peoria Heights | Peoria-area | Peoria County; immediately adjacent to Peoria (added April 25 alongside the license-registry subset migration) |
 | Pekin | Peoria-area | Tazewell County |
 | Bartonville | Peoria-area | Peoria County, south of Peoria |
 | Morton | Peoria-area | Tazewell County, east of East Peoria |
@@ -44,21 +45,33 @@ The April 24 hardening cuts that surface. Non-Central-IL is hidden everywhere pu
 
 The canonical source is `lib/constants/regions.ts` → `CENTRAL_IL_CITIES`. That array is the single source of truth — this doc describes the rule; the code enforces it.
 
-Four metro clusters: the Peoria-area belt (six cities that geographically function as one market), Bloomington-Normal, Champaign-Urbana, and Springfield.
+Four metro clusters: the Peoria-area belt (seven cities that geographically function as one market), Bloomington-Normal, Champaign-Urbana, and Springfield.
 
-**23 Central IL active dispensary listings** at lock time — the set Matthew is actually driving through and can verify.
+### Current DB snapshot (2026-04-26 morning)
+
+| metric | value | notes |
+|---|---|---|
+| Active Central IL dispensary listings | 28 → **26 after tonight's deactivations** | Two rows flagged for deactivation in today's Cowork research: `ascend-springfield` (duplicate stub of Ascend Horizon Drive) and `consume-cannabis-champaign` (wrong-identity ghost; 505 W Town Center Blvd is actually Cloud9 Champaign). |
+| Listings with phone + website | 26/28 → **27/27 after tonight** | `the-dispensary-champaign` fixed tonight via `docs/missing-contact-research-20260426.md`. `consume-cannabis-champaign` exits the denominator via deactivation. |
+| Listings hitting 150-word content floor | 21/28 → **26/26 after tonight** | Six new drafts in `docs/central-il-content-floor-drafts-20260426.md`; `ascend-springfield` deactivation removes the remaining gap from the denominator. |
+| Listings with GPS + logo | 29/29 (includes 1 inactive) | From Code's April 25 Places run. |
+| Active deals | 11, across 3 cities (East Peoria, Champaign, Peoria) | Unchanged since April 23. |
+
+Per-city active-listing counts after tonight's two deactivations: Springfield 6, Peoria 5, Normal 4, Champaign 3, East Peoria 3, Bloomington 2, Peoria Heights 1, Pekin 1, Urbana 1. Four empty cities: Bartonville, Morton, Washington. *(Pekin moved off the empty list when nuEra Pekin was added April 25; the "4 empty" section below now lists 3.)*
 
 ---
 
-## The 4 empty Central IL cities
+## The 3 empty Central IL cities
 
-Four of the 11 cities currently hold zero active dispensary records in `master_listings`: **Bartonville, Morton, Pekin, Washington.** All four are in the Peoria metro and geographically close to listings in Peoria / East Peoria.
+Three of the 12 cities currently hold zero active dispensary records in `master_listings`: **Bartonville, Morton, Washington.** All three are in the Peoria metro and geographically close to listings in Peoria / East Peoria / Peoria Heights / Pekin.
 
-**They stay in scope.** The homepage includes them in any "cities in scope" display; city landing pages for these four continue to resolve. The render treatment is a placeholder:
+_(Pekin was in this list at lock time; it now has one active listing — nuEra Pekin — following Code's April 25 license-registry subset migration.)_
+
+**They stay in scope.** The homepage includes them in any "cities in scope" display; city landing pages for these three continue to resolve. The render treatment is a placeholder:
 
 > No licensed dispensaries in [city] yet — nearest is [X miles away in Y].
 
-This mirrors the "real person in a parking lot" principle: if a Pekin resident arrives via search, they should land on an honest answer (the nearest option), not a blank template or a 404. Code owns the placeholder render.
+This mirrors the "real person in a parking lot" principle: if a Washington resident arrives via search, they should land on an honest answer (the nearest option), not a blank template or a 404. Code owns the placeholder render.
 
 Rationale for keeping empty cities in scope:
 
@@ -71,14 +84,14 @@ Rationale for keeping empty cities in scope:
 
 ## What "in scope" means (tonight)
 
-Applies to all 11 cities:
+Applies to all 12 cities:
 
 - **Public surface** — homepage, deal-category pages, brand pages, city landings, `/l/[id]`, `/l/[slug]`, sitemap: show Central IL listings only.
 - **Search** — deal browsing, category filters, and "near me" suggestions scope to Central IL by default.
 - **Metadata** — title tags, meta descriptions, Open Graph, and schema.org `LocalBusiness` entries reflect Central IL positioning. Statewide language ("Illinois cannabis deals") gets replaced with Central IL language on every template that still carries it.
 - **Homepage messaging** — hero copy references Central IL and the four metro clusters. No statewide promises.
 - **Outreach priority** — dispensary verification calls, email outreach, and corporate data-integrity conversations stay on Central IL operators. nuEra East Peoria + nuEra Champaign remain priority #1 and #2.
-- **Content floor** — the 150-word descriptions target the ~23 Central IL dispensaries first. Out-of-scope content floor work is parked.
+- **Content floor** — the 150-word descriptions target the current Central IL dispensary set first. Out-of-scope content floor work is parked.
 - **GPS backfill** — bounded Google Places geocoding runs target Central IL only.
 - **PR and media** — any "launch announcement" and local outreach leads with "Central Illinois."
 
@@ -86,7 +99,7 @@ Applies to all 11 cities:
 
 ## What "out of scope" means (tonight)
 
-Applies to the ~44 dispensaries and ~21 cities outside the 11-city scope:
+Applies to the ~44 dispensaries and ~20 cities outside the 12-city scope:
 
 - **DB rows preserved.** Every `master_listings`, `deals`, `listing_hours`, and related row stays exactly as-is. No deactivation, no deletion, no rewrite.
 - **Not publicly rendered.** Homepage, deal pages, city landings, brand pages, sitemap, and search results filter them out at the render layer.
@@ -127,7 +140,7 @@ For homepage, outreach, metadata, and social language, use these phrasings:
 
 - **Standard:** "Central Illinois cannabis deals — Peoria, Bloomington-Normal, Champaign-Urbana, and Springfield."
 - **Tightest honest claim (when only cities with live deals matter):** "Deals from dispensaries in East Peoria, Champaign, and Peoria" (the three cities currently carrying all 11 Central IL active deals).
-- **Coverage framing:** "Eleven Central Illinois cities, seven currently with licensed dispensaries — nearest-store routing for the other four."
+- **Coverage framing:** "Twelve Central Illinois cities, nine currently with licensed dispensaries — nearest-store routing for the other three."
 - **Expansion-friendly when speaking to the future:** "Built for Central Illinois first."
 
 **Avoid:** "Illinois' best cannabis deals." "The largest Illinois dispensary directory." "Statewide coverage." Anything that overstates the current surface.
@@ -136,8 +149,8 @@ For homepage, outreach, metadata, and social language, use these phrasings:
 
 ## How this doc gets used
 
-- **Code lane:** source of truth for the scope filter, the homepage copy, the placeholder render for the 4 empty cities, and the reversal procedure.
+- **Code lane:** source of truth for the scope filter, the homepage copy, the placeholder render for the 3 empty cities, and the reversal procedure.
 - **Cowork lane:** source of truth for outreach prioritization, content-depth scheduling, and any future data migration decisions.
 - **Chrome lane:** verifies that any claim on the live site matches what's in scope and that out-of-scope listings are correctly hidden.
 
-Any change to the 11-city list gets written here first. Silent drift — the homepage saying one thing, this doc saying another — is the specific failure mode this doc exists to prevent.
+Any change to the 12-city list gets written here first. Silent drift — the homepage saying one thing, this doc saying another — is the specific failure mode this doc exists to prevent.

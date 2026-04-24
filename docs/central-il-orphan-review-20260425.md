@@ -145,3 +145,76 @@ Everything else in this review stays as-is. All four PARSER_MISS rows remain `is
 - [Ascend Cannabis — Springfield (Horizon Dr)](https://letsascend.com/locations/illinois/springfield-horizon-drive/)
 - [Ascend Cannabis Dispensary — Springfield Downtown (Yelp)](https://www.yelp.com/biz/ascend-springfield-downtown-springfield-2)
 - [Beyond Hello Peoria](https://beyond-hello.com/illinois-dispensaries/peoria/)
+
+---
+
+## Addendum — 2026-04-26 morning
+
+Re-review of two rows from the April 25 list after additional research and the April 25 evening Places-enrichment run. Two corrections, two Code actions.
+
+### 1. `ascend-springfield` (generic stub) — DEACTIVATE
+
+The April 25 content-floor drafts doc deferred this row as a "probable duplicate stub." Tonight's research tightens that from probable to confirmed.
+
+**What changed:** Code's April 25 evening Places enrichment run wrote to this row (phone (217) 492-8060, website `letsascend.com/locations/illinois/springfield-horizon-drive/`, and a 7-day 8-9 hours block). The website URL is the same one Ascend uses for its **Horizon Drive** location — the same dispensary already represented in the DB as `ascend-cannabis-horizon-drive` (3201 Horizon Dr, (217) 492-8182). The phone numbers differ by four digits (both (217) 492-8XXX) but point to the same physical store; the letsascend.com URL pattern makes the duplication explicit.
+
+**Web-research confirms no third location:**
+
+- letsascend.com/find-us/ lists **exactly two** Springfield Ascend locations: Adams Street (downtown) and Horizon Drive. No third.
+- The April 23 IDFPR license audit has two Springfield Ascend licenses both in the Original-Lottery section the parser skipped (one each for Adams Street and Horizon Drive). No third license.
+- Yelp, Leafly, Weedmaps, Veriheal, Waze, and Nextdoor all list the same two Springfield Ascend storefronts. No third.
+
+**Recommendation:** **DEACTIVATE.** `ascend-springfield` is a pre-scraper generic stub that ended up with a Horizon-Drive Places match. The correct representation of "Ascend Springfield" in the DB is the two specific-location rows that already exist. The generic stub doubles the public listing count for a single physical dispensary and creates an "Ascend" card on the Springfield metro page that would duplicate Ascend Horizon Drive with slightly different data.
+
+Do not merge data fields into `ascend-cannabis-horizon-drive`; the Horizon Drive row has its own canonical values already, and the generic row's Places-sourced phone may be a separate receptionist line that would confuse more than it helps.
+
+**Cascade effects:** total Central IL active listings drops by 1 (to 27 post-deactivation; to 26 after combining with the `consume-cannabis-champaign` deactivation in today's research doc). Springfield's active-listing count drops from 7 to 6.
+
+### SQL
+
+```sql
+-- 2026-04-26 deactivation — ascend-springfield
+-- Duplicative of ascend-cannabis-horizon-drive and
+-- ascend-cannabis-downtown-springfield. No third Ascend location
+-- exists in Springfield per operator site, state registry, and every
+-- public directory checked (Yelp, Leafly, Weedmaps, Veriheal).
+
+BEGIN;
+
+UPDATE master_listings
+SET is_active       = false,
+    long_description = '',
+    short_description = '',
+    updated_at       = now()
+WHERE slug = 'ascend-springfield';
+
+COMMIT;
+```
+
+No `long_description` draft needed — the row is going inactive.
+
+### 2. `consume-cannabis-champaign` — retract PARSER_MISS, mark as GHOST
+
+The April 25 review placed this row in PARSER_MISS, asserting that state license 284.000259-AUDO ("9 Cannabis Champai" / 505 W Town Center Blvd) was a garbled version of Consume Cannabis Champaign. **That was wrong.**
+
+**What's actually true:**
+
+- **Consume Cannabis does not operate a Champaign location.** The chain's own locations page (`consumecannabis.com`) lists Carbondale, Marion, Chicago, Oakbrook Terrace, Antioch, and St. Charles. No Champaign.
+- **505 W Town Center Blvd is Cloud9 Cannabis Champaign,** operated by the same Cloud9 chain that just got a correctly-named row added on April 25 as `cloud-9-east-peoria`. Cloud9's corporate site explicitly lists Champaign, Edwardsville, Oswego, and East Peoria as the four store locations.
+- **The "9" in "9 Cannabis Champai" is the end of "Cloud9,"** not the end of "Consume." The parser garble made that hard to see in the Suspect tier; the direct Cloud9 site confirmation dissolves the ambiguity.
+
+**Recommendation:** **DEACTIVATE + clear the incorrect long_description** that the April 25 content-floor applied. Separately, the real Cloud9 Champaign row should be added in a follow-up (not tonight), along with the parser-section-scoping fix.
+
+Full rationale, source links, and the SQL for Code are in `docs/missing-contact-research-20260426.md` (deliberately kept with the research data, not here, because the deactivation is triggered by new research and pairs naturally with the `the-dispensary-champaign` fix in the same doc).
+
+**Cascade effects:** Champaign active-listing count drops from 4 to 3. Central IL total drops by another 1 on top of the Ascend-Springfield deactivation, landing the total at 26.
+
+### Summary of changes from this addendum
+
+| slug | April 25 recommendation | April 26 revised recommendation | reason |
+|---|---|---|---|
+| `ascend-springfield` | Deferred / probable duplicate | **Deactivate** | Places enrichment + three-way web-source cross-check confirms duplication of `ascend-cannabis-horizon-drive` |
+| `consume-cannabis-champaign` | PARSER_MISS; keep active | **Deactivate + clear bad long_description** | April 25 categorization was wrong; 505 W Town Center is Cloud9 Champaign, not Consume |
+
+Both changes are SQL-blocked in their respective research / fix docs. Code applies tonight.
+
