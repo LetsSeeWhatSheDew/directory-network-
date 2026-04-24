@@ -2,10 +2,12 @@
 > Read automatically by Claude Code at session start.
 
 ## What This Is
-PuffPrice — Illinois cannabis deal intelligence.
+PuffPrice — Central Illinois cannabis deal intelligence.
 GPS-aware deal finder. Built for a real person in a parking lot who wants to save money on weed.
 
 Live at puffprice.com.
+
+**Scope (hard lock, April 24, 2026):** Public surface is Central Illinois only — 11 cities, 7 currently with licensed dispensaries. Non-Central-IL listings remain in the DB but are hidden at the app level. See `docs/central-illinois-scope.md`.
 
 ## Stack
 - Frontend: Next.js 16 (App Router, Turbopack)
@@ -15,13 +17,17 @@ Live at puffprice.com.
 - Error monitoring: Sentry (scaffolded with env-var gating, DSN pending)
 - Brand config: lib/brand.ts — one string change renames entire site
 
-## Current State (April 21, 2026)
-- 61 dispensaries across 25 Illinois cities
-- 56 active deals | 82 master listings
+## Current State (April 25, 2026 — HEAD: see git, rebased onto origin/main at 96c4930)
+- **Scope:** Central Illinois only — 11 cities, 7 with dispensaries, 4 empty-with-nearest-alternative placeholder
+- **Central IL active listings:** 23, all with GPS + logos, 17/23 with phone + website (Code's enrichment run closes the remaining 6 tonight)
+- **Central IL active deals:** 11, across 3 cities — East Peoria (5), Champaign (4), Peoria (2)
+- **Statewide DB (not publicly rendered):** 67 active dispensaries across 28 cities, 53 active deals, 111 total master_listings. Preserved in DB, hidden at app level via `lib/constants/regions.ts` scope filter. One-line reversal.
+- **Enhanced Places backfill complete** — phone + website + hours populated for enriched rows; GPS seeded for all 23 Central IL listings
+- **Content floor:** 21 of 23 Central IL listings receive 150-200 word drafts this session (`docs/central-il-content-floor-drafts-20260425.md`); Code applies the UPDATE block. 1 listing recommended for deactivation (`north-star-remedies-peoria-il` — zero-evidence stub); 1 flagged as probable duplicate (`ascend-springfield` generic).
 - PuffPrice Index — statewide flower price-per-gram benchmark at /about/index
 - Brand pages scaffolded at /brand and /brand/[slug] (populate when brands table lands)
 - Content depth layer on /l/[id] — monogram fallback, stat strip, serif prose, map iframe, report-outdated link
-- Sitemap covers: listings, cities, intents, landmarks, dispensary profiles, city landings, brands, deals
+- Sitemap scoped to Central IL cities/listings/brands/deals only; out-of-scope URLs return 404
 
 ## Business Tiers
 - FREE: No account, full deal access, always

@@ -182,3 +182,53 @@ Three common threads:
 3. **Idea 3 on hold** until Central IL deal density improves. Revisit after May 24 scope review.
 
 No implementation started in this session. Matthew's roadmap decision.
+
+---
+
+## Addendum — 2026-04-25: Idea 4 — Turn SMS into real enough
+
+### The pitch
+
+Short version of Idea 3 above, designed to land before the full 10DLC stack. One Twilio number or Zapier webhook. One manual-trigger route. One test user (Matthew). The homepage SMS promise — "text a ZIP, get deals" — becomes technically true for one phone number, today, with no compliance theater.
+
+The flow:
+
+1. A Twilio phone number (or a Zapier inbound-SMS webhook with a free Twilio trial credit) receives a text.
+2. The inbound body is piped to a simple handler (Zapier → email, or a one-route serverless endpoint).
+3. Matthew reads the incoming ZIP, runs a SELECT against the live Central IL deals table, and sends a reply — either by hand or via a queued Twilio send.
+4. The loop closes in under 5 minutes for test users.
+
+Volume is zero. Compliance burden is zero (single test user, opt-in by virtue of being Matthew). The point is not scale. The point is that the homepage's implicit SMS promise isn't vaporware the first time a real person tests it.
+
+### Why this matters relative to Idea 3
+
+Idea 3 ships the full SMS experience with Pro-tier wrapping, ZIP-based digest, alerts, etc. — blocked on 10DLC approval, deal density, unit economics, and compliance review. Months of work.
+
+Idea 4 is the **minimum viable credibility** version. It doesn't try to scale. It tries to make the homepage honest for one reader.
+
+This matters because the Central IL scope lock is fundamentally about "don't make claims you can't stand behind." If the homepage says SMS is an option and the answer to "how do I use it?" is "we haven't built it yet," the scope-lock credibility story has a hole in it. Patching the hole is cheap once you stop trying to make SMS a product.
+
+### What we already have
+
+- Stripe Pro tier live (April 23). Any payment friction is handled.
+- Decision engine (`lib/decisionEngine.ts`) already does ZIP-based deal ranking for the web surface.
+- Matthew has a phone. Matthew can manually reply.
+
+### What we'd need
+
+- One Twilio trial number (~free; no 10DLC needed for single-receiver test traffic) OR a Zapier account with SMS triggers enabled.
+- A one-page internal route (or just an email forward) where Matthew can see the inbound text.
+- A manually-triggered reply template pulling from the existing deals query.
+- Optional: a "test-user" gating screen on the homepage SMS feature, so we only solicit SMS from people Matthew invites personally for the pilot period.
+
+### What's blocked on
+
+Essentially nothing. Single test user scope removes carrier-compliance and volume concerns. The main judgment call is whether to keep this as a dev-only demo or offer it as a personal-invite pilot. Pilot-mode is more useful feedback but takes a few more hours of setup.
+
+### Verdict
+
+**Medium priority, post-Stripe.** Not urgent because Stripe Pro is live and cleaner. But the moment Matthew has a real prospect on the phone asking about SMS alerts or the homepage SMS promise, this unblocks the "yes, here's how" answer without lying. That conversational unblock is worth the hour or two of Zapier wiring.
+
+Do it before attempting the full Idea 3 build — proves the loop works end to end on a single user before investing in 10DLC, compliance, and Pro-tier integration.
+
+Source: DeepSeek's April 23 external review, paraphrased and expanded.
