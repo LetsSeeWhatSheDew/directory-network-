@@ -74,7 +74,7 @@ async function getDeal(id: string): Promise<Deal | null> {
 async function getListing(slug: string): Promise<ListingMini | null> {
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/master_listings?slug=eq.${encodeURIComponent(slug)}&is_active=eq.true&select=slug,name,city,address1,phone&limit=1`,
+      `${SUPABASE_URL}/rest/v1/master_listings?slug=eq.${encodeURIComponent(slug)}&project_tag=eq.green&is_active=eq.true&select=slug,name,city,address1,phone&limit=1`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,

@@ -91,7 +91,7 @@ async function sbFetch<T>(path: string): Promise<T | null> {
 
 async function getListing(slug: string): Promise<Listing | null> {
   const rows = await sbFetch<Listing[]>(
-    `master_listings?slug=eq.${encodeURIComponent(slug)}&is_active=eq.true&select=*&limit=1`
+    `master_listings?slug=eq.${encodeURIComponent(slug)}&project_tag=eq.green&is_active=eq.true&select=*&limit=1`
   );
   return rows && rows[0] ? rows[0] : null;
 }

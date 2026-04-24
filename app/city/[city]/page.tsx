@@ -119,7 +119,7 @@ async function getCityListings(city: string): Promise<Listing[]> {
     .join(",");
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/master_listings?select=id,slug,name,city,address1&city=in.(${encodeURIComponent(cityFilter)})&is_active=eq.true&limit=50`,
+      `${SUPABASE_URL}/rest/v1/master_listings?select=id,slug,name,city,address1&city=in.(${encodeURIComponent(cityFilter)})&project_tag=eq.green&state=eq.IL&is_active=eq.true&limit=50`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,

@@ -53,7 +53,7 @@ function slugToCity(slug: string | undefined | null): string {
 
 async function getCityListings(city: string): Promise<Listing[]> {
   return fetchJson<Listing[]>(
-    `/master_listings?city=ilike.${encodeURIComponent(city)}&state=eq.IL&is_active=eq.true&select=id,name,slug,city,state,address1,phone,website,short_description,logo_url,plan,claimed,delivery,online_ordering,atm_onsite,wheelchair_accessible,type&order=plan.desc,name.asc&limit=50`
+    `/master_listings?city=ilike.${encodeURIComponent(city)}&state=eq.IL&project_tag=eq.green&is_active=eq.true&select=id,name,slug,city,state,address1,phone,website,short_description,logo_url,plan,claimed,delivery,online_ordering,atm_onsite,wheelchair_accessible,type&order=plan.desc,name.asc&limit=50`
   );
 }
 

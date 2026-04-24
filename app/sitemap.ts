@@ -57,7 +57,7 @@ const STATIC_PAGES = [
 async function getAllListings() {
     try {
           const res = await fetch(
-                  `${SUPABASE_URL}/rest/v1/master_listings?select=slug,city,updated_at&is_active=eq.true&limit=200`,
+                  `${SUPABASE_URL}/rest/v1/master_listings?select=slug,city,updated_at&project_tag=eq.green&state=eq.IL&is_active=eq.true&limit=200`,
             {
                       headers: {
                                   apikey: SUPABASE_ANON_KEY!,
