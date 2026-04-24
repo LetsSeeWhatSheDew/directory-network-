@@ -1,5 +1,5 @@
 # Central Illinois Scope Lock
-**Date locked:** April 23, 2026 (evening) — hardened April 24, 2026.
+**Date locked:** April 23, 2026 (evening) — hardened April 24, 2026; deal-data-policy amendment April 26, 2026.
 **Effective:** April 24, 2026 onward.
 **Author:** Matthew (business decision) + Cowork (codification).
 **Status:** Active and hard. Central Illinois is the only publicly visible scope until Matthew explicitly decides to expand.
@@ -47,17 +47,18 @@ The canonical source is `lib/constants/regions.ts` → `CENTRAL_IL_CITIES`. That
 
 Four metro clusters: the Peoria-area belt (seven cities that geographically function as one market), Bloomington-Normal, Champaign-Urbana, and Springfield.
 
-### Current DB snapshot (2026-04-26 morning)
+### Current DB snapshot (2026-04-26)
 
 | metric | value | notes |
 |---|---|---|
-| Active Central IL dispensary listings | 28 → **26 after tonight's deactivations** | Two rows flagged for deactivation in today's Cowork research: `ascend-springfield` (duplicate stub of Ascend Horizon Drive) and `consume-cannabis-champaign` (wrong-identity ghost; 505 W Town Center Blvd is actually Cloud9 Champaign). |
-| Listings with phone + website | 26/28 → **27/27 after tonight** | `the-dispensary-champaign` fixed tonight via `docs/missing-contact-research-20260426.md`. `consume-cannabis-champaign` exits the denominator via deactivation. |
-| Listings hitting 150-word content floor | 21/28 → **26/26 after tonight** | Six new drafts in `docs/central-il-content-floor-drafts-20260426.md`; `ascend-springfield` deactivation removes the remaining gap from the denominator. |
-| Listings with GPS + logo | 29/29 (includes 1 inactive) | From Code's April 25 Places run. |
-| Active deals | 11, across 3 cities (East Peoria, Champaign, Peoria) | Unchanged since April 23. |
+| Active Central IL dispensary listings | 31 → **29 after today's deactivations** | Two rows flagged for deactivation in April 26 Cowork research: `ascend-springfield` (duplicate stub of Ascend Horizon Drive) and `consume-cannabis-champaign` (wrong-identity ghost; 505 W Town Center Blvd is actually Cloud9 Champaign). Code applies the migrations; until then both remain `is_active=true` in DB. Earlier planning docs referenced 26/28 — live DB says 31 today; discrepancy logged in the April 26 commit. |
+| Listings with phone + website | 25/31 → **25/29 after deactivations** | Gaps: `the-dispensary-champaign`, `flora-farms-springfield`, `key-cannabis-springfield`, `terrabis-springfield` — all no-website rows that route to the direct-contact verification queue. |
+| Listings hitting 150-word content floor | Maintained from April 25 set; April 26 pass focuses on deal-policy and freshness layer rather than new drafts. | |
+| Listings with GPS + logo | Central IL set seeded from Code's April 25 Places run. | |
+| Active deals (pre-cutover) | 11, across 3 cities (East Peoria 5, Champaign 4, Peoria 2) | Source mix: 9 Leafly, 2 direct-source. All Leafly/Weedmaps rows being deactivated April 26 under the new deal data policy. |
+| Active deals (post-cutover target) | 2-5 initially | Direct-source only. Grows as the new scraper matures and direct-contact verification catches up. See `docs/deal-data-policy.md`. |
 
-Per-city active-listing counts after tonight's two deactivations: Springfield 6, Peoria 5, Normal 4, Champaign 3, East Peoria 3, Bloomington 2, Peoria Heights 1, Pekin 1, Urbana 1. Four empty cities: Bartonville, Morton, Washington. *(Pekin moved off the empty list when nuEra Pekin was added April 25; the "4 empty" section below now lists 3.)*
+Per-city active-listing counts from live DB (April 26): Springfield 9 (→ 8 post-deactivation), Peoria 5, Normal 4, Champaign 4 (→ 3 post-deactivation), East Peoria 3, Bloomington 2, Peoria Heights 1, Pekin 1, Urbana 1. Three empty cities: Bartonville, Morton, Washington. *(Pekin moved off the empty list when nuEra Pekin was added April 25; the "4 empty" section below now lists 3.)*
 
 ---
 
@@ -93,6 +94,7 @@ Applies to all 12 cities:
 - **Outreach priority** — dispensary verification calls, email outreach, and corporate data-integrity conversations stay on Central IL operators. nuEra East Peoria + nuEra Champaign remain priority #1 and #2.
 - **Content floor** — the 150-word descriptions target the current Central IL dispensary set first. Out-of-scope content floor work is parked.
 - **GPS backfill** — bounded Google Places geocoding runs target Central IL only.
+- **Deal sourcing** — direct dispensary websites and official social only. No Leafly, Weedmaps, iHeartJane, or Dutchie marketplace. Re-verified every 6 hours. Full policy: `docs/deal-data-policy.md`. Scrape difficulty per listing: `docs/scrape-coverage-20260426.md`.
 - **PR and media** — any "launch announcement" and local outreach leads with "Central Illinois."
 
 ---

@@ -7,7 +7,9 @@ GPS-aware deal finder. Built for a real person in a parking lot who wants to sav
 
 Live at puffprice.com.
 
-**Scope (hard lock, April 24, 2026):** Public surface is Central Illinois only — 11 cities, 7 currently with licensed dispensaries. Non-Central-IL listings remain in the DB but are hidden at the app level. See `docs/central-illinois-scope.md`.
+**Scope (hard lock, April 24, 2026):** Public surface is Central Illinois only — 12 cities, 9 currently with licensed dispensaries. Non-Central-IL listings remain in the DB but are hidden at the app level. See `docs/central-illinois-scope.md`.
+
+**Deal data policy (April 26, 2026):** Deals are pulled from direct dispensary websites and official social only — never Leafly, Weedmaps, or other aggregators. Re-verified every 6 hours. Legacy aggregator-sourced deals were deactivated April 26 in a single cutover. See `docs/deal-data-policy.md`.
 
 ## Stack
 - Frontend: Next.js 16 (App Router, Turbopack)
@@ -17,13 +19,15 @@ Live at puffprice.com.
 - Error monitoring: Sentry (scaffolded with env-var gating, DSN pending)
 - Brand config: lib/brand.ts — one string change renames entire site
 
-## Current State (April 25, 2026 — HEAD: see git, rebased onto origin/main at 96c4930)
-- **Scope:** Central Illinois only — 11 cities, 7 with dispensaries, 4 empty-with-nearest-alternative placeholder
-- **Central IL active listings:** 23, all with GPS + logos, 17/23 with phone + website (Code's enrichment run closes the remaining 6 tonight)
-- **Central IL active deals:** 11, across 3 cities — East Peoria (5), Champaign (4), Peoria (2)
-- **Statewide DB (not publicly rendered):** 67 active dispensaries across 28 cities, 53 active deals, 111 total master_listings. Preserved in DB, hidden at app level via `lib/constants/regions.ts` scope filter. One-line reversal.
-- **Enhanced Places backfill complete** — phone + website + hours populated for enriched rows; GPS seeded for all 23 Central IL listings
-- **Content floor:** 21 of 23 Central IL listings receive 150-200 word drafts this session (`docs/central-il-content-floor-drafts-20260425.md`); Code applies the UPDATE block. 1 listing recommended for deactivation (`north-star-remedies-peoria-il` — zero-evidence stub); 1 flagged as probable duplicate (`ascend-springfield` generic).
+## Current State (April 26, 2026 — HEAD: see git)
+- **Scope:** Central Illinois only — 12 cities, 9 with dispensaries, 3 empty-with-nearest-alternative placeholder (Bartonville, Morton, Washington)
+- **Central IL active listings:** 31 in DB today; two flagged for deactivation in this session (`ascend-springfield`, `consume-cannabis-champaign`) → 29 post-cutover. See `docs/scrape-coverage-20260426.md` for the full list.
+- **Central IL active deals (pre-cutover):** 11 — 9 from Leafly, 2 from direct-source. All Leafly/Weedmaps deals being deactivated April 26 under the new deal policy. Post-cutover starting point: ~2 direct-source deals, growing as direct-source scraper + direct-contact verification catch up.
+- **Scrape policy (April 26 onward):** Direct dispensary websites + official social only. No Leafly, Weedmaps, iHeartJane, Dutchie marketplace, or any aggregator. Dispensary-owned pages that embed a POS menu widget (Dutchie, Jane, Cookies.co, etc.) count as direct. See `docs/deal-data-policy.md`.
+- **Scrape cadence:** every 6 hours per scrapable listing. Deals unverified for 72+ hours render with a "verification pending" state; 7+ days auto-deactivate.
+- **Statewide DB (not publicly rendered):** preserved; hidden at the app level via `lib/constants/regions.ts` scope filter. One-line reversal.
+- **Enhanced Places backfill complete** — phone + website + hours populated for enriched rows; GPS seeded for Central IL listings
+- **Content floor:** Central IL listing drafts landed through April 25; ongoing maintenance pass per session
 - PuffPrice Index — statewide flower price-per-gram benchmark at /about/index
 - Brand pages scaffolded at /brand and /brand/[slug] (populate when brands table lands)
 - Content depth layer on /l/[id] — monogram fallback, stat strip, serif prose, map iframe, report-outdated link
