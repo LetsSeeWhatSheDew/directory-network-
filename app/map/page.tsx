@@ -152,7 +152,7 @@ export default async function MapPage() {
             Map view coming soon
           </h2>
           <p style={{ color: "#6b7280", marginBottom: 22, maxWidth: 480, margin: "0 auto 22px", lineHeight: 1.5 }}>
-            We&apos;re adding map pins for every Illinois dispensary. Browse the full list below while we finish geocoding.
+            We&apos;re adding map pins for every Central Illinois dispensary. Browse the full list below while we finish geocoding.
           </p>
           <Link
             href="/dispensaries"

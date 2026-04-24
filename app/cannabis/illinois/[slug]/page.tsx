@@ -453,7 +453,7 @@ export default async function CityPage({
           </div>
 
           <div className="city-footer-nav">
-            <Link href="/cannabis/illinois" className="city-footer-link">← All Illinois cities</Link>
+            <Link href="/cannabis/illinois" className="city-footer-link">← All Central IL cities</Link>
             <Link href="/get-listed" className="city-footer-link city-footer-link-fwd">List your dispensary →</Link>
           </div>
         </div>

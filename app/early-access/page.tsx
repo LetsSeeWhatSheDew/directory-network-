@@ -9,13 +9,13 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Early access to PuffPrice — Illinois cannabis deal alerts",
+  title: "Early access to PuffPrice — Central Illinois cannabis deal alerts",
   description:
-    "Get free early access to PuffPrice deal alerts for Illinois cannabis dispensaries. Weekly digest, no account needed.",
+    "Get free early access to PuffPrice deal alerts for Central Illinois cannabis dispensaries. Weekly digest, no account needed.",
   alternates: { canonical: "https://www.puffprice.com/early-access" },
   openGraph: {
     title: "Early access to PuffPrice",
-    description: "Free early access to Illinois cannabis deal alerts.",
+    description: "Free early access to Central Illinois cannabis deal alerts.",
     url: "https://www.puffprice.com/early-access",
     type: "website",
   },

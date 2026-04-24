@@ -6,12 +6,12 @@ import { brand } from "../../lib/brand";
 export const metadata: Metadata = {
   title: `New to dispensaries? Start here | ${brand.name}`,
   description:
-    "First-time guide to Illinois dispensaries — what to expect, how to compare deals, and how to buy with confidence.",
+    "First-time guide to Central Illinois dispensaries — what to expect, how to compare deals, and how to buy with confidence.",
   alternates: { canonical: `${brand.url}/start` },
   openGraph: {
     title: `New to dispensaries? Start here | ${brand.name}`,
     description:
-      "First-time guide to Illinois dispensaries — what to expect, how to compare deals, and how to buy with confidence.",
+      "First-time guide to Central Illinois dispensaries — what to expect, how to compare deals, and how to buy with confidence.",
     url: `${brand.url}/start`,
     siteName: brand.name,
     images: [{ url: `${brand.url}/og-image.png`, width: 1200, height: 630 }],
@@ -177,7 +177,7 @@ export default function StartPage() {
         <section>
           <h2>5. How PuffPrice helps</h2>
           <p>
-            PuffPrice tracks active deals at Illinois dispensaries daily. When you
+            PuffPrice tracks active deals at Central Illinois dispensaries daily. When you
             find a deal you like, we make the rest easy:
           </p>
           <ul>

@@ -190,8 +190,8 @@ export default function IllinoisLawsPage() {
           </div>
           <div className="laws-cta">
             <p className="laws-cta-title">Find a dispensary near you</p>
-            <p className="laws-cta-sub">Browse every licensed cannabis dispensary in Illinois with real hours and directions.</p>
-            <Link href="/cannabis/illinois" className="laws-cta-btn">Browse Illinois dispensaries →</Link>
+            <p className="laws-cta-sub">Browse every licensed cannabis dispensary in Central Illinois with real hours and directions.</p>
+            <Link href="/cannabis/illinois" className="laws-cta-btn">Browse Central IL dispensaries →</Link>
           </div>
         </div>
         <footer className="laws-footer">

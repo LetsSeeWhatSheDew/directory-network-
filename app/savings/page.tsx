@@ -5,7 +5,7 @@ import SavingsCalculator from "./SavingsCalculator";
 export const metadata = {
   title: "How much are you leaving on the table? | PuffPrice",
   description:
-    "Quick calculator: see how much Illinois cannabis shoppers with your habits are overpaying — and how much PuffPrice users save.",
+    "Quick calculator: see how much Central Illinois cannabis shoppers with your habits are overpaying — and how much PuffPrice users save.",
 };
 
 export default function SavingsPage() {

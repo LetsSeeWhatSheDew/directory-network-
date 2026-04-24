@@ -116,10 +116,10 @@ export default async function DispensariesIndexPage() {
 
       <header style={{ background: "#0f1f3d", color: "#fff", padding: "48px 28px", textAlign: "center" }}>
         <p style={{ fontSize: ".7rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#4ade80", fontFamily: "system-ui, sans-serif", fontWeight: 700, marginBottom: 8 }}>
-          Illinois directory
+          Central Illinois directory
         </p>
         <h1 style={{ fontSize: "clamp(1.8rem, 4vw, 2.6rem)", letterSpacing: "-0.03em", marginBottom: 10 }}>
-          Every licensed Illinois dispensary
+          Every licensed Central Illinois dispensary
         </h1>
         <p style={{ color: "rgba(255,255,255,0.55)", fontFamily: "system-ui, sans-serif", maxWidth: 520, margin: "0 auto", lineHeight: 1.6 }}>
           {listings.length} dispensaries across {cities.length} cities. Click a city to see deals

@@ -74,8 +74,8 @@ export default function ClaimLandingPage() {
         <h1>Is this your dispensary?</h1>
         <p className="lede">
           Claim your PuffPrice listing to update your hours, push deals to
-          Illinois cannabis shoppers actively looking for offers near them,
-          and tell us about anything we got wrong.
+          Central Illinois cannabis shoppers actively looking for offers
+          near them, and tell us about anything we got wrong.
         </p>
 
         <div className="benefits" aria-label="Claim benefits">

@@ -151,7 +151,7 @@ export default function MapClient({ points }: { points: Point[] }) {
             Map couldn&apos;t load
           </div>
           <div style={{ fontSize: ".9rem", color: "#6b7280", maxWidth: 360 }}>
-            We couldn&apos;t reach the map tiles. You can still browse every Illinois dispensary in a list.
+            We couldn&apos;t reach the map tiles. You can still browse every Central IL dispensary in a list.
           </div>
           <Link
             href="/dispensaries"

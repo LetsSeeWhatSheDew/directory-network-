@@ -43,7 +43,7 @@ export default function NotFound() {
           Find deals near me →
         </Link>
         <div className="nf-links">
-          <Link href="/deals/all" className="nf-link">Browse all Illinois deals</Link>
+          <Link href="/deals/all" className="nf-link">Browse all Central IL deals</Link>
           <Link href="/alerts" className="nf-link">Get deal alerts</Link>
           <Link href="/about" className="nf-link">About PuffPrice</Link>
         </div>

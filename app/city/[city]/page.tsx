@@ -261,12 +261,12 @@ export default async function CityPage({
         <Link href="/" className="logo" aria-label="PuffPrice home">
           <Logo />
         </Link>
-        <Link href="/deals/all" className="back">← All Illinois deals</Link>
+        <Link href="/deals/all" className="back">← All Central IL deals</Link>
       </nav>
 
       <main className="wrap">
         <p className="answer">{answerText}</p>
-        <div className="eyebrow">Illinois · City page</div>
+        <div className="eyebrow">Central Illinois · City page</div>
         <h1>{city} dispensary deals today</h1>
         {intro && <p className="intro">{intro}</p>}
 
@@ -359,7 +359,7 @@ export default async function CityPage({
         )}
 
         <Link href="/deals/all" className="footer-link">
-          Browse all Illinois cities →
+          Browse all Central IL cities →
         </Link>
       </main>
     </>

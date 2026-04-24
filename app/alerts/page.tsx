@@ -47,7 +47,7 @@ export const revalidate = 300;
 
 const OG_IMAGE = "https://www.puffprice.com/og-image.png";
 const OG_DESC =
-  "Illinois cannabis deal alerts. Free forever, no account needed. Pro is $0.99/month. Deal alerts within minutes.";
+  "Central Illinois cannabis deal alerts. Free forever, no account needed. Pro is $0.99/month. Deal alerts within minutes.";
 
 export const metadata = {
   title: "Get Deal Alerts | PuffPrice",
@@ -175,7 +175,7 @@ export default async function AlertsPage() {
             <span style={{ color: "#4ade80", fontWeight: 700 }}>
               {alertCount.toLocaleString()}
             </span>{" "}
-            {alertCount === 1 ? "person is" : "people are"} already getting deal alerts in Illinois.
+            {alertCount === 1 ? "person is" : "people are"} already getting deal alerts in Central Illinois.
           </p>
         )}
       </header>

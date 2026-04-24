@@ -343,8 +343,8 @@ function buildItemListSchema(deals: any[], categoryLabel: string, category: stri
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: `Best ${categoryLabel} Deals in Illinois`,
-    description: `Top cannabis ${category === "all" ? "" : categoryLabel.toLowerCase() + " "}deals at Illinois dispensaries today`,
+    name: `Best ${categoryLabel} Deals in Central Illinois`,
+    description: `Top cannabis ${category === "all" ? "" : categoryLabel.toLowerCase() + " "}deals at Central Illinois dispensaries today`,
     itemListElement: top,
   };
 }

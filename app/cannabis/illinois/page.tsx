@@ -248,7 +248,7 @@ export default function IllinoisHubPage() {
             </Link>
             <Link href="/cannabis/illinois/open-now" className="il-guide-card">
               <p className="il-guide-label">Live hours</p>
-              <p className="il-guide-title">Illinois Dispensaries Open Right Now</p>
+              <p className="il-guide-title">Central IL Dispensaries Open Right Now</p>
               <p className="il-guide-desc">Real-time view of which dispensaries are currently open across Central Illinois.</p>
             </Link>
           </div>

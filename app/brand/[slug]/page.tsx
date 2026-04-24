@@ -38,10 +38,10 @@ export async function generateMetadata({
   if (!data) {
     return { title: "Brand not found | PuffPrice", robots: { index: false } };
   }
-  const title = `${data.name} — Illinois dispensary deals | PuffPrice`;
+  const title = `${data.name} — Central IL dispensary deals | PuffPrice`;
   const description =
     data.description?.slice(0, 180) ||
-    `${data.name} deals at Illinois dispensaries, all in one place on PuffPrice.`;
+    `${data.name} deals at Central Illinois dispensaries, all in one place on PuffPrice.`;
   const url = `${site.url}/brand/${data.slug}`;
   const ogImage = `${site.url}/og-image.png`;
   return {

@@ -7,12 +7,12 @@ import { getServerLocation } from "../../../../lib/location";
 import { isInMetro } from "../../../../lib/cityNormalize";
 
 export const metadata: Metadata = {
-  title: "Illinois Dispensaries Open Right Now | PuffPrice",
-  description: "Find cannabis dispensaries open right now in Illinois. Real-time hours for every licensed dispensary. Updated continuously.",
+  title: "Central Illinois Dispensaries Open Right Now | PuffPrice",
+  description: "Find cannabis dispensaries open right now in Central Illinois. Real-time hours for every licensed dispensary. Updated continuously.",
   alternates: { canonical: "https://www.puffprice.com/cannabis/illinois/open-now" },
   openGraph: {
-    title: "Illinois Dispensaries Open Right Now",
-    description: "Find cannabis dispensaries open right now in Illinois. Real-time hours updated continuously.",
+    title: "Central Illinois Dispensaries Open Right Now",
+    description: "Find cannabis dispensaries open right now in Central Illinois. Real-time hours updated continuously.",
     url: "https://www.puffprice.com/cannabis/illinois/open-now",
     siteName: "PuffPrice",
     type: "website",
@@ -20,8 +20,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Illinois Dispensaries Open Right Now",
-    description: "Find cannabis dispensaries open right now in Illinois. Real-time hours updated continuously.",
+    title: "Central Illinois Dispensaries Open Right Now",
+    description: "Find cannabis dispensaries open right now in Central Illinois. Real-time hours updated continuously.",
     images: ["https://www.puffprice.com/og-image.png"],
   },
   robots: { index: true, follow: true },
@@ -196,7 +196,7 @@ export default async function OpenNowPage() {
               <span className="on-live-dot" />
               Live · Updated {timeStr} CT
             </span>
-            <h1 className="on-h1">Illinois Dispensaries<br />Open Right Now</h1>
+            <h1 className="on-h1">Central Illinois Dispensaries<br />Open Right Now</h1>
             <p className="on-sub">Real hours, updated daily. Showing what&apos;s open at {timeStr} Central Time.</p>
             <div className="on-stats">
               <div className="on-stat">
