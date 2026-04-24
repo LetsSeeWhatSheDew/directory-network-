@@ -379,17 +379,10 @@ export default async function ListingPage({
   const listing = await getListing(id);
 
   if (!listing) {
-    return (
-      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#f7f6f2", padding: "24px" }}>
-        <div style={{ background: "#fff", borderRadius: "16px", border: "1px solid #e8e5de", padding: "48px", textAlign: "center", maxWidth: "400px" }}>
-          <p style={{ fontSize: "1.2rem", fontWeight: 700, color: "#0f1f3d", marginBottom: "8px" }}>Listing not found</p>
-          <p style={{ fontSize: "0.875rem", color: "#6b7280", fontFamily: "system-ui, sans-serif", marginBottom: "24px" }}>
-            We couldn&apos;t find <code style={{ fontFamily: "monospace", background: "#f3f4f6", padding: "2px 6px", borderRadius: "4px" }}>{id}</code>
-          </p>
-          <Link href="/" style={{ color: "#16a34a", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontWeight: 600, fontSize: "0.875rem" }}>← Back to directories</Link>
-        </div>
-      </div>
-    );
+    // Not in DB, or is_active=false. Return a real 404 — the previous
+    // inline "Listing not found" screen rendered as 200 OK, which made
+    // deactivated rows look live to crawlers and analytics.
+    notFound();
   }
 
   // Central IL scope gate — non-CIL listings are hidden publicly.

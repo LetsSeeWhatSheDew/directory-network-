@@ -60,9 +60,9 @@ async function getCityListings(city: string): Promise<Listing[]> {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ city: string }>;
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { city: citySlug } = await params;
+  const { slug: citySlug } = await params;
   // Central IL scope gate — non-CIL city pages are hidden publicly.
   if (!CANNABIS_IL_NON_CITY_SLUGS.has(citySlug) && !isInCentralIL(citySlug)) {
     return { robots: { index: false, follow: false } };
@@ -92,9 +92,9 @@ export async function generateMetadata({
 export default async function CityPage({
   params,
 }: {
-  params: Promise<{ city: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { city: citySlug } = await params;
+  const { slug: citySlug } = await params;
 
   // Exclude known non-city routes — let their static pages handle these.
   if (CANNABIS_IL_NON_CITY_SLUGS.has(citySlug)) {
