@@ -434,6 +434,35 @@ async function getActiveDealCount() {
   return null;
 }
 
+// Live count of active Central IL dispensaries. Drives the homepage
+// stats line — never hard-code "N dispensaries" when the DB can answer.
+async function getCentralILListingCount() {
+  try {
+    // PostgREST `in.()` with spaces needs double-quoted values.
+    const cityList = `("Peoria","East Peoria","Peoria Heights","Pekin","Bartonville","Morton","Washington","Bloomington","Normal","Champaign","Urbana","Springfield")`;
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/master_listings?select=id&state=eq.IL&project_tag=eq.green&is_active=eq.true&city=in.${encodeURIComponent(cityList)}`,
+      {
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          Prefer: "count=exact",
+          "Range-Unit": "items",
+          Range: "0-0",
+        },
+        next: { revalidate: 3600, tags: ["listings"] },
+      }
+    );
+    const range = res.headers.get("content-range");
+    if (range) {
+      const total = range.split("/")[1];
+      const n = Number.parseInt(total, 10);
+      if (Number.isFinite(n)) return n;
+    }
+  } catch {}
+  return null;
+}
+
 // FAQPage schema. Google requires the Q&A text here to be visibly
 // rendered on the page — the FAQ section below mirrors these entries
 // verbatim. GSC flagged items as invalid while the schema existed
@@ -482,8 +511,9 @@ function preferLocalDeals(deals, userCity) {
 }
 
 export default async function HomePage() {
-  const [dealCount, topDeals, mostRecentTs, endingSoon, dealPool, userLoc, liveValue, dealsThisMonth] = await Promise.all([
+  const [dealCount, listingCount, topDeals, mostRecentTs, endingSoon, dealPool, userLoc, liveValue, dealsThisMonth] = await Promise.all([
     getActiveDealCount(),
+    getCentralILListingCount(),
     getTopDeals(),
     getMostRecentDealTs(),
     getEndingSoonDeals(),
@@ -1095,7 +1125,7 @@ export default async function HomePage() {
       <div className="stats">
         <div className="stats-inner">
           <span className="stats-line">
-            <strong>{dealCount !== null ? dealCount : "—"}</strong> active deals · <strong>61</strong> Illinois dispensaries · <strong>25</strong> cities
+            <strong>{dealCount !== null ? dealCount : "—"}</strong> active deals · <strong>{listingCount !== null ? listingCount : "—"}</strong> Central IL dispensaries · <strong>12</strong> cities
           </span>
         </div>
       </div>

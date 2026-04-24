@@ -71,7 +71,7 @@ export const metadata = {
 
 const FREE_FEATURES = [
   "Best deal near you right now — always",
-  "Browse every Illinois dispensary in our directory — 61 today, growing weekly",
+  "Browse every Central Illinois dispensary we track — updated weekly",
   "Map view with deal pins",
   "Search by city or dispensary name",
   "Weekly Monday digest (just email + city, no account)",

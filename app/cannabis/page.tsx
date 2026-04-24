@@ -128,15 +128,13 @@ export default function CannabisCentralHub() {
 
               <div className="mb-4 space-y-1 text-[11px] text-slate-400">
                 <p>
-                  <span className="text-[#7FE3C7]">25 Illinois cities</span> covered
+                  <span className="text-[#7FE3C7]">12 Central IL cities</span> covered
                 </p>
                 <p>
-                  <span className="text-[#7FE3C7]">10 neighborhoods</span> in
-                  Chicago
+                  <span className="text-[#7FE3C7]">Peoria · Bloomington-Normal</span>
                 </p>
                 <p>
-                  <span className="text-[#7FE3C7]">271+</span> licensed
-                  dispensaries
+                  <span className="text-[#7FE3C7]">Champaign-Urbana · Springfield</span>
                 </p>
               </div>
 
@@ -347,10 +345,11 @@ export default function CannabisCentralHub() {
               Get Your Dispensary Listed
             </h2>
             <p className="mb-6 text-sm leading-relaxed text-slate-300">
-              If you operate a cannabis dispensary or are a dispensary owner,
-              PuffPrice can help you reach new customers across Illinois and
-              beyond. Get listed, manage your profile, and connect with
-              cannabis shoppers in your area.
+              If you operate a cannabis dispensary in Central Illinois,
+              PuffPrice can help you reach new customers across Peoria,
+              Bloomington-Normal, Champaign-Urbana, and Springfield. Get
+              listed, manage your profile, and connect with cannabis
+              shoppers in your area.
             </p>
             <Link
               href="/get-listed"

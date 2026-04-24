@@ -71,7 +71,7 @@ const BRANDS: Brand[] = [
     slug: "kiva",
     name: "Kiva Confections",
     description:
-      "California-based edibles maker in exclusive IL licensing partnership with C3 Industries. Kiva chocolates, Petra mints, Camino gummies, and Terra bites reach ~40 of the 61 Illinois dispensaries PuffPrice tracks. Edibles-only brand, no flower or hardware SKUs.",
+      "California-based edibles maker in exclusive IL licensing partnership with C3 Industries. Kiva chocolates, Petra mints, Camino gummies, and Terra bites are carried across most Central Illinois adult-use dispensaries. Edibles-only brand, no flower or hardware SKUs.",
     logo_url: null,
     website: "https://kivaconfections.com",
     affiliate_url: null,
