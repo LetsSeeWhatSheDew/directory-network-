@@ -3,6 +3,10 @@
     {
       "path": "/api/cron/mark-stale-deals",
       "schedule": "0 4 * * *"
+    },
+    {
+      "path": "/api/cron/scrape-deals",
+      "schedule": "0 */6 * * *"
     }
   ]
 }
