@@ -12,12 +12,12 @@ const SUPABASE_ANON_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300";
 
 export const metadata = {
-  title: "All Illinois Dispensaries | PuffPrice",
-  description: "Browse every licensed Illinois cannabis dispensary by city. Hours, ratings, and active deals from shops across the state.",
+  title: "All Central Illinois Dispensaries | PuffPrice",
+  description: "Browse every licensed Central Illinois cannabis dispensary by city. Hours, ratings, and active deals from Peoria, Bloomington-Normal, Champaign-Urbana, and Springfield.",
   alternates: { canonical: "https://www.puffprice.com/dispensaries" },
   openGraph: {
-    title: "All Illinois Dispensaries",
-    description: "Browse every licensed Illinois cannabis dispensary by city. Hours, ratings, and active deals from shops across the state.",
+    title: "All Central Illinois Dispensaries",
+    description: "Browse every licensed Central Illinois cannabis dispensary by city.",
     url: "https://www.puffprice.com/dispensaries",
     siteName: "PuffPrice",
     type: "website" as const,
@@ -25,11 +25,15 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image" as const,
-    title: "All Illinois Dispensaries",
-    description: "Browse every licensed Illinois cannabis dispensary by city. Hours, ratings, and active deals from shops across the state.",
+    title: "All Central Illinois Dispensaries",
+    description: "Browse every licensed Central Illinois cannabis dispensary by city.",
     images: ["https://www.puffprice.com/og-image.png"],
   },
 };
+
+// Central IL city allow-list — keeps this page aligned with the
+// sitemap and the homepage deal feed.
+const CIL_CITY_IN_LIST = `("Peoria","East Peoria","Peoria Heights","Pekin","Bartonville","Morton","Washington","Bloomington","Normal","Champaign","Urbana","Springfield")`;
 
 export const dynamic = "force-dynamic";
 
@@ -54,7 +58,7 @@ async function getListings(): Promise<Listing[]> {
   // drive_thru, delivery — any of which may not exist on master_listings)
   // doesn't 400 the whole query and silently leave the page empty.
   // Filter narrowed to slug NOT NULL so /l/null cards never render.
-  const url = `${SUPABASE_URL}/rest/v1/master_listings?select=*&state=eq.IL&project_tag=eq.green&is_active=eq.true&slug=not.is.null&order=city.asc&limit=500`;
+  const url = `${SUPABASE_URL}/rest/v1/master_listings?select=*&state=eq.IL&project_tag=eq.green&is_active=eq.true&slug=not.is.null&city=in.${encodeURIComponent(CIL_CITY_IN_LIST)}&order=city.asc&limit=500`;
   const res = await fetch(url, {
     headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
     cache: "no-store",

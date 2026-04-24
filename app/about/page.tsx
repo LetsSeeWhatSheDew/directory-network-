@@ -73,18 +73,20 @@ export default function AboutPage() {
         </p>
 
         <p>
-          PuffPrice aggregates deals from Illinois dispensaries, normalizes
-          pricing to price-per-gram, and shows you the best deal near you
-          right now. No menus. No strain databases. No ads. Just: here&apos;s
-          the best deal near you today.
+          PuffPrice aggregates deals from Central Illinois dispensaries,
+          normalizes pricing to price-per-gram, and shows you the best
+          deal near you right now. No menus. No strain databases. No ads.
+          Just: here&apos;s the best deal near you today.
         </p>
 
         <p>
-          We&apos;re covering Illinois dispensaries one city at a time. If
-          yours isn&apos;t in our directory yet, email us and we&apos;ll add
-          you within 48 hours. Every listing is free for dispensaries,
-          forever. PuffPrice is funded by Pro subscribers ($0.99/month) who
-          want instant SMS when prices drop. That&apos;s the whole model.
+          We&apos;re covering Central Illinois dispensaries one city at a
+          time — Peoria, Bloomington-Normal, Champaign-Urbana, Springfield,
+          and the surrounding metro belt. If yours isn&apos;t in our
+          directory yet, email us and we&apos;ll add you within 48 hours.
+          Every listing is free for dispensaries, forever. PuffPrice is
+          funded by Pro subscribers ($0.99/month) who want instant SMS
+          when prices drop. That&apos;s the whole model.
         </p>
 
         <div className="contact">

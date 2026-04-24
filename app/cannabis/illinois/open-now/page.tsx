@@ -213,7 +213,7 @@ export default async function OpenNowPage() {
           {openNow.length === 0 ? (
             <div style={{ background: "#fff", borderRadius: "12px", border: "1px solid #e8e5de", padding: "32px", textAlign: "center" }}>
               <p style={{ fontSize: "1rem", fontWeight: 700, color: "#0f1f3d", marginBottom: "8px" }}>No dispensaries open right now</p>
-              <p style={{ fontSize: "0.875rem", color: "#6b7280", fontFamily: "system-ui, sans-serif" }}>Check back during business hours — most Illinois dispensaries open between 9–10 AM CT.</p>
+              <p style={{ fontSize: "0.875rem", color: "#6b7280", fontFamily: "system-ui, sans-serif" }}>Check back during business hours — most Central IL dispensaries open between 9–10 AM CT.</p>
             </div>
           ) : (
             <>

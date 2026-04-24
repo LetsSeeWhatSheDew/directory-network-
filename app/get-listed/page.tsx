@@ -5,7 +5,7 @@ import { GetListedForm } from "../components/GetListedForm";
 export const metadata = {
   title: "Get your dispensary listed | PuffPrice",
   description:
-    "Free listing for every Illinois cannabis dispensary. Get discovered on city pages, search, and deal pages. Claim or add your dispensary in under 2 minutes.",
+    "Free listing for every Central Illinois cannabis dispensary. Get discovered on city pages, search, and deal pages. Claim or add your dispensary in under 2 minutes.",
 };
 
 export default function GetListedPage() {

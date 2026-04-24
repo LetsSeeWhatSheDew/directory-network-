@@ -13,9 +13,9 @@ const SUPABASE_ANON_KEY =
 export const revalidate = 600;
 
 export const metadata = {
-  title: "Illinois cannabis map — every dispensary + live deals | PuffPrice",
+  title: "Central Illinois cannabis map — every dispensary + live deals | PuffPrice",
   description:
-    "Every Illinois cannabis dispensary on one map. Green pins mark live deals. Click any pin to see the best deal today.",
+    "Every Central Illinois cannabis dispensary on one map. Green pins mark live deals. Click any pin to see the best deal today.",
 };
 
 type Listing = {
@@ -38,8 +38,12 @@ async function getListings(): Promise<Listing[]> {
   // Column names are lat/lng, NOT latitude/longitude — wrong column names
   // were 400ing the PostgREST query and emptying the map silently.
   try {
+    // Central IL scope — the map publicly surfaces the 12-city
+    // allow-list only; out-of-scope dispensaries stay in the DB but
+    // never receive a pin.
+    const CIL_CITY_IN_LIST = `("Peoria","East Peoria","Peoria Heights","Pekin","Bartonville","Morton","Washington","Bloomington","Normal","Champaign","Urbana","Springfield")`;
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/master_listings?select=slug,name,city,lat,lng&project_tag=eq.green&state=eq.IL&is_active=eq.true&lat=not.is.null&limit=500`,
+      `${SUPABASE_URL}/rest/v1/master_listings?select=slug,name,city,lat,lng&project_tag=eq.green&state=eq.IL&is_active=eq.true&city=in.${encodeURIComponent(CIL_CITY_IN_LIST)}&lat=not.is.null&limit=500`,
       {
         headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
         next: { revalidate: 600 },
@@ -163,7 +167,7 @@ export default async function MapPage() {
               fontSize: ".95rem",
             }}
           >
-            Browse all Illinois dispensaries →
+            Browse all Central IL dispensaries →
           </Link>
         </div>
       ) : (

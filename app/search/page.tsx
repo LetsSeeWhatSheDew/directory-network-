@@ -134,8 +134,8 @@ export async function generateMetadata({
     ? `Search results for "${query}" | PuffPrice`
     : "Search | PuffPrice";
   const description = query
-    ? `Illinois cannabis dispensaries matching "${query}".`
-    : "Search Illinois cannabis dispensaries.";
+    ? `Central Illinois cannabis dispensaries matching "${query}".`
+    : "Search Central Illinois cannabis dispensaries.";
   const ogImage = "https://www.puffprice.com/og-image.png";
   const url = query
     ? `https://www.puffprice.com/search?q=${encodeURIComponent(query)}`

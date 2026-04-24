@@ -5,13 +5,13 @@ import { getAllBrands } from "../../lib/brands";
 import { brand as site } from "../../lib/brand";
 
 export const metadata: Metadata = {
-  title: "Illinois cannabis brands | PuffPrice",
+  title: "Central Illinois cannabis brands | PuffPrice",
   description:
-    "Cannabis brands carried at Illinois dispensaries, with live deals pulled from every shop PuffPrice tracks.",
+    "Cannabis brands carried at Central Illinois dispensaries, with live deals pulled from every shop PuffPrice tracks.",
   alternates: { canonical: `${site.url}/brand` },
   openGraph: {
-    title: "Illinois cannabis brands",
-    description: "Cannabis brands carried at Illinois dispensaries, with live deals pulled from every shop PuffPrice tracks.",
+    title: "Central Illinois cannabis brands",
+    description: "Cannabis brands carried at Central Illinois dispensaries, with live deals pulled from every shop PuffPrice tracks.",
     url: `${site.url}/brand`,
     siteName: "PuffPrice",
     type: "website",
@@ -19,8 +19,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Illinois cannabis brands",
-    description: "Cannabis brands carried at Illinois dispensaries, with live deals pulled from every shop PuffPrice tracks.",
+    title: "Central Illinois cannabis brands",
+    description: "Cannabis brands carried at Central Illinois dispensaries, with live deals pulled from every shop PuffPrice tracks.",
     images: [`${site.url}/og-image.png`],
   },
 };
@@ -61,11 +61,11 @@ export default async function BrandIndex() {
 
       <div className="wrap">
         <div className="eyebrow">Brands</div>
-        <h1>Illinois cannabis brands</h1>
+        <h1>Central Illinois cannabis brands</h1>
         <p className="lede">
-          We&apos;re building pages for every brand carried at Illinois
-          dispensaries — so you can see where they&apos;re sold, what the
-          price is today, and which shops are running a deal.
+          We&apos;re building pages for every brand carried at Central
+          Illinois dispensaries — so you can see where they&apos;re sold,
+          what the price is today, and which shops are running a deal.
         </p>
 
         {brands.length === 0 ? (
@@ -78,7 +78,7 @@ export default async function BrandIndex() {
             </p>
             <p className="stub-foot">
               Meanwhile:{" "}
-              <Link href="/deals/all">browse every active Illinois deal →</Link>
+              <Link href="/deals/all">browse every active Central IL deal →</Link>
             </p>
           </div>
         ) : (
