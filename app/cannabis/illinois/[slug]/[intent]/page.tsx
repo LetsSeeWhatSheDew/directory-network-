@@ -29,7 +29,7 @@ if(!isInCentralIL(slug))notFound();
 const city=s2c(slug);
 const ts=new Date().toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit",timeZone:"America/Chicago"});
 const ct=nowInCT();
-const listings=await fj<L[]>(`/master_listings?city=ilike.${encodeURIComponent(city)}&state=eq.IL&project_tag=eq.green&select=id,name,slug,city,state,address1,short_description,logo_url,plan,delivery,online_ordering&order=plan.desc,name.asc&limit=50`);
+const listings=await fj<L[]>(`/master_listings?city=ilike.${encodeURIComponent(city)}&state=eq.IL&project_tag=eq.green&is_active=eq.true&select=id,name,slug,city,state,address1,short_description,logo_url,plan,delivery,online_ordering&order=plan.desc,name.asc&limit=50`);
 
 let hours:H[]=[];
 if(intent==="open-now"){hours=await fj<H[]>(`/listing_hours?weekday=eq.${ct.weekday}&select=listing_id,weekday,opens_at,closes_at,is_closed`);}

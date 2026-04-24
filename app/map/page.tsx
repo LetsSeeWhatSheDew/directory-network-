@@ -39,7 +39,7 @@ async function getListings(): Promise<Listing[]> {
   // were 400ing the PostgREST query and emptying the map silently.
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/master_listings?select=slug,name,city,lat,lng&project_tag=eq.green&state=eq.IL&lat=not.is.null&limit=500`,
+      `${SUPABASE_URL}/rest/v1/master_listings?select=slug,name,city,lat,lng&project_tag=eq.green&state=eq.IL&is_active=eq.true&lat=not.is.null&limit=500`,
       {
         headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
         next: { revalidate: 600 },

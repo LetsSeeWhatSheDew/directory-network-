@@ -93,6 +93,7 @@ async function fetchListings(tag: string): Promise<Listing[]> {
   const url =
     `${baseUrl}/rest/v1/master_listings` +
     `?project_tag=eq.${encodeURIComponent(tag)}` +
+    `&is_active=eq.true` +
     `&select=*` +
     `&order=is_featured.desc`;
 

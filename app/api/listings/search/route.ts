@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
     if (q.length < 2) return NextResponse.json({ listings: [] });
 
     const safe = q.replace(/[(),]/g, "");
-    const url = `${SUPABASE_URL}/rest/v1/master_listings?select=slug,name,city&project_tag=eq.green&or=(name.ilike.*${encodeURIComponent(safe)}*,city.ilike.*${encodeURIComponent(safe)}*,slug.ilike.*${encodeURIComponent(safe)}*)&limit=10`;
+    const url = `${SUPABASE_URL}/rest/v1/master_listings?select=slug,name,city&project_tag=eq.green&is_active=eq.true&or=(name.ilike.*${encodeURIComponent(safe)}*,city.ilike.*${encodeURIComponent(safe)}*,slug.ilike.*${encodeURIComponent(safe)}*)&limit=10`;
 
     const res = await fetch(url, {
       headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },

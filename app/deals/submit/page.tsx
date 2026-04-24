@@ -49,7 +49,7 @@ type ListingOpt = { slug: string; name: string; city: string };
 async function getListingOptions(): Promise<ListingOpt[]> {
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/master_listings?select=slug,name,city&state=eq.IL&project_tag=eq.green&order=name.asc&limit=300`,
+      `${SUPABASE_URL}/rest/v1/master_listings?select=slug,name,city&state=eq.IL&project_tag=eq.green&is_active=eq.true&order=name.asc&limit=300`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,

@@ -36,7 +36,7 @@ function orFilter(q: string) {
 async function searchListings(q: string): Promise<Listing[]> {
   if (!q) return [];
   try {
-    const url = `${SUPABASE_URL}/rest/v1/master_listings?select=id,slug,name,city,address1,short_description&${orFilter(q)}&project_tag=eq.green&limit=30`;
+    const url = `${SUPABASE_URL}/rest/v1/master_listings?select=id,slug,name,city,address1,short_description&${orFilter(q)}&project_tag=eq.green&is_active=eq.true&limit=30`;
     const res = await fetch(url, {
       headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
       cache: "no-store",
@@ -80,7 +80,7 @@ async function fetchListingsBySlug(slugs: string[]): Promise<Listing[]> {
   if (slugs.length === 0) return [];
   try {
     const inList = slugs.map((s) => `"${s}"`).join(",");
-    const url = `${SUPABASE_URL}/rest/v1/master_listings?select=id,slug,name,city,address1,short_description&slug=in.(${inList})&project_tag=eq.green&limit=50`;
+    const url = `${SUPABASE_URL}/rest/v1/master_listings?select=id,slug,name,city,address1,short_description&slug=in.(${inList})&project_tag=eq.green&is_active=eq.true&limit=50`;
     const res = await fetch(url, {
       headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
       cache: "no-store",
