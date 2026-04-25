@@ -12,6 +12,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { runCilScrape } from "@/lib/scraper/cil-deal-scraper";
+import { checkCronAuth } from "@/lib/cronAuth";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -27,11 +28,8 @@ const SERVICE_KEY =
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
 
 async function handle(req: NextRequest): Promise<NextResponse> {
-  const authHeader = req.headers.get("authorization") || "";
-  const expected = `Bearer ${process.env.CRON_SECRET || ""}`;
-  if (!process.env.CRON_SECRET || authHeader !== expected) {
-    return new NextResponse("unauthorized", { status: 401 });
-  }
+  const auth = checkCronAuth(req, "scrape-deals");
+  if (!auth.ok) return auth.response;
 
   if (!SERVICE_KEY) {
     return NextResponse.json(

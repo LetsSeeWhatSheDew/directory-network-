@@ -18,6 +18,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { checkCronAuth } from "@/lib/cronAuth";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -43,10 +44,6 @@ type Summary = {
   skipped?: boolean;
   reason?: string;
 };
-
-function unauthorized(): NextResponse {
-  return new NextResponse("unauthorized", { status: 401 });
-}
 
 function makeAdminClient() {
   // Service role bypasses RLS — required for UPDATE on deals table.
@@ -161,9 +158,8 @@ async function sendStaleAlert(summary: Summary): Promise<boolean> {
 }
 
 async function handle(req: NextRequest): Promise<NextResponse> {
-  const authHeader = req.headers.get("authorization") || "";
-  const expected = `Bearer ${process.env.CRON_SECRET || ""}`;
-  if (!process.env.CRON_SECRET || authHeader !== expected) return unauthorized();
+  const auth = checkCronAuth(req, "mark-stale-deals");
+  if (!auth.ok) return auth.response;
 
   const started = Date.now();
   const ranAt = new Date().toISOString();
