@@ -257,8 +257,12 @@ function mapsHref(parts: Array<string | null | undefined>): string {
 }
 
 async function getRelated(city: string, currentId: string): Promise<Listing[]> {
+  // master_listings is shared across multiple projects (PuffPrice + bid +
+  // rent + ...). Without project_tag/state/is_active filters this query
+  // surfaced apartments and public-works listings as "Other dispensaries
+  // in [city]". Scope tightly to active green-tag IL rows only.
   const rows = await fetchJson<Listing[]>(
-    `/master_listings?city=eq.${encodeURIComponent(city)}&id=neq.${encodeURIComponent(currentId)}&select=id,name,slug,city,state,type,short_description,logo_url&limit=3`
+    `/master_listings?city=eq.${encodeURIComponent(city)}&id=neq.${encodeURIComponent(currentId)}&project_tag=eq.green&state=eq.IL&is_active=eq.true&select=id,name,slug,city,state,type,short_description,logo_url&limit=3`
   );
   return rows ?? [];
 }

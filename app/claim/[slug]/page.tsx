@@ -12,7 +12,10 @@ const SUPABASE_ANON_KEY =
 async function getListing(slug: string) {
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/master_listings?select=slug,name,city&slug=eq.${encodeURIComponent(slug)}&limit=1`,
+      // Scope to project_tag=green so a slug collision with another
+      // project sharing master_listings can't be claimed via the
+      // PuffPrice claim flow.
+      `${SUPABASE_URL}/rest/v1/master_listings?select=slug,name,city&slug=eq.${encodeURIComponent(slug)}&project_tag=eq.green&is_active=eq.true&limit=1`,
       {
         headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
         cache: "no-store",

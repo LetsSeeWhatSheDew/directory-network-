@@ -26,10 +26,13 @@ function weekStart(d = new Date()): string {
 export async function computeWeeklyIndex(): Promise<WeeklyIndexResult> {
   const week_of = weekStart();
   const supabase = getSupabase();
+  // deals table is shared across multiple projects; scope to green
+  // before any aggregation so the Index can't pull in non-PuffPrice rows.
   const { data, error } = await supabase
     .from("deals")
     .select("price_per_gram,unit,category,is_active")
     .eq("is_active", true)
+    .eq("project_tag", "green")
     .eq("category", "flower")
     .not("price_per_gram", "is", null);
 

@@ -54,7 +54,10 @@ type ListingMini = {
 async function getDeal(id: string): Promise<Deal | null> {
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/deals?id=eq.${encodeURIComponent(id)}&select=*&limit=1`,
+      // deals is shared across projects (same as master_listings); scope
+      // to project_tag=green so /deal/[uuid] can't surface a non-PuffPrice
+      // deal even if a UUID collision occurred.
+      `${SUPABASE_URL}/rest/v1/deals?id=eq.${encodeURIComponent(id)}&project_tag=eq.green&select=*&limit=1`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,

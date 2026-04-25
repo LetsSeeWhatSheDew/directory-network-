@@ -108,7 +108,10 @@ async function fetchListingMeta(slug: string): Promise<{
   if (!slug) return { lat: null, lng: null, hours: [] };
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/master_listings?slug=eq.${encodeURIComponent(slug)}&select=lat,lng,listing_hours(weekday,opens_at,closes_at,is_closed)&limit=1`,
+      // Scope to project_tag=green: master_listings is shared across
+      // multiple projects, and a slug collision could swap in wrong
+      // coords/hours from a non-PuffPrice listing.
+      `${SUPABASE_URL}/rest/v1/master_listings?slug=eq.${encodeURIComponent(slug)}&project_tag=eq.green&is_active=eq.true&select=lat,lng,listing_hours(weekday,opens_at,closes_at,is_closed)&limit=1`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,
