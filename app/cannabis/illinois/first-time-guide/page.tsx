@@ -134,7 +134,7 @@ export default function FirstTimeGuidePage() {
             <span className="guide-nav-dot" />
             <span className="guide-nav-name">puff<span className="guide-nav-accent">price</span></span>
           </Link>
-          <Link href="/cannabis/illinois" className="guide-nav-back">← Illinois</Link>
+          <Link href="/" className="guide-nav-back">← Central IL</Link>
         </nav>
 
         <div className="guide-breadcrumb">
@@ -142,7 +142,7 @@ export default function FirstTimeGuidePage() {
           <span>›</span>
           <Link href="/cannabis">Cannabis</Link>
           <span>›</span>
-          <Link href="/cannabis/illinois">Illinois</Link>
+          <Link href="/">Central IL</Link>
           <span>›</span>
           <span style={{ color: "#374151" }}>First-Time Guide</span>
         </div>
@@ -357,7 +357,7 @@ export default function FirstTimeGuidePage() {
               ].map((city) => (
                 <Link
                   key={city.slug}
-                  href={`/cannabis/illinois/${city.slug}`}
+                  href={`/city/${city.slug}`}
                   style={{
                     background: "#fff",
                     border: "1px solid #e8e5de",

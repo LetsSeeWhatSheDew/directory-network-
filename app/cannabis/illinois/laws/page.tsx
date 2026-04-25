@@ -96,12 +96,12 @@ export default function IllinoisLawsPage() {
             <span className="laws-nav-dot" />
             <span className="laws-nav-name">puff<span className="laws-nav-accent">price</span></span>
           </Link>
-          <Link href="/cannabis/illinois" className="laws-nav-back">← Illinois</Link>
+          <Link href="/" className="laws-nav-back">← Central IL</Link>
         </nav>
         <div className="laws-breadcrumb">
           <Link href="/">Home</Link><span>›</span>
           <Link href="/cannabis">Cannabis</Link><span>›</span>
-          <Link href="/cannabis/illinois">Illinois</Link><span>›</span>
+          <Link href="/">Central IL</Link><span>›</span>
           <span style={{ color: "#374151" }}>Laws</span>
         </div>
         <div className="laws-inner">
@@ -191,7 +191,7 @@ export default function IllinoisLawsPage() {
           <div className="laws-cta">
             <p className="laws-cta-title">Find a dispensary near you</p>
             <p className="laws-cta-sub">Browse every licensed cannabis dispensary in Central Illinois with real hours and directions.</p>
-            <Link href="/cannabis/illinois" className="laws-cta-btn">Browse Central IL dispensaries →</Link>
+            <Link href="/dispensaries" className="laws-cta-btn">Browse Central IL dispensaries →</Link>
           </div>
         </div>
         <footer className="laws-footer">

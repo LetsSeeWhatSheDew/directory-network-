@@ -177,7 +177,7 @@ export default async function OpenNowPage() {
             <span className="on-nav-dot" />
             <span className="on-nav-name">puff<span className="on-nav-accent">price</span></span>
           </Link>
-          <Link href="/cannabis/illinois" className="on-nav-back">← Illinois</Link>
+          <Link href="/" className="on-nav-back">← Central IL</Link>
         </nav>
 
         <div className="on-breadcrumb">
@@ -185,7 +185,7 @@ export default async function OpenNowPage() {
           <span>›</span>
           <Link href="/cannabis">Cannabis</Link>
           <span>›</span>
-          <Link href="/cannabis/illinois">Illinois</Link>
+          <Link href="/">Central IL</Link>
           <span>›</span>
           <span style={{ color: "#374151" }}>Open now</span>
         </div>

@@ -343,9 +343,9 @@ export default async function DealPage({
         </p>
         <p className="city">
           {rawCity ? (
-            <Link href={`/city/${encodeURIComponent(rawCity.toLowerCase())}`}>{rawCity}, IL</Link>
+            <Link href={`/city/${rawCity.toLowerCase().trim().replace(/\s+/g, "-")}`}>{rawCity}, IL</Link>
           ) : (
-            <Link href="/cannabis/illinois">Illinois</Link>
+            <Link href="/">Central Illinois</Link>
           )}
         </p>
 
