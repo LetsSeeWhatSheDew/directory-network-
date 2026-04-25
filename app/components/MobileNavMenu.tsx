@@ -48,7 +48,7 @@ export default function MobileNavMenu() {
           />
           <div className="mobile-menu-panel" role="menu" onClick={() => setOpen(false)}>
             <Link href="/" className="mobile-menu-link">Home (deals feed)</Link>
-            <Link href="/cannabis/illinois" className="mobile-menu-link">Browse by city</Link>
+            <Link href="/" className="mobile-menu-link">Browse by city</Link>
             <Link href="/cannabis/illinois/open-now" className="mobile-menu-link">Open now</Link>
             <Link href="/map" className="mobile-menu-link">Map view</Link>
             <Link href="/alerts" className="mobile-menu-link highlight">Get deal alerts →</Link>

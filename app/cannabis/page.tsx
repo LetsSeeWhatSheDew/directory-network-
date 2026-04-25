@@ -90,7 +90,7 @@ export default function CannabisCentralHub() {
             regulations, dispensary directories, first-timer tips, and current
             market information. Start with a state below, or{" "}
             <Link
-              href="/cannabis/illinois"
+              href="/"
               className="font-medium text-[#7FE3C7] hover:underline"
             >
               explore Illinois
@@ -114,7 +114,7 @@ export default function CannabisCentralHub() {
           <div className="grid gap-4 md:grid-cols-2">
             {/* Illinois - Live */}
             <Link
-              href="/cannabis/illinois"
+              href="/"
               className="group flex flex-col rounded-3xl border border-slate-800 bg-slate-900/60 p-6 text-xs shadow-sm transition hover:border-[#7FE3C7]/60 hover:bg-slate-900"
             >
               <div className="mb-3 flex items-center justify-between">
@@ -375,10 +375,10 @@ export default function CannabisCentralHub() {
 
           <div className="flex flex-wrap gap-2 mb-6">
             <Link
-              href="/cannabis/illinois"
+              href="/"
               className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-[11px] text-slate-300 transition-colors hover:border-[#7FE3C7]/60 hover:bg-slate-800 hover:text-slate-50"
             >
-              Illinois Dispensaries
+              Central Illinois Dispensaries
             </Link>
             <Link
               href="/cannabis/illinois/laws"
@@ -387,10 +387,10 @@ export default function CannabisCentralHub() {
               Illinois Cannabis Laws
             </Link>
             <Link
-              href="/cannabis/illinois/chicago"
+              href="/city/peoria"
               className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-[11px] text-slate-300 transition-colors hover:border-[#7FE3C7]/60 hover:bg-slate-800 hover:text-slate-50"
             >
-              Chicago Dispensaries
+              Peoria Dispensaries
             </Link>
           </div>
 

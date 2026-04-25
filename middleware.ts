@@ -5,7 +5,6 @@ import {
 } from "./lib/visibility";
 
 const COOKIE_NAME = "dn_admin_auth";
-const INTENTS = ["best", "open-now", "recreational", "deals"];
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -24,35 +23,41 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // Central IL scope gate for /cannabis/illinois/:city and deeper.
-  // Matches: /cannabis/illinois/chicago, /cannabis/illinois/chicago/best,
-  // /cannabis/illinois/chicago/hyde-park. The hub page itself
-  // (/cannabis/illinois) has no slug so it passes through. Non-geographic
-  // slugs (first-time-guide, laws, open-now, ...) are whitelisted.
+  // Legacy `/cannabis/illinois` hub — the old "directory of all Illinois
+  // cities" surface. The Central IL homepage absorbs that role today.
+  if (pathname === "/cannabis/illinois" || pathname === "/cannabis/illinois/") {
+    return NextResponse.redirect(new URL("/", req.url), 308);
+  }
+
+  // Legacy `/cannabis/illinois/:slug(/...)` city routes. The new canonical
+  // template lives at `/city/:slug`. CIL slugs 308 to the new home; the
+  // three content pages (first-time-guide, laws, open-now) pass through
+  // unchanged; everything else 404s.
   const cityMatch = pathname.match(/^\/cannabis\/illinois\/([^/]+)(\/.*)?$/);
   if (cityMatch) {
     const slug = cityMatch[1];
-    if (!CANNABIS_IL_NON_CITY_SLUGS.has(slug) && !isInCentralIL(slug)) {
-      return new NextResponse(null, { status: 404 });
+
+    if (CANNABIS_IL_NON_CITY_SLUGS.has(slug)) {
+      return NextResponse.next();
     }
+
+    if (isInCentralIL(slug)) {
+      return NextResponse.redirect(
+        new URL(`/city/${slug.toLowerCase()}`, req.url),
+        308
+      );
+    }
+
+    return new NextResponse(null, { status: 404 });
   }
 
-  // Central IL scope gate for /city/:slug. Same logic — compound slugs
-  // and canonical Central IL city slugs pass, everything else 404s.
+  // Central IL scope gate for /city/:slug. Non-CIL city landings return
+  // 404, so the new template never serves out-of-scope content.
   const cityLanding = pathname.match(/^\/city\/([^/]+)\/?$/);
   if (cityLanding) {
     const slug = cityLanding[1];
     if (!isInCentralIL(slug)) {
       return new NextResponse(null, { status: 404 });
-    }
-  }
-
-  // Intent page rewrite — force Next.js to route /[city]/[intent] correctly
-  const match = pathname.match(/^\/cannabis\/illinois\/([^/]+)\/([^/]+)$/);
-  if (match) {
-    const intent = match[2];
-    if (INTENTS.includes(intent)) {
-      return NextResponse.rewrite(new URL(pathname, req.url));
     }
   }
 
@@ -62,7 +67,8 @@ export function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     "/admin/:path*",
-    "/cannabis/illinois/:slug*",
+    "/cannabis/illinois",
+    "/cannabis/illinois/:path*",
     "/city/:slug*",
   ],
 };

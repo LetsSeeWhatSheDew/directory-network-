@@ -1,7 +1,7 @@
 // app/dispensaries/page.tsx
-// Top-level dispensary directory landing — full IL list grouped by city.
-// Distinct from /cannabis/illinois (which is more SEO-focused with intent
-// pages). This page is for users who land via /dispensaries.
+// Top-level dispensary directory landing — full Central IL list grouped by city.
+// Distinct from /city/[city] (which is the per-city deal-and-listing landing).
+// This page is for users who land via /dispensaries directly.
 
 import Link from "next/link";
 
@@ -143,7 +143,7 @@ export default async function DispensariesIndexPage() {
                     <h2 style={{ fontSize: "1.3rem", fontWeight: 700, letterSpacing: "-0.02em" }}>
                       {city}
                     </h2>
-                    <Link href={`/cannabis/illinois/${slug}/deals`} style={{ fontSize: ".8rem", color: "#16a34a", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontWeight: 600 }}>
+                    <Link href={`/city/${slug}`} style={{ fontSize: ".8rem", color: "#16a34a", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontWeight: 600 }}>
                       Deals in {city} →
                     </Link>
                   </div>
