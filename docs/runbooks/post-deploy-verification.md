@@ -115,3 +115,106 @@ If any step fails, **stop the next commit**. The fix to the failing step is the 
 - Performance regressions. Add a step when Sentry / web-vitals monitoring is wired (currently scaffolded; DSN pending per `CLAUDE.md`).
 
 When any of those become production-relevant, append a section to this runbook rather than spinning up a separate one.
+
+---
+
+## Pre-launch checklist (added 2026-04-27)
+
+This is a **separate, sharper checklist** from the post-deploy steps above. Run it **before sharing any production URL** — to a customer, a press contact, social media, an email blast, or anywhere a human or crawler will see it for the first time. The post-deploy checklist verifies the deploy itself; this one verifies the deploy is fit to be seen.
+
+Triggered by the 2026-04-27 audit (`docs/site-audits/2026-04-27-claude-audit.md`). All four findings — metro bleed, project-tag bleed, cron auth, stale internal links — would have been caught by one of the seven steps below before Matthew had to find them by spot-check.
+
+**Total time:** under 10 minutes. If any step fails, do not share the URL until the failure is fixed and the step re-runs green.
+
+### 1. Spot-check 3 random listing pages — verify only cannabis dispensaries appear in any "related" or "nearby" sections
+
+Pick three listings at random (one from a high-density city like Peoria, one mid-density like Springfield, one low-density like Pekin or Urbana). For each:
+
+- Open the production URL: `https://www.puffprice.com/l/<slug>` and `https://www.puffprice.com/dispensary/<slug>`.
+- Inspect every "Other dispensaries in {city}" / "Nearby dispensaries" / map / sidebar that lists multiple listings.
+- Confirm every card represents an actual cannabis dispensary, not an apartment listing, a contractor bid, a wellness practitioner, or any other `project_tag` ≠ `'green'` row.
+
+This is the C2 (project-tag bleed) check. Fast and decisive: if any non-cannabis row is visible, stop the launch and fix the query before sharing. See `docs/architecture/db-scope-discipline.md`.
+
+### 2. Spot-check 3 random city pages — verify listing count matches DB exact-city query
+
+Pick three CIL cities. For each:
+
+- Run a DB query: `SELECT COUNT(*) FROM master_listings WHERE city='<city>' AND state='IL' AND project_tag='green' AND is_active=true AND type='dispensary';`
+- Open `https://www.puffprice.com/city/<slug>`.
+- Confirm the visible dispensary count matches the DB count exactly.
+
+If the page count exceeds DB exact-city count, you have either metro bleed (C1), project-tag bleed (C2), or both. Both are launch-blockers. Do not interpret a too-high number as "we have more dispensaries than I thought."
+
+### 3. Spot-check 1 empty-state city — verify proper empty-state copy renders
+
+Pick one of the empty-state cities (Bartonville, Morton, or Washington — any city where the exact-city DB count is zero):
+
+- Open `https://www.puffprice.com/city/<slug>`.
+- Confirm the page renders the canonical empty-state strings from `docs/empty-state-copy-20260426.md` section 2:
+  - Headline: "No licensed dispensaries in {City} yet."
+  - Body explaining the nearest CIL city as an alternative.
+  - CTA to the nearest city.
+- Confirm the page does NOT render any dispensary cards, deal cards, or counts greater than zero.
+
+This is the Bartonville-class failure-mode check. Most damaging variant of C1; it's where the empty-state-copy doc lives in production.
+
+### 4. Click a deal card — verify freshness badge matches between browse and listing-detail views
+
+Pick any deal card on the homepage or `/deals/all`:
+
+- Note the freshness label on the browse-view card (e.g., "Last verified Apr 24" or "Verified yesterday").
+- Click into the deal's listing-detail page (`/l/<slug>`).
+- Confirm the freshness label on the listing-detail card matches the browse-view label.
+
+If the two disagree, you have a re-introduction of the late-night session's freshness-badge bug (one query was missing `verified_at` from its `select`). The bug is fixed in the canonical `select` strings on both views; this step is regression detection.
+
+### 5. Test cron endpoint with curl + bearer token — confirm 200 response
+
+```
+curl -i -H "Authorization: Bearer $CRON_SECRET" \
+  https://www.puffprice.com/api/cron/scrape-deals
+```
+
+- Expected: HTTP 200 (with whatever response body the route returns — usually a small JSON receipt).
+- Common failure: HTTP 401. If 401 with the correct token, the auth-parsing code is broken (see audit C3). The cron is firing daily but doing nothing.
+- Common failure 2: HTTP 200 but the response body says "0 deals scraped" indefinitely. That's a separate scraper problem; this checklist confirms the auth path only.
+
+`CRON_SECRET` lives in Vercel env (Production, Sensitive). Get the value from Vercel project settings.
+
+### 6. Verify GSC has zero new canonical warnings on `/city/*` URLs
+
+Open Google Search Console for the project. Check the Coverage / Page indexing report for:
+
+- Any `/city/<slug>` URL flagged as "Duplicate without user-selected canonical."
+- Any `/dispensary/<slug>` URL flagged similarly.
+- Any `/deal/<uuid>` URL flagged similarly (this one is on the v2 canonical-decisions doc as a known open question; if it persists past the next deploy, escalate).
+
+GSC indexing reports lag actual deploys by 1–7 days. For a "before sharing the URL" check, it's enough that no warnings have appeared since the most recent deploy. If new warnings are stacking, the canonical strategy from `docs/url-canonical-decisions-20260426.md` isn't being honored somewhere — investigate before promoting.
+
+### 7. Pull current Supabase counts — verify they match what's displayed in the homepage stat block
+
+Run the canonical reconciliation queries:
+
+```
+SELECT COUNT(*) FROM master_listings
+WHERE state='IL' AND is_active=true AND type='dispensary' AND project_tag='green'
+  AND city IN ('Bartonville','Bloomington','Champaign','East Peoria','Morton',
+               'Normal','Pekin','Peoria','Peoria Heights','Springfield',
+               'Urbana','Washington');
+
+SELECT COUNT(*) FROM deals d
+JOIN master_listings m ON m.slug = d.listing_slug
+WHERE d.is_active = true AND m.project_tag = 'green' AND m.state='IL'
+  AND m.city IN (... same list ...);
+```
+
+Compare the two numbers to whatever the homepage stat block currently displays ("X dispensaries · Y active deals" or whatever the live copy is). They must match exactly.
+
+If they don't, either (a) the stat-block query is missing the `project_tag` filter (C2 class), (b) the stat-block query is using a different city list than `CENTRAL_IL_CITIES` (scope drift), or (c) the page is cached against an old DB state (rebuild the page).
+
+### Stopping rule
+
+If any of steps 1–7 fails, **stop the launch** and fix the failure before sharing the URL. There is no "I'll fix it after." A URL shared with a broken empty state, or a project-tag bleed, or a 401 cron, is a credibility cost that doesn't refund.
+
+The runbook's seven steps are designed to compose: each one takes 1–2 minutes, the whole thing runs end-to-end in under 10. The cost of running it is small enough that the only reason not to is haste, and haste is what produced the four findings the runbook now exists to catch.

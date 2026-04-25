@@ -11,7 +11,9 @@ Live at puffprice.com.
 
 **Deal data policy (April 26, 2026):** Deals are pulled from direct dispensary websites and official social only — never Leafly, Weedmaps, or other aggregators. Re-verified daily (Vercel Hobby cron limit; was originally specced every 6 hours, see `docs/session-reports/2026-04-26-code-ci-fix.md`). Legacy aggregator-sourced deals were deactivated April 26 in a single cutover. See `docs/deal-data-policy.md`.
 
-**URL canonical (April 26, 2026):** `/city/[city]` is the canonical city URL pattern; `/dispensary/[slug]` is the canonical listing URL pattern; `/cannabis/illinois/*` is deprecated except for content pages (`first-time-guide`, `laws`, `open-now`). See `docs/url-canonical-decisions-20260426.md`.
+**URL canonical (April 26, 2026):** `/city/[city]` is the canonical city URL pattern; `/dispensary/[slug]` is the canonical listing URL pattern; `/cannabis/illinois/*` is deprecated except for content pages (`first-time-guide`, `laws`, `open-now`). See `docs/url-canonical-decisions-20260426.md` (v2 addendum dated 2026-04-27 covers the open `/l/[id]` vs `/dispensary/[slug]` question and the `/deal/[uuid]` GSC canonical warning).
+
+**DB scope discipline (April 27, 2026):** `master_listings` is multi-tenant — it serves PuffPrice (`project_tag='green'`), an apartment-rentals project (`'rent'`), a public-works bidding directory (`'bid'`), wellness practitioners (`'heal'`), women's-health clinics (`'her'`), and an AI-tools directory (`'machine'`). **Every public query touching `master_listings` MUST include `.eq('project_tag', 'green')`. No exceptions.** Required reading for any session that adds or modifies a query touching this table: `docs/architecture/db-scope-discipline.md`. The 2026-04-27 audit caught apartment rentals and a public-works bid rendering as PuffPrice dispensaries on `/l/ivy-hall-dispensary` because the related-listings widget was missing this filter (`docs/site-audits/2026-04-27-claude-audit.md`).
 
 ## Stack
 - Frontend: Next.js 16 (App Router, Turbopack)

@@ -1,7 +1,10 @@
-# URL Canonical Decisions — 2026-04-26
-**Date:** 2026-04-26 (late session)
-**Author:** Cowork (Claude), documenting parallel Code session.
-**Status:** Active. The canonical patterns below are the single source of truth for city and listing URLs going forward.
+# URL Canonical Decisions — 2026-04-26 (v1) / 2026-04-27 (v2 addendum)
+**Original date:** 2026-04-26 (late session)
+**v2 addendum date:** 2026-04-27 (morning, after audit)
+**Author:** Cowork (Claude), documenting parallel Code sessions.
+**Status:** Active. The canonical patterns below are the single source of truth for city and listing URLs going forward. v2 addendum adds open questions surfaced by the 2026-04-27 audit.
+
+> **v2 quick read:** Code's late-night session (2026-04-26 → 2026-04-27 early morning) shipped the redirects this doc described — `/cannabis/illinois/[city]` 308s to `/city/[city]` for all 12 CIL cities, the legacy template tree was deleted (70 files, −3,066 lines), and the sitemap was rewritten to emit only canonical URLs. See the v2 addendum at the bottom of this file for what's still open: the `/l/[id]` vs `/dispensary/[slug]` split, content-page internal links (Finding C4 in tonight's audit), and the `/deal/[uuid]` canonical-tag warning from Google Search Console.
 
 ---
 
@@ -99,3 +102,72 @@ The post-deploy verification runbook (`docs/runbooks/post-deploy-verification.md
 - **Code lane:** owns the redirects landing tonight. Should produce a follow-up note in the next session report listing the exact source paths redirected and confirming production responses.
 - **Cowork lane:** owns this doc and any future canonical decisions. Document new URL patterns here before they ship.
 - **Chrome lane:** owns smoke-testing the redirects after deploy. Specifically: hit each `/cannabis/illinois/[city]` for the 12-city scope on production and confirm 301 → `/city/[city]`.
+
+---
+
+# v2 addendum — 2026-04-27 morning (post-audit)
+
+This addendum reaffirms the v1 decisions and adds three open questions surfaced by the 2026-04-27 site audit (`docs/site-audits/2026-04-27-claude-audit.md`). v1 decisions still hold; the open questions below are not changes — they are unresolved scope items that need a Code-side decision in a follow-up session.
+
+## Reaffirmed (no change)
+
+- **`/city/[city]` is the canonical city URL pattern.** Verified in production: all 12 CIL cities resolve at `/city/<slug>` with HTTP 200; all `/cannabis/illinois/<slug>` city URLs 308-redirect to the canonical equivalent.
+- **`/cannabis/illinois/<city>` is deprecated** as of 2026-04-26. Code's late-night session deleted the legacy template tree (70 files, −3,066 lines). The redirects are stable; the templates that would compete with the canonical pages no longer exist.
+- **Content pages stay where they are.** `/cannabis/illinois/first-time-guide`, `/cannabis/illinois/laws`, and `/cannabis/illinois/open-now` remain at their long-form paths. Code preserved them in place per the v1 exemption.
+
+## Open question 1 — `/l/[id]` vs `/dispensary/[slug]`
+
+**Both exist on production.** They are not duplicates — file headers in the codebase explicitly distinguish them:
+
+| Route | Purpose (per file header comment) |
+|---|---|
+| `/l/[id]` | "GO HERE confirmation screen for the core flow" — minimal, action-oriented; this is the page the parking-lot user lands on after clicking a deal card. |
+| `/dispensary/[slug]` | "Full dispensary profile page — SEO-forward, distinct from /l/[slug]." Bookmark / repeat-visitor / search destination. |
+
+The two were intentionally split. But:
+
+1. **They both render the same dispensary content from the same `master_listings` row.** Search engines see two URLs for the same conceptual thing.
+2. **Internal links across the codebase are inconsistent** — some surfaces link to `/l/<slug>`, others to `/dispensary/<slug>`. Whether the link goes to the action-oriented page or the SEO-forward page depends on which component the user happens to be on.
+3. **It's not clear whether one should `<link rel="canonical">` to the other**, or whether both should self-canonical with distinct content treatments. Today (best as I can tell) neither does that explicitly, which is the same pre-existing duplication shape that produced the 2026-04-26 audit Finding 1.
+
+**This is a Code decision to make in a follow-up session, not a Cowork doc decision.** Possible directions, listed in roughly increasing order of effort:
+
+- **(a) Both stay; pick one as canonical via `<link rel="canonical">` headers.** No URL change; tells search engines which one to rank. Probably `/dispensary/<slug>` as canonical because of its SEO-forward role; `/l/<slug>` self-references but signals the canonical home.
+- **(b) Merge intents.** One template, one URL. The action-oriented "GO HERE confirmation" becomes a query param or anchor on the SEO-forward page. Loses the per-route bundle-size optimization (if any) but eliminates the duplication.
+- **(c) Split harder.** Make the two pages actually different content — `/l/<slug>` is post-click confirmation only (no SEO content, noindex), `/dispensary/<slug>` is the full profile. The duplication-by-content goes away because the pages stop rendering the same thing.
+
+Cowork preference: **(a) for the next session**, **(c) as a longer-term polish**. (b) loses the user-flow split that the original authors had a reason for; don't undo it without naming the reason.
+
+**Flag for next Code session:** confirm what each route's intent is today, decide a canonical, and either ship `<link rel="canonical">` headers or document why both are self-canonical.
+
+## Open question 2 — content-page internal links pointing at deprecated URLs
+
+Tonight's audit Finding C4: `/cannabis/illinois/first-time-guide` is a surviving content page (per the v1 exemption above) but contains internal links pointing at `/cannabis/illinois/<city>`. Those URLs now 308-redirect to `/city/<city>`. The page itself works for users (one extra redirect hop); the SEO and AI-citation cost is real because:
+
+- Search engines treat the page as linking to redirected URLs, which dilutes the link equity that v1's redirect strategy was supposed to consolidate.
+- AI citation systems often de-prioritize linked-but-redirected URLs in favor of canonical ones; first-time-guide is exactly the page we want AI systems to cite.
+
+**Rule (locked here as of v2):** internal links from `/cannabis/illinois/first-time-guide`, `/cannabis/illinois/laws`, and `/cannabis/illinois/open-now` to any CIL city page MUST use the `/city/<city-slug>` pattern. The redirect is for inbound URLs the world is still pointing at — it is not a substitute for updating internal links inside surviving pages.
+
+**Code's parallel-session fix:** grep `/cannabis/illinois/<city-slug>` patterns inside the three content-page source files and replace with `/city/<city-slug>`. Same pattern that was already applied to nav, sitemap, and the `/dispensaries` directory page.
+
+If the content pages contain non-city `/cannabis/illinois/*` links (e.g., links to other content pages within the same set, or to the deleted Chicago neighborhoods), those are different cases:
+
+- Links between the three preserved content pages stay as-is. They are linking to canonical content URLs.
+- Links to deleted city or neighborhood pages must be removed entirely or replaced with the closest canonical equivalent. Don't link to a 404; don't link to a redirect that lands on a 404 either.
+
+## Open question 3 — `/deal/[uuid]` and Google Search Console canonical warnings
+
+`/deal/<uuid>` is the canonical URL for individual deal pages today (one route file: `app/deal/[id]/page.tsx`). GSC has been emitting canonical warnings on this surface — likely because the deal pages don't carry an explicit `<link rel="canonical">` header, and crawl-time signals (parameters, source URL referrer, etc.) are giving GSC enough ambiguity to flag.
+
+**Action (queue for next Code session):**
+
+1. Add `<link rel="canonical" href="https://www.puffprice.com/deal/{uuid}" />` to every deal-page render. This is a one-line metadata addition, not a routing change.
+2. Confirm in GSC that the warnings clear after the next crawl (typically 1–7 days post-deploy).
+3. If warnings persist, audit whether there are duplicate or near-duplicate URL entries in the sitemap for the same deal — there shouldn't be, but worth confirming.
+
+**Cowork preference:** the deal-page canonical is correctly `/deal/<uuid>`. There is no plausible alternative URL for an individual deal under the current routing, so the canonical declaration is purely a "tell GSC explicitly what we already know" move.
+
+## Pre-launch checklist alignment
+
+The pre-launch checklist in `docs/runbooks/post-deploy-verification.md` now includes a step that catches the v2 addendum's class of bugs: "Verify GSC has zero new canonical warnings on `/city/*` URLs" and "Spot-check 3 random listing pages on production." Both would have caught Open Question 3 and the C2 bleed before this audit.

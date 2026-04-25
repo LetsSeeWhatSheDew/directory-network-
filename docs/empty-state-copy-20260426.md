@@ -1,6 +1,13 @@
-# PuffPrice Empty-State Copy — April 26, 2026
+# PuffPrice Empty-State Copy — April 26, 2026 (canonical strings re-locked 2026-04-27)
 
 **Purpose:** exact strings Code can drop into components. Every empty state on PuffPrice should be **honest, positive, specific**, and offer a next step.
+
+> **Update 2026-04-27 — canonical empty-state strings locked.**
+> Tonight's audit (`docs/site-audits/2026-04-27-claude-audit.md` Finding C1) found that `/city/bartonville` rendered "3 dispensaries in the Bartonville metro" with three East Peoria dispensaries instead of an empty state. Bartonville has zero licensed dispensaries; the page should never show non-zero dispensary cards under any framing. The strings in **section 2** below are the canonical empty-state copy for any CIL city with zero exact-city dispensaries. Code's parallel-session fix swaps the metro-radius primary query for an exact-city primary query, which means the empty-state branch fires correctly for the first time. Strings here have not changed; the trigger condition has.
+>
+> **Bartonville-class failure mode:** any `/city/[slug]` page where `master_listings` has zero exact-city dispensary rows for `(city=slug, state='IL', project_tag='green', is_active=true)` MUST render section 2 below. Never render "X active deals at Y dispensaries in {City}" when {City} has no exact-city dispensaries — the only thing that string can mean to a user is "we lied to you about coverage." Same rule applies to any future scope-frontier city that holds zero listings (Morton, Washington today; potentially other cities as scope shifts).
+>
+> **Stale-string watch:** the previous template rendered "No active deals in {City}" as the empty-state line. Replace any surviving instance of that string with the section 2A headline below: **"No licensed dispensaries in {City} yet."** "Deals" is the wrong noun — the issue is licensure, not deal availability.
 
 **Principles (from the deal data policy):**
 
