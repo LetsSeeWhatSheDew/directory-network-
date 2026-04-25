@@ -86,18 +86,24 @@ function getExpiryUrgency(expiresAt?: string | null) {
 }
 
 // Freshness label from a MAX(updated_at) timestamp.
-//   < 24h  → "Updated today"
-//   < 72h  → "Updated Xh ago"
+//   < 24h  → "Last verified today"
+//   < 72h  → "Last verified {Mon Day}" — absolute date is clearer to
+//            a user than relative hours, and matches the per-deal
+//            DealFreshnessBadge wording.
 //   ≥ 72h  → null (hide the line entirely — stale indicators hurt trust
 //             on a price-comparison product more than missing ones)
 function freshnessLabel(iso: string | null | undefined): string | null {
   if (!iso) return null;
-  const t = new Date(iso).getTime();
-  if (!Number.isFinite(t)) return null;
-  const ageHours = (Date.now() - t) / 3_600_000;
-  if (ageHours < 0) return "Updated today";
-  if (ageHours < 24) return "Updated today";
-  if (ageHours < 72) return `Updated ${Math.round(ageHours)}h ago`;
+  const t = new Date(iso);
+  const ms = t.getTime();
+  if (!Number.isFinite(ms)) return null;
+  const ageHours = (Date.now() - ms) / 3_600_000;
+  if (ageHours < 0) return "Last verified today";
+  if (ageHours < 24) return "Last verified today";
+  if (ageHours < 72) {
+    const dateLabel = t.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    return `Last verified ${dateLabel}`;
+  }
   return null;
 }
 

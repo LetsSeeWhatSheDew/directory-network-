@@ -325,7 +325,7 @@ export default async function CityPage({
         {listings.length > 0 && (
           <>
             <div className="section-h">
-              {listings.length} dispensar{listings.length === 1 ? "y" : "ies"} in {city}
+              {listings.length} dispensar{listings.length === 1 ? "y" : "ies"} in {metros.length > 1 ? `the ${city} metro` : `${city}, IL`}
             </div>
             <div className="dlist">
               {listings.map((l) => {
