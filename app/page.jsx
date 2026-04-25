@@ -959,7 +959,7 @@ export default async function HomePage() {
           <Link href="/cannabis/illinois/open-now" className="nav-link">Open now</Link>
           <Link href="/savings/dashboard" className="nav-link">My savings</Link>
           <Link href="/map" className="nav-link">Map view</Link>
-          <Link href="/cannabis/illinois" className="nav-link">Browse Central IL</Link>
+          <Link href="/" className="nav-link">Browse Central IL</Link>
           <Link href="/dispensaries" className="nav-cta">For dispensaries</Link>
         </div>
         <MobileNavMenu />
@@ -1140,9 +1140,9 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* City shortcuts — Central IL anchor cities. Out-of-scope cities
-          stay reachable via the "Browse all Illinois" link and the
-          /cannabis/illinois hub. */}
+      {/* City shortcuts — Central IL anchor cities. The "Browse all
+          Central IL cities" link below points back to the homepage —
+          there is no separate hub since the homepage IS the hub. */}
       <div
         style={{
           maxWidth: 1100,
@@ -1169,7 +1169,7 @@ export default async function HomePage() {
         ))}
         {" · "}
         <Link
-          href="/cannabis/illinois"
+          href="/dispensaries"
           style={{ color: "#6b7280", fontWeight: 500, textDecoration: "underline", textDecorationStyle: "dotted" }}
         >
           Browse all Central IL cities →
@@ -1211,7 +1211,7 @@ export default async function HomePage() {
           )}
           {dealsThisMonth && dealsThisMonth.count > 0 && (
             <span>
-              Central IL dispensaries ran <strong style={{ color: "#0f1f3d" }}>{dealsThisMonth.count}</strong> deal{dealsThisMonth.count === 1 ? "" : "s"} in {dealsThisMonth.monthName}
+              We tracked <strong style={{ color: "#0f1f3d" }}>{dealsThisMonth.count}</strong> Central IL deal{dealsThisMonth.count === 1 ? "" : "s"} in {dealsThisMonth.monthName}
             </span>
           )}
         </div>
@@ -1283,7 +1283,7 @@ export default async function HomePage() {
       <footer className="footer">
         <span className="footer-logo" aria-label="PuffPrice"><Logo size={28} /></span>
         <div className="footer-links">
-          <Link href="/cannabis/illinois" className="footer-link">Illinois</Link>
+          <Link href="/" className="footer-link">Central Illinois</Link>
           <Link href="/cannabis/illinois/first-time-guide" className="footer-link">First-time guide</Link>
           <Link href="/cannabis/illinois/laws" className="footer-link">IL laws</Link>
           <Link href="/dispensaries" className="footer-link">For dispensaries</Link>

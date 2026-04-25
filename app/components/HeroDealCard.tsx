@@ -174,7 +174,7 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
     return (
       <div className="hero-deal-card skeleton" aria-busy="true" aria-live="polite">
         <div className="hero-deal-label" style={{ color: "#9ca3af" }}>
-          Finding the top Illinois deal…
+          Finding the top Central Illinois deal…
         </div>
         <div className="skeleton-savings" />
         <div className="skeleton-subline" />
@@ -206,7 +206,7 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
   return (
     <div className="hero-deal-card">
       <div className="hero-deal-label">
-        {city ? `Best deal near ${city} right now` : "Top Illinois deal right now"}
+        {city ? `Best deal near ${city} right now` : "Top Central Illinois deal right now"}
       </div>
       <div className="hero-deal-savings">{savings}</div>
       {regular != null && sale != null && (
@@ -245,7 +245,7 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
         href={city ? `/deals/all?city=${encodeURIComponent(city)}` : "/deals/all"}
         className="hero-deal-more"
       >
-        {city ? `3 other deals near ${city} →` : "See more Illinois deals →"}
+        {city ? `3 other deals near ${city} →` : "See more Central Illinois deals →"}
       </Link>
       <style>{`
         .hero-deal-price{font-size:.9rem;color:#6b7280;font-family:system-ui,sans-serif;margin:-4px 0 8px}

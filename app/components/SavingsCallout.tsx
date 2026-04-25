@@ -44,7 +44,7 @@ export default function SavingsCallout({ initialSavings }: { initialSavings: num
         {city ? (
           <>Showing the best deal in <strong>{city}</strong> right now.</>
         ) : (
-          <>Showing the best active deal in Illinois right now.</>
+          <>Showing the best active deal in Central Illinois right now.</>
         )}
         {calloutStyles}
       </p>
@@ -60,7 +60,7 @@ export default function SavingsCallout({ initialSavings }: { initialSavings: num
         </>
       ) : (
         <>
-          Best deal in Illinois right now saves{" "}
+          Best deal in Central Illinois right now saves{" "}
           <strong className="savings-amt">${savings}</strong>.
         </>
       )}

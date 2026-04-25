@@ -90,6 +90,14 @@ export default async function PuffPriceIndexCard() {
     };
   }
 
+  // Don't show users an empty placeholder. The Index appears once we
+  // have ≥THRESHOLD qualifying deals; until then the section is hidden
+  // entirely. ComingSoonState is preserved below in case we want to
+  // resurface it later.
+  if (!result.available) {
+    return null;
+  }
+
   return (
     <section className="ppi-card" aria-labelledby="ppi-title">
       <h2 id="ppi-title" className="ppi-sr-only">
@@ -205,7 +213,11 @@ export default async function PuffPriceIndexCard() {
           }
         }
       `}</style>
-      {result.available ? <LiveState result={result} /> : <ComingSoonState result={result} />}
+      <LiveState result={result} />
+      {/* ComingSoonState below is intentionally unreachable today —
+          PuffPriceIndexCard returns null when result.available is false.
+          Keeping the function in place so we can re-enable the
+          placeholder when we want to advertise Index progress. */}
     </section>
   );
 }
