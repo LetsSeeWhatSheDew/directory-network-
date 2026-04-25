@@ -47,18 +47,20 @@ The canonical source is `lib/constants/regions.ts` → `CENTRAL_IL_CITIES`. That
 
 Four metro clusters: the Peoria-area belt (seven cities that geographically function as one market), Bloomington-Normal, Champaign-Urbana, and Springfield.
 
-### Current DB snapshot (2026-04-26)
+### Current DB snapshot (2026-04-26 night — verified)
+
+Counts pulled from live `master_listings` and `deals` tables in Supabase project `hnbjufmtmrhexmdrfubw` on the night of 2026-04-26. Replaces the morning version of this section, which referenced 31 active listings and a Leafly/Weedmaps deal mix that no longer exists.
 
 | metric | value | notes |
 |---|---|---|
-| Active Central IL dispensary listings | 31 → **29 after today's deactivations** | Two rows flagged for deactivation in April 26 Cowork research: `ascend-springfield` (duplicate stub of Ascend Horizon Drive) and `consume-cannabis-champaign` (wrong-identity ghost; 505 W Town Center Blvd is actually Cloud9 Champaign). Code applies the migrations; until then both remain `is_active=true` in DB. Earlier planning docs referenced 26/28 — live DB says 31 today; discrepancy logged in the April 26 commit. |
-| Listings with phone + website | 25/31 → **25/29 after deactivations** | Gaps: `the-dispensary-champaign`, `flora-farms-springfield`, `key-cannabis-springfield`, `terrabis-springfield` — all no-website rows that route to the direct-contact verification queue. |
-| Listings hitting 150-word content floor | Maintained from April 25 set; April 26 pass focuses on deal-policy and freshness layer rather than new drafts. | |
+| Active Central IL dispensary listings | **26** | Filter: `state='IL' AND is_active=true AND type='dispensary' AND city ∈ 12-city scope`. Two rows deactivated this evening (`ascend-springfield`, `consume-cannabis-champaign`). Three Springfield, **MO** rows (`flora-farms-springfield`, `key-cannabis-springfield`, `terrabis-springfield`) that briefly inflated the morning count are out of CIL scope — they remain in the broader statewide DB, just not in any CIL coverage tracker. See `docs/scrape-coverage-20260426.md`. |
+| Populated Central IL cities | **9** of 12 | Empty: Bartonville, Morton, Washington (placeholder render with nearest alternative). |
+| Listings with phone + website | 26 / 26 | Every active CIL row has both. The earlier "no-website" rows fell out of scope along with the MO miscategorizations and the deactivations. |
+| Listings hitting 150-word content floor | Maintained from April 25 set; April 26 pass focused on deal-policy, freshness layer, and CI/cron deploy rather than new drafts. | |
 | Listings with GPS + logo | Central IL set seeded from Code's April 25 Places run. | |
-| Active deals (pre-cutover) | 11, across 3 cities (East Peoria 5, Champaign 4, Peoria 2) | Source mix: 9 Leafly, 2 direct-source. All Leafly/Weedmaps rows being deactivated April 26 under the new deal data policy. |
-| Active deals (post-cutover target) | 2-5 initially | Direct-source only. Grows as the new scraper matures and direct-contact verification catches up. See `docs/deal-data-policy.md`. |
+| Active deals (post-cutover) | **10**, across 5 cities | All `source='website'` (direct dispensary sites). Zero from Leafly, Weedmaps, iHeartJane, or Dutchie marketplace. Distribution: Bloomington 3 (Cookies), East Peoria 1 (NOXX), Peoria 3 (Ivy Hall), Peoria Heights 2 (Cookies Peoria Heights), Springfield 1 (SHARE). |
 
-Per-city active-listing counts from live DB (April 26): Springfield 9 (→ 8 post-deactivation), Peoria 5, Normal 4, Champaign 4 (→ 3 post-deactivation), East Peoria 3, Bloomington 2, Peoria Heights 1, Pekin 1, Urbana 1. Three empty cities: Bartonville, Morton, Washington. *(Pekin moved off the empty list when nuEra Pekin was added April 25; the "4 empty" section below now lists 3.)*
+Per-city active-listing counts from live DB (2026-04-26 night): **Springfield 6, Peoria 5, Normal 4, Champaign 3, East Peoria 3, Bloomington 2, Pekin 1, Peoria Heights 1, Urbana 1.** Three empty cities: Bartonville, Morton, Washington.
 
 ---
 
@@ -141,7 +143,7 @@ The scope lock is designed to be reversed with a single line change.
 For homepage, outreach, metadata, and social language, use these phrasings:
 
 - **Standard:** "Central Illinois cannabis deals — Peoria, Bloomington-Normal, Champaign-Urbana, and Springfield."
-- **Tightest honest claim (when only cities with live deals matter):** "Deals from dispensaries in East Peoria, Champaign, and Peoria" (the three cities currently carrying all 11 Central IL active deals).
+- **Tightest honest claim (when only cities with live deals matter):** "Deals from dispensaries in Bloomington, Peoria, Peoria Heights, East Peoria, and Springfield" (the five cities currently carrying all 10 Central IL active deals as of 2026-04-26 night).
 - **Coverage framing:** "Twelve Central Illinois cities, nine currently with licensed dispensaries — nearest-store routing for the other three."
 - **Expansion-friendly when speaking to the future:** "Built for Central Illinois first."
 

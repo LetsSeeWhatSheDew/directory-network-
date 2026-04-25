@@ -9,7 +9,9 @@ Live at puffprice.com.
 
 **Scope (hard lock, April 24, 2026):** Public surface is Central Illinois only — 12 cities, 9 currently with licensed dispensaries. Non-Central-IL listings remain in the DB but are hidden at the app level. See `docs/central-illinois-scope.md`.
 
-**Deal data policy (April 26, 2026):** Deals are pulled from direct dispensary websites and official social only — never Leafly, Weedmaps, or other aggregators. Re-verified every 6 hours. Legacy aggregator-sourced deals were deactivated April 26 in a single cutover. See `docs/deal-data-policy.md`.
+**Deal data policy (April 26, 2026):** Deals are pulled from direct dispensary websites and official social only — never Leafly, Weedmaps, or other aggregators. Re-verified daily (Vercel Hobby cron limit; was originally specced every 6 hours, see `docs/session-reports/2026-04-26-code-ci-fix.md`). Legacy aggregator-sourced deals were deactivated April 26 in a single cutover. See `docs/deal-data-policy.md`.
+
+**URL canonical (April 26, 2026):** `/city/[city]` is the canonical city URL pattern; `/dispensary/[slug]` is the canonical listing URL pattern; `/cannabis/illinois/*` is deprecated except for content pages (`first-time-guide`, `laws`, `open-now`). See `docs/url-canonical-decisions-20260426.md`.
 
 ## Stack
 - Frontend: Next.js 16 (App Router, Turbopack)
@@ -19,19 +21,42 @@ Live at puffprice.com.
 - Error monitoring: Sentry (scaffolded with env-var gating, DSN pending)
 - Brand config: lib/brand.ts — one string change renames entire site
 
-## Current State (April 26, 2026 — HEAD: see git)
-- **Scope:** Central Illinois only — 12 cities, 9 with dispensaries, 3 empty-with-nearest-alternative placeholder (Bartonville, Morton, Washington)
-- **Central IL active listings:** 31 in DB today; two flagged for deactivation in this session (`ascend-springfield`, `consume-cannabis-champaign`) → 29 post-cutover. See `docs/scrape-coverage-20260426.md` for the full list.
-- **Central IL active deals (pre-cutover):** 11 — 9 from Leafly, 2 from direct-source. All Leafly/Weedmaps deals being deactivated April 26 under the new deal policy. Post-cutover starting point: ~2 direct-source deals, growing as direct-source scraper + direct-contact verification catch up.
-- **Scrape policy (April 26 onward):** Direct dispensary websites + official social only. No Leafly, Weedmaps, iHeartJane, Dutchie marketplace, or any aggregator. Dispensary-owned pages that embed a POS menu widget (Dutchie, Jane, Cookies.co, etc.) count as direct. See `docs/deal-data-policy.md`.
-- **Scrape cadence:** every 6 hours per scrapable listing. Deals unverified for 72+ hours render with a "verification pending" state; 7+ days auto-deactivate.
+## Current State (2026-04-26 night — parent HEAD: 64d2087 + this docs commit)
+
+All counts in this section verified against the live `master_listings` and `deals` tables in Supabase (project ref `hnbjufmtmrhexmdrfubw`) at 2026-04-26 night. Earlier sessions inherited stale numbers; this block is rewritten from the DB, not from prior memory.
+
+- **Scope:** Central Illinois only — 12 cities, 9 populated with dispensaries, 3 empty-with-nearest-alternative placeholder (Bartonville, Morton, Washington). Pekin moved off the empty list when nuEra Pekin was added April 25.
+- **Central IL active listings:** **26** (verified). Filter: `state='IL' AND is_active=true AND type='dispensary' AND city IN (12-city scope)`. Two earlier rows (`ascend-springfield`, `consume-cannabis-champaign`) deactivated this evening; three Springfield, **MO** rows that briefly polluted the Cowork count (`flora-farms-springfield`, `key-cannabis-springfield`, `terrabis-springfield`) were never CIL.
+- **Central IL active deals:** **10** (verified), all `source='website'` (direct dispensary sites). Zero from Leafly, Weedmaps, iHeartJane, or Dutchie marketplace. NOXX "50% off vape" deactivated this evening as a BOGO false positive (scraper rule tightened — see `docs/session-reports/2026-04-26-code-ci-fix.md`).
+- **Per-city distribution (live DB):**
+
+  | City | Listings | Deals |
+  |---|---:|---:|
+  | Springfield | 6 | 1 |
+  | Peoria | 5 | 3 |
+  | Normal | 4 | 0 |
+  | Champaign | 3 | 0 |
+  | East Peoria | 3 | 1 |
+  | Bloomington | 2 | 3 |
+  | Pekin | 1 | 0 |
+  | Peoria Heights | 1 | 2 |
+  | Urbana | 1 | 0 |
+  | Bartonville | 0 | 0 |
+  | Morton | 0 | 0 |
+  | Washington | 0 | 0 |
+  | **Total** | **26** | **10** |
+
+- **Scrape policy:** direct dispensary websites + official social only. No Leafly, Weedmaps, iHeartJane, Dutchie marketplace, or any aggregator. Dispensary-owned pages that embed a POS menu widget (Dutchie, Jane, Cookies.co, etc.) count as direct. See `docs/deal-data-policy.md`.
+- **Cron status:** registered in `vercel.json`. `/api/cron/scrape-deals` runs **daily at 09:00 UTC** (Vercel Hobby plan caps cron at once per day; original spec was every 6 hours and is documented in the deal data policy as the long-term target). `/api/cron/mark-stale-deals` runs daily at 04:00 UTC. `CRON_SECRET` is required in Vercel env (Production, Sensitive); the route returns 401 until it's set.
+- **Freshness rules:** deals unverified for 72+ hours render with a "verification pending" state; 7+ days auto-deactivate via `mark-stale-deals` cron.
 - **Statewide DB (not publicly rendered):** preserved; hidden at the app level via `lib/constants/regions.ts` scope filter. One-line reversal.
-- **Enhanced Places backfill complete** — phone + website + hours populated for enriched rows; GPS seeded for Central IL listings
-- **Content floor:** Central IL listing drafts landed through April 25; ongoing maintenance pass per session
-- PuffPrice Index — statewide flower price-per-gram benchmark at /about/index
-- Brand pages scaffolded at /brand and /brand/[slug] (populate when brands table lands)
-- Content depth layer on /l/[id] — monogram fallback, stat strip, serif prose, map iframe, report-outdated link
-- Sitemap scoped to Central IL cities/listings/brands/deals only; out-of-scope URLs return 404
+- **URL canonicalization:** `/city/[city]` and `/dispensary/[slug]` are the canonical patterns. The legacy `/cannabis/illinois/[city]` template tree is being redirected to `/city/[city]` in a parallel Code session tonight. See `docs/url-canonical-decisions-20260426.md`.
+- **Enhanced Places backfill complete** — phone + website + hours populated for enriched rows; GPS seeded for Central IL listings.
+- **Content floor:** Central IL listing drafts landed through April 25; ongoing maintenance pass per session.
+- PuffPrice Index — statewide flower price-per-gram benchmark at `/about/index`.
+- Brand pages scaffolded at `/brand` and `/brand/[slug]` (populate when brands table lands).
+- Content depth layer on `/l/[id]` — monogram fallback, stat strip, serif prose, map iframe, report-outdated link.
+- Sitemap scoped to Central IL cities/listings/brands/deals only; out-of-scope URLs return 404.
 
 ## Business Tiers
 - FREE: No account, full deal access, always

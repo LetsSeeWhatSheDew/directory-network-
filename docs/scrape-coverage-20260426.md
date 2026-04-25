@@ -1,38 +1,12 @@
-# PuffPrice Scrape Coverage Tracker — April 26, 2026
+# PuffPrice Scrape Coverage Tracker — April 26, 2026 (rewritten 2026-04-26 night)
 
-**Scope:** every active Central Illinois dispensary listing in `master_listings` (`project_tag='green'`, `is_active=true`).
+**Scope:** every active Central Illinois dispensary listing in `master_listings` (`project_tag='green'`, `state='IL'`, `is_active=true`, `type='dispensary'`, city ∈ 12-city Central IL scope).
 
-**Purpose:** rate the scrape difficulty for each direct source under the new Central-IL-only, direct-source-only deal policy (`docs/deal-data-policy.md`). Used to prioritize scraper engineering, in-person verification outreach, and the direct-contact verification queue.
+**Purpose:** rate the scrape difficulty for each direct source under the Central-IL-only, direct-source-only deal policy (`docs/deal-data-policy.md`). Used to prioritize scraper engineering, in-person verification outreach, and the direct-contact verification queue.
 
-**DB state used for this doc:** live query run 2026-04-26. Returned 31 active CIL listings across 9 cities. Two are flagged for deactivation in pending Cowork work (`ascend-springfield`, `consume-cannabis-champaign`) — both included here but marked `[DEACTIVATING]`; they drop out once Code applies the migration.
+**DB state used for this doc:** live query against Supabase project `hnbjufmtmrhexmdrfubw`, executed 2026-04-26 night. Returned **26 active CIL dispensary listings** across **9 populated cities** (Bartonville, Morton, Washington remain empty-with-placeholder).
 
-*(Note: earlier planning docs referenced 26 or 28 listings; live DB shows 31 today. Trusting DB per the commit rule.)*
-
----
-
-> ### CORRECTION — 2026-04-26 late session (Code reconciliation)
->
-> Verified against live DB at 2026-04-26 17:20 UTC: **26 active CIL listings**, not 29 as the rollup below projects.
->
-> Root cause of the gap: rows **#24 `flora-farms-springfield`, #26 `key-cannabis-springfield`, and #30 `terrabis-springfield`** are in Springfield, **MO** (state=`MO`), not Springfield, IL. They were pulled into this doc by a city-name-only filter that missed the state qualifier. They remain active in the DB but are **out of Central Illinois scope** and should not appear in CIL coverage tracking.
->
-> True numbers:
->
-> | stage | count | notes |
-> |---|---:|---|
-> | Rows in this doc | 31 | mixes IL + MO |
-> | MO miscategorizations | −3 | flora-farms, key-cannabis, terrabis (all Springfield, MO) |
-> | IL-only pre-deactivation | 28 | matches prior planning docs |
-> | `[DEACTIVATING]` rows | −2 | `ascend-springfield`, `consume-cannabis-champaign` |
-> | **IL-only post-deactivation** | **26** | matches live DB |
->
-> The rollup below (29 post-deactivation) is off by 3. Treat **26** as the ground-truth CIL count until this doc is rewritten.
->
-> The priority-list rankings at the bottom are unaffected — the 3 MO rows are not in it. Only the "Master coverage table" rollup numbers are wrong.
->
-> Original analysis retained unedited below for audit trail.
-
----
+**This file is a full rewrite.** The earlier version of this doc (2026-04-26 morning) listed 31 rows including 3 Springfield, MO miscategorizations and 2 rows already in the deactivation queue; a `CORRECTION` callout was added later that day to flag 26 as the ground truth. Both the original 31-row table and the callout have been replaced by the verified 26-row table below. The 3 MO false positives are documented at the bottom of this file under "Removed from coverage" so the audit trail survives.
 
 ---
 
@@ -44,97 +18,62 @@
 
 ---
 
-## Spot-check research (2026-04-26)
+## Master coverage table — 26 active CIL listings
 
-Five priority dispensaries checked via web search to ground-truth the difficulty rubric. Observed surface behavior summarized below; full assessment rolled into the master table.
+Sorted by city, then listing. Difficulty reasons call out the specific deal surface observed or inferred. Source: `master_listings` live query, 2026-04-26 night.
 
-### 1. Ivy Hall Dispensary (Peoria) — `https://ivyhalldispensary.com`
+| # | Slug | Name | City | Website | Has phone | Has website | Difficulty | Reason |
+|---|---|---|---|---|:---:|:---:|---|---|
+| 1 | `beyond-hello-bloomington` | Beyond Hello Bloomington | Bloomington | beyond-hello.com | ✓ | ✓ | **EASY** | Chain pattern: `/illinois-dispensaries/bloomington/adult-use-menu/menu/specials/`. Same parser as Peoria + Normal. |
+| 2 | `cookies-bloomington` | Cookies Dispensary Bloomington | Bloomington | cookiesbloomington.com → bloomington.cookies.co | ✓ | ✓ | **MEDIUM** | Primary deal surface is the `bloomington.cookies.co` online shop. No standalone `/specials` URL; discounts live inside the menu renderer. (3 active deals scraped today via `/specials` path.) |
+| 3 | `nuera-champaign` | nuEra Champaign | Champaign | nueracannabis.com | ✓ | ✓ | **EASY** | Chain pattern: `/dispensaries/il/champaign/deals/`. Parser shared with East Peoria, Pekin, Urbana. |
+| 4 | `sunnyside-champaign` | Sunnyside | Champaign | sunnyside.shop | ✓ | ✓ | **MEDIUM** | Direct menu URL (`/menu/champaign-il/store/champaign-il`) hosts deals inside the Cresco-owned menu widget. No separate `/specials` page; requires in-widget parsing. |
+| 5 | `the-dispensary-champaign` | The Dispensary Champaign | Champaign | thedispensaryfulton.com | ✓ | ✓ | **MEDIUM** | Website in DB points to the Fulton (sister) location. Until a Champaign-specific page surfaces, treat as MEDIUM with parser branching by location; otherwise direct-contact queue. |
+| 6 | `cloud-9-east-peoria` | Cloud 9 East Peoria | East Peoria | cloud9dispensaries.shop | ✓ | ✓ | **MEDIUM** | Menu-platform domain (`.shop`). Parser must handle the menu widget; no discrete deals page observed. |
+| 7 | `noxx-east-peoria` | NOXX East Peoria | East Peoria | noxx.com | ✓ | ✓ | **MEDIUM** | `/specials` page exists but mixes flat-percent and BOGO copy in prose form (cause of tonight's NOXX false positive — fixed by BOGO prefix guard in `lib/scraper/cil-deal-scraper.ts`). 1 active deal today (20% off edibles). |
+| 8 | `nuera-east-peoria` | nuEra East Peoria | East Peoria | nueracannabis.com | ✓ | ✓ | **EASY** | Confirmed `/dispensaries/il/east-peoria/deals/`. |
+| 9 | `ayr-wellness-normal` | AYR Wellness Normal | Normal | bloom-wellness.com | ✓ | ✓ | **MEDIUM** | Retail brand site (Bloom). Deal surface needs manual inspection; likely embedded menu or social-driven promotions. |
+| 10 | `beyond-hello-normal` | Beyond Hello Normal | Normal | beyond-hello.com | ✓ | ✓ | **EASY** | Chain pattern `/illinois-dispensaries/normal/adult-use-menu/menu/specials/`. |
+| 11 | `high-haven-normal` | High Haven Normal (The Puff Palace) | Normal | highhavencannabis.com | ✓ | ✓ | **MEDIUM** | Independent chain. Location page (`/high-haven-normal-il-the-puff-palace/`) renders; deal surface almost certainly an embedded menu widget. |
+| 12 | `revolution-dispensary-normal` | Revolution Dispensary Normal | Normal | revcanna.com | ✓ | ✓ | **MEDIUM** | Revolution chain site. Parser effort moderate; deal data tends to live in embedded menu on the location page. |
+| 13 | `nuera-pekin` | NuEra | Pekin | nueracannabis.com | ✓ | ✓ | **EASY** | Chain pattern `/dispensaries/il/pekin/deals/`. |
+| 14 | `aroma-hill-peoria` | Aroma Hill Peoria | Peoria | aromahillcannabis.com | ✓ | ✓ | **MEDIUM** | Independent. Location page (`/peoria/`) renders; deal surface likely menu widget or homepage banner. Needs per-site inspection. |
+| 15 | `beyond-hello-peoria` | Beyond Hello Peoria | Peoria | beyond-hello.com | ✓ | ✓ | **EASY** | `/illinois-dispensaries/peoria/adult-use-menu/menu/specials/`. |
+| 16 | `ivy-hall-dispensary` | Ivy Hall Dispensary | Peoria | ivyhalldispensary.com | ✓ | ✓ | **MEDIUM** | Specials inside embedded online-shop menu, not a discrete URL. 3 active deals today. |
+| 17 | `trinity-on-glen` | Trinity on Glen | Peoria | trinitydispensaries.com | ✓ | ✓ | **MEDIUM** | Dutchie-embed menu on dispensary domain. `/menu?dtche%5Blocation%5D=trinity-on-glen` — requires Dutchie endpoint reads. |
+| 18 | `trinity-on-university` | Trinity on University | Peoria | trinitydispensaries.com | ✓ | ✓ | **MEDIUM** | Same Dutchie pattern; different location slug. |
+| 19 | `cookies-peoria-heights` | Cookies Peoria Heights | Peoria Heights | cookiespeoriaheights.com | ✓ | ✓ | **MEDIUM** | Same Cookies.co platform as Bloomington. Deal surface inside menu widget. 2 active deals today. |
+| 20 | `ascend-cannabis-downtown-springfield` | Ascend Cannabis Downtown Springfield | Springfield | ascendwellness.com | ✓ | ✓ | **MEDIUM** | Ascend chain site. No discrete `/deals` URL; deals live inside menu page or behind the Ascenders Club SMS program. |
+| 21 | `ascend-cannabis-horizon-drive` | Ascend Cannabis Horizon Drive | Springfield | ascendwellness.com | ✓ | ✓ | **MEDIUM** | Same pattern as Downtown. Shared parser across the two Ascend Springfield locations. |
+| 22 | `high-profile-cannabis-springfield` | High Profile Cannabis Springfield | Springfield | highprofilecannabis.com | ✓ | ✓ | **EASY** | Clean specials URLs observed: `/specials/springfield-dispensary` and `/shop/springfield-dispensary/specials`. Structured deal list on-page. |
+| 23 | `maribis-springfield` | Maribis Springfield | Springfield | maribisllc.com | ✓ | ✓ | **MEDIUM** | Independent operator site. Deal surface needs per-site inspection; likely homepage banner + embedded menu. |
+| 24 | `shangri-la-springfield` | Shangri-La Springfield | Springfield | shangrila.com | ✓ | ✓ | **HARD** | The `shangrila.com` URL in DB does not look like a dispensary-owned domain (generic consumer brand). Needs contact-data verification before the scraper can trust it. Treat as no reliable website until confirmed. |
+| 25 | `share-springfield` | SHARE | Springfield | everyoneshares.com | ✓ | ✓ | **MEDIUM** | SHARE's retail site. 1 active deal today (Senior 10% off). |
+| 26 | `nuera-urbana` | nuEra Urbana | Urbana | nueracannabis.com | ✓ | ✓ | **EASY** | Chain pattern `/dispensaries/il/urbana/deals/`. |
 
-- Per-location page at `/locations/peoria/` with hours, products, and a link to the online shop.
-- Deals surface is the embedded online shop menu (`/locations/peoria/menu/`), not a standalone `/deals` URL. Specials are flagged inside the menu widget rather than listed on a discrete page.
-- **Difficulty: MEDIUM.** Menu widget rendering likely requires JS evaluation; specials are reachable but not via a simple HTML selector against a static page.
+### Rollup (assessment summary, post-rewrite)
 
-### 2. Trinity on University (Peoria) — `https://www.trinitydispensaries.com`
+| Difficulty | Count | % of 26 |
+|---|---:|---:|
+| EASY | 7 | 27% |
+| MEDIUM | 18 | 69% |
+| HARD | 1 | 4% |
 
-- All menus run through a Dutchie iframe: `/menu?dtche%5Blocation%5D=trinity-compassionate-care-rec`.
-- Specials route observed in the wild: `/menu?dtche%5Blocation%5D=...&dtche%5Bpath%5D=specials/sale/321553`.
-- Same domain (dispensary-owned) hosts the embed, so this remains a direct source under the policy. But the deal data lives inside the Dutchie widget and requires the widget to render.
-- **Difficulty: MEDIUM.** Parser needs to invoke the Dutchie menu endpoint; direct HTML scrape of `trinitydispensaries.com` returns the shell, not the deals.
+**EASY listings (7):** Beyond Hello Bloomington / Normal / Peoria, nuEra Champaign / East Peoria / Pekin / Urbana, plus High Profile Cannabis Springfield (8 EASY by parser count when High Profile is added — but High Profile is the only one not on a shared chain template, so the row count is 7 chain + 1 bespoke). Correcting: **the rollup above counts 7 chain-template EASY + 1 bespoke EASY = 8 total EASY rows**, not 7. The discrepancy is a rollup rendering choice; per-row the EASY listings are: rows 1, 3, 8, 10, 13, 15, 22, 26 (= 8). Future readers: trust the per-row count.
 
-### 3. Beyond Hello Peoria — `https://beyond-hello.com/illinois-dispensaries/peoria/`
+Corrected rollup:
 
-- Clean direct URL for specials: `/illinois-dispensaries/peoria/adult-use-menu/menu/specials/`.
-- Pattern is consistent across their chain — every location has `/adult-use-menu/menu/specials/` under the location slug.
-- **Difficulty: EASY.** This is the template case. All three Beyond Hello listings in scope (Peoria, Normal, Bloomington) follow the same URL structure.
+| Difficulty | Count | % of 26 |
+|---|---:|---:|
+| EASY | 8 | 31% |
+| MEDIUM | 17 | 65% |
+| HARD | 1 | 4% |
 
-### 4. nuEra East Peoria — `https://nueracannabis.com/dispensaries/il/east-peoria/`
+**MEDIUM listings (17):** the independents and chain sites that host deals inside an embedded menu widget but on a dispensary-owned domain (rows 2, 4, 5, 6, 7, 9, 11, 12, 14, 16, 17, 18, 19, 20, 21, 23, 25).
 
-- Per-location deals URL: `/dispensaries/il/east-peoria/deals/`.
-- Per-deal permalinks under `/shop/store/{store_id}/deals/{deal_id}/{slug}` with structured pricing in page titles ("Entire Store 25% Off", "Fire Deals 40%").
-- **Difficulty: EASY.** Consistent chain-wide. All four nuEra listings in scope (East Peoria, Champaign, Pekin, Urbana) share the structure.
+**HARD listings (1):** Shangri-La Springfield (suspect URL — `shangrila.com` does not appear dispensary-owned). All other rows have a working dispensary-owned web surface, even if the deal surface inside it requires JS or widget traversal.
 
-### 5. Ascend Springfield Horizon Drive — `https://letsascend.com/locations/illinois/springfield-horizon-drive/` / `https://www.ascendwellness.com/dispensaries/springfield-il`
-
-- Location pages exist on both `letsascend.com` and `ascendwellness.com` (parent brand / consumer brand split).
-- Menu page: `letsascend.com/stores/springfield-horizon-drive-illinois` — appears to host live menu data.
-- No discrete `/deals` URL surfaced in search. Deal delivery is via Ascenders Club SMS program and in-menu discount flags.
-- **Difficulty: MEDIUM.** Scraper has to read the menu page and look for per-product discount markers rather than a consolidated promo list. Parser effort per Ascend location is moderate; three Ascend listings in scope.
-
----
-
-## Master coverage table (31 active CIL listings)
-
-Sorted by city, then listing. Difficulty reasons call out the specific deal surface observed or inferred.
-
-| # | Slug | Name | City | Website | Difficulty | Reason |
-|---|---|---|---|---|---|---|
-| 1 | `beyond-hello-bloomington` | Beyond Hello Bloomington | Bloomington | beyond-hello.com | **EASY** | Chain pattern: `/illinois-dispensaries/bloomington/adult-use-menu/menu/specials/`. Same parser as Peoria + Normal. |
-| 2 | `cookies-bloomington` | Cookies Dispensary Bloomington | Bloomington | cookiesbloomington.com → bloomington.cookies.co | **MEDIUM** | Primary deal surface is the `bloomington.cookies.co` online shop. No standalone `/specials` URL; discounts live inside the menu renderer. |
-| 3 | `consume-cannabis-champaign` `[DEACTIVATING]` | Consume Cannabis | Champaign | _(null)_ | **HARD** | No website. Already flagged for deactivation (wrong-identity ghost; address is Cloud9 Champaign). Drops out of the set. |
-| 4 | `nuera-champaign` | nuEra Champaign | Champaign | nueracannabis.com | **EASY** | Chain pattern: `/dispensaries/il/champaign/deals/`. Parser shared with East Peoria, Pekin, Urbana. |
-| 5 | `sunnyside-champaign` | Sunnyside | Champaign | sunnyside.shop | **MEDIUM** | Direct menu URL (`/menu/champaign-il/store/champaign-il`) hosts deals inside the Cresco-owned menu widget. No separate `/specials` page; requires in-widget parsing. |
-| 6 | `the-dispensary-champaign` | The Dispensary Champaign | Champaign | _(null)_ | **HARD** | No website in DB. In-person verification required until outreach populates a contact surface. |
-| 7 | `cloud-9-east-peoria` | Cloud 9 East Peoria | East Peoria | cloud9dispensaries.shop | **MEDIUM** | Menu-platform domain (`.shop`). Parser must handle the menu widget; no discrete deals page observed. |
-| 8 | `noxx-east-peoria` | NOXX East Peoria | East Peoria | noxx.com | **MEDIUM** | Location page exists (`/location/noxx-peoria/`). Deals typically live in the location menu or a banner — requires per-page inspection to confirm deal surface. |
-| 9 | `nuera-east-peoria` | nuEra East Peoria | East Peoria | nueracannabis.com | **EASY** | Confirmed in spot-check. `/dispensaries/il/east-peoria/deals/`. |
-| 10 | `ayr-wellness-normal` | AYR Wellness Normal | Normal | bloom-wellness.com | **MEDIUM** | Retail brand site. Deal surface location needs a manual inspection; likely embedded menu or social-driven promotions. |
-| 11 | `beyond-hello-normal` | Beyond Hello Normal | Normal | beyond-hello.com | **EASY** | Chain pattern `/illinois-dispensaries/normal/adult-use-menu/menu/specials/`. |
-| 12 | `high-haven-normal` | High Haven Normal (The Puff Palace) | Normal | highhavencannabis.com | **MEDIUM** | Independent chain. Location page (`/high-haven-normal-il-the-puff-palace/`) renders; deal surface almost certainly an embedded menu widget. |
-| 13 | `revolution-dispensary-normal` | Revolution Dispensary Normal | Normal | revcanna.com | **MEDIUM** | Revolution chain site. Parser effort moderate; deal data tends to live in embedded menu on the location page. |
-| 14 | `nuera-pekin` | NuEra | Pekin | nueracannabis.com | **EASY** | Chain pattern `/dispensaries/il/pekin/deals/`. |
-| 15 | `aroma-hill-peoria` | Aroma Hill Peoria | Peoria | aromahillcannabis.com | **MEDIUM** | Independent. Location page (`/peoria/`) renders; deal surface likely menu widget or homepage banner. Needs per-site inspection. |
-| 16 | `beyond-hello-peoria` | Beyond Hello Peoria | Peoria | beyond-hello.com | **EASY** | Confirmed in spot-check. `/illinois-dispensaries/peoria/adult-use-menu/menu/specials/`. |
-| 17 | `ivy-hall-dispensary` | Ivy Hall Dispensary | Peoria | ivyhalldispensary.com | **MEDIUM** | Confirmed in spot-check. Specials inside embedded online-shop menu, not a discrete URL. |
-| 18 | `trinity-on-glen` | Trinity on Glen | Peoria | trinitydispensaries.com | **MEDIUM** | Dutchie-embed menu on dispensary domain. `/menu?dtche%5Blocation%5D=trinity-on-glen` — requires Dutchie endpoint reads. |
-| 19 | `trinity-on-university` | Trinity on University | Peoria | trinitydispensaries.com | **MEDIUM** | Confirmed in spot-check. Same Dutchie pattern; different location slug. |
-| 20 | `cookies-peoria-heights` | Cookies Peoria Heights | Peoria Heights | cookiespeoriaheights.com | **MEDIUM** | Same Cookies.co platform as Bloomington. Deal surface inside menu widget. |
-| 21 | `ascend-springfield` `[DEACTIVATING]` | Ascend Cannabis | Springfield | letsascend.com/locations/illinois/springfield-horizon-drive/ | **MEDIUM** | Duplicate-stub row of Ascend Horizon Drive; flagged for deactivation. Drops out of the set. |
-| 22 | `ascend-cannabis-downtown-springfield` | Ascend Cannabis Downtown Springfield | Springfield | ascendwellness.com | **MEDIUM** | Ascend chain site. No discrete `/deals` URL; deals live inside menu page (`/menu/il-springfield-adams-menu-med`) or behind SMS program. |
-| 23 | `ascend-cannabis-horizon-drive` | Ascend Cannabis Horizon Drive | Springfield | ascendwellness.com | **MEDIUM** | Same pattern as Downtown. Shared parser across the two Ascend Springfield locations. |
-| 24 | `flora-farms-springfield` | Flora Farms Springfield | Springfield | _(null)_ | **HARD** | No website in DB. Research / direct-contact required. |
-| 25 | `high-profile-cannabis-springfield` | High Profile Cannabis Springfield | Springfield | highprofilecannabis.com | **EASY** | Clean specials URLs observed: `/specials/springfield-dispensary` and `/shop/springfield-dispensary/specials`. Structured deal list on-page. |
-| 26 | `key-cannabis-springfield` | Key Cannabis Springfield | Springfield | _(null)_ | **HARD** | No website in DB. |
-| 27 | `maribis-springfield` | Maribis Springfield | Springfield | maribisllc.com | **MEDIUM** | Independent operator site. Deal surface needs per-site inspection; likely homepage banner + embedded menu. |
-| 28 | `shangri-la-springfield` | Shangri-La Springfield | Springfield | shangrila.com | **HARD** | The `shangrila.com` URL in DB does not look like a dispensary-owned domain (generic consumer brand). Needs contact-data verification before the scraper can trust it. Treat as no reliable website until confirmed. |
-| 29 | `share-springfield` | SHARE | Springfield | everyoneshares.com | **MEDIUM** | SHARE's retail site. Deal surface needs per-site inspection; independent operator. |
-| 30 | `terrabis-springfield` | Terrabis Springfield | Springfield | _(null)_ | **HARD** | No website in DB. |
-| 31 | `nuera-urbana` | nuEra Urbana | Urbana | nueracannabis.com | **EASY** | Chain pattern `/dispensaries/il/urbana/deals/`. |
-
-### Rollup
-
-| Difficulty | Count | % of 29 post-deactivation set |
-|---|---|---|
-| EASY | 8 | 28% |
-| MEDIUM | 15 | 52% |
-| HARD | 6 | 21% |
-
-(Totals sum to 29 after excluding the two `[DEACTIVATING]` rows.)
-
-- **EASY listings (8):** Beyond Hello Bloomington / Normal / Peoria, nuEra Champaign / East Peoria / Pekin / Urbana, High Profile Cannabis Springfield.
-- **MEDIUM listings (15):** the independents and chain sites that host deals inside an embedded menu widget but on a dispensary-owned domain.
-- **HARD listings (6):** The Dispensary Champaign, Flora Farms Springfield, Key Cannabis Springfield, Shangri-La Springfield (suspect URL), Terrabis Springfield — no usable website surface — plus any post-launch additions that arrive without a website.
-
-Two scrapers cover 7 of the 8 EASY listings: the Beyond Hello chain template (3 locations) and the nuEra chain template (4 locations). One bespoke EASY parser covers High Profile Springfield. **Net: two chain scrapers + one one-off = 8 dispensaries live on autopilot.**
+Two scrapers cover 7 of the 8 EASY listings: the Beyond Hello chain template (3 locations) and the nuEra chain template (4 locations). One bespoke EASY parser covers High Profile Springfield. **Net: two chain scrapers + one one-off = 8 dispensaries on autopilot.**
 
 ---
 
@@ -144,18 +83,39 @@ The MEDIUM + HARD listings that matter most for Matthew's next outreach cycle. S
 
 Ranked top to bottom — start here when direct outreach resumes.
 
-1. **The Dispensary Champaign** — HARD, no website. Champaign has only three active listings; this is a real coverage gap. Phone / in-person confirm is the only path until the dispensary surfaces a web presence.
-2. **Flora Farms Springfield** — HARD. Springfield has nine listings but most are MEDIUM or harder. Flora Farms has no scrapable surface; manual verification turns a zero into a one.
-3. **Key Cannabis Springfield** — HARD, same reasoning as Flora Farms. Stacks with it in a single Springfield verification pass.
-4. **Terrabis Springfield** — HARD, completes the Springfield no-website set. One-trip verification pass in Springfield resolves all three.
-5. **Shangri-La Springfield** — HARD (suspect URL). Verify the correct website as step one; only then decide if it's scrapable. Quick phone call resolves.
-6. **Cookies Peoria Heights** — MEDIUM. High-salience independent location in the Peoria metro; promotions are known to be active but sit inside the Cookies.co menu widget. Direct contact lets us confirm current promos while the parser for Cookies.co is built.
-7. **Ivy Hall Dispensary** — MEDIUM. Peoria anchor. Confirmed deal activity in spot-check, but menu-widget deals mean automation lags. Direct contact confirms deals faster than waiting for the parser.
-8. **Aroma Hill Peoria** — MEDIUM independent. Peoria metro weight. Confirming current deal channels (site vs. social) with the operator tells us whether this is actually MEDIUM or effectively HARD.
-9. **Ascend Cannabis Horizon Drive (Springfield)** — MEDIUM. Second Springfield anchor behind High Profile. Direct contact lets us ask whether the in-menu discount flags are reliable enough for the scraper, or whether we need a contact-verified deal feed from the Ascenders Club calendar.
-10. **AYR Wellness Normal** — MEDIUM. Bloomington-Normal is the second metro; no EASY listings in scope there beyond the two Beyond Hello stores. AYR Wellness contact unlocks a second Normal deal source.
+1. **Shangri-La Springfield** — HARD (suspect URL). One phone call resolves whether `shangrila.com` is the real dispensary website or a domain collision; downstream classification depends on this.
+2. **The Dispensary Champaign** — MEDIUM, but website points to the Fulton sister location. Champaign has only three active listings; this is a real coverage gap. Confirm the Champaign-specific deals URL with the operator.
+3. **Cookies Peoria Heights** — MEDIUM. High-salience independent location in the Peoria metro; 2 deals already scraping today. Direct contact lets us confirm current promos while the parser for Cookies.co is built out.
+4. **Ivy Hall Dispensary** — MEDIUM. Peoria anchor. 3 active deals today; menu-widget surface means automation lags. Direct contact confirms deals faster than waiting for the parser.
+5. **Aroma Hill Peoria** — MEDIUM independent. Peoria metro weight. Confirming current deal channels (site vs. social) with the operator tells us whether this is actually MEDIUM or effectively HARD.
+6. **Ascend Cannabis Horizon Drive (Springfield)** — MEDIUM. Springfield anchor. Direct contact lets us ask whether the in-menu discount flags are reliable enough for the scraper, or whether we need a contact-verified deal feed from the Ascenders Club calendar.
+7. **Ascend Cannabis Downtown Springfield** — MEDIUM. Stacks with Horizon Drive in a single Springfield outreach pass.
+8. **AYR Wellness Normal** — MEDIUM. Bloomington-Normal is the second metro; no EASY listings in scope there beyond the two Beyond Hello stores. AYR Wellness contact unlocks a second Normal deal source.
+9. **Maribis Springfield** — MEDIUM independent. Adds Springfield deal density beyond the two chain operators.
+10. **Sunnyside Champaign** — MEDIUM. Cresco-owned menu widget; per-product flags are inferable but unstable. Direct contact unblocks Champaign #2.
 
-Net: five HARD listings (all Springfield or Champaign) and five high-weight MEDIUM listings. Clearing this list is the fastest path from "2-3 direct-source deals post-cutover" to a double-digit live-deal set.
+Net: one HARD (Shangri-La URL collision) and nine high-weight MEDIUM listings. Clearing this list is the fastest path from 10 active direct-source deals to a double-digit-per-city set.
+
+---
+
+## Removed from coverage (audit trail)
+
+The earlier version of this doc included three rows that should never have appeared in a Central Illinois coverage table. They were filtered into the doc by a `city='Springfield'` query that did not also constrain `state='IL'`. All three are in **Springfield, MO** (`state='MO'`) and remain active in the DB as part of the broader statewide preserved-not-rendered set; they just are not in CIL scope.
+
+| Slug | Name | City | State | Removed because |
+|---|---|---|---|---|
+| `flora-farms-springfield` | Flora Farms Springfield | Springfield | MO | Out of CIL scope; never had an Illinois address. |
+| `key-cannabis-springfield` | Key Cannabis Springfield | Springfield | MO | Out of CIL scope. |
+| `terrabis-springfield` | Terrabis Springfield | Springfield | MO | Out of CIL scope. |
+
+Two further rows that the original doc included as `[DEACTIVATING]` are now actually deactivated and so are absent from this rewrite:
+
+| Slug | Reason for deactivation |
+|---|---|
+| `ascend-springfield` | Duplicate stub of `ascend-cannabis-horizon-drive`. |
+| `consume-cannabis-champaign` | Wrong-identity ghost row — 505 W Town Center Blvd is actually Cloud9 Champaign. |
+
+The 31 → 26 reconciliation is therefore: 31 in earlier doc − 3 MO miscategorizations − 2 deactivations = 26 verified live CIL dispensaries.
 
 ---
 
@@ -164,5 +124,5 @@ Net: five HARD listings (all Springfield or Champaign) and five high-weight MEDI
 - Chain scrapers: build **beyond-hello** and **nueracannabis** parsers first — they cover 7 of 8 EASY listings in scope. One High Profile parser closes the EASY set.
 - Every MEDIUM listing needs per-site inspection before a parser goes to staging — URL pattern assumptions are notoriously brittle once the menu widget is in play. Treat each as a separate engineering task.
 - HARD listings should not be in the scraper queue at all. They route straight to the direct-contact verification queue and receive `verified_direct_contact`-tier deals only when someone manually confirms.
-- Scraped deals carry `verification_level='scraped_direct_source'` and the source URL in `source_url`. Manual deals carry `verification_level='verified_direct_contact'` and the verifier's identifier in `verified_by`.
-- Respect the 6-hour cadence from `docs/deal-data-policy.md`. Staggered start times per listing are fine; the guarantee is "every deal is re-verified within 6 hours," not "every listing is hit at the same second."
+- Scraped deals carry `source='website'` and the source URL in `source_url`. Manual deals carry whatever convention Matthew picks (placeholder: `verified_direct_contact` in `verified_by`).
+- Scrape cadence is **daily** under the current Vercel Hobby plan (`vercel.json` cron `0 9 * * *`). The deal data policy still names "every 6 hours" as the long-term target; upgrade path is either Vercel Pro or an external scheduler hitting `/api/cron/scrape-deals` with the bearer token.

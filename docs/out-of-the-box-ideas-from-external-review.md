@@ -232,3 +232,48 @@ Essentially nothing. Single test user scope removes carrier-compliance and volum
 Do it before attempting the full Idea 3 build — proves the loop works end to end on a single user before investing in 10DLC, compliance, and Pro-tier integration.
 
 Source: DeepSeek's April 23 external review, paraphrased and expanded.
+
+---
+
+## Addendum — 2026-04-26: Idea 5 — Verified deal source link on every deal card
+
+### The pitch
+
+Every deal card on PuffPrice shows the deal title, the dispensary, and a link to the dispensary listing. Idea 5: optionally also show a "View source" link that goes to the page where the scraper extracted the deal — the dispensary's `/specials`, `/deals`, embedded menu URL, or whatever direct source the deal carries in `deals.source_url`.
+
+A user clicks "View source" and lands on the dispensary's own deal page in a new tab. They see the same deal in the dispensary's own words, on the dispensary's own domain, with the dispensary's own pricing. Maximum trust. The data isn't just "PuffPrice says NOXX has 20% off edibles" — it's "PuffPrice says NOXX has 20% off edibles, and here's noxx.com/specials so you can confirm in one click."
+
+### Why it matters
+
+1. **Trust ceiling.** Every aggregator hits a trust ceiling at some point — "how do I know this isn't stale or wrong?" A one-click verifiable source moves the ceiling up. Especially valuable for the Central IL pivot where the credibility story depends on "we don't bullshit."
+2. **Free SEO signal.** Outbound links to dispensary domains are a "we're embedded in the local cannabis ecosystem" signal. Modest direct value, but a useful piece of the topical-authority story.
+3. **Pairs with the deal data policy.** The April 26 deal data policy (`docs/deal-data-policy.md`) commits to direct sources only — no aggregators. "View source" makes that policy visible to the user, not just to internal docs. The honesty becomes a feature.
+4. **Falsifiability is the moat.** Weedmaps and Leafly do not surface their source page (they often don't have a single one — deals come from operator portals or partnership feeds). A direct-source-only competitor that lets you check the math has a structural advantage that's hard to imitate.
+
+### What we already have
+
+- **`deals.source_url`** is populated on every direct-source deal today (10 of 10 active CIL deals as of 2026-04-26 night). This is the field the link would point to.
+- **`deals.source`** distinguishes website / social / direct-contact tiers. The UI can vary per tier — "View source" for `source='website'`, "Verified by call" for `source='direct_contact'`, etc.
+- **Deal card component** already exists and already renders an outbound link to the dispensary listing. Adding a second outbound link is a low-touch UI change.
+
+### What we don't have
+
+- **A click-tracking decision.** Outbound clicks on deal sources are useful analytics but require a decision on whether to interstitial them through `/r/source/[id]` for tracking, or to let them go straight to the dispensary domain. The latter is faster and more honest; the former gives us better attribution data.
+- **A "source page may be stale" caveat.** Sometimes the deal exists in our DB because it was scraped 12 hours ago, but the dispensary updated their `/specials` page 2 hours ago and the deal is no longer there. The user clicks "View source" and finds the deal missing. Need a small piece of UI to say "Sourced from [URL] at [timestamp]" so the user understands the freshness window.
+- **A fallback for direct-contact deals.** Deals verified by phone don't have a meaningful source URL. The UI should hide "View source" for those, or replace it with "Verified by direct contact, [date]."
+
+### Rough scope
+
+- **Phase A (UI):** Add a "View source" link to the deal card component for `source='website'` deals. Open in new tab. 1 hour of work.
+- **Phase B (caveat):** Add a small "Sourced [N hours] ago" label next to the link. 1 hour.
+- **Phase C (analytics, optional):** Decide on interstitial vs. direct outbound. If interstitial, scaffold `/r/source/[deal_id]` with a 302 to the source URL and click logging into `deal_clicks`.
+
+### What's blocked on
+
+Nothing structurally. Could ship Phase A in a single small PR.
+
+### Verdict
+
+**Low priority post-Stripe, but worth queueing.** Not urgent because the current deal cards are working. But the moment a user emails asking "is this deal real?" — and that email will arrive — having "View source" already shipped is the cleanest possible response. Build it before the email lands, not after.
+
+Source: surfaced during the 2026-04-26 evening audit conversation (Matthew + Claude). Triggered by the realization that the new deal data policy makes per-deal source links cheap and natural.
