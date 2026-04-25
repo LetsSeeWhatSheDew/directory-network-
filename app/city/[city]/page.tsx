@@ -9,8 +9,11 @@ import Logo from "../../components/Logo";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
-import { metroCities, isInMetro } from "../../../lib/cityNormalize";
-import { isInCentralIL } from "../../../lib/visibility";
+import {
+  isInCentralIL,
+  EMPTY_CENTRAL_IL_CITIES,
+} from "../../../lib/visibility";
+import { CENTRAL_IL_CITIES } from "../../../lib/constants/regions";
 import { estimateSavings } from "../../../lib/dealScoring";
 import EndingSoonRow, { type EndingSoonDeal } from "../../components/EndingSoonRow";
 
@@ -86,6 +89,11 @@ function filterExpired<T extends { expires_at?: string | null }>(list: T[]): T[]
   });
 }
 
+// Exact city match for both deals and listings. Previously this expanded
+// via metroCities() which folded East Peoria + Bartonville into Peoria
+// queries, producing "8 dispensaries in Peoria" when only 5 are in Peoria
+// proper, and bleeding 6 deals onto Bartonville (which has zero licensed
+// dispensaries). /city/peoria means Peoria, the city. Period.
 async function getCityDeals(city: string): Promise<DealRow[]> {
   try {
     const res = await fetch(
@@ -101,8 +109,9 @@ async function getCityDeals(city: string): Promise<DealRow[]> {
     if (!res.ok) return [];
     const all = await res.json();
     if (!Array.isArray(all)) return [];
-    const inCity = all.filter((d: any) =>
-      isInMetro(d.city, d.slug || d.listing_slug, city)
+    const target = city.toLowerCase();
+    const inCity = all.filter(
+      (d: any) => typeof d?.city === "string" && d.city.toLowerCase() === target
     );
     return filterExpired(inCity).slice(0, 25);
   } catch {
@@ -111,15 +120,9 @@ async function getCityDeals(city: string): Promise<DealRow[]> {
 }
 
 async function getCityListings(city: string): Promise<Listing[]> {
-  const metros = metroCities(city);
-  if (metros.length === 0) return [];
-  // PostgREST `in.` filter for the metro cities, case-insensitive.
-  const cityFilter = metros
-    .map((c) => `"${c.replace(/"/g, "")}"`)
-    .join(",");
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/master_listings?select=id,slug,name,city,address1&city=in.(${encodeURIComponent(cityFilter)})&project_tag=eq.green&state=eq.IL&is_active=eq.true&limit=50`,
+      `${SUPABASE_URL}/rest/v1/master_listings?select=id,slug,name,city,address1&city=eq.${encodeURIComponent(city)}&project_tag=eq.green&state=eq.IL&is_active=eq.true&limit=50`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,
@@ -134,6 +137,15 @@ async function getCityListings(city: string): Promise<Listing[]> {
   } catch {
     return [];
   }
+}
+
+// Slugify a city name into the canonical /city/[slug] path segment.
+// Lowercase + replace whitespace runs with hyphens. Matches CENTRAL_IL_CITIES
+// slug shape (e.g., "East Peoria" → "east-peoria"). encodeURIComponent
+// would emit "east%20peoria" which 404s, since the route param doesn't
+// decode back to "East Peoria" before the visibility check.
+function citySlug(name: string): string {
+  return name.trim().toLowerCase().replace(/\s+/g, "-");
 }
 
 export async function generateMetadata({
@@ -198,14 +210,27 @@ export default async function CityPage({
     deals.map((d) => d.listing_slug).filter(Boolean)
   ).size;
   const intro = CITY_INTROS[raw.toLowerCase()] || null;
-  const metros = metroCities(city);
-  const neighborCities = metros.filter((c) => c.toLowerCase() !== city.toLowerCase());
 
-  // Answer-format line at the top — the Zone 4 Phase 1 signal
-  const answerText =
-    deals.length > 0
-      ? `${deals.length} active deal${deals.length !== 1 ? "s" : ""} at ${dispensaryCount} dispensar${dispensaryCount !== 1 ? "ies" : "y"} in ${city}, IL right now.`
-      : `No active deals in ${city}, IL right now — check back soon.`;
+  // Empty-CIL-cities (Bartonville, Morton, Washington) show explicit
+  // "no licensed dispensary yet" copy plus a pointer at the nearest CIL
+  // city with inventory. Cities with listings get the standard answer.
+  const isEmpty = listings.length === 0;
+  const emptyMeta = isEmpty
+    ? EMPTY_CENTRAL_IL_CITIES[raw.toLowerCase()] ?? null
+    : null;
+  const answerText = isEmpty
+    ? emptyMeta
+      ? `No licensed dispensaries in ${city}, IL yet — nearest is about ${emptyMeta.nearestMiles} mi ${emptyMeta.direction} in ${emptyMeta.nearestCity}.`
+      : `No licensed dispensaries in ${city}, IL yet.`
+    : `${deals.length} active deal${deals.length !== 1 ? "s" : ""} at ${dispensaryCount} dispensar${dispensaryCount !== 1 ? "ies" : "y"} in ${city}, IL right now.`;
+
+  // "Also near you" — explicit list of OTHER Central IL cities, not a
+  // metro expansion. Caps at 6 to keep the row scannable.
+  const neighborCities = CENTRAL_IL_CITIES.filter(
+    (c) => c.slug !== citySlug(city)
+  )
+    .slice(0, 6)
+    .map((c) => ({ name: c.name, slug: c.slug }));
 
   return (
     <>
@@ -325,7 +350,7 @@ export default async function CityPage({
         {listings.length > 0 && (
           <>
             <div className="section-h">
-              {listings.length} dispensar{listings.length === 1 ? "y" : "ies"} in {metros.length > 1 ? `the ${city} metro` : `${city}, IL`}
+              {listings.length} dispensar{listings.length === 1 ? "y" : "ies"} in {city}, IL
             </div>
             <div className="dlist">
               {listings.map((l) => {
@@ -350,9 +375,9 @@ export default async function CityPage({
           <div className="neighbors">
             Also near you:{" "}
             {neighborCities.map((c, i) => (
-              <span key={c}>
+              <span key={c.slug}>
                 {i > 0 && " · "}
-                <Link href={`/city/${encodeURIComponent(c.toLowerCase())}`}>{c}</Link>
+                <Link href={`/city/${c.slug}`}>{c.name}</Link>
               </span>
             ))}
           </div>
