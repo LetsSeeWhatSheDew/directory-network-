@@ -57,6 +57,9 @@ export const CANNABIS_IL_NON_CITY_SLUGS = new Set<string>([
  * Empty Central IL cities — in scope, but have zero dispensary listings
  * today. These render a honest empty-state hub pointing to the nearest
  * city with inventory. Distances are approximate driving miles.
+ *
+ * Pekin was on this list when the only Pekin candidate was an unverified
+ * row; nuera-pekin is now active so Pekin is a populated city.
  */
 export const EMPTY_CENTRAL_IL_CITIES: Record<
   string,
@@ -73,12 +76,6 @@ export const EMPTY_CENTRAL_IL_CITIES: Record<
     nearestCity: "East Peoria",
     nearestMiles: 8,
     direction: "W",
-  },
-  pekin: {
-    name: "Pekin",
-    nearestCity: "East Peoria",
-    nearestMiles: 10,
-    direction: "N",
   },
   washington: {
     name: "Washington",

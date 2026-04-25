@@ -2,6 +2,7 @@ import { MetadataRoute } from "next";
 import { brand } from "../lib/brand";
 import { getAllBrands } from "../lib/brands";
 import { isInCentralIL } from "../lib/visibility";
+import { CENTRAL_IL_CITIES } from "../lib/constants/regions";
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -11,43 +12,14 @@ const SUPABASE_ANON_KEY =
 
 const DEAL_CATEGORIES = ["flower", "edibles", "vapes", "concentrate", "all"] as const;
 
-// Canonical list of /cannabis/illinois/[city] static pages in the
-// publicly-visible Central Illinois scope. Mirrors the 11 CENTRAL_IL_CITIES
-// plus the two twin-metro compound slugs (bloomington-normal, champaign-urbana).
-// Out-of-scope cities (Chicago, Aurora, etc.) are intentionally omitted —
-// middleware 404s those URLs, so they must NOT appear in the sitemap.
-const IL_CITY_PAGES = [
-  "peoria",
-  "east-peoria",
-  "peoria-heights",
-  "pekin",
-  "bartonville",
-  "morton",
-  "washington",
-  "bloomington",
-  "bloomington-normal",
-  "normal",
-  "champaign",
-  "champaign-urbana",
-  "urbana",
-  "springfield",
-] as const;
-
 const NOINDEX_SLUGS = [
     "emerald-city-dispensary-chicago-il",
     "emerald-leaf-collective-chicago-il",
     "lakefront-cannabis-co-chicago-il",
   ];
 
-const INTENTS = ["best", "open-now", "recreational", "deals"] as const;
-
-const CHICAGO_LANDMARKS = [
-    "near-wrigley-field",
-    "near-ohare",
-    "near-navy-pier",
-    "near-magnificent-mile",
-  ];
-
+// /cannabis/illinois content pages that survived the legacy-tree retirement.
+// These are content guides, not city directories — middleware lets them through.
 const STATIC_PAGES = [
   { path: "first-time-guide", freq: "monthly" as const, pri: 0.8 },
   { path: "laws", freq: "monthly" as const, pri: 0.8 },
@@ -68,27 +40,6 @@ async function getAllListings() {
                 );
           if (!res.ok) return [];
           return res.json();
-    } catch {
-          return [];
-    }
-}
-
-async function getIllinoisCities() {
-    try {
-          const res = await fetch(
-                  `${SUPABASE_URL}/rest/v1/master_listings?select=city,state&state=eq.IL&project_tag=eq.green&is_active=eq.true&limit=200`,
-            {
-                      headers: {
-                                  apikey: SUPABASE_ANON_KEY!,
-                                  Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-                      },
-                      next: { revalidate: 3600 },
-            }
-                );
-          if (!res.ok) return [];
-          const rows = await res.json();
-          const unique = [...new Set(rows.map((r: { city: string }) => r.city).filter(Boolean))];
-          return unique;
     } catch {
           return [];
     }
@@ -120,9 +71,8 @@ async function getActiveDeals() {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const [listings, cities, activeDeals, brands] = await Promise.all([
+    const [listings, activeDeals, brands] = await Promise.all([
           getAllListings(),
-          getIllinoisCities(),
           getActiveDeals(),
           getAllBrands(),
         ]);
@@ -130,7 +80,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base: MetadataRoute.Sitemap = [
     { url: `${brand.url}`, lastModified: new Date(), changeFrequency: "daily", priority: 1.0 },
     { url: `${brand.url}/cannabis`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
-    { url: `${brand.url}/cannabis/illinois`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     { url: `${brand.url}/alerts`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: `${brand.url}/dispensaries`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: `${brand.url}/about`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
@@ -176,39 +125,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
               priority: 0.8,
       }));
 
-  // Central IL city slugs — the intersection of (DB cities ∩ Central IL)
-  // plus the canonical IL_CITY_PAGES (which is already Central-IL-only).
-  const citySlugsFromDb = (cities as string[])
-    .map((c) => c.toLowerCase().replace(/\s+/g, "-"))
-    .filter((slug) => isInCentralIL(slug));
-  const mergedCitySlugs = Array.from(new Set([...citySlugsFromDb, ...IL_CITY_PAGES]));
-
-  // City hub pages
-  const cityUrls: MetadataRoute.Sitemap = mergedCitySlugs.map((slug) => ({
-        url: `${brand.url}/cannabis/illinois/${slug}`,
-        lastModified: new Date(),
-        changeFrequency: "daily" as const,
-        priority: 0.85,
-  }));
-
-  // Intent pages — best, open-now, recreational, deals for every city.
-  // Only emit for cities we actually have listings for (intent pages
-  // need data to render meaningfully); static-only cities get their
-  // landing page above but not the intent matrix.
-  const intentUrls: MetadataRoute.Sitemap = citySlugsFromDb.flatMap((slug) =>
-        INTENTS.map((intent) => ({
-                url: `${brand.url}/cannabis/illinois/${slug}/${intent}`,
-                lastModified: new Date(),
-                changeFrequency: intent === "open-now" ? ("hourly" as const) : ("daily" as const),
-                priority: intent === "best" || intent === "open-now" ? 0.9 : 0.8,
-        }))
-                                                                           );
-
-  // Chicago landmark pages — OUT OF SCOPE. Chicago is not in Central IL,
-  // so these URLs 404 via middleware. Leave the constant for future
-  // reference but do not emit.
-  const landmarkUrls: MetadataRoute.Sitemap = [];
-
   // /dispensary/[slug] full profile pages — Central IL only.
   const dispensaryProfileUrls: MetadataRoute.Sitemap = listings
     .filter((l: { slug: string; city?: string | null }) =>
@@ -220,15 +136,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.85,
     }));
 
-  // /city/[city] clean landing pages — Central IL only.
-  const cityLandingUrls: MetadataRoute.Sitemap = (cities as string[])
-    .filter((city) => isInCentralIL(city))
-    .map((city) => ({
-      url: `${brand.url}/city/${city.toLowerCase().replace(/\s+/g, "-")}`,
-      lastModified: new Date(),
-      changeFrequency: "daily" as const,
-      priority: 0.9,
-    }));
+  // /city/[city] canonical landings — every Central IL city in scope,
+  // including the empty cities (Bartonville, Morton, Washington), which
+  // render an honest "no dispensaries yet" body. Sourced from the
+  // CENTRAL_IL_CITIES constant, not the DB, so empty-but-in-scope cities
+  // are always discoverable. Replaces the legacy /cannabis/illinois/<city>
+  // canonical (the legacy tree was retired and now 308-redirects here).
+  const cityLandingUrls: MetadataRoute.Sitemap = CENTRAL_IL_CITIES.map((c) => ({
+    url: `${brand.url}/city/${c.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "daily" as const,
+    priority: 0.9,
+  }));
 
   // NEW — /brand/[slug] per-brand pages. Returns [] until brands table lands,
   // so the shape is live but the section is empty today.
@@ -266,9 +185,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...dealUrls,
     ...staticPages,
     ...listingUrls,
-    ...cityUrls,
-    ...intentUrls,
-    ...landmarkUrls,
     ...dispensaryProfileUrls,
     ...cityLandingUrls,
     ...brandDetailUrls,
