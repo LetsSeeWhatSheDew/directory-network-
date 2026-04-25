@@ -261,7 +261,7 @@ export default async function OpenNowPage() {
 
           <div className="on-cta">
             <div>
-              <p className="on-cta-text">Own a dispensary in Illinois?</p>
+              <p className="on-cta-text">Own a Central Illinois dispensary?</p>
               <p className="on-cta-sub">Claim your listing free — update your hours and appear here automatically.</p>
             </div>
             <Link href="/get-listed" className="on-cta-btn">Claim your listing →</Link>

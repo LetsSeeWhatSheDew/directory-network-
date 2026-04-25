@@ -385,7 +385,7 @@ export default function FirstTimeGuidePage() {
 
         <footer className="guide-footer">
           <span className="guide-footer-brand">puff<span style={{ color: "#16a34a" }}>price</span></span>
-          <span className="guide-footer-note">© {new Date().getFullYear()} PuffPrice · Illinois Cannabis Directory</span>
+          <span className="guide-footer-note">© {new Date().getFullYear()} PuffPrice · Central Illinois</span>
         </footer>
       </div>
     </>

@@ -171,11 +171,21 @@ export async function generateMetadata({
     ? deal.description.slice(0, 180)
     : `${headline} at ${disp} in ${cityPhrase}. ${brand.name} tracks active cannabis deals across Central Illinois.`;
   const url = `${brand.url}/deal/${id}`;
+  // Point canonical at the dispensary detail page when we have a
+  // listing slug. /deal/[uuid] is a UUID-keyed convenience URL; the
+  // dispensary page is the durable resource the deal hangs off and
+  // the surface we want indexed. Falls back to self-canonical when
+  // no listing context is available so we never emit an empty/null
+  // canonical. GSC was flagging /deal/[uuid] as "duplicate without
+  // user-selected canonical" before this consolidation.
+  const canonicalUrl = deal.listing_slug
+    ? `${brand.url}/dispensary/${deal.listing_slug}`
+    : url;
   const ogImage = `${brand.url}/og-image.png`;
   return {
     title,
     description,
-    alternates: { canonical: url },
+    alternates: { canonical: canonicalUrl },
     openGraph: {
       title,
       description,

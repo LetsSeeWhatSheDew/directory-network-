@@ -1042,7 +1042,7 @@ export default async function ListingPage({
 
         <footer className="dn-footer">
           <span className="dn-footer-brand">puff<span className="dn-nav-accent">price</span></span>
-          <span className="dn-footer-note">© {new Date().getFullYear()} PuffPrice · Illinois Cannabis Directory</span>
+          <span className="dn-footer-note">© {new Date().getFullYear()} PuffPrice · Central Illinois</span>
         </footer>
       </div>
     </>
