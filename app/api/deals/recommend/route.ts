@@ -7,6 +7,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isInMetro } from "../../../../lib/cityNormalize";
 import { computeOpenStatus, type HoursRow } from "../../../../lib/hours";
+import { isFreshFeatured } from "../../../../lib/dealFreshness";
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL ||
@@ -186,7 +187,21 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ ...emptyResponse(category, city), deals: [] });
     }
 
-    const top = combined[0];
+    // Featured-slot staleness gate: pick the highest-scored deal whose
+    // verified_at is within 7 days. If nothing qualifies, return a null
+    // topPick so the hero renders its empty state — but still return the
+    // full combined deal list so the homepage grid keeps surfacing the
+    // older deals with their existing freshness badges.
+    const top = combined.find((d) => isFreshFeatured(d.verified_at)) || null;
+    if (!top) {
+      return NextResponse.json({
+        ...emptyResponse(category, city),
+        deals: combined,
+        totalFound: combined.length,
+        localCount: scoredLocal.length,
+        likelyOpen: openNow,
+      });
+    }
     const topSlug = String(top.slug || top.listing_slug || "");
     const meta = topSlug
       ? await fetchListingMeta(topSlug)
@@ -198,7 +213,12 @@ export async function GET(req: NextRequest) {
       lat: meta.lat,
       lng: meta.lng,
     };
-    const alternatives = combined.slice(1, Math.max(4, limit));
+    // Alternatives drawn from the *combined* pool, not the post-gate one,
+    // so the grid below the hero stays full even when the featured slot
+    // is empty. The grid component handles its own freshness display.
+    const alternatives = combined
+      .filter((d) => String(d.deal_id ?? d.id ?? "") !== String(top.deal_id ?? top.id ?? ""))
+      .slice(0, Math.max(3, limit - 1));
 
     return NextResponse.json({
       topPick,

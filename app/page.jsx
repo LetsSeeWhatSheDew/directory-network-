@@ -20,6 +20,7 @@ import {
   CENTRAL_IL_CITIES,
   CENTRAL_IL_PUBLIC_CITIES,
 } from "../lib/constants/regions";
+import { isFreshFeatured } from "../lib/dealFreshness";
 
 // Metadata — Central IL framing. The full IL footprint stays discoverable
 // via the "Browse all Illinois" link below; out-of-scope city pages keep
@@ -540,6 +541,14 @@ export default async function HomePage() {
   const userCity = userLoc?.city || null;
   const localizedTopDeals = preferLocalDeals(topDeals, userCity);
   const localizedDealPool = preferLocalDeals(dealPool, userCity);
+  // Featured-slot staleness gate. The hero card must show a deal whose
+  // verified_at is within 7 days, otherwise we'd hand the most prominent
+  // surface on the site a "may be outdated" amber warning. If nothing
+  // qualifies, render an honest empty state. Lower-priority surfaces
+  // (deal grid, ending-soon row) keep using DealFreshnessBadge so older
+  // deals continue to surface with their existing transparency labels.
+  const featuredDeal =
+    localizedTopDeals.find((d) => isFreshFeatured(d?.verified_at)) || null;
   return (
     <>
       <script
@@ -1009,10 +1018,10 @@ export default async function HomePage() {
               </p>
 
               {/* THE big deal card — the hero element */}
-              <HeroDealCard initial={localizedTopDeals[0] || null} />
+              <HeroDealCard initial={featuredDeal} totalDealCount={dealCount ?? 0} />
 
               {/* City-aware savings callout — muted supporting copy */}
-              <SavingsCallout initialSavings={localizedTopDeals[0] ? estimateSavings(localizedTopDeals[0]) : null} />
+              <SavingsCallout initialSavings={featuredDeal ? estimateSavings(featuredDeal) : null} />
             </div>
 
             {/* Desktop-only right column: category shortcuts */}

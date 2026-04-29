@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { estimateSavings, formatSavingsDollars, hasExactSavings } from "../../lib/dealScoring";
 import { displayCity } from "../../lib/cityNormalize";
 import { listingHref } from "../../lib/links";
+import { isFreshFeatured } from "../../lib/dealFreshness";
 import TrackedLink from "./TrackedLink";
 import DealFreshnessBadge from "./DealFreshnessBadge";
 
@@ -108,8 +109,32 @@ function dispatchSavings(d: Deal | null) {
   } catch {}
 }
 
-export default function HeroDealCard({ initial }: { initial: Deal | null }) {
-  const [deal, setDeal] = useState<Deal | null>(null);
+// Pick the first deal in a list that passes the 7-day featured-slot
+// freshness gate. Returns null if nothing qualifies — caller renders the
+// empty state instead. Mirrors the same gate applied server-side in
+// app/page.jsx and in /api/deals/recommend so both surfaces agree.
+function pickFreshDeal(deals: Deal[] | null | undefined): Deal | null {
+  if (!Array.isArray(deals)) return null;
+  for (const d of deals) {
+    if (isFreshFeatured(d?.verified_at ?? null)) return d;
+  }
+  return null;
+}
+
+export default function HeroDealCard({
+  initial,
+  totalDealCount = 0,
+}: {
+  initial: Deal | null;
+  totalDealCount?: number;
+}) {
+  // The server-resolved `initial` already passes the freshness gate (see
+  // app/page.jsx). The client effect may receive a stale topPick if a
+  // future API change reverts the gate, so we re-check on the client too
+  // — defense in depth, and cheap.
+  const initialFresh =
+    initial && isFreshFeatured(initial.verified_at) ? initial : null;
+  const [deal, setDeal] = useState<Deal | null>(initialFresh);
   const [city, setCity] = useState<string | null>(null);
   const [openStatus, setOpenStatus] = useState<{ isOpen: boolean; label: string } | null>(null);
   const [resolved, setResolved] = useState(false);
@@ -128,7 +153,16 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
       setResolved(true);
       fetchRecommendation(cached, controller.signal).then((data) => {
         if (cancelled) return;
-        const next = data?.topPick || initial;
+        // /api/deals/recommend now returns topPick=null when nothing is
+        // within the 7-day window. Fall back to the city-localized list
+        // it returns in `deals` and pick the first fresh entry there;
+        // otherwise fall back to the server-rendered initialFresh; if
+        // none of those qualify, render the empty state.
+        const apiTop =
+          data?.topPick && isFreshFeatured(data.topPick.verified_at)
+            ? data.topPick
+            : pickFreshDeal(data?.deals);
+        const next = apiTop || initialFresh;
         setDeal(next);
         if (data?.openStatus && typeof data.openStatus.label === "string") {
           setOpenStatus(data.openStatus);
@@ -149,7 +183,11 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
         setCity(detail.city);
         fetchRecommendation(detail.city, controller.signal).then((data) => {
           if (cancelled) return;
-          const next = data?.topPick || initial;
+          const apiTop =
+            data?.topPick && isFreshFeatured(data.topPick.verified_at)
+              ? data.topPick
+              : pickFreshDeal(data?.deals);
+          const next = apiTop || initialFresh;
           setDeal(next);
           if (data?.openStatus && typeof data.openStatus.label === "string") {
             setOpenStatus(data.openStatus);
@@ -157,8 +195,8 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
           dispatchSavings(next);
         });
       } else {
-        setDeal(initial);
-        dispatchSavings(initial);
+        setDeal(initialFresh);
+        dispatchSavings(initialFresh);
       }
     };
 
@@ -168,9 +206,11 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
       controller.abort();
       window.removeEventListener("cl:location-resolved", handler);
     };
-  }, [initial]);
+  }, [initial, initialFresh]);
 
-  if (!resolved || !deal) {
+  // Pre-resolution skeleton — keeps perceived load tight while client
+  // location detection runs.
+  if (!resolved && !deal) {
     return (
       <div className="hero-deal-card skeleton" aria-busy="true" aria-live="polite">
         <div className="hero-deal-label" style={{ color: "#9ca3af" }}>
@@ -187,6 +227,39 @@ export default function HeroDealCard({ initial }: { initial: Deal | null }) {
           .skeleton-name{height:18px;width:70%;background:#f0ece3;border-radius:6px;margin-bottom:8px}
           .skeleton-cta{height:46px;background:#f0ece3;border-radius:10px;margin-top:18px}
           @keyframes cl-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+        `}</style>
+      </div>
+    );
+  }
+
+  // Post-resolution empty state — no deal in the last 7 days qualifies
+  // for the featured slot. Tell the truth and route the user to the
+  // grid (which still surfaces older deals with their freshness badges
+  // intact). Total dealCount is the homepage stats-line count so the CTA
+  // copy stays in sync with what the user can verify just below.
+  if (!deal) {
+    const ctaLabel =
+      totalDealCount > 0
+        ? `See all ${totalDealCount} active Central IL deals →`
+        : "Browse all Central IL deals →";
+    return (
+      <div className="hero-deal-card hero-deal-empty">
+        <div className="hero-deal-label" style={{ color: "#9ca3af" }}>
+          {city ? `Deals near ${city}` : "Central Illinois deals"}
+        </div>
+        <div className="hero-deal-empty-headline">No featured deal today</div>
+        <p className="hero-deal-empty-sub">
+          We only feature deals re-verified in the last 7 days. Today's pool
+          is older — browse the live grid to see every active deal with its
+          freshness label.
+        </p>
+        <Link href="/deals/all" className="hero-deal-cta hero-deal-empty-cta">
+          {ctaLabel}
+        </Link>
+        <style>{`
+          .hero-deal-empty-headline{font-family:Georgia,serif;font-size:1.6rem;font-weight:700;color:#0f1f3d;letter-spacing:-.02em;margin:8px 0 6px}
+          .hero-deal-empty-sub{font-size:.92rem;color:#6b7280;font-family:system-ui,sans-serif;line-height:1.55;margin:0 0 18px;max-width:520px}
+          .hero-deal-empty-cta{display:inline-block;text-align:center;text-decoration:none}
         `}</style>
       </div>
     );
