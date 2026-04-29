@@ -11,6 +11,7 @@ import FourTwentyBanner from "./components/FourTwentyBanner";
 import RecentlyViewedRow from "./components/RecentlyViewedRow";
 import EndingSoonRow from "./components/EndingSoonRow";
 import PuffPriceIndexCard from "./components/PuffPriceIndexCard";
+import StickyMobileCTA from "./components/StickyMobileCTA";
 import { brand } from "../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../lib/dealScoring";
 import { getServerLocation } from "../lib/location";
@@ -674,11 +675,13 @@ export default async function HomePage() {
         .hero-deal-cta{
           background:#16a34a;color:#fff;
           padding:12px 22px;border-radius:10px;
-          text-decoration:none;font-family:system-ui,sans-serif;
-          font-weight:800;font-size:.92rem;letter-spacing:.02em;
-          transition:background .15s;white-space:nowrap;
+          text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif);
+          font-weight:700;font-size:.92rem;letter-spacing:.02em;
+          transition:background 150ms ease, transform 150ms ease;
+          white-space:nowrap;
+          min-height:44px;display:inline-flex;align-items:center;
         }
-        .hero-deal-cta:hover{background:#15803d}
+        .hero-deal-cta:hover{background:#15803d;transform:translateY(-1px)}
         .hero-deal-more{
           margin-top:14px;align-self:flex-start;
           font-size:.82rem;color:#6b7280;
@@ -1091,6 +1094,10 @@ export default async function HomePage() {
       {/* PUFFPRICE INDEX — price-per-gram benchmark card.
           Live when sample threshold crosses (migration pending);
           renders a coming-soon progress state in the meantime. */}
+      {/* Sentinel for the StickyMobileCTA — mounted right after the
+          hero. When this scrolls out of view, the bottom CTA fades in. */}
+      <div id="pp-hero-sentinel" aria-hidden="true" style={{ height: 1 }} />
+
       <PuffPriceIndexCard />
 
       {/* ============================================================
@@ -1126,12 +1133,17 @@ export default async function HomePage() {
           <p className="pp-eyebrow">Central Illinois · Coverage</p>
           <h2 id="cities-heading" className="cities-h2">Browse deals by city</h2>
           <div className="cities-grid">
-            {CENTRAL_IL_PUBLIC_CITIES.map((c) => {
+            {CENTRAL_IL_PUBLIC_CITIES.map((c, i) => {
               const count = (localizedDealPool || []).filter(
                 (d) => typeof d?.city === "string" && d.city.toLowerCase() === c.name.toLowerCase()
               ).length;
+              // Stagger fade-in: cycle through delay-1/2/3 so adjacent
+              // cards don't all animate on the same frame, but we never
+              // delay a card more than 240ms (delay-3) so the section
+              // feels instant on slow connections.
+              const delay = ["", " pp-fade-up-delay-1", " pp-fade-up-delay-2", " pp-fade-up-delay-3"][i % 4];
               return (
-                <Link key={c.slug} href={`/city/${c.slug}`} className="city-card pp-card">
+                <Link key={c.slug} href={`/city/${c.slug}`} className={`city-card pp-card pp-fade-up${delay}`}>
                   <span className="city-card-name">{c.name}</span>
                   {count > 0 ? (
                     <span className="city-card-count">{count} deal{count === 1 ? "" : "s"}</span>
@@ -1159,7 +1171,7 @@ export default async function HomePage() {
        * and let the typography (Source Serif 4 long-form) carry it.
        * ============================================================ */}
       <section className="trust-section" aria-labelledby="trust-heading">
-        <div className="trust-inner">
+        <div className="trust-inner pp-fade-up">
           <p className="pp-eyebrow">About PuffPrice</p>
           <h2 id="trust-heading" className="trust-h2">We built the thing we wished existed.</h2>
           <p className="trust-body pp-longform">
@@ -1247,6 +1259,11 @@ export default async function HomePage() {
         </div>
         <span className="footer-copy">© {new Date().getFullYear()} PuffPrice</span>
       </footer>
+
+      {/* Mobile-only sticky bottom CTA — appears once user scrolls
+          past the #pp-hero-sentinel. Hidden on desktop via CSS media
+          query inside the component. */}
+      <StickyMobileCTA />
     </>
   );
 }
