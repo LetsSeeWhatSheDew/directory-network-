@@ -10,7 +10,6 @@ import SearchTracker from "./components/SearchTracker";
 import FourTwentyBanner from "./components/FourTwentyBanner";
 import RecentlyViewedRow from "./components/RecentlyViewedRow";
 import EndingSoonRow from "./components/EndingSoonRow";
-import TopDealsRow from "./components/TopDealsRow";
 import PuffPriceIndexCard from "./components/PuffPriceIndexCard";
 import { brand } from "../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../lib/dealScoring";
@@ -32,24 +31,9 @@ export const metadata = {
   alternates: { canonical: brand.url },
 };
 
-// The 6 anchor cities shown in the homepage "browse by city" strip. The
-// full Central IL public list drives positioning elsewhere; here we cap
-// at 6 so the row still reads at-a-glance on a phone. Sourced from the
-// public-cities allow-list so a hidden city slug can never sneak into
-// the visible navigation.
-const HOMEPAGE_CITY_SHORTCUT_SLUGS = [
-  "peoria",
-  "east-peoria",
-  "bloomington",
-  "normal",
-  "champaign",
-  "springfield",
-];
-
-const HOMEPAGE_CITY_SHORTCUTS = HOMEPAGE_CITY_SHORTCUT_SLUGS.map((slug) => {
-  const found = CENTRAL_IL_PUBLIC_CITIES.find((c) => c.slug === slug);
-  return { slug, name: found?.name || slug };
-}).filter((c) => CENTRAL_IL_PUBLIC_CITIES.some((p) => p.slug === c.slug));
+// The homepage "Browse by city" section now renders all 9 public cities
+// directly from CENTRAL_IL_PUBLIC_CITIES (see Section 3 in the JSX), so
+// the prior 6-shortcut list is no longer needed.
 
 // ============================================================
 // PUFFPRICE HOMEPAGE — Cannabis visual identity overhaul
@@ -598,12 +582,14 @@ export default async function HomePage() {
         .promo-cta:hover{text-decoration:underline}
         @media(max-width:520px){.promo-inner{padding:8px 14px}.promo-text{font-size:.75rem}}
 
-        /* HERO */
+        /* HERO — pp-hero-bg from globals.css now drives the backdrop
+           (warm cream + radial-gradient terracotta hint). The local
+           rule keeps the layout shape and removes the prior white. */
         .hero{
-          background:#fff;
-          padding:20px 28px 44px;
+          padding:36px 28px 56px;
           position:relative;
           overflow:hidden;
+          border-bottom:1px solid #e8e4da;
         }
         .hero-inner{position:relative;z-index:1;max-width:1100px;margin:0 auto}
         .hero-grid{
@@ -622,16 +608,19 @@ export default async function HomePage() {
         }
 
         .hero h1{
-          font-size:clamp(1.8rem,5vw,2.8rem);
+          /* Spec 2.3 hero: 56-72px Geist Display 700, tight tracking. */
+          font-family:var(--font-display, var(--font-geist-sans));
+          font-size:clamp(2.5rem, 6vw + 1rem, 4.25rem);
           font-weight:700;color:#0f1f3d;
-          letter-spacing:-.04em;line-height:1.05;
-          margin-bottom:4px;
+          letter-spacing:-.04em;line-height:1.02;
+          margin-bottom:10px;
         }
         .hero h1 em{color:#16a34a;font-style:normal}
         .hero-sub{
-          font-size:.92rem;color:#6b7280;
-          font-family:system-ui,sans-serif;
-          line-height:1.5;margin-bottom:14px;
+          font-family:var(--font-ui, system-ui, sans-serif);
+          font-size:1.05rem;color:#4B5563;
+          line-height:1.55;margin-bottom:22px;
+          max-width:520px;
         }
 
         /* HERO DEAL CARD — THE hero element */
@@ -935,12 +924,78 @@ export default async function HomePage() {
         .footer-link:hover{color:#0f1f3d}
         .footer-copy{font-size:.72rem;color:#9ca3af;font-family:system-ui,sans-serif}
 
+        /* SECTION 3 — CITIES GRID (Phase 4 layout consolidation) */
+        .cities-section{background:#fff;border-top:1px solid #e8e4da;border-bottom:1px solid #e8e4da;padding:64px 28px}
+        .cities-inner{max-width:1100px;margin:0 auto}
+        .cities-h2{margin:8px 0 28px}
+        .cities-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+        @media(min-width:720px){.cities-grid{grid-template-columns:repeat(3,1fr);gap:18px}}
+        @media(min-width:1080px){.cities-grid{grid-template-columns:repeat(3,1fr);gap:20px}}
+        .city-card{
+          display:flex;justify-content:space-between;align-items:center;
+          padding:18px 22px;text-decoration:none;color:inherit;
+          min-height:64px;
+        }
+        .city-card-name{
+          font-family:var(--font-display, var(--font-geist-sans));
+          font-weight:600;font-size:1.125rem;letter-spacing:-.01em;
+          color:#0f1f3d;
+        }
+        .city-card-count{
+          font-family:var(--font-ui, system-ui, sans-serif);
+          font-size:.78rem;font-weight:600;letter-spacing:.01em;
+          color:#16a34a;background:#f0fdf4;
+          padding:4px 10px;border-radius:100px;
+          font-variant-numeric:tabular-nums;
+        }
+        .city-card-count-quiet{
+          color:#9ca3af;background:transparent;border:1px solid #e8e4da;
+        }
+        .cities-foot{margin-top:28px;text-align:center}
+        .cities-all-link{
+          font-family:var(--font-ui, system-ui, sans-serif);
+          font-size:.92rem;font-weight:600;color:#16a34a;
+          text-decoration:none;
+        }
+        .cities-all-link:hover{text-decoration:underline}
+
+        /* SECTION 4 — TRUST + BRAND */
+        .trust-section{
+          background:linear-gradient(180deg, #F5F4F0 0%, #FFFFFF 100%);
+          padding:72px 28px;
+        }
+        .trust-inner{max-width:680px;margin:0 auto;text-align:center}
+        .trust-h2{margin:8px 0 18px;letter-spacing:-.03em}
+        .trust-body{
+          font-family:var(--font-serif, Georgia, serif);
+          font-size:clamp(1.05rem, 1.5vw + .8rem, 1.2rem);
+          line-height:1.7;color:#374151;
+          max-width:560px;margin:0 auto 24px;
+        }
+        .trust-cta-row{display:flex;gap:18px;justify-content:center;align-items:center;flex-wrap:wrap}
+        .trust-cta{
+          font-family:var(--font-ui, system-ui, sans-serif);
+          font-size:.92rem;font-weight:700;color:#fff;background:#16a34a;
+          text-decoration:none;padding:11px 22px;border-radius:10px;
+          min-height:44px;display:inline-flex;align-items:center;
+          transition:background 150ms ease, transform 150ms ease;
+        }
+        .trust-cta:hover{background:#15803d;transform:translateY(-1px)}
+        .trust-cta-muted{
+          font-family:var(--font-ui, system-ui, sans-serif);
+          font-size:.92rem;font-weight:600;color:#374151;
+          text-decoration:none;padding:11px 4px;
+          min-height:44px;display:inline-flex;align-items:center;
+        }
+        .trust-cta-muted:hover{color:#0f1f3d}
+
         /* RESPONSIVE */
         @media(max-width:768px){
           .nav{padding:12px 16px}
           .hero{padding:40px 16px 36px}
-          .how-inner{grid-template-columns:1fr;gap:24px;padding:36px 16px}
           .deals-section{padding:36px 16px}
+          .cities-section{padding:48px 16px}
+          .trust-section{padding:56px 16px}
           .footer{padding:16px;flex-direction:column;text-align:center}
           .footer-links{justify-content:center}
         }
@@ -957,7 +1012,8 @@ export default async function HomePage() {
           .savings-num{font-size:1.75rem}
           .nav-cta{padding:5px 11px;font-size:.78rem}
           .nav .logo-text{font-size:1.02rem}
-          .logo img{width:44px!important;height:44px!important}
+          .city-card{padding:14px 18px;min-height:56px}
+          .city-card-name{font-size:1rem}
         }
       `}</style>
 
@@ -967,7 +1023,7 @@ export default async function HomePage() {
       {/* NAV */}
       <nav className="nav">
         <Link href="/" className="logo" aria-label="PuffPrice home">
-          <Logo size={56} priority />
+          <Logo size={26} />
         </Link>
         <div className="nav-links desktop-only-nav">
           <Link href="/cannabis/illinois/open-now" className="nav-link">Open now</Link>
@@ -982,32 +1038,20 @@ export default async function HomePage() {
       {/* 4/20 DEALS WEEK BANNER — only renders Apr 17–20, 2026 */}
       <FourTwentyBanner />
 
-      {/* HERO — one recommendation, above the fold */}
-      <div className="hero">
+      {/* HERO — one recommendation, above the fold. The pp-hero-bg
+          class layers a warm cream + terracotta-hint radial gradient
+          per brand spec 2.3 in lieu of hero photography (deferred). */}
+      <div className="hero pp-hero-bg">
         <PlantSilhouette side="left" />
         <PlantSilhouette side="right" />
         <div className="hero-inner">
           <div className="hero-grid">
-            <div className="hero-left">
+            <div className="hero-left pp-fade-up">
               {/* Location line — tiny, first */}
               <LocationAware />
 
-              {/* Regional eyebrow — Central IL is the current focus market.
-                  Out-of-scope cities stay reachable via the footer and
-                  /cannabis/illinois hub link. */}
-              <div
-                style={{
-                  fontSize: ".68rem",
-                  fontWeight: 700,
-                  letterSpacing: ".14em",
-                  textTransform: "uppercase",
-                  color: "#16a34a",
-                  fontFamily: "system-ui, sans-serif",
-                  marginBottom: 4,
-                }}
-              >
-                Serving Central Illinois
-              </div>
+              {/* Regional eyebrow — Central IL is the focus market. */}
+              <p className="pp-eyebrow" style={{ marginBottom: 6 }}>Serving Central Illinois</p>
 
               {/* Headline */}
               <h1>Best Bud For <em>Your Buck$</em></h1>
@@ -1049,103 +1093,15 @@ export default async function HomePage() {
           renders a coming-soon progress state in the meantime. */}
       <PuffPriceIndexCard />
 
-      {/* BELOW FOLD — Section 1: Browse by category (mobile-first) */}
-      <div className="below-section below-categories">
-        <div className="below-inner">
-          <h2 className="below-title">Browse by what you want</h2>
-          <div className="below-cat-grid">
-            {CATEGORIES.filter((c) => c.slug !== "all").map((cat) => (
-              <TrackedLink
-                key={cat.slug}
-                href={`/deals/${cat.slug}`}
-                className="below-cat-card"
-                event="category_click"
-                params={{ category: cat.slug, source: "below_fold" }}
-              >
-                <div className="below-cat-icon">{renderIcon(cat.icon)}</div>
-                <div className="below-cat-label">{cat.label}</div>
-              </TrackedLink>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Section 2: How it works — 3 simplified lines */}
-      <div className="how">
-        <div className="how-inner">
-          <div className="how-step">
-            <div className="how-num">01</div>
-            <div className="how-title">We detect your location</div>
-          </div>
-          <div className="how-step">
-            <div className="how-num">02</div>
-            <div className="how-title">We find the best deal right now</div>
-          </div>
-          <div className="how-step">
-            <div className="how-num">03</div>
-            <div className="how-title">You save money</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Recently-visited row (hidden on first visit, renders client-side) */}
-      {/* Ending-soon urgency row — honest or invisible. Only renders when
-          there's at least one real <24h expiring deal. */}
+      {/* ============================================================
+       * SECTION 2 — Today's deals (stat strip + grid)
+       * The HomeDealCards grid carries the deal-card data density
+       * (per Chrome's OpenTable benchmark). The stat line above it is
+       * the trust signal — three numbers, no flair, no padding.
+       * ============================================================ */}
       <EndingSoonRow deals={endingSoon} />
-
       <RecentlyViewedRow />
 
-      {/* Section 3: More deals near you (existing card grid) */}
-      <div className="deals-section">
-        {/* Quick search — lands users directly on a dispensary or city */}
-        <form
-          action="/search"
-          method="get"
-          role="search"
-          className="home-search"
-          aria-label="Search dispensaries"
-        >
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#9ca3af"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-            className="home-search-icon"
-          >
-            <circle cx="11" cy="11" r="7" />
-            <line x1="20" y1="20" x2="16.65" y2="16.65" />
-          </svg>
-          <input
-            type="search"
-            name="q"
-            placeholder="Search by city, dispensary, or product"
-            autoComplete="off"
-            className="home-search-input"
-          />
-          <button type="submit" className="home-search-btn">Search</button>
-        </form>
-        <HomeDealCards initial={localizedTopDeals} dealCount={dealCount} mostRecent={mostRecentTs} />
-      </div>
-
-      {/* Social-proof row — ranked by computed savings until click data
-          aggregates. Label is "Top deals", not "most popular". */}
-      <TopDealsRow deals={localizedDealPool} userCity={userCity} />
-
-      {/* Section 4: Get alerts CTA */}
-      <div className="alerts-strip">
-        <div className="alerts-inner">
-          <div className="alerts-title">Never miss a deal near you</div>
-          <p className="alerts-sub">Free email alerts when a better deal drops in your city.</p>
-          <Link href="/alerts" className="alerts-btn">Get free alerts →</Link>
-        </div>
-      </div>
-
-      {/* Section 5: Stats — credibility line */}
       <div className="stats">
         <div className="stats-inner">
           <span className="stats-line">
@@ -1154,82 +1110,69 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* City shortcuts — Central IL anchor cities. The "Browse all
-          Central IL cities" link below points back to the homepage —
-          there is no separate hub since the homepage IS the hub. */}
-      <div
-        style={{
-          maxWidth: 1100,
-          margin: "0 auto",
-          padding: "16px 28px 36px",
-          fontFamily: "system-ui, sans-serif",
-          fontSize: ".85rem",
-          color: "#6b7280",
-          textAlign: "center",
-          lineHeight: 1.8,
-        }}
-      >
-        Browse deals by city:{" "}
-        {HOMEPAGE_CITY_SHORTCUTS.map((c, i) => (
-          <span key={c.slug}>
-            {i > 0 && " · "}
-            <Link
-              href={`/city/${c.slug}`}
-              style={{ color: "#16a34a", fontWeight: 600, textDecoration: "none" }}
-            >
-              {c.name}
-            </Link>
-          </span>
-        ))}
-        {" · "}
-        <Link
-          href="/dispensaries"
-          style={{ color: "#6b7280", fontWeight: 500, textDecoration: "underline", textDecorationStyle: "dotted" }}
-        >
-          Browse all Central IL cities →
-        </Link>
+      <div className="deals-section">
+        <HomeDealCards initial={localizedTopDeals} dealCount={dealCount} mostRecent={mostRecentTs} />
       </div>
+
+      {/* ============================================================
+       * SECTION 3 — Browse by city
+       * 9 city cards in a 3×3 desktop / 2×5 mobile grid. Each card
+       * shows the city name, deal-count badge, and a small accent.
+       * Sourced from CENTRAL_IL_PUBLIC_CITIES so a future dispensary
+       * opening in a hidden city brings its slug back automatically.
+       * ============================================================ */}
+      <section className="cities-section" aria-labelledby="cities-heading">
+        <div className="cities-inner">
+          <p className="pp-eyebrow">Central Illinois · Coverage</p>
+          <h2 id="cities-heading" className="cities-h2">Browse deals by city</h2>
+          <div className="cities-grid">
+            {CENTRAL_IL_PUBLIC_CITIES.map((c) => {
+              const count = (localizedDealPool || []).filter(
+                (d) => typeof d?.city === "string" && d.city.toLowerCase() === c.name.toLowerCase()
+              ).length;
+              return (
+                <Link key={c.slug} href={`/city/${c.slug}`} className="city-card pp-card">
+                  <span className="city-card-name">{c.name}</span>
+                  {count > 0 ? (
+                    <span className="city-card-count">{count} deal{count === 1 ? "" : "s"}</span>
+                  ) : (
+                    <span className="city-card-count city-card-count-quiet">Listings</span>
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+          <div className="cities-foot">
+            <Link href="/dispensaries" className="cities-all-link">
+              Browse every Central IL dispensary →
+            </Link>
+          </div>
+        </div>
+      </section>
 
       <SearchTracker />
 
-      {/* DISPENSARY CTA */}
-      <div className="biz-strip">
-        <div className="biz-title">Own a Central Illinois dispensary?</div>
-        <p className="biz-sub">
-          Your listing is always free — claim it in under a minute.
-        </p>
-        <div className="biz-btns">
-          <Link href="/get-listed" className="biz-btn-primary">Claim your free listing →</Link>
-          <Link href="/dispensary/submit-deal" className="biz-btn-secondary">Submit a deal</Link>
+      {/* ============================================================
+       * SECTION 4 — Trust + brand
+       * Small about block. The voice is the strongest part of the
+       * brand per the spec — keep the copy plain, builder-to-builder,
+       * and let the typography (Source Serif 4 long-form) carry it.
+       * ============================================================ */}
+      <section className="trust-section" aria-labelledby="trust-heading">
+        <div className="trust-inner">
+          <p className="pp-eyebrow">About PuffPrice</p>
+          <h2 id="trust-heading" className="trust-h2">We built the thing we wished existed.</h2>
+          <p className="trust-body pp-longform">
+            One person, in a parking lot, looking for a real deal — that's the user.
+            We pull deals from direct dispensary websites and official social only.
+            No aggregator scraping. Re-verified daily. Free to browse, always.
+          </p>
+          <div className="trust-cta-row">
+            <Link href="/about" className="trust-cta">Read the about page →</Link>
+            <Link href="/alerts" className="trust-cta-muted">Get free deal alerts</Link>
+          </div>
         </div>
-      </div>
-
-      {/* LIVE STATS STRIP — factual, month-to-date */}
-      {(liveValue || dealsThisMonth) && (
-        <div style={{
-          maxWidth: 1100,
-          margin: "0 auto",
-          padding: "18px 24px 0",
-          fontFamily: "system-ui, sans-serif",
-          fontSize: ".82rem",
-          color: "#6b7280",
-          textAlign: "center",
-        }}>
-          {liveValue && liveValue.totalDollars > 0 && (
-            <span>
-              <strong style={{ color: "#0f1f3d" }}>${liveValue.totalDollars.toLocaleString()}</strong> in deals live across Central Illinois this month
-            </span>
-          )}
-          {liveValue && liveValue.totalDollars > 0 && dealsThisMonth && dealsThisMonth.count > 0 && (
-            <span style={{ margin: "0 10px", color: "#d1d5db" }}>·</span>
-          )}
-          {dealsThisMonth && dealsThisMonth.count > 0 && (
-            <span>
-              We tracked <strong style={{ color: "#0f1f3d" }}>{dealsThisMonth.count}</strong> Central IL deal{dealsThisMonth.count === 1 ? "" : "s"} in {dealsThisMonth.monthName}
-            </span>
-          )}
-        </div>
-      )}
+      </section>
 
       {/* FAQ — visible content that matches FAQ_SCHEMA. Google requires
           FAQPage rich-result text to be rendered on the page; the schema
@@ -1295,7 +1238,7 @@ export default async function HomePage() {
 
       {/* FOOTER */}
       <footer className="footer">
-        <span className="footer-logo" aria-label="PuffPrice"><Logo size={28} /></span>
+        <span className="footer-logo" aria-label="PuffPrice"><Logo size={20} /></span>
         <div className="footer-links">
           <Link href="/" className="footer-link">Central Illinois</Link>
           <Link href="/cannabis/illinois/first-time-guide" className="footer-link">First-time guide</Link>
