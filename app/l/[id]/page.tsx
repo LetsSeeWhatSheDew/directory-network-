@@ -293,17 +293,23 @@ export async function generateMetadata({
   const description = listing.meta_description ||
     listing.short_description ||
     `Current deals and directions for ${listing.name}. Save on cannabis in ${listing.city}, IL.`;
-  const canonicalUrl = `https://www.puffprice.com/l/${listing.slug}`;
+  // SEO consolidation: /l/[slug] is the click-tracking "GO HERE"
+  // confirmation surface; /dispensary/[slug] is the SEO-forward profile
+  // (longer, richer template). Both render listing detail content, so we
+  // canonicalise to the dispensary profile to keep ranking signal in
+  // one place. The route stays at /l/[slug] for inbound deal clicks.
+  const profileUrl = `https://www.puffprice.com/dispensary/${listing.slug}`;
+  const ogUrl = `https://www.puffprice.com/l/${listing.slug}`;
   const image = listing.logo_url || listing.hero_image_url;
 
   return {
     title,
     description,
-    alternates: { canonical: canonicalUrl },
+    alternates: { canonical: profileUrl },
     openGraph: {
       title,
       description,
-      url: canonicalUrl,
+      url: ogUrl,
       siteName: "PuffPrice",
       type: "website",
       ...(image ? { images: [{ url: image, alt: (listing.name ?? "") + " logo" }] } : {}),
