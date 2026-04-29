@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import { brand } from "../lib/brand";
 import { getAllBrands } from "../lib/brands";
 import { isInCentralIL } from "../lib/visibility";
-import { CENTRAL_IL_CITIES } from "../lib/constants/regions";
+import { CENTRAL_IL_PUBLIC_CITIES } from "../lib/constants/regions";
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -136,13 +136,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.85,
     }));
 
-  // /city/[city] canonical landings — every Central IL city in scope,
-  // including the empty cities (Bartonville, Morton, Washington), which
-  // render an honest "no dispensaries yet" body. Sourced from the
-  // CENTRAL_IL_CITIES constant, not the DB, so empty-but-in-scope cities
-  // are always discoverable. Replaces the legacy /cannabis/illinois/<city>
-  // canonical (the legacy tree was retired and now 308-redirects here).
-  const cityLandingUrls: MetadataRoute.Sitemap = CENTRAL_IL_CITIES.map((c) => ({
+  // /city/[city] canonical landings — only the 9 Central IL cities with
+  // licensed dispensaries today. The 3 dispensary-less cities (Bartonville,
+  // Morton, Washington) stay in CENTRAL_IL_CITIES for data-scope reasons
+  // but render 404 publicly, so they must not appear in the sitemap.
+  const cityLandingUrls: MetadataRoute.Sitemap = CENTRAL_IL_PUBLIC_CITIES.map((c) => ({
     url: `${brand.url}/city/${c.slug}`,
     lastModified: new Date(),
     changeFrequency: "daily" as const,

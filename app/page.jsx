@@ -16,7 +16,10 @@ import { brand } from "../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../lib/dealScoring";
 import { getServerLocation } from "../lib/location";
 import { getLiveDealsValueThisMonth, getDealsRunThisMonth } from "../lib/stats";
-import { CENTRAL_IL_CITIES } from "../lib/constants/regions";
+import {
+  CENTRAL_IL_CITIES,
+  CENTRAL_IL_PUBLIC_CITIES,
+} from "../lib/constants/regions";
 
 // Metadata — Central IL framing. The full IL footprint stays discoverable
 // via the "Browse all Illinois" link below; out-of-scope city pages keep
@@ -29,8 +32,10 @@ export const metadata = {
 };
 
 // The 6 anchor cities shown in the homepage "browse by city" strip. The
-// full 11-city Central IL list drives positioning elsewhere; here we cap
-// at 6 so the row still reads at-a-glance on a phone.
+// full Central IL public list drives positioning elsewhere; here we cap
+// at 6 so the row still reads at-a-glance on a phone. Sourced from the
+// public-cities allow-list so a hidden city slug can never sneak into
+// the visible navigation.
 const HOMEPAGE_CITY_SHORTCUT_SLUGS = [
   "peoria",
   "east-peoria",
@@ -41,9 +46,9 @@ const HOMEPAGE_CITY_SHORTCUT_SLUGS = [
 ];
 
 const HOMEPAGE_CITY_SHORTCUTS = HOMEPAGE_CITY_SHORTCUT_SLUGS.map((slug) => {
-  const found = CENTRAL_IL_CITIES.find((c) => c.slug === slug);
+  const found = CENTRAL_IL_PUBLIC_CITIES.find((c) => c.slug === slug);
   return { slug, name: found?.name || slug };
-});
+}).filter((c) => CENTRAL_IL_PUBLIC_CITIES.some((p) => p.slug === c.slug));
 
 // ============================================================
 // PUFFPRICE HOMEPAGE — Cannabis visual identity overhaul
@@ -493,7 +498,7 @@ const FAQ_ENTRIES = [
   },
   {
     q: "Which Central Illinois cities does PuffPrice cover?",
-    a: "Peoria, East Peoria, Peoria Heights, Pekin, Bartonville, Morton, Washington, Bloomington, Normal, Champaign, Urbana, and Springfield — the twelve cities that make up the Central Illinois cannabis market. Dispensaries outside this region are not listed here.",
+    a: "Peoria and East Peoria, Bloomington-Normal, Champaign-Urbana, Pekin, Peoria Heights, and Springfield — the Central Illinois markets where licensed dispensaries are operating today. If you're in a smaller Central IL town, the nearest licensed dispensary is usually 5–15 minutes from one of those metros.",
   },
 ];
 
@@ -1135,7 +1140,7 @@ export default async function HomePage() {
       <div className="stats">
         <div className="stats-inner">
           <span className="stats-line">
-            <strong>{dealCount !== null ? dealCount : "—"}</strong> active deals · <strong>{listingCount !== null ? listingCount : "—"}</strong> Central IL dispensaries · <strong>12</strong> cities
+            <strong>{dealCount !== null ? dealCount : "—"}</strong> active deals · <strong>{listingCount !== null ? listingCount : "—"}</strong> Central IL dispensaries · <strong>{CENTRAL_IL_PUBLIC_CITIES.length}</strong> cities
           </span>
         </div>
       </div>

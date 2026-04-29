@@ -13,7 +13,10 @@ import {
   isInCentralIL,
   EMPTY_CENTRAL_IL_CITIES,
 } from "../../../lib/visibility";
-import { CENTRAL_IL_CITIES } from "../../../lib/constants/regions";
+import {
+  CENTRAL_IL_PUBLIC_CITIES,
+  isCentralILPublicCity,
+} from "../../../lib/constants/regions";
 import { estimateSavings } from "../../../lib/dealScoring";
 import EndingSoonRow, { type EndingSoonDeal } from "../../components/EndingSoonRow";
 
@@ -158,6 +161,11 @@ export async function generateMetadata({
   if (!isInCentralIL(raw)) {
     return { robots: { index: false, follow: false } };
   }
+  // Public-cities allow-list — hidden CIL cities get noindex metadata so
+  // any cached crawler entry de-indexes alongside the route returning 404.
+  if (!isCentralILPublicCity(raw)) {
+    return { robots: { index: false, follow: false } };
+  }
   const city = toCityCase(raw);
   const deals = await getCityDeals(city);
   const dispensaryCount = new Set(deals.map((d) => d.listing_slug).filter(Boolean)).size;
@@ -200,6 +208,10 @@ export default async function CityPage({
   if (!city) notFound();
   // Central IL scope gate — non-CIL city landings are hidden publicly.
   if (!isInCentralIL(raw)) notFound();
+  // Public-cities allow-list — the 3 CIL cities with zero dispensaries
+  // (Bartonville, Morton, Washington) stay in CENTRAL_IL_CITIES for the
+  // data scope but no longer render a public page. They 404 publicly.
+  if (!isCentralILPublicCity(raw)) notFound();
 
   const [deals, listings] = await Promise.all([
     getCityDeals(city),
@@ -224,9 +236,11 @@ export default async function CityPage({
       : `No licensed dispensaries in ${city}, IL yet.`
     : `${deals.length} active deal${deals.length !== 1 ? "s" : ""} at ${dispensaryCount} dispensar${dispensaryCount !== 1 ? "ies" : "y"} in ${city}, IL right now.`;
 
-  // "Also near you" — explicit list of OTHER Central IL cities, not a
-  // metro expansion. Caps at 6 to keep the row scannable.
-  const neighborCities = CENTRAL_IL_CITIES.filter(
+  // "Also near you" — explicit list of OTHER public Central IL cities, not
+  // a metro expansion. Pulled from the public-cities allow-list so hidden
+  // cities (Bartonville, Morton, Washington) never appear as a clickable
+  // link anywhere on the site. Caps at 6 to keep the row scannable.
+  const neighborCities = CENTRAL_IL_PUBLIC_CITIES.filter(
     (c) => c.slug !== citySlug(city)
   )
     .slice(0, 6)

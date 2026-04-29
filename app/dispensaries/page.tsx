@@ -31,9 +31,11 @@ export const metadata = {
   },
 };
 
-// Central IL city allow-list — keeps this page aligned with the
-// sitemap and the homepage deal feed.
-const CIL_CITY_IN_LIST = `("Peoria","East Peoria","Peoria Heights","Pekin","Bartonville","Morton","Washington","Bloomington","Normal","Champaign","Urbana","Springfield")`;
+// Central IL public-cities allow-list — keeps this page aligned with the
+// sitemap and the homepage deal feed. Drops the 3 dispensary-less cities
+// (Bartonville, Morton, Washington) from the publicly-indexed directory
+// since they have no listings to render and 404 publicly anyway.
+const CIL_CITY_IN_LIST = `("Peoria","East Peoria","Peoria Heights","Pekin","Bloomington","Normal","Champaign","Urbana","Springfield")`;
 
 export const dynamic = "force-dynamic";
 
