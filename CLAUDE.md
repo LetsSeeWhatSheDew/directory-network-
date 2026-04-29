@@ -15,6 +15,8 @@ Live at puffprice.com.
 
 **DB scope discipline (April 27, 2026):** `master_listings` is multi-tenant — it serves PuffPrice (`project_tag='green'`), an apartment-rentals project (`'rent'`), a public-works bidding directory (`'bid'`), wellness practitioners (`'heal'`), women's-health clinics (`'her'`), and an AI-tools directory (`'machine'`). **Every public query touching `master_listings` MUST include `.eq('project_tag', 'green')`. No exceptions.** Required reading for any session that adds or modifies a query touching this table: `docs/architecture/db-scope-discipline.md`. The 2026-04-27 audit caught apartment rentals and a public-works bid rendering as PuffPrice dispensaries on `/l/ivy-hall-dispensary` because the related-listings widget was missing this filter (`docs/site-audits/2026-04-27-claude-audit.md`).
 
+**Brand identity locked (April 28, 2026):** Wordmark + color palette + typography + photography + icon system + voice guidelines locked in `docs/brand/2026-04-28-identity-package.md`. Code's visual upgrade session implements against this. About-page draft and the Illinois cannabis tax explainer + calculator spec are in `docs/content/`. Prior brand exploration deck (referenced as "Concept 02 wordmark, Concept 03 pin mark") is **not in the repo** — the identity package is a fresh-recommendation pass; if Matthew's deck surfaces later, it overrides.
+
 ## Stack
 - Frontend: Next.js 16 (App Router, Turbopack)
 - Database: Supabase — project ref: hnbjufmtmrhexmdrfubw

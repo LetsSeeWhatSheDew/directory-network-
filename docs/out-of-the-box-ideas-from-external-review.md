@@ -1,7 +1,15 @@
 # Out-of-the-Box Ideas from External Review
 **Date:** April 24, 2026 (morning)
 **Author:** Cowork (Claude), synthesizing GPT + DeepSeek feedback from April 23 reviews
-**Status:** **Research doc only. No implementation planned in this session.** Enqueue for Matthew's roadmap review; do not touch code.
+**Status:** Research doc + tracking ledger. Idea 1 promoted to drafted-content-and-spec status on 2026-04-28; Ideas 2 and 3 remain queued for roadmap review.
+
+## Status ledger (updated 2026-04-28)
+
+| Idea | State | Artifact |
+|---|---|---|
+| **Idea 1 — Out-the-door tax calculator** | **Drafted, awaiting implementation** | Article: `docs/content/illinois-cannabis-tax-explainer-draft.md`. Calculator spec (Code-ready): `docs/content/tax-calculator-spec.md`. Per-city tax data table embedded in the spec. |
+| **Idea 2 — Cannabis deal calendar** | Queued. No artifact yet. | — |
+| **Idea 3 — SMS-first lookup** | Queued. No artifact yet. | — |
 
 ---
 

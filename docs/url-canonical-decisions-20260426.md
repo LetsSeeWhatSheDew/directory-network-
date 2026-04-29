@@ -16,6 +16,10 @@
 | Listing page | `/dispensary/[slug]` | **Canonical** |
 | Legacy city tree | `/cannabis/illinois/[city]` | **Deprecated** as of 2026-04-26 — redirects to `/city/[city]` |
 | Content pages (non-city, non-listing) | `/cannabis/illinois/first-time-guide`, `/cannabis/illinois/laws`, `/cannabis/illinois/open-now` | **Stay** at current paths — they are content, not city/listing pages |
+| About | `/about` | **Canonical** (added 2026-04-28; no alternates) |
+| About — Index methodology | `/about/index` | **Canonical** (existing) |
+| Tax explainer article | `/illinois-cannabis-tax` | **Canonical** (added 2026-04-28; not yet implemented — see `docs/content/illinois-cannabis-tax-explainer-draft.md`) |
+| Tax calculator | `/illinois-cannabis-tax-calculator` | **Canonical** (added 2026-04-28; not yet implemented — see `docs/content/tax-calculator-spec.md`) |
 
 Everything else under `/cannabis/illinois/*` that is a city or listing template should 301 to its canonical equivalent. The redirect work is landing in a parallel Code session tonight (8–10 commits expected).
 
@@ -171,3 +175,42 @@ If the content pages contain non-city `/cannabis/illinois/*` links (e.g., links 
 ## Pre-launch checklist alignment
 
 The pre-launch checklist in `docs/runbooks/post-deploy-verification.md` now includes a step that catches the v2 addendum's class of bugs: "Verify GSC has zero new canonical warnings on `/city/*` URLs" and "Spot-check 3 random listing pages on production." Both would have caught Open Question 3 and the C2 bleed before this audit.
+
+---
+
+# v3 addendum — 2026-04-28 night (content routes added)
+
+This addendum adds three canonical URL decisions that landed alongside the brand identity package and content drafts.
+
+## /about — stays at `/about`
+
+The about-page draft (`docs/content/about-page-draft.md`) lands at the existing `/about` route. No alternative URL was considered; `/about` is the obvious, short, semantic path. No redirect needed; route already exists in `app/about/page.tsx`.
+
+The Index methodology page at `/about/index` (existing) is unaffected. It remains the canonical URL for the PuffPrice Index.
+
+## /illinois-cannabis-tax — new content route (not yet implemented)
+
+The tax explainer article (`docs/content/illinois-cannabis-tax-explainer-draft.md`) lands at **`/illinois-cannabis-tax`**.
+
+Why this URL pattern (not `/cannabis/illinois/tax` and not `/about/tax`):
+
+1. **Top-level for SEO weight.** This is a high-value content page targeting "Illinois cannabis tax" search intent. Top-level URLs accrue search authority faster than deeply nested ones.
+2. **Not under `/cannabis/illinois/*`.** That tree is being deprecated for everything except the three pre-existing content pillars (`first-time-guide`, `laws`, `open-now`). Adding a fourth would muddy the deprecation narrative — better to start the tax content on a clean slug.
+3. **Not under `/about/*`.** The about tree is for first-person product copy; the tax explainer is consumer-protection editorial. Different category.
+4. **Singular, not plural.** `/illinois-cannabis-tax` not `/illinois-cannabis-taxes`. Singular slugs win at search. (We'll teach the article that there are multiple taxes; the URL stays singular.)
+
+## /illinois-cannabis-tax-calculator — new interactive route (not yet implemented)
+
+The tax calculator (`docs/content/tax-calculator-spec.md`) lands at **`/illinois-cannabis-tax-calculator`**.
+
+Why parallel-with-not-nested-under the explainer:
+
+- Calculator and article are siblings, not parent-child. The article links to the calculator; the calculator links back to the article. Putting the calculator at `/illinois-cannabis-tax/calculator` would imply the article is the canonical and the calculator is supporting — which inverts the value relationship (the calculator is the moat; the article is the explainer).
+- Top-level URLs are cleaner for sharing. "puffprice.com/illinois-cannabis-tax-calculator" reads as a destination.
+
+When v2 calculator embedding lands per-deal-card, those embeds do **not** get their own URLs — they reuse the standalone route via deep-linking with query params, which carry no canonical weight. Always keep the standalone calculator URL as the only canonical for tax-calculation surfaces.
+
+## What's not yet decided
+
+- Whether the tax explainer should live at `/illinois-cannabis-tax` (singular concept) or migrate to a plural `/illinois-cannabis-taxes` later if SEO data shows the plural ranks better. v1 ships singular. Revisit after 90 days of GSC data.
+- Whether to canonicalize `/about/index` → `/illinois-cannabis-index` to match the top-level pattern of the new content routes. Out of scope for tonight; surface in a future canonical review.
