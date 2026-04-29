@@ -1,34 +1,312 @@
 @import "tailwindcss";
 
+/* ============================================================
+ * PuffPrice global tokens — locked per
+ * docs/brand/2026-04-28-identity-package.md
+ *
+ * Two layers:
+ *   :root          — raw token hexes
+ *   @theme inline  — Tailwind v4 token bridge (utility class names)
+ *
+ * Anything visual on the site reads through these. Inline hex literals
+ * in component code are migrating to var(--token-name) progressively.
+ * ============================================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --brand-primary: #050f09;
-  --brand-accent: #50c878;
-  --brand-text: #f0ede8;
-  --brand-muted: #8a9490;
+  /* --- Brand colors (spec 2.2) --- */
+  --color-navy: #0F1F3D;          /* navy primary — headers, body on light, wordmark */
+  --color-navy-ink: #1E3A5F;      /* secondary navy for hierarchy */
+  --color-green: #16A34A;          /* CTAs, $ accent, verified */
+  --color-green-vibrant: #4ADE80;  /* hover, pulse dot */
+  --color-green-deep: #15803D;     /* active/pressed CTA */
+  --color-cream: #F5F4F0;          /* default page bg — warmer than white */
+  --color-white: #FFFFFF;          /* card surface, inputs */
+  --color-terracotta: #C8765E;     /* secondary accent — sparingly */
+
+  /* --- Neutral scale (warm-tinted, spec 2.2) --- */
+  --color-gray-50: #FAFAF7;
+  --color-gray-100: #F1F0EB;
+  --color-gray-200: #E8E4DA;
+  --color-gray-300: #D1CFC6;
+  --color-gray-400: #9CA3AF;
+  --color-gray-500: #6B7280;
+  --color-gray-600: #4B5563;
+  --color-gray-700: #374151;       /* primary body text */
+  --color-gray-900: #0F1F3D;       /* alias of navy */
+
+  /* --- Status colors (spec 2.2) --- */
+  --color-status-verified: #16A34A;
+  --color-status-stale: #D97706;
+  --color-status-expired: #B91C1C;
+  --color-status-info: #2563EB;
+
+  /* --- Surface / chrome aliases for legibility in component code --- */
+  --color-bg: var(--color-cream);
+  --color-surface: var(--color-white);
+  --color-text: var(--color-gray-700);
+  --color-text-strong: var(--color-navy);
+  --color-text-muted: var(--color-gray-500);
+  --color-border: var(--color-gray-200);
+
+  /* --- Type stack (spec 2.3) --- */
+  --font-display: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-ui: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-serif: var(--font-source-serif), Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
+
+  /* --- Elevation (spec 2.3 visual depth) --- */
+  --shadow-sm: 0 1px 2px rgba(15, 31, 61, 0.04), 0 1px 3px rgba(15, 31, 61, 0.06);
+  --shadow-md: 0 4px 12px rgba(15, 31, 61, 0.06), 0 2px 4px rgba(15, 31, 61, 0.04);
+  --shadow-lg: 0 12px 32px rgba(15, 31, 61, 0.12), 0 4px 12px rgba(15, 31, 61, 0.08);
+
+  /* --- Radius scale (modern feel — spec 2.3) --- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-brand-primary: #050f09;
-  --color-brand-accent: #50c878;
-  --color-brand-text: #f0ede8;
-  --color-brand-muted: #8a9490;
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--color-cream);
+  --color-foreground: var(--color-gray-700);
+
+  /* Brand */
+  --color-navy: var(--color-navy);
+  --color-navy-ink: var(--color-navy-ink);
+  --color-green: var(--color-green);
+  --color-green-vibrant: var(--color-green-vibrant);
+  --color-green-deep: var(--color-green-deep);
+  --color-cream: var(--color-cream);
+  --color-terracotta: var(--color-terracotta);
+
+  /* Neutrals */
+  --color-gray-50: var(--color-gray-50);
+  --color-gray-100: var(--color-gray-100);
+  --color-gray-200: var(--color-gray-200);
+  --color-gray-300: var(--color-gray-300);
+  --color-gray-400: var(--color-gray-400);
+  --color-gray-500: var(--color-gray-500);
+  --color-gray-600: var(--color-gray-600);
+  --color-gray-700: var(--color-gray-700);
+  --color-gray-900: var(--color-gray-900);
+
+  /* Status */
+  --color-status-verified: var(--color-status-verified);
+  --color-status-stale: var(--color-status-stale);
+  --color-status-expired: var(--color-status-expired);
+  --color-status-info: var(--color-status-info);
+
+  /* Type roles — Tailwind utility names */
+  --font-display: var(--font-display);
+  --font-ui: var(--font-ui);
+  --font-serif: var(--font-serif);
+  --font-mono: var(--font-mono);
+
+  /* Backwards compatibility aliases — components still using these */
+  --font-sans: var(--font-ui);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #050f09;
-    --foreground: #f0ede8;
+/* ============================================================
+ * Base styles
+ * ============================================================ */
+
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+body {
+  background: var(--color-cream);
+  color: var(--color-gray-700);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.55;
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
+}
+
+/* ============================================================
+ * Type scale — spec 2.3
+ * Class names match the role rather than the visual size, so a
+ * future scale tweak only touches this file.
+ * ============================================================ */
+
+h1, .pp-h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.5rem, 5vw + 1rem, 4.5rem);     /* 40 → 72px */
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  color: var(--color-navy);
+}
+
+.pp-hero {                                          /* explicit hero — matches h1 max */
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(3rem, 6vw + 1rem, 4.5rem);
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  color: var(--color-navy);
+}
+
+h2, .pp-h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2rem, 3vw + 1rem, 2.5rem);       /* 32 → 40px */
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--color-navy);
+}
+
+h3, .pp-h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.375rem, 1vw + 1rem, 1.75rem);  /* 22 → 28px */
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--color-navy);
+}
+
+h4, .pp-h4 {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 1.0625rem;                              /* 17px */
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  color: var(--color-navy);
+}
+
+.pp-eyebrow {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.6875rem;                              /* 11px */
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  color: var(--color-green);
+}
+
+.pp-meta, .pp-metadata {
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 0.8125rem;                              /* 13px */
+  letter-spacing: 0.01em;
+  line-height: 1.4;
+  color: var(--color-gray-500);
+}
+
+.pp-longform {
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;                              /* 17px */
+  line-height: 1.7;
+  color: var(--color-gray-700);
+}
+
+.pp-price, .price, .discount, .distance, .timestamp, .tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* ============================================================
+ * Card depth — spec 2.3
+ * .pp-card is the canonical card surface (white, soft shadow,
+ * rounded). Hover lifts shadow + scales 1.01 (subtle, not bouncy).
+ * ============================================================ */
+
+.pp-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 200ms ease, transform 200ms ease, border-color 200ms ease;
+}
+
+.pp-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+  border-color: var(--color-gray-300);
+}
+
+.pp-card-elevated {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: box-shadow 200ms ease, transform 200ms ease;
+}
+
+.pp-card-elevated:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+ * Hero gradient (spec 2.3 — cream → warm terracotta hint).
+ * Subtle radial. Used as the homepage hero backdrop.
+ * ============================================================ */
+
+.pp-hero-bg {
+  background:
+    radial-gradient(ellipse at 80% 20%, rgba(200, 118, 94, 0.10), transparent 55%),
+    radial-gradient(ellipse at 20% 80%, rgba(22, 163, 74, 0.06), transparent 50%),
+    var(--color-cream);
+}
+
+/* Section divider — thin gradient rule */
+.pp-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--color-gray-200) 20%, var(--color-gray-200) 80%, transparent);
+  border: 0;
+  margin: 0;
+}
+
+/* ============================================================
+ * Motion — load + scroll-in. CSS-only, prefers-reduced-motion-aware.
+ * ============================================================ */
+
+@keyframes pp-fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pp-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.pp-fade-up { animation: pp-fade-up 600ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+.pp-fade-up-delay-1 { animation: pp-fade-up 600ms cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: 80ms; }
+.pp-fade-up-delay-2 { animation: pp-fade-up 600ms cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: 160ms; }
+.pp-fade-up-delay-3 { animation: pp-fade-up 600ms cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: 240ms; }
+.pp-fade-in { animation: pp-fade-in 400ms ease both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pp-fade-up, .pp-fade-up-delay-1, .pp-fade-up-delay-2, .pp-fade-up-delay-3, .pp-fade-in {
+    animation: none;
+  }
+  .pp-card, .pp-card-elevated {
+    transition: none;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ============================================================
+ * Touch-target floor (spec — mobile polish)
+ * Buttons, nav links, and CTA links must clear 44×44 on touch.
+ * ============================================================ */
+
+.pp-tap-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================
+ * Selection styling — small detail that signals "designed"
+ * ============================================================ */
+
+::selection {
+  background: rgba(22, 163, 74, 0.20);
+  color: var(--color-navy);
 }
