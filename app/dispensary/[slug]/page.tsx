@@ -530,6 +530,38 @@ export default async function DispensaryProfilePage({
           <Link href={`/claim/${slug}`}>Claim this listing →</Link>
         </div>
       </main>
+
+      <footer
+        style={{
+          background: "#0f1f3d",
+          padding: "24px 32px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: 12,
+        }}
+      >
+        <span
+          style={{
+            color: "#fff",
+            fontSize: "1rem",
+            fontWeight: 700,
+            fontFamily: "Georgia, serif",
+          }}
+        >
+          puff<span style={{ color: "#16a34a" }}>price</span>
+        </span>
+        <span
+          style={{
+            color: "#475569",
+            fontSize: "0.78rem",
+            fontFamily: "system-ui, sans-serif",
+          }}
+        >
+          © {new Date().getFullYear()} PuffPrice · Central Illinois
+        </span>
+      </footer>
     </>
   );
 }

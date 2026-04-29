@@ -204,9 +204,12 @@ export default async function DispensariesIndexPage() {
         )}
       </section>
 
-      <footer style={{ background: "#0f1f3d", padding: "20px 28px", textAlign: "center" }}>
-        <span style={{ color: "#fff", fontSize: ".9rem" }}>
-          puff<span style={{ color: "#4ade80" }}>price</span>
+      <footer style={{ background: "#0f1f3d", padding: "24px 32px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+        <span style={{ color: "#fff", fontSize: "1rem", fontWeight: 700, fontFamily: "Georgia, serif" }}>
+          puff<span style={{ color: "#16a34a" }}>price</span>
+        </span>
+        <span style={{ color: "#475569", fontSize: ".78rem", fontFamily: "system-ui, sans-serif" }}>
+          © {new Date().getFullYear()} PuffPrice · Central Illinois
         </span>
       </footer>
     </div>
