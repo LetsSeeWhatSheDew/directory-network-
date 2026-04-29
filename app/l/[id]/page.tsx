@@ -6,6 +6,7 @@ import { Metadata } from "next";
 import ClaimForm from "../../components/ClaimForm";
 import RecentlyViewedTracker from "../../components/RecentlyViewedTracker";
 import ShareDealButton from "../../components/ShareDealButton";
+import AmenityRow from "../../components/AmenityRow";
 import { estimateSavings } from "../../../lib/dealScoring";
 import DealFreshnessBadge from "../../components/DealFreshnessBadge";
 import { nowInCT, isOpen, formatTime as formatHourTime } from "../../../lib/hours";
@@ -449,17 +450,19 @@ export default async function ListingPage({
     return acc;
   }, {});
 
-  const amenities = [
-    listing.delivery === true && "🚗 Delivery",
-    listing.online_ordering === true && "📱 Online ordering",
-    listing.drive_thru === true && "🏎 Drive-thru",
-    listing.atm_onsite === true && "💵 ATM on-site",
-    listing.wheelchair_accessible === true && "♿ Accessible",
-    listing.parking === true && "🅿 Parking",
-    listing.loyalty_program === true && "⭐ Loyalty program",
-    listing.accepts_credit === true && "💳 Credit cards",
-    listing.cash_only === true && "💵 Cash only",
-  ].filter(Boolean) as string[];
+  // Amenity rendering moved into <AmenityRow /> per brand spec 2.5; this
+  // hasAmenities flag controls whether the section renders at all.
+  const hasAmenities = [
+    listing.delivery,
+    listing.online_ordering,
+    listing.drive_thru,
+    listing.atm_onsite,
+    listing.wheelchair_accessible,
+    listing.parking,
+    listing.loyalty_program,
+    listing.accepts_credit,
+    listing.cash_only,
+  ].some((v) => v === true);
 
   return (
     <>
@@ -812,11 +815,9 @@ export default async function ListingPage({
               </div>
             </div>
 
-            {amenities.length > 0 && (
+            {hasAmenities && (
               <div className="dn-amenities">
-                {amenities.map((a) => (
-                  <span key={a} className="dn-amenity">{a}</span>
-                ))}
+                <AmenityRow listing={listing} variant="pill" />
               </div>
             )}
           </div>

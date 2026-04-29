@@ -7,6 +7,8 @@
 
 import Link from "next/link";
 import Logo from "../../components/Logo";
+import AmenityRow from "../../components/AmenityRow";
+import { MapPin, Phone, Menu as MenuIcon } from "lucide-react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
@@ -263,17 +265,20 @@ export default async function DispensaryProfilePage({
     ],
   };
 
-  const amenities = [
-    listing.delivery === true && "🚗 Delivery",
-    listing.online_ordering === true && "📱 Online ordering",
-    listing.drive_thru === true && "🏎 Drive-thru",
-    listing.atm_onsite === true && "💵 ATM on-site",
-    listing.wheelchair_accessible === true && "♿ Accessible",
-    listing.parking === true && "🅿 Parking",
-    listing.loyalty_program === true && "⭐ Loyalty program",
-    listing.accepts_credit === true && "💳 Credit cards",
-    listing.cash_only === true && "💵 Cash only",
-  ].filter(Boolean) as string[];
+  // Amenity icons live in <AmenityRow /> per brand spec 2.5; this just
+  // tracks whether anything qualifies so the section renders only when
+  // there's at least one amenity to show.
+  const hasAmenities = [
+    listing.delivery,
+    listing.online_ordering,
+    listing.drive_thru,
+    listing.atm_onsite,
+    listing.wheelchair_accessible,
+    listing.parking,
+    listing.loyalty_program,
+    listing.accepts_credit,
+    listing.cash_only,
+  ].some((v) => v === true);
 
   return (
     <>
@@ -392,7 +397,7 @@ export default async function DispensaryProfilePage({
               className="contact-btn"
               aria-label={`Directions to ${name}`}
             >
-              <span className="ico">📍</span>
+              <span className="ico" aria-hidden="true"><MapPin size={20} strokeWidth={1.75} /></span>
               <span>
                 {listing.address1}
                 <span className="sub">Tap for directions</span>
@@ -401,7 +406,7 @@ export default async function DispensaryProfilePage({
           )}
           {listing.phone && (
             <a href={`tel:${listing.phone}`} className="contact-btn" aria-label={`Call ${name}`}>
-              <span className="ico">📞</span>
+              <span className="ico" aria-hidden="true"><Phone size={20} strokeWidth={1.75} /></span>
               <span>
                 {listing.phone}
                 <span className="sub">Tap to call</span>
@@ -416,7 +421,7 @@ export default async function DispensaryProfilePage({
               className="contact-btn"
               aria-label="Open full menu"
             >
-              <span className="ico">📋</span>
+              <span className="ico" aria-hidden="true"><MenuIcon size={20} strokeWidth={1.75} /></span>
               <span>
                 {listing.menu_url ? "View Full Menu" : "Visit Website"}
                 <span className="sub">{listing.menu_url ? "External menu" : "External site"}</span>
@@ -512,15 +517,12 @@ export default async function DispensaryProfilePage({
           </section>
         )}
 
-        {/* Amenities */}
-        {amenities.length > 0 && (
+        {/* Amenities — lucide icons replacing the legacy emoji per brand
+            spec 2.5. AmenityRow knows the boolean→icon mapping. */}
+        {hasAmenities && (
           <section className="section" aria-label="Amenities">
             <div className="section-h">Amenities</div>
-            <div className="amenities">
-              {amenities.map((a) => (
-                <span key={a} className="amenity">{a}</span>
-              ))}
-            </div>
+            <AmenityRow listing={listing} variant="pill" />
           </section>
         )}
 
