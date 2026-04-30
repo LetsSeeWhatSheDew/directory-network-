@@ -1,32 +1,16 @@
 import Link from "next/link";
-import dynamic from "next/dynamic";
 import Logo from "../components/Logo";
 import MobileNavMenu from "../components/MobileNavMenu";
+import Calculator from "./Calculator";
 import { TAX_RATES_LAST_UPDATED } from "../../lib/taxRates";
 
-// The interactive calculator hydrates after first paint so the static
-// framing (eyebrow, H1, prose, footer note) renders in the LCP path
-// without waiting on the form's JS.
-const Calculator = dynamic(() => import("./Calculator"), {
-  ssr: false,
-  loading: () => (
-    <div
-      style={{
-        background: "#fff",
-        border: "1px solid #e8e4da",
-        borderRadius: 14,
-        padding: 32,
-        minHeight: 280,
-        textAlign: "center",
-        color: "#9ca3af",
-        fontFamily: "var(--font-ui, system-ui, sans-serif)",
-        fontSize: ".95rem",
-      }}
-    >
-      Loading calculator…
-    </div>
-  ),
-});
+// Calculator is a Client Component (`"use client"` at top of the file).
+// Importing it directly from this Server Component is fine — Next.js
+// renders the static framing here as HTML and hydrates the calculator
+// in-place. We can't use `next/dynamic` with `{ ssr: false }` from a
+// Server Component in Next 16; the page wrapper would have to become
+// `"use client"` to do that, and we'd lose the streaming SSR for the
+// static prose.
 
 const PAGE_DESC =
   "Calculate the out-the-door price of cannabis at any Central Illinois dispensary. Enter the shelf price, product type, and city; see every tax broken out — state, county, city — and what you'll actually pay.";
