@@ -547,8 +547,10 @@ export default async function HomePage() {
         html{scroll-behavior:smooth}
         body{font-family:Georgia,serif;background:#f5f4f0;min-height:100vh;color:#0f1f3d}
 
-        /* GREEN TOP STRIPE — money signal */
-        .top-stripe{height:4px;background:#16a34a;width:100%}
+        /* The 4px green top-stripe was removed 2026-04-30 — it read as an
+           orphan green line above the nav rather than a "money signal", per
+           Matthew's user-walkthrough. Brand identity now lives in the
+           nav-bar logo and the per-deal green pricing accents instead. */
 
         /* NAV */
         .nav{
@@ -1022,13 +1024,10 @@ export default async function HomePage() {
         }
       `}</style>
 
-      {/* GREEN MONEY STRIPE */}
-      <div className="top-stripe" aria-hidden="true" />
-
       {/* NAV */}
       <nav className="nav">
         <Link href="/" className="logo" aria-label="PuffPrice home">
-          <Logo size={26} />
+          <Logo size={44} priority />
         </Link>
         <div className="nav-links desktop-only-nav">
           <Link href="/cannabis/illinois/open-now" className="nav-link">Open now</Link>
@@ -1252,7 +1251,7 @@ export default async function HomePage() {
 
       {/* FOOTER */}
       <footer className="footer">
-        <span className="footer-logo" aria-label="PuffPrice"><Logo size={20} /></span>
+        <span className="footer-logo" aria-label="PuffPrice"><Logo size={32} /></span>
         <div className="footer-links">
           <Link href="/" className="footer-link">Central Illinois</Link>
           <Link href="/cannabis/illinois/first-time-guide" className="footer-link">First-time guide</Link>

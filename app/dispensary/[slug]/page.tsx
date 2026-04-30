@@ -289,7 +289,6 @@ export default async function DispensaryProfilePage({
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
         body{font-family:Georgia,serif;background:#f5f4f0;color:#0f1f3d;min-height:100vh}
-        .top-stripe{height:4px;background:#16a34a;width:100%}
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;position:sticky;top:0;z-index:100;border-bottom:1px solid #e8e4da}
         .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
         .logo-dot{width:8px;height:8px;border-radius:50%;background:#16a34a;animation:pulse 2.5s infinite}
@@ -362,7 +361,6 @@ export default async function DispensaryProfilePage({
         @media(max-width:600px){.wrap{padding:24px 14px}.contact-btn{flex-basis:100%}}
       `}</style>
 
-      <div className="top-stripe" aria-hidden="true" />
       <nav className="nav">
         <Link href="/" className="logo" aria-label="PuffPrice home">
           <Logo />

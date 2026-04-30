@@ -108,7 +108,6 @@ export default async function MapPage() {
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
         html,body{height:100%;font-family:Georgia,serif;background:#f5f4f0}
-        .top-stripe{height:4px;background:#16a34a;width:100%}
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #e8e4da}
         .logo{color:#0f1f3d;text-decoration:none;font-weight:700;letter-spacing:-.02em}
         .logo span{color:#16a34a}
@@ -120,7 +119,6 @@ export default async function MapPage() {
         @keyframes mapspin{to{transform:rotate(360deg)}}
       `}</style>
 
-      <div className="top-stripe" aria-hidden="true" />
       <nav className="nav">
         <Link href="/" className="logo" aria-label="PuffPrice home"><Logo /></Link>
         <Link href="/" className="back">← Home</Link>

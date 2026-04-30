@@ -612,7 +612,6 @@ export default async function ListingPage({
       `}</style>
 
       <div className="dn-root">
-        <div className="top-stripe" aria-hidden="true" style={{ height: 4, background: "#16a34a", width: "100%" }} />
         <nav className="dn-nav">
           <Link href="/" className="dn-nav-brand">
             <span className="dn-nav-dot" aria-hidden="true" />

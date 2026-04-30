@@ -66,9 +66,9 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: `${brand.url}/logo-512.png`,
-        width: 512,
-        height: 512,
+        url: `${brand.url}/og-image.png`,
+        width: 1200,
+        height: 630,
         alt: `${brand.name} — ${brand.tagline}`,
       },
     ],
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `Cannabis Deals in Central Illinois | ${brand.name}`,
     description: brand.description,
-    images: [`${brand.url}/logo-512.png`],
+    images: [`${brand.url}/og-image.png`],
   },
 };
 

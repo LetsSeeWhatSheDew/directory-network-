@@ -33,7 +33,6 @@ export default async function BrandIndex() {
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
         body{font-family:Georgia,serif;background:#f5f4f0;color:#0f1f3d;min-height:100vh}
-        .top-stripe{height:4px;background:#16a34a}
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #e8e4da}
         .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
         .logo-text{font-size:1.1rem;font-weight:700;color:#0f1f3d}
@@ -51,7 +50,6 @@ export default async function BrandIndex() {
         .stub-foot a:hover{text-decoration:underline}
       `}</style>
 
-      <div className="top-stripe" aria-hidden="true" />
       <nav className="nav">
         <Link href="/" className="logo" aria-label="PuffPrice home">
           <Logo />
