@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import Logo from "../components/Logo";
 
@@ -35,7 +36,29 @@ export default function AboutPage() {
         .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none}
         .back{font-size:.82rem;color:#6b7280;text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif)}
         .back:hover{color:#0f1f3d}
-        .wrap{max-width:680px;margin:0 auto;padding:72px 28px 64px}
+        .about-photo{
+          position:relative;
+          width:100%;
+          height:clamp(220px, 30vw, 380px);
+          overflow:hidden;
+        }
+        .about-photo img{object-fit:cover;object-position:center 30%}
+        .about-photo-tint{
+          position:absolute;inset:0;
+          background:
+            linear-gradient(to bottom,
+              rgba(245,244,240,0) 60%,
+              rgba(245,244,240,0.95) 100%),
+            linear-gradient(rgba(15,31,61,0.06), rgba(15,31,61,0.06));
+          pointer-events:none;
+        }
+        .about-photo-credit{
+          position:absolute;bottom:8px;right:12px;
+          font-size:.7rem;color:rgba(255,255,255,0.85);
+          font-family:var(--font-ui, system-ui, sans-serif);
+          text-shadow:0 1px 2px rgba(0,0,0,0.4);
+        }
+        .wrap{max-width:680px;margin:0 auto;padding:48px 28px 64px}
         .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#16a34a;font-family:var(--font-ui, system-ui, sans-serif);margin-bottom:14px}
         h1{
           font-family:var(--font-display, var(--font-geist-sans));
@@ -68,6 +91,20 @@ export default function AboutPage() {
         </Link>
         <Link href="/" className="back">← Back</Link>
       </nav>
+
+      {/* Downtown Peoria building with US flag, photographed through bare
+          branches (Darrien Staton, Unsplash). Place-rooted establishing
+          shot for "I'm Matthew. I live in Peoria." */}
+      <div className="about-photo">
+        <Image
+          src="/photography/about-peoria-flag.jpg"
+          alt="Downtown Peoria, Illinois building with American flag, viewed through bare tree branches"
+          fill
+          priority
+          sizes="100vw"
+        />
+        <div className="about-photo-tint" aria-hidden="true" />
+      </div>
 
       <main className="wrap">
         <div className="eyebrow">About</div>

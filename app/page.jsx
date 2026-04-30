@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import Logo from "./components/Logo";
 import LocationAware from "./components/LocationAware";
@@ -664,14 +665,50 @@ export default async function HomePage() {
         .promo-cta:hover{text-decoration:underline}
         @media(max-width:520px){.promo-inner{padding:8px 14px}.promo-text{font-size:.75rem}}
 
-        /* HERO — pp-hero-bg from globals.css now drives the backdrop
-           (warm cream + radial-gradient terracotta hint). The local
-           rule keeps the layout shape and removes the prior white. */
+        /* HERO — photo backdrop (Central IL place) + cream gradient
+           overlay to keep the headline legible. The pp-hero-bg fallback
+           class still provides the warm radial-gradient if the photo
+           fails to load. */
         .hero{
           padding:36px 28px 56px;
           position:relative;
           overflow:hidden;
           border-bottom:1px solid #e8e4da;
+          isolation:isolate;
+        }
+        .hero-photo{position:absolute;inset:0;z-index:0;pointer-events:none}
+        .hero-photo img{
+          object-fit:cover;
+          object-position:center 35%;
+        }
+        /* The legibility scrim: cream fade on the left so the headline
+           reads navy-on-cream, plus a subtle 5–6% navy tint over the
+           whole photo per brand spec 2.4 ("5–8% navy-tinted overlay
+           pulls the image into the brand without recoloring it"). */
+        .hero-photo-overlay{
+          position:absolute;inset:0;z-index:0;pointer-events:none;
+          background:
+            linear-gradient(to right,
+              rgba(245,244,240,0.96) 0%,
+              rgba(245,244,240,0.78) 35%,
+              rgba(245,244,240,0.35) 65%,
+              rgba(245,244,240,0.05) 100%),
+            linear-gradient(to bottom,
+              rgba(15,31,61,0.06),
+              rgba(15,31,61,0.06));
+        }
+        @media(max-width:900px){
+          /* On mobile we lose the right column, so cream needs to
+             extend further across to keep the headline legible against
+             the right side of the photo. */
+          .hero-photo-overlay{
+            background:
+              linear-gradient(to bottom,
+                rgba(245,244,240,0.92) 0%,
+                rgba(245,244,240,0.55) 60%,
+                rgba(245,244,240,0.30) 100%),
+              linear-gradient(rgba(15,31,61,0.08), rgba(15,31,61,0.08));
+          }
         }
         .hero-inner{position:relative;z-index:1;max-width:1100px;margin:0 auto}
         .hero-grid{
@@ -899,8 +936,26 @@ export default async function HomePage() {
         .footer-copy{font-size:.72rem;color:#9ca3af;font-family:system-ui,sans-serif}
 
         /* SECTION 3 — CITIES GRID (Phase 4 layout consolidation) */
-        .cities-section{background:#fff;border-top:1px solid #e8e4da;border-bottom:1px solid #e8e4da;padding:64px 28px}
-        .cities-inner{max-width:1100px;margin:0 auto}
+        .cities-section{background:#fff;border-top:1px solid #e8e4da;border-bottom:1px solid #e8e4da;padding:0 0 64px;position:relative}
+        /* Banner photo above the city grid — positions us geographically. */
+        .cities-banner{
+          position:relative;
+          width:100%;
+          height:clamp(180px, 22vw, 320px);
+          overflow:hidden;
+          margin-bottom:48px;
+        }
+        .cities-banner img{object-fit:cover;object-position:center 60%}
+        .cities-banner-tint{
+          position:absolute;inset:0;
+          background:
+            linear-gradient(to bottom,
+              rgba(245,244,240,0) 60%,
+              rgba(255,255,255,0.85) 100%),
+            linear-gradient(rgba(15,31,61,0.06), rgba(15,31,61,0.06));
+          pointer-events:none;
+        }
+        .cities-inner{max-width:1100px;margin:0 auto;padding:0 28px}
         .cities-h2{margin:8px 0 28px}
         .cities-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
         @media(min-width:720px){.cities-grid{grid-template-columns:repeat(3,1fr);gap:18px}}
@@ -938,7 +993,27 @@ export default async function HomePage() {
           background:linear-gradient(180deg, #F5F4F0 0%, #FFFFFF 100%);
           padding:72px 28px;
         }
-        .trust-inner{max-width:680px;margin:0 auto;text-align:center}
+        .trust-grid{
+          max-width:1100px;margin:0 auto;
+          display:grid;grid-template-columns:1fr;gap:36px;
+          align-items:center;
+        }
+        @media(min-width:900px){
+          .trust-grid{grid-template-columns:1.1fr 1fr;gap:56px}
+        }
+        .trust-photo{
+          position:relative;
+          aspect-ratio:4/3;
+          border-radius:14px;
+          overflow:hidden;
+          box-shadow:0 1px 3px rgba(15,31,61,0.06), 0 8px 24px rgba(15,31,61,0.08);
+        }
+        .trust-photo img{object-fit:cover}
+        .trust-inner{max-width:560px;margin:0 auto;text-align:left}
+        @media(max-width:900px){
+          .trust-inner{text-align:center;margin:0 auto}
+          .trust-photo{order:-1;max-width:560px;margin:0 auto}
+        }
         .trust-h2{margin:8px 0 18px;letter-spacing:-.03em}
         .trust-body{
           font-family:var(--font-serif, Georgia, serif);
@@ -1014,8 +1089,19 @@ export default async function HomePage() {
           class layers a warm cream + terracotta-hint radial gradient
           per brand spec 2.3 in lieu of hero photography (deferred). */}
       <div className="hero pp-hero-bg">
-        <PlantSilhouette side="left" />
-        <PlantSilhouette side="right" />
+        {/* Hero backdrop — Downtown Peoria (Darrien Staton, Unsplash).
+            The cream gradient overlay below keeps the headline legible
+            without forcing the photo darker. */}
+        <div className="hero-photo">
+          <Image
+            src="/photography/hero-peoria-downtown.jpg"
+            alt="Downtown Peoria, Illinois at golden hour"
+            fill
+            priority
+            sizes="100vw"
+          />
+        </div>
+        <div className="hero-photo-overlay" aria-hidden="true" />
         <div className="hero-inner">
           <div className="hero-grid">
             <div className="hero-left pp-fade-up">
@@ -1098,6 +1184,20 @@ export default async function HomePage() {
        * opening in a hidden city brings its slug back automatically.
        * ============================================================ */}
       <section className="cities-section" aria-labelledby="cities-heading">
+        {/* Banner — University of Illinois South Farms in Urbana
+            (James Baltz, Unsplash). The Central IL patchwork from
+            above; positions us geographically without leaning on a
+            state outline. */}
+        <div className="cities-banner">
+          <Image
+            src="/photography/cities-il-farmland.jpg"
+            alt="Central Illinois farmland under a wide sunset sky"
+            fill
+            sizes="100vw"
+            loading="lazy"
+          />
+          <div className="cities-banner-tint" aria-hidden="true" />
+        </div>
         <div className="cities-inner">
           <p className="pp-eyebrow">Central Illinois · Coverage</p>
           <h2 id="cities-heading" className="cities-h2">Browse deals by city</h2>
@@ -1149,17 +1249,31 @@ export default async function HomePage() {
        * and let the typography (Source Serif 4 long-form) carry it.
        * ============================================================ */}
       <section className="trust-section" aria-labelledby="trust-heading">
-        <div className="trust-inner pp-fade-up">
-          <p className="pp-eyebrow">About PuffPrice</p>
-          <h2 id="trust-heading" className="trust-h2">We built the thing we wished existed.</h2>
-          <p className="trust-body pp-longform">
-            One person, in a parking lot, looking for a real deal — that's the user.
-            We pull deals from direct dispensary websites and official social only.
-            No aggregator scraping. Re-verified daily. Free to browse, always.
-          </p>
-          <div className="trust-cta-row">
-            <Link href="/about" className="trust-cta">Read the about page →</Link>
-            <Link href="/alerts" className="trust-cta-muted">Get free deal alerts</Link>
+        <div className="trust-grid">
+          <div className="trust-inner pp-fade-up">
+            <p className="pp-eyebrow">About PuffPrice</p>
+            <h2 id="trust-heading" className="trust-h2">We built the thing we wished existed.</h2>
+            <p className="trust-body pp-longform">
+              One person, in a parking lot, looking for a real deal — that&apos;s the user.
+              We pull deals from direct dispensary websites and official social only.
+              No aggregator scraping. Re-verified daily. Free to browse, always.
+            </p>
+            <div className="trust-cta-row">
+              <Link href="/about" className="trust-cta">Read the about page →</Link>
+              <Link href="/alerts" className="trust-cta-muted">Get free deal alerts</Link>
+            </div>
+          </div>
+          {/* Algonquin-Minonk windfarm at sunset, Illinois (Laura Ockel,
+              Unsplash). The "Tuesday afternoon, not a rave" mood the
+              brand spec asks for. */}
+          <div className="trust-photo">
+            <Image
+              src="/photography/trust-il-windfarm-sunset.jpg"
+              alt="Wind turbines on an Illinois farm at sunset"
+              fill
+              sizes="(max-width: 900px) 100vw, 45vw"
+              loading="lazy"
+            />
           </div>
         </div>
       </section>
@@ -1235,7 +1349,7 @@ export default async function HomePage() {
           <Link href="/cannabis/illinois/laws" className="footer-link">IL laws</Link>
           <Link href="/dispensaries" className="footer-link">For dispensaries</Link>
         </div>
-        <span className="footer-copy">© {new Date().getFullYear()} PuffPrice</span>
+        <span className="footer-copy">© {new Date().getFullYear()} PuffPrice · Photography via Unsplash</span>
       </footer>
 
       {/* Mobile-only sticky bottom CTA — appears once user scrolls
