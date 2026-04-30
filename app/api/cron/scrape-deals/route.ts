@@ -12,6 +12,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { runCilScrape } from "@/lib/scraper/cil-deal-scraper";
+import { runDailyVerificationSweep } from "@/lib/scraper/dailyVerification";
 import { checkCronAuth } from "@/lib/cronAuth";
 
 export const dynamic = "force-dynamic";
@@ -50,6 +51,16 @@ async function handle(req: NextRequest): Promise<NextResponse> {
       apply: true,
       maxListings: 30,
     });
+
+    // Post-scrape sweep: bump verified_at on active deals the scraper
+    // didn't touch this run (within-48h trust tier) and deactivate ones
+    // that have gone 7+ days without an independent verification. See
+    // lib/scraper/dailyVerification.ts for the tier policy.
+    const verification = await runDailyVerificationSweep({
+      supabaseUrl: SUPABASE_URL,
+      serviceKey: SERVICE_KEY,
+    });
+
     console.log("[scrape-deals]", JSON.stringify({
       mode: summary.mode,
       listings_processed: summary.listings_processed,
@@ -58,8 +69,17 @@ async function handle(req: NextRequest): Promise<NextResponse> {
       deals_aged: summary.deals_aged.length,
       fetch_errors: summary.fetch_errors.length,
       rate_limited_hosts: summary.rate_limited_hosts,
+      verification: {
+        scanned: verification.scanned,
+        bumped: verification.bumped,
+        held: verification.held,
+        deactivated: verification.deactivated,
+        skipped: verification.skipped ?? false,
+        reason: verification.reason ?? null,
+        errors: verification.errors.length,
+      },
     }));
-    return NextResponse.json(summary);
+    return NextResponse.json({ ...summary, verification });
   } catch (err) {
     console.error("[scrape-deals] fatal", err);
     return NextResponse.json(

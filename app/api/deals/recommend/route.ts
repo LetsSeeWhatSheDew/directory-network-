@@ -7,7 +7,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isInMetro } from "../../../../lib/cityNormalize";
 import { computeOpenStatus, type HoursRow } from "../../../../lib/hours";
-import { isFreshFeatured } from "../../../../lib/dealFreshness";
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL ||
@@ -187,21 +186,13 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ ...emptyResponse(category, city), deals: [] });
     }
 
-    // Featured-slot staleness gate: pick the highest-scored deal whose
-    // verified_at is within 7 days. If nothing qualifies, return a null
-    // topPick so the hero renders its empty state — but still return the
-    // full combined deal list so the homepage grid keeps surfacing the
-    // older deals with their existing freshness badges.
-    const top = combined.find((d) => isFreshFeatured(d.verified_at)) || null;
-    if (!top) {
-      return NextResponse.json({
-        ...emptyResponse(category, city),
-        deals: combined,
-        totalFound: combined.length,
-        localCount: scoredLocal.length,
-        likelyOpen: openNow,
-      });
-    }
+    // Top pick is whichever deal is highest-ranked. The 7-day freshness
+    // gate previously gated this slot, but with the daily-verification
+    // sweep now deactivating any deal >7d without independent verification
+    // (lib/scraper/dailyVerification.ts), every active deal in `combined`
+    // is by definition fresh enough to feature. Per-card freshness badges
+    // still carry transparency at the row level.
+    const top = combined[0];
     const topSlug = String(top.slug || top.listing_slug || "");
     const meta = topSlug
       ? await fetchListingMeta(topSlug)

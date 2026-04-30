@@ -20,7 +20,6 @@ import {
   CENTRAL_IL_CITIES,
   CENTRAL_IL_PUBLIC_CITIES,
 } from "../lib/constants/regions";
-import { isFreshFeatured } from "../lib/dealFreshness";
 
 // Metadata — Central IL framing. The full IL footprint stays discoverable
 // via the "Browse all Illinois" link below; out-of-scope city pages keep
@@ -526,14 +525,17 @@ export default async function HomePage() {
   const userCity = userLoc?.city || null;
   const localizedTopDeals = preferLocalDeals(topDeals, userCity);
   const localizedDealPool = preferLocalDeals(dealPool, userCity);
-  // Featured-slot staleness gate. The hero card must show a deal whose
-  // verified_at is within 7 days, otherwise we'd hand the most prominent
-  // surface on the site a "may be outdated" amber warning. If nothing
-  // qualifies, render an honest empty state. Lower-priority surfaces
-  // (deal grid, ending-soon row) keep using DealFreshnessBadge so older
-  // deals continue to surface with their existing transparency labels.
-  const featuredDeal =
-    localizedTopDeals.find((d) => isFreshFeatured(d?.verified_at)) || null;
+  // Featured deal: top-ranked active deal in the user's localized pool.
+  // The hero used to gate on a 7-day verified_at window, but that gate
+  // produced an empty state ("No featured deal today") on every day
+  // where the daily cron couldn't independently re-confirm a particular
+  // dispensary. With the new daily-verification sweep
+  // (lib/scraper/dailyVerification.ts), no active deal can be older than
+  // 7 days without independent verification — they auto-deactivate at
+  // that point — so the gate has become redundant. The hero now picks
+  // whichever deal is top-ranked and the per-card freshness badge tells
+  // the truth at the row level.
+  const featuredDeal = localizedTopDeals[0] || null;
   return (
     <>
       <script

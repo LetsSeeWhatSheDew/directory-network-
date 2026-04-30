@@ -529,9 +529,45 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
   );
 
   if (cfg.mode === "live" && cfg.apply && cfg.serviceKey) {
+    // last_independent_verification is what the daily-verification sweep
+    // reads to decide trust tier. The scraper IS the independent
+    // verification — so any time we insert or update a deal here, both
+    // verified_at (display freshness) and last_independent_verification
+    // (audit anchor) get the same NOW timestamp.
+    const tryColumns = async (
+      path: string,
+      bodyWithCol: Record<string, unknown>,
+      bodyFallback: Record<string, unknown>,
+      method: "insert" | "patch"
+    ) => {
+      try {
+        if (method === "insert") {
+          await supaInsert(cfg.supabaseUrl, cfg.serviceKey!, "/deals", bodyWithCol);
+        } else {
+          await supaPatch(cfg.supabaseUrl, cfg.serviceKey!, path, bodyWithCol);
+        }
+        return;
+      } catch (err) {
+        const msg = String((err as Error).message);
+        // Pre-migration: column doesn't exist. Retry without it. The
+        // scraper still works — we just lose the audit anchor for this
+        // run. Once Matthew applies the migration, both fields populate.
+        if (/last_independent_verification/i.test(msg)) {
+          if (method === "insert") {
+            await supaInsert(cfg.supabaseUrl, cfg.serviceKey!, "/deals", bodyFallback);
+          } else {
+            await supaPatch(cfg.supabaseUrl, cfg.serviceKey!, path, bodyFallback);
+          }
+          return;
+        }
+        throw err;
+      }
+    };
+
     for (const u of upsertPlan) {
       if (u.op === "insert") {
-        await supaInsert(cfg.supabaseUrl, cfg.serviceKey, "/deals", {
+        const nowIso = new Date().toISOString();
+        const insertBase = {
           listing_slug: u.scraped.listing_slug,
           project_tag: "green",
           title: u.scraped.title,
@@ -547,20 +583,33 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
           source_url: u.scraped.source_url,
           is_active: true,
           status_reason: "scraped_direct_source",
-          verified_at: new Date().toISOString(),
+          verified_at: nowIso,
           verified_by: "scraper@puffprice.com",
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        });
+          created_at: nowIso,
+          updated_at: nowIso,
+        };
+        await tryColumns(
+          "",
+          { ...insertBase, last_independent_verification: nowIso },
+          insertBase,
+          "insert"
+        );
         summary.deals_inserted.push({ slug: u.scraped.listing_slug, title: u.scraped.title });
       } else if (u.op === "update" && u.existingId) {
-        await supaPatch(cfg.supabaseUrl, cfg.serviceKey, `/deals?id=eq.${u.existingId}`, {
-          verified_at: new Date().toISOString(),
+        const nowIso = new Date().toISOString();
+        const patchBase = {
+          verified_at: nowIso,
           verified_by: "scraper@puffprice.com",
           status_reason: "scraped_direct_source",
           is_active: true,
-          updated_at: new Date().toISOString(),
-        });
+          updated_at: nowIso,
+        };
+        await tryColumns(
+          `/deals?id=eq.${u.existingId}`,
+          { ...patchBase, last_independent_verification: nowIso },
+          patchBase,
+          "patch"
+        );
         summary.deals_updated.push({ slug: u.scraped.listing_slug, title: u.scraped.title });
       }
     }

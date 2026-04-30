@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { estimateSavings, formatSavingsDollars, hasExactSavings } from "../../lib/dealScoring";
 import { displayCity } from "../../lib/cityNormalize";
 import { listingHref } from "../../lib/links";
-import { isFreshFeatured } from "../../lib/dealFreshness";
 import TrackedLink from "./TrackedLink";
 import DealFreshnessBadge from "./DealFreshnessBadge";
 
@@ -34,6 +33,7 @@ type Recommendation = {
   topPick: Deal | null;
   deals?: Deal[];
   likelyOpen?: boolean;
+  openStatus?: { isOpen: boolean; label: string } | null;
 };
 
 function slugToName(s: string) {
@@ -109,32 +109,20 @@ function dispatchSavings(d: Deal | null) {
   } catch {}
 }
 
-// Pick the first deal in a list that passes the 7-day featured-slot
-// freshness gate. Returns null if nothing qualifies — caller renders the
-// empty state instead. Mirrors the same gate applied server-side in
-// app/page.jsx and in /api/deals/recommend so both surfaces agree.
-function pickFreshDeal(deals: Deal[] | null | undefined): Deal | null {
-  if (!Array.isArray(deals)) return null;
-  for (const d of deals) {
-    if (isFreshFeatured(d?.verified_at ?? null)) return d;
-  }
-  return null;
-}
-
 export default function HeroDealCard({
   initial,
-  totalDealCount = 0,
+  totalDealCount: _totalDealCount = 0,
 }: {
   initial: Deal | null;
   totalDealCount?: number;
 }) {
-  // The server-resolved `initial` already passes the freshness gate (see
-  // app/page.jsx). The client effect may receive a stale topPick if a
-  // future API change reverts the gate, so we re-check on the client too
-  // — defense in depth, and cheap.
-  const initialFresh =
-    initial && isFreshFeatured(initial.verified_at) ? initial : null;
-  const [deal, setDeal] = useState<Deal | null>(initialFresh);
+  // The 7-day featured-slot freshness gate has been retired (2026-04-30).
+  // The daily-verification sweep (lib/scraper/dailyVerification.ts) now
+  // deactivates any active deal that's gone 7+ days without an
+  // independent verification, so any active deal that reaches this
+  // component is safe to feature. Per-card freshness badges still
+  // surface the actual age at the row level.
+  const [deal, setDeal] = useState<Deal | null>(initial);
   const [city, setCity] = useState<string | null>(null);
   const [openStatus, setOpenStatus] = useState<{ isOpen: boolean; label: string } | null>(null);
   const [resolved, setResolved] = useState(false);
@@ -153,16 +141,10 @@ export default function HeroDealCard({
       setResolved(true);
       fetchRecommendation(cached, controller.signal).then((data) => {
         if (cancelled) return;
-        // /api/deals/recommend now returns topPick=null when nothing is
-        // within the 7-day window. Fall back to the city-localized list
-        // it returns in `deals` and pick the first fresh entry there;
-        // otherwise fall back to the server-rendered initialFresh; if
-        // none of those qualify, render the empty state.
         const apiTop =
-          data?.topPick && isFreshFeatured(data.topPick.verified_at)
-            ? data.topPick
-            : pickFreshDeal(data?.deals);
-        const next = apiTop || initialFresh;
+          data?.topPick ||
+          (Array.isArray(data?.deals) && data.deals.length > 0 ? data.deals[0] : null);
+        const next = apiTop || initial;
         setDeal(next);
         if (data?.openStatus && typeof data.openStatus.label === "string") {
           setOpenStatus(data.openStatus);
@@ -184,10 +166,9 @@ export default function HeroDealCard({
         fetchRecommendation(detail.city, controller.signal).then((data) => {
           if (cancelled) return;
           const apiTop =
-            data?.topPick && isFreshFeatured(data.topPick.verified_at)
-              ? data.topPick
-              : pickFreshDeal(data?.deals);
-          const next = apiTop || initialFresh;
+            data?.topPick ||
+            (Array.isArray(data?.deals) && data.deals.length > 0 ? data.deals[0] : null);
+          const next = apiTop || initial;
           setDeal(next);
           if (data?.openStatus && typeof data.openStatus.label === "string") {
             setOpenStatus(data.openStatus);
@@ -195,8 +176,8 @@ export default function HeroDealCard({
           dispatchSavings(next);
         });
       } else {
-        setDeal(initialFresh);
-        dispatchSavings(initialFresh);
+        setDeal(initial);
+        dispatchSavings(initial);
       }
     };
 
@@ -206,7 +187,7 @@ export default function HeroDealCard({
       controller.abort();
       window.removeEventListener("cl:location-resolved", handler);
     };
-  }, [initial, initialFresh]);
+  }, [initial]);
 
   // Pre-resolution skeleton — keeps perceived load tight while client
   // location detection runs.
@@ -232,29 +213,24 @@ export default function HeroDealCard({
     );
   }
 
-  // Post-resolution empty state — no deal in the last 7 days qualifies
-  // for the featured slot. Tell the truth and route the user to the
-  // grid (which still surfaces older deals with their freshness badges
-  // intact). Total dealCount is the homepage stats-line count so the CTA
-  // copy stays in sync with what the user can verify just below.
+  // Catastrophe-state empty: only fires when the entire site has zero
+  // active deals (totalDealCount === 0). The 7-day "no featured deal
+  // today" empty state was retired 2026-04-30 — the daily-verification
+  // sweep now keeps active deals fresh, so any time we have any active
+  // deals at all we can fill the hero.
   if (!deal) {
-    const ctaLabel =
-      totalDealCount > 0
-        ? `See all ${totalDealCount} active Central IL deals →`
-        : "Browse all Central IL deals →";
     return (
       <div className="hero-deal-card hero-deal-empty">
         <div className="hero-deal-label" style={{ color: "#9ca3af" }}>
           {city ? `Deals near ${city}` : "Central Illinois deals"}
         </div>
-        <div className="hero-deal-empty-headline">No featured deal today</div>
+        <div className="hero-deal-empty-headline">Pulling today's deals…</div>
         <p className="hero-deal-empty-sub">
-          We only feature deals re-verified in the last 7 days. Today's pool
-          is older — browse the live grid to see every active deal with its
-          freshness label.
+          We're re-verifying with Central Illinois dispensaries right now.
+          Browse the directory while we finish.
         </p>
-        <Link href="/deals/all" className="hero-deal-cta hero-deal-empty-cta">
-          {ctaLabel}
+        <Link href="/dispensaries" className="hero-deal-cta hero-deal-empty-cta">
+          Browse Central IL dispensaries →
         </Link>
         <style>{`
           .hero-deal-empty-headline{font-family:Georgia,serif;font-size:1.6rem;font-weight:700;color:#0f1f3d;letter-spacing:-.02em;margin:8px 0 6px}
