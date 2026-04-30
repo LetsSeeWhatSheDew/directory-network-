@@ -1188,7 +1188,7 @@ export default async function HomePage() {
             (James Baltz, Unsplash). The Central IL patchwork from
             above; positions us geographically without leaning on a
             state outline. */}
-        <div className="cities-banner">
+        <div className="cities-banner pp-fade-in">
           <Image
             src="/photography/cities-il-farmland.jpg"
             alt="Central Illinois farmland under a wide sunset sky"
@@ -1266,7 +1266,7 @@ export default async function HomePage() {
           {/* Algonquin-Minonk windfarm at sunset, Illinois (Laura Ockel,
               Unsplash). The "Tuesday afternoon, not a rave" mood the
               brand spec asks for. */}
-          <div className="trust-photo">
+          <div className="trust-photo pp-fade-up">
             <Image
               src="/photography/trust-il-windfarm-sunset.jpg"
               alt="Wind turbines on an Illinois farm at sunset"
