@@ -935,6 +935,36 @@ export default async function HomePage() {
         .footer-link:hover{color:#0f1f3d}
         .footer-copy{font-size:.72rem;color:#9ca3af;font-family:system-ui,sans-serif}
 
+        /* TAX CALCULATOR CALLOUT — sits between deals and cities. Navy
+           bg with a single CTA; the differentiator we lead with. */
+        .tax-callout{background:#0F1F3D;color:#FAFAF7;padding:64px 28px}
+        .tax-callout-inner{max-width:760px;margin:0 auto;text-align:center}
+        .tax-callout .pp-eyebrow{color:#4ADE80}
+        .tax-callout-h2{
+          font-family:var(--font-display, var(--font-geist-sans));
+          font-size:clamp(1.5rem, 3vw, 2rem);font-weight:600;
+          letter-spacing:-.03em;line-height:1.2;
+          color:#FAFAF7;margin:8px 0 14px;
+        }
+        .tax-callout-body{
+          font-family:var(--font-ui, system-ui, sans-serif);
+          font-size:1.0625rem;line-height:1.6;color:#cbd5e1;
+          max-width:560px;margin:0 auto 24px;
+        }
+        .tax-callout-cta{
+          display:inline-flex;align-items:center;
+          background:#16A34A;color:#fff;
+          padding:13px 26px;border-radius:10px;
+          font-family:var(--font-ui, system-ui, sans-serif);
+          font-weight:700;font-size:.95rem;
+          text-decoration:none;min-height:44px;
+          transition:background 150ms ease, transform 150ms ease;
+        }
+        .tax-callout-cta:hover{background:#15803D;transform:translateY(-1px)}
+        @media(max-width:520px){
+          .tax-callout{padding:52px 18px}
+        }
+
         /* SECTION 3 — CITIES GRID (Phase 4 layout consolidation) */
         .cities-section{background:#fff;border-top:1px solid #e8e4da;border-bottom:1px solid #e8e4da;padding:0 0 64px;position:relative}
         /* Banner photo above the city grid — positions us geographically. */
@@ -1077,6 +1107,7 @@ export default async function HomePage() {
           <Link href="/map" className="nav-link">Map view</Link>
           <Link href="/" className="nav-link">Browse Central IL</Link>
           <Link href="/about" className="nav-link">About</Link>
+          <Link href="/illinois-cannabis-tax-calculator" className="nav-link">Tax calculator</Link>
           <Link href="/dispensaries" className="nav-cta">For dispensaries</Link>
         </div>
         <MobileNavMenu />
@@ -1175,6 +1206,27 @@ export default async function HomePage() {
       <div className="deals-section">
         <HomeDealCards initial={localizedTopDeals} dealCount={dealCount} mostRecent={mostRecentTs} />
       </div>
+
+      {/* TAX CALCULATOR CALLOUT — between deals and city grid. The
+          calculator is the moat play: no aggregator builds this, and
+          the buyer sees the actual out-the-door price before the
+          dispensary parking lot. */}
+      <section className="tax-callout" aria-labelledby="tax-callout-heading">
+        <div className="tax-callout-inner pp-fade-up">
+          <p className="pp-eyebrow">Pricing</p>
+          <h2 id="tax-callout-heading" className="tax-callout-h2">
+            Wondering what you&apos;ll actually pay at the register?
+          </h2>
+          <p className="tax-callout-body">
+            Illinois cannabis tax runs 26%–45% of the shelf price depending on
+            product type and city. Our calculator shows you the real out-the-door
+            price for any Central Illinois dispensary.
+          </p>
+          <Link href="/illinois-cannabis-tax-calculator" className="tax-callout-cta">
+            See out-the-door prices for your city →
+          </Link>
+        </div>
+      </section>
 
       {/* ============================================================
        * SECTION 3 — Browse by city
