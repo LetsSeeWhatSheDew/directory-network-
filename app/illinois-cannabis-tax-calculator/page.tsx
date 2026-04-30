@@ -132,7 +132,7 @@ export default function TaxCalculatorPage() {
           <Logo size={36} />
         </Link>
         <div className="nav-links desktop-only-nav">
-          <Link href="/" className="nav-link">Browse Central IL</Link>
+          <Link href="/dispensaries" className="nav-link">Browse Central IL</Link>
           <Link href="/about" className="nav-link">About</Link>
           <Link href="/illinois-cannabis-tax" className="nav-link">Tax explainer</Link>
           <Link href="/dispensaries" className="nav-cta">For dispensaries</Link>

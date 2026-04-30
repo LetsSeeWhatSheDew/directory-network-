@@ -638,7 +638,12 @@ export default async function HomePage() {
           border-bottom:1px solid #e8e4da;
         }
         .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
-        .logo img{width:56px!important;height:56px!important}
+        /* Logo sizing — desktop 60px tall, mobile 46px tall.
+           !important overrides Logo.tsx's inline style so the canonical
+           PNG (272×299) keeps its real aspect ratio at every breakpoint. */
+        .nav .logo img{width:auto!important;height:60px!important}
+        @media(max-width:768px){.nav .logo img{height:46px!important}}
+        .footer .footer-logo img{width:auto!important;height:40px!important}
         .logo-mark{position:relative;width:28px;height:28px;display:inline-block;flex-shrink:0}
         .logo-mark-dot{position:absolute;top:-2px;right:-2px;width:10px;height:10px;border-radius:50%;background:#16a34a;border:2px solid #fff;animation:pulse 2.5s infinite}
         .logo-dot{width:8px;height:8px;border-radius:50%;background:#16a34a;animation:pulse 2.5s infinite}
@@ -1105,7 +1110,7 @@ export default async function HomePage() {
           <Link href="/cannabis/illinois/open-now" className="nav-link">Open now</Link>
           <Link href="/savings/dashboard" className="nav-link">My savings</Link>
           <Link href="/map" className="nav-link">Map view</Link>
-          <Link href="/" className="nav-link">Browse Central IL</Link>
+          <Link href="/dispensaries" className="nav-link">Browse Central IL</Link>
           <Link href="/about" className="nav-link">About</Link>
           <Link href="/illinois-cannabis-tax-calculator" className="nav-link">Tax calculator</Link>
           <Link href="/dispensaries" className="nav-cta">For dispensaries</Link>
@@ -1394,7 +1399,7 @@ export default async function HomePage() {
 
       {/* FOOTER */}
       <footer className="footer">
-        <span className="footer-logo" aria-label="PuffPrice"><Logo size={32} /></span>
+        <span className="footer-logo" aria-label="PuffPrice"><Logo size={40} /></span>
         <div className="footer-links">
           <Link href="/" className="footer-link">Central Illinois</Link>
           <Link href="/cannabis/illinois/first-time-guide" className="footer-link">First-time guide</Link>

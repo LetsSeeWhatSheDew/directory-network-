@@ -1,6 +1,27 @@
 "use client";
 
-import Script from "next/script";
+// MapClient — Leaflet map for /map.
+//
+// 2026-05-01 rewrite: switched from external CDN (cdnjs leaflet.min.js +
+// SRI integrity hash + leaflet.min.css) to a bundled npm install. The
+// CDN approach worked most of the time, but Matthew's review on May 1
+// flagged /map as "broken" — most likely because the SRI integrity
+// check or the script-tag race surfaced as a perpetual loading state.
+// Bundling removes the entire external-load failure mode.
+//
+// Implementation notes:
+//   - Leaflet's module evaluation touches `window` and `document`, so a
+//     plain `import L from "leaflet"` at module top would crash during
+//     SSR. The component is "use client", but Next.js still SSRs client
+//     components on initial render. So we dynamic-import L *inside*
+//     useEffect, which only fires on the client.
+//   - The CSS, by contrast, is safe to import statically — Next.js
+//     extracts it at build time, no JS evaluation.
+//   - We keep the same div ref / state machine as the prior CDN-based
+//     implementation; only the script delivery has changed.
+
+import "leaflet/dist/leaflet.css";
+
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
@@ -18,12 +39,6 @@ type Point = {
   } | null;
 };
 
-declare global {
-  interface Window {
-    L?: any;
-  }
-}
-
 export default function MapClient({ points }: { points: Point[] }) {
   const mapRef = useRef<HTMLDivElement>(null);
   const [leafletReady, setLeafletReady] = useState(false);
@@ -31,17 +46,28 @@ export default function MapClient({ points }: { points: Point[] }) {
   const [dealsOnly, setDealsOnly] = useState(false);
   const mapInstance = useRef<any>(null);
   const markersLayer = useRef<any>(null);
+  const leafletRef = useRef<any>(null);
 
-  // If Leaflet hasn't loaded in 10 seconds assume it's blocked or the
-  // CDN is unreachable and surface an escape route instead of leaving
-  // the user staring at a spinner.
+  // Dynamic-import Leaflet client-side. If the import fails (offline /
+  // bundle missing) we fall through to the loadFailed escape route.
   useEffect(() => {
-    if (leafletReady) return;
-    const t = setTimeout(() => {
-      if (!leafletReady) setLoadFailed(true);
-    }, 10_000);
-    return () => clearTimeout(t);
-  }, [leafletReady]);
+    let cancelled = false;
+    (async () => {
+      try {
+        const mod = await import("leaflet");
+        const L = (mod as any).default ?? mod;
+        if (cancelled) return;
+        leafletRef.current = L;
+        setLeafletReady(true);
+      } catch {
+        if (cancelled) return;
+        setLoadFailed(true);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   function humanize(slug: string) {
     return slug
@@ -63,17 +89,17 @@ export default function MapClient({ points }: { points: Point[] }) {
         <div style="font-weight:700;font-size:.95rem;color:#0f1f3d;">${escapeHtml(display)}</div>
         <div style="font-size:.75rem;color:#6b7280;margin-top:2px;">${escapeHtml(p.city)}, IL</div>
         ${dealHtml}
-        <a href="/l/${encodeURIComponent(p.slug)}" style="display:inline-block;margin-top:10px;background:#0f1f3d;color:#fff;padding:6px 12px;border-radius:6px;font-size:.78rem;text-decoration:none;font-weight:600;">View listing →</a>
+        <a href="/dispensary/${encodeURIComponent(p.slug)}" style="display:inline-block;margin-top:10px;background:#0f1f3d;color:#fff;padding:6px 12px;border-radius:6px;font-size:.78rem;text-decoration:none;font-weight:600;">View dispensary →</a>
       </div>`;
   }
 
   useEffect(() => {
-    if (!leafletReady || !mapRef.current || !window.L) return;
-    const L = window.L;
+    if (!leafletReady || !mapRef.current || !leafletRef.current) return;
+    const L = leafletRef.current;
 
     if (!mapInstance.current) {
       mapInstance.current = L.map(mapRef.current, { zoomControl: true }).setView(
-        [40.0, -89.0],
+        [40.4, -89.2],
         7
       );
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -101,11 +127,19 @@ export default function MapClient({ points }: { points: Point[] }) {
       popupAnchor: [0, -10],
     });
 
+    const visible: Point[] = [];
     for (const p of points) {
       if (dealsOnly && !p.deal) continue;
       const marker = L.marker([p.lat, p.lng], { icon: p.deal ? greenIcon : grayIcon });
       marker.bindPopup(popupHtml(p));
       marker.addTo(markersLayer.current);
+      visible.push(p);
+    }
+
+    // Center the view so all visible markers are in frame on first paint.
+    if (visible.length > 0) {
+      const bounds = L.latLngBounds(visible.map((p) => [p.lat, p.lng] as [number, number]));
+      mapInstance.current.fitBounds(bounds, { padding: [40, 40], maxZoom: 11 });
     }
   }, [leafletReady, points, dealsOnly]);
 
@@ -113,23 +147,6 @@ export default function MapClient({ points }: { points: Point[] }) {
 
   return (
     <>
-      <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"
-        integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw=="
-        crossOrigin="anonymous"
-        referrerPolicy="no-referrer"
-      />
-      <Script
-        src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"
-        integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
-        crossOrigin="anonymous"
-        referrerPolicy="no-referrer"
-        strategy="afterInteractive"
-        onLoad={() => setLeafletReady(true)}
-        onError={() => setLoadFailed(true)}
-      />
-
       <div ref={mapRef} style={{ width: "100%", height: "100%", position: "relative", zIndex: 2 }} />
 
       {loadFailed && (
@@ -151,7 +168,7 @@ export default function MapClient({ points }: { points: Point[] }) {
             Map couldn&apos;t load
           </div>
           <div style={{ fontSize: ".9rem", color: "#6b7280", maxWidth: 360 }}>
-            We couldn&apos;t reach the map tiles. You can still browse every Central IL dispensary in a list.
+            We couldn&apos;t initialize the map. You can still browse every Central IL dispensary in a list.
           </div>
           <Link
             href="/dispensaries"
