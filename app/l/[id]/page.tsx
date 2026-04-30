@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { MapPin, Phone } from "lucide-react";
+import Logo from "../../components/Logo";
 import ClaimForm from "../../components/ClaimForm";
 import RecentlyViewedTracker from "../../components/RecentlyViewedTracker";
 import ShareDealButton from "../../components/ShareDealButton";
@@ -614,9 +615,8 @@ export default async function ListingPage({
 
       <div className="dn-root">
         <nav className="dn-nav">
-          <Link href="/" className="dn-nav-brand">
-            <span className="dn-nav-dot" aria-hidden="true" />
-            <span className="dn-nav-name">puff<span className="dn-nav-accent">price</span></span>
+          <Link href="/" className="dn-nav-brand" aria-label="PuffPrice home">
+            <Logo size={40} />
           </Link>
           <Link href={backHref} className="dn-nav-back">{backLabel}</Link>
         </nav>
@@ -1060,7 +1060,7 @@ export default async function ListingPage({
         </div>
 
         <footer className="dn-footer">
-          <span className="dn-footer-brand">puff<span className="dn-nav-accent">price</span></span>
+          <span className="dn-footer-brand"><Logo size={28} /></span>
           <span className="dn-footer-note">© {new Date().getFullYear()} PuffPrice · Central Illinois</span>
         </footer>
       </div>

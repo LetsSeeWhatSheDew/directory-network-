@@ -272,6 +272,25 @@ function filterExpired(list) {
   });
 }
 
+// Composite hero ranking: discount × freshness multiplier. Heroing the
+// largest discount alone produced "Ivy Hall 30% off" with a freshness
+// badge reading "Last checked 23 days ago" — accurate per the badge,
+// but a bad first impression. After the daily-verification sweep is
+// active (post-migration), every active deal will be fresh enough that
+// the multiplier collapses to 1.0 and ranking is back to pure discount.
+// Until then, this transition function keeps the hero feeling live.
+function rankFreshDealFirst(d, now) {
+  const discount = Number(d?.discount_value) || 0;
+  const t = d?.verified_at ? new Date(d.verified_at).getTime() : 0;
+  const ageDays = Number.isFinite(t) && t > 0 ? (now - t) / 86_400_000 : 9999;
+  let mult;
+  if (ageDays < 1) mult = 1.0;
+  else if (ageDays < 3) mult = 0.92;
+  else if (ageDays < 7) mult = 0.78;
+  else mult = 0.40;
+  return discount * mult;
+}
+
 async function getTopDeals() {
   // ISR: cache the Supabase response for 60s. Cold starts and repeat
   // visitors both read the cached payload instead of round-tripping
@@ -279,7 +298,10 @@ async function getTopDeals() {
   // refresh roughly once a minute.
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&city=in.${encodeURIComponent(CIL_CITY_IN_LIST)}&order=discount_value.desc&limit=6`,
+      // Pull a wider candidate pool (20) so the freshness re-rank below
+      // has room to move a fresh-but-smaller-discount deal to the top
+      // when an older-but-bigger deal would otherwise hero it.
+      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&city=in.${encodeURIComponent(CIL_CITY_IN_LIST)}&order=discount_value.desc&limit=20`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,
@@ -290,7 +312,12 @@ async function getTopDeals() {
     );
     if (!res.ok) return [];
     const data = await res.json();
-    return Array.isArray(data) ? filterExpired(data).slice(0, 3) : [];
+    if (!Array.isArray(data)) return [];
+    const now = Date.now();
+    return filterExpired(data)
+      .map((d) => ({ ...d, _heroScore: rankFreshDealFirst(d, now) }))
+      .sort((a, b) => (b._heroScore || 0) - (a._heroScore || 0))
+      .slice(0, 3);
   } catch {
     return [];
   }
