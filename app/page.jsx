@@ -434,6 +434,55 @@ async function getActiveDealCount() {
   return null;
 }
 
+// Per-city deal + listing counts for the "Browse deals by city" grid.
+// Returns a map of city-name (lower-cased) → { deals, listings }. Pulls
+// the raw lists from the same view + table the rest of the page already
+// reads, then aggregates client-side rather than hitting Supabase nine
+// times in a row. Cached 5 minutes — counts move with each cron, not by
+// the second.
+async function getCityCounts() {
+  const cityList = `("Peoria","East Peoria","Peoria Heights","Pekin","Normal","Bloomington","Champaign","Urbana","Springfield")`;
+  const result = new Map();
+  try {
+    const [dealRes, listingRes] = await Promise.all([
+      fetch(
+        `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=city&city=in.${encodeURIComponent(cityList)}`,
+        {
+          headers: {
+            apikey: SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          },
+          next: { revalidate: 300, tags: ["deals"] },
+        }
+      ),
+      fetch(
+        `${SUPABASE_URL}/rest/v1/master_listings?select=city&state=eq.IL&project_tag=eq.green&is_active=eq.true&type=eq.dispensary&city=in.${encodeURIComponent(cityList)}`,
+        {
+          headers: {
+            apikey: SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          },
+          next: { revalidate: 600, tags: ["listings"] },
+        }
+      ),
+    ]);
+    const dealRows = dealRes.ok ? await dealRes.json() : [];
+    const listingRows = listingRes.ok ? await listingRes.json() : [];
+    const tally = (rows, key) => {
+      for (const r of rows || []) {
+        const c = typeof r?.city === "string" ? r.city.toLowerCase() : null;
+        if (!c) continue;
+        const slot = result.get(c) || { deals: 0, listings: 0 };
+        slot[key] += 1;
+        result.set(c, slot);
+      }
+    };
+    tally(dealRows, "deals");
+    tally(listingRows, "listings");
+  } catch {}
+  return result;
+}
+
 // Live count of active Central IL dispensaries. Drives the homepage
 // stats line — never hard-code "N dispensaries" when the DB can answer.
 async function getCentralILListingCount() {
@@ -511,7 +560,7 @@ function preferLocalDeals(deals, userCity) {
 }
 
 export default async function HomePage() {
-  const [dealCount, listingCount, topDeals, mostRecentTs, endingSoon, dealPool, userLoc, liveValue, dealsThisMonth] = await Promise.all([
+  const [dealCount, listingCount, topDeals, mostRecentTs, endingSoon, dealPool, userLoc, liveValue, dealsThisMonth, cityCounts] = await Promise.all([
     getActiveDealCount(),
     getCentralILListingCount(),
     getTopDeals(),
@@ -521,6 +570,7 @@ export default async function HomePage() {
     getServerLocation(),
     getLiveDealsValueThisMonth().catch(() => null),
     getDealsRunThisMonth().catch(() => null),
+    getCityCounts(),
   ]);
   const userCity = userLoc?.city || null;
   const localizedTopDeals = preferLocalDeals(topDeals, userCity);
@@ -726,88 +776,9 @@ export default async function HomePage() {
         .stats-line strong{color:#16a34a;font-weight:700}
         @media(max-width:520px){.stats-line{font-size:.78rem}}
 
-        /* BELOW-FOLD CATEGORY SECTION */
-        .below-section{background:#fff;border-top:1px solid #e8e4da}
-        .below-inner{max-width:900px;margin:0 auto;padding:48px 28px}
-        .below-title{
-          font-size:clamp(1.3rem,3vw,1.6rem);font-weight:700;
-          color:#0f1f3d;letter-spacing:-.03em;margin-bottom:18px;
-        }
-        .below-cat-grid{
-          display:grid;grid-template-columns:1fr 1fr;gap:12px;
-        }
-        .below-cat-card{
-          display:flex;flex-direction:column;align-items:center;gap:10px;
-          background:#fff;border:1px solid #e8e4da;border-radius:12px;
-          padding:24px 16px;text-decoration:none;
-          transition:all .15s;
-        }
-        .below-cat-card:hover{border-color:#16a34a;background:#f0fdf4}
-        .below-cat-icon{display:flex;align-items:center;justify-content:center}
-        .below-cat-icon svg{width:38px;height:38px}
-        .below-cat-label{
-          font-size:.95rem;font-weight:700;color:#0f1f3d;
-          font-family:system-ui,sans-serif;
-        }
-
-        /* HOW IT WORKS — simplified 3 lines */
-        .how{background:#f5f4f0;border-top:1px solid #e8e4da;border-bottom:1px solid #e8e4da}
-        .how-inner{
-          max-width:900px;margin:0 auto;
-          padding:40px 28px;
-          display:grid;grid-template-columns:repeat(3,1fr);gap:28px;
-        }
-        .how-num{
-          font-size:1.8rem;font-weight:700;color:#16a34a;
-          line-height:1;margin-bottom:8px;
-        }
-        .how-title{font-size:.95rem;font-weight:700;color:#0f1f3d;font-family:system-ui,sans-serif;line-height:1.3}
-
-        /* ALERTS CTA STRIP */
-        .alerts-strip{background:#fff;border-top:1px solid #e8e4da;padding:44px 28px;text-align:center}
-        .alerts-inner{max-width:600px;margin:0 auto}
-        .alerts-title{font-size:1.3rem;font-weight:700;color:#0f1f3d;letter-spacing:-.02em;margin-bottom:6px}
-        .alerts-sub{font-size:.9rem;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:18px}
-        .alerts-btn{
-          display:inline-block;background:#16a34a;color:#fff;
-          padding:12px 24px;border-radius:10px;text-decoration:none;
-          font-family:system-ui,sans-serif;font-weight:700;font-size:.9rem;
-        }
-        .alerts-btn:hover{background:#15803d}
-
         /* DEALS SECTION */
         .deals-section{max-width:1100px;margin:0 auto;padding:52px 28px}
 
-        /* HOMEPAGE SEARCH — compact, dependable entry point */
-        .home-search{
-          display:flex;align-items:center;gap:8px;
-          background:#fff;border:1px solid #e8e4da;border-radius:12px;
-          padding:6px 6px 6px 14px;margin-bottom:24px;
-          transition:border-color .15s, box-shadow .15s;
-          max-width:560px;
-        }
-        .home-search:focus-within{
-          border-color:#16a34a;
-          box-shadow:0 0 0 3px rgba(22,163,74,.12);
-        }
-        .home-search-icon{flex-shrink:0}
-        .home-search-input{
-          flex:1;min-width:0;border:none;outline:none;background:transparent;
-          padding:12px 4px;color:#0f1f3d;
-          font-family:system-ui,sans-serif;font-size:.95rem;
-          min-height:44px;
-        }
-        .home-search-input::placeholder{color:#9ca3af}
-        .home-search-btn{
-          background:#0f1f3d;color:#fff;border:none;border-radius:8px;
-          padding:10px 18px;font-family:system-ui,sans-serif;font-weight:700;
-          font-size:.88rem;cursor:pointer;min-height:44px;flex-shrink:0;
-        }
-        .home-search-btn:hover{background:#1e3a5f}
-        @media(max-width:520px){
-          .home-search{padding:4px 4px 4px 12px}
-          .home-search-btn{padding:10px 14px;font-size:.85rem}
-        }
         .section-eyebrow{
           font-size:.7rem;font-weight:700;letter-spacing:.14em;
           text-transform:uppercase;color:#16a34a;
@@ -885,37 +856,6 @@ export default async function HomePage() {
         .savings-label{font-size:.65rem;font-weight:700;color:#166534;font-family:system-ui,sans-serif;text-transform:uppercase;letter-spacing:.12em}
         .savings-sub{font-size:.68rem;color:rgba(22,101,52,.7);font-family:system-ui,sans-serif;margin-top:2px}
         .savings-num{font-size:2rem;font-weight:700;color:#16a34a;letter-spacing:-.03em;line-height:1}
-
-        /* BIZ STRIP */
-        .biz-strip{
-          background:#f5f4f0;border-top:1px solid #e8e4da;
-          padding:44px 28px;text-align:center;
-        }
-        .biz-title{
-          font-size:1.25rem;font-weight:700;color:#0f1f3d;
-          letter-spacing:-.02em;margin-bottom:6px;
-        }
-        .biz-sub{
-          font-size:.875rem;color:#6b7280;
-          font-family:system-ui,sans-serif;margin-bottom:20px;
-          max-width:400px;margin-left:auto;margin-right:auto;
-        }
-        .biz-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-        .biz-btn-primary{
-          background:#0f1f3d;color:#fff;
-          padding:10px 22px;border-radius:8px;
-          text-decoration:none;font-family:system-ui,sans-serif;
-          font-weight:700;font-size:.875rem;
-        }
-        .biz-btn-primary:hover{background:#1e3a5f}
-        .biz-btn-secondary{
-          background:transparent;color:#6b7280;
-          padding:10px 22px;border-radius:8px;
-          text-decoration:none;font-family:system-ui,sans-serif;
-          font-weight:600;font-size:.875rem;
-          border:1px solid #d1cfc6;
-        }
-        .biz-btn-secondary:hover{border-color:#9ca3af;color:#374151}
 
         /* FOOTER */
         .footer{
@@ -1034,6 +974,7 @@ export default async function HomePage() {
           <Link href="/savings/dashboard" className="nav-link">My savings</Link>
           <Link href="/map" className="nav-link">Map view</Link>
           <Link href="/" className="nav-link">Browse Central IL</Link>
+          <Link href="/about" className="nav-link">About</Link>
           <Link href="/dispensaries" className="nav-cta">For dispensaries</Link>
         </div>
         <MobileNavMenu />
@@ -1135,9 +1076,14 @@ export default async function HomePage() {
           <h2 id="cities-heading" className="cities-h2">Browse deals by city</h2>
           <div className="cities-grid">
             {CENTRAL_IL_PUBLIC_CITIES.map((c, i) => {
-              const count = (localizedDealPool || []).filter(
-                (d) => typeof d?.city === "string" && d.city.toLowerCase() === c.name.toLowerCase()
-              ).length;
+              // Pull live counts from the unfiltered city map. Earlier
+              // versions used localizedDealPool, which is filtered to the
+              // user's metro — that meant cards outside the user's city
+              // always read "Listings" (the placeholder) regardless of
+              // whether real deals existed there. Fixed 2026-04-30.
+              const slot = cityCounts.get(c.name.toLowerCase()) || { deals: 0, listings: 0 };
+              const dealN = slot.deals;
+              const listingN = slot.listings;
               // Stagger fade-in: cycle through delay-1/2/3 so adjacent
               // cards don't all animate on the same frame, but we never
               // delay a card more than 240ms (delay-3) so the section
@@ -1146,10 +1092,14 @@ export default async function HomePage() {
               return (
                 <Link key={c.slug} href={`/city/${c.slug}`} className={`city-card pp-card pp-fade-up${delay}`}>
                   <span className="city-card-name">{c.name}</span>
-                  {count > 0 ? (
-                    <span className="city-card-count">{count} deal{count === 1 ? "" : "s"}</span>
+                  {dealN > 0 ? (
+                    <span className="city-card-count">{dealN} deal{dealN === 1 ? "" : "s"}</span>
+                  ) : listingN > 0 ? (
+                    <span className="city-card-count city-card-count-quiet">
+                      {listingN} dispensar{listingN === 1 ? "y" : "ies"}
+                    </span>
                   ) : (
-                    <span className="city-card-count city-card-count-quiet">Listings</span>
+                    <span className="city-card-count city-card-count-quiet">View dispensaries →</span>
                   )}
                 </Link>
               );

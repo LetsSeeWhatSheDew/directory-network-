@@ -3,6 +3,7 @@ export const revalidate = 0;
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import { MapPin, Phone } from "lucide-react";
 import ClaimForm from "../../components/ClaimForm";
 import RecentlyViewedTracker from "../../components/RecentlyViewedTracker";
 import ShareDealButton from "../../components/ShareDealButton";
@@ -783,7 +784,12 @@ export default async function ListingPage({
                     className="dn-hero-location"
                     style={{ textDecoration: "none", color: "#16a34a", fontWeight: 600, display: "block" }}
                   >
-                    {listing.address1 && <span style={{ display: "block" }}>📍 {listing.address1}</span>}
+                    {listing.address1 && (
+                      <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        <MapPin size={16} strokeWidth={1.75} aria-hidden="true" />
+                        {listing.address1}
+                      </span>
+                    )}
                     {(listing.city || listing.state) && (
                       <span style={{ display: "block", whiteSpace: "nowrap" }}>
                         {[listing.city, listing.state].filter(Boolean).join(", ")} · Get directions →
@@ -804,7 +810,14 @@ export default async function ListingPage({
                   {todayStatus.label}
                 </span>
                 {listing.phone && (
-                  <a href={`tel:${listing.phone}`} className="dn-phone">{listing.phone}</a>
+                  <a
+                    href={`tel:${listing.phone}`}
+                    className="dn-phone"
+                    style={{ display: "inline-flex", alignItems: "center", gap: 6 }}
+                  >
+                    <Phone size={14} strokeWidth={1.75} aria-hidden="true" />
+                    {listing.phone}
+                  </a>
                 )}
                 {listing.website && (
                   <a href={listing.website} target="_blank" rel="noopener noreferrer" className="dn-website">
