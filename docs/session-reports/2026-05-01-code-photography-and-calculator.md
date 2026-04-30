@@ -3,7 +3,7 @@
 **Branch:** `claude/relaxed-jackson-a0ff78` (worktree) → pushed to `main`
 **Authorization:** Big Boi mode. No clarifying questions. Photography ships first; calculator after photography is verified clean.
 **Starting HEAD:** `4904615` (the 2026-04-30 demo-ready report)
-**Final HEAD before this report:** `4e45e58`
+**Final HEAD before this report:** `1a54806`
 **One-line summary:** Site no longer looks empty — four hand-picked Central Illinois Unsplash photos shipped (Peoria downtown for hero, IL windfarm for trust, UIUC South Farms for cities banner, Peoria flag for about). Plus the moat-creation differentiator: an interactive Illinois cannabis tax calculator at `/illinois-cannabis-tax-calculator` with verified per-city rates for all 9 CIL public cities, a companion explainer article at `/illinois-cannabis-tax`, homepage callout, nav link, sitemap update.
 
 ---
@@ -114,7 +114,15 @@ Lighthouse — not run from this environment (no headless Chrome locally). The p
 | # | Commit | Phases | Title |
 |---|---|---|---|
 | 3 | `4e45e58` | 5 + 6 + 7 + 8 | `feat(tax-calc): /illinois-cannabis-tax-calculator + explainer + integration` |
-| 4 | this commit | 9 | `docs(session): 2026-05-01 photography + calculator report` |
+| 4 | `1a54806` | 6 hotfix + 9 doc | `fix(tax-calc): drop next/dynamic ssr:false (Next 16 forbids in Server Components)` |
+| 5 | this commit | 9 | `docs(session): 2026-05-01 photography + calculator report (final hashes)` |
+
+### Build hotfix landed mid-session
+
+The first push of the calculator (`4e45e58`) errored on Vercel with:
+> `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+
+Next.js 16 is stricter than 14 about server/client boundaries. The fix in `1a54806` drops `next/dynamic` and imports `Calculator` directly from the page's Server Component. Since `Calculator.tsx` already starts with `"use client"`, the boundary works correctly: Next.js renders the static framing as HTML, hydrates the calculator client-side. No SSR-blocking change.
 
 ### Tax data sourcing
 
@@ -188,24 +196,56 @@ Scenario C — $50 edible (20% excise) in Urbana
 
 Stacking order is load-bearing: cannabis excise applies to shelf price; everything else applies to (shelf + excise). The `calculateOutTheDoor` implementation in `lib/taxRates.ts` matches this exactly. Verification script lives at `scripts/verify-tax-math.ts`.
 
-### Production verification — calculator + explainer routes
-
-(Captured at the end of this session. Replace timestamps if re-running.)
+### Production verification — full smoke
 
 ```
-$ curl -sIL https://www.puffprice.com/illinois-cannabis-tax-calculator | head -3
-HTTP/2 200
-content-type: text/html; charset=utf-8
+$ date -u +"%Y-%m-%dT%H:%M:%SZ"
+2026-05-01T03:39Z
 
-$ curl -sIL https://www.puffprice.com/illinois-cannabis-tax | head -3
-HTTP/2 200
-content-type: text/html; charset=utf-8
-
-$ curl -sL https://www.puffprice.com/ | grep -c "tax-callout-h2"
+$ # HOMEPAGE
+$ curl -sL https://www.puffprice.com/ -o /tmp/pp-final-home.html
+$ wc -c /tmp/pp-final-home.html ; md5 /tmp/pp-final-home.html
+  113016 /tmp/pp-final-home.html
+MD5 (/tmp/pp-final-home.html) = a9c707a5f55120ca6552427188be2e81
+$ curl -sI https://www.puffprice.com/ | grep -i x-vercel-id
+x-vercel-id: cle1::iad1::4zpbg-1777563579140-9cbda47413e0
+$ grep -c "photography/hero-peoria-downtown" /tmp/pp-final-home.html
 1
+$ grep -oE "Wondering what you'll actually pay" /tmp/pp-final-home.html | head -1
+Wondering what you'll actually pay
+$ grep -oE 'href="/illinois-cannabis-tax-calculator"' /tmp/pp-final-home.html | wc -l
+2  # nav link + homepage callout
 
-$ curl -sL https://www.puffprice.com/ | grep -oE 'href="/illinois-cannabis-tax-calculator"' | wc -l
-2  # (nav link + homepage callout)
+$ # TAX CALCULATOR
+$ curl -sL https://www.puffprice.com/illinois-cannabis-tax-calculator -o /tmp/pp-calc.html
+$ wc -c /tmp/pp-calc.html ; md5 /tmp/pp-calc.html
+   39575 /tmp/pp-calc.html
+MD5 (/tmp/pp-calc.html) = 8d7b8d8144a3c703a39be565afc1a2a9
+$ curl -sI https://www.puffprice.com/illinois-cannabis-tax-calculator | grep -i x-vercel-id
+x-vercel-id: cle1::q8xfm-1777563580101-c4e7f4ed6895
+$ grep -oE 'option value="[a-z-]+"' /tmp/pp-calc.html | wc -l
+9  # all 9 CIL public cities present in the dropdown
+
+$ # TAX EXPLAINER
+$ curl -sL https://www.puffprice.com/illinois-cannabis-tax -o /tmp/pp-tax.html
+$ wc -c /tmp/pp-tax.html ; md5 /tmp/pp-tax.html
+   42700 /tmp/pp-tax.html
+MD5 (/tmp/pp-tax.html) = b5cf7821090971648c82b3cf78d6efe6
+$ curl -sI https://www.puffprice.com/illinois-cannabis-tax | grep -i x-vercel-id
+x-vercel-id: cle1::462rm-1777563580570-ae325100cece
+$ # Article worked example renders the live numbers from lib/taxRates.ts —
+$ # for $35 East Peoria flower: total tax $9.47, out-the-door $44.47.
+$ # Matches the local verification script output exactly.
+
+$ # ABOUT
+$ curl -sL https://www.puffprice.com/about -o /tmp/pp-about-final.html
+$ wc -c /tmp/pp-about-final.html ; md5 /tmp/pp-about-final.html
+   26868 /tmp/pp-about-final.html
+MD5 (/tmp/pp-about-final.html) = 67c20bfb4940a56d8c0d81d5313a82c9
+$ curl -sI https://www.puffprice.com/about | grep -i x-vercel-id
+x-vercel-id: cle1::k58fx-1777563581088-f371166435d7
+$ grep -c "photography/about-peoria-flag" /tmp/pp-about-final.html
+1
 ```
 
 ### Mobile viewport (375px)
@@ -242,10 +282,11 @@ This is the full medical answer per the prompt's directive (no medical-mode togg
 
 ## Final state
 
-- **HEAD:** `4e45e58`
+- **HEAD:** `1a54806` (this report's commit will sit on top after push)
 - **Production deploy:** Ready, alias `www.puffprice.com`
-- **Code commits this session:** 3 (photography x2 + tax calc/explainer/integration x1)
+- **Code commits this session:** 4 (photography ×2 + tax calc ×2)
 - **Doc commits this session:** 1 (this report)
+- **Vercel production deploy:** `directory-network-kqhsbvvrf-matthews-projects-6520d24c.vercel.app`, Ready, 57s build, alias-promoted to `www.puffprice.com`. Ready timestamp ~2026-05-01T03:36 UTC.
 
 ### Demo-ready assessment
 
