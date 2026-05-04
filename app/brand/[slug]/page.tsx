@@ -1,5 +1,6 @@
 import Link from "next/link";
-import Logo from "../../components/Logo";
+import Nav from "../../components/Nav";
+import Footer from "../../components/Footer";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getBrand, type Brand } from "../../../lib/brands";
@@ -175,12 +176,7 @@ export default async function BrandPage({
         .cat-tag{font-family:system-ui,sans-serif;font-size:.72rem;color:#6b7280;background:#F7F4ED;border-radius:100px;padding:3px 10px}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo" aria-label="PuffPrice home">
-          <Logo />
-        </Link>
-        <Link href="/brand" className="back">← All brands</Link>
-      </nav>
+      <Nav variant="light" />
 
       <main className="wrap">
         <div className="head">

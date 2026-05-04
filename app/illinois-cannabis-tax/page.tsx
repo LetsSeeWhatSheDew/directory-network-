@@ -1,5 +1,6 @@
 import Link from "next/link";
-import Logo from "../components/Logo";
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
 import MobileNavMenu from "../components/MobileNavMenu";
 import {
   STATE_EXCISE_RATES,
@@ -159,18 +160,7 @@ export default function IllinoisCannabisTaxPage() {
         .footer-copy{font-size:.74rem;color:#9ca3af;font-family:var(--font-ui, system-ui, sans-serif)}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo-link" aria-label="PuffPrice home">
-          <Logo size={36} />
-        </Link>
-        <div className="nav-links desktop-only-nav">
-          <Link href="/dispensaries" className="nav-link">Browse Central IL</Link>
-          <Link href="/about" className="nav-link">About</Link>
-          <Link href="/illinois-cannabis-tax-calculator" className="nav-link">Tax calculator</Link>
-          <Link href="/dispensaries" className="nav-cta">For dispensaries</Link>
-        </div>
-        <MobileNavMenu />
-      </nav>
+      <Nav variant="light" />
 
       <main className="wrap">
         <p className="eyebrow">Pricing</p>

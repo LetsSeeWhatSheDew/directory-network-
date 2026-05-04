@@ -1,5 +1,6 @@
 import Link from "next/link";
-import Logo from "../components/Logo";
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
 import type { Metadata } from "next";
 import { brand } from "../../lib/brand";
 
@@ -58,12 +59,7 @@ export default function StartPage() {
         @media(max-width:600px){.wrap{padding:32px 16px 56px}h2{font-size:1.2rem}p,li{font-size:.98rem}}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo" aria-label="PuffPrice home">
-          <Logo />
-        </Link>
-        <Link href="/" className="back">← Back</Link>
-      </nav>
+      <Nav variant="light" />
 
       <main className="wrap">
         <div className="eyebrow">First-time guide</div>

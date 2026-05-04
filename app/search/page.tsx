@@ -1,5 +1,6 @@
 import Link from "next/link";
-import Logo from "../components/Logo";
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -209,10 +210,7 @@ export default async function SearchPage({
         .empty-sub{font-size:.85rem;color:#6b7280;font-family:system-ui,sans-serif}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo" aria-label="PuffPrice home"><Logo /></Link>
-        <Link href="/" className="back">← Home</Link>
-      </nav>
+      <Nav variant="light" />
 
       <div className="wrap">
         <h1>

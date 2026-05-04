@@ -1,5 +1,6 @@
 import Link from "next/link";
-import Logo from "../components/Logo";
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
 import MobileNavMenu from "../components/MobileNavMenu";
 import Calculator from "./Calculator";
 import { TAX_RATES_LAST_UPDATED } from "../../lib/taxRates";
@@ -127,18 +128,7 @@ export default function TaxCalculatorPage() {
         .footer-copy{font-size:.74rem;color:#9ca3af;font-family:var(--font-ui, system-ui, sans-serif)}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo-link" aria-label="PuffPrice home">
-          <Logo size={36} />
-        </Link>
-        <div className="nav-links desktop-only-nav">
-          <Link href="/dispensaries" className="nav-link">Browse Central IL</Link>
-          <Link href="/about" className="nav-link">About</Link>
-          <Link href="/illinois-cannabis-tax" className="nav-link">Tax explainer</Link>
-          <Link href="/dispensaries" className="nav-cta">For dispensaries</Link>
-        </div>
-        <MobileNavMenu />
-      </nav>
+      <Nav variant="light" />
 
       <main className="wrap">
         <p className="eyebrow">Pricing</p>

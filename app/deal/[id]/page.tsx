@@ -5,7 +5,8 @@
 // /l/[slug], which carries the full destination-screen UX.
 
 import Link from "next/link";
-import Logo from "../../components/Logo";
+import Nav from "../../components/Nav";
+import Footer from "../../components/Footer";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
@@ -328,17 +329,15 @@ export default async function DealPage({
         @media(max-width:600px){.wrap{padding:24px 14px}.savings-block{padding:20px 18px}}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo" aria-label="PuffPrice home">
-          <Logo />
-        </Link>
+      <Nav variant="light" />
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(1rem, 4vw, 2rem) 4px", fontSize: 13 }}>
         <Link
           href={city ? `/city/${encodeURIComponent(city.toLowerCase())}` : "/deals/all"}
-          className="back"
+          style={{ color: "var(--color-gray-500, #6B7280)", textDecoration: "none", fontFamily: "Manrope, system-ui, sans-serif", fontWeight: 500 }}
         >
           ← {city ? `${city} deals` : "All deals"}
         </Link>
-      </nav>
+      </div>
 
       <main className="wrap">
         <div className="eyebrow">Active deal{deal.category ? ` · ${deal.category}` : ""}</div>

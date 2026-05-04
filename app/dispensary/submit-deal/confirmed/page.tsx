@@ -1,5 +1,6 @@
 import Link from "next/link";
-import Logo from "../../../components/Logo";
+import Nav from "../../../components/Nav";
+import Footer from "../../../components/Footer";
 
 export const metadata = {
   title: "Deal submitted — thanks! | PuffPrice",
@@ -38,10 +39,7 @@ export default async function ConfirmedPage({
         .cta-secondary:hover{border-color:#9ca3af}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo" aria-label="PuffPrice home"><Logo /></Link>
-        <Link href="/dispensary/submit-deal" className="back">← Submit another</Link>
-      </nav>
+      <Nav variant="light" />
 
       <div className="wrap">
         <div className="eyebrow">✓ Submitted</div>

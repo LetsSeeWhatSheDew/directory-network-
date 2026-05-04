@@ -1,5 +1,6 @@
 import Link from "next/link";
-import Logo from "../../components/Logo";
+import Nav from "../../components/Nav";
+import Footer from "../../components/Footer";
 import ClaimForm from "./ClaimForm";
 
 const SUPABASE_URL =
@@ -62,10 +63,7 @@ export default async function ClaimPage({ params }: { params: Promise<{ slug: st
         .city{font-size:.88rem;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:24px}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo" aria-label="PuffPrice home"><Logo /></Link>
-        <Link href={`/l/${slug}`} className="back">← Back to listing</Link>
-      </nav>
+      <Nav variant="light" />
 
       <div className="wrap">
         <div className="eyebrow">Claim listing</div>

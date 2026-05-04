@@ -9,7 +9,8 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
-import Logo from "../../components/Logo";
+import Nav from "../../components/Nav";
+import Footer from "../../components/Footer";
 import SubmitForm from "./SubmitForm";
 import { brand } from "../../../lib/brand";
 
@@ -95,12 +96,7 @@ export default async function SubmitDealPage() {
         .trust strong{color:#1F3D2B}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo" aria-label="PuffPrice home">
-          <Logo />
-        </Link>
-        <Link href="/deals/all" className="back">← All deals</Link>
-      </nav>
+      <Nav variant="light" />
 
       <main className="wrap">
         <div className="eyebrow">For dispensaries</div>

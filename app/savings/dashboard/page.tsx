@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import Logo from "../../components/Logo";
+import Nav from "../../components/Nav";
+import Footer from "../../components/Footer";
 import { useEffect, useMemo, useState } from "react";
 
 type Record = {
@@ -102,10 +103,7 @@ export default function SavingsDashboard() {
         .cta:hover{background:#2A4F38}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo" aria-label="PuffPrice home"><Logo /></Link>
-        <Link href="/deals/all" className="back">← Browse deals</Link>
-      </nav>
+      <Nav variant="light" />
 
       <div className="wrap">
         <div className="eyebrow">My savings</div>

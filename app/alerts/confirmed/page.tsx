@@ -3,6 +3,8 @@
 // Reached via the /alerts form POST and also via /early-access.
 
 import Link from "next/link";
+import Nav from "../../components/Nav";
+import Footer from "../../components/Footer";
 
 export const metadata = {
   title: "You're in — PuffPrice deal alerts",
@@ -11,12 +13,8 @@ export const metadata = {
 
 export default function AlertsConfirmedPage() {
   return (
-    <div style={{ fontFamily: "Georgia, serif", background: "#1F3D2B", minHeight: "100vh", color: "#fff", display: "flex", flexDirection: "column" }}>
-      <nav style={{ padding: "14px 28px" }}>
-        <Link href="/" style={{ color: "#fff", textDecoration: "none", fontWeight: 700, fontSize: "1.15rem" }}>
-          puff<span style={{ color: "#93CB5C" }}>price</span>
-        </Link>
-      </nav>
+    <div className="pp-surface-deep pp-leaf pp-leaf-04" style={{ fontFamily: "Manrope, system-ui, sans-serif", minHeight: "100vh", color: "var(--color-cream, #F7F4ED)", display: "flex", flexDirection: "column" }}>
+      <Nav variant="deep" />
 
       <main style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 24px" }}>
         <div style={{ maxWidth: 560, textAlign: "center" }}>

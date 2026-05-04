@@ -1,5 +1,6 @@
 import Link from "next/link";
-import Logo from "../components/Logo";
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
 import SavingsCalculator from "./SavingsCalculator";
 
 export const metadata = {
@@ -25,10 +26,7 @@ export default function SavingsPage() {
         .sub{font-size:1rem;color:#6b7280;font-family:system-ui,sans-serif;line-height:1.6;margin-bottom:28px;max-width:520px}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo" aria-label="PuffPrice home"><Logo /></Link>
-        <Link href="/" className="back">← Home</Link>
-      </nav>
+      <Nav variant="light" />
 
       <main className="wrap">
         <div className="eyebrow">Savings calculator</div>

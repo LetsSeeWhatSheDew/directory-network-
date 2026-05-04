@@ -1,5 +1,6 @@
 import Link from "next/link";
-import Logo from "../components/Logo";
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
 import MapClient from "./MapClient";
 import { cityFromSlug } from "@/lib/cityNormalize";
 
@@ -119,10 +120,7 @@ export default async function MapPage() {
         @keyframes mapspin{to{transform:rotate(360deg)}}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo" aria-label="PuffPrice home"><Logo /></Link>
-        <Link href="/" className="back">← Home</Link>
-      </nav>
+      <Nav variant="light" />
 
       {/* When we have fewer than 3 geocoded dispensaries there's nothing
           a map adds over the list view — most dispensaries have null

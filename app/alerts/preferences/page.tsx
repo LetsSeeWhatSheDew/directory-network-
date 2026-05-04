@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import Logo from "../../components/Logo";
+import Nav from "../../components/Nav";
+import Footer from "../../components/Footer";
 import { useState } from "react";
 
 export default function AlertPreferencesPage() {
@@ -94,10 +95,7 @@ export default function AlertPreferencesPage() {
         .msg.ok{background:#F2F8E9;color:#3F6B1F;border:1px solid #C7E5A8}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo" aria-label="PuffPrice home"><Logo /></Link>
-        <Link href="/alerts" className="back">← Back</Link>
-      </nav>
+      <Nav variant="light" />
 
       <div className="wrap">
         <h1>Deal alert preferences</h1>

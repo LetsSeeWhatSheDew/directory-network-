@@ -2,7 +2,8 @@
 // Fixed v2: force no-cache + correct Supabase query format
 
 import Link from "next/link";
-import Logo from "../../components/Logo";
+import Nav from "../../components/Nav";
+import Footer from "../../components/Footer";
 import { redirect } from "next/navigation";
 import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
 import DealBadge from "../../components/DealBadge";
@@ -556,12 +557,7 @@ export default async function DealsPage({
         }
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo" aria-label="PuffPrice home">
-          <Logo />
-        </Link>
-        <Link href="/" className="back">← Back</Link>
-      </nav>
+      <Nav variant="light" />
 
       <div className="page">
         {/* Zone 4 Phase 1: direct factual answer for AI crawlers */}

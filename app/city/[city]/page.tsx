@@ -5,7 +5,8 @@
 // all three via internal linking.
 
 import Link from "next/link";
-import Logo from "../../components/Logo";
+import Nav from "../../components/Nav";
+import Footer from "../../components/Footer";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
@@ -294,12 +295,7 @@ export default async function CityPage({
         @media(max-width:600px){.wrap{padding:24px 14px}.deal-save-amt{font-size:1.2rem}}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo" aria-label="PuffPrice home">
-          <Logo />
-        </Link>
-        <Link href="/deals/all" className="back">← All Central IL deals</Link>
-      </nav>
+      <Nav variant="light" />
 
       <main className="wrap">
         <p className="answer">{answerText}</p>

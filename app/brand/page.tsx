@@ -1,5 +1,6 @@
 import Link from "next/link";
-import Logo from "../components/Logo";
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
 import type { Metadata } from "next";
 import { getAllBrands } from "../../lib/brands";
 import { brand as site } from "../../lib/brand";
@@ -50,12 +51,7 @@ export default async function BrandIndex() {
         .stub-foot a:hover{text-decoration:underline}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo" aria-label="PuffPrice home">
-          <Logo />
-        </Link>
-        <Link href="/" className="back">← Home</Link>
-      </nav>
+      <Nav variant="light" />
 
       <div className="wrap">
         <div className="eyebrow">Brands</div>
