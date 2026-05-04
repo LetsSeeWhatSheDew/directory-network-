@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" preserveAspectRatio="xMidYMid meet" fill="none" stroke="#7DBA47" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+  <!-- PuffPrice pin-mark companion — geometric map-pin silhouette with embedded
+       leaf glyph. Brand spec § 5: sage-green stroke, no fill. Used at favicon /
+       OG-card / app-icon scale where the wordmark won't survive. -->
+  <!-- Pin silhouette -->
+  <path d="M32 6 C20 6 11 15 11 27 C11 39 32 58 32 58 C32 58 53 39 53 27 C53 15 44 6 32 6 Z" fill="#F7F4ED" stroke="#7DBA47"/>
+  <!-- Leaf glyph centered on pin head — 7-leaflet abstract -->
+  <g transform="translate(32 25)" stroke-width="2">
+    <!-- center leaflet -->
+    <path d="M0 -10 L0 4"/>
+    <!-- upper pair -->
+    <path d="M0 -3 L7 -8"/>
+    <path d="M0 -3 L-7 -8"/>
+    <!-- middle pair -->
+    <path d="M0 1 L9 -1"/>
+    <path d="M0 1 L-9 -1"/>
+    <!-- lower pair -->
+    <path d="M0 4 L6 5"/>
+    <path d="M0 4 L-6 5"/>
+  </g>
+</svg>

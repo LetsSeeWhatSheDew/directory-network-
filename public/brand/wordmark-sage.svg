@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 64" width="360" height="64" preserveAspectRatio="xMidYMid meet">
+  <!-- PuffPrice wordmark — Manrope 800 in sage green. Used on cream / light surfaces.
+       Brand spec § 1: letter-spacing −0.025em, single line. -->
+  <text x="0" y="48"
+        font-family="Manrope, -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif"
+        font-weight="800"
+        font-size="44"
+        letter-spacing="-1.1"
+        fill="#7DBA47">PuffPrice</text>
+</svg>
