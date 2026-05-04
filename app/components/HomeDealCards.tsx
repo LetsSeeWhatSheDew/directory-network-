@@ -8,7 +8,8 @@ import { listingHref } from "../../lib/links";
 import TrackedLink from "./TrackedLink";
 import ShareDealButton from "./ShareDealButton";
 import DealBadge from "./DealBadge";
-import DealFreshnessBadge, { isFreshnessHidden, isFreshnessStale } from "./DealFreshnessBadge";
+import { isFreshnessHidden, isFreshnessStale } from "./DealFreshnessBadge";
+import VerifiedRow from "./VerifiedRow";
 
 type Deal = {
   deal_id?: string;
@@ -53,6 +54,35 @@ function dedupeDeals(list: Deal[]): Deal[] {
     out.push(d);
   }
   return out;
+}
+
+/**
+ * Per-dispensary diversity pass. Cleanup-PR rule: when the top-deals row
+ * shows 3 cards, never repeat the same dispensary unless we'd otherwise
+ * be forced to render fewer than 3 cards. Caller can specify maxRepeat
+ * (default 1) to relax the rule for cases where there are genuinely
+ * fewer dispensaries than slots.
+ *
+ * Pass 1: take the highest-ranked deal from each unique dispensary.
+ * Pass 2: if that doesn't fill the slot count, fall back to the original
+ *         order (preserving discount sort) so the row stays full.
+ */
+function diversifyByDispensary(list: Deal[], slots: number): Deal[] {
+  const bySlug = new Map<string, Deal>();
+  for (const d of list) {
+    const slug = (d.listing_slug || d.slug || "").toLowerCase();
+    if (!slug) continue;
+    if (!bySlug.has(slug)) bySlug.set(slug, d);
+  }
+  const unique = Array.from(bySlug.values());
+  if (unique.length >= slots) return unique.slice(0, slots);
+  // Backfill with repeats from the original list so the row stays full.
+  const out = [...unique];
+  for (const d of list) {
+    if (out.length >= slots) break;
+    if (!out.includes(d)) out.push(d);
+  }
+  return out.slice(0, slots);
 }
 
 function displayName(d: Deal) {
@@ -121,32 +151,71 @@ export default function HomeDealCards({
   // "near" (GPS city) vs "all" (statewide best savings). The default
   // mirrors the prior behavior: use GPS if available, else statewide.
   const [mode, setMode] = useState<Mode>("near");
-  const initialDeduped = dedupeDeals(initial || []).slice(0, 3);
+  // Diversity guard: take the top deal per unique dispensary so the row
+  // doesn't render three Cookies-Peoria-Heights cards when one
+  // dispensary has multiple recurring deals stacked at the top of the
+  // discount-sorted feed.
+  const initialDeduped = diversifyByDispensary(dedupeDeals(initial || []), 3);
   const [dealsNear, setDealsNear] = useState<Deal[] | null>(null);
   const [dealsAll, setDealsAll] = useState<Deal[]>(initialDeduped);
   const [city, setCity] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // Hot-swap rule (cleanup PR, 2026-05-04): when the user picks a new
+  // city via the picker modal or the LocationAware editor, the
+  // `cl:location-resolved` event fires. Re-fetch from /api/deals/recommend
+  // so the row updates without a full reload — the test case in the spec
+  // is "switch from Peoria to Bloomington and confirm results update."
   useEffect(() => {
+    let cancelled = false;
+    const controller = new AbortController();
+
+    const refetchFor = (nextCity: string | null) => {
+      if (!nextCity) return;
+      if (cancelled) return;
+      setCity(nextCity);
+      setLoading(true);
+      fetch(
+        `/api/deals/recommend?category=all&limit=6&city=${encodeURIComponent(nextCity)}`,
+        { cache: "no-store", signal: controller.signal }
+      )
+        .then((r) => (r.ok ? r.json() : null))
+        .then((data) => {
+          if (cancelled) return;
+          const raw: Deal[] = Array.isArray(data?.deals) ? data.deals : [];
+          const arr = diversifyByDispensary(dedupeDeals(raw), 3);
+          // Even when the new city has no matches, set an empty array so
+          // the headline / location strip update immediately. The mode
+          // toggle still lets the user fall back to "All Central IL".
+          setDealsNear(arr.length > 0 ? arr : []);
+        })
+        .catch(() => {})
+        .finally(() => {
+          if (!cancelled) setLoading(false);
+        });
+    };
+
     let c: string | null = null;
     try {
       c = sessionStorage.getItem("cl_city");
     } catch {}
-    if (!c) return;
-    setCity(c);
-    setLoading(true);
-    fetch(
-      `/api/deals/recommend?category=all&limit=6&city=${encodeURIComponent(c)}`,
-      { cache: "no-store" }
-    )
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        const raw: Deal[] = Array.isArray(data?.deals) ? data.deals : [];
-        const arr = dedupeDeals(raw).slice(0, 3);
-        if (arr.length > 0) setDealsNear(arr);
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
+    if (c) refetchFor(c);
+
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent).detail as { city?: string } | null;
+      if (!detail?.city) return;
+      // Skip if the resolved city is the same as the current state
+      // (silent IP-or-cookie reconciliation runs on mount).
+      if (detail.city.toLowerCase() === (c || "").toLowerCase()) return;
+      c = detail.city;
+      refetchFor(detail.city);
+    };
+    window.addEventListener("cl:location-resolved", handler);
+    return () => {
+      cancelled = true;
+      controller.abort();
+      window.removeEventListener("cl:location-resolved", handler);
+    };
   }, []);
 
   const deals =
@@ -212,12 +281,21 @@ export default function HomeDealCards({
     );
   }
 
-  const headline =
-    mode === "all"
-      ? "Top deals in Central Illinois today"
-      : city
-      ? `Best deals near ${city} today`
-      : "Top deals in Central Illinois today";
+  // Honest headline rule (cleanup PR, 2026-05-04): if every visible deal
+  // belongs to one dispensary, name it explicitly rather than implying a
+  // selection across the metro that doesn't exist.
+  const visibleSlugs = new Set(
+    deals.map((d) => (d.listing_slug || d.slug || "").toLowerCase()).filter(Boolean)
+  );
+  const onlyOneDispensary = visibleSlugs.size === 1 && deals.length > 0;
+  const onlyDispensaryName = onlyOneDispensary ? displayName(deals[0]) : null;
+  const headline = onlyDispensaryName
+    ? `Top deals at ${onlyDispensaryName} today`
+    : mode === "all"
+    ? "Top deals in Central Illinois today"
+    : city
+    ? `Best deals near ${city} today`
+    : "Top deals in Central Illinois today";
 
   return (
     <>
@@ -302,7 +380,7 @@ export default function HomeDealCards({
         )}
       </div>
 
-      <div className="deal-cards">
+      <div className="deal-cards pp-deal-grid-equal">
         {deals.filter((d) => !isFreshnessHidden(d.verified_at)).map((d, i) => {
           const slug = d.slug || d.listing_slug || "";
           const href = listingHref(slug, city);
@@ -310,12 +388,22 @@ export default function HomeDealCards({
           const name = displayName(d);
           const urgency = getExpiryUrgency(d.expires_at);
           const stale = isFreshnessStale(d.verified_at);
+          const dollars = estimateSavings(d);
+          const formatted = formatSavingsDollars(d);
+          // Discount % for the Verified row. Prefer explicit percent units;
+          // fall back to discount_value when unit is "percent" or missing.
+          const unit = (d.discount_unit || "").toLowerCase();
+          const dv = Number(d.discount_value);
+          const discountPct =
+            Number.isFinite(dv) && dv > 0 && (unit === "percent" || (!unit && dv <= 100))
+              ? Math.round(dv)
+              : null;
           return (
             <TrackedLink
               key={d.deal_id || d.id || i}
               href={href}
-              className={`deal-card${i === 0 ? " top-pick" : ""}`}
-              style={{ textDecoration: "none", color: "inherit", ...(stale ? { opacity: 0.75, filter: "grayscale(25%)" } : {}) }}
+              className={`deal-card pp-deal-card${i === 0 ? " top-pick" : ""}`}
+              style={{ textDecoration: "none", color: "inherit", ...(stale ? { opacity: 0.78, filter: "grayscale(20%)" } : {}) }}
               event="deal_click"
               params={{ dispensary: name, category: d.category || "all", position: i + 1 }}
             >
@@ -331,7 +419,7 @@ export default function HomeDealCards({
                   </div>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                  <span className={`open-badge ${likelyOpen ? "open" : "closed"}`}>
+                  <span className={`pp-open-pill ${likelyOpen ? "is-open" : "is-closed"}`}>
                     {likelyOpen ? "Open today" : "Check hours"}
                   </span>
                   {(d.id || d.deal_id) && (
@@ -339,7 +427,7 @@ export default function HomeDealCards({
                       dealId={(d.id || d.deal_id) as string}
                       dispensaryName={name}
                       dealTitle={d.deal_title || "Deal"}
-                      savings={estimateSavings(d) ?? null}
+                      savings={dollars ?? null}
                       variant="icon"
                     />
                   )}
@@ -361,35 +449,86 @@ export default function HomeDealCards({
                 {d.google_rating && d.google_rating > 0 && <span className="deal-attr">{d.google_rating} ★</span>}
                 {d.is_recurring && <span className="deal-attr">Recurring</span>}
               </div>
-              {(() => {
-                const dollars = estimateSavings(d);
-                const formatted = formatSavingsDollars(d);
-                if (formatted === "Deal active") return null;
-                if (dollars != null) {
-                  return (
+              <div className="pp-deal-card-foot">
+                {formatted !== "Deal active" && (
+                  dollars != null && dollars > 0 ? (
                     <div className="deal-savings">
                       <div className="savings-copy">
                         <span className="savings-label">You save</span>
-                        </div>
+                      </div>
                       <span className="savings-num">${dollars}</span>
                     </div>
-                  );
-                }
-                return (
-                  <div className="deal-savings">
-                    <span className="savings-num" style={{ fontSize: "1.5rem" }}>
-                      {formatted}
-                    </span>
-                  </div>
-                );
-              })()}
-              <div style={{ marginTop: 6 }}>
-                <DealFreshnessBadge verifiedAt={d.verified_at} statusReason={d.status_reason} />
+                  ) : (
+                    <div className="deal-savings">
+                      <span className="savings-num" style={{ fontSize: "1.5rem" }}>
+                        {formatted}
+                      </span>
+                    </div>
+                  )
+                )}
+                <div style={{ marginTop: 8 }}>
+                  <VerifiedRow verifiedAt={d.verified_at} discountPct={discountPct} />
+                </div>
+                <div className="pp-deal-card-cta-row">
+                  <span className="pp-deal-card-cta">View deal &rarr;</span>
+                </div>
               </div>
             </TrackedLink>
           );
         })}
       </div>
+      <style>{`
+        /* Equal-height card grid — every card in the row stretches to
+           match the tallest sibling. Inner content can vary; the shell
+           stays consistent so the row never reads as "this card is the
+           winner because it's bigger." */
+        .pp-deal-grid-equal { align-items: stretch; }
+        .pp-deal-grid-equal > * { display: flex; flex-direction: column; height: 100%; }
+        .pp-deal-card { display: flex; flex-direction: column; height: 100%; }
+        .pp-deal-card-foot { margin-top: auto; display: flex; flex-direction: column; gap: 10px; }
+        .pp-deal-card-cta-row { display: flex; justify-content: flex-end; padding-top: 4px; }
+        .pp-deal-card-cta {
+          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-weight: 700;
+          font-size: 0.82rem;
+          color: var(--color-sage-deep, #6BA63B);
+          letter-spacing: -0.005em;
+        }
+        .pp-deal-card:hover .pp-deal-card-cta { color: var(--color-deep, #1F3D2B); }
+
+        /* "Open today" pill — primary trust signal on every card. Solid
+           sage, white text, padded for confidence. Replaces the older
+           pale-tint pill that disappeared into the cream surface. */
+        .pp-open-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-weight: 600;
+          font-size: 0.72rem;
+          letter-spacing: 0.01em;
+          padding: 5px 10px;
+          border-radius: 100px;
+          white-space: nowrap;
+          line-height: 1.2;
+          box-shadow: 0 1px 2px rgba(31, 61, 43, 0.10);
+        }
+        .pp-open-pill.is-open {
+          background: var(--color-sage, #7DBA47);
+          color: #fff;
+        }
+        .pp-open-pill.is-open::before {
+          content: "";
+          width: 6px; height: 6px; border-radius: 50%;
+          background: #fff;
+          display: inline-block;
+        }
+        .pp-open-pill.is-closed {
+          background: var(--color-gray-100, #F1EEE7);
+          color: var(--color-gray-600, #4B5563);
+          box-shadow: none;
+        }
+      `}</style>
     </>
   );
 }

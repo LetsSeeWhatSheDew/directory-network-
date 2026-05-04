@@ -6,7 +6,7 @@ import { estimateSavings, formatSavingsDollars, hasExactSavings } from "../../li
 import { displayCity } from "../../lib/cityNormalize";
 import { listingHref } from "../../lib/links";
 import TrackedLink from "./TrackedLink";
-import DealFreshnessBadge from "./DealFreshnessBadge";
+import VerifiedRow from "./VerifiedRow";
 
 type Deal = {
   deal_id?: string;
@@ -247,10 +247,19 @@ export default function HeroDealCard({
   const savings = formatSavingsDollars(deal);
   const expiresToday = endsToday(deal.expires_at);
   const exact = hasExactSavings(deal);
-  const regular = exact && deal.original_price != null ? Number(deal.original_price) : null;
-  const sale = exact && deal.sale_price != null ? Number(deal.sale_price) : null;
+  // Hide null/zero price fields. Cleanup PR rule: never render "$0" — if
+  // original_price or sale_price is missing OR zero, omit the row entirely.
+  const regular = exact && deal.original_price != null && Number(deal.original_price) > 0 ? Number(deal.original_price) : null;
+  const sale = exact && deal.sale_price != null && Number(deal.sale_price) > 0 ? Number(deal.sale_price) : null;
   const userCoords = readUserCoords();
   const miles = distanceMiles(userCoords, { lat: deal.lat, lng: deal.lng });
+  // Discount % for the Verified row.
+  const unit = (deal.discount_unit || "").toLowerCase();
+  const dv = Number(deal.discount_value);
+  const discountPct =
+    Number.isFinite(dv) && dv > 0 && (unit === "percent" || (!unit && dv <= 100))
+      ? Math.round(dv)
+      : null;
 
   return (
     <div className="hero-deal-card">
@@ -283,18 +292,22 @@ export default function HeroDealCard({
             event="deal_cta_click"
             params={{ dispensary: name, position: 1, source: "hero_recommendation" }}
           >
-            GO HERE →
+            View deal →
           </TrackedLink>
         )}
       </div>
-      <div style={{ marginTop: 8 }}>
-        <DealFreshnessBadge verifiedAt={deal.verified_at} statusReason={deal.status_reason} />
+      <div style={{ marginTop: 10 }}>
+        <VerifiedRow
+          verifiedAt={deal.verified_at}
+          discountPct={discountPct}
+          variant="detail"
+        />
       </div>
       <Link
         href={city ? `/deals/all?city=${encodeURIComponent(city)}` : "/deals/all"}
         className="hero-deal-more"
       >
-        {city ? `3 other deals near ${city} →` : "See more Central Illinois deals →"}
+        {city ? `More deals near ${city} →` : "See more Central Illinois deals →"}
       </Link>
       <style>{`
         .hero-deal-price{font-size:.9rem;color:#6b7280;font-family:system-ui,sans-serif;margin:-4px 0 8px}
