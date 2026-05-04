@@ -1,11 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import Logo from "./components/Logo";
+import { MapPin } from "lucide-react";
+import Nav from "./components/Nav";
+import Footer from "./components/Footer";
 import LocationAware from "./components/LocationAware";
 import TrackedLink from "./components/TrackedLink";
 import HomeDealCards from "./components/HomeDealCards";
 import HeroDealCard from "./components/HeroDealCard";
-import MobileNavMenu from "./components/MobileNavMenu";
 import SavingsCallout from "./components/SavingsCallout";
 import SearchTracker from "./components/SearchTracker";
 import FourTwentyBanner from "./components/FourTwentyBanner";
@@ -1099,85 +1100,231 @@ export default async function HomePage() {
           .city-card{padding:14px 18px;min-height:56px}
           .city-card-name{font-size:1rem}
         }
+
+        /* ============================================================
+         * Homepage hero (Image 1 fidelity)
+         * Deep brand surface, leaf-pattern watermark (handled by
+         * pp-leaf class), bud photography on the right edge, cream
+         * wordmark from Nav, sand CTA pill, floating featured card.
+         * ============================================================ */
+        .pp-home-hero {
+          position: relative;
+          padding: 0 0 clamp(3rem, 6vw, 5.5rem);
+          overflow: hidden;
+        }
+        .pp-home-hero-inner {
+          position: relative;
+          z-index: 2;
+          width: 100%;
+          max-width: 1280px;
+          margin: 0 auto;
+          padding: clamp(2.5rem, 6vw, 5rem) clamp(1rem, 4vw, 2rem) 0;
+          display: flex;
+          flex-direction: column;
+          gap: 1.25rem;
+          color: var(--color-cream, #F7F4ED);
+        }
+        .pp-home-hero-photo {
+          position: absolute;
+          top: 0; right: 0; bottom: 0;
+          width: 50%;
+          z-index: 1;
+          pointer-events: none;
+        }
+        .pp-home-hero-photo img { object-fit: cover; object-position: center right; }
+        .pp-home-hero-photo-scrim {
+          position: absolute;
+          inset: 0;
+          background:
+            linear-gradient(to right,
+              rgba(31, 61, 43, 1) 0%,
+              rgba(31, 61, 43, 0.85) 25%,
+              rgba(31, 61, 43, 0.55) 55%,
+              rgba(31, 61, 43, 0.35) 100%),
+            linear-gradient(to bottom,
+              rgba(31, 61, 43, 0.10),
+              rgba(31, 61, 43, 0.30));
+        }
+        .pp-home-hero-eyebrow {
+          color: var(--color-sage-vibrant, #93CB5C);
+          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-weight: 600;
+          font-size: 0.875rem;
+          letter-spacing: 0.01em;
+          margin: 0;
+        }
+        .pp-home-hero-h1 {
+          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-weight: 800;
+          font-size: clamp(2.5rem, 5.5vw + 1rem, 4.5rem);
+          line-height: 1.05;
+          letter-spacing: -0.04em;
+          color: var(--color-cream, #F7F4ED);
+          max-width: 18ch;
+          margin: 0;
+        }
+        .pp-home-hero-dollar { color: var(--color-sage-vibrant, #93CB5C); }
+        .pp-home-hero-h1-region {
+          color: var(--color-sand, #C9A876);
+          font-weight: 700;
+          font-size: 0.86em;
+        }
+        .pp-home-hero-sub {
+          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-weight: 500;
+          font-size: clamp(1rem, 1vw + 0.75rem, 1.125rem);
+          color: rgba(247, 244, 237, 0.78);
+          max-width: 56ch;
+          margin: 0;
+        }
+        .pp-home-hero-cta-row {
+          display: flex;
+          gap: 0.75rem;
+          flex-wrap: wrap;
+          margin-top: 0.5rem;
+        }
+        .pp-home-hero-featured {
+          margin-top: clamp(1.5rem, 3vw, 2.5rem);
+          max-width: 640px;
+        }
+
+        @media (max-width: 880px) {
+          .pp-home-hero-photo { width: 100%; opacity: 0.45; }
+          .pp-home-hero-photo-scrim {
+            background:
+              linear-gradient(to bottom,
+                rgba(31, 61, 43, 0.86) 0%,
+                rgba(31, 61, 43, 0.92) 60%,
+                rgba(31, 61, 43, 1.00) 100%);
+          }
+          .pp-home-hero-cta-row { flex-direction: column; align-items: stretch; }
+          .pp-home-hero-cta-row .pp-btn { width: 100%; }
+        }
+
+        /* ============================================================
+         * Category tiles band (under the hero)
+         * ============================================================ */
+        .pp-home-cats-band {
+          background: var(--color-cream, #F7F4ED);
+          border-bottom: 1px solid var(--color-gray-200, #E8E2D5);
+        }
+        .pp-home-cats-inner {
+          width: 100%;
+          max-width: 1280px;
+          margin: 0 auto;
+          padding: clamp(2rem, 4vw, 3rem) clamp(1rem, 4vw, 2rem);
+        }
+        .pp-home-cats-grid {
+          display: grid;
+          grid-template-columns: repeat(6, minmax(0, 1fr));
+          gap: 0.75rem;
+        }
+        .pp-home-cat-tile {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          padding: 1.125rem 0.75rem;
+          border-radius: 14px;
+          background: var(--color-cream-pure, #FAFAF7);
+          border: 1px solid var(--color-gray-200, #E8E2D5);
+          color: var(--color-deep, #1F3D2B);
+          text-decoration: none;
+          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-weight: 600;
+          font-size: 0.875rem;
+          letter-spacing: -0.005em;
+          transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+          min-height: 96px;
+        }
+        .pp-home-cat-tile:hover {
+          border-color: var(--color-sage, #7DBA47);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(31, 61, 43, 0.06);
+        }
+        .pp-home-cat-icon { display: inline-flex; }
+        .pp-home-cat-label { display: inline-block; }
+
+        @media (max-width: 880px) {
+          .pp-home-cats-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+        @media (max-width: 480px) {
+          .pp-home-cats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
       `}</style>
 
-      {/* NAV */}
-      <nav className="nav">
-        <Link href="/" className="logo" aria-label="PuffPrice home">
-          <Logo size={44} priority />
-        </Link>
-        <div className="nav-links desktop-only-nav">
-          <Link href="/cannabis/illinois/open-now" className="nav-link">Open now</Link>
-          <Link href="/savings/dashboard" className="nav-link">My savings</Link>
-          <Link href="/map" className="nav-link">Map view</Link>
-          <Link href="/dispensaries" className="nav-link">Browse Central IL</Link>
-          <Link href="/about" className="nav-link">About</Link>
-          <Link href="/illinois-cannabis-tax-calculator" className="nav-link">Tax calculator</Link>
-          <Link href="/dispensaries" className="nav-cta">For dispensaries</Link>
-        </div>
-        <MobileNavMenu />
-      </nav>
+      {/* HERO — Image 1 fidelity: deep brand surface, leaf-pattern watermark
+          at 4%, bud photography bleed on the right edge, cream wordmark in
+          Nav, sand-tone "Find Deals Near Me" CTA, featured deal card
+          floating below. Brand spec § 6.1, asset manifest § 1 + § 2. */}
+      <div className="pp-home-hero pp-surface-deep pp-leaf pp-leaf-04">
+        <Nav variant="deep" />
 
-      {/* 4/20 DEALS WEEK BANNER — only renders Apr 17–20, 2026 */}
-      <FourTwentyBanner />
+        {/* 4/20 DEALS WEEK BANNER — only renders Apr 17–20, 2026 */}
+        <FourTwentyBanner />
 
-      {/* HERO — one recommendation, above the fold. The pp-hero-bg
-          class layers a warm cream + terracotta-hint radial gradient
-          per brand spec 2.3 in lieu of hero photography (deferred). */}
-      <div className="hero pp-hero-bg">
-        {/* Hero backdrop — Downtown Peoria (Darrien Staton, Unsplash).
-            The cream gradient overlay below keeps the headline legible
-            without forcing the photo darker. */}
-        <div className="hero-photo">
+        {/* Right-edge bud photo accent — desktop only. ~30% width bleed
+            with a deep-green tint scrim to keep the wordmark legible. */}
+        <div className="pp-home-hero-photo" aria-hidden="true">
           <Image
-            src="/photography/hero-peoria-downtown.jpg"
-            alt="Downtown Peoria, Illinois at golden hour"
+            src="/photography/hero-bud-edge.jpg"
+            alt=""
             fill
             priority
-            sizes="100vw"
+            sizes="(max-width: 880px) 0px, 40vw"
           />
+          <div className="pp-home-hero-photo-scrim" aria-hidden="true" />
         </div>
-        <div className="hero-photo-overlay" aria-hidden="true" />
-        <div className="hero-inner">
-          <div className="hero-grid">
-            <div className="hero-left pp-fade-up">
-              {/* Location line — tiny, first */}
-              <LocationAware />
 
-              {/* Regional eyebrow — Central IL is the focus market. */}
-              <p className="pp-eyebrow" style={{ marginBottom: 6 }}>Serving Central Illinois</p>
+        <div className="pp-home-hero-inner pp-fade-up">
+          <p className="pp-home-hero-eyebrow"><LocationAware /></p>
 
-              {/* Headline */}
-              <h1>Best Bud For <em>Your Buck$</em></h1>
-              <p className="hero-sub">
-                Low Prices. High Times.
-                <br />
-                Live dispensary deals for Central Illinois.
-              </p>
+          <h1 className="pp-home-hero-h1">
+            Best Bud For Your Buck<span className="pp-home-hero-dollar">$</span>
+            <br />
+            <span className="pp-home-hero-h1-region">in Central Illinois</span>
+          </h1>
 
-              {/* THE big deal card — the hero element */}
-              <HeroDealCard initial={featuredDeal} totalDealCount={dealCount ?? 0} />
+          <p className="pp-home-hero-sub">
+            Live verified deals &middot; Peoria &middot; Bloomington &middot; Champaign
+          </p>
 
-              {/* City-aware savings callout — muted supporting copy */}
-              <SavingsCallout initialSavings={featuredDeal ? estimateSavings(featuredDeal) : null} />
-            </div>
+          <div className="pp-home-hero-cta-row">
+            <Link href="/cannabis/illinois/open-now" className="pp-btn pp-btn-lg pp-btn-sand">
+              <MapPin size={18} strokeWidth={2.25} aria-hidden="true" />
+              Find Deals Near Me
+            </Link>
+            <Link href="/dispensaries" className="pp-btn pp-btn-lg pp-btn-outline-cream">
+              Browse all dispensaries
+            </Link>
+          </div>
 
-            {/* Desktop-only right column: category shortcuts */}
-            <div className="hero-right">
-              <div className="hero-right-label">Browse by category</div>
-              {CATEGORIES.map((cat) => (
-                <TrackedLink
-                  key={cat.slug}
-                  href={`/deals/${cat.slug}`}
-                  className="cat-btn"
-                  event="category_click"
-                  params={{ category: cat.slug }}
-                >
-                  {renderIcon(cat.icon)}
-                  {cat.label}
-                </TrackedLink>
-              ))}
-            </div>
+          {/* Featured deal card floats over the hero bottom edge */}
+          <div className="pp-home-hero-featured">
+            <HeroDealCard initial={featuredDeal} totalDealCount={dealCount ?? 0} />
+            <SavingsCallout initialSavings={featuredDeal ? estimateSavings(featuredDeal) : null} />
+          </div>
+        </div>
+      </div>
+
+      {/* CATEGORY TILES — runs immediately under the hero on a cream surface */}
+      <div className="pp-home-cats-band">
+        <div className="pp-home-cats-inner">
+          <p className="pp-eyebrow" style={{ marginBottom: 14 }}>Browse by category</p>
+          <div className="pp-home-cats-grid">
+            {CATEGORIES.map((cat) => (
+              <TrackedLink
+                key={cat.slug}
+                href={`/deals/${cat.slug}`}
+                className="pp-home-cat-tile"
+                event="category_click"
+                params={{ category: cat.slug }}
+              >
+                <span className="pp-home-cat-icon">{renderIcon(cat.icon)}</span>
+                <span className="pp-home-cat-label">{cat.label}</span>
+              </TrackedLink>
+            ))}
           </div>
         </div>
       </div>
@@ -1397,17 +1544,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="footer">
-        <span className="footer-logo" aria-label="PuffPrice"><Logo size={40} /></span>
-        <div className="footer-links">
-          <Link href="/" className="footer-link">Central Illinois</Link>
-          <Link href="/cannabis/illinois/first-time-guide" className="footer-link">First-time guide</Link>
-          <Link href="/cannabis/illinois/laws" className="footer-link">IL laws</Link>
-          <Link href="/dispensaries" className="footer-link">For dispensaries</Link>
-        </div>
-        <span className="footer-copy">© {new Date().getFullYear()} PuffPrice · Photography via Unsplash</span>
-      </footer>
+      <Footer />
 
       {/* Mobile-only sticky bottom CTA — appears once user scrolls
           past the #pp-hero-sentinel. Hidden on desktop via CSS media
