@@ -14,6 +14,7 @@ import RecentlyViewedRow from "./components/RecentlyViewedRow";
 import EndingSoonRow from "./components/EndingSoonRow";
 import PuffPriceIndexCard from "./components/PuffPriceIndexCard";
 import StickyMobileCTA from "./components/StickyMobileCTA";
+import { CategoryIcon, HOME_HERO_CATEGORIES } from "../lib/categoryIcons";
 import { brand } from "../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../lib/dealScoring";
 import { getServerLocation } from "../lib/location";
@@ -49,187 +50,22 @@ export const metadata = {
 // ============================================================
 
 // ---------- SVG ICON COMPONENTS ----------
+// All cartoon category icons (gummy bear, vape pen, concentrate crystal,
+// flame) were retired 2026-05-04 in favor of Lucide line-art per
+// docs/brand-system.md. The category mapping now lives in
+// lib/categoryIcons.tsx and is rendered via <CategoryIcon slug="..." />.
 
-// 7-blade cannabis leaf — universal cannabis symbol
-function LeafIcon({ size = 20, color = "#93CB5C" }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      {/* stem */}
-      <path d="M32 60 L32 44" stroke={color} strokeWidth="2" strokeLinecap="round" />
-      {/* center blade (tallest) */}
-      <path d="M32 44 Q30 28 32 4 Q34 28 32 44 M30 14 L26 16 M34 14 L38 16 M30 22 L25 24 M34 22 L39 24 M30 30 L24 33 M34 30 L40 33" stroke={color} strokeWidth="1.5" fill={color} fillOpacity="0.55" strokeLinejoin="round" />
-      {/* upper-left blade */}
-      <path d="M32 44 Q20 32 10 14 Q22 28 32 44 M15 18 L11 22 M19 22 L15 26 M23 26 L20 30" stroke={color} strokeWidth="1.4" fill={color} fillOpacity="0.5" strokeLinejoin="round" />
-      {/* upper-right blade */}
-      <path d="M32 44 Q44 32 54 14 Q42 28 32 44 M49 18 L53 22 M45 22 L49 26 M41 26 L44 30" stroke={color} strokeWidth="1.4" fill={color} fillOpacity="0.5" strokeLinejoin="round" />
-      {/* mid-left blade (widest) */}
-      <path d="M32 44 Q14 40 2 30 Q18 40 32 44 M10 34 L7 38 M16 36 L13 40 M22 40 L20 43" stroke={color} strokeWidth="1.4" fill={color} fillOpacity="0.45" strokeLinejoin="round" />
-      {/* mid-right blade (widest) */}
-      <path d="M32 44 Q50 40 62 30 Q46 40 32 44 M54 34 L57 38 M48 36 L51 40 M42 40 L44 43" stroke={color} strokeWidth="1.4" fill={color} fillOpacity="0.45" strokeLinejoin="round" />
-      {/* lower-left blade (short) */}
-      <path d="M32 44 Q22 48 12 50 Q24 46 32 44" stroke={color} strokeWidth="1.3" fill={color} fillOpacity="0.4" strokeLinejoin="round" />
-      {/* lower-right blade (short) */}
-      <path d="M32 44 Q42 48 52 50 Q40 46 32 44" stroke={color} strokeWidth="1.3" fill={color} fillOpacity="0.4" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-// Gummy bear — edibles icon
-function GummyBearIcon({ size = 20 }) {
-  const color = "#fb923c";
-  return (
-    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      {/* left ear */}
-      <circle cx="20" cy="14" r="6" fill={color} />
-      {/* right ear */}
-      <circle cx="44" cy="14" r="6" fill={color} />
-      {/* head */}
-      <circle cx="32" cy="22" r="10" fill={color} />
-      {/* torso */}
-      <ellipse cx="32" cy="40" rx="13" ry="14" fill={color} />
-      {/* left arm */}
-      <ellipse cx="16" cy="36" rx="5" ry="6" fill={color} />
-      {/* right arm */}
-      <ellipse cx="48" cy="36" rx="5" ry="6" fill={color} />
-      {/* left leg */}
-      <ellipse cx="24" cy="56" rx="5" ry="5" fill={color} />
-      {/* right leg */}
-      <ellipse cx="40" cy="56" rx="5" ry="5" fill={color} />
-      {/* eyes */}
-      <circle cx="28" cy="20" r="1.4" fill="#1F3D2B" />
-      <circle cx="36" cy="20" r="1.4" fill="#1F3D2B" />
-      {/* smile */}
-      <path d="M28 25 Q32 28 36 25" stroke="#1F3D2B" strokeWidth="1.3" strokeLinecap="round" fill="none" />
-    </svg>
-  );
-}
-
-// Vape pen — sleek cartridge with oil window
-function VapeIcon({ size = 20 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      {/* mouthpiece */}
-      <rect x="28" y="4" width="8" height="8" rx="1.5" fill="#1f2937" />
-      {/* upper cartridge body */}
-      <rect x="24" y="12" width="16" height="22" rx="2" fill="#e5e7eb" stroke="#9ca3af" strokeWidth="1" />
-      {/* oil window */}
-      <rect x="27" y="16" width="10" height="14" rx="1" fill="#fbbf24" />
-      {/* metal band */}
-      <rect x="23" y="34" width="18" height="4" rx="1" fill="#9ca3af" />
-      {/* battery body */}
-      <rect x="24" y="38" width="16" height="20" rx="2" fill="#1F3D2B" />
-      {/* LED button */}
-      <circle cx="32" cy="52" r="2.2" fill="#7DBA47" />
-      <circle cx="32" cy="52" r="1" fill="#93CB5C" />
-    </svg>
-  );
-}
-
-// Concentrate crystal — faceted gem / water drop
-function ConcentrateIcon({ size = 20 }) {
-  const color = "#a78bfa";
-  return (
-    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      {/* outer crystal teardrop */}
-      <path d="M32 6 L50 32 Q50 54 32 58 Q14 54 14 32 Z" fill={color} fillOpacity="0.85" stroke="#7c3aed" strokeWidth="1.2" strokeLinejoin="round" />
-      {/* internal facet lines */}
-      <path d="M32 6 L32 58" stroke="#c4b5fd" strokeWidth="0.8" />
-      <path d="M14 32 L50 32" stroke="#c4b5fd" strokeWidth="0.8" />
-      <path d="M22 18 L42 46" stroke="#c4b5fd" strokeWidth="0.7" />
-      <path d="M42 18 L22 46" stroke="#c4b5fd" strokeWidth="0.7" />
-      {/* highlight */}
-      <path d="M26 14 L22 24" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" opacity="0.75" />
-    </svg>
-  );
-}
-
-// Flame — all deals icon
-function FlameIcon({ size = 20 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      {/* outer flame (white on green bg) */}
-      <path d="M32 6 C36 18 48 24 48 40 C48 52 40 58 32 58 C24 58 16 52 16 40 C16 30 22 26 24 20 C26 26 30 22 32 6 Z" fill="#fff" stroke="#fff" strokeWidth="1" strokeLinejoin="round" />
-      {/* inner flame */}
-      <path d="M32 22 C34 28 40 32 40 42 C40 50 36 54 32 54 C28 54 24 50 24 42 C24 36 28 34 29 30 C30 34 31 32 32 22 Z" fill="#fb923c" />
-      {/* core */}
-      <path d="M32 34 C33 38 36 40 36 45 C36 49 34 51 32 51 C30 51 28 49 28 45 C28 41 30 41 32 34 Z" fill="#fbbf24" />
-    </svg>
-  );
-}
-
-// Large botanical cannabis plant — hero background, 420px tall, bottom-aligned
-// 7-blade fan leaf clusters branching off the main stalk at multiple heights
-function PlantSilhouette({ side = "left" }) {
-  const transform = side === "right" ? "scale(-1,1) translate(-200,0)" : "";
-  // Single 7-blade fan leaf cluster, origin at (0,0), blades radiating upward
-  const FanLeaf = ({ scale = 1 }) => (
-    <g transform={`scale(${scale})`} fill="#e8e4da" fillOpacity="0.9" stroke="#e8e4da" strokeWidth="1" strokeLinejoin="round">
-      {/* center blade — tallest, straight up */}
-      <path d="M0 0 Q-3 -40 -1 -78 Q0 -82 1 -78 Q3 -40 0 0 Z" />
-      {/* blades at 30° (left + right) */}
-      <path d="M0 0 Q-22 -32 -40 -62 Q-43 -66 -38 -65 Q-14 -28 0 0 Z" />
-      <path d="M0 0 Q22 -32 40 -62 Q43 -66 38 -65 Q14 -28 0 0 Z" />
-      {/* blades at 60° (widest) */}
-      <path d="M0 0 Q-38 -20 -64 -34 Q-68 -36 -63 -32 Q-24 -10 0 0 Z" />
-      <path d="M0 0 Q38 -20 64 -34 Q68 -36 63 -32 Q24 -10 0 0 Z" />
-      {/* blades at 80° (short lower) */}
-      <path d="M0 0 Q-32 -4 -50 -4 Q-54 -3 -48 -1 Q-22 2 0 0 Z" />
-      <path d="M0 0 Q32 -4 50 -4 Q54 -3 48 -1 Q22 2 0 0 Z" />
-    </g>
-  );
-  return (
-    <svg
-      width="200"
-      height="420"
-      viewBox="0 0 200 420"
-      xmlns="http://www.w3.org/2000/svg"
-      style={{
-        position: "absolute",
-        bottom: "0",
-        [side]: "-30px",
-        opacity: 0.3,
-        pointerEvents: "none",
-        zIndex: 0,
-      }}
-      aria-hidden="true"
-    >
-      <g transform={transform}>
-        {/* main stalk, rises from bottom */}
-        <path d="M100 420 L100 20" stroke="#e8e4da" strokeWidth="3" fill="none" />
-        {/* branch offshoots */}
-        <path d="M100 330 Q82 318 62 304" stroke="#e8e4da" strokeWidth="2" fill="none" />
-        <path d="M100 240 Q118 228 140 216" stroke="#e8e4da" strokeWidth="2" fill="none" />
-        <path d="M100 150 Q80 140 60 128" stroke="#e8e4da" strokeWidth="2" fill="none" />
-        {/* fan leaf clusters at different heights */}
-        <g transform="translate(100 22)"><FanLeaf scale={1} /></g>
-        <g transform="translate(60 128)"><FanLeaf scale={0.82} /></g>
-        <g transform="translate(140 216)"><FanLeaf scale={0.78} /></g>
-        <g transform="translate(62 304)"><FanLeaf scale={0.68} /></g>
-        <g transform="translate(100 390)"><FanLeaf scale={0.55} /></g>
-      </g>
-    </svg>
-  );
-}
+// PlantSilhouette helper retired 2026-05-04 — the hero now uses the
+// .pp-leaf watermark utility from globals.css instead of a per-page
+// inline SVG. Kept commit history intact for future reference.
 
 // ---------- DATA ----------
 
-const CATEGORIES = [
-  { label: "Flower", slug: "flower", icon: "leaf" },
-  { label: "Edibles", slug: "edibles", icon: "gummy" },
-  { label: "Vapes", slug: "vapes", icon: "vape" },
-  { label: "Concentrates", slug: "concentrate", icon: "crystal" },
-  { label: "All deals", slug: "all", icon: "flame" },
-];
-
-function renderIcon(key) {
-  const s = 36;
-  if (key === "leaf") return <LeafIcon size={s} />;
-  if (key === "gummy") return <GummyBearIcon size={s} />;
-  if (key === "vape") return <VapeIcon size={s} />;
-  if (key === "crystal") return <ConcentrateIcon size={s} />;
-  if (key === "flame") return <FlameIcon size={s} />;
-  return null;
-}
+// Category data is now sourced from lib/categoryIcons.tsx so the
+// homepage and the rest of the site stay in sync. The hero surfaces
+// six categories: flower, edibles, vapes, concentrates, topicals,
+// accessories.
+const CATEGORIES = HOME_HERO_CATEGORIES;
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300";
@@ -1102,14 +938,18 @@ export default async function HomePage() {
         }
 
         /* ============================================================
-         * Homepage hero (Image 1 fidelity)
-         * Deep brand surface, leaf-pattern watermark (handled by
-         * pp-leaf class), bud photography on the right edge, cream
-         * wordmark from Nav, sand CTA pill, floating featured card.
+         * Homepage hero — two-column layout (cleanup PR, 2026-05-04)
+         *
+         * Left column:  hero copy + dual CTAs + LocationAware strip
+         * Right column: featured deal card stacked above category tiles
+         *
+         * Both columns must be visible in a 1366×768 viewport without
+         * scrolling. Category grid moves under the CTAs on tablet, then
+         * stacks vertically on mobile (still above the rest of the page).
          * ============================================================ */
         .pp-home-hero {
           position: relative;
-          padding: 0 0 clamp(3rem, 6vw, 5.5rem);
+          padding: 0 0 clamp(2.5rem, 5vw, 4.5rem);
           overflow: hidden;
         }
         .pp-home-hero-inner {
@@ -1118,16 +958,35 @@ export default async function HomePage() {
           width: 100%;
           max-width: 1280px;
           margin: 0 auto;
-          padding: clamp(2.5rem, 6vw, 5rem) clamp(1rem, 4vw, 2rem) 0;
+          padding: clamp(1.75rem, 4vw, 3rem) clamp(1rem, 4vw, 2rem) 0;
+          color: var(--color-cream, #F7F4ED);
+        }
+        .pp-home-hero-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: clamp(1.5rem, 3vw, 2.5rem);
+          align-items: start;
+        }
+        @media (min-width: 1024px) {
+          .pp-home-hero-grid {
+            grid-template-columns: minmax(0, 1.05fr) minmax(420px, 1fr);
+            gap: clamp(2rem, 4vw, 3.5rem);
+          }
+        }
+        .pp-home-hero-left {
           display: flex;
           flex-direction: column;
-          gap: 1.25rem;
-          color: var(--color-cream, #F7F4ED);
+          gap: 1rem;
+        }
+        .pp-home-hero-right {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
         }
         .pp-home-hero-photo {
           position: absolute;
           top: 0; right: 0; bottom: 0;
-          width: 50%;
+          width: 38%;
           z-index: 1;
           pointer-events: none;
         }
@@ -1138,9 +997,9 @@ export default async function HomePage() {
           background:
             linear-gradient(to right,
               rgba(31, 61, 43, 1) 0%,
-              rgba(31, 61, 43, 0.85) 25%,
-              rgba(31, 61, 43, 0.55) 55%,
-              rgba(31, 61, 43, 0.35) 100%),
+              rgba(31, 61, 43, 0.95) 35%,
+              rgba(31, 61, 43, 0.78) 70%,
+              rgba(31, 61, 43, 0.55) 100%),
             linear-gradient(to bottom,
               rgba(31, 61, 43, 0.10),
               rgba(31, 61, 43, 0.30));
@@ -1156,7 +1015,7 @@ export default async function HomePage() {
         .pp-home-hero-h1 {
           font-family: Manrope, system-ui, -apple-system, sans-serif;
           font-weight: 800;
-          font-size: clamp(2.5rem, 5.5vw + 1rem, 4.5rem);
+          font-size: clamp(2.25rem, 4vw + 1rem, 3.75rem);
           line-height: 1.05;
           letter-spacing: -0.04em;
           color: var(--color-cream, #F7F4ED);
@@ -1172,24 +1031,77 @@ export default async function HomePage() {
         .pp-home-hero-sub {
           font-family: Manrope, system-ui, -apple-system, sans-serif;
           font-weight: 500;
-          font-size: clamp(1rem, 1vw + 0.75rem, 1.125rem);
+          font-size: clamp(0.95rem, 0.5vw + 0.75rem, 1.0625rem);
           color: rgba(247, 244, 237, 0.78);
-          max-width: 56ch;
+          max-width: 52ch;
           margin: 0;
         }
         .pp-home-hero-cta-row {
           display: flex;
           gap: 0.75rem;
           flex-wrap: wrap;
-          margin-top: 0.5rem;
-        }
-        .pp-home-hero-featured {
-          margin-top: clamp(1.5rem, 3vw, 2.5rem);
-          max-width: 640px;
+          margin-top: 0.25rem;
         }
 
-        @media (max-width: 880px) {
-          .pp-home-hero-photo { width: 100%; opacity: 0.45; }
+        /* Right column — featured deal card. The HeroDealCard component
+           applies its own styles; this just constrains width. */
+        .pp-home-hero-featured {
+          width: 100%;
+        }
+
+        /* Category grid — sits inside the right column on desktop, under
+           the CTAs on mobile. Cream tile on deep surface = stays
+           on-brand without recoloring the hero. */
+        .pp-home-hero-cats-shell {
+          background: rgba(247, 244, 237, 0.06);
+          border: 1px solid rgba(247, 244, 237, 0.10);
+          border-radius: 16px;
+          padding: 1rem;
+          backdrop-filter: blur(2px);
+        }
+        .pp-home-hero-cats-label {
+          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-weight: 800;
+          font-size: 0.6875rem;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: var(--color-sage-vibrant, #93CB5C);
+          margin: 0 0 0.625rem 0.25rem;
+        }
+        .pp-home-hero-cats-grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 0.625rem;
+        }
+        .pp-home-hero-cat-tile {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 0.375rem;
+          padding: 0.875rem 0.5rem;
+          border-radius: 12px;
+          background: var(--color-cream-pure, #FAFAF7);
+          border: 1px solid transparent;
+          color: var(--color-deep, #1F3D2B);
+          text-decoration: none;
+          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-weight: 600;
+          font-size: 0.8125rem;
+          letter-spacing: -0.005em;
+          transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+          min-height: 78px;
+        }
+        .pp-home-hero-cat-tile:hover {
+          border-color: var(--color-sage, #7DBA47);
+          transform: translateY(-1px);
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+        }
+        .pp-home-hero-cat-icon { display: inline-flex; }
+        .pp-home-hero-cat-label { display: inline-block; }
+
+        @media (max-width: 1023px) {
+          .pp-home-hero-photo { width: 100%; opacity: 0.35; }
           .pp-home-hero-photo-scrim {
             background:
               linear-gradient(to bottom,
@@ -1197,134 +1109,95 @@ export default async function HomePage() {
                 rgba(31, 61, 43, 0.92) 60%,
                 rgba(31, 61, 43, 1.00) 100%);
           }
+        }
+        @media (max-width: 640px) {
+          .pp-home-hero-cats-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
           .pp-home-hero-cta-row { flex-direction: column; align-items: stretch; }
           .pp-home-hero-cta-row .pp-btn { width: 100%; }
         }
-
-        /* ============================================================
-         * Category tiles band (under the hero)
-         * ============================================================ */
-        .pp-home-cats-band {
-          background: var(--color-cream, #F7F4ED);
-          border-bottom: 1px solid var(--color-gray-200, #E8E2D5);
-        }
-        .pp-home-cats-inner {
-          width: 100%;
-          max-width: 1280px;
-          margin: 0 auto;
-          padding: clamp(2rem, 4vw, 3rem) clamp(1rem, 4vw, 2rem);
-        }
-        .pp-home-cats-grid {
-          display: grid;
-          grid-template-columns: repeat(6, minmax(0, 1fr));
-          gap: 0.75rem;
-        }
-        .pp-home-cat-tile {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
-          padding: 1.125rem 0.75rem;
-          border-radius: 14px;
-          background: var(--color-cream-pure, #FAFAF7);
-          border: 1px solid var(--color-gray-200, #E8E2D5);
-          color: var(--color-deep, #1F3D2B);
-          text-decoration: none;
-          font-family: Manrope, system-ui, -apple-system, sans-serif;
-          font-weight: 600;
-          font-size: 0.875rem;
-          letter-spacing: -0.005em;
-          transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
-          min-height: 96px;
-        }
-        .pp-home-cat-tile:hover {
-          border-color: var(--color-sage, #7DBA47);
-          transform: translateY(-1px);
-          box-shadow: 0 4px 12px rgba(31, 61, 43, 0.06);
-        }
-        .pp-home-cat-icon { display: inline-flex; }
-        .pp-home-cat-label { display: inline-block; }
-
-        @media (max-width: 880px) {
-          .pp-home-cats-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-        }
-        @media (max-width: 480px) {
-          .pp-home-cats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        @media (max-width: 380px) {
+          .pp-home-hero-cats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
       `}</style>
 
-      {/* HERO — Image 1 fidelity: deep brand surface, leaf-pattern watermark
-          at 4%, bud photography bleed on the right edge, cream wordmark in
-          Nav, sand-tone "Find Deals Near Me" CTA, featured deal card
-          floating below. Brand spec § 6.1, asset manifest § 1 + § 2. */}
+      {/* HERO — Two-column layout (cleanup PR, 2026-05-04):
+          LEFT: location strip → headline → subhead → dual CTAs
+          RIGHT: featured deal card stacked above the category grid
+          Both columns must fit in a 1366×768 viewport without scrolling.
+          Brand spec § 6.1, asset manifest § 1 + § 2. */}
       <div className="pp-home-hero pp-surface-deep pp-leaf pp-leaf-04">
         <Nav variant="deep" />
 
         {/* 4/20 DEALS WEEK BANNER — only renders Apr 17–20, 2026 */}
         <FourTwentyBanner />
 
-        {/* Right-edge bud photo accent — desktop only. ~30% width bleed
-            with a deep-green tint scrim to keep the wordmark legible. */}
+        {/* Right-edge bud photo accent — desktop only. ~38% width bleed
+            with a deep-green tint scrim to keep the headline legible. */}
         <div className="pp-home-hero-photo" aria-hidden="true">
           <Image
             src="/photography/hero-bud-edge.jpg"
             alt=""
             fill
             priority
-            sizes="(max-width: 880px) 0px, 40vw"
+            sizes="(max-width: 1023px) 0px, 38vw"
           />
           <div className="pp-home-hero-photo-scrim" aria-hidden="true" />
         </div>
 
         <div className="pp-home-hero-inner pp-fade-up">
-          <p className="pp-home-hero-eyebrow"><LocationAware /></p>
+          <div className="pp-home-hero-grid">
+            {/* LEFT — copy + CTAs */}
+            <div className="pp-home-hero-left">
+              <p className="pp-home-hero-eyebrow"><LocationAware /></p>
 
-          <h1 className="pp-home-hero-h1">
-            Best Bud For Your Buck<span className="pp-home-hero-dollar">$</span>
-            <br />
-            <span className="pp-home-hero-h1-region">in Central Illinois</span>
-          </h1>
+              <h1 className="pp-home-hero-h1">
+                Best Bud For Your Buck<span className="pp-home-hero-dollar">$</span>
+                <br />
+                <span className="pp-home-hero-h1-region">in Central Illinois</span>
+              </h1>
 
-          <p className="pp-home-hero-sub">
-            Live verified deals &middot; Peoria &middot; Bloomington &middot; Champaign
-          </p>
+              <p className="pp-home-hero-sub">
+                Live verified deals &middot; Peoria &middot; Bloomington &middot; Champaign
+              </p>
 
-          <div className="pp-home-hero-cta-row">
-            <Link href="/cannabis/illinois/open-now" className="pp-btn pp-btn-lg pp-btn-sand">
-              <MapPin size={18} strokeWidth={2.25} aria-hidden="true" />
-              Find Deals Near Me
-            </Link>
-            <Link href="/dispensaries" className="pp-btn pp-btn-lg pp-btn-outline-cream">
-              Browse all dispensaries
-            </Link>
-          </div>
+              <div className="pp-home-hero-cta-row">
+                <Link href="/cannabis/illinois/open-now" className="pp-btn pp-btn-lg pp-btn-sand">
+                  <MapPin size={18} strokeWidth={2.25} aria-hidden="true" />
+                  Find Deals Near Me
+                </Link>
+                <Link href="/dispensaries" className="pp-btn pp-btn-lg pp-btn-outline-cream">
+                  Browse all dispensaries
+                </Link>
+              </div>
+            </div>
 
-          {/* Featured deal card floats over the hero bottom edge */}
-          <div className="pp-home-hero-featured">
-            <HeroDealCard initial={featuredDeal} totalDealCount={dealCount ?? 0} />
-            <SavingsCallout initialSavings={featuredDeal ? estimateSavings(featuredDeal) : null} />
-          </div>
-        </div>
-      </div>
+            {/* RIGHT — featured deal card + 6-tile category grid */}
+            <div className="pp-home-hero-right">
+              <div className="pp-home-hero-featured">
+                <HeroDealCard initial={featuredDeal} totalDealCount={dealCount ?? 0} />
+                <SavingsCallout initialSavings={featuredDeal ? estimateSavings(featuredDeal) : null} />
+              </div>
 
-      {/* CATEGORY TILES — runs immediately under the hero on a cream surface */}
-      <div className="pp-home-cats-band">
-        <div className="pp-home-cats-inner">
-          <p className="pp-eyebrow" style={{ marginBottom: 14 }}>Browse by category</p>
-          <div className="pp-home-cats-grid">
-            {CATEGORIES.map((cat) => (
-              <TrackedLink
-                key={cat.slug}
-                href={`/deals/${cat.slug}`}
-                className="pp-home-cat-tile"
-                event="category_click"
-                params={{ category: cat.slug }}
-              >
-                <span className="pp-home-cat-icon">{renderIcon(cat.icon)}</span>
-                <span className="pp-home-cat-label">{cat.label}</span>
-              </TrackedLink>
-            ))}
+              <div className="pp-home-hero-cats-shell">
+                <p className="pp-home-hero-cats-label">Browse by category</p>
+                <div className="pp-home-hero-cats-grid">
+                  {CATEGORIES.map((cat) => (
+                    <TrackedLink
+                      key={cat.slug}
+                      href={`/deals/${cat.slug}`}
+                      className="pp-home-hero-cat-tile"
+                      event="category_click"
+                      params={{ category: cat.slug }}
+                    >
+                      <span className="pp-home-hero-cat-icon">
+                        <CategoryIcon slug={cat.slug} size={28} tone="light" />
+                      </span>
+                      <span className="pp-home-hero-cat-label">{cat.label}</span>
+                    </TrackedLink>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

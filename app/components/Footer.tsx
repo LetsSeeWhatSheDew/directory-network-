@@ -87,9 +87,11 @@ export default function Footer() {
             Built in Peoria, Illinois <span aria-hidden="true">🌿</span>
           </p>
           <p className="pp-footer-meta">
-            &copy; {year} PuffPrice &middot; Photography via{" "}
+            &copy; {year} PuffPrice &mdash; All rights reserved.{" "}
+            <span aria-hidden="true" style={{ opacity: 0.4 }}>&middot;</span>{" "}
+            Photography via{" "}
             <a href="https://www.pexels.com" rel="noreferrer noopener" target="_blank" className="pp-footer-link-inline">Pexels</a>{" "}
-            and Unsplash &middot; Central Illinois deal intelligence
+            and Unsplash
           </p>
           <p className="pp-footer-disclaimer">
             For adults 21+. Cannabis is legal for recreational and medical use in Illinois.

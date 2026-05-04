@@ -12,6 +12,7 @@
 const KNOWN_CITY_SUFFIXES: string[] = [
   // Longer multi-word cities first so "chicago-heights" matches before "chicago"
   "chicago-heights",
+  "peoria-heights",
   "east-peoria",
   "carol-stream",
   "galesburg",
@@ -21,6 +22,12 @@ const KNOWN_CITY_SUFFIXES: string[] = [
   "aurora",
   "peoria",
   "champaign",
+  "urbana",
+  "bloomington",
+  "normal",
+  "pekin",
+  "morton",
+  "washington",
   "danville",
   "chicago",
   "moline",
@@ -62,18 +69,40 @@ export function displayCity(deal: { city?: string | null; slug?: string | null; 
 
 /**
  * Greater-metro aliases — used to broaden the city filter so a Peoria
- * user sees East Peoria + Bartonville deals too. Keys are the
- * user-input city; values are the set of aliases to search against
- * (always includes the input itself). Keys are matched case-insensitive.
+ * user sees East Peoria + Peoria Heights + Bartonville + Pekin deals too.
+ * Keys are the user-input city; values are the set of aliases to search
+ * against (always includes the input itself). Keys matched case-insensitive.
+ *
+ * Radius rule of thumb: every alias listed here is within ~15 miles of
+ * the key city — close enough that a real user would consider them
+ * "near me" rather than a separate trip. Update PROXIMITY_RADIUS_MILES
+ * in lib/proximity.ts when expanding aliases.
  */
 const METRO_ALIASES: Record<string, string[]> = {
-  peoria: ["Peoria", "East Peoria", "Bartonville"],
-  "east peoria": ["East Peoria", "Peoria", "Bartonville"],
-  bartonville: ["Bartonville", "Peoria", "East Peoria"],
-  chicago: ["Chicago", "Chicago Heights", "Oak Park", "Cicero"],
-  "chicago heights": ["Chicago Heights", "Chicago"],
+  // Greater Peoria metro: Peoria + East Peoria + Peoria Heights all sit
+  // within ~3 miles of each other. Bartonville (4 mi south) and Pekin
+  // (10 mi south) round out the metro.
+  peoria: ["Peoria", "East Peoria", "Peoria Heights", "Bartonville", "Pekin"],
+  "east peoria": ["East Peoria", "Peoria", "Peoria Heights", "Bartonville", "Pekin"],
+  "peoria heights": ["Peoria Heights", "Peoria", "East Peoria", "Bartonville", "Pekin"],
+  bartonville: ["Bartonville", "Peoria", "East Peoria", "Peoria Heights", "Pekin"],
+  pekin: ["Pekin", "Peoria", "East Peoria", "Peoria Heights", "Bartonville"],
+  // Bloomington-Normal twin cities — adjacent municipalities, treat as one.
+  bloomington: ["Bloomington", "Normal"],
+  normal: ["Normal", "Bloomington"],
+  // Champaign-Urbana twin cities — same pattern.
   champaign: ["Champaign", "Urbana"],
   urbana: ["Urbana", "Champaign"],
+  // Springfield is a standalone metro in CIL — no nearby satellite cities.
+  springfield: ["Springfield"],
+  // Tri-City: Morton/Washington both within ~12 mi of Peoria.
+  morton: ["Morton", "Washington", "Peoria", "East Peoria", "Pekin"],
+  washington: ["Washington", "Morton", "East Peoria", "Peoria"],
+  // Out-of-CIL aliases retained for legacy paths still rendering off
+  // the same helper. Hidden from the public scope by the city allow-list,
+  // but kept so internal queries don't break if a CIL filter is bypassed.
+  chicago: ["Chicago", "Chicago Heights", "Oak Park", "Cicero"],
+  "chicago heights": ["Chicago Heights", "Chicago"],
   "carol stream": ["Carol Stream", "Bloomingdale", "Wheaton"],
   naperville: ["Naperville", "Aurora", "Lisle"],
   aurora: ["Aurora", "Naperville"],

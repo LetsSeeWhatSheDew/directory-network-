@@ -141,8 +141,6 @@ function requestGps(): Promise<GeolocationPosition | null> {
 export default function LocationAware() {
   const [loc, setLoc] = useState<Loc | null>(null);
   const [busy, setBusy] = useState(false);
-  const [editing, setEditing] = useState(false);
-  const [draft, setDraft] = useState("");
 
   const commit = useCallback((next: Loc, lat?: number, lng?: number) => {
     save(next, lat, lng);
@@ -298,45 +296,25 @@ export default function LocationAware() {
     return () => form.removeEventListener("submit", handler);
   }, []);
 
-  if (!loc && !busy) return null;
+  // The "Change location" link now opens the global CityPickerModal
+  // instead of an inline text input. The modal is a much clearer UX
+  // (4 primary city buttons + dropdown + GPS retry) and shares one
+  // source of truth across the site. CityPickerHost listens for
+  // `cl:open-city-picker` from anywhere.
+  const openPicker = () => {
+    try {
+      window.dispatchEvent(new CustomEvent("cl:open-city-picker"));
+    } catch {}
+  };
 
-  if (editing) {
+  if (!loc && !busy) {
+    // No location resolved AND no detection in flight — show a minimal
+    // "Set your city" prompt so the location strip never silently
+    // disappears.
     return (
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          const v = draft.trim();
-          if (!v) return;
-          const cityCase = v
-            .split(/\s+/)
-            .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
-            .join(" ");
-          commit({ city: cityCase, source: "manual" });
-          setEditing(false);
-          setDraft("");
-        }}
-        style={formStyle}
-      >
-        <input
-          type="text"
-          autoFocus
-          value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-          placeholder="Type your city (e.g. Peoria)"
-          style={inputStyle}
-        />
-        <button type="submit" style={buttonStyle}>Save</button>
-        <button
-          type="button"
-          onClick={() => {
-            setEditing(false);
-            setDraft("");
-          }}
-          style={{ ...buttonStyle, background: "transparent", color: "#6b7280" }}
-        >
-          Cancel
-        </button>
-      </form>
+      <button type="button" onClick={openPicker} style={linkBtn}>
+        📍 Set your city
+      </button>
     );
   }
 
@@ -373,10 +351,7 @@ export default function LocationAware() {
           <span aria-hidden="true" style={{ opacity: 0.35 }}>·</span>{" "}
           <button
             type="button"
-            onClick={() => {
-              setDraft("");
-              setEditing(true);
-            }}
+            onClick={openPicker}
             style={linkBtn}
           >
             Not in {loc.city}? Change location
@@ -425,36 +400,5 @@ const linkBtn: React.CSSProperties = {
   fontSize: ".75rem",
 };
 
-const formStyle: React.CSSProperties = {
-  marginTop: -8,
-  marginBottom: 12,
-  display: "flex",
-  gap: 6,
-  justifyContent: "center",
-  alignItems: "center",
-  flexWrap: "wrap",
-};
-
-const inputStyle: React.CSSProperties = {
-  background: "#fff",
-  border: "1px solid #e8e4da",
-  borderRadius: 8,
-  padding: "6px 10px",
-  color: "#1F3D2B",
-  fontFamily: "system-ui, sans-serif",
-  fontSize: ".8rem",
-  outline: "none",
-  minWidth: 180,
-};
-
-const buttonStyle: React.CSSProperties = {
-  background: "#7DBA47",
-  color: "#fff",
-  border: "none",
-  borderRadius: 8,
-  padding: "6px 12px",
-  fontFamily: "system-ui, sans-serif",
-  fontWeight: 700,
-  fontSize: ".78rem",
-  cursor: "pointer",
-};
+// Inline form styles retired 2026-05-04 — manual city entry now goes
+// through the CityPickerModal instead.

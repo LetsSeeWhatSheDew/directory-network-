@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Manrope } from "next/font/google";
 import "./globals.css";
 import UtmCapture from "./components/UtmCapture";
+import CityPickerHost from "./components/CityPickerHost";
 import { brand } from "../lib/brand";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-TML9Y6VMC2";
@@ -70,6 +71,7 @@ export default function RootLayout({
       <body className={`${manrope.variable} antialiased`}>
         {children}
         <UtmCapture />
+        <CityPickerHost />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
           strategy="afterInteractive"
