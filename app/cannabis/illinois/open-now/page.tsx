@@ -2,6 +2,8 @@ export const revalidate = 300; // revalidate every 5 minutes — hours change th
 
 import { Metadata } from "next";
 import Link from "next/link";
+import Nav from "../../../components/Nav";
+import Footer from "../../../components/Footer";
 import { nowInCT, isOpen, formatTime as formatHourTime } from "../../../../lib/hours";
 import { getServerLocation } from "../../../../lib/location";
 import { isInMetro } from "../../../../lib/cityNormalize";
@@ -91,7 +93,7 @@ export default async function OpenNowPage() {
       `/master_listings?state=eq.IL&project_tag=eq.green&is_active=eq.true&city=in.${encodeURIComponent(CIL_CITY_IN_LIST)}&select=id,name,slug,city,state,address1,phone,type,logo_url,delivery,online_ordering&order=city.asc,name.asc&limit=100`
     ),
     fetchJson<Hour[]>(
-      `/listing_hours?weekday=eq.${ct.weekday}&select=listing_id,weekday,opens_at,closes_at,is_closed`
+      `/listing_hours?weekday=eq.${ct.weekday}&project_tag=eq.green&select=listing_id,weekday,opens_at,closes_at,is_closed`
     ),
   ]);
 
@@ -123,44 +125,44 @@ export default async function OpenNowPage() {
         .on-root { min-height: 100vh; background: #f7f6f2; font-family: Georgia, serif; }
         .on-nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 32px; background: #fff; border-bottom: 1px solid #e8e5de; position: sticky; top: 0; z-index: 50; }
         .on-nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-        .on-nav-dot { width: 10px; height: 10px; border-radius: 50%; background: #16a34a; display: inline-block; animation: pulse 2s infinite; }
+        .on-nav-dot { width: 10px; height: 10px; border-radius: 50%; background: #7DBA47; display: inline-block; animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-        .on-nav-name { font-size: 1.1rem; font-weight: 700; color: #0f1f3d; letter-spacing: -0.02em; }
-        .on-nav-accent { color: #16a34a; }
+        .on-nav-name { font-size: 1.1rem; font-weight: 700; color: #1F3D2B; letter-spacing: -0.02em; }
+        .on-nav-accent { color: #7DBA47; }
         .on-nav-back { font-size: 0.85rem; color: #6b7280; text-decoration: none; font-family: system-ui, sans-serif; }
         .on-breadcrumb { padding: 12px 32px; background: #fff; border-bottom: 1px solid #f0ede6; font-size: 0.8rem; font-family: system-ui, sans-serif; color: #6b7280; display: flex; gap: 8px; }
         .on-breadcrumb a { color: #6b7280; text-decoration: none; }
         .on-inner { max-width: 900px; margin: 0 auto; padding: 32px 24px 64px; }
         .on-hero { margin-bottom: 32px; }
-        .on-live-badge { display: inline-flex; align-items: center; gap: 6px; background: #dcfce7; border: 1px solid #bbf7d0; border-radius: 100px; padding: 4px 14px; font-size: 0.75rem; font-family: system-ui, sans-serif; color: #14532d; font-weight: 700; margin-bottom: 12px; }
-        .on-live-dot { width: 6px; height: 6px; border-radius: 50%; background: #16a34a; animation: pulse 2s infinite; }
-        .on-h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700; color: #0f1f3d; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 10px; }
+        .on-live-badge { display: inline-flex; align-items: center; gap: 6px; background: #dcfce7; border: 1px solid #C7E5A8; border-radius: 100px; padding: 4px 14px; font-size: 0.75rem; font-family: system-ui, sans-serif; color: #14532d; font-weight: 700; margin-bottom: 12px; }
+        .on-live-dot { width: 6px; height: 6px; border-radius: 50%; background: #7DBA47; animation: pulse 2s infinite; }
+        .on-h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700; color: #1F3D2B; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 10px; }
         .on-sub { font-size: 0.95rem; color: #6b7280; font-family: system-ui, sans-serif; }
         .on-stats { display: flex; gap: 20px; flex-wrap: wrap; margin: 24px 0; }
         .on-stat { display: flex; flex-direction: column; gap: 2px; }
-        .on-stat-num { font-size: 2rem; font-weight: 700; color: #16a34a; letter-spacing: -0.03em; }
+        .on-stat-num { font-size: 2rem; font-weight: 700; color: #7DBA47; letter-spacing: -0.03em; }
         .on-stat-num-closed { color: #9ca3af; }
         .on-stat-label { font-size: 0.75rem; color: #6b7280; font-family: system-ui, sans-serif; }
         .on-section-title { font-size: 0.7rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #9ca3af; margin-bottom: 12px; margin-top: 32px; }
-        .on-city-title { font-size: 1rem; font-weight: 700; color: #0f1f3d; letter-spacing: -0.01em; margin-bottom: 10px; margin-top: 24px; padding-bottom: 8px; border-bottom: 1px solid #e8e5de; }
+        .on-city-title { font-size: 1rem; font-weight: 700; color: #1F3D2B; letter-spacing: -0.01em; margin-bottom: 10px; margin-top: 24px; padding-bottom: 8px; border-bottom: 1px solid #e8e5de; }
         .on-card { background: #fff; border-radius: 12px; border: 1px solid #e8e5de; padding: 16px 20px; display: flex; gap: 14px; align-items: center; text-decoration: none; margin-bottom: 10px; }
-        .on-card:hover { border-color: #16a34a; }
+        .on-card:hover { border-color: #7DBA47; }
         .on-card-closed { opacity: 0.5; }
-        .on-logo { width: 44px; height: 44px; border-radius: 8px; border: 1px solid #e8e5de; background: #f7f6f2; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; font-size: 1.2rem; font-weight: 700; color: #16a34a; font-family: Georgia, serif; }
+        .on-logo { width: 44px; height: 44px; border-radius: 8px; border: 1px solid #e8e5de; background: #f7f6f2; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; font-size: 1.2rem; font-weight: 700; color: #7DBA47; font-family: Georgia, serif; }
         .on-logo-img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
         .on-info { flex: 1; min-width: 0; }
-        .on-name { font-size: 0.95rem; font-weight: 700; color: #0f1f3d; font-family: system-ui, sans-serif; margin-bottom: 2px; }
+        .on-name { font-size: 0.95rem; font-weight: 700; color: #1F3D2B; font-family: system-ui, sans-serif; margin-bottom: 2px; }
         .on-address { font-size: 0.8rem; color: #6b7280; font-family: system-ui, sans-serif; }
         .on-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
         .on-open-badge { font-size: 0.72rem; font-family: system-ui, sans-serif; font-weight: 700; color: #14532d; background: #dcfce7; padding: 3px 10px; border-radius: 100px; }
         .on-closes { font-size: 0.72rem; color: #6b7280; font-family: system-ui, sans-serif; }
         .on-tags { display: flex; gap: 6px; margin-top: 4px; }
         .on-tag { font-size: 0.68rem; font-family: system-ui, sans-serif; color: #374151; background: #f7f6f2; border: 1px solid #e8e5de; padding: 2px 8px; border-radius: 100px; }
-        .on-cta { background: #0f1f3d; border-radius: 14px; padding: 24px; margin-top: 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+        .on-cta { background: #1F3D2B; border-radius: 14px; padding: 24px; margin-top: 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
         .on-cta-text { font-size: 0.95rem; font-weight: 700; color: #fff; }
         .on-cta-sub { font-size: 0.8rem; color: #94a3b8; font-family: system-ui, sans-serif; margin-top: 4px; }
-        .on-cta-btn { background: #16a34a; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 700; font-size: 0.85rem; white-space: nowrap; }
-        .on-footer { background: #0f1f3d; padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .on-cta-btn { background: #7DBA47; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 700; font-size: 0.85rem; white-space: nowrap; }
+        .on-footer { background: #1F3D2B; padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
         .on-footer-brand { font-size: 1rem; font-weight: 700; color: #fff; font-family: Georgia, serif; }
         .on-footer-note { font-size: 0.78rem; color: #475569; font-family: system-ui, sans-serif; }
         @media (max-width: 768px) {
@@ -172,13 +174,7 @@ export default async function OpenNowPage() {
       `}</style>
 
       <div className="on-root">
-        <nav className="on-nav">
-          <Link href="/" className="on-nav-brand">
-            <span className="on-nav-dot" />
-            <span className="on-nav-name">puff<span className="on-nav-accent">price</span></span>
-          </Link>
-          <Link href="/" className="on-nav-back">← Central IL</Link>
-        </nav>
+        <Nav variant="light" />
 
         <div className="on-breadcrumb">
           <Link href="/">Home</Link>
@@ -212,7 +208,7 @@ export default async function OpenNowPage() {
 
           {openNow.length === 0 ? (
             <div style={{ background: "#fff", borderRadius: "12px", border: "1px solid #e8e5de", padding: "32px", textAlign: "center" }}>
-              <p style={{ fontSize: "1rem", fontWeight: 700, color: "#0f1f3d", marginBottom: "8px" }}>No dispensaries open right now</p>
+              <p style={{ fontSize: "1rem", fontWeight: 700, color: "#1F3D2B", marginBottom: "8px" }}>No dispensaries open right now</p>
               <p style={{ fontSize: "0.875rem", color: "#6b7280", fontFamily: "system-ui, sans-serif" }}>Check back during business hours — most Central IL dispensaries open between 9–10 AM CT.</p>
             </div>
           ) : (
@@ -268,11 +264,8 @@ export default async function OpenNowPage() {
           </div>
         </div>
 
-        <footer className="on-footer">
-          <span className="on-footer-brand">puff<span style={{ color: "#16a34a" }}>price</span></span>
-          <span className="on-footer-note">© {new Date().getFullYear()} PuffPrice · Hours sourced from verified dispensary listings</span>
-        </footer>
       </div>
+      <Footer />
     </>
   );
 }

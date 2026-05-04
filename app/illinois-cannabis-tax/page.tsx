@@ -1,5 +1,6 @@
 import Link from "next/link";
-import Logo from "../components/Logo";
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
 import MobileNavMenu from "../components/MobileNavMenu";
 import {
   STATE_EXCISE_RATES,
@@ -48,14 +49,14 @@ export default function IllinoisCannabisTaxPage() {
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:var(--font-ui, system-ui, sans-serif);background:#f5f4f0;color:#0f1f3d;min-height:100vh}
+        body{font-family:var(--font-ui, system-ui, sans-serif);background:#F7F4ED;color:#1F3D2B;min-height:100vh}
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #e8e4da;position:sticky;top:0;z-index:100}
         .logo-link{display:flex;align-items:center}
         .nav-links{display:flex;gap:18px;align-items:center}
         .nav-link{font-size:.88rem;color:#6b7280;text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif);font-weight:500}
-        .nav-link:hover{color:#0f1f3d}
-        .nav-cta{background:#0f1f3d;color:#fff;padding:8px 14px;border-radius:8px;font-size:.85rem;font-weight:700;text-decoration:none}
-        .nav-cta:hover{background:#1e3a5f}
+        .nav-link:hover{color:#1F3D2B}
+        .nav-cta{background:#1F3D2B;color:#fff;padding:8px 14px;border-radius:8px;font-size:.85rem;font-weight:700;text-decoration:none}
+        .nav-cta:hover{background:#2A4F38}
         .desktop-only-nav{display:flex}
         @media(max-width:768px){.desktop-only-nav{display:none !important}}
 
@@ -65,26 +66,26 @@ export default function IllinoisCannabisTaxPage() {
         .eyebrow{
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:.74rem;font-weight:700;letter-spacing:.14em;
-          text-transform:uppercase;color:#16a34a;margin-bottom:14px;
+          text-transform:uppercase;color:#7DBA47;margin-bottom:14px;
         }
         h1{
           font-family:var(--font-display, var(--font-geist-sans));
           font-size:clamp(2rem, 4.5vw, 2.85rem);
           font-weight:700;letter-spacing:-.04em;line-height:1.1;
-          color:#0f1f3d;margin-bottom:32px;
+          color:#1F3D2B;margin-bottom:32px;
         }
         h2{
           font-family:var(--font-display, var(--font-geist-sans));
           font-size:clamp(1.4rem, 2.5vw, 1.75rem);
           font-weight:600;letter-spacing:-.02em;
-          color:#0f1f3d;margin:36px 0 14px;
+          color:#1F3D2B;margin:36px 0 14px;
         }
         p, .article-list{
           font-family:var(--font-serif, Georgia, serif);
           font-size:1.0625rem;line-height:1.7;color:#374151;
           margin-bottom:18px;
         }
-        p strong, .article-list strong{font-weight:700;color:#0f1f3d}
+        p strong, .article-list strong{font-weight:700;color:#1F3D2B}
         .article-list{padding-left:1.4rem;list-style:disc}
         .article-list li{margin-bottom:8px}
 
@@ -98,24 +99,24 @@ export default function IllinoisCannabisTaxPage() {
           text-align:left;color:#374151;
         }
         table.worked thead th{
-          background:#f5f4f0;
+          background:#F7F4ED;
           font-size:.78rem;font-weight:700;letter-spacing:.06em;
           text-transform:uppercase;color:#6b7280;
         }
         table.worked td.num{
           text-align:right;font-variant-numeric:tabular-nums;
           font-family:var(--font-display, var(--font-geist-sans));
-          font-weight:600;color:#0f1f3d;
+          font-weight:600;color:#1F3D2B;
         }
         table.worked tr.total td{
-          border-top:1.5px solid #0f1f3d;border-bottom:none;
+          border-top:1.5px solid #1F3D2B;border-bottom:none;
           padding-top:14px;font-weight:700;
         }
-        table.worked tr.total td.num{font-size:1.05rem;color:#16a34a}
+        table.worked tr.total td.num{font-size:1.05rem;color:#7DBA47}
 
         .calculator-cta{
           margin:36px 0 24px;
-          background:#0f1f3d;color:#fff;
+          background:#1F3D2B;color:#fff;
           border-radius:14px;padding:24px;
           display:flex;flex-direction:column;gap:12px;
         }
@@ -126,9 +127,9 @@ export default function IllinoisCannabisTaxPage() {
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:1rem;color:#fafaf7;line-height:1.5;
         }
-        .calculator-cta-text strong{color:#4ade80;font-weight:700}
+        .calculator-cta-text strong{color:#93CB5C;font-weight:700}
         .calculator-cta-button{
-          background:#16a34a;color:#fff;
+          background:#7DBA47;color:#fff;
           padding:12px 22px;border-radius:10px;
           text-decoration:none;
           font-family:var(--font-ui, system-ui, sans-serif);
@@ -136,7 +137,7 @@ export default function IllinoisCannabisTaxPage() {
           white-space:nowrap;
           transition:background 150ms ease;
         }
-        .calculator-cta-button:hover{background:#15803d}
+        .calculator-cta-button:hover{background:#6BA63B}
 
         .source-note{
           margin-top:32px;padding-top:24px;
@@ -145,7 +146,7 @@ export default function IllinoisCannabisTaxPage() {
           border-top:1px solid #e8e4da;
           font-style:italic;
         }
-        .source-note a{color:#16a34a;text-decoration:none;font-style:normal;font-weight:600}
+        .source-note a{color:#7DBA47;text-decoration:none;font-style:normal;font-weight:600}
         .source-note a:hover{text-decoration:underline}
 
         .footer{
@@ -155,22 +156,11 @@ export default function IllinoisCannabisTaxPage() {
           flex-wrap:wrap;gap:12px;
         }
         .footer-link{font-size:.78rem;color:#6b7280;text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif)}
-        .footer-link:hover{color:#0f1f3d}
+        .footer-link:hover{color:#1F3D2B}
         .footer-copy{font-size:.74rem;color:#9ca3af;font-family:var(--font-ui, system-ui, sans-serif)}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo-link" aria-label="PuffPrice home">
-          <Logo size={36} />
-        </Link>
-        <div className="nav-links desktop-only-nav">
-          <Link href="/dispensaries" className="nav-link">Browse Central IL</Link>
-          <Link href="/about" className="nav-link">About</Link>
-          <Link href="/illinois-cannabis-tax-calculator" className="nav-link">Tax calculator</Link>
-          <Link href="/dispensaries" className="nav-cta">For dispensaries</Link>
-        </div>
-        <MobileNavMenu />
-      </nav>
+      <Nav variant="light" />
 
       <main className="wrap">
         <p className="eyebrow">Pricing</p>

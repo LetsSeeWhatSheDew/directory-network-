@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import Logo from "../../components/Logo";
+import Nav from "../../components/Nav";
+import Footer from "../../components/Footer";
 import { useState } from "react";
 
 export default function AlertPreferencesPage() {
@@ -60,10 +61,10 @@ export default function AlertPreferencesPage() {
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:Georgia,serif;background:#f5f4f0;color:#0f1f3d;min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#0f1f3d;position:sticky;top:0;z-index:100}
+        body{font-family:Georgia,serif;background:#F7F4ED;color:#1F3D2B;min-height:100vh}
+        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#1F3D2B;position:sticky;top:0;z-index:100}
         .logo{display:flex;align-items:center;gap:8px;color:#fff;text-decoration:none;font-weight:700}
-        .logo span{color:#4ade80}
+        .logo span{color:#93CB5C}
         .back{font-size:.82rem;color:rgba(255,255,255,.55);text-decoration:none;font-family:system-ui,sans-serif}
         .back:hover{color:#fff}
         .wrap{max-width:600px;margin:0 auto;padding:40px 20px}
@@ -71,33 +72,30 @@ export default function AlertPreferencesPage() {
         .sub{font-size:.9rem;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:28px}
         form{background:#fff;border:1px solid #e8e4da;border-radius:14px;padding:24px}
         .field{margin-bottom:20px}
-        label.field-label{display:block;font-size:.8rem;font-weight:600;color:#0f1f3d;font-family:system-ui,sans-serif;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
-        input[type=email],input[type=text]{width:100%;padding:10px 12px;border:1px solid #d1cfc6;border-radius:8px;font-family:system-ui,sans-serif;font-size:.92rem;color:#0f1f3d;outline:none}
-        input[type=email]:focus,input[type=text]:focus{border-color:#16a34a}
+        label.field-label{display:block;font-size:.8rem;font-weight:600;color:#1F3D2B;font-family:system-ui,sans-serif;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
+        input[type=email],input[type=text]{width:100%;padding:10px 12px;border:1px solid #d1cfc6;border-radius:8px;font-family:system-ui,sans-serif;font-size:.92rem;color:#1F3D2B;outline:none}
+        input[type=email]:focus,input[type=text]:focus{border-color:#7DBA47}
         .radio-row,.check-row{display:flex;gap:8px;flex-wrap:wrap}
         .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid #d1cfc6;border-radius:100px;font-family:system-ui,sans-serif;font-size:.85rem;cursor:pointer;background:#fff;color:#374151;transition:all .15s}
-        .pill input{accent-color:#16a34a;margin:0}
+        .pill input{accent-color:#7DBA47;margin:0}
         .pill:hover{border-color:#9ca3af}
-        .pill.active{background:#f0fdf4;border-color:#16a34a;color:#166534;font-weight:600}
+        .pill.active{background:#F2F8E9;border-color:#7DBA47;color:#3F6B1F;font-weight:600}
         .freq{display:grid;grid-template-columns:1fr;gap:8px}
         .freq label{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid #d1cfc6;border-radius:10px;cursor:pointer;font-family:system-ui,sans-serif;font-size:.88rem;color:#374151;background:#fff;transition:all .15s}
-        .freq label.active{background:#f0fdf4;border-color:#16a34a;color:#166534}
-        .freq label input{margin-top:3px;accent-color:#16a34a}
+        .freq label.active{background:#F2F8E9;border-color:#7DBA47;color:#3F6B1F}
+        .freq label input{margin-top:3px;accent-color:#7DBA47}
         .freq-title{font-weight:600;display:block}
         .freq-desc{font-size:.78rem;color:#6b7280;margin-top:2px}
-        .freq label.active .freq-desc{color:#16a34a}
-        .save{background:#16a34a;color:#fff;border:none;border-radius:10px;padding:12px 24px;font-family:system-ui,sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;width:100%;margin-top:8px;transition:background .15s}
-        .save:hover{background:#15803d}
+        .freq label.active .freq-desc{color:#7DBA47}
+        .save{background:#7DBA47;color:#fff;border:none;border-radius:10px;padding:12px 24px;font-family:system-ui,sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;width:100%;margin-top:8px;transition:background .15s}
+        .save:hover{background:#6BA63B}
         .save:disabled{opacity:.6;cursor:not-allowed}
         .msg{margin-top:14px;padding:10px 14px;border-radius:8px;font-family:system-ui,sans-serif;font-size:.85rem}
         .msg.err{background:#fee2e2;color:#991b1b;border:1px solid #fecaca}
-        .msg.ok{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+        .msg.ok{background:#F2F8E9;color:#3F6B1F;border:1px solid #C7E5A8}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo" aria-label="PuffPrice home"><Logo /></Link>
-        <Link href="/alerts" className="back">← Back</Link>
-      </nav>
+      <Nav variant="light" />
 
       <div className="wrap">
         <h1>Deal alert preferences</h1>

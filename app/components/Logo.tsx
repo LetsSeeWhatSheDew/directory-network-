@@ -1,90 +1,135 @@
 // app/components/Logo.tsx
-// PuffPrice logo — the canonical mark per Matthew's 2026-04-30 directive.
+// PuffPrice logo — pin-mark + wordmark lockup, inline SVG so the fill
+// inherits from token color and the asset never requires a network round
+// trip. The 2026-04-30 raster-PNG mark is retired in this rollout — the
+// brand spec § 1 (locked 2026-05-04) calls for a Manrope 800 wordmark
+// paired with a geometric pin-mark companion.
 //
-// Renders public/logo-puffprice-mark.png — the woman exhaling smoke that
-// forms a green dollar sign with the "PuffPrice" wordmark below. This
-// replaces the prior text-only $P wordmark (commit 04d5a01) which read
-// as just two words separated by a green divider and didn't carry the
-// brand at the favicon or share-image level.
+// Variants:
+//   default ("sage") — sage wordmark on light surfaces (nav, content pages)
+//   inverse ("cream") — cream wordmark on the deep brand surface (hero, footer)
 //
-// Sizes (per Phase 2 spec in the demo-ready prompt):
-//   header desktop: 40–48 px tall
-//   header mobile:  32–40 px tall
-//   footer:         32 px tall
-//   favicon:        32×32 (separate file in /public)
-//
-// The PNG includes the wordmark beneath the mark, so we don't render
-// any additional text. Width is intrinsic to the file (272×299), so we
-// pass `height` and let `width="auto"` derive — keeping aspect ratio
-// stable across every render context.
-//
-// Backwards compat: every existing call site that wraps <Logo /> in its
-// own <Link> still works — the new component's `href` defaults to null
-// (no auto-Link). Older props (`glyphOnly`, `inverse`, `priority`,
-// `ariaLabel`) are still accepted for API stability with the prior
-// implementation.
+// Sizes: pass `size` as desired height in px. Lockup width is derived
+// from the SVG viewBox (3.5 : 1 aspect — pin + wordmark side by side).
 
-import Image from "next/image";
 import Link from "next/link";
 
 type Props = {
-  /** Pixel height of the logo image. Width is derived from aspect ratio. */
+  /** Pixel height of the logo lockup. Width derived from aspect ratio. */
   size?: number;
-  /** Kept for API compat — the PNG already conveys the brand at every
-   *  size, so the prior glyph-only fallback is no longer required. */
-  glyphOnly?: boolean;
-  /** Kept for API compat — the PNG ships with the wordmark on a
-   *  transparent background, so it sits cleanly on light or dark. */
+  /** Render in cream (for deep brand surfaces) instead of sage. */
   inverse?: boolean;
-  /** Optional href — wraps in a <Link> when provided. Defaults to null
-   *  so call sites that wrap <Logo /> in their own <Link> don't end up
-   *  with nested anchors. */
+  /** Optional href — wraps in a <Link>. Defaults to null. */
   href?: string | null;
+  /** Render only the pin-mark (no wordmark). Used at sub-32px contexts. */
+  glyphOnly?: boolean;
   className?: string;
   ariaLabel?: string;
-  /** Whether to mark the image as priority (used for the LCP element). */
   priority?: boolean;
 };
 
-const LOGO_SRC = "/logo-puffprice-mark.png";
-const LOGO_INTRINSIC_WIDTH = 272;
-const LOGO_INTRINSIC_HEIGHT = 299;
+const VIEWBOX_W = 432;       // 64 (pin) + 16 (gap) + 352 (wordmark) = 432
+const VIEWBOX_H = 72;
+const PIN_VIEWBOX = 64;
+const PIN_SIZE_RATIO = PIN_VIEWBOX / VIEWBOX_H;
 
 export default function Logo({
   size = 40,
-  glyphOnly: _glyphOnly = false,
-  inverse: _inverse = false,
+  inverse = false,
   href = null,
+  glyphOnly = false,
   className,
   ariaLabel = "PuffPrice",
-  priority = false,
+  priority: _priority = false,
 }: Props) {
-  const renderedWidth = Math.round(
-    (LOGO_INTRINSIC_WIDTH / LOGO_INTRINSIC_HEIGHT) * size
-  );
+  const stroke = inverse ? "#F7F4ED" : "#7DBA47";
+  const wordmarkFill = inverse ? "#F7F4ED" : "#7DBA47";
+  const pinFill = inverse ? "transparent" : "#F7F4ED";
 
-  const img = (
-    <Image
-      src={LOGO_SRC}
-      alt={ariaLabel}
-      width={renderedWidth}
+  const svg = glyphOnly ? (
+    <svg
+      role="img"
+      aria-label={ariaLabel}
+      width={Math.round(size * (PIN_VIEWBOX / VIEWBOX_H) * (VIEWBOX_H / PIN_VIEWBOX))}
       height={size}
-      priority={priority}
+      viewBox="0 0 64 64"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke={stroke}
+      strokeWidth="3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
       className={className}
-      style={{
-        height: `${size}px`,
-        width: "auto",
-        display: "inline-block",
-        verticalAlign: "middle",
-      }}
-    />
+      style={{ display: "inline-block", verticalAlign: "middle" }}
+    >
+      <path
+        d="M32 6 C20 6 11 15 11 27 C11 39 32 58 32 58 C32 58 53 39 53 27 C53 15 44 6 32 6 Z"
+        fill={pinFill}
+        stroke={stroke}
+      />
+      <g transform="translate(32 25)" strokeWidth="2">
+        <path d="M0 -10 L0 4" />
+        <path d="M0 -3 L7 -8" />
+        <path d="M0 -3 L-7 -8" />
+        <path d="M0 1 L9 -1" />
+        <path d="M0 1 L-9 -1" />
+        <path d="M0 4 L6 5" />
+        <path d="M0 4 L-6 5" />
+      </g>
+    </svg>
+  ) : (
+    <svg
+      role="img"
+      aria-label={ariaLabel}
+      width={Math.round((VIEWBOX_W / VIEWBOX_H) * size)}
+      height={size}
+      viewBox={`0 0 ${VIEWBOX_W} ${VIEWBOX_H}`}
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      style={{ display: "inline-block", verticalAlign: "middle" }}
+    >
+      {/* Pin-mark — 64x64 inscribed in 72-tall band, vertically centered */}
+      <g transform={`translate(0 ${(VIEWBOX_H - PIN_VIEWBOX) / 2})`}
+         fill="none"
+         stroke={stroke}
+         strokeWidth="3"
+         strokeLinecap="round"
+         strokeLinejoin="round">
+        <path
+          d="M32 6 C20 6 11 15 11 27 C11 39 32 58 32 58 C32 58 53 39 53 27 C53 15 44 6 32 6 Z"
+          fill={pinFill}
+          stroke={stroke}
+        />
+        <g transform="translate(32 25)" strokeWidth="2">
+          <path d="M0 -10 L0 4" />
+          <path d="M0 -3 L7 -8" />
+          <path d="M0 -3 L-7 -8" />
+          <path d="M0 1 L9 -1" />
+          <path d="M0 1 L-9 -1" />
+          <path d="M0 4 L6 5" />
+          <path d="M0 4 L-6 5" />
+        </g>
+      </g>
+      {/* Wordmark — Manrope 800, letter-spacing -0.025em (per spec § 1) */}
+      <text
+        x="80"
+        y="50"
+        fontFamily="Manrope, -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif"
+        fontWeight="800"
+        fontSize="48"
+        letterSpacing="-1.2"
+        fill={wordmarkFill}
+      >
+        PuffPrice
+      </text>
+    </svg>
   );
 
   return href ? (
     <Link href={href} aria-label={ariaLabel} style={{ display: "inline-flex", alignItems: "center" }}>
-      {img}
+      {svg}
     </Link>
   ) : (
-    img
+    svg
   );
 }

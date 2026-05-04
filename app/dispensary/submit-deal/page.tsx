@@ -124,10 +124,10 @@ export default function SubmitDealPage() {
   }
 
   return (
-    <div style={{ fontFamily: "Georgia, serif", background: "#f5f4f0", minHeight: "100vh", color: "#0f1f3d" }}>
-      <nav style={{ padding: "14px 28px", background: "#0f1f3d" }}>
+    <div style={{ fontFamily: "Georgia, serif", background: "#F7F4ED", minHeight: "100vh", color: "#1F3D2B" }}>
+      <nav style={{ padding: "14px 28px", background: "#1F3D2B" }}>
         <Link href="/" style={{ color: "#fff", textDecoration: "none", fontWeight: 700 }}>
-          puff<span style={{ color: "#4ade80" }}>price</span>
+          puff<span style={{ color: "#93CB5C" }}>price</span>
         </Link>
       </nav>
 
@@ -244,24 +244,24 @@ export default function SubmitDealPage() {
 
           {/* LIVE PREVIEW */}
           <div style={{ marginTop: 8, padding: "18px", background: "#fff", border: "1px solid #e8e4da", borderRadius: 14, position: "relative" }}>
-            <div style={{ fontSize: ".68rem", fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: "#16a34a", fontFamily: "system-ui,sans-serif", marginBottom: 10 }}>
+            <div style={{ fontSize: ".68rem", fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: "#7DBA47", fontFamily: "system-ui,sans-serif", marginBottom: 10 }}>
               Preview — this is how it will appear
             </div>
-            <div style={{ background: "linear-gradient(135deg,#f0fdf4 0%,#fff 60%)", border: "2px solid #16a34a", borderRadius: 12, padding: 18 }}>
+            <div style={{ background: "linear-gradient(135deg,#F2F8E9 0%,#fff 60%)", border: "2px solid #7DBA47", borderRadius: 12, padding: 18 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10, marginBottom: 8 }}>
                 <div>
-                  <div style={{ fontSize: "1rem", fontWeight: 700, color: "#0f1f3d" }}>
+                  <div style={{ fontSize: "1rem", fontWeight: 700, color: "#1F3D2B" }}>
                     {form.dispensary_name || "Your dispensary"}
                   </div>
                   <div style={{ fontSize: ".78rem", color: "#9ca3af", fontFamily: "system-ui,sans-serif" }}>
                     {form.city ? `${form.city}, IL` : "Your city, IL"}
                   </div>
                 </div>
-                <span style={{ fontSize: ".66rem", background: "#dcfce7", color: "#166534", padding: "2px 8px", borderRadius: 100, fontFamily: "system-ui,sans-serif", fontWeight: 600 }}>
+                <span style={{ fontSize: ".66rem", background: "#dcfce7", color: "#3F6B1F", padding: "2px 8px", borderRadius: 100, fontFamily: "system-ui,sans-serif", fontWeight: 600 }}>
                   Likely open
                 </span>
               </div>
-              <div style={{ fontSize: "1.02rem", fontWeight: 700, color: "#16a34a", marginBottom: 6 }}>
+              <div style={{ fontSize: "1.02rem", fontWeight: 700, color: "#7DBA47", marginBottom: 6 }}>
                 {form.deal_title || "Your deal headline"}
               </div>
               {form.deal_description && (
@@ -270,16 +270,16 @@ export default function SubmitDealPage() {
                 </div>
               )}
               <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10 }}>
-                {form.category && <span style={{ fontSize: ".68rem", color: "#6b7280", background: "#f5f4f0", borderRadius: 100, padding: "2px 9px", fontFamily: "system-ui,sans-serif" }}>{form.category}</span>}
-                {form.is_recurring && <span style={{ fontSize: ".68rem", color: "#6b7280", background: "#f5f4f0", borderRadius: 100, padding: "2px 9px", fontFamily: "system-ui,sans-serif" }}>Recurring</span>}
-                {form.expires_at && <span style={{ fontSize: ".68rem", color: "#6b7280", background: "#f5f4f0", borderRadius: 100, padding: "2px 9px", fontFamily: "system-ui,sans-serif" }}>Expires {new Date(form.expires_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>}
+                {form.category && <span style={{ fontSize: ".68rem", color: "#6b7280", background: "#F7F4ED", borderRadius: 100, padding: "2px 9px", fontFamily: "system-ui,sans-serif" }}>{form.category}</span>}
+                {form.is_recurring && <span style={{ fontSize: ".68rem", color: "#6b7280", background: "#F7F4ED", borderRadius: 100, padding: "2px 9px", fontFamily: "system-ui,sans-serif" }}>Recurring</span>}
+                {form.expires_at && <span style={{ fontSize: ".68rem", color: "#6b7280", background: "#F7F4ED", borderRadius: 100, padding: "2px 9px", fontFamily: "system-ui,sans-serif" }}>Expires {new Date(form.expires_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>}
               </div>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 10, padding: "12px 14px" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#F2F8E9", border: "1px solid #C7E5A8", borderRadius: 10, padding: "12px 14px" }}>
                 <div>
-                  <div style={{ fontSize: ".65rem", fontWeight: 700, color: "#166534", fontFamily: "system-ui,sans-serif", textTransform: "uppercase", letterSpacing: ".12em" }}>You save</div>
+                  <div style={{ fontSize: ".65rem", fontWeight: 700, color: "#3F6B1F", fontFamily: "system-ui,sans-serif", textTransform: "uppercase", letterSpacing: ".12em" }}>You save</div>
                   <div style={{ fontSize: ".68rem", color: "rgba(22,101,52,.7)", fontFamily: "system-ui,sans-serif", marginTop: 2 }}>vs. Illinois average</div>
                 </div>
-                <div style={{ fontSize: "1.7rem", fontWeight: 700, color: "#16a34a", letterSpacing: "-.02em", lineHeight: 1, fontFamily: "Georgia,serif" }}>
+                <div style={{ fontSize: "1.7rem", fontWeight: 700, color: "#7DBA47", letterSpacing: "-.02em", lineHeight: 1, fontFamily: "Georgia,serif" }}>
                   {previewSavings || "—"}
                 </div>
               </div>
@@ -287,7 +287,7 @@ export default function SubmitDealPage() {
           </div>
 
           <button type="submit" disabled={submitting} style={{
-            background: "#16a34a", color: "#fff", border: "none",
+            background: "#7DBA47", color: "#fff", border: "none",
             padding: "14px 24px", borderRadius: 10, fontSize: "1rem",
             fontFamily: "system-ui, sans-serif", fontWeight: 700,
             cursor: submitting ? "not-allowed" : "pointer",
@@ -315,7 +315,7 @@ function Field({
   error?: string;
 }) {
   return (
-    <label style={{ display: "flex", flexDirection: "column", gap: 6, fontFamily: "system-ui, sans-serif", fontSize: ".85rem", color: "#0f1f3d", fontWeight: 600 }}>
+    <label style={{ display: "flex", flexDirection: "column", gap: 6, fontFamily: "system-ui, sans-serif", fontSize: ".85rem", color: "#1F3D2B", fontWeight: 600 }}>
       {label}
       {children}
       {error && (
@@ -331,7 +331,7 @@ const input: React.CSSProperties = {
   borderRadius: 8,
   fontSize: "1rem",
   fontFamily: "system-ui, sans-serif",
-  color: "#0f1f3d",
+  color: "#1F3D2B",
   background: "#fff",
   fontWeight: 400,
 };

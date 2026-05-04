@@ -4,7 +4,8 @@
 // at this stage.
 
 import Link from "next/link";
-import Logo from "../components/Logo";
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
 import AlertsCalculator from "./AlertsCalculator";
 import ProCheckoutButton from "./ProCheckoutButton";
 
@@ -94,69 +95,66 @@ export default async function AlertsPage() {
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:Georgia,serif;background:#f5f4f0;color:#0f1f3d;min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#0f1f3d;position:sticky;top:0;z-index:100}
+        body{font-family:Georgia,serif;background:#F7F4ED;color:#1F3D2B;min-height:100vh}
+        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#1F3D2B;position:sticky;top:0;z-index:100}
         .logo{color:#fff;text-decoration:none;font-weight:700;letter-spacing:-.02em;font-size:1.1rem}
-        .logo span{color:#4ade80}
+        .logo span{color:#93CB5C}
         .back{font-size:.82rem;color:rgba(255,255,255,.55);text-decoration:none;font-family:system-ui,sans-serif}
         .back:hover{color:#fff}
 
-        .hero{background:#0f1f3d;color:#fff;padding:64px 28px 40px;text-align:center}
+        .hero{background:#1F3D2B;color:#fff;padding:64px 28px 40px;text-align:center}
         .hero h1{font-size:clamp(2rem,5vw,3rem);font-weight:700;letter-spacing:-.04em;line-height:1.1;margin-bottom:14px}
-        .hero h1 em{color:#4ade80;font-style:normal}
+        .hero h1 em{color:#93CB5C;font-style:normal}
         .hero-sub{font-size:clamp(1rem,2.5vw,1.15rem);color:rgba(255,255,255,.65);font-family:system-ui,sans-serif;line-height:1.55;max-width:560px;margin:0 auto}
 
         .tiers{max-width:960px;margin:0 auto;padding:48px 20px 24px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
         @media(max-width:720px){.tiers{grid-template-columns:1fr}}
         .tier{background:#fff;border:1px solid #e8e4da;border-radius:16px;padding:28px 26px;display:flex;flex-direction:column;gap:14px;position:relative}
         .tier.pro{background:#0b172f;color:#fff;border-color:rgba(74,222,128,.35);box-shadow:0 8px 24px rgba(22,163,74,.08)}
-        .tier-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#16a34a;font-family:system-ui,sans-serif}
-        .tier.pro .tier-eyebrow{color:#4ade80}
+        .tier-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#7DBA47;font-family:system-ui,sans-serif}
+        .tier.pro .tier-eyebrow{color:#93CB5C}
         .tier-name{font-size:1.35rem;font-weight:700;letter-spacing:-.02em;font-family:Georgia,serif;line-height:1.1}
         .tier.pro .tier-name{color:#fff}
         .tier-price{display:flex;align-items:baseline;gap:6px}
-        .tier-price-big{font-size:2.4rem;font-weight:700;color:#0f1f3d;letter-spacing:-.03em;line-height:1;font-family:Georgia,serif}
+        .tier-price-big{font-size:2.4rem;font-weight:700;color:#1F3D2B;letter-spacing:-.03em;line-height:1;font-family:Georgia,serif}
         .tier.pro .tier-price-big{color:#fff}
         .tier-price-period{font-size:.85rem;color:#6b7280;font-family:system-ui,sans-serif}
         .tier.pro .tier-price-period{color:rgba(255,255,255,.55)}
         .tier-anchor{font-size:.82rem;color:#6b7280;font-family:system-ui,sans-serif;line-height:1.5}
         .tier.pro .tier-anchor{color:rgba(255,255,255,.7)}
-        .tier-anchor strong{color:#16a34a;font-weight:700}
-        .tier.pro .tier-anchor strong{color:#4ade80}
+        .tier-anchor strong{color:#7DBA47;font-weight:700}
+        .tier.pro .tier-anchor strong{color:#93CB5C}
         .tier-headline{font-size:.95rem;font-weight:600;color:#374151;font-family:system-ui,sans-serif;line-height:1.5}
         .tier.pro .tier-headline{color:rgba(255,255,255,.8)}
         ul.tier-features{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:7px}
         ul.tier-features li{display:flex;gap:8px;align-items:flex-start;font-size:.86rem;color:#374151;font-family:system-ui,sans-serif;line-height:1.5}
         .tier.pro ul.tier-features li{color:rgba(255,255,255,.82)}
-        .check{color:#16a34a;font-weight:700;flex-shrink:0}
-        .tier.pro .check{color:#4ade80}
+        .check{color:#7DBA47;font-weight:700;flex-shrink:0}
+        .tier.pro .check{color:#93CB5C}
         .testimonial{background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.22);border-radius:10px;padding:14px 16px;margin-top:6px}
-        .tier:not(.pro) .testimonial{background:#f0fdf4;border-color:#bbf7d0}
+        .tier:not(.pro) .testimonial{background:#F2F8E9;border-color:#C7E5A8}
         .testimonial blockquote{font-family:Georgia,serif;font-style:italic;font-size:.92rem;line-height:1.5;color:inherit;margin:0;opacity:.88}
         .testimonial figcaption{font-family:system-ui,sans-serif;font-size:.74rem;color:rgba(255,255,255,.55);margin-top:8px}
-        .tier:not(.pro) .testimonial figcaption{color:#16a34a}
+        .tier:not(.pro) .testimonial figcaption{color:#7DBA47}
         .tier.pro .testimonial figcaption strong{color:#fff}
 
         .cta{display:inline-block;padding:13px 22px;border-radius:10px;font-family:system-ui,sans-serif;font-weight:700;font-size:.95rem;text-decoration:none;text-align:center;transition:all .15s;cursor:pointer;border:none;width:100%}
-        .cta-free{background:#0f1f3d;color:#fff}
-        .cta-free:hover{background:#1e3a5f}
-        .cta-pro{background:#16a34a;color:#fff}
-        .cta-pro:hover{background:#15803d}
+        .cta-free{background:#1F3D2B;color:#fff}
+        .cta-free:hover{background:#2A4F38}
+        .cta-pro{background:#7DBA47;color:#fff}
+        .cta-pro:hover{background:#6BA63B}
         .cta-pro:disabled{opacity:.7;cursor:not-allowed}
 
         .feels{max-width:760px;margin:24px auto 0;padding:48px 24px}
         .feels h2{font-size:clamp(1.5rem,3.5vw,2rem);font-weight:700;letter-spacing:-.03em;line-height:1.15;margin-bottom:24px;font-family:Georgia,serif}
         .feels p{font-family:Georgia,serif;font-size:1.02rem;line-height:1.7;color:#374151;margin-bottom:20px}
-        .feels p em{color:#16a34a;font-style:normal;font-weight:700}
-        .feels p.closer{color:#0f1f3d;font-weight:600}
+        .feels p em{color:#7DBA47;font-style:normal;font-weight:700}
+        .feels p.closer{color:#1F3D2B;font-weight:600}
 
         .calc{max-width:640px;margin:0 auto;padding:12px 20px 64px}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo" aria-label="PuffPrice home"><Logo /></Link>
-        <Link href="/" className="back">← Home</Link>
-      </nav>
+      <Nav variant="light" />
 
       <header className="hero">
         <h1>Never overpay for weed again.</h1>
@@ -172,7 +170,7 @@ export default async function AlertsPage() {
               fontFamily: "system-ui, sans-serif",
             }}
           >
-            <span style={{ color: "#4ade80", fontWeight: 700 }}>
+            <span style={{ color: "#93CB5C", fontWeight: 700 }}>
               {alertCount.toLocaleString()}
             </span>{" "}
             {alertCount === 1 ? "person is" : "people are"} already getting deal alerts in Central Illinois.
@@ -243,6 +241,7 @@ export default async function AlertsPage() {
       <section className="calc">
         <AlertsCalculator />
       </section>
+      <Footer />
     </>
   );
 }

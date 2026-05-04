@@ -91,7 +91,7 @@ export default function EndingSoonRow({ deals }: { deals: EndingSoonDeal[] }) {
               borderRadius: 12,
               padding: "12px 14px",
               textDecoration: "none",
-              color: "#0f1f3d",
+              color: "#1F3D2B",
               fontFamily: "system-ui, sans-serif",
               minWidth: 220,
               maxWidth: 280,
@@ -145,7 +145,7 @@ export default function EndingSoonRow({ deals }: { deals: EndingSoonDeal[] }) {
                   marginTop: 4,
                 }}
               >
-                {d.city}
+                {d.city}, IL
               </div>
             )}
           </Link>

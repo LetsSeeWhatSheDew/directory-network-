@@ -204,7 +204,7 @@ export default function HeroDealCard({
         <div className="skeleton-cta" />
         <style>{`
           .skeleton-savings{height:54px;width:62%;background:linear-gradient(90deg,#f0ece3 0%,#f8f6f0 50%,#f0ece3 100%);background-size:200% 100%;animation:cl-shimmer 1.4s linear infinite;border-radius:8px;margin:8px 0 4px}
-          .skeleton-subline{height:12px;width:40%;background:#f5f4f0;border-radius:6px;margin-bottom:18px}
+          .skeleton-subline{height:12px;width:40%;background:#F7F4ED;border-radius:6px;margin-bottom:18px}
           .skeleton-name{height:18px;width:70%;background:#f0ece3;border-radius:6px;margin-bottom:8px}
           .skeleton-cta{height:46px;background:#f0ece3;border-radius:10px;margin-top:18px}
           @keyframes cl-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
@@ -233,7 +233,7 @@ export default function HeroDealCard({
           Browse Central IL dispensaries →
         </Link>
         <style>{`
-          .hero-deal-empty-headline{font-family:Georgia,serif;font-size:1.6rem;font-weight:700;color:#0f1f3d;letter-spacing:-.02em;margin:8px 0 6px}
+          .hero-deal-empty-headline{font-family:Georgia,serif;font-size:1.6rem;font-weight:700;color:#1F3D2B;letter-spacing:-.02em;margin:8px 0 6px}
           .hero-deal-empty-sub{font-size:.92rem;color:#6b7280;font-family:system-ui,sans-serif;line-height:1.55;margin:0 0 18px;max-width:520px}
           .hero-deal-empty-cta{display:inline-block;text-align:center;text-decoration:none}
         `}</style>
@@ -299,8 +299,8 @@ export default function HeroDealCard({
       <style>{`
         .hero-deal-price{font-size:.9rem;color:#6b7280;font-family:system-ui,sans-serif;margin:-4px 0 8px}
         .hero-deal-price .strike{text-decoration:line-through}
-        .hero-deal-price strong{color:#16a34a;font-weight:700}
-        .hero-deal-open{color:#16a34a;font-size:.75rem;font-weight:600;background:#f0fdf4;padding:2px 8px;border-radius:100px}
+        .hero-deal-price strong{color:#7DBA47;font-weight:700}
+        .hero-deal-open{color:#7DBA47;font-size:.75rem;font-weight:600;background:#F2F8E9;padding:2px 8px;border-radius:100px}
         .hero-deal-closed{color:#9ca3af;font-size:.72rem;font-family:system-ui,sans-serif}
       `}</style>
     </div>

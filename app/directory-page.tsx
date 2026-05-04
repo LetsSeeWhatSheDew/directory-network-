@@ -31,13 +31,13 @@ const PROJECTS: Record<
     label: "PuffPrice · Cannabis",
     tagline: "Licensed dispensaries, delivery services & patient-first cannabis brands.",
     badge: "Cannabis",
-    color: "#16a34a",
+    color: "#7DBA47",
   },
   heal: {
     label: "Project Heal · Holistic",
     tagline: "Somatic workers, energy healers, bodyworkers & alternative care.",
     badge: "Holistic",
-    color: "#22c55e",
+    color: "#7DBA47",
   },
   her: {
     label: "Project Her · Women’s Wellness",
@@ -130,9 +130,9 @@ export default async function Home({
   const currentProject = PROJECTS[selectedTag];
 
   return (
-    <main className="min-h-screen bg-[#050f09] text-slate-50">
+    <main className="min-h-screen bg-[#1F3D2B] text-slate-50">
       {/* Top gradient halo */}
-      <div className="pointer-events-none fixed inset-x-0 top-0 z-0 h-64 bg-gradient-to-b from-[#0a2818] via-[#050f09] to-transparent opacity-80" />
+      <div className="pointer-events-none fixed inset-x-0 top-0 z-0 h-64 bg-gradient-to-b from-[#0a2818] via-[#1F3D2B] to-transparent opacity-80" />
 
       {/* Header */}
       <header className="relative z-10 border-b border-white/5 bg-black/40 backdrop-blur">
@@ -168,7 +168,7 @@ export default async function Home({
             </Link>
             <Link
               href="/get-listed"
-              className="rounded-full bg-[#50c878] px-3.5 py-1.5 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#3da85e]"
+              className="rounded-full bg-[#7DBA47] px-3.5 py-1.5 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#3da85e]"
             >
               Get listed
             </Link>
@@ -178,7 +178,7 @@ export default async function Home({
           <div className="flex items-center gap-2 md:hidden">
             <Link
               href="/get-listed"
-              className="rounded-full bg-[#50c878] px-3 py-1.5 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#3da85e]"
+              className="rounded-full bg-[#7DBA47] px-3 py-1.5 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#3da85e]"
             >
               Get listed
             </Link>
@@ -191,14 +191,14 @@ export default async function Home({
         <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-8 md:flex-row md:items-center md:py-12">
           {/* Left: copy */}
           <div className="flex-1 space-y-5">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#50c878]/20 bg-[#50c878]/5 px-3 py-1 text-[11px] font-medium text-[#50c878]/80 tracking-wide uppercase">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#50c878]" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#7DBA47]/20 bg-[#7DBA47]/5 px-3 py-1 text-[11px] font-medium text-[#7DBA47]/80 tracking-wide uppercase">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#7DBA47]" />
               Live &middot; Cannabis-led rollout
             </div>
 
-            <h1 className="text-2xl font-semibold tracking-tight text-[#f0ede8] sm:text-3xl md:text-4xl">
+            <h1 className="text-2xl font-semibold tracking-tight text-[#F7F4ED] sm:text-3xl md:text-4xl">
               The curated directory for{" "}
-              <span className="text-[#50c878]">
+              <span className="text-[#7DBA47]">
                 licensed cannabis operators
               </span>
               .
@@ -212,18 +212,18 @@ export default async function Home({
             </p>
 
             {/* Stats strip */}
-            <div className="grid grid-cols-3 gap-3 text-xs text-[#f0ede8] sm:flex sm:flex-wrap sm:gap-4">
+            <div className="grid grid-cols-3 gap-3 text-xs text-[#F7F4ED] sm:flex sm:flex-wrap sm:gap-4">
               <div className="rounded-xl border border-white/5 bg-white/[0.03] px-3 py-2">
                 <div className="text-[10px] uppercase tracking-widest text-[#8a9490]">
                   Markets
                 </div>
-                <div className="text-lg font-semibold text-[#f0ede8]">2</div>
+                <div className="text-lg font-semibold text-[#F7F4ED]">2</div>
               </div>
               <div className="rounded-xl border border-white/5 bg-white/[0.03] px-3 py-2">
                 <div className="text-[10px] uppercase tracking-widest text-[#8a9490]">
                   Verified listings
                 </div>
-                <div className="text-lg font-semibold text-[#f0ede8]">
+                <div className="text-lg font-semibold text-[#F7F4ED]">
                   {listings.length}+
                 </div>
               </div>
@@ -231,7 +231,7 @@ export default async function Home({
                 <div className="text-[10px] uppercase tracking-widest text-[#8a9490]">
                   Cities covered
                 </div>
-                <div className="text-lg font-semibold text-[#f0ede8]">45</div>
+                <div className="text-lg font-semibold text-[#F7F4ED]">45</div>
               </div>
             </div>
 
@@ -239,13 +239,13 @@ export default async function Home({
             <div className="flex flex-wrap gap-3 pt-1 text-xs">
               <Link
                 href="/get-listed"
-                className="inline-flex items-center rounded-full bg-[#50c878] px-4 py-2 text-[12px] font-semibold text-[#050f09] shadow-sm hover:bg-[#3da85e] transition-colors"
+                className="inline-flex items-center rounded-full bg-[#7DBA47] px-4 py-2 text-[12px] font-semibold text-[#1F3D2B] shadow-sm hover:bg-[#3da85e] transition-colors"
               >
                 Request a listing
               </Link>
               <Link
                 href="/cannabis/illinois"
-                className="inline-flex items-center rounded-full border border-white/10 bg-transparent px-4 py-2 text-[12px] font-medium text-[#f0ede8] hover:border-[#50c878]/30 hover:bg-white/5 transition-colors"
+                className="inline-flex items-center rounded-full border border-white/10 bg-transparent px-4 py-2 text-[12px] font-medium text-[#F7F4ED] hover:border-[#7DBA47]/30 hover:bg-white/5 transition-colors"
               >
                 Browse Illinois
               </Link>
@@ -276,7 +276,7 @@ export default async function Home({
                     <Link
                       key={listing.id}
                       href={`/l/${listing.id}`}
-                      className="flex items-start justify-between gap-3 rounded-2xl border border-white/5 bg-slate-900/80 px-3 py-2.5 text-xs text-slate-100 transition hover:border-[#50c878]/60 hover:bg-slate-900"
+                      className="flex items-start justify-between gap-3 rounded-2xl border border-white/5 bg-slate-900/80 px-3 py-2.5 text-xs text-slate-100 transition hover:border-[#7DBA47]/60 hover:bg-slate-900"
                     >
                       <div>
                         <div className="flex items-center gap-2">
@@ -284,7 +284,7 @@ export default async function Home({
                             {getListingName(listing)}
                           </h3>
                           {listing.is_featured && (
-                            <span className="rounded-full bg-[#50c878]/15 px-2 py-0.5 text-[10px] font-medium text-[#50c878]">
+                            <span className="rounded-full bg-[#7DBA47]/15 px-2 py-0.5 text-[10px] font-medium text-[#7DBA47]">
                               Featured
                             </span>
                           )}
@@ -319,7 +319,7 @@ export default async function Home({
           {/* Directory tabs */}
           <div className="mb-5 flex flex-col gap-3 md:mb-6 md:flex-row md:items-center md:justify-between">
             <div>
-              <h2 className="text-sm font-semibold tracking-tight text-[#f0ede8] md:text-base">
+              <h2 className="text-sm font-semibold tracking-tight text-[#F7F4ED] md:text-base">
                 Directory index
               </h2>
               <p className="text-[11px] text-[#8a9490] md:text-xs">
@@ -337,7 +337,7 @@ export default async function Home({
                     className={[
                       "inline-flex items-center rounded-full border px-3 py-1 transition-colors",
                       isActive
-                        ? "border-[#50c878] bg-[#50c878]/15 text-[#50c878]"
+                        ? "border-[#7DBA47] bg-[#7DBA47]/15 text-[#7DBA47]"
                         : "border-slate-700 bg-slate-900 text-slate-300 hover:border-slate-500 hover:bg-slate-800",
                     ].join(" ")}
                   >
@@ -356,7 +356,7 @@ export default async function Home({
                 first operators —{" "}
                 <Link
                   href="/get-listed"
-                  className="font-medium text-[#50c878] underline-offset-2 hover:underline"
+                  className="font-medium text-[#7DBA47] underline-offset-2 hover:underline"
                 >
                   apply to be one of them
                 </Link>
@@ -369,7 +369,7 @@ export default async function Home({
                 <Link
                   key={listing.id}
                   href={`/l/${listing.id}`}
-                  className="group flex flex-col rounded-3xl border border-slate-800 bg-slate-900/60 p-4 text-xs text-slate-100 shadow-sm transition hover:border-[#50c878]/60 hover:bg-slate-900"
+                  className="group flex flex-col rounded-3xl border border-slate-800 bg-slate-900/60 p-4 text-xs text-slate-100 shadow-sm transition hover:border-[#7DBA47]/60 hover:bg-slate-900"
                 >
                   <div className="mb-2 flex items-start justify-between gap-2">
                     <div>
@@ -381,7 +381,7 @@ export default async function Home({
                       </p>
                     </div>
                     {listing.is_featured && (
-                      <span className="rounded-full bg-[#50c878]/15 px-2 py-0.5 text-[10px] font-medium text-[#50c878]">
+                      <span className="rounded-full bg-[#7DBA47]/15 px-2 py-0.5 text-[10px] font-medium text-[#7DBA47]">
                         Featured
                       </span>
                     )}
@@ -393,7 +393,7 @@ export default async function Home({
                   )}
                   <div className="mt-auto flex items-center justify-between pt-1 text-[11px] text-slate-400">
                     <span>View profile</span>
-                    <span className="text-slate-500 group-hover:text-[#50c878]">
+                    <span className="text-slate-500 group-hover:text-[#7DBA47]">
                       →
                     </span>
                   </div>
@@ -412,7 +412,7 @@ export default async function Home({
         <div className="mx-auto max-w-6xl px-4 py-9 md:py-12">
           <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div>
-              <h2 className="text-sm font-semibold tracking-tight text-[#f0ede8] md:text-base">
+              <h2 className="text-sm font-semibold tracking-tight text-[#F7F4ED] md:text-base">
                 Editorial standards
               </h2>
               <p className="text-[11px] text-[#8a9490] md:text-xs">
@@ -421,15 +421,15 @@ export default async function Home({
             </div>
             <Link
               href="/get-listed"
-              className="inline-flex items-center rounded-full bg-[#50c878] px-4 py-2 text-[11px] font-semibold text-[#050f09] shadow-sm hover:bg-[#3da85e] transition-colors"
+              className="inline-flex items-center rounded-full bg-[#7DBA47] px-4 py-2 text-[11px] font-semibold text-[#1F3D2B] shadow-sm hover:bg-[#3da85e] transition-colors"
             >
               Submit for review
             </Link>
           </div>
 
           <div className="grid gap-4 md:grid-cols-3">
-            <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-5 text-xs text-[#f0ede8]">
-              <div className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#50c878]">
+            <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-5 text-xs text-[#F7F4ED]">
+              <div className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#7DBA47]">
                 Verification
               </div>
               <p className="text-[#8a9490] leading-relaxed">
@@ -438,8 +438,8 @@ export default async function Home({
                 legitimacy before publication.
               </p>
             </div>
-            <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-5 text-xs text-[#f0ede8]">
-              <div className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#50c878]">
+            <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-5 text-xs text-[#F7F4ED]">
+              <div className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#7DBA47]">
                 Local authority
               </div>
               <p className="text-[#8a9490] leading-relaxed">
@@ -448,8 +448,8 @@ export default async function Home({
                 and Missouri — not a national aggregator.
               </p>
             </div>
-            <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-5 text-xs text-[#f0ede8]">
-              <div className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#50c878]">
+            <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-5 text-xs text-[#F7F4ED]">
+              <div className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#7DBA47]">
                 Curation
               </div>
               <p className="text-[#8a9490] leading-relaxed">
@@ -469,12 +469,12 @@ export default async function Home({
             <Image src="/logo-512.png" alt="PuffPrice" width={20} height={20} className="h-5 w-5 opacity-60" />
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <Link href="/cannabis/illinois" className="text-[#8a9490] hover:text-[#f0ede8] transition-colors">Illinois</Link>
-            <Link href="/cannabis/missouri" className="text-[#8a9490] hover:text-[#f0ede8] transition-colors">Missouri</Link>
+            <Link href="/cannabis/illinois" className="text-[#8a9490] hover:text-[#F7F4ED] transition-colors">Illinois</Link>
+            <Link href="/cannabis/missouri" className="text-[#8a9490] hover:text-[#F7F4ED] transition-colors">Missouri</Link>
             <span className="hidden text-slate-700 md:inline">|</span>
             <Link
               href="/get-listed"
-              className="text-[#50c878] underline-offset-2 hover:text-[#3da85e]"
+              className="text-[#7DBA47] underline-offset-2 hover:text-[#3da85e]"
             >
               Request a listing
             </Link>

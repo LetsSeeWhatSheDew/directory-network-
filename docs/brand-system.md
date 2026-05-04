@@ -38,14 +38,14 @@ PuffPrice is **Central Illinois only** through Phase 1: 12 cities, 9 currently w
 
 ### Brand primitives
 
-| Token | Intent | Approximate hex |
+| Token | Intent | Locked hex |
 |---|---|---|
-| `--brand-primary-deep` | Deep brand surface — homepage hero panel, footer band, OG-card background, "premium" surfaces. Near-black with a green tint; reads serious without reading goth. | `#050F09` |
-| `--brand-accent-green` | The signature accent — CTAs, the `$` glyph in the tagline, "verified" pills, hover transitions, the wordmark fill. | `#50C878` (sage / emerald) |
-| `--brand-sand` | Warm earth-tone secondary — section accent rules, pull-quote highlights on long-form content, terracotta-adjacent without going full terracotta. | `#C8A877` *(directional — Code finalizes)* |
-| `--brand-cream` | Default light page background. Warmer than pure white — reads "publication," not "form." | `#F0EDE8` |
+| `--brand-primary-deep` | Deep brand surface — homepage hero panel, footer band, OG-card background, "premium" surfaces. Cannabis-green-tinted dark; reads serious without reading goth. | `#1F3D2B` |
+| `--brand-accent-green` | The signature accent — CTAs, the `$` glyph in the tagline, "verified" pills, hover transitions, the wordmark fill. | `#7DBA47` |
+| `--brand-sand` | Warm earth-tone secondary — section accent rules, pull-quote highlights on long-form content, terracotta-adjacent without going full terracotta. | `#C9A876` |
+| `--brand-cream` | Default light page background. Warmer than pure white — reads "publication," not "form." | `#F7F4ED` |
 | `--brand-cream-pure` | Card and input surfaces only. Cream is the page; pure cream is the surface. | `#FAFAF7` |
-| `--brand-text-on-deep` | Body and headline color when the surface is `--brand-primary-deep`. | `#F0EDE8` |
+| `--brand-text-on-deep` | Body and headline color when the surface is `--brand-primary-deep`. | `#F7F4ED` |
 
 ### Neutral scale
 
@@ -313,7 +313,11 @@ The April 28 identity package leaned away from cannabis-product photography on t
 
 ### Why deep-green hero is allowed
 
-Earlier versions of the design system included a "no dark mode" rule to keep the site away from goth/cyberpunk aesthetics. That rule was overgeneralized. Deep green (`~#050F09`) on a marketing hero is **cannabis-native**, not goth — it's the color of a freshly trimmed bud, not the color of a hacker terminal. The rule narrows: no neutral-black surfaces, no purple accents, no neon-on-black combinations. Deep cannabis-green-tinted near-black is the brand surface and ships.
+Earlier versions of the design system included a "no dark mode" rule to keep the site away from goth/cyberpunk aesthetics. That rule was overgeneralized. Deep green (`#1F3D2B`) on a marketing hero is **cannabis-native**, not goth — it's the color of a freshly trimmed bud, not the color of a hacker terminal. The rule narrows: no neutral-black surfaces, no purple accents, no neon-on-black combinations. Deep cannabis-green is the brand surface and ships.
+
+### Tokens corrected to match Image 1 sampled values
+
+Tokens corrected to match Image 1 sampled values; `#050F09` read as near-black against the visual target. Locked: `--brand-primary-deep #1F3D2B`, `--brand-accent-green #7DBA47`, `--brand-sand #C9A876`, `--brand-cream #F7F4ED`. Section 2 above has been updated; this entry preserves the correction trail.
 
 ### Why "premium" is an explicit goal
 
@@ -342,8 +346,8 @@ Splitting visual from funnel fixes was floated as a sequencing move. It was reje
 | Wordmark in geometric sans, two-tone | **Carries forward**, but font changes from Geist Display 700 to **Manrope 800** for sitewide consistency with body. |
 | Dollar-sign accent in wordmark | **Carries forward** as the `$` in the tagline; the wordmark glyph itself is plain Manrope 800 (no `$P` accent in the mark). The integrated `$P` was flagged as risky in the identity package; this rollout retreats from it. |
 | Pin mark deferred | **Reversed.** A pin-mark companion ships in this rollout for sub-32px contexts (favicon, OG corner stamp). Asset spec in `asset-manifest.md` § 5. |
-| Navy `#0F1F3D` as primary | **Reversed.** Deep cannabis-green `#050F09` is the brand primary going forward. Navy retired. |
-| Terracotta secondary | **Reversed** to **sand** `~#C8A877`. Terracotta read too "ceramic studio"; sand reads "Central Illinois warm earth tone" without coastal connotations. |
+| Navy `#0F1F3D` as primary | **Reversed.** Deep cannabis-green `#1F3D2B` is the brand primary going forward. Navy retired. |
+| Terracotta secondary | **Reversed** to **sand** `#C9A876`. Terracotta read too "ceramic studio"; sand reads "Central Illinois warm earth tone" without coastal connotations. |
 | Geist Display + Inter + Source Serif 4 | **Reversed** to **Manrope single-family**. One family with four weights is easier to maintain, ships faster, and avoids the "we picked three good fonts" optics drift. |
 | Bud photography rejected | **Reversed** — see "Why bud imagery is in scope" above. |
 | Lucide icon system | **Carries forward** unchanged. |

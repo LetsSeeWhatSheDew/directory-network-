@@ -58,16 +58,16 @@ export default function DirectoryLandingPage({ config }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-[#050f09] text-slate-50">
+    <div className="min-h-screen bg-[#1F3D2B] text-slate-50">
       {/* Nav */}
-      <nav className="sticky top-0 z-20 border-b border-white/5 bg-[#050f09]/90 backdrop-blur">
+      <nav className="sticky top-0 z-20 border-b border-white/5 bg-[#1F3D2B]/90 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <span className="text-sm font-semibold tracking-tight" style={{ color: accentColor }}>
             {directoryName}
           </span>
           <a
             href="#get-listed"
-            className="rounded-full px-4 py-1.5 text-xs font-semibold text-[#050f09] shadow-sm transition hover:opacity-90"
+            className="rounded-full px-4 py-1.5 text-xs font-semibold text-[#1F3D2B] shadow-sm transition hover:opacity-90"
             style={{ backgroundColor: accentColor }}
           >
             Get listed
@@ -96,7 +96,7 @@ export default function DirectoryLandingPage({ config }: Props) {
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <a
             href="#get-listed"
-            className="inline-flex items-center rounded-full px-6 py-2.5 text-sm font-semibold text-[#050f09] shadow-sm transition hover:opacity-90"
+            className="inline-flex items-center rounded-full px-6 py-2.5 text-sm font-semibold text-[#1F3D2B] shadow-sm transition hover:opacity-90"
             style={{ backgroundColor: accentColor }}
           >
             Claim your listing
@@ -195,7 +195,7 @@ export default function DirectoryLandingPage({ config }: Props) {
                     className="block w-full rounded-full py-2 text-center text-sm font-semibold transition hover:opacity-90"
                     style={
                       isHighlighted
-                        ? { backgroundColor: accentColor, color: "#050f09" }
+                        ? { backgroundColor: accentColor, color: "#1F3D2B" }
                         : { border: `1px solid ${accentColor}`, color: accentColor }
                     }
                   >
@@ -290,7 +290,7 @@ export default function DirectoryLandingPage({ config }: Props) {
                     name="tier_interest"
                     value={selectedTier}
                     onChange={(e) => setSelectedTier(e.target.value)}
-                    className="w-full rounded-lg border border-white/10 bg-[#050f09] px-3 py-2 text-sm text-slate-50 focus:border-white/20 focus:outline-none focus:ring-1"
+                    className="w-full rounded-lg border border-white/10 bg-[#1F3D2B] px-3 py-2 text-sm text-slate-50 focus:border-white/20 focus:outline-none focus:ring-1"
                     style={{ "--tw-ring-color": accentColor } as React.CSSProperties}
                   >
                     {pricingTiers.map((t) => (
@@ -308,7 +308,7 @@ export default function DirectoryLandingPage({ config }: Props) {
                 <button
                   type="submit"
                   disabled={status === "submitting"}
-                  className="w-full rounded-full py-2.5 text-sm font-semibold text-[#050f09] shadow-sm transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="w-full rounded-full py-2.5 text-sm font-semibold text-[#1F3D2B] shadow-sm transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
                   style={{ backgroundColor: accentColor }}
                 >
                   {status === "submitting" ? "Submitting…" : "Submit request"}

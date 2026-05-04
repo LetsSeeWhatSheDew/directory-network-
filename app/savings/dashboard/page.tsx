@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import Logo from "../../components/Logo";
+import Nav from "../../components/Nav";
+import Footer from "../../components/Footer";
 import { useEffect, useMemo, useState } from "react";
 
 type Record = {
@@ -66,46 +67,43 @@ export default function SavingsDashboard() {
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:Georgia,serif;background:#f5f4f0;color:#0f1f3d;min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#0f1f3d;position:sticky;top:0;z-index:100}
+        body{font-family:Georgia,serif;background:#F7F4ED;color:#1F3D2B;min-height:100vh}
+        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#1F3D2B;position:sticky;top:0;z-index:100}
         .logo{color:#fff;text-decoration:none;font-weight:700}
-        .logo span{color:#4ade80}
+        .logo span{color:#93CB5C}
         .back{font-size:.82rem;color:rgba(255,255,255,.55);text-decoration:none;font-family:system-ui,sans-serif}
         .back:hover{color:#fff}
         .wrap{max-width:720px;margin:0 auto;padding:40px 20px 64px}
-        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#16a34a;font-family:system-ui,sans-serif;margin-bottom:10px}
+        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#7DBA47;font-family:system-ui,sans-serif;margin-bottom:10px}
         h1{font-size:clamp(1.8rem,4.5vw,2.4rem);font-weight:700;letter-spacing:-.03em;line-height:1.15;margin-bottom:22px}
         .stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:22px}
         @media(max-width:520px){.stat-row{grid-template-columns:1fr;gap:10px}}
         .stat{background:#fff;border:1px solid #e8e4da;border-radius:14px;padding:18px}
-        .stat.primary{background:#0f1f3d;color:#fff;border-color:#0f1f3d}
+        .stat.primary{background:#1F3D2B;color:#fff;border-color:#1F3D2B}
         .stat-label{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#9ca3af;font-family:system-ui,sans-serif;margin-bottom:6px}
-        .stat.primary .stat-label{color:#4ade80}
+        .stat.primary .stat-label{color:#93CB5C}
         .stat-num{font-size:1.9rem;font-weight:700;letter-spacing:-.02em;line-height:1;font-family:Georgia,serif}
         .stat.primary .stat-num{color:#fff}
-        .stat.primary .stat-num span{color:#4ade80}
+        .stat.primary .stat-num span{color:#93CB5C}
         .row-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
         .row-head h2{font-size:1.1rem;font-weight:700;letter-spacing:-.02em}
-        .share{background:#16a34a;color:#fff;border:none;border-radius:10px;padding:9px 16px;font-family:system-ui,sans-serif;font-weight:700;font-size:.82rem;cursor:pointer}
-        .share:hover{background:#15803d}
-        .share.copied{background:#15803d}
+        .share{background:#7DBA47;color:#fff;border:none;border-radius:10px;padding:9px 16px;font-family:system-ui,sans-serif;font-weight:700;font-size:.82rem;cursor:pointer}
+        .share:hover{background:#6BA63B}
+        .share.copied{background:#6BA63B}
         .list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
         .rec{background:#fff;border:1px solid #e8e4da;border-radius:10px;padding:12px 14px;display:flex;justify-content:space-between;gap:10px}
-        .rec-name{font-size:.92rem;font-weight:700;color:#0f1f3d}
+        .rec-name{font-size:.92rem;font-weight:700;color:#1F3D2B}
         .rec-title{font-size:.78rem;color:#6b7280;font-family:system-ui,sans-serif;margin-top:2px}
         .rec-date{font-size:.72rem;color:#9ca3af;font-family:system-ui,sans-serif;margin-top:2px}
-        .rec-save{font-size:1rem;font-weight:700;color:#16a34a;white-space:nowrap}
+        .rec-save{font-size:1rem;font-weight:700;color:#7DBA47;white-space:nowrap}
         .empty{background:#fff;border:1px dashed #d1cfc6;border-radius:12px;padding:32px 20px;text-align:center}
         .empty-title{font-size:1rem;font-weight:700;margin-bottom:8px}
         .empty-sub{font-size:.85rem;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:18px;line-height:1.5}
-        .cta{display:inline-block;background:#0f1f3d;color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:700;font-size:.88rem}
-        .cta:hover{background:#1e3a5f}
+        .cta{display:inline-block;background:#1F3D2B;color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:700;font-size:.88rem}
+        .cta:hover{background:#2A4F38}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo" aria-label="PuffPrice home"><Logo /></Link>
-        <Link href="/deals/all" className="back">← Browse deals</Link>
-      </nav>
+      <Nav variant="light" />
 
       <div className="wrap">
         <div className="eyebrow">My savings</div>
@@ -150,7 +148,7 @@ export default function SavingsDashboard() {
               </button>
             </div>
             <p style={{ fontSize: ".78rem", color: "#6b7280", fontFamily: "system-ui,sans-serif" }}>
-              {month} savings: <strong style={{ color: "#16a34a" }}>${monthly}</strong> · Tap to
+              {month} savings: <strong style={{ color: "#7DBA47" }}>${monthly}</strong> · Tap to
               share.
             </p>
 

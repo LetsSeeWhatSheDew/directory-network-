@@ -1,5 +1,6 @@
 import Link from "next/link";
-import Logo from "../components/Logo";
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
 import MobileNavMenu from "../components/MobileNavMenu";
 import Calculator from "./Calculator";
 import { TAX_RATES_LAST_UPDATED } from "../../lib/taxRates";
@@ -53,14 +54,14 @@ export default function TaxCalculatorPage() {
       />
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:var(--font-ui, system-ui, sans-serif);background:#f5f4f0;color:#0f1f3d;min-height:100vh}
+        body{font-family:var(--font-ui, system-ui, sans-serif);background:#F7F4ED;color:#1F3D2B;min-height:100vh}
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #e8e4da;position:sticky;top:0;z-index:100}
         .logo-link{display:flex;align-items:center}
         .nav-links{display:flex;gap:18px;align-items:center}
         .nav-link{font-size:.88rem;color:#6b7280;text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif);font-weight:500}
-        .nav-link:hover{color:#0f1f3d}
-        .nav-cta{background:#0f1f3d;color:#fff;padding:8px 14px;border-radius:8px;font-size:.85rem;font-weight:700;text-decoration:none}
-        .nav-cta:hover{background:#1e3a5f}
+        .nav-link:hover{color:#1F3D2B}
+        .nav-cta{background:#1F3D2B;color:#fff;padding:8px 14px;border-radius:8px;font-size:.85rem;font-weight:700;text-decoration:none}
+        .nav-cta:hover{background:#2A4F38}
         .desktop-only-nav{display:flex}
         @media(max-width:768px){.desktop-only-nav{display:none !important}}
 
@@ -70,13 +71,13 @@ export default function TaxCalculatorPage() {
         .eyebrow{
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:.74rem;font-weight:700;letter-spacing:.14em;
-          text-transform:uppercase;color:#16a34a;margin-bottom:14px;
+          text-transform:uppercase;color:#7DBA47;margin-bottom:14px;
         }
         h1{
           font-family:var(--font-display, var(--font-geist-sans));
           font-size:clamp(1.9rem, 4.5vw, 2.75rem);
           font-weight:700;letter-spacing:-.04em;line-height:1.1;
-          color:#0f1f3d;margin-bottom:18px;
+          color:#1F3D2B;margin-bottom:18px;
         }
         .lede{
           font-family:var(--font-ui, system-ui, sans-serif);
@@ -88,7 +89,7 @@ export default function TaxCalculatorPage() {
           background:#fff;border:1px solid #2563eb;border-left:4px solid #2563eb;
           border-radius:10px;padding:14px 18px;margin-bottom:24px;
           font-family:var(--font-ui, system-ui, sans-serif);
-          font-size:.88rem;color:#1e3a5f;line-height:1.55;
+          font-size:.88rem;color:#2A4F38;line-height:1.55;
         }
         .medical-banner strong{font-weight:700}
 
@@ -103,7 +104,7 @@ export default function TaxCalculatorPage() {
         @media(min-width:560px){
           .article-link{flex-direction:row;justify-content:space-between;align-items:center;gap:18px}
         }
-        .article-link a{color:#16a34a;font-weight:700;text-decoration:none;white-space:nowrap}
+        .article-link a{color:#7DBA47;font-weight:700;text-decoration:none;white-space:nowrap}
         .article-link a:hover{text-decoration:underline}
 
         .source-note{
@@ -113,7 +114,7 @@ export default function TaxCalculatorPage() {
           border-top:1px solid #e8e4da;
         }
         .source-note strong{color:#374151;font-weight:700}
-        .source-note a{color:#16a34a;text-decoration:none}
+        .source-note a{color:#7DBA47;text-decoration:none}
         .source-note a:hover{text-decoration:underline}
 
         .footer{
@@ -123,22 +124,11 @@ export default function TaxCalculatorPage() {
           flex-wrap:wrap;gap:12px;
         }
         .footer-link{font-size:.78rem;color:#6b7280;text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif)}
-        .footer-link:hover{color:#0f1f3d}
+        .footer-link:hover{color:#1F3D2B}
         .footer-copy{font-size:.74rem;color:#9ca3af;font-family:var(--font-ui, system-ui, sans-serif)}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo-link" aria-label="PuffPrice home">
-          <Logo size={36} />
-        </Link>
-        <div className="nav-links desktop-only-nav">
-          <Link href="/dispensaries" className="nav-link">Browse Central IL</Link>
-          <Link href="/about" className="nav-link">About</Link>
-          <Link href="/illinois-cannabis-tax" className="nav-link">Tax explainer</Link>
-          <Link href="/dispensaries" className="nav-cta">For dispensaries</Link>
-        </div>
-        <MobileNavMenu />
-      </nav>
+      <Nav variant="light" />
 
       <main className="wrap">
         <p className="eyebrow">Pricing</p>

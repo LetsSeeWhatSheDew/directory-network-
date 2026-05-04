@@ -31,7 +31,7 @@ export default function RecentlyViewedRow() {
           fontWeight: 700,
           letterSpacing: "0.14em",
           textTransform: "uppercase",
-          color: "#16a34a",
+          color: "#7DBA47",
           fontFamily: "system-ui, sans-serif",
           marginBottom: 10,
         }}
@@ -58,7 +58,7 @@ export default function RecentlyViewedRow() {
               borderRadius: 10,
               padding: "10px 14px",
               textDecoration: "none",
-              color: "#0f1f3d",
+              color: "#1F3D2B",
               fontFamily: "system-ui, sans-serif",
               minWidth: 160,
               maxWidth: 240,

@@ -1,6 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
-import Logo from "../components/Logo";
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
 
 const OG_DESC =
   "Cannabis deal finder for Central Illinois. Built by one person in Peoria because the existing tools cost too much and lie about coverage.";
@@ -31,11 +31,11 @@ export default function AboutPage() {
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:var(--font-ui, system-ui, sans-serif);background:#f5f4f0;color:#0f1f3d;min-height:100vh}
+        body{font-family:var(--font-ui, system-ui, sans-serif);background:#F7F4ED;color:#1F3D2B;min-height:100vh}
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #e8e4da;position:sticky;top:0;z-index:100}
         .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none}
         .back{font-size:.82rem;color:#6b7280;text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif)}
-        .back:hover{color:#0f1f3d}
+        .back:hover{color:#1F3D2B}
         .about-photo{
           position:relative;
           width:100%;
@@ -59,11 +59,11 @@ export default function AboutPage() {
           text-shadow:0 1px 2px rgba(0,0,0,0.4);
         }
         .wrap{max-width:680px;margin:0 auto;padding:48px 28px 64px}
-        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#16a34a;font-family:var(--font-ui, system-ui, sans-serif);margin-bottom:14px}
+        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#7DBA47;font-family:var(--font-ui, system-ui, sans-serif);margin-bottom:14px}
         h1{
           font-family:var(--font-display, var(--font-geist-sans));
           font-size:clamp(2rem,4.5vw,3rem);font-weight:700;
-          letter-spacing:-.04em;line-height:1.1;margin-bottom:32px;color:#0f1f3d
+          letter-spacing:-.04em;line-height:1.1;margin-bottom:32px;color:#1F3D2B
         }
         p{
           font-family:var(--font-serif, Georgia, serif);
@@ -75,7 +75,7 @@ export default function AboutPage() {
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:.92rem;color:#6b7280
         }
-        .contact a{color:#16a34a;text-decoration:none;font-weight:600}
+        .contact a{color:#7DBA47;text-decoration:none;font-weight:600}
         .contact a:hover{text-decoration:underline}
         .built{
           margin-top:48px;
@@ -85,12 +85,7 @@ export default function AboutPage() {
         @media(max-width:600px){.wrap{padding:48px 20px 40px}.nav{padding:12px 16px}}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo-link" aria-label="PuffPrice home">
-          <Logo size={36} />
-        </Link>
-        <Link href="/" className="back">← Back</Link>
-      </nav>
+      <Nav variant="light" />
 
       {/* Downtown Peoria building with US flag, photographed through bare
           branches (Darrien Staton, Unsplash). Place-rooted establishing
@@ -160,8 +155,8 @@ export default function AboutPage() {
           <a href="mailto:hi@puffprice.com">hi@puffprice.com</a>
         </div>
 
-        <div className="built">Built in Peoria, Illinois 🌿</div>
       </main>
+      <Footer />
     </>
   );
 }

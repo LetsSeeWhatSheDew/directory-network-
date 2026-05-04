@@ -5,7 +5,8 @@
 // /l/[slug], which carries the full destination-screen UX.
 
 import Link from "next/link";
-import Logo from "../../components/Logo";
+import Nav from "../../components/Nav";
+import Footer from "../../components/Footer";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
@@ -223,7 +224,7 @@ export default async function DealPage({
   const expiry = computeExpiry(deal.expires_at);
   const expiryStyle: Record<ExpiryBadge["tone"], React.CSSProperties> = {
     none:     { display: "none" },
-    ongoing:  { color: "#166534", background: "#dcfce7" },
+    ongoing:  { color: "#3F6B1F", background: "#dcfce7" },
     soft:     { color: "#475569", background: "#f1f5f9" },
     warning:  { color: "#92400e", background: "#fef3c7" },
     urgent:   { color: "#fff",    background: "#dc2626" },
@@ -294,51 +295,49 @@ export default async function DealPage({
       />
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:Georgia,serif;background:#f5f4f0;color:#0f1f3d;min-height:100vh}
+        body{font-family:Georgia,serif;background:#F7F4ED;color:#1F3D2B;min-height:100vh}
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;position:sticky;top:0;z-index:100;border-bottom:1px solid #e8e4da}
         .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
-        .logo-dot{width:8px;height:8px;border-radius:50%;background:#16a34a;animation:pulse 2.5s infinite}
+        .logo-dot{width:8px;height:8px;border-radius:50%;background:#7DBA47;animation:pulse 2.5s infinite}
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-        .logo-text{font-size:1.1rem;font-weight:700;color:#0f1f3d}
-        .logo-text span{color:#16a34a}
+        .logo-text{font-size:1.1rem;font-weight:700;color:#1F3D2B}
+        .logo-text span{color:#7DBA47}
         .back{font-size:.82rem;color:#6b7280;text-decoration:none;font-family:system-ui,sans-serif}
         .wrap{max-width:680px;margin:0 auto;padding:40px 20px 64px}
-        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#16a34a;font-family:system-ui,sans-serif;margin-bottom:10px}
+        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#7DBA47;font-family:system-ui,sans-serif;margin-bottom:10px}
         h1{font-size:clamp(1.8rem,4.5vw,2.6rem);font-weight:700;letter-spacing:-.03em;line-height:1.12;margin-bottom:10px}
         .disp{font-size:1rem;color:#374151;font-family:system-ui,sans-serif;margin-bottom:4px}
-        .disp a{color:#16a34a;font-weight:700;text-decoration:none}
+        .disp a{color:#7DBA47;font-weight:700;text-decoration:none}
         .disp a:hover{text-decoration:underline}
         .city{font-size:.85rem;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:22px}
-        .city a{color:#16a34a;text-decoration:none}
-        .savings-block{background:#fff;border:1px solid #e8e4da;border-left:4px solid #16a34a;border-radius:16px;padding:24px;margin-bottom:18px;box-shadow:0 4px 16px rgba(15,31,61,.06)}
+        .city a{color:#7DBA47;text-decoration:none}
+        .savings-block{background:#fff;border:1px solid #e8e4da;border-left:4px solid #7DBA47;border-radius:16px;padding:24px;margin-bottom:18px;box-shadow:0 4px 16px rgba(15,31,61,.06)}
         .sv-label{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:2px}
-        .sv-amt{font-size:clamp(2.4rem,9vw,3.4rem);font-weight:700;color:#16a34a;letter-spacing:-.04em;line-height:1;margin-bottom:4px}
+        .sv-amt{font-size:clamp(2.4rem,9vw,3.4rem);font-weight:700;color:#7DBA47;letter-spacing:-.04em;line-height:1;margin-bottom:4px}
         .sv-vs{font-size:.78rem;color:#9ca3af;font-family:system-ui,sans-serif;margin-bottom:14px}
         .expires{display:inline-block;font-size:.74rem;color:#92400e;background:#fef3c7;padding:3px 10px;border-radius:100px;font-family:system-ui,sans-serif;font-weight:700;margin-bottom:14px}
-        .expires.ongoing{color:#166534;background:#dcfce7}
+        .expires.ongoing{color:#3F6B1F;background:#dcfce7}
         .desc{font-size:.98rem;color:#374151;font-family:system-ui,sans-serif;line-height:1.6;margin-bottom:16px}
-        .code-box{background:#0f1f3d;color:#fff;border-radius:10px;padding:14px 18px;margin-bottom:18px;font-family:system-ui,sans-serif;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-        .code-label{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:#4ade80;font-weight:700}
+        .code-box{background:#1F3D2B;color:#fff;border-radius:10px;padding:14px 18px;margin-bottom:18px;font-family:system-ui,sans-serif;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+        .code-label{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:#93CB5C;font-weight:700}
         .code-value{font-family:monospace;font-size:1.05rem;font-weight:700;background:rgba(255,255,255,.1);padding:6px 14px;border-radius:8px;letter-spacing:.06em}
-        .how-to{font-size:.88rem;color:#374151;font-family:system-ui,sans-serif;line-height:1.5;margin-bottom:18px;padding:12px 14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;color:#14532d}
-        .cta{display:block;width:100%;text-align:center;background:#16a34a;color:#fff;padding:16px;border-radius:12px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:800;font-size:1rem;letter-spacing:.02em;min-height:52px;transition:background .15s}
-        .cta:hover{background:#15803d}
+        .how-to{font-size:.88rem;color:#374151;font-family:system-ui,sans-serif;line-height:1.5;margin-bottom:18px;padding:12px 14px;background:#F2F8E9;border:1px solid #C7E5A8;border-radius:10px;color:#14532d}
+        .cta{display:block;width:100%;text-align:center;background:#7DBA47;color:#fff;padding:16px;border-radius:12px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:800;font-size:1rem;letter-spacing:.02em;min-height:52px;transition:background .15s}
+        .cta:hover{background:#6BA63B}
         .secondary{display:block;text-align:center;margin-top:12px;color:#6b7280;font-family:system-ui,sans-serif;font-size:.82rem;text-decoration:none}
-        .secondary:hover{color:#0f1f3d;text-decoration:underline}
+        .secondary:hover{color:#1F3D2B;text-decoration:underline}
         @media(max-width:600px){.wrap{padding:24px 14px}.savings-block{padding:20px 18px}}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo" aria-label="PuffPrice home">
-          <Logo />
-        </Link>
+      <Nav variant="light" />
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(1rem, 4vw, 2rem) 4px", fontSize: 13 }}>
         <Link
           href={city ? `/city/${encodeURIComponent(city.toLowerCase())}` : "/deals/all"}
-          className="back"
+          style={{ color: "var(--color-gray-500, #6B7280)", textDecoration: "none", fontFamily: "Manrope, system-ui, sans-serif", fontWeight: 500 }}
         >
           ← {city ? `${city} deals` : "All deals"}
         </Link>
-      </nav>
+      </div>
 
       <main className="wrap">
         <div className="eyebrow">Active deal{deal.category ? ` · ${deal.category}` : ""}</div>

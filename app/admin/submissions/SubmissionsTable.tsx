@@ -195,7 +195,7 @@ export function SubmissionsTable({ rows }: { rows: Submission[] }) {
                   </Td>
                   <Td>
                     {r.source_url ? (
-                      <a href={r.source_url} target="_blank" rel="noreferrer noopener" style={{ color: "#16a34a" }}>
+                      <a href={r.source_url} target="_blank" rel="noreferrer noopener" style={{ color: "#7DBA47" }}>
                         link ↗
                       </a>
                     ) : (
@@ -204,7 +204,7 @@ export function SubmissionsTable({ rows }: { rows: Submission[] }) {
                   </Td>
                   <Td>
                     {done ? (
-                      <span style={{ color: decision.ok ? "#15803d" : "#b91c1c", fontSize: "0.75rem" }}>
+                      <span style={{ color: decision.ok ? "#6BA63B" : "#b91c1c", fontSize: "0.75rem" }}>
                         {decision.message}
                       </span>
                     ) : (
@@ -267,7 +267,7 @@ const fieldStyle: React.CSSProperties = {
 };
 
 const approveBtn: React.CSSProperties = {
-  background: "#16a34a",
+  background: "#7DBA47",
   color: "white",
   border: "none",
   padding: "6px 10px",

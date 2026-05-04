@@ -1,5 +1,6 @@
 import Link from "next/link";
-import Logo from "../../components/Logo";
+import Nav from "../../components/Nav";
+import Footer from "../../components/Footer";
 
 const OG_DESC =
   "How the PuffPrice Index is calculated — our weekly Illinois flower price-per-gram benchmark.";
@@ -30,29 +31,29 @@ export default function AboutIndexPage() {
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:Georgia,serif;background:#f5f4f0;color:#0f1f3d;min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#0f1f3d;position:sticky;top:0;z-index:100}
+        body{font-family:Georgia,serif;background:#F7F4ED;color:#1F3D2B;min-height:100vh}
+        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#1F3D2B;position:sticky;top:0;z-index:100}
         .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
         .logo-text{font-size:1.1rem;font-weight:700;color:#fff;letter-spacing:-.02em}
-        .logo-text span{color:#4ade80}
+        .logo-text span{color:#93CB5C}
         .back{font-size:.82rem;color:rgba(255,255,255,.55);text-decoration:none;font-family:system-ui,sans-serif}
         .back:hover{color:#fff}
         .wrap{max-width:720px;margin:0 auto;padding:56px 28px 80px}
         .eyebrow{
           font-family:system-ui,sans-serif;font-size:.72rem;font-weight:700;
-          letter-spacing:.14em;text-transform:uppercase;color:#16a34a;margin-bottom:14px;
+          letter-spacing:.14em;text-transform:uppercase;color:#7DBA47;margin-bottom:14px;
         }
         h1{
-          font-size:clamp(2rem,5vw,2.8rem);font-weight:700;color:#0f1f3d;
+          font-size:clamp(2rem,5vw,2.8rem);font-weight:700;color:#1F3D2B;
           letter-spacing:-.04em;line-height:1.08;margin-bottom:18px;
         }
-        h1 em{color:#16a34a;font-style:normal}
+        h1 em{color:#7DBA47;font-style:normal}
         .lede{
           font-size:1.1rem;color:#374151;line-height:1.55;
           margin-bottom:32px;max-width:60ch;
         }
         h2{
-          font-size:1.3rem;font-weight:700;color:#0f1f3d;
+          font-size:1.3rem;font-weight:700;color:#1F3D2B;
           letter-spacing:-.02em;margin:28px 0 12px;
         }
         p,li{
@@ -66,7 +67,7 @@ export default function AboutIndexPage() {
         }
         .promise{
           margin-top:40px;padding:22px 24px;
-          background:#fff;border:1px solid #e8e4da;border-left:4px solid #16a34a;
+          background:#fff;border:1px solid #e8e4da;border-left:4px solid #7DBA47;
           border-radius:12px;box-shadow:0 4px 16px rgba(15,31,61,.04);
         }
         .promise h2{margin:0 0 8px;font-size:1.1rem}
@@ -74,17 +75,12 @@ export default function AboutIndexPage() {
         .back-link{
           display:inline-block;margin-top:36px;
           font-family:system-ui,sans-serif;font-size:.88rem;font-weight:600;
-          color:#16a34a;text-decoration:none;
+          color:#7DBA47;text-decoration:none;
         }
         .back-link:hover{text-decoration:underline}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo" aria-label="PuffPrice home">
-          <Logo />
-        </Link>
-        <Link href="/" className="back">← Back to deals</Link>
-      </nav>
+      <Nav variant="light" />
 
       <div className="wrap">
         <div className="eyebrow">Methodology</div>
@@ -137,7 +133,7 @@ export default function AboutIndexPage() {
             We will never round up a sample size. We will never publish an
             Index from fewer than 10 deals. If we can't calculate it
             honestly, we won't publish it — that's why you see a progress
-            bar instead of a placeholder number. <Link href="/about" style={{color:"#16a34a",fontWeight:600,textDecoration:"none"}}>More about how we work →</Link>
+            bar instead of a placeholder number. <Link href="/about" style={{color:"#7DBA47",fontWeight:600,textDecoration:"none"}}>More about how we work →</Link>
           </p>
         </div>
 

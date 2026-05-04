@@ -107,7 +107,7 @@ export default async function PuffPriceIndexCard() {
         .ppi-card{
           background:#fff;
           border:1px solid #e8e4da;
-          border-left:4px solid #16a34a;
+          border-left:4px solid #7DBA47;
           border-radius:14px;
           padding:28px 28px 24px;
           box-shadow:0 4px 16px rgba(15,31,61,.06);
@@ -132,12 +132,12 @@ export default async function PuffPriceIndexCard() {
         .ppi-eyebrow{
           font-family:system-ui,sans-serif;
           font-size:.7rem;font-weight:700;letter-spacing:.14em;
-          text-transform:uppercase;color:#16a34a;
+          text-transform:uppercase;color:#7DBA47;
           margin-bottom:8px;
         }
         .ppi-price-line,.ppi-teaser-price{
           font-family:Georgia,serif;
-          color:#0f1f3d;
+          color:#1F3D2B;
           letter-spacing:-.04em;
           line-height:1;
           display:flex;align-items:baseline;gap:0;
@@ -146,7 +146,7 @@ export default async function PuffPriceIndexCard() {
         .ppi-currency{
           font-size:clamp(1.6rem,3.4vw,2.1rem);
           font-weight:700;
-          color:#16a34a;
+          color:#7DBA47;
           margin-right:2px;
         }
         .ppi-dollars{
@@ -180,7 +180,7 @@ export default async function PuffPriceIndexCard() {
         }
         .ppi-progress{
           height:6px;
-          background:#f5f4f0;
+          background:#F7F4ED;
           border-radius:100px;
           overflow:hidden;
           margin:4px 0 12px;
@@ -188,7 +188,7 @@ export default async function PuffPriceIndexCard() {
         }
         .ppi-progress-fill{
           height:100%;
-          background:linear-gradient(90deg,#16a34a,#4ade80);
+          background:linear-gradient(90deg,#7DBA47,#93CB5C);
           border-radius:100px;
           transition:width .4s ease-out;
         }
@@ -198,7 +198,7 @@ export default async function PuffPriceIndexCard() {
           color:#6b7280;
         }
         .ppi-link{
-          color:#16a34a;
+          color:#7DBA47;
           text-decoration:none;
           font-weight:600;
         }

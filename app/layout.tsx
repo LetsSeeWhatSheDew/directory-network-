@@ -1,42 +1,21 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Geist, Geist_Mono, Inter, Source_Serif_4 } from "next/font/google";
+import { Manrope } from "next/font/google";
 import "./globals.css";
 import UtmCapture from "./components/UtmCapture";
 import { brand } from "../lib/brand";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-TML9Y6VMC2";
 
-// Brand spec 2.3: Geist Display drives every headline and the wordmark;
-// Inter is the UI/chrome face for body, navigation, deal cards, metadata;
-// Source Serif 4 is reserved for long-form content (about, content guides);
-// Geist Mono stays available for code blocks. Each font is wired as a CSS
-// variable so globals.css can reference them by role rather than literal
-// font name — the type scale rules pick the correct face per element.
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Brand spec § 3 (locked 2026-05-04): Manrope, single family, four weights.
+// Wired as a CSS variable so globals.css references the loaded family
+// regardless of next/font's hash. Legacy variable names (--font-geist-sans,
+// --font-inter, --font-source-serif) are aliased to Manrope inside
+// globals.css so older component code keeps working until it's migrated.
+const manrope = Manrope({
+  variable: "--font-manrope-loaded",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
-
-const sourceSerif = Source_Serif_4({
-  variable: "--font-source-serif",
-  subsets: ["latin"],
-  weight: ["400", "600"],
+  weight: ["400", "500", "600", "800"],
   display: "swap",
 });
 
@@ -88,9 +67,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${sourceSerif.variable} antialiased`}
-      >
+      <body className={`${manrope.variable} antialiased`}>
         {children}
         <UtmCapture />
         <Script
