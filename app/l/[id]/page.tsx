@@ -4,7 +4,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { MapPin, Phone } from "lucide-react";
-import Logo from "../../components/Logo";
+import Nav from "../../components/Nav";
+import Footer from "../../components/Footer";
 import ClaimForm from "../../components/ClaimForm";
 import RecentlyViewedTracker from "../../components/RecentlyViewedTracker";
 import ShareDealButton from "../../components/ShareDealButton";
@@ -614,12 +615,12 @@ export default async function ListingPage({
       `}</style>
 
       <div className="dn-root">
-        <nav className="dn-nav">
-          <Link href="/" className="dn-nav-brand" aria-label="PuffPrice home">
-            <Logo size={40} />
+        <Nav variant="light" />
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(1rem, 4vw, 2rem) 4px", fontSize: 13 }}>
+          <Link href={backHref} style={{ color: "var(--color-gray-500, #6B7280)", textDecoration: "none", fontFamily: "Manrope, system-ui, sans-serif", fontWeight: 500 }}>
+            {backLabel}
           </Link>
-          <Link href={backHref} className="dn-nav-back">{backLabel}</Link>
-        </nav>
+        </div>
 
         {isNoIndex && (
           <div className="dn-noindex-banner">
@@ -1059,11 +1060,8 @@ export default async function ListingPage({
           </div>
         </div>
 
-        <footer className="dn-footer">
-          <span className="dn-footer-brand"><Logo size={28} /></span>
-          <span className="dn-footer-note">© {new Date().getFullYear()} PuffPrice · Central Illinois</span>
-        </footer>
       </div>
+      <Footer />
     </>
   );
 }

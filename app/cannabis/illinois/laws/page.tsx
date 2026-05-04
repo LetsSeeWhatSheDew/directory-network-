@@ -1,5 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import Nav from "../../../components/Nav";
+import Footer from "../../../components/Footer";
 
 export const metadata: Metadata = {
   title: "Illinois Cannabis Laws 2025 — What's Legal, What's Not | PuffPrice",
@@ -91,13 +93,7 @@ export default function IllinoisLawsPage() {
         @media (max-width: 768px) { .laws-nav { padding: 14px 20px; } .laws-breadcrumb { padding: 10px 20px; } .laws-inner { padding: 24px 16px 60px; } }
       `}</style>
       <div className="laws-root">
-        <nav className="laws-nav">
-          <Link href="/" className="laws-nav-brand">
-            <span className="laws-nav-dot" />
-            <span className="laws-nav-name">puff<span className="laws-nav-accent">price</span></span>
-          </Link>
-          <Link href="/" className="laws-nav-back">← Central IL</Link>
-        </nav>
+        <Nav variant="light" />
         <div className="laws-breadcrumb">
           <Link href="/">Home</Link><span>›</span>
           <Link href="/cannabis">Cannabis</Link><span>›</span>
@@ -194,11 +190,8 @@ export default function IllinoisLawsPage() {
             <Link href="/dispensaries" className="laws-cta-btn">Browse Central IL dispensaries →</Link>
           </div>
         </div>
-        <footer className="laws-footer">
-          <span className="laws-footer-brand">puff<span style={{ color: "#16a34a" }}>price</span></span>
-          <span className="laws-footer-note">© {new Date().getFullYear()} PuffPrice · For informational purposes only, not legal advice.</span>
-        </footer>
       </div>
+      <Footer />
     </>
   );
 }

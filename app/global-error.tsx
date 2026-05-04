@@ -3,7 +3,6 @@
 // Global error boundary — catches errors thrown in the root layout
 // that app/error.tsx cannot catch. Next.js convention: this replaces
 // the layout entirely, so it MUST render its own <html>/<body>.
-// Logs to console always; reports to Sentry only if DSN is configured.
 
 import { useEffect } from "react";
 import * as Sentry from "@sentry/nextjs";
@@ -22,9 +21,9 @@ export default function GlobalError({
     <html lang="en">
       <body
         style={{
-          fontFamily: "Georgia, serif",
-          background: "#f5f4f0",
-          color: "#0f1f3d",
+          fontFamily: "Manrope, -apple-system, BlinkMacSystemFont, system-ui, sans-serif",
+          background: "#F7F4ED",
+          color: "#1F3D2B",
           minHeight: "100vh",
           display: "flex",
           alignItems: "center",
@@ -35,32 +34,36 @@ export default function GlobalError({
       >
         <div
           style={{
-            background: "#fff",
-            border: "1px solid #e8e4da",
-            borderRadius: 16,
+            background: "#FAFAF7",
+            border: "1px solid #E8E2D5",
+            borderRadius: 14,
             padding: "32px 28px",
-            maxWidth: 440,
+            maxWidth: 460,
             textAlign: "center",
+            boxShadow: "0 4px 12px rgba(31, 61, 43, 0.08)",
           }}
         >
-          <h1 style={{ fontSize: "1.4rem", fontWeight: 700, letterSpacing: "-0.02em", marginBottom: 10 }}>
+          <h1 style={{ fontFamily: "inherit", fontSize: "1.5rem", fontWeight: 800, letterSpacing: "-0.025em", marginBottom: 12, color: "#1F3D2B" }}>
             Something broke
           </h1>
-          <p style={{ fontSize: ".9rem", color: "#6b7280", fontFamily: "system-ui, sans-serif", lineHeight: 1.55, marginBottom: 18 }}>
+          <p style={{ fontFamily: "inherit", fontSize: "0.9375rem", color: "#4B5563", lineHeight: 1.55, marginBottom: 20 }}>
             We hit an error we can&apos;t recover from. Reload the page or head back home.
           </p>
           <a
             href="/"
             style={{
-              display: "inline-block",
-              background: "#16a34a",
-              color: "#fff",
-              padding: "10px 18px",
-              borderRadius: 10,
-              fontFamily: "system-ui, sans-serif",
-              fontWeight: 700,
-              fontSize: ".88rem",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "#7DBA47",
+              color: "#1F3D2B",
+              padding: "12px 22px",
+              borderRadius: 9999,
+              fontFamily: "inherit",
+              fontWeight: 600,
+              fontSize: "0.9375rem",
               textDecoration: "none",
+              minHeight: 44,
             }}
           >
             Go home

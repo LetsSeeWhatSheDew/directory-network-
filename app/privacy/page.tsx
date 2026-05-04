@@ -5,6 +5,8 @@
 
 import Link from "next/link";
 import type { Metadata } from "next";
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | PuffPrice",
@@ -15,27 +17,19 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div style={{ fontFamily: "Georgia, serif", background: "#f5f4f0", minHeight: "100vh", color: "#0f1f3d" }}>
-      <nav style={{ padding: "14px 28px", background: "#0f1f3d", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <Link href="/" style={{ color: "#fff", textDecoration: "none", fontWeight: 700, fontSize: "1.15rem" }}>
-          puff<span style={{ color: "#4ade80" }}>price</span>
-        </Link>
-        <Link href="/" style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none", fontSize: ".85rem", fontFamily: "system-ui, sans-serif" }}>
-          ← Home
-        </Link>
-      </nav>
-
-      <header style={{ background: "#0f1f3d", color: "#fff", padding: "56px 28px", textAlign: "center" }}>
-        <p style={{ fontSize: ".7rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#4ade80", fontFamily: "system-ui, sans-serif", fontWeight: 700, marginBottom: 10 }}>
-          Legal
-        </p>
-        <h1 style={{ fontSize: "clamp(2rem, 5vw, 3rem)", letterSpacing: "-0.04em", marginBottom: 12, lineHeight: 1.1 }}>
-          Privacy Policy
-        </h1>
-        <p style={{ color: "rgba(255,255,255,0.65)", fontFamily: "system-ui, sans-serif", maxWidth: 520, margin: "0 auto", lineHeight: 1.6, fontSize: "1rem" }}>
-          Last updated: April 18, 2026. Short and specific.
-        </p>
-      </header>
+    <div style={{ fontFamily: "Manrope, system-ui, sans-serif", background: "var(--color-cream, #F7F4ED)", minHeight: "100vh", color: "var(--color-deep, #1F3D2B)" }}>
+      <div className="pp-surface-deep pp-leaf pp-leaf-04">
+        <Nav variant="deep" />
+        <header style={{ color: "var(--color-cream, #F7F4ED)", padding: "clamp(2rem, 5vw, 4rem) clamp(1rem, 4vw, 2rem)", textAlign: "center", position: "relative", zIndex: 2 }}>
+          <p className="pp-eyebrow" style={{ color: "var(--color-sage-vibrant, #93CB5C)", marginBottom: 10 }}>Legal</p>
+          <h1 style={{ fontFamily: "Manrope, system-ui, sans-serif", fontWeight: 800, fontSize: "clamp(2rem, 5vw, 3rem)", letterSpacing: "-0.035em", lineHeight: 1.1, marginBottom: 12, color: "var(--color-cream, #F7F4ED)" }}>
+            Privacy Policy
+          </h1>
+          <p style={{ color: "rgba(247, 244, 237, 0.72)", fontFamily: "Manrope, system-ui, sans-serif", maxWidth: 520, margin: "0 auto", lineHeight: 1.6, fontSize: "1rem" }}>
+            Last updated: April 18, 2026. Short and specific.
+          </p>
+        </header>
+      </div>
 
       <section style={{ maxWidth: 720, margin: "-32px auto 0", padding: "0 28px 80px", position: "relative" }}>
         <article style={{ background: "#fff", border: "1px solid #e8e4da", borderRadius: 14, padding: "32px 28px", lineHeight: 1.7, fontSize: "1.02rem" }}>
@@ -128,10 +122,11 @@ export default function PrivacyPage() {
 
         </article>
 
-        <p style={{ textAlign: "center", marginTop: 28, fontSize: ".85rem", fontFamily: "system-ui, sans-serif", color: "#6b7280" }}>
+        <p style={{ textAlign: "center", marginTop: 28, fontSize: ".85rem", fontFamily: "Manrope, system-ui, sans-serif", color: "var(--color-gray-500, #6B7280)" }}>
           See also: <Link href="/terms" style={link}>Terms of Service</Link>
         </p>
       </section>
+      <Footer />
     </div>
   );
 }

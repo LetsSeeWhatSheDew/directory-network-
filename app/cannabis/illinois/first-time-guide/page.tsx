@@ -1,5 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import Nav from "../../../components/Nav";
+import Footer from "../../../components/Footer";
 
 export const metadata: Metadata = {
   title: "First Time Buying Cannabis in Illinois — Complete Beginner's Guide | PuffPrice",
@@ -129,13 +131,7 @@ export default function FirstTimeGuidePage() {
       `}</style>
 
       <div className="guide-root">
-        <nav className="guide-nav">
-          <Link href="/" className="guide-nav-brand">
-            <span className="guide-nav-dot" />
-            <span className="guide-nav-name">puff<span className="guide-nav-accent">price</span></span>
-          </Link>
-          <Link href="/" className="guide-nav-back">← Central IL</Link>
-        </nav>
+        <Nav variant="light" />
 
         <div className="guide-breadcrumb">
           <Link href="/">Home</Link>
@@ -383,11 +379,8 @@ export default function FirstTimeGuidePage() {
           </div>
         </div>
 
-        <footer className="guide-footer">
-          <span className="guide-footer-brand">puff<span style={{ color: "#16a34a" }}>price</span></span>
-          <span className="guide-footer-note">© {new Date().getFullYear()} PuffPrice · Central Illinois</span>
-        </footer>
       </div>
+      <Footer />
     </>
   );
 }

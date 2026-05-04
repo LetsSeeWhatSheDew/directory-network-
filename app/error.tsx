@@ -13,16 +13,15 @@ export default function RouteError({
 }) {
   useEffect(() => {
     console.error("[route error]", error);
-    // No-op when NEXT_PUBLIC_SENTRY_DSN is unset — Sentry.init skipped.
     Sentry.captureException(error);
   }, [error]);
 
   return (
     <div
       style={{
-        fontFamily: "Georgia, serif",
-        background: "#f5f4f0",
-        color: "#0f1f3d",
+        fontFamily: "Manrope, system-ui, sans-serif",
+        background: "var(--color-cream, #F7F4ED)",
+        color: "var(--color-deep, #1F3D2B)",
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",
@@ -31,38 +30,37 @@ export default function RouteError({
       }}
     >
       <div
+        className="pp-card-elevated"
         style={{
-          background: "#fff",
-          border: "1px solid #e8e4da",
-          borderRadius: 16,
           padding: "32px 28px",
-          maxWidth: 440,
+          maxWidth: 460,
           textAlign: "center",
+          width: "100%",
         }}
       >
         <div
           style={{
-            fontSize: ".7rem",
-            fontWeight: 700,
-            letterSpacing: ".14em",
+            fontSize: ".6875rem",
+            fontWeight: 800,
+            letterSpacing: "0.14em",
             textTransform: "uppercase",
-            color: "#dc2626",
-            fontFamily: "system-ui, sans-serif",
-            marginBottom: 10,
+            color: "var(--color-status-expired, #B91C1C)",
+            fontFamily: "Manrope, system-ui, sans-serif",
+            marginBottom: 12,
           }}
         >
           Something didn&apos;t load
         </div>
-        <h1 style={{ fontSize: "1.4rem", fontWeight: 700, letterSpacing: "-0.02em", marginBottom: 10 }}>
+        <h1 style={{ fontFamily: "Manrope, system-ui, sans-serif", fontSize: "1.5rem", fontWeight: 800, letterSpacing: "-0.025em", marginBottom: 12, color: "var(--color-deep, #1F3D2B)" }}>
           Try that again
         </h1>
         <p
           style={{
-            fontSize: ".9rem",
-            color: "#6b7280",
-            fontFamily: "system-ui, sans-serif",
+            fontSize: ".9375rem",
+            color: "var(--color-gray-600, #4B5563)",
+            fontFamily: "Manrope, system-ui, sans-serif",
             lineHeight: 1.55,
-            marginBottom: 18,
+            marginBottom: 20,
           }}
         >
           We couldn&apos;t load this part of the site. It&apos;s probably temporary —
@@ -72,34 +70,11 @@ export default function RouteError({
           <button
             type="button"
             onClick={reset}
-            style={{
-              background: "#16a34a",
-              color: "#fff",
-              border: "none",
-              borderRadius: 10,
-              padding: "10px 18px",
-              fontFamily: "system-ui, sans-serif",
-              fontWeight: 700,
-              fontSize: ".88rem",
-              cursor: "pointer",
-            }}
+            className="pp-btn pp-btn-primary"
           >
             Try again
           </button>
-          <Link
-            href="/"
-            style={{
-              background: "transparent",
-              color: "#0f1f3d",
-              border: "1px solid #d1cfc6",
-              borderRadius: 10,
-              padding: "10px 18px",
-              fontFamily: "system-ui, sans-serif",
-              fontWeight: 600,
-              fontSize: ".88rem",
-              textDecoration: "none",
-            }}
-          >
+          <Link href="/" className="pp-btn pp-btn-outline">
             Go home
           </Link>
         </div>

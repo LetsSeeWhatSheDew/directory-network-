@@ -2,6 +2,8 @@ export const revalidate = 300; // revalidate every 5 minutes — hours change th
 
 import { Metadata } from "next";
 import Link from "next/link";
+import Nav from "../../../components/Nav";
+import Footer from "../../../components/Footer";
 import { nowInCT, isOpen, formatTime as formatHourTime } from "../../../../lib/hours";
 import { getServerLocation } from "../../../../lib/location";
 import { isInMetro } from "../../../../lib/cityNormalize";
@@ -172,13 +174,7 @@ export default async function OpenNowPage() {
       `}</style>
 
       <div className="on-root">
-        <nav className="on-nav">
-          <Link href="/" className="on-nav-brand">
-            <span className="on-nav-dot" />
-            <span className="on-nav-name">puff<span className="on-nav-accent">price</span></span>
-          </Link>
-          <Link href="/" className="on-nav-back">← Central IL</Link>
-        </nav>
+        <Nav variant="light" />
 
         <div className="on-breadcrumb">
           <Link href="/">Home</Link>
@@ -268,11 +264,8 @@ export default async function OpenNowPage() {
           </div>
         </div>
 
-        <footer className="on-footer">
-          <span className="on-footer-brand">puff<span style={{ color: "#16a34a" }}>price</span></span>
-          <span className="on-footer-note">© {new Date().getFullYear()} PuffPrice · Hours sourced from verified dispensary listings</span>
-        </footer>
       </div>
+      <Footer />
     </>
   );
 }

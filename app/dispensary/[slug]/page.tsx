@@ -6,7 +6,8 @@
 // serves as the bookmark/permalink destination for repeat visitors.
 
 import Link from "next/link";
-import Logo from "../../components/Logo";
+import Nav from "../../components/Nav";
+import Footer from "../../components/Footer";
 import AmenityRow from "../../components/AmenityRow";
 import { MapPin, Phone, Menu as MenuIcon } from "lucide-react";
 import { notFound } from "next/navigation";
@@ -361,17 +362,15 @@ export default async function DispensaryProfilePage({
         @media(max-width:600px){.wrap{padding:24px 14px}.contact-btn{flex-basis:100%}}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo" aria-label="PuffPrice home">
-          <Logo />
-        </Link>
+      <Nav variant="light" />
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(1rem, 4vw, 2rem) 4px", fontSize: 13 }}>
         <Link
           href={city ? `/city/${encodeURIComponent(city.toLowerCase())}` : "/deals/all"}
-          className="back"
+          style={{ color: "var(--color-gray-500, #6B7280)", textDecoration: "none", fontFamily: "Manrope, system-ui, sans-serif", fontWeight: 500 }}
         >
           {city ? `← ${city} deals` : "← All deals"}
         </Link>
-      </nav>
+      </div>
 
       <main className="wrap">
         <div className="eyebrow">{listing.type || "Dispensary"}</div>
@@ -531,37 +530,7 @@ export default async function DispensaryProfilePage({
         </div>
       </main>
 
-      <footer
-        style={{
-          background: "#0f1f3d",
-          padding: "24px 32px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: 12,
-        }}
-      >
-        <span
-          style={{
-            color: "#fff",
-            fontSize: "1rem",
-            fontWeight: 700,
-            fontFamily: "Georgia, serif",
-          }}
-        >
-          puff<span style={{ color: "#16a34a" }}>price</span>
-        </span>
-        <span
-          style={{
-            color: "#475569",
-            fontSize: "0.78rem",
-            fontFamily: "system-ui, sans-serif",
-          }}
-        >
-          © {new Date().getFullYear()} PuffPrice · Central Illinois
-        </span>
-      </footer>
+      <Footer />
     </>
   );
 }
