@@ -11,10 +11,10 @@ export const metadata = {
 
 export default function AlertsConfirmedPage() {
   return (
-    <div style={{ fontFamily: "Georgia, serif", background: "#0f1f3d", minHeight: "100vh", color: "#fff", display: "flex", flexDirection: "column" }}>
+    <div style={{ fontFamily: "Georgia, serif", background: "#1F3D2B", minHeight: "100vh", color: "#fff", display: "flex", flexDirection: "column" }}>
       <nav style={{ padding: "14px 28px" }}>
         <Link href="/" style={{ color: "#fff", textDecoration: "none", fontWeight: 700, fontSize: "1.15rem" }}>
-          puff<span style={{ color: "#4ade80" }}>price</span>
+          puff<span style={{ color: "#93CB5C" }}>price</span>
         </Link>
       </nav>
 
@@ -26,7 +26,7 @@ export default function AlertsConfirmedPage() {
             background: "rgba(74, 222, 128, 0.15)",
             marginBottom: 24,
           }}>
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#93CB5C" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </div>
@@ -49,7 +49,7 @@ export default function AlertsConfirmedPage() {
             textAlign: "left",
             fontFamily: "system-ui, sans-serif",
           }}>
-            <h2 style={{ fontSize: ".8rem", textTransform: "uppercase", letterSpacing: ".12em", color: "#4ade80", marginBottom: 12, fontWeight: 700 }}>
+            <h2 style={{ fontSize: ".8rem", textTransform: "uppercase", letterSpacing: ".12em", color: "#93CB5C", marginBottom: 12, fontWeight: 700 }}>
               While you wait
             </h2>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
@@ -73,7 +73,7 @@ export default function AlertsConfirmedPage() {
 
           <Link href="/" style={{
             display: "inline-block",
-            background: "#16a34a", color: "#fff",
+            background: "#7DBA47", color: "#fff",
             padding: "12px 28px", borderRadius: 10,
             textDecoration: "none", fontFamily: "system-ui, sans-serif",
             fontWeight: 700, fontSize: ".95rem",

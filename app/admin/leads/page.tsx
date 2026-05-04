@@ -35,7 +35,7 @@ const FILTERS = [
 ];
 
 const STATUS_STYLES: Record<string, string> = {
-  new: "bg-[#4ade80]/15 text-[#4ade80] border-[#4ade80]/30",
+  new: "bg-[#93CB5C]/15 text-[#93CB5C] border-[#93CB5C]/30",
   reviewed: "bg-blue-500/15 text-blue-300 border-blue-400/30",
   converted: "bg-purple-500/15 text-purple-300 border-purple-400/30",
 };
@@ -101,7 +101,7 @@ export default async function AdminLeadsPage({
       <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:py-4">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#4ade80] text-xs font-semibold text-slate-900 shadow-sm">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#93CB5C] text-xs font-semibold text-slate-900 shadow-sm">
               PG
             </div>
             <div className="flex flex-col">
@@ -139,12 +139,12 @@ export default async function AdminLeadsPage({
             <div className="flex flex-wrap gap-2 text-[11px] md:text-xs">
               <span className="inline-flex items-center rounded-full bg-slate-900 px-3 py-1 text-slate-200">
                 Total:{" "}
-                <span className="ml-1 font-semibold text-[#4ade80]">
+                <span className="ml-1 font-semibold text-[#93CB5C]">
                   {leads.length}
                 </span>
               </span>
               {newLeads > 0 && (
-                <span className="inline-flex items-center rounded-full bg-[#4ade80]/15 px-3 py-1 text-[#4ade80]">
+                <span className="inline-flex items-center rounded-full bg-[#93CB5C]/15 px-3 py-1 text-[#93CB5C]">
                   New:{" "}
                   <span className="ml-1 font-semibold">{newLeads}</span>
                 </span>
@@ -168,7 +168,7 @@ export default async function AdminLeadsPage({
                   className={[
                     "inline-flex items-center rounded-full border px-3 py-1 transition-colors",
                     isActive
-                      ? "border-[#4ade80] bg-[#4ade80]/15 text-[#4ade80]"
+                      ? "border-[#93CB5C] bg-[#93CB5C]/15 text-[#93CB5C]"
                       : "border-slate-700 bg-slate-900 text-slate-300 hover:border-slate-500 hover:bg-slate-800",
                   ].join(" ")}
                 >

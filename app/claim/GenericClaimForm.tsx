@@ -60,8 +60,8 @@ export default function GenericClaimForm() {
         role="status"
         aria-live="polite"
         style={{
-          background: "#f0fdf4",
-          border: "1px solid #bbf7d0",
+          background: "#F2F8E9",
+          border: "1px solid #C7E5A8",
           borderRadius: 14,
           padding: "22px 24px",
           fontFamily: "system-ui, sans-serif",
@@ -70,7 +70,7 @@ export default function GenericClaimForm() {
         <div style={{ fontSize: "1rem", fontWeight: 700, color: "#14532d", marginBottom: 4 }}>
           Got it — we&apos;ll be in touch.
         </div>
-        <div style={{ fontSize: ".88rem", color: "#166534", lineHeight: 1.55 }}>
+        <div style={{ fontSize: ".88rem", color: "#3F6B1F", lineHeight: 1.55 }}>
           We&apos;ll verify and reach out via{" "}
           <strong>{email}</strong> within 24 hours. In the meantime, keep selling.
         </div>
@@ -157,7 +157,7 @@ export default function GenericClaimForm() {
         type="submit"
         disabled={busy}
         style={{
-          background: "#16a34a",
+          background: "#7DBA47",
           color: "#fff",
           border: "none",
           borderRadius: 10,
@@ -190,7 +190,7 @@ const inputStyle: React.CSSProperties = {
   padding: "12px 14px",
   fontFamily: "system-ui, sans-serif",
   fontSize: ".95rem",
-  color: "#0f1f3d",
+  color: "#1F3D2B",
   outline: "none",
   minHeight: 44,
   background: "#fff",

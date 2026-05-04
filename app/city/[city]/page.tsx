@@ -250,45 +250,45 @@ export default async function CityPage({
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:Georgia,serif;background:#f5f4f0;color:#0f1f3d;min-height:100vh}
+        body{font-family:Georgia,serif;background:#F7F4ED;color:#1F3D2B;min-height:100vh}
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;position:sticky;top:0;z-index:100;border-bottom:1px solid #e8e4da}
         .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
-        .logo-dot{width:8px;height:8px;border-radius:50%;background:#16a34a;animation:pulse 2.5s infinite}
+        .logo-dot{width:8px;height:8px;border-radius:50%;background:#7DBA47;animation:pulse 2.5s infinite}
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-        .logo-text{font-size:1.1rem;font-weight:700;color:#0f1f3d}
-        .logo-text span{color:#16a34a}
+        .logo-text{font-size:1.1rem;font-weight:700;color:#1F3D2B}
+        .logo-text span{color:#7DBA47}
         .back{font-size:.82rem;color:#6b7280;text-decoration:none;font-family:system-ui,sans-serif}
 
         .wrap{max-width:900px;margin:0 auto;padding:40px 20px 64px}
         .answer{font-size:1rem;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:18px;line-height:1.5}
-        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#16a34a;font-family:system-ui,sans-serif;margin-bottom:8px}
+        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#7DBA47;font-family:system-ui,sans-serif;margin-bottom:8px}
         h1{font-size:clamp(1.8rem,4vw,2.4rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:14px}
         .intro{font-size:.95rem;color:#374151;font-family:system-ui,sans-serif;line-height:1.65;margin-bottom:28px;max-width:680px}
 
         .section-h{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#9ca3af;font-family:system-ui,sans-serif;margin:28px 0 12px}
 
-        .deal-row{background:#fff;border:1px solid #e8e4da;border-left:4px solid #16a34a;border-radius:12px;padding:14px 18px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:14px;text-decoration:none;color:inherit;transition:border-color .15s}
-        .deal-row:hover{border-left-color:#15803d}
+        .deal-row{background:#fff;border:1px solid #e8e4da;border-left:4px solid #7DBA47;border-radius:12px;padding:14px 18px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:14px;text-decoration:none;color:inherit;transition:border-color .15s}
+        .deal-row:hover{border-left-color:#6BA63B}
         .deal-body{flex:1;min-width:0}
-        .deal-name{font-size:.94rem;font-weight:700;color:#0f1f3d;margin-bottom:2px}
+        .deal-name{font-size:.94rem;font-weight:700;color:#1F3D2B;margin-bottom:2px}
         .deal-title{font-size:.82rem;color:#374151;font-family:system-ui,sans-serif;line-height:1.4}
         .deal-right{text-align:right;flex-shrink:0}
         .deal-save-label{font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#6b7280;font-family:system-ui,sans-serif;font-weight:700}
-        .deal-save-amt{font-size:1.4rem;color:#16a34a;font-weight:700;letter-spacing:-.03em;font-family:Georgia,serif;line-height:1}
+        .deal-save-amt{font-size:1.4rem;color:#7DBA47;font-weight:700;letter-spacing:-.03em;font-family:Georgia,serif;line-height:1}
 
         .dlist{background:#fff;border:1px solid #e8e4da;border-radius:12px;overflow:hidden}
-        .dlist-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid #f5f4f0;text-decoration:none;color:inherit}
+        .dlist-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid #F7F4ED;text-decoration:none;color:inherit}
         .dlist-row:last-child{border-bottom:none}
-        .dlist-row:hover{background:#f0fdf4}
-        .dlist-name{font-weight:700;color:#0f1f3d;font-size:.92rem}
+        .dlist-row:hover{background:#F2F8E9}
+        .dlist-name{font-weight:700;color:#1F3D2B;font-size:.92rem}
         .dlist-addr{font-size:.76rem;color:#6b7280;font-family:system-ui,sans-serif;margin-top:2px}
-        .dlist-count{font-size:.72rem;color:#16a34a;font-weight:700;font-family:system-ui,sans-serif}
+        .dlist-count{font-size:.72rem;color:#7DBA47;font-weight:700;font-family:system-ui,sans-serif}
 
         .neighbors{margin-top:28px;padding:14px 18px;background:#fff;border:1px solid #e8e4da;border-radius:10px;font-family:system-ui,sans-serif;font-size:.85rem;color:#6b7280}
-        .neighbors a{color:#16a34a;font-weight:600;text-decoration:none}
+        .neighbors a{color:#7DBA47;font-weight:600;text-decoration:none}
         .neighbors a:hover{text-decoration:underline}
 
-        .footer-link{display:block;text-align:center;margin-top:28px;padding:14px;color:#16a34a;text-decoration:none;font-family:system-ui,sans-serif;font-weight:700}
+        .footer-link{display:block;text-align:center;margin-top:28px;padding:14px;color:#7DBA47;text-decoration:none;font-family:system-ui,sans-serif;font-weight:700}
         .footer-link:hover{text-decoration:underline}
 
         @media(max-width:600px){.wrap{padding:24px 14px}.deal-save-amt{font-size:1.2rem}}
@@ -402,7 +402,7 @@ export default async function CityPage({
 
       <footer
         style={{
-          background: "#0f1f3d",
+          background: "#1F3D2B",
           padding: "24px 32px",
           display: "flex",
           justifyContent: "space-between",
@@ -419,7 +419,7 @@ export default async function CityPage({
             fontFamily: "Georgia, serif",
           }}
         >
-          puff<span style={{ color: "#16a34a" }}>price</span>
+          puff<span style={{ color: "#7DBA47" }}>price</span>
         </span>
         <span
           style={{

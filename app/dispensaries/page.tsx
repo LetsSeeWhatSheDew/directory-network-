@@ -108,7 +108,7 @@ export default async function DispensariesIndexPage() {
   const cities = Array.from(byCity.keys()).sort();
 
   return (
-    <div style={{ fontFamily: "Georgia, serif", background: "#f5f4f0", minHeight: "100vh", color: "#0f1f3d" }}>
+    <div style={{ fontFamily: "Georgia, serif", background: "#F7F4ED", minHeight: "100vh", color: "#1F3D2B" }}>
       <div className="pp-surface-deep pp-leaf pp-leaf-04">
         <Nav variant="deep" />
         <header style={{ color: "var(--color-cream, #F7F4ED)", padding: "clamp(2.5rem, 6vw, 5rem) clamp(1rem, 4vw, 2rem) clamp(2rem, 4vw, 4rem)", textAlign: "center", position: "relative", zIndex: 2 }}>
@@ -141,7 +141,7 @@ export default async function DispensariesIndexPage() {
                     <h2 style={{ fontSize: "1.3rem", fontWeight: 700, letterSpacing: "-0.02em" }}>
                       {city}
                     </h2>
-                    <Link href={`/city/${slug}`} style={{ fontSize: ".8rem", color: "#16a34a", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontWeight: 600 }}>
+                    <Link href={`/city/${slug}`} style={{ fontSize: ".8rem", color: "#7DBA47", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontWeight: 600 }}>
                       Deals in {city} →
                     </Link>
                   </div>
@@ -163,18 +163,18 @@ export default async function DispensariesIndexPage() {
                           href={`/l/${l.slug}`}
                           style={{
                             background: "#fff",
-                            border: l.plan === "featured" ? "2px solid #16a34a" : "1px solid #e8e4da",
+                            border: l.plan === "featured" ? "2px solid #7DBA47" : "1px solid #e8e4da",
                             borderRadius: 10,
                             padding: 14,
                             textDecoration: "none",
-                            color: "#0f1f3d",
+                            color: "#1F3D2B",
                             display: "block",
                           }}
                         >
                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
                             <div style={{ fontSize: ".95rem", fontWeight: 700 }}>{display}</div>
                             {l.plan === "featured" && (
-                              <span style={{ fontSize: ".62rem", background: "#16a34a", color: "#fff", padding: "2px 7px", borderRadius: 100, fontFamily: "system-ui, sans-serif", fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase" }}>
+                              <span style={{ fontSize: ".62rem", background: "#7DBA47", color: "#fff", padding: "2px 7px", borderRadius: 100, fontFamily: "system-ui, sans-serif", fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase" }}>
                                 Featured
                               </span>
                             )}
@@ -184,8 +184,8 @@ export default async function DispensariesIndexPage() {
                             {attrs.length > 0 ? ` · ${attrs.join(" · ")}` : ""}
                           </div>
                           {count > 0 && (
-                            <div style={{ marginTop: 10, display: "inline-flex", alignItems: "center", gap: 6, fontSize: ".7rem", fontFamily: "system-ui, sans-serif", fontWeight: 700, color: "#166534", background: "#f0fdf4", border: "1px solid #bbf7d0", padding: "3px 9px", borderRadius: 100 }}>
-                              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#16a34a" }} />
+                            <div style={{ marginTop: 10, display: "inline-flex", alignItems: "center", gap: 6, fontSize: ".7rem", fontFamily: "system-ui, sans-serif", fontWeight: 700, color: "#3F6B1F", background: "#F2F8E9", border: "1px solid #C7E5A8", padding: "3px 9px", borderRadius: 100 }}>
+                              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#7DBA47" }} />
                               {count} active deal{count === 1 ? "" : "s"}
                             </div>
                           )}

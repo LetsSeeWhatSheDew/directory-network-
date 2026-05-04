@@ -163,9 +163,9 @@ export default function SubmitForm({ listings }: Props) {
     return (
       <div
         style={{
-          background: "#f0fdf4",
-          border: "1px solid #bbf7d0",
-          borderLeft: "4px solid #16a34a",
+          background: "#F2F8E9",
+          border: "1px solid #C7E5A8",
+          borderLeft: "4px solid #7DBA47",
           borderRadius: 12,
           padding: "22px 22px 20px",
           fontFamily: "system-ui, sans-serif",
@@ -176,7 +176,7 @@ export default function SubmitForm({ listings }: Props) {
         <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "#14532d", marginBottom: 8 }}>
           Thanks — we got your deal submission.
         </div>
-        <p style={{ fontSize: ".95rem", color: "#166534", lineHeight: 1.55, marginBottom: 14 }}>
+        <p style={{ fontSize: ".95rem", color: "#3F6B1F", lineHeight: 1.55, marginBottom: 14 }}>
           We&apos;ll review and publish it within 24 hours. If there&apos;s anything we need
           to double-check, we&apos;ll email you at <strong>{form.submitter_email}</strong>.
         </p>
@@ -184,7 +184,7 @@ export default function SubmitForm({ listings }: Props) {
           type="button"
           onClick={reset}
           style={{
-            background: "#16a34a",
+            background: "#7DBA47",
             color: "#fff",
             border: "none",
             padding: "10px 18px",
@@ -522,7 +522,7 @@ export default function SubmitForm({ listings }: Props) {
             />
           </Field>
         </div>
-        <label style={{ display: "flex", alignItems: "center", gap: 10, fontSize: ".95rem", color: "#0f1f3d", fontFamily: "system-ui, sans-serif" }}>
+        <label style={{ display: "flex", alignItems: "center", gap: 10, fontSize: ".95rem", color: "#1F3D2B", fontFamily: "system-ui, sans-serif" }}>
           <input
             type="checkbox"
             checked={!!form.is_recurring}
@@ -642,7 +642,7 @@ const styles: Record<string, React.CSSProperties> = {
   section: {
     background: "#fff",
     border: "1px solid #e8e4da",
-    borderLeft: "4px solid #16a34a",
+    borderLeft: "4px solid #7DBA47",
     borderRadius: 12,
     padding: "18px 18px 16px",
     display: "flex",
@@ -654,18 +654,18 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: 700,
     letterSpacing: ".14em",
     textTransform: "uppercase",
-    color: "#16a34a",
+    color: "#7DBA47",
     padding: "0 6px",
   },
   field: { display: "flex", flexDirection: "column", gap: 6 },
-  label: { fontSize: ".85rem", fontWeight: 600, color: "#0f1f3d" },
+  label: { fontSize: ".85rem", fontWeight: 600, color: "#1F3D2B" },
   input: {
     border: "1px solid #d1cfc6",
     borderRadius: 8,
     padding: "10px 12px",
     fontSize: ".95rem",
     background: "#fff",
-    color: "#0f1f3d",
+    color: "#1F3D2B",
     fontFamily: "inherit",
     minHeight: 44,
     width: "100%",
@@ -675,18 +675,18 @@ const styles: Record<string, React.CSSProperties> = {
   radioRow: { display: "flex", flexWrap: "wrap", gap: 12 },
   radio: { display: "flex", alignItems: "center", gap: 6, fontSize: ".92rem", color: "#374151" },
   previewBox: {
-    background: "#f0fdf4",
-    border: "1px solid #bbf7d0",
+    background: "#F2F8E9",
+    border: "1px solid #C7E5A8",
     borderRadius: 10,
     padding: "10px 14px",
     fontSize: ".9rem",
-    color: "#166534",
+    color: "#3F6B1F",
     fontWeight: 600,
   },
   link: {
     background: "none",
     border: "none",
-    color: "#16a34a",
+    color: "#7DBA47",
     fontSize: ".85rem",
     textAlign: "left",
     padding: "4px 0",
@@ -704,7 +704,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: ".92rem",
   },
   cta: {
-    background: "#16a34a",
+    background: "#7DBA47",
     color: "#fff",
     border: "none",
     padding: "14px 20px",
@@ -727,5 +727,5 @@ const styles: Record<string, React.CSSProperties> = {
     userSelect: "none",
     background: "#fff",
   },
-  dayChipOn: { background: "#16a34a", color: "#fff", borderColor: "#16a34a", fontWeight: 700 },
+  dayChipOn: { background: "#7DBA47", color: "#fff", borderColor: "#7DBA47", fontWeight: 700 },
 };

@@ -65,7 +65,7 @@ export default function StickyMobileCTA() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            background: "var(--color-green, #16A34A)",
+            background: "var(--color-green, #7DBA47)",
             color: "#fff",
             textDecoration: "none",
             fontFamily: "var(--font-ui, system-ui, sans-serif)",

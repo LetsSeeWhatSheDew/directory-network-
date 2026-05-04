@@ -115,7 +115,7 @@ export default function DispensaryAutocomplete({
                 fontFamily: "system-ui, sans-serif",
               }}
             >
-              <div style={{ fontSize: ".9rem", fontWeight: 700, color: "#0f1f3d" }}>{m.name}</div>
+              <div style={{ fontSize: ".9rem", fontWeight: 700, color: "#1F3D2B" }}>{m.name}</div>
               <div style={{ fontSize: ".75rem", color: "#6b7280" }}>
                 {m.city ? `${m.city}, IL · ${m.slug}` : m.slug}
               </div>

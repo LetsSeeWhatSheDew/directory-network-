@@ -140,7 +140,7 @@ const styles: Record<string, React.CSSProperties> = {
     display: "block",
     fontSize: ".8rem",
     fontWeight: 600,
-    color: "#0f1f3d",
+    color: "#1F3D2B",
     fontFamily: "system-ui, sans-serif",
     marginBottom: 6,
     textTransform: "uppercase",
@@ -154,7 +154,7 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: 8,
     fontFamily: "system-ui, sans-serif",
     fontSize: ".92rem",
-    color: "#0f1f3d",
+    color: "#1F3D2B",
     outline: "none",
   },
   textarea: {
@@ -164,7 +164,7 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: 8,
     fontFamily: "system-ui, sans-serif",
     fontSize: ".9rem",
-    color: "#0f1f3d",
+    color: "#1F3D2B",
     outline: "none",
     resize: "vertical",
   },
@@ -183,7 +183,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   submit: {
     width: "100%",
-    background: "#16a34a",
+    background: "#7DBA47",
     color: "#fff",
     border: "none",
     borderRadius: 10,
@@ -205,8 +205,8 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: ".85rem",
   },
   thanks: {
-    background: "#f0fdf4",
-    border: "1px solid #bbf7d0",
+    background: "#F2F8E9",
+    border: "1px solid #C7E5A8",
     borderRadius: 14,
     padding: 24,
     textAlign: "center",
@@ -214,12 +214,12 @@ const styles: Record<string, React.CSSProperties> = {
   thanksTitle: {
     fontSize: "1.2rem",
     fontWeight: 700,
-    color: "#166534",
+    color: "#3F6B1F",
     marginBottom: 8,
   },
   thanksBody: {
     fontSize: ".9rem",
-    color: "#166534",
+    color: "#3F6B1F",
     fontFamily: "system-ui, sans-serif",
   },
 };

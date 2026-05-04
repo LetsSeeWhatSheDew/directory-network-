@@ -67,7 +67,7 @@ export default function AlertsCalculator() {
       {result ? (
         <div style={resultCard} aria-live="polite">
           <div style={resultBig}>
-            You&apos;re probably overpaying <span style={{ color: "#4ade80" }}>~${result.weekly}/week</span>
+            You&apos;re probably overpaying <span style={{ color: "#93CB5C" }}>~${result.weekly}/week</span>
           </div>
           <div style={resultSmall}>
             That&apos;s <strong>${result.annual}/year</strong>
@@ -142,7 +142,7 @@ const eyebrow: React.CSSProperties = {
   fontWeight: 700,
   letterSpacing: ".14em",
   textTransform: "uppercase",
-  color: "#16a34a",
+  color: "#7DBA47",
   fontFamily: "system-ui, sans-serif",
   marginBottom: 6,
 };
@@ -156,7 +156,7 @@ const h3: React.CSSProperties = {
 const rowLabel: React.CSSProperties = {
   fontSize: ".88rem",
   fontWeight: 700,
-  color: "#0f1f3d",
+  color: "#1F3D2B",
   fontFamily: "Georgia, serif",
   marginBottom: 8,
 };
@@ -174,15 +174,15 @@ const pill: React.CSSProperties = {
   transition: "all .15s",
 };
 const pillActive: React.CSSProperties = {
-  background: "#16a34a",
-  borderColor: "#16a34a",
+  background: "#7DBA47",
+  borderColor: "#7DBA47",
   color: "#fff",
   fontWeight: 700,
 };
 const resultCard: React.CSSProperties = {
   marginTop: 12,
   padding: "22px",
-  background: "#0f1f3d",
+  background: "#1F3D2B",
   borderRadius: 12,
   textAlign: "center",
 };
@@ -203,7 +203,7 @@ const resultSmall: React.CSSProperties = {
   lineHeight: 1.5,
 };
 const cta: React.CSSProperties = {
-  background: "#16a34a",
+  background: "#7DBA47",
   color: "#fff",
   border: "none",
   borderRadius: 10,

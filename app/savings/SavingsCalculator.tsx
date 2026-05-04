@@ -104,7 +104,7 @@ export default function SavingsCalculator() {
           <p style={resultBody}>
             At a typical {Math.round(AVG_DISCOUNT_RATE * 100)}% discount on tracked deals, your
             profile would save about{" "}
-            <strong style={{ color: "#16a34a" }}>${result.puffpriceSaves} / year</strong>.
+            <strong style={{ color: "#7DBA47" }}>${result.puffpriceSaves} / year</strong>.
           </p>
           {result.eighths > 0 && (
             <p style={resultSub}>That&apos;s <strong>{result.eighths} free eighth{result.eighths === 1 ? "" : "s"} of flower.</strong></p>
@@ -178,14 +178,14 @@ const questionHeader: React.CSSProperties = { display: "flex", alignItems: "base
 const questionNum: React.CSSProperties = {
   fontSize: ".75rem",
   fontWeight: 700,
-  color: "#16a34a",
+  color: "#7DBA47",
   fontFamily: "system-ui, sans-serif",
   letterSpacing: ".08em",
 };
 const questionLabel: React.CSSProperties = {
   fontSize: "1rem",
   fontWeight: 700,
-  color: "#0f1f3d",
+  color: "#1F3D2B",
   fontFamily: "Georgia, serif",
   lineHeight: 1.3,
 };
@@ -203,8 +203,8 @@ const pillStyle: React.CSSProperties = {
   transition: "all .15s",
 };
 const pillActive: React.CSSProperties = {
-  background: "#0f1f3d",
-  borderColor: "#0f1f3d",
+  background: "#1F3D2B",
+  borderColor: "#1F3D2B",
   color: "#fff",
   fontWeight: 700,
 };
@@ -212,7 +212,7 @@ const pillActive: React.CSSProperties = {
 const resultCard: React.CSSProperties = {
   marginTop: 10,
   padding: "24px",
-  background: "#0f1f3d",
+  background: "#1F3D2B",
   color: "#fff",
   borderRadius: 14,
   textAlign: "center",
@@ -221,7 +221,7 @@ const resultEyebrow: React.CSSProperties = {
   fontSize: ".7rem",
   fontWeight: 700,
   letterSpacing: ".14em",
-  color: "#4ade80",
+  color: "#93CB5C",
   fontFamily: "system-ui, sans-serif",
   textTransform: "uppercase",
   marginBottom: 14,
@@ -249,7 +249,7 @@ const resultSub: React.CSSProperties = {
 };
 const cta: React.CSSProperties = {
   display: "inline-block",
-  background: "#16a34a",
+  background: "#7DBA47",
   color: "#fff",
   padding: "12px 22px",
   borderRadius: 10,

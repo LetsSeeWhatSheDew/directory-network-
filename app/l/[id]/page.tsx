@@ -492,37 +492,37 @@ export default async function ListingPage({
         .dn-root { min-height: 100vh; background: #f7f6f2; font-family: Georgia, 'Times New Roman', serif; color: #1a1a1a; }
         .dn-nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 32px; background: #fff; border-bottom: 1px solid #e8e5de; position: sticky; top: 0; z-index: 50; }
         .dn-nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-        .dn-nav-dot { width: 10px; height: 10px; border-radius: 50%; background: #16a34a; display: inline-block; flex-shrink: 0; }
-        .dn-nav-name { font-size: 1.1rem; font-weight: 700; color: #0f1f3d; letter-spacing: -0.02em; }
-        .dn-nav-accent { color: #16a34a; }
+        .dn-nav-dot { width: 10px; height: 10px; border-radius: 50%; background: #7DBA47; display: inline-block; flex-shrink: 0; }
+        .dn-nav-name { font-size: 1.1rem; font-weight: 700; color: #1F3D2B; letter-spacing: -0.02em; }
+        .dn-nav-accent { color: #7DBA47; }
         .dn-nav-back { font-size: 0.85rem; color: #6b7280; text-decoration: none; font-family: system-ui, sans-serif; }
         .dn-banner { background: #fffbeb; border-bottom: 1px solid #fde68a; padding: 10px 32px; display: flex; align-items: center; gap: 10px; }
         .dn-banner-dot { width: 8px; height: 8px; border-radius: 50%; background: #d97706; flex-shrink: 0; }
         .dn-banner-text { font-size: 0.85rem; color: #92400e; font-family: system-ui, sans-serif; }
         .dn-banner-link { color: #d97706; font-weight: 600; text-decoration: none; }
-        .dn-noindex-banner { background: #f0fdf4; border-bottom: 1px solid #bbf7d0; padding: 8px 32px; text-align: center; font-size: 0.78rem; color: #166534; font-family: system-ui, sans-serif; }
+        .dn-noindex-banner { background: #F2F8E9; border-bottom: 1px solid #C7E5A8; padding: 8px 32px; text-align: center; font-size: 0.78rem; color: #3F6B1F; font-family: system-ui, sans-serif; }
         .dn-inner { max-width: 1100px; margin: 0 auto; padding: 32px 24px 64px; }
         .dn-hero { background: #fff; border-radius: 16px; border: 1px solid #e8e5de; padding: 32px; margin-bottom: 24px; }
         .dn-hero-top { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
         .dn-logo-wrap { flex-shrink: 0; width: 80px; height: 80px; border-radius: 12px; overflow: hidden; border: 1px solid #e8e5de; background: #f7f6f2; display: flex; align-items: center; justify-content: center; }
         .dn-logo-img { width: 100%; height: 100%; object-fit: contain; padding: 8px; }
-        .dn-logo-fallback { font-size: 2rem; font-weight: 700; color: #16a34a; font-family: Georgia, serif; }
+        .dn-logo-fallback { font-size: 2rem; font-weight: 700; color: #7DBA47; font-family: Georgia, serif; }
         .dn-hero-info { flex: 1; min-width: 200px; }
         .dn-hero-meta { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
-        .dn-badge-type { font-size: 0.7rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #16a34a; background: #dcfce7; padding: 3px 10px; border-radius: 100px; }
+        .dn-badge-type { font-size: 0.7rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #7DBA47; background: #dcfce7; padding: 3px 10px; border-radius: 100px; }
         .dn-badge-featured { font-size: 0.7rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #854d0e; background: #fef9c3; padding: 3px 10px; border-radius: 100px; }
-        .dn-hero-name { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 700; letter-spacing: -0.03em; color: #0f1f3d; margin-bottom: 6px; line-height: 1.1; }
+        .dn-hero-name { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 700; letter-spacing: -0.03em; color: #1F3D2B; margin-bottom: 6px; line-height: 1.1; }
         .dn-hero-location { font-size: 0.9rem; color: #6b7280; font-family: system-ui, sans-serif; margin-bottom: 8px; }
         .dn-hero-tagline { font-size: 0.95rem; color: #374151; font-family: system-ui, sans-serif; line-height: 1.6; max-width: 480px; }
         .dn-hero-actions { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; min-width: 180px; }
         .dn-status { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 100px; font-size: 0.8rem; font-family: system-ui, sans-serif; font-weight: 600; }
         .dn-status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
         .dn-status-open { background: #dcfce7; color: #14532d; }
-        .dn-status-dot-open { background: #16a34a; }
+        .dn-status-dot-open { background: #7DBA47; }
         .dn-status-closed { background: #fee2e2; color: #991b1b; }
         .dn-status-dot-closed { background: #dc2626; }
-        .dn-phone { font-size: 0.9rem; color: #0f1f3d; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 600; }
-        .dn-website { font-size: 0.85rem; color: #16a34a; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 600; }
+        .dn-phone { font-size: 0.9rem; color: #1F3D2B; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 600; }
+        .dn-website { font-size: 0.85rem; color: #7DBA47; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 600; }
         .dn-amenities { margin-top: 24px; padding-top: 20px; border-top: 1px solid #f0ede6; display: flex; flex-wrap: wrap; gap: 8px; }
         .dn-amenity { font-size: 0.78rem; font-family: system-ui, sans-serif; color: #374151; background: #f7f6f2; border: 1px solid #e8e5de; padding: 4px 12px; border-radius: 100px; }
         .dn-grid { display: grid; grid-template-columns: 1fr 360px; gap: 20px; align-items: start; }
@@ -531,51 +531,51 @@ export default async function ListingPage({
         .dn-card-title { font-size: 0.7rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #9ca3af; margin-bottom: 16px; }
         .dn-empty { font-size: 0.875rem; color: #9ca3af; font-family: system-ui, sans-serif; }
         .dn-hours-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; }
-        .dn-hours-row-today { background: #f0fdf4; border-radius: 8px; padding: 6px 10px; margin: 0 -10px; }
+        .dn-hours-row-today { background: #F2F8E9; border-radius: 8px; padding: 6px 10px; margin: 0 -10px; }
         .dn-hours-day { font-size: 0.875rem; font-family: system-ui, sans-serif; font-weight: 500; color: #374151; display: flex; align-items: center; gap: 6px; }
         .dn-hours-day-today { font-weight: 700; color: #14532d; }
-        .dn-today-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #16a34a; }
+        .dn-today-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #7DBA47; }
         .dn-hours-time { font-size: 0.875rem; font-family: system-ui, sans-serif; color: #374151; }
         .dn-hours-time-today { color: #14532d; font-weight: 600; }
         .dn-hours-closed { color: #9ca3af; }
         .dn-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-        .dn-tag { font-size: 0.8rem; font-family: system-ui, sans-serif; font-weight: 500; color: #0f1f3d; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 5px 14px; border-radius: 100px; text-transform: capitalize; }
+        .dn-tag { font-size: 0.8rem; font-family: system-ui, sans-serif; font-weight: 500; color: #1F3D2B; background: #F2F8E9; border: 1px solid #C7E5A8; padding: 5px 14px; border-radius: 100px; text-transform: capitalize; }
         .dn-product-cat { margin-bottom: 16px; }
         .dn-product-cat-label { font-size: 0.7rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #6b7280; margin-bottom: 8px; }
         .dn-product-items { display: flex; flex-wrap: wrap; gap: 6px; }
         .dn-product-item { font-size: 0.8rem; font-family: system-ui, sans-serif; color: #374151; background: #f7f6f2; border: 1px solid #e8e5de; padding: 4px 12px; border-radius: 6px; }
         .dn-about { font-size: 0.925rem; line-height: 1.75; color: #374151; font-family: system-ui, sans-serif; }
-        .dn-claim-card { background: #0f1f3d; border-radius: 16px; padding: 28px; border: 1px solid #1e3a5f; }
+        .dn-claim-card { background: #1F3D2B; border-radius: 16px; padding: 28px; border: 1px solid #2A4F38; }
         .dn-claim-header { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 16px; }
         .dn-claim-icon { width: 40px; height: 40px; border-radius: 10px; background: #dcfce7; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.1rem; }
         .dn-claim-title { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 2px; letter-spacing: -0.01em; }
         .dn-claim-sub { font-size: 0.78rem; color: #a3e635; font-family: system-ui, sans-serif; font-weight: 600; }
         .dn-claim-body { font-size: 0.875rem; color: #94a3b8; font-family: system-ui, sans-serif; line-height: 1.65; margin-bottom: 20px; }
-        .dn-claim-trust { display: flex; gap: 16px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #1e3a5f; flex-wrap: wrap; }
+        .dn-claim-trust { display: flex; gap: 16px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #2A4F38; flex-wrap: wrap; }
         .dn-claim-trust-item { font-size: 0.75rem; color: #64748b; font-family: system-ui, sans-serif; }
-        .dn-trust-card { background: #f0fdf4; border-radius: 16px; padding: 20px 24px; border: 1px solid #bbf7d0; }
+        .dn-trust-card { background: #F2F8E9; border-radius: 16px; padding: 20px 24px; border: 1px solid #C7E5A8; }
         .dn-trust-title { font-size: 0.7rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #14532d; margin-bottom: 12px; }
         .dn-trust-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-        .dn-trust-item { font-size: 0.825rem; color: #166534; font-family: system-ui, sans-serif; line-height: 1.4; }
+        .dn-trust-item { font-size: 0.825rem; color: #3F6B1F; font-family: system-ui, sans-serif; line-height: 1.4; }
         .dn-related { margin-top: 0; }
         .dn-related-grid { display: flex; flex-direction: column; gap: 12px; }
         .dn-related-card { display: flex; align-items: center; gap: 12px; padding: 12px; background: #f7f6f2; border-radius: 10px; border: 1px solid #e8e5de; text-decoration: none; }
-        .dn-related-card:hover { border-color: #16a34a; background: #f0fdf4; }
-        .dn-related-logo { width: 36px; height: 36px; border-radius: 8px; background: #fff; border: 1px solid #e8e5de; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 700; color: #16a34a; flex-shrink: 0; }
+        .dn-related-card:hover { border-color: #7DBA47; background: #F2F8E9; }
+        .dn-related-logo { width: 36px; height: 36px; border-radius: 8px; background: #fff; border: 1px solid #e8e5de; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 700; color: #7DBA47; flex-shrink: 0; }
         .dn-related-img { width: 100%; height: 100%; object-fit: contain; padding: 4px; border-radius: 6px; }
-        .dn-related-name { font-size: 0.875rem; font-weight: 600; color: #0f1f3d; font-family: system-ui, sans-serif; }
+        .dn-related-name { font-size: 0.875rem; font-weight: 600; color: #1F3D2B; font-family: system-ui, sans-serif; }
         .dn-related-city { font-size: 0.75rem; color: #6b7280; font-family: system-ui, sans-serif; }
         .dn-footer-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid #e8e5de; flex-wrap: wrap; gap: 12px; }
         .dn-footer-back { font-size: 0.85rem; color: #6b7280; text-decoration: none; font-family: system-ui, sans-serif; }
-        .dn-footer-fwd { font-size: 0.85rem; color: #16a34a; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 600; }
-        .dn-footer { background: #0f1f3d; padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .dn-footer-fwd { font-size: 0.85rem; color: #7DBA47; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 600; }
+        .dn-footer { background: #1F3D2B; padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
         .dn-footer-brand { font-size: 1rem; font-weight: 700; color: #fff; letter-spacing: -0.02em; font-family: Georgia, serif; }
         .dn-footer-note { font-size: 0.78rem; color: #475569; font-family: system-ui, sans-serif; }
         /* DEAL HISTORY STAT STRIP — matches homepage stats treatment */
         .dn-stats-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 4px; }
         .dn-stat-cell { padding: 4px 0; }
-        .dn-stat-num { font-family: Georgia, serif; font-size: clamp(1.8rem, 4vw, 2.3rem); font-weight: 700; color: #0f1f3d; letter-spacing: -0.03em; line-height: 1; }
-        .dn-stat-num-accent { color: #16a34a; }
+        .dn-stat-num { font-family: Georgia, serif; font-size: clamp(1.8rem, 4vw, 2.3rem); font-weight: 700; color: #1F3D2B; letter-spacing: -0.03em; line-height: 1; }
+        .dn-stat-num-accent { color: #7DBA47; }
         .dn-stat-label { font-family: system-ui, sans-serif; font-size: 0.78rem; color: #6b7280; margin-top: 6px; letter-spacing: 0.01em; }
         .dn-stat-foot { font-family: system-ui, sans-serif; font-size: 0.74rem; color: #9ca3af; margin-top: 14px; }
 
@@ -588,13 +588,13 @@ export default async function ListingPage({
         .dn-report-row { margin-top: 8px; padding: 12px 0 0; text-align: center; }
         .dn-report-text { font-family: system-ui, sans-serif; font-size: 0.76rem; color: #9ca3af; }
         .dn-report-link { color: #6b7280; text-decoration: underline; text-decoration-color: #e8e5de; text-underline-offset: 3px; font-weight: 500; border-radius: 2px; }
-        .dn-report-link:hover { color: #16a34a; text-decoration-color: #16a34a; }
-        .dn-report-link:focus-visible { outline: 2px solid #16a34a; outline-offset: 3px; color: #16a34a; }
+        .dn-report-link:hover { color: #7DBA47; text-decoration-color: #7DBA47; }
+        .dn-report-link:focus-visible { outline: 2px solid #7DBA47; outline-offset: 3px; color: #7DBA47; }
 
         /* LOGO refinements — 64px with cleaner monogram fallback */
         .dn-logo-wrap { width: 64px; height: 64px; border-radius: 14px; }
         .dn-logo-fallback { font-size: 1.7rem; }
-        .dn-logo-fallback-mono { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #0f1f3d, #1e3a5f); color: #4ade80; font-family: Georgia, serif; font-weight: 700; font-size: 1.7rem; letter-spacing: -0.02em; }
+        .dn-logo-fallback-mono { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1F3D2B, #2A4F38); color: #93CB5C; font-family: Georgia, serif; font-weight: 700; font-size: 1.7rem; letter-spacing: -0.02em; }
 
         /* MAP EMBED */
         .dn-map-card { padding: 0; overflow: hidden; }
@@ -638,7 +638,7 @@ export default async function ListingPage({
             <div style={{
               background: "#fff",
               border: "1px solid #e8e5de",
-              borderLeft: "4px solid #16a34a",
+              borderLeft: "4px solid #7DBA47",
               borderRadius: 14,
               padding: "22px 22px 18px",
               boxShadow: "0 4px 16px rgba(15,31,61,.06)",
@@ -648,7 +648,7 @@ export default async function ListingPage({
                 letterSpacing: ".14em",
                 textTransform: "uppercase",
                 fontWeight: 700,
-                color: "#16a34a",
+                color: "#7DBA47",
                 marginBottom: 6,
               }}>
                 Active deal{activeDeals.length > 1 ? "s" : ""} today
@@ -656,7 +656,7 @@ export default async function ListingPage({
               <div style={{
                 fontSize: "1.25rem",
                 fontWeight: 700,
-                color: "#0f1f3d",
+                color: "#1F3D2B",
                 lineHeight: 1.3,
                 marginBottom: 4,
                 display: "flex",
@@ -702,7 +702,7 @@ export default async function ListingPage({
               )}
               <div style={{
                 fontSize: ".82rem",
-                color: "#16a34a",
+                color: "#7DBA47",
                 fontWeight: 600,
                 marginBottom: 12,
               }}>
@@ -730,12 +730,12 @@ export default async function ListingPage({
                   </summary>
                   <ul style={{ listStyle: "none", marginTop: 10, display: "flex", flexDirection: "column", gap: 10 }}>
                     {activeDeals.slice(1).map((d) => (
-                      <li key={d.id || d.title} style={{ padding: "10px 12px", background: "#f5f4f0", borderRadius: 8 }}>
-                        <div style={{ fontWeight: 600, color: "#0f1f3d", fontSize: ".9rem" }}>{d.title}</div>
+                      <li key={d.id || d.title} style={{ padding: "10px 12px", background: "#F7F4ED", borderRadius: 8 }}>
+                        <div style={{ fontWeight: 600, color: "#1F3D2B", fontSize: ".9rem" }}>{d.title}</div>
                         {d.description && (
                           <div style={{ fontSize: ".78rem", color: "#6b7280", marginTop: 2 }}>{d.description}</div>
                         )}
-                        <div style={{ fontSize: ".74rem", color: "#16a34a", marginTop: 4 }}>
+                        <div style={{ fontSize: ".74rem", color: "#7DBA47", marginTop: 4 }}>
                           → {howToUseDeal(d)}
                         </div>
                       </li>
@@ -783,7 +783,7 @@ export default async function ListingPage({
                     target="_blank"
                     rel="noopener noreferrer"
                     className="dn-hero-location"
-                    style={{ textDecoration: "none", color: "#16a34a", fontWeight: 600, display: "block" }}
+                    style={{ textDecoration: "none", color: "#7DBA47", fontWeight: 600, display: "block" }}
                   >
                     {listing.address1 && (
                       <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -1021,7 +1021,7 @@ export default async function ListingPage({
                     </div>
                     <p style={{ marginTop: 12, fontSize: ".8rem", fontFamily: "system-ui, sans-serif", color: "rgba(226,232,240,.6)" }}>
                       Need more options?{" "}
-                      <Link href={`/claim/${listing.slug}`} style={{ color: "#4ade80", textDecoration: "none" }}>
+                      <Link href={`/claim/${listing.slug}`} style={{ color: "#93CB5C", textDecoration: "none" }}>
                         Use the full claim form →
                       </Link>
                     </p>

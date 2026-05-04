@@ -31,13 +31,13 @@ const PROJECTS: Record<
     label: "PuffPrice · Cannabis",
     tagline: "Licensed dispensaries, delivery services & patient-first cannabis brands.",
     badge: "Cannabis",
-    color: "#16a34a",
+    color: "#7DBA47",
   },
   heal: {
     label: "Project Heal · Holistic",
     tagline: "Somatic workers, energy healers, bodyworkers & alternative care.",
     badge: "Holistic",
-    color: "#22c55e",
+    color: "#7DBA47",
   },
   her: {
     label: "Project Her · Women’s Wellness",

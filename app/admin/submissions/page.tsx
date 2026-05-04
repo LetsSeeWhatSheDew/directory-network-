@@ -50,7 +50,7 @@ export default async function SubmissionsPage() {
             {pending.length} pending review · Target SLA: p95 ≤ 24h
           </p>
         </div>
-        <Link href="/admin" style={{ fontSize: "0.875rem", color: "#16a34a" }}>
+        <Link href="/admin" style={{ fontSize: "0.875rem", color: "#7DBA47" }}>
           ← Back to admin
         </Link>
       </div>

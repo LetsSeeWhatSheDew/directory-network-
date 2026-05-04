@@ -81,18 +81,18 @@ export default async function SubmitDealPage() {
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:Georgia,serif;background:#f5f4f0;color:#0f1f3d;min-height:100vh}
+        body{font-family:Georgia,serif;background:#F7F4ED;color:#1F3D2B;min-height:100vh}
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #e8e4da}
         .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
-        .logo-text{font-size:1.1rem;font-weight:700;color:#0f1f3d}
-        .logo-text span{color:#16a34a}
+        .logo-text{font-size:1.1rem;font-weight:700;color:#1F3D2B}
+        .logo-text span{color:#7DBA47}
         .back{font-size:.82rem;color:#6b7280;text-decoration:none;font-family:system-ui,sans-serif}
         .wrap{max-width:680px;margin:0 auto;padding:44px 24px 72px}
-        .eyebrow{font-family:system-ui,sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#16a34a;margin-bottom:12px}
+        .eyebrow{font-family:system-ui,sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#7DBA47;margin-bottom:12px}
         h1{font-size:clamp(1.9rem,5vw,2.6rem);font-weight:700;letter-spacing:-.04em;line-height:1.08;margin-bottom:10px}
         .lede{font-family:system-ui,sans-serif;font-size:1.02rem;color:#374151;line-height:1.55;max-width:56ch;margin-bottom:8px}
         .trust{font-family:system-ui,sans-serif;font-size:.85rem;color:#6b7280;max-width:56ch;margin-bottom:28px;line-height:1.5}
-        .trust strong{color:#0f1f3d}
+        .trust strong{color:#1F3D2B}
       `}</style>
 
       <nav className="nav">

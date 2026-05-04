@@ -26,7 +26,7 @@ export default function EarlyAccessPage() {
   return (
     <div style={{
       fontFamily: "Georgia, serif",
-      background: "linear-gradient(180deg, #0f1f3d 0%, #142847 100%)",
+      background: "linear-gradient(180deg, #1F3D2B 0%, #142847 100%)",
       minHeight: "100vh",
       color: "#fff",
       display: "flex",
@@ -47,7 +47,7 @@ export default function EarlyAccessPage() {
           marginBottom: 32,
           display: "inline-block",
         }}>
-          puff<span style={{ color: "#4ade80" }}>price</span>
+          puff<span style={{ color: "#93CB5C" }}>price</span>
         </Link>
 
         {/* Personal headline */}
@@ -58,7 +58,7 @@ export default function EarlyAccessPage() {
           marginBottom: 16,
         }}>
           You&apos;re early.<br />
-          <em style={{ color: "#4ade80", fontStyle: "normal" }}>That&apos;s a good thing.</em>
+          <em style={{ color: "#93CB5C", fontStyle: "normal" }}>That&apos;s a good thing.</em>
         </h1>
 
         <p style={{
@@ -140,7 +140,7 @@ export default function EarlyAccessPage() {
           <button
             type="submit"
             style={{
-              background: "#16a34a",
+              background: "#7DBA47",
               color: "#fff",
               border: "none",
               padding: "14px 22px",
@@ -175,7 +175,7 @@ export default function EarlyAccessPage() {
         }}>
           Built by <strong style={{ color: "rgba(255,255,255,0.8)" }}>Matthew Burns</strong> in Peoria, IL.
           <br />
-          Questions? <a href="mailto:matthew@jacarandapeoria.com" style={{ color: "#4ade80", textDecoration: "none" }}>matthew@jacarandapeoria.com</a>
+          Questions? <a href="mailto:matthew@jacarandapeoria.com" style={{ color: "#93CB5C", textDecoration: "none" }}>matthew@jacarandapeoria.com</a>
         </p>
       </div>
     </div>

@@ -148,31 +148,31 @@ export default async function BrandPage({
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:Georgia,serif;background:#f5f4f0;color:#0f1f3d;min-height:100vh}
+        body{font-family:Georgia,serif;background:#F7F4ED;color:#1F3D2B;min-height:100vh}
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #e8e4da}
         .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
-        .logo-text{font-size:1.1rem;font-weight:700;color:#0f1f3d}
-        .logo-text span{color:#16a34a}
+        .logo-text{font-size:1.1rem;font-weight:700;color:#1F3D2B}
+        .logo-text span{color:#7DBA47}
         .back{font-size:.82rem;color:#6b7280;text-decoration:none;font-family:system-ui,sans-serif}
         .wrap{max-width:780px;margin:0 auto;padding:44px 24px 72px}
         .head{display:flex;align-items:center;gap:18px;margin-bottom:22px}
-        .logo-mark{width:72px;height:72px;border-radius:16px;background:#0f1f3d;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.6rem;letter-spacing:.02em;font-family:system-ui,sans-serif;flex-shrink:0}
-        .eyebrow{font-family:system-ui,sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#16a34a;margin-bottom:6px}
+        .logo-mark{width:72px;height:72px;border-radius:16px;background:#1F3D2B;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.6rem;letter-spacing:.02em;font-family:system-ui,sans-serif;flex-shrink:0}
+        .eyebrow{font-family:system-ui,sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#7DBA47;margin-bottom:6px}
         h1{font-size:clamp(1.8rem,4.5vw,2.4rem);font-weight:700;letter-spacing:-.04em;line-height:1.1}
         .meta{font-family:system-ui,sans-serif;font-size:.85rem;color:#6b7280;margin-top:4px}
-        .meta a{color:#16a34a;text-decoration:none;font-weight:600}
+        .meta a{color:#7DBA47;text-decoration:none;font-weight:600}
         .meta a:hover{text-decoration:underline}
         .prose{background:#fff;border:1px solid #e8e4da;border-radius:14px;padding:22px 22px;font-family:system-ui,sans-serif;font-size:1rem;line-height:1.65;color:#374151;margin-bottom:32px;max-width:64ch}
-        h2{font-size:1.2rem;font-weight:700;color:#0f1f3d;margin-bottom:14px;font-family:Georgia,serif;letter-spacing:-.01em}
+        h2{font-size:1.2rem;font-weight:700;color:#1F3D2B;margin-bottom:14px;font-family:Georgia,serif;letter-spacing:-.01em}
         .deal-list{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:28px}
-        .deal-card{background:#fff;border:1px solid #e8e4da;border-left:4px solid #16a34a;border-radius:12px;padding:16px 18px;text-decoration:none;color:inherit;transition:border-color .15s, box-shadow .15s}
-        .deal-card:hover{border-color:#16a34a;box-shadow:0 2px 8px rgba(22,163,74,.12)}
-        .deal-head{font-family:system-ui,sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#16a34a;margin-bottom:4px}
-        .deal-title{font-size:1.02rem;font-weight:700;color:#0f1f3d;line-height:1.25;margin-bottom:4px}
+        .deal-card{background:#fff;border:1px solid #e8e4da;border-left:4px solid #7DBA47;border-radius:12px;padding:16px 18px;text-decoration:none;color:inherit;transition:border-color .15s, box-shadow .15s}
+        .deal-card:hover{border-color:#7DBA47;box-shadow:0 2px 8px rgba(22,163,74,.12)}
+        .deal-head{font-family:system-ui,sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#7DBA47;margin-bottom:4px}
+        .deal-title{font-size:1.02rem;font-weight:700;color:#1F3D2B;line-height:1.25;margin-bottom:4px}
         .deal-sub{font-family:system-ui,sans-serif;font-size:.85rem;color:#6b7280}
         .empty{background:#fff;border:1px solid #e8e4da;border-radius:12px;padding:22px;font-family:system-ui,sans-serif;color:#6b7280;font-size:.95rem;line-height:1.5}
         .cat-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-        .cat-tag{font-family:system-ui,sans-serif;font-size:.72rem;color:#6b7280;background:#f5f4f0;border-radius:100px;padding:3px 10px}
+        .cat-tag{font-family:system-ui,sans-serif;font-size:.72rem;color:#6b7280;background:#F7F4ED;border-radius:100px;padding:3px 10px}
       `}</style>
 
       <nav className="nav">
@@ -214,7 +214,7 @@ export default async function BrandPage({
           <div className="empty">
             No active deals featuring {data.name} right now. We refresh deals
             daily — check back soon, or{" "}
-            <Link href="/deals/all" style={{ color: "#16a34a", fontWeight: 600, textDecoration: "none" }}>
+            <Link href="/deals/all" style={{ color: "#7DBA47", fontWeight: 600, textDecoration: "none" }}>
               browse every active Illinois deal →
             </Link>
           </div>
@@ -241,7 +241,7 @@ export default async function BrandPage({
           {data.match_keywords.length > 3 ? ", and more" : ""}. Think we missed one?{" "}
           <a
             href={`mailto:${site.supportEmail}?subject=Brand%20match%20fix%20for%20${encodeURIComponent(data.name)}`}
-            style={{ color: "#16a34a", fontWeight: 600, textDecoration: "none" }}
+            style={{ color: "#7DBA47", fontWeight: 600, textDecoration: "none" }}
           >
             Let us know
           </a>

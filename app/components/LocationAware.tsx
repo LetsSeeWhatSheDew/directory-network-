@@ -352,7 +352,7 @@ export default function LocationAware() {
     <div aria-live="polite" style={wrapperStyle}>
       <span>
         {approximate ? "📍 Location approximate —" : "📍 Showing deals near"}{" "}
-        <span style={{ color: "#16a34a", fontWeight: 600 }}>{loc.city}</span>
+        <span style={{ color: "#7DBA47", fontWeight: 600 }}>{loc.city}</span>
         {approximate && (
           <>
             {" · "}
@@ -391,7 +391,7 @@ const wrapperStyle: React.CSSProperties = {
   margin: 0,
   fontSize: ".8rem",
   fontFamily: "system-ui, sans-serif",
-  color: "#16a34a",
+  color: "#7DBA47",
   fontWeight: 500,
   letterSpacing: ".01em",
   display: "flex",
@@ -417,7 +417,7 @@ const detectingStyle: React.CSSProperties = {
 const linkBtn: React.CSSProperties = {
   background: "transparent",
   border: "none",
-  color: "#16a34a",
+  color: "#7DBA47",
   textDecoration: "underline",
   cursor: "pointer",
   padding: 0,
@@ -440,7 +440,7 @@ const inputStyle: React.CSSProperties = {
   border: "1px solid #e8e4da",
   borderRadius: 8,
   padding: "6px 10px",
-  color: "#0f1f3d",
+  color: "#1F3D2B",
   fontFamily: "system-ui, sans-serif",
   fontSize: ".8rem",
   outline: "none",
@@ -448,7 +448,7 @@ const inputStyle: React.CSSProperties = {
 };
 
 const buttonStyle: React.CSSProperties = {
-  background: "#16a34a",
+  background: "#7DBA47",
   color: "#fff",
   border: "none",
   borderRadius: 8,

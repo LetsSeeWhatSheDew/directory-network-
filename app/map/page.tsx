@@ -107,15 +107,15 @@ export default async function MapPage() {
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        html,body{height:100%;font-family:Georgia,serif;background:#f5f4f0}
+        html,body{height:100%;font-family:Georgia,serif;background:#F7F4ED}
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #e8e4da}
-        .logo{color:#0f1f3d;text-decoration:none;font-weight:700;letter-spacing:-.02em}
-        .logo span{color:#16a34a}
+        .logo{color:#1F3D2B;text-decoration:none;font-weight:700;letter-spacing:-.02em}
+        .logo span{color:#7DBA47}
         .back{font-size:.82rem;color:#6b7280;text-decoration:none;font-family:system-ui,sans-serif}
-        .back:hover{color:#0f1f3d}
+        .back:hover{color:#1F3D2B}
         .map-shell{position:relative;width:100%;height:calc(100vh - 60px);min-height:520px;background:#e8e4da}
         .map-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#e8e4da;font-family:system-ui,sans-serif;color:#6b7280;z-index:1;pointer-events:none}
-        .map-loading-spinner{width:36px;height:36px;border:3px solid #d1cfc6;border-top-color:#16a34a;border-radius:50%;animation:mapspin 1s linear infinite}
+        .map-loading-spinner{width:36px;height:36px;border:3px solid #d1cfc6;border-top-color:#7DBA47;border-radius:50%;animation:mapspin 1s linear infinite}
         @keyframes mapspin{to{transform:rotate(360deg)}}
       `}</style>
 
@@ -141,7 +141,7 @@ export default async function MapPage() {
           <h2
             style={{
               fontSize: "1.5rem",
-              color: "#0f1f3d",
+              color: "#1F3D2B",
               fontFamily: "Georgia, serif",
               marginBottom: 10,
               letterSpacing: "-0.02em",
@@ -156,7 +156,7 @@ export default async function MapPage() {
             href="/dispensaries"
             style={{
               display: "inline-block",
-              background: "#16a34a",
+              background: "#7DBA47",
               color: "#fff",
               padding: "12px 28px",
               borderRadius: 10,

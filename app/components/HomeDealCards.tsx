@@ -170,7 +170,7 @@ export default function HomeDealCards({
               <div style={{ height: 16, width: "75%", borderRadius: 6, background: "#e8e4da", marginBottom: 10 }} />
               <div style={{ height: 10, width: "92%", borderRadius: 5, background: "#f0ece3", marginBottom: 6 }} />
               <div style={{ height: 10, width: "68%", borderRadius: 5, background: "#f0ece3", marginBottom: 18 }} />
-              <div style={{ height: 42, width: "100%", borderRadius: 10, background: "#f0fdf4", border: "1px solid #bbf7d0" }} />
+              <div style={{ height: 42, width: "100%", borderRadius: 10, background: "#F2F8E9", border: "1px solid #C7E5A8" }} />
             </div>
           ))}
         </div>
@@ -187,7 +187,7 @@ export default function HomeDealCards({
           fontFamily: "system-ui, sans-serif",
         }}
       >
-        <div style={{ fontFamily: "Georgia, serif", fontSize: "1.1rem", fontWeight: 700, color: "#0f1f3d", marginBottom: 6 }}>
+        <div style={{ fontFamily: "Georgia, serif", fontSize: "1.1rem", fontWeight: 700, color: "#1F3D2B", marginBottom: 6 }}>
           We're refreshing Central IL deals — check back soon.
         </div>
         <p style={{ fontSize: ".9rem", color: "#6b7280", margin: "0 auto 14px", maxWidth: 420, lineHeight: 1.5 }}>
@@ -197,7 +197,7 @@ export default function HomeDealCards({
           href="/alerts"
           style={{
             display: "inline-block",
-            background: "#16a34a",
+            background: "#7DBA47",
             color: "#fff",
             padding: "10px 20px",
             borderRadius: 10,
@@ -250,7 +250,7 @@ export default function HomeDealCards({
                 aria-selected={mode === "near"}
                 onClick={() => setMode("near")}
                 style={{
-                  background: mode === "near" ? "#16a34a" : "transparent",
+                  background: mode === "near" ? "#7DBA47" : "transparent",
                   color: mode === "near" ? "#fff" : "#6b7280",
                   border: "none",
                   borderRadius: 100,
@@ -269,7 +269,7 @@ export default function HomeDealCards({
                 aria-selected={mode === "all"}
                 onClick={() => setMode("all")}
                 style={{
-                  background: mode === "all" ? "#16a34a" : "transparent",
+                  background: mode === "all" ? "#7DBA47" : "transparent",
                   color: mode === "all" ? "#fff" : "#6b7280",
                   border: "none",
                   borderRadius: 100,
@@ -290,7 +290,7 @@ export default function HomeDealCards({
             href="/deals/all"
             style={{
               fontSize: ".85rem",
-              color: "#16a34a",
+              color: "#7DBA47",
               fontFamily: "system-ui, sans-serif",
               fontWeight: 600,
               textDecoration: "none",

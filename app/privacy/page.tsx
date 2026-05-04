@@ -137,7 +137,7 @@ const h2: React.CSSProperties = {
   fontWeight: 700,
   marginTop: 28,
   marginBottom: 8,
-  color: "#0f1f3d",
+  color: "#1F3D2B",
   letterSpacing: "-0.01em",
 };
 
@@ -148,6 +148,6 @@ const ul: React.CSSProperties = {
 };
 
 const link: React.CSSProperties = {
-  color: "#16a34a",
+  color: "#7DBA47",
   textDecoration: "underline",
 };

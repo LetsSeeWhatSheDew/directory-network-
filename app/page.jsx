@@ -51,7 +51,7 @@ export const metadata = {
 // ---------- SVG ICON COMPONENTS ----------
 
 // 7-blade cannabis leaf — universal cannabis symbol
-function LeafIcon({ size = 20, color = "#4ade80" }) {
+function LeafIcon({ size = 20, color = "#93CB5C" }) {
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       {/* stem */}
@@ -96,10 +96,10 @@ function GummyBearIcon({ size = 20 }) {
       {/* right leg */}
       <ellipse cx="40" cy="56" rx="5" ry="5" fill={color} />
       {/* eyes */}
-      <circle cx="28" cy="20" r="1.4" fill="#0f1f3d" />
-      <circle cx="36" cy="20" r="1.4" fill="#0f1f3d" />
+      <circle cx="28" cy="20" r="1.4" fill="#1F3D2B" />
+      <circle cx="36" cy="20" r="1.4" fill="#1F3D2B" />
       {/* smile */}
-      <path d="M28 25 Q32 28 36 25" stroke="#0f1f3d" strokeWidth="1.3" strokeLinecap="round" fill="none" />
+      <path d="M28 25 Q32 28 36 25" stroke="#1F3D2B" strokeWidth="1.3" strokeLinecap="round" fill="none" />
     </svg>
   );
 }
@@ -117,10 +117,10 @@ function VapeIcon({ size = 20 }) {
       {/* metal band */}
       <rect x="23" y="34" width="18" height="4" rx="1" fill="#9ca3af" />
       {/* battery body */}
-      <rect x="24" y="38" width="16" height="20" rx="2" fill="#0f1f3d" />
+      <rect x="24" y="38" width="16" height="20" rx="2" fill="#1F3D2B" />
       {/* LED button */}
-      <circle cx="32" cy="52" r="2.2" fill="#16a34a" />
-      <circle cx="32" cy="52" r="1" fill="#4ade80" />
+      <circle cx="32" cy="52" r="2.2" fill="#7DBA47" />
+      <circle cx="32" cy="52" r="1" fill="#93CB5C" />
     </svg>
   );
 }
@@ -624,7 +624,7 @@ export default async function HomePage() {
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
         html{scroll-behavior:smooth}
-        body{font-family:Georgia,serif;background:#f5f4f0;min-height:100vh;color:#0f1f3d}
+        body{font-family:Georgia,serif;background:#F7F4ED;min-height:100vh;color:#1F3D2B}
 
         /* The 4px green top-stripe was removed 2026-04-30 — it read as an
            orphan green line above the nav rather than a "money signal", per
@@ -646,26 +646,26 @@ export default async function HomePage() {
         @media(max-width:768px){.nav .logo img{height:46px!important}}
         .footer .footer-logo img{width:auto!important;height:40px!important}
         .logo-mark{position:relative;width:28px;height:28px;display:inline-block;flex-shrink:0}
-        .logo-mark-dot{position:absolute;top:-2px;right:-2px;width:10px;height:10px;border-radius:50%;background:#16a34a;border:2px solid #fff;animation:pulse 2.5s infinite}
-        .logo-dot{width:8px;height:8px;border-radius:50%;background:#16a34a;animation:pulse 2.5s infinite}
+        .logo-mark-dot{position:absolute;top:-2px;right:-2px;width:10px;height:10px;border-radius:50%;background:#7DBA47;border:2px solid #fff;animation:pulse 2.5s infinite}
+        .logo-dot{width:8px;height:8px;border-radius:50%;background:#7DBA47;animation:pulse 2.5s infinite}
         @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.9)}}
-        .logo-text{font-size:1.15rem;font-weight:700;color:#0f1f3d;letter-spacing:-.02em}
-        .logo-text span{color:#16a34a}
+        .logo-text{font-size:1.15rem;font-weight:700;color:#1F3D2B;letter-spacing:-.02em}
+        .logo-text span{color:#7DBA47}
         .nav-links{display:flex;align-items:center;gap:20px}
         .nav-link{font-size:.82rem;color:#6b7280;text-decoration:none;font-family:system-ui,sans-serif}
-        .nav-link:hover{color:#0f1f3d}
+        .nav-link:hover{color:#1F3D2B}
         .nav-cta{
           font-size:.82rem;font-family:system-ui,sans-serif;font-weight:600;
-          color:#fff;background:#16a34a;padding:6px 14px;border-radius:6px;
+          color:#fff;background:#7DBA47;padding:6px 14px;border-radius:6px;
           text-decoration:none;
         }
-        .nav-cta:hover{background:#15803d}
+        .nav-cta:hover{background:#6BA63B}
 
         /* 4/20 PROMO BANNER */
-        .promo-banner{background:#15803d;color:#fff}
+        .promo-banner{background:#6BA63B;color:#fff}
         .promo-inner{max-width:1100px;margin:0 auto;padding:8px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
         .promo-left{display:flex;align-items:center;gap:10px;font-family:system-ui,sans-serif;font-size:.82rem;font-weight:600}
-        .promo-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite;flex-shrink:0}
+        .promo-dot{width:7px;height:7px;border-radius:50%;background:#93CB5C;animation:pulse 2s infinite;flex-shrink:0}
         .promo-text{line-height:1.3}
         .promo-cta{color:#fff;text-decoration:none;font-family:system-ui,sans-serif;font-size:.82rem;font-weight:600;white-space:nowrap}
         .promo-cta:hover{text-decoration:underline}
@@ -728,7 +728,7 @@ export default async function HomePage() {
 
         /* LOCATION LINE */
         .hero-loc-line{
-          font-size:.8rem;color:#16a34a;font-family:system-ui,sans-serif;
+          font-size:.8rem;color:#7DBA47;font-family:system-ui,sans-serif;
           font-weight:500;margin-bottom:2px;
         }
 
@@ -736,11 +736,11 @@ export default async function HomePage() {
           /* Spec 2.3 hero: 56-72px Geist Display 700, tight tracking. */
           font-family:var(--font-display, var(--font-geist-sans));
           font-size:clamp(2.5rem, 6vw + 1rem, 4.25rem);
-          font-weight:700;color:#0f1f3d;
+          font-weight:700;color:#1F3D2B;
           letter-spacing:-.04em;line-height:1.02;
           margin-bottom:10px;
         }
-        .hero h1 em{color:#16a34a;font-style:normal}
+        .hero h1 em{color:#7DBA47;font-style:normal}
         .hero-sub{
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:1.05rem;color:#4B5563;
@@ -752,7 +752,7 @@ export default async function HomePage() {
         .hero-deal-card{
           background:#fff;
           border:1px solid #e8e4da;
-          border-left:4px solid #16a34a;
+          border-left:4px solid #7DBA47;
           border-radius:14px;
           padding:22px 22px 18px;
           box-shadow:0 4px 16px rgba(15,31,61,.06);
@@ -767,7 +767,7 @@ export default async function HomePage() {
         }
         .hero-deal-savings{
           font-size:clamp(2.4rem,9vw,3.4rem);
-          font-weight:700;color:#16a34a;
+          font-weight:700;color:#7DBA47;
           letter-spacing:-.04em;line-height:1;
         }
         .hero-deal-vs{
@@ -777,7 +777,7 @@ export default async function HomePage() {
         }
         .hero-deal-name{
           font-size:1.1rem;font-weight:700;
-          color:#0f1f3d;line-height:1.2;
+          color:#1F3D2B;line-height:1.2;
         }
         .hero-deal-title{
           font-size:.9rem;color:#374151;
@@ -797,7 +797,7 @@ export default async function HomePage() {
         }
         .hero-deal-urgent{color:#991b1b;font-weight:700}
         .hero-deal-cta{
-          background:#16a34a;color:#fff;
+          background:#7DBA47;color:#fff;
           padding:12px 22px;border-radius:10px;
           text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif);
           font-weight:700;font-size:.92rem;letter-spacing:.02em;
@@ -805,14 +805,14 @@ export default async function HomePage() {
           white-space:nowrap;
           min-height:44px;display:inline-flex;align-items:center;
         }
-        .hero-deal-cta:hover{background:#15803d;transform:translateY(-1px)}
+        .hero-deal-cta:hover{background:#6BA63B;transform:translateY(-1px)}
         .hero-deal-more{
           margin-top:14px;align-self:flex-start;
           font-size:.82rem;color:#6b7280;
           font-family:system-ui,sans-serif;
           text-decoration:none;
         }
-        .hero-deal-more:hover{color:#16a34a}
+        .hero-deal-more:hover{color:#7DBA47}
         .skeleton{pointer-events:none}
 
         /* HERO RIGHT — desktop category stack */
@@ -833,17 +833,17 @@ export default async function HomePage() {
           border:1px solid #e8e4da;
           border-radius:10px;padding:11px 14px;
           font-size:.85rem;font-family:system-ui,sans-serif;font-weight:500;
-          color:#0f1f3d;cursor:pointer;text-decoration:none;
+          color:#1F3D2B;cursor:pointer;text-decoration:none;
           transition:all .15s;
         }
-        .cat-btn:hover{background:#f0fdf4;border-color:#16a34a;color:#0f1f3d}
+        .cat-btn:hover{background:#F2F8E9;border-color:#7DBA47;color:#1F3D2B}
         .cat-btn svg{flex-shrink:0;width:24px;height:24px}
 
         /* STATS STRIP — minimal credibility line */
-        .stats{background:#f5f4f0;padding:22px 28px;text-align:center}
+        .stats{background:#F7F4ED;padding:22px 28px;text-align:center}
         .stats-inner{max-width:900px;margin:0 auto}
         .stats-line{font-size:.85rem;color:#6b7280;font-family:system-ui,sans-serif;letter-spacing:.01em}
-        .stats-line strong{color:#16a34a;font-weight:700}
+        .stats-line strong{color:#7DBA47;font-weight:700}
         @media(max-width:520px){.stats-line{font-size:.78rem}}
 
         /* DEALS SECTION */
@@ -851,12 +851,12 @@ export default async function HomePage() {
 
         .section-eyebrow{
           font-size:.7rem;font-weight:700;letter-spacing:.14em;
-          text-transform:uppercase;color:#16a34a;
+          text-transform:uppercase;color:#7DBA47;
           font-family:system-ui,sans-serif;margin-bottom:6px;
         }
         .section-title{
           font-size:clamp(1.4rem,3vw,1.8rem);font-weight:700;
-          color:#0f1f3d;letter-spacing:-.03em;margin-bottom:4px;
+          color:#1F3D2B;letter-spacing:-.03em;margin-bottom:4px;
         }
         .section-sub{
           font-size:.875rem;color:#6b7280;
@@ -870,14 +870,14 @@ export default async function HomePage() {
           padding:18px;position:relative;
           transition:border-color .15s;
         }
-        .deal-card:hover{border-color:#16a34a}
+        .deal-card:hover{border-color:#7DBA47}
         .deal-card.top-pick{
-          border:2px solid #16a34a;
-          background:linear-gradient(135deg,#f0fdf4 0%,#fff 60%);
+          border:2px solid #7DBA47;
+          background:linear-gradient(135deg,#F2F8E9 0%,#fff 60%);
         }
         .top-pick-badge{
           position:absolute;top:-10px;left:16px;
-          background:#16a34a;color:#fff;
+          background:#7DBA47;color:#fff;
           font-size:.68rem;font-family:system-ui,sans-serif;
           font-weight:700;letter-spacing:.08em;text-transform:uppercase;
           padding:3px 10px;border-radius:100px;
@@ -892,7 +892,7 @@ export default async function HomePage() {
           box-shadow:0 1px 3px rgba(0,0,0,.12);
         }
         .deal-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
-        .deal-name{font-size:.95rem;font-weight:700;color:#0f1f3d}
+        .deal-name{font-size:.95rem;font-weight:700;color:#1F3D2B}
         .deal-city{font-size:.75rem;color:#9ca3af;font-family:system-ui,sans-serif;margin-top:2px}
         .open-badge{
           font-size:.68rem;font-weight:600;
@@ -900,10 +900,10 @@ export default async function HomePage() {
           font-family:system-ui,sans-serif;
           white-space:nowrap;
         }
-        .open-badge.open{color:#166534;background:#dcfce7}
+        .open-badge.open{color:#3F6B1F;background:#dcfce7}
         .open-badge.closed{color:#6b7280;background:#f1f5f9}
         .deal-highlight{
-          font-size:.95rem;font-weight:700;color:#16a34a;
+          font-size:.95rem;font-weight:700;color:#7DBA47;
           margin-bottom:6px;
         }
         .deal-reason{
@@ -914,18 +914,18 @@ export default async function HomePage() {
         .deal-attrs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
         .deal-attr{
           font-size:.68rem;color:#6b7280;
-          background:#f5f4f0;border-radius:100px;
+          background:#F7F4ED;border-radius:100px;
           padding:2px 9px;font-family:system-ui,sans-serif;
         }
         .deal-savings{
           display:flex;align-items:center;justify-content:space-between;
-          gap:10px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;
+          gap:10px;background:#F2F8E9;border:1px solid #C7E5A8;border-radius:10px;
           padding:14px 16px;margin-top:auto;
         }
         .savings-copy{display:flex;flex-direction:column}
-        .savings-label{font-size:.65rem;font-weight:700;color:#166534;font-family:system-ui,sans-serif;text-transform:uppercase;letter-spacing:.12em}
+        .savings-label{font-size:.65rem;font-weight:700;color:#3F6B1F;font-family:system-ui,sans-serif;text-transform:uppercase;letter-spacing:.12em}
         .savings-sub{font-size:.68rem;color:rgba(22,101,52,.7);font-family:system-ui,sans-serif;margin-top:2px}
-        .savings-num{font-size:2rem;font-weight:700;color:#16a34a;letter-spacing:-.03em;line-height:1}
+        .savings-num{font-size:2rem;font-weight:700;color:#7DBA47;letter-spacing:-.03em;line-height:1}
 
         /* FOOTER */
         .footer{
@@ -934,18 +934,18 @@ export default async function HomePage() {
           display:flex;justify-content:space-between;align-items:center;
           flex-wrap:wrap;gap:12px;
         }
-        .footer-logo{font-size:.9rem;font-weight:700;color:#0f1f3d}
-        .footer-logo span{color:#16a34a}
+        .footer-logo{font-size:.9rem;font-weight:700;color:#1F3D2B}
+        .footer-logo span{color:#7DBA47}
         .footer-links{display:flex;gap:18px}
         .footer-link{font-size:.75rem;color:#6b7280;font-family:system-ui,sans-serif;text-decoration:none}
-        .footer-link:hover{color:#0f1f3d}
+        .footer-link:hover{color:#1F3D2B}
         .footer-copy{font-size:.72rem;color:#9ca3af;font-family:system-ui,sans-serif}
 
         /* TAX CALCULATOR CALLOUT — sits between deals and cities. Navy
            bg with a single CTA; the differentiator we lead with. */
-        .tax-callout{background:#0F1F3D;color:#FAFAF7;padding:64px 28px}
+        .tax-callout{background:#1F3D2B;color:#FAFAF7;padding:64px 28px}
         .tax-callout-inner{max-width:760px;margin:0 auto;text-align:center}
-        .tax-callout .pp-eyebrow{color:#4ADE80}
+        .tax-callout .pp-eyebrow{color:#93CB5C}
         .tax-callout-h2{
           font-family:var(--font-display, var(--font-geist-sans));
           font-size:clamp(1.5rem, 3vw, 2rem);font-weight:600;
@@ -959,14 +959,14 @@ export default async function HomePage() {
         }
         .tax-callout-cta{
           display:inline-flex;align-items:center;
-          background:#16A34A;color:#fff;
+          background:#7DBA47;color:#fff;
           padding:13px 26px;border-radius:10px;
           font-family:var(--font-ui, system-ui, sans-serif);
           font-weight:700;font-size:.95rem;
           text-decoration:none;min-height:44px;
           transition:background 150ms ease, transform 150ms ease;
         }
-        .tax-callout-cta:hover{background:#15803D;transform:translateY(-1px)}
+        .tax-callout-cta:hover{background:#6BA63B;transform:translateY(-1px)}
         @media(max-width:520px){
           .tax-callout{padding:52px 18px}
         }
@@ -1004,12 +1004,12 @@ export default async function HomePage() {
         .city-card-name{
           font-family:var(--font-display, var(--font-geist-sans));
           font-weight:600;font-size:1.125rem;letter-spacing:-.01em;
-          color:#0f1f3d;
+          color:#1F3D2B;
         }
         .city-card-count{
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:.78rem;font-weight:600;letter-spacing:.01em;
-          color:#16a34a;background:#f0fdf4;
+          color:#7DBA47;background:#F2F8E9;
           padding:4px 10px;border-radius:100px;
           font-variant-numeric:tabular-nums;
         }
@@ -1019,14 +1019,14 @@ export default async function HomePage() {
         .cities-foot{margin-top:28px;text-align:center}
         .cities-all-link{
           font-family:var(--font-ui, system-ui, sans-serif);
-          font-size:.92rem;font-weight:600;color:#16a34a;
+          font-size:.92rem;font-weight:600;color:#7DBA47;
           text-decoration:none;
         }
         .cities-all-link:hover{text-decoration:underline}
 
         /* SECTION 4 — TRUST + BRAND */
         .trust-section{
-          background:linear-gradient(180deg, #F5F4F0 0%, #FFFFFF 100%);
+          background:linear-gradient(180deg, #F7F4ED 0%, #FFFFFF 100%);
           padding:72px 28px;
         }
         .trust-grid{
@@ -1060,19 +1060,19 @@ export default async function HomePage() {
         .trust-cta-row{display:flex;gap:18px;justify-content:center;align-items:center;flex-wrap:wrap}
         .trust-cta{
           font-family:var(--font-ui, system-ui, sans-serif);
-          font-size:.92rem;font-weight:700;color:#fff;background:#16a34a;
+          font-size:.92rem;font-weight:700;color:#fff;background:#7DBA47;
           text-decoration:none;padding:11px 22px;border-radius:10px;
           min-height:44px;display:inline-flex;align-items:center;
           transition:background 150ms ease, transform 150ms ease;
         }
-        .trust-cta:hover{background:#15803d;transform:translateY(-1px)}
+        .trust-cta:hover{background:#6BA63B;transform:translateY(-1px)}
         .trust-cta-muted{
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:.92rem;font-weight:600;color:#374151;
           text-decoration:none;padding:11px 4px;
           min-height:44px;display:inline-flex;align-items:center;
         }
-        .trust-cta-muted:hover{color:#0f1f3d}
+        .trust-cta-muted:hover{color:#1F3D2B}
 
         /* RESPONSIVE */
         @media(max-width:768px){
@@ -1499,7 +1499,7 @@ export default async function HomePage() {
             style={{
               fontSize: "clamp(1.3rem,3vw,1.7rem)",
               fontWeight: 700,
-              color: "#0f1f3d",
+              color: "#1F3D2B",
               letterSpacing: "-.03em",
               marginBottom: 24,
             }}
@@ -1511,7 +1511,7 @@ export default async function HomePage() {
               <div
                 key={i}
                 style={{
-                  background: "#f5f4f0",
+                  background: "#F7F4ED",
                   border: "1px solid #e8e4da",
                   borderRadius: 12,
                   padding: "16px 18px",
@@ -1521,7 +1521,7 @@ export default async function HomePage() {
                   style={{
                     fontSize: "1rem",
                     fontWeight: 700,
-                    color: "#0f1f3d",
+                    color: "#1F3D2B",
                     fontFamily: "system-ui, sans-serif",
                     marginBottom: 6,
                   }}

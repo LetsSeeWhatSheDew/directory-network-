@@ -118,7 +118,7 @@ export default function ProCheckoutButton() {
           ✓ You&rsquo;re on the list
         </div>
         <div style={{ fontSize: ".82rem", color: "rgba(255,255,255,.75)", lineHeight: 1.5 }}>
-          Pro isn&rsquo;t live yet. We&rsquo;ll email <strong style={{ color: "#4ade80" }}>{email}</strong>{" "}
+          Pro isn&rsquo;t live yet. We&rsquo;ll email <strong style={{ color: "#93CB5C" }}>{email}</strong>{" "}
           the moment it launches — usually within a few days.
         </div>
       </div>
@@ -166,7 +166,7 @@ export default function ProCheckoutButton() {
           type="checkbox"
           checked={smsOptIn}
           onChange={(e) => setSmsOptIn(e.target.checked)}
-          style={{ accentColor: "#16a34a", width: 16, height: 16 }}
+          style={{ accentColor: "#7DBA47", width: 16, height: 16 }}
         />
         Text me when new deals drop near me
       </label>
