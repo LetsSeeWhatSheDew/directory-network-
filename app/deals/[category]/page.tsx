@@ -15,6 +15,7 @@ import ShareDealButton from "../../components/ShareDealButton";
 import { getServerLocation } from "../../../lib/location";
 import { listingHref } from "../../../lib/links";
 import { displayDispensaryName } from "../../../lib/dispensaryName";
+import { brand } from "../../../lib/brand";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://hnbjufmtmrhexmdrfubw.supabase.co';
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300';
@@ -280,7 +281,7 @@ export async function generateMetadata({
   const cookieLoc = await getServerLocation();
   const city = cityFromUrl || (cookieLoc?.city ? toCityCase(cookieLoc.city) : null);
   const label = CATEGORY_LABELS[category] || "Cannabis deals";
-  const ogImage = "https://www.puffprice.com/og-image.png";
+  const ogImage = `${brand.url}/og-image.png`;
   const title = city
     ? `${city} Dispensary Deals Today | PuffPrice`
     : `${label} Deals Central Illinois | PuffPrice`;
@@ -288,8 +289,8 @@ export async function generateMetadata({
     ? `Browse today's best dispensary deals in ${city}, Illinois. Save money on cannabis with live offers.`
     : `Find the cheapest ${label.toLowerCase()} deals at Central Illinois dispensaries right now. Real prices, real savings.`;
   const url = city
-    ? `https://www.puffprice.com/deals/${category}?city=${encodeURIComponent(city)}`
-    : `https://www.puffprice.com/deals/${category}`;
+    ? `${brand.url}/deals/${category}?city=${encodeURIComponent(city)}`
+    : `${brand.url}/deals/${category}`;
   return {
     title,
     description,
@@ -378,9 +379,9 @@ function buildBreadcrumbSchema(categoryLabel: string, category: string) {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.puffprice.com" },
-      { "@type": "ListItem", position: 2, name: "Deals", item: "https://www.puffprice.com/deals/all" },
-      { "@type": "ListItem", position: 3, name: categoryLabel, item: `https://www.puffprice.com/deals/${category}` },
+      { "@type": "ListItem", position: 1, name: "Home", item: brand.url },
+      { "@type": "ListItem", position: 2, name: "Deals", item: `${brand.url}/deals/all` },
+      { "@type": "ListItem", position: 3, name: categoryLabel, item: `${brand.url}/deals/${category}` },
     ],
   };
 }
@@ -450,10 +451,15 @@ export default async function DealsPage({
   // (see CIL_CITY_IN_LIST above). Label without-city views accordingly
   // so the "N deals at X dispensaries in …" answer string matches what
   // the user actually sees in the cards below.
-  const scopeLabel = city ? `${city}, IL` : "Central Illinois";
+  // The default proximity radius (15 mi) wraps every CIL metro alias —
+  // see lib/proximity.ts. Phrasing the empty state as "within 15 miles
+  // of <city>" instead of "near <city>" matches what the metro-alias
+  // filter actually does and rules out the trust-killing "advertised on
+  // homepage but missing from /deals" gap that surfaced in the audit.
+  const scopeLabel = city ? `within 15 miles of ${city}, IL` : "in Central Illinois";
   const answerText = deals.length > 0
-    ? `${deals.length} active deal${deals.length !== 1 ? "s" : ""} at ${dispensaryCount} dispensar${dispensaryCount !== 1 ? "ies" : "y"} in ${scopeLabel} right now.`
-    : `No active deals in ${scopeLabel} right now — check back soon.`;
+    ? `${deals.length} active deal${deals.length !== 1 ? "s" : ""} at ${dispensaryCount} dispensar${dispensaryCount !== 1 ? "ies" : "y"} ${scopeLabel} right now.`
+    : `No active ${categoryLabel.toLowerCase()} deals ${scopeLabel} right now — check back soon.`;
 
   return (
     <>
@@ -578,16 +584,16 @@ export default async function DealsPage({
         <p className="page-sub">
           {deals.length > 0
             ? city
-              ? `${deals.length} active deal${deals.length !== 1 ? "s" : ""} found near ${city}`
+              ? `${deals.length} active deal${deals.length !== 1 ? "s" : ""} found within 15 miles of ${city}`
               : `${deals.length} active deal${deals.length !== 1 ? "s" : ""} found in Central Illinois`
             : city
-            ? `No active deals near ${city} right now`
+            ? `No active ${categoryLabel.toLowerCase()} deals within 15 miles of ${city} right now`
             : "No active deals right now — check back soon"}
         </p>
 
         {city && (
           <div className="city-banner">
-            <span className="city-banner-pin">📍 Deals near {city}, IL</span>
+            <span className="city-banner-pin">📍 Showing deals within 15 miles of {city}, IL</span>
           </div>
         )}
 
