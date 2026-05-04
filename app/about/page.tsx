@@ -1,6 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
-import Logo from "../components/Logo";
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
 
 const OG_DESC =
   "Cannabis deal finder for Central Illinois. Built by one person in Peoria because the existing tools cost too much and lie about coverage.";
@@ -85,12 +85,7 @@ export default function AboutPage() {
         @media(max-width:600px){.wrap{padding:48px 20px 40px}.nav{padding:12px 16px}}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo-link" aria-label="PuffPrice home">
-          <Logo size={36} />
-        </Link>
-        <Link href="/" className="back">← Back</Link>
-      </nav>
+      <Nav variant="light" />
 
       {/* Downtown Peoria building with US flag, photographed through bare
           branches (Darrien Staton, Unsplash). Place-rooted establishing
@@ -160,8 +155,8 @@ export default function AboutPage() {
           <a href="mailto:hi@puffprice.com">hi@puffprice.com</a>
         </div>
 
-        <div className="built">Built in Peoria, Illinois 🌿</div>
       </main>
+      <Footer />
     </>
   );
 }

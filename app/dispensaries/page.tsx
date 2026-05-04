@@ -4,6 +4,8 @@
 // This page is for users who land via /dispensaries directly.
 
 import Link from "next/link";
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -107,27 +109,21 @@ export default async function DispensariesIndexPage() {
 
   return (
     <div style={{ fontFamily: "Georgia, serif", background: "#f5f4f0", minHeight: "100vh", color: "#0f1f3d" }}>
-      <nav style={{ padding: "14px 28px", background: "#0f1f3d", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <Link href="/" style={{ color: "#fff", textDecoration: "none", fontWeight: 700, fontSize: "1.15rem" }}>
-          puff<span style={{ color: "#4ade80" }}>price</span>
-        </Link>
-        <Link href="/deals/all" style={{ color: "rgba(255,255,255,0.7)", textDecoration: "none", fontSize: ".85rem", fontFamily: "system-ui, sans-serif" }}>
-          See today&apos;s deals →
-        </Link>
-      </nav>
-
-      <header style={{ background: "#0f1f3d", color: "#fff", padding: "48px 28px", textAlign: "center" }}>
-        <p style={{ fontSize: ".7rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#4ade80", fontFamily: "system-ui, sans-serif", fontWeight: 700, marginBottom: 8 }}>
-          Central Illinois directory
-        </p>
-        <h1 style={{ fontSize: "clamp(1.8rem, 4vw, 2.6rem)", letterSpacing: "-0.03em", marginBottom: 10 }}>
-          Every licensed Central Illinois dispensary
-        </h1>
-        <p style={{ color: "rgba(255,255,255,0.55)", fontFamily: "system-ui, sans-serif", maxWidth: 520, margin: "0 auto", lineHeight: 1.6 }}>
-          {listings.length} dispensaries across {cities.length} cities. Click a city to see deals
-          and hours, or jump to a specific store.
-        </p>
-      </header>
+      <div className="pp-surface-deep pp-leaf pp-leaf-04">
+        <Nav variant="deep" />
+        <header style={{ color: "var(--color-cream, #F7F4ED)", padding: "clamp(2.5rem, 6vw, 5rem) clamp(1rem, 4vw, 2rem) clamp(2rem, 4vw, 4rem)", textAlign: "center", position: "relative", zIndex: 2 }}>
+          <p className="pp-eyebrow" style={{ color: "var(--color-sage-vibrant, #93CB5C)", marginBottom: 10 }}>
+            Central Illinois directory
+          </p>
+          <h1 style={{ fontFamily: "Manrope, system-ui, sans-serif", fontWeight: 800, fontSize: "clamp(2rem, 5vw, 3.25rem)", letterSpacing: "-0.035em", lineHeight: 1.1, color: "var(--color-cream, #F7F4ED)", marginBottom: 12 }}>
+            Every licensed Central Illinois dispensary
+          </h1>
+          <p style={{ color: "rgba(247, 244, 237, 0.72)", fontFamily: "Manrope, system-ui, sans-serif", fontWeight: 500, maxWidth: 580, margin: "0 auto", lineHeight: 1.6 }}>
+            {listings.length} dispensaries across {cities.length} cities. Click a city to see deals
+            and hours, or jump to a specific store.
+          </p>
+        </header>
+      </div>
 
       <section style={{ maxWidth: 1100, margin: "0 auto", padding: "44px 28px" }}>
         {cities.length === 0 ? (
@@ -204,14 +200,7 @@ export default async function DispensariesIndexPage() {
         )}
       </section>
 
-      <footer style={{ background: "#0f1f3d", padding: "24px 32px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
-        <span style={{ color: "#fff", fontSize: "1rem", fontWeight: 700, fontFamily: "Georgia, serif" }}>
-          puff<span style={{ color: "#16a34a" }}>price</span>
-        </span>
-        <span style={{ color: "#475569", fontSize: ".78rem", fontFamily: "system-ui, sans-serif" }}>
-          © {new Date().getFullYear()} PuffPrice · Central Illinois
-        </span>
-      </footer>
+      <Footer />
     </div>
   );
 }

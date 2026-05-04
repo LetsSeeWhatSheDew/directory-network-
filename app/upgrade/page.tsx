@@ -4,6 +4,8 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
 
 export const metadata: Metadata = {
   title: "Go Pro — $0.99/mo | PuffPrice",
@@ -65,15 +67,8 @@ const CHECKOUT_URL =
 
 export default function UpgradePage() {
   return (
-    <main className="min-h-screen bg-[#faf7f0] text-gray-900">
-      <nav className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
-        <Link href="/" className="font-serif text-xl tracking-tight">
-          puffprice
-        </Link>
-        <Link href="/" className="text-sm text-gray-600 hover:text-gray-900">
-          ← Home
-        </Link>
-      </nav>
+    <main className="min-h-screen text-gray-900" style={{ background: "var(--color-cream, #F7F4ED)" }}>
+      <Nav variant="light" />
 
       <section className="max-w-2xl mx-auto px-6 pt-8 pb-16 text-center">
         <p className="text-xs tracking-[0.2em] uppercase text-gray-500 mb-4">
@@ -167,6 +162,7 @@ export default function UpgradePage() {
           Claim your free listing →
         </Link>
       </section>
+      <Footer />
     </main>
   );
 }

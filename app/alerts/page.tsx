@@ -4,7 +4,8 @@
 // at this stage.
 
 import Link from "next/link";
-import Logo from "../components/Logo";
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
 import AlertsCalculator from "./AlertsCalculator";
 import ProCheckoutButton from "./ProCheckoutButton";
 
@@ -153,10 +154,7 @@ export default async function AlertsPage() {
         .calc{max-width:640px;margin:0 auto;padding:12px 20px 64px}
       `}</style>
 
-      <nav className="nav">
-        <Link href="/" className="logo" aria-label="PuffPrice home"><Logo /></Link>
-        <Link href="/" className="back">← Home</Link>
-      </nav>
+      <Nav variant="light" />
 
       <header className="hero">
         <h1>Never overpay for weed again.</h1>
@@ -243,6 +241,7 @@ export default async function AlertsPage() {
       <section className="calc">
         <AlertsCalculator />
       </section>
+      <Footer />
     </>
   );
 }
