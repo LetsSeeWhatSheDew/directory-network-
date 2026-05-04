@@ -145,7 +145,7 @@ export default function EndingSoonRow({ deals }: { deals: EndingSoonDeal[] }) {
                   marginTop: 4,
                 }}
               >
-                {d.city}
+                {d.city}, IL
               </div>
             )}
           </Link>

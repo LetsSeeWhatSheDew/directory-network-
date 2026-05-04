@@ -132,21 +132,21 @@ async function getListing(id: string): Promise<Listing | null> {
 
 async function getHours(listingId: string): Promise<ListingHour[]> {
   const rows = await fetchJson<ListingHour[]>(
-    `/listing_hours?listing_id=eq.${encodeURIComponent(listingId)}&select=*&order=weekday.asc`
+    `/listing_hours?listing_id=eq.${encodeURIComponent(listingId)}&project_tag=eq.green&select=*&order=weekday.asc`
   );
   return rows ?? [];
 }
 
 async function getAttributes(listingId: string): Promise<ListingAttribute[]> {
   const rows = await fetchJson<ListingAttribute[]>(
-    `/listing_attributes?listing_id=eq.${encodeURIComponent(listingId)}&select=*&order=tag.asc`
+    `/listing_attributes?listing_id=eq.${encodeURIComponent(listingId)}&project_tag=eq.green&select=*&order=tag.asc`
   );
   return rows ?? [];
 }
 
 async function getProducts(listingId: string): Promise<ProductOrService[]> {
   const rows = await fetchJson<ProductOrService[]>(
-    `/products_or_services?listing_id=eq.${encodeURIComponent(listingId)}&select=*&order=category.asc,subcategory.asc`
+    `/products_or_services?listing_id=eq.${encodeURIComponent(listingId)}&project_tag=eq.green&select=*&order=category.asc,subcategory.asc`
   );
   return rows ?? [];
 }

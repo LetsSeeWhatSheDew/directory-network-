@@ -100,7 +100,7 @@ async function getListing(slug: string): Promise<Listing | null> {
 
 async function getHours(listingId: string): Promise<Hours[]> {
   const rows = await sbFetch<Hours[]>(
-    `listing_hours?listing_id=eq.${encodeURIComponent(listingId)}&select=weekday,opens_at,closes_at,is_closed&order=weekday.asc`
+    `listing_hours?listing_id=eq.${encodeURIComponent(listingId)}&project_tag=eq.green&select=weekday,opens_at,closes_at,is_closed&order=weekday.asc`
   );
   return rows || [];
 }

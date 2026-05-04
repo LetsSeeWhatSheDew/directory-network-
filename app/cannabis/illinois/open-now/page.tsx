@@ -91,7 +91,7 @@ export default async function OpenNowPage() {
       `/master_listings?state=eq.IL&project_tag=eq.green&is_active=eq.true&city=in.${encodeURIComponent(CIL_CITY_IN_LIST)}&select=id,name,slug,city,state,address1,phone,type,logo_url,delivery,online_ordering&order=city.asc,name.asc&limit=100`
     ),
     fetchJson<Hour[]>(
-      `/listing_hours?weekday=eq.${ct.weekday}&select=listing_id,weekday,opens_at,closes_at,is_closed`
+      `/listing_hours?weekday=eq.${ct.weekday}&project_tag=eq.green&select=listing_id,weekday,opens_at,closes_at,is_closed`
     ),
   ]);
 
