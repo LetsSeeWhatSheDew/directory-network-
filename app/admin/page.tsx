@@ -205,6 +205,12 @@ export default async function AdminDashboard() {
           </div>
           <div className="flex items-center gap-4 text-sm">
             <Link
+              href="/admin/deals/new"
+              className="text-[11px] uppercase tracking-widest text-[#8a9490] transition-colors hover:text-[#7DBA47]"
+            >
+              + New deal
+            </Link>
+            <Link
               href="/admin/submissions"
               className="text-[11px] uppercase tracking-widest text-[#8a9490] transition-colors hover:text-[#7DBA47]"
             >
