@@ -7,6 +7,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isInMetro } from "../../../../lib/cityNormalize";
 import { computeOpenStatus, type HoursRow } from "../../../../lib/hours";
+import { filterActiveDeals } from "../../../../lib/dealActiveFilter";
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL ||
@@ -92,7 +93,13 @@ async function fetchDeals(category: string): Promise<Deal[]> {
   );
   if (!res.ok) return [];
   const json = await res.json();
-  return Array.isArray(json) ? json : [];
+  if (!Array.isArray(json)) return [];
+  // Defensive day-of-week + active_until re-filter. The view applies the
+  // same gate at the DB layer, but `cache: "no-store"` returns whatever the
+  // view evaluated when this request hit Supabase — re-filtering in JS
+  // ensures consistent visibility across the boundary if the request
+  // straddles midnight America/Chicago.
+  return filterActiveDeals(json);
 }
 
 // Fetch lat/lng + weekly hours for a dispensary slug in a single roundtrip

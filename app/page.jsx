@@ -23,6 +23,7 @@ import {
   CENTRAL_IL_CITIES,
   CENTRAL_IL_PUBLIC_CITIES,
 } from "../lib/constants/regions";
+import { filterActiveDeals as filterActive } from "../lib/dealActiveFilter";
 
 // Metadata — Central IL framing. The full IL footprint stays discoverable
 // via the "Browse all Illinois" link below; out-of-scope city pages keep
@@ -152,7 +153,10 @@ async function getTopDeals() {
     const data = await res.json();
     if (!Array.isArray(data)) return [];
     const now = Date.now();
-    return filterExpired(data)
+    // The view applies active_days/active_until at the DB level, but Next.js
+    // ISR can hold the response for up to 60s. Re-filter in JS so a deal
+    // queried 5 minutes before midnight doesn't render at 12:01am Chicago.
+    return filterActive(filterExpired(data))
       .map((d) => ({ ...d, _heroScore: rankFreshDealFirst(d, now) }))
       .sort((a, b) => (b._heroScore || 0) - (a._heroScore || 0))
       .slice(0, 3);
@@ -227,7 +231,7 @@ async function getDealPool() {
     );
     if (!res.ok) return [];
     const data = await res.json();
-    return Array.isArray(data) ? filterExpired(data) : [];
+    return Array.isArray(data) ? filterActive(filterExpired(data)) : [];
   } catch {
     return [];
   }

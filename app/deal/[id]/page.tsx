@@ -16,6 +16,7 @@ import { displayDispensaryName } from "../../../lib/dispensaryName";
 import ShareDealButton from "../../components/ShareDealButton";
 import DealFreshnessBadge from "../../components/DealFreshnessBadge";
 import { isInCentralIL } from "../../../lib/visibility";
+import { isDealActiveNow, describeActiveDays } from "../../../lib/dealActiveFilter";
 
 export const revalidate = 60;
 
@@ -40,6 +41,8 @@ type Deal = {
   expires_at: string | null;
   is_recurring: boolean | null;
   recurring_days?: string[] | null;
+  active_days?: string[] | null;
+  active_until?: string | null;
   source_url: string | null;
   is_active: boolean | null;
 };
@@ -217,6 +220,13 @@ export default async function DealPage({
   const listing = await getListing(deal.listing_slug);
   // Central IL scope gate — deals on non-CIL listings are hidden publicly.
   if (!isInCentralIL(listing?.city)) notFound();
+  // Day-of-week + active_until visibility gate. The page renders even when
+  // not active today (so the URL stays a stable resource), but the savings
+  // block flips to a "not active today" notice that names the days the
+  // deal is valid. Mirror of the DB-level filter applied by the
+  // active_deals_with_listings view.
+  const activeNow = isDealActiveNow(deal);
+  const activeDaysLabel = describeActiveDays(deal.active_days);
   const headline = formatDealHeadline(deal);
   const dollars = estimateSavings(deal);
   const savingsFormatted = formatSavingsDollars(deal);
@@ -357,6 +367,27 @@ export default async function DealPage({
         </p>
 
         <div className="savings-block">
+          {!activeNow && (
+            <div
+              role="status"
+              style={{
+                background: "#fef3c7",
+                border: "1px solid #f5d27a",
+                borderRadius: 10,
+                padding: "10px 14px",
+                marginBottom: 14,
+                fontFamily: "system-ui,sans-serif",
+                fontSize: ".88rem",
+                color: "#92400e",
+                lineHeight: 1.5,
+              }}
+            >
+              <strong>Not active today.</strong>{" "}
+              {activeDaysLabel
+                ? `This deal runs ${activeDaysLabel} only — check back then.`
+                : "This deal isn't valid right now."}
+            </div>
+          )}
           {dollars != null ? (
             <>
               <div className="sv-label">You save</div>

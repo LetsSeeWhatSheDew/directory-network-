@@ -9,6 +9,27 @@ function checkAuth(req: NextRequest): boolean {
   return cookie?.value === adminPassword;
 }
 
+const DAY_MAP: Record<string, string> = {
+  mon: "mon", monday: "mon",
+  tue: "tue", tues: "tue", tuesday: "tue",
+  wed: "wed", wednesday: "wed",
+  thu: "thu", thur: "thu", thurs: "thu", thursday: "thu",
+  fri: "fri", friday: "fri",
+  sat: "sat", saturday: "sat",
+  sun: "sun", sunday: "sun",
+};
+
+function mapToActiveDays(input: unknown): string[] | null {
+  if (!Array.isArray(input) || input.length === 0) return null;
+  const out = new Set<string>();
+  for (const raw of input) {
+    if (typeof raw !== "string") continue;
+    const k = DAY_MAP[raw.toLowerCase()];
+    if (k) out.add(k);
+  }
+  return out.size > 0 ? Array.from(out) : null;
+}
+
 function supabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -67,6 +88,11 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
     expires_at: s.end_date,
     is_recurring: s.is_recurring ?? false,
     recurring_days: s.recurring_days,
+    // Mirror recurring_days into active_days so the new day-of-week
+    // visibility filter (sql/migrations/2026-11-05-deal-hygiene.sql)
+    // applies on approval. Map both 'monday' and 'mon' shapes to the
+    // canonical 3-letter token. Unset (NULL) = always-active default.
+    active_days: mapToActiveDays(s.recurring_days),
     source: "manual_approval",
     source_url: s.source_url,
     is_active: true,
