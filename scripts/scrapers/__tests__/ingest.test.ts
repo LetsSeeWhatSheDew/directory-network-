@@ -11,7 +11,7 @@ import { buildDealRow } from "../ingest";
 
 const NOW = new Date("2026-11-06T09:00:00.000Z");
 
-test("buildDealRow: percent discount → percent + value", () => {
+test("buildDealRow: percent discount → percent + value + discount_pct", () => {
   const row = buildDealRow({
     slug: "cookies-peoria-heights",
     platform: "dutchie",
@@ -25,6 +25,7 @@ test("buildDealRow: percent discount → percent + value", () => {
   });
   assert.equal(row.discount_value, 20);
   assert.equal(row.discount_unit, "percent");
+  assert.equal(row.discount_pct, 20);
   assert.equal(row.source, "scraper:dutchie");
   assert.equal(row.is_active, true);
   assert.equal(row.verified_at, NOW.toISOString());
@@ -42,20 +43,48 @@ test("buildDealRow: title regex backfills discount_value when scraped value is m
   });
   assert.equal(row.discount_value, 30);
   assert.equal(row.discount_unit, "percent");
+  assert.equal(row.discount_pct, 30);
 });
 
-test("buildDealRow: recurring_days inferred from title", () => {
+test("buildDealRow: '20% off Munchie Monday' → discount_pct=20, recurring_days=['monday'], no active_days", () => {
   const row = buildDealRow({
     slug: "abc",
     platform: "leafly",
-    scraped: { title: "Munchie Monday: 25% off edibles", source_url: "u" },
+    scraped: { title: "20% off Munchie Monday", source_url: "u" },
     now: NOW,
   });
+  assert.equal(row.discount_pct, 20);
   assert.deepEqual(row.recurring_days, ["monday"]);
-  assert.deepEqual(row.active_days, ["mon"]);
+  // active_days is NOT a column on `deals` — confirm we don't write it.
+  assert.equal((row as Record<string, unknown>).active_days, undefined);
 });
 
-test("buildDealRow: no day match → recurring_days null, active_days null", () => {
+test("buildDealRow: 'Wax Wednesday — buy 2 get 1' → discount_pct=null, recurring_days=['wednesday']", () => {
+  const row = buildDealRow({
+    slug: "abc",
+    platform: "leafly",
+    scraped: {
+      title: "Wax Wednesday — buy 2 get 1",
+      source_url: "u",
+    },
+    now: NOW,
+  });
+  assert.equal(row.discount_pct, null);
+  assert.deepEqual(row.recurring_days, ["wednesday"]);
+});
+
+test("buildDealRow: '30% off everything' → discount_pct=30, recurring_days=null", () => {
+  const row = buildDealRow({
+    slug: "abc",
+    platform: "leafly",
+    scraped: { title: "30% off everything", source_url: "u" },
+    now: NOW,
+  });
+  assert.equal(row.discount_pct, 30);
+  assert.equal(row.recurring_days, null);
+});
+
+test("buildDealRow: no day match → recurring_days null", () => {
   const row = buildDealRow({
     slug: "abc",
     platform: "generic",
@@ -63,10 +92,9 @@ test("buildDealRow: no day match → recurring_days null, active_days null", () 
     now: NOW,
   });
   assert.equal(row.recurring_days, null);
-  assert.equal(row.active_days, null);
 });
 
-test("buildDealRow: dollar discount mapped correctly", () => {
+test("buildDealRow: dollar discount mapped correctly, discount_pct stays null", () => {
   const row = buildDealRow({
     slug: "abc",
     platform: "dutchie",
@@ -80,6 +108,7 @@ test("buildDealRow: dollar discount mapped correctly", () => {
   });
   assert.equal(row.discount_unit, "dollars");
   assert.equal(row.discount_value, 5);
+  assert.equal(row.discount_pct, null);
 });
 
 test("buildDealRow: bogo unit collapses to discount_unit=null since DB only allows percent/dollars", () => {
@@ -106,6 +135,7 @@ test("buildDealRow: title is whitespace-collapsed and trimmed", () => {
     now: NOW,
   });
   assert.equal(row.title, "25% off pre-rolls");
+  assert.equal(row.discount_pct, 25);
 });
 
 test("buildDealRow: source string includes platform tag", () => {

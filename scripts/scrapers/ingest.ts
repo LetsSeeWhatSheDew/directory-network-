@@ -15,26 +15,6 @@ import {
 } from "./types";
 import { inferDiscountPct, inferRecurringDays } from "./regex";
 
-const FULL_TO_ABBR: Record<string, string> = {
-  monday: "mon",
-  tuesday: "tue",
-  wednesday: "wed",
-  thursday: "thu",
-  friday: "fri",
-  saturday: "sat",
-  sunday: "sun",
-};
-
-function abbreviateDays(days: string[] | null): string[] | null {
-  if (!days || days.length === 0) return null;
-  const out: string[] = [];
-  for (const d of days) {
-    const abbr = FULL_TO_ABBR[d.toLowerCase()];
-    if (abbr && !out.includes(abbr)) out.push(abbr);
-  }
-  return out.length === 0 ? null : out;
-}
-
 function normalizeTitle(t: string): string {
   return (t ?? "")
     .replace(/\s+/g, " ")
@@ -55,10 +35,10 @@ export type DealRowToWrite = {
   status_reason: string;
   discount_value: number | null;
   discount_unit: "percent" | "dollars" | null;
+  discount_pct: number | null;
   original_price: number | null;
   sale_price: number | null;
   recurring_days: string[] | null;
-  active_days: string[] | null;
   category: string | null;
 };
 
@@ -91,6 +71,17 @@ export function buildDealRow(args: {
     discountUnit = "percent";
   }
 
+  // discount_pct is its own column on `deals` (added in PR #4) — the
+  // VerifiedRow component reads it directly. Populate from whatever
+  // percent value we ended up with, falling back to the title regex
+  // when the scraper itself didn't supply a percent unit.
+  let discountPct: number | null = null;
+  if (discountUnit === "percent" && discountValue != null) {
+    discountPct = Math.round(discountValue);
+  } else if (inferredPct != null) {
+    discountPct = inferredPct;
+  }
+
   const isoNow = now.toISOString();
 
   return {
@@ -106,10 +97,10 @@ export function buildDealRow(args: {
     status_reason: "scraped_direct_source",
     discount_value: discountValue,
     discount_unit: discountUnit,
+    discount_pct: discountPct,
     original_price: scraped.original_price ?? null,
     sale_price: scraped.sale_price ?? null,
     recurring_days: recurringDays,
-    active_days: abbreviateDays(recurringDays),
     category: scraped.category ?? null,
   };
 }
@@ -180,10 +171,10 @@ export async function ingestDeals(
           description: row.description,
           discount_value: row.discount_value,
           discount_unit: row.discount_unit,
+          discount_pct: row.discount_pct,
           original_price: row.original_price,
           sale_price: row.sale_price,
           recurring_days: row.recurring_days,
-          active_days: row.active_days,
           category: row.category,
           source: row.source,
           status_reason: row.status_reason,
