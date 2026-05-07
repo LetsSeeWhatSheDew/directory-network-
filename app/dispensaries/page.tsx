@@ -87,7 +87,12 @@ async function getListings(): Promise<Listing[]> {
 }
 
 async function getActiveDealSlugs(): Promise<Map<string, number>> {
-  const url = `${SUPABASE_URL}/rest/v1/deals?select=listing_slug&is_active=eq.true&project_tag=eq.green&limit=1000`;
+  // Query the active_deals_with_listings view so the count here matches
+  // exactly what the homepage feed and listing detail pages render.
+  // The view filters on is_active=true, project_tag=green, expiration,
+  // and day-of-week recurrence — raw `deals` was missing the last two
+  // and overcounting stale rows.
+  const url = `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=listing_slug&limit=1000`;
   const res = await fetch(url, {
     headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
     cache: "no-store",
