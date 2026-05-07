@@ -50,7 +50,7 @@ export default function RecentlyViewedRow() {
         {items.map((it) => (
           <Link
             key={it.slug}
-            href={`/l/${it.slug}`}
+            href={`/dispensary/${it.slug}`}
             style={{
               flexShrink: 0,
               background: "#fff",

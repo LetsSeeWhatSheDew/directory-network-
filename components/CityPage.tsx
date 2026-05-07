@@ -131,7 +131,7 @@ function buildJsonLd(
   const localBusinesses = listings.map((l) => ({
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "@id": `${BASE_URL}/l/${l.slug || l.id}`,
+    "@id": `${BASE_URL}/dispensary/${l.slug || l.id}`,
     name: l.listing_title ?? l.listing_name,
     description: l.short_description ?? undefined,
     address: {
@@ -140,7 +140,7 @@ function buildJsonLd(
       addressRegion: l.state ?? "IL",
       addressCountry: "US",
     },
-    url: `${BASE_URL}/l/${l.slug || l.id}`,
+    url: `${BASE_URL}/dispensary/${l.slug || l.id}`,
     isAccessibleForFree: true,
     currenciesAccepted: "USD",
     paymentAccepted: "Cash, Debit Card",
@@ -332,7 +332,7 @@ export default function CityPage({ config, listings = [] }: Props) {
                   return (
                     <Link
                       key={listing.id}
-                      href={`/l/${listing.slug || listing.id}`}
+                      href={`/dispensary/${listing.slug || listing.id}`}
                       className="group flex flex-col rounded-3xl border border-slate-800 bg-slate-900/60 p-4 text-xs text-slate-100 shadow-sm transition hover:border-[#7DBA47]/60 hover:bg-slate-900"
                     >
                       <div className="mb-2 flex items-start justify-between gap-2">

@@ -176,7 +176,7 @@ export default async function DispensariesIndexPage() {
                       return (
                         <Link
                           key={l.slug}
-                          href={`/l/${l.slug}`}
+                          href={`/dispensary/${l.slug}`}
                           style={{
                             background: "#fff",
                             border: l.plan === "featured" ? "2px solid #7DBA47" : "1px solid #e8e4da",

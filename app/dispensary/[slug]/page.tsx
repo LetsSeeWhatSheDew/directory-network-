@@ -262,7 +262,6 @@ export default async function DispensaryProfilePage({
     ...(listing.short_description ? { description: listing.short_description } : {}),
     sameAs: [
       `${brand.url}/dispensary/${slug}`,
-      `${brand.url}/l/${slug}`,
     ],
   };
 

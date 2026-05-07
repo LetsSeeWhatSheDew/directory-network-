@@ -228,7 +228,7 @@ export default async function OpenNowPage() {
                   {dispensaries.map(l => {
                     const initial = (l.name ?? "?").charAt(0).toUpperCase();
                     return (
-                      <Link key={l.id} href={`/l/${l.slug}`} className="on-card">
+                      <Link key={l.id} href={`/dispensary/${l.slug}`} className="on-card">
                         <div className="on-logo">
                           {l.logo_url ? (
                             /* eslint-disable-next-line @next/next/no-img-element */

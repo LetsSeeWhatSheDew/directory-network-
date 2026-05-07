@@ -297,13 +297,13 @@ export async function generateMetadata({
   const description = listing.meta_description ||
     listing.short_description ||
     `Current deals and directions for ${listing.name}. Save on cannabis in ${listing.city}, IL.`;
-  // SEO consolidation: /l/[slug] is the click-tracking "GO HERE"
-  // confirmation surface; /dispensary/[slug] is the SEO-forward profile
-  // (longer, richer template). Both render listing detail content, so we
-  // canonicalise to the dispensary profile to keep ranking signal in
-  // one place. The route stays at /l/[slug] for inbound deal clicks.
+  // /dispensary/[slug] is the canonical listing URL. /l/[slug] 308-redirects
+  // to it (next.config.ts), so this metadata only renders if the redirect
+  // is bypassed (e.g., direct internal call). Canonical + OG both point at
+  // the canonical /dispensary/ URL so any cached /l/ render still attributes
+  // SEO weight to the right place.
   const profileUrl = `https://www.puffprice.com/dispensary/${listing.slug}`;
-  const ogUrl = `https://www.puffprice.com/l/${listing.slug}`;
+  const ogUrl = profileUrl;
   const image = listing.logo_url || listing.hero_image_url;
 
   return {
@@ -371,11 +371,11 @@ function buildSchemaOrg(listing: Listing, hours: ListingHour[]) {
       }
     } : {}),
     ...(listing.phone ? { telephone: listing.phone } : {}),
-    url: listing.website ?? `https://www.puffprice.com/l/${listing.slug}`,
+    url: listing.website ?? `https://www.puffprice.com/dispensary/${listing.slug}`,
     ...(listing.logo_url ? { image: listing.logo_url } : {}),
     ...(openingHours.length > 0 ? { openingHoursSpecification: openingHours } : {}),
     ...(listing.short_description ? { description: listing.short_description } : {}),
-    sameAs: [`https://www.puffprice.com/l/${listing.slug}`],
+    sameAs: [`https://www.puffprice.com/dispensary/${listing.slug}`],
   });
 }
 
@@ -971,7 +971,7 @@ export default async function ListingPage({
                   <p className="dn-card-title">Other dispensaries in {listing.city}</p>
                   <div className="dn-related-grid">
                     {related.map((r) => (
-                      <Link key={r.id} href={`/l/${r.slug}`} className="dn-related-card">
+                      <Link key={r.id} href={`/dispensary/${r.slug}`} className="dn-related-card">
                         <div className="dn-related-logo" aria-hidden={r.logo_url ? undefined : "true"}>
                           {r.logo_url ? (
                             /* eslint-disable-next-line @next/next/no-img-element */
@@ -1045,7 +1045,7 @@ export default async function ListingPage({
             <p className="dn-report-text">
               Something off?{" "}
               <a
-                href={`mailto:hello@puffprice.com?subject=Outdated%20info%20for%20${encodeURIComponent(listing.name ?? listing.slug ?? "listing")}&body=Tell%20us%20what%20looks%20wrong%20on%20this%20page%3A%20${encodeURIComponent(`https://www.puffprice.com/l/${listing.slug}`)}%0A%0A`}
+                href={`mailto:hello@puffprice.com?subject=Outdated%20info%20for%20${encodeURIComponent(listing.name ?? listing.slug ?? "listing")}&body=Tell%20us%20what%20looks%20wrong%20on%20this%20page%3A%20${encodeURIComponent(`https://www.puffprice.com/dispensary/${listing.slug}`)}%0A%0A`}
                 className="dn-report-link"
                 aria-label={`Email PuffPrice to report outdated info for ${listing.name ?? "this listing"}`}
               >

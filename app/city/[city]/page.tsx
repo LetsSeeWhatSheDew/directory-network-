@@ -334,7 +334,7 @@ export default async function CityPage({
               const name = d.name || slug;
               const title = d.deal_title || d.title || "Active deal";
               return (
-                <Link key={d.id} href={`/l/${slug}?city=${encodeURIComponent(city)}`} className="deal-row">
+                <Link key={d.id} href={`/dispensary/${slug}?city=${encodeURIComponent(city)}`} className="deal-row">
                   <div className="deal-body">
                     <div className="deal-name">{name}</div>
                     <div className="deal-title">{title}</div>
