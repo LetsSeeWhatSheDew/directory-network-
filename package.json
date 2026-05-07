@@ -7,12 +7,16 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "smoke": "node tests/smoke.mjs"
+    "smoke": "node tests/smoke.mjs",
+    "scrape": "tsx scripts/scrapers/index.ts",
+    "scrape:detect": "tsx scripts/scrapers/detect-platforms.ts",
+    "test:scrapers": "node --import tsx --test scripts/scrapers/__tests__/*.test.ts"
   },
   "dependencies": {
     "@sentry/nextjs": "^10.49.0",
     "@supabase/supabase-js": "^2.102.1",
     "@types/leaflet": "^1.9.21",
+    "cheerio": "^1.0.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.471.2",
     "next": "16.0.7",
@@ -29,6 +33,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.7",
     "tailwindcss": "^4",
+    "tsx": "^4.19.2",
     "typescript": "^5"
   }
 }
