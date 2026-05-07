@@ -71,11 +71,19 @@ const CATEGORIES = HOME_HERO_CATEGORIES;
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300";
 
-// PostgREST `in.()` value list of Central IL city names. Keeps the
-// homepage deal feed + stats scoped to the 12 publicly-visible cities;
-// any deal attached to a non-CIL dispensary stays in the DB but never
-// appears here. Matches CENTRAL_IL_CITIES in lib/constants/regions.ts.
-const CIL_CITY_IN_LIST = `("Peoria","East Peoria","Peoria Heights","Pekin","Bartonville","Morton","Washington","Bloomington","Normal","Champaign","Urbana","Springfield")`;
+// Canonical 12-city Central Illinois scope for the homepage.
+// One source of truth — all three homepage queries (active deal count,
+// CIL dispensary count, per-city listing+deal counts) derive their
+// PostgREST `in.()` filter from this array so the stats line, the
+// "Browse by city" grid, and the deal feed agree on what's in scope.
+const CIL_CITIES = [
+  'Peoria', 'East Peoria', 'Peoria Heights', 'Pekin',
+  'Normal', 'Bloomington',
+  'Champaign', 'Urbana',
+  'Springfield', 'Decatur', 'Lincoln', 'Galesburg',
+];
+
+const CIL_CITY_IN_LIST = `(${CIL_CITIES.map((c) => `"${c}"`).join(',')})`;
 
 export const revalidate = 300;
 
@@ -322,7 +330,7 @@ async function getActiveDealCount() {
 // times in a row. Cached 5 minutes — counts move with each cron, not by
 // the second.
 async function getCityCounts() {
-  const cityList = `("Peoria","East Peoria","Peoria Heights","Pekin","Normal","Bloomington","Champaign","Urbana","Springfield")`;
+  const cityList = CIL_CITY_IN_LIST;
   const result = new Map();
   try {
     const [dealRes, listingRes] = await Promise.all([
@@ -368,8 +376,7 @@ async function getCityCounts() {
 // stats line — never hard-code "N dispensaries" when the DB can answer.
 async function getCentralILListingCount() {
   try {
-    // PostgREST `in.()` with spaces needs double-quoted values.
-    const cityList = `("Peoria","East Peoria","Peoria Heights","Pekin","Bartonville","Morton","Washington","Bloomington","Normal","Champaign","Urbana","Springfield")`;
+    const cityList = CIL_CITY_IN_LIST;
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/master_listings?select=id&state=eq.IL&project_tag=eq.green&is_active=eq.true&city=in.${encodeURIComponent(cityList)}`,
       {

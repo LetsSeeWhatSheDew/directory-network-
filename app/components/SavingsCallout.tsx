@@ -17,12 +17,14 @@ export default function SavingsCallout({ initialSavings }: { initialSavings: num
   useEffect(() => {
     try {
       const c = sessionStorage.getItem("cl_city");
-      if (c) setCity(c);
+      const trimmed = typeof c === "string" ? c.trim() : "";
+      if (trimmed) setCity(trimmed);
     } catch {}
 
     const onLoc = (e: Event) => {
       const detail = (e as CustomEvent).detail as { city?: string } | null;
-      if (detail?.city) setCity(detail.city);
+      const next = typeof detail?.city === "string" ? detail.city.trim() : "";
+      if (next) setCity(next);
     };
     const onDeal = (e: Event) => {
       const detail = (e as CustomEvent).detail as { savings?: number | null } | null;
@@ -37,15 +39,16 @@ export default function SavingsCallout({ initialSavings }: { initialSavings: num
     };
   }, []);
 
+  // Always render a non-empty city label so we never flash
+  // "Showing the best deal in <empty> right now." while geolocation
+  // is still resolving (or never resolves).
+  const cityLabel = city && city.trim() ? city.trim() : "Central Illinois";
+
   // If we have no confident dollar number, don't make one up.
   if (savings == null) {
     return (
       <p className="savings-callout">
-        {city ? (
-          <>Showing the best deal in <strong>{city}</strong> right now.</>
-        ) : (
-          <>Showing the best active deal in Central Illinois right now.</>
-        )}
+        Showing the best deal in <strong>{cityLabel}</strong> right now.
         {calloutStyles}
       </p>
     );
@@ -53,17 +56,8 @@ export default function SavingsCallout({ initialSavings }: { initialSavings: num
 
   return (
     <p className="savings-callout">
-      {city ? (
-        <>
-          Best deal in <strong>{city}</strong> right now saves{" "}
-          <strong className="savings-amt">${savings}</strong>.
-        </>
-      ) : (
-        <>
-          Best deal in Central Illinois right now saves{" "}
-          <strong className="savings-amt">${savings}</strong>.
-        </>
-      )}
+      Best deal in <strong>{cityLabel}</strong> right now saves{" "}
+      <strong className="savings-amt">${savings}</strong>.
       {calloutStyles}
     </p>
   );
