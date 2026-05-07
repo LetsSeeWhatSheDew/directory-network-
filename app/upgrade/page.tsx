@@ -8,7 +8,7 @@ import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 
 export const metadata: Metadata = {
-  title: "Go Pro — $0.99/mo | PuffPrice",
+  title: "Go Pro — $0.99/mo",
   description:
     "Instant SMS when cannabis deals drop near you in Illinois. $0.99 a month. Cancel anytime.",
   alternates: { canonical: "https://www.puffprice.com/upgrade" },

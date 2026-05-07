@@ -9,7 +9,7 @@ import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | PuffPrice",
+  title: "Terms of Service",
   description:
     "PuffPrice Terms of Service — plain-language terms covering the free tier, the $0.99/mo Pro tier, cancellation, data use, DMCA, and governing law (Illinois).",
   alternates: { canonical: "https://www.puffprice.com/terms" },

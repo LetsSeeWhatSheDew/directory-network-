@@ -3,7 +3,7 @@ import Link from "next/link";
 import { SubmissionsTable, type Submission } from "./SubmissionsTable";
 
 export const metadata: Metadata = {
-  title: "Submissions | PuffPrice Admin",
+  title: "Admin · Submissions",
   robots: "noindex, nofollow",
 };
 

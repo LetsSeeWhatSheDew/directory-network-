@@ -9,7 +9,7 @@ import { getServerLocation } from "../../../../lib/location";
 import { isInMetro } from "../../../../lib/cityNormalize";
 
 export const metadata: Metadata = {
-  title: "Central Illinois Dispensaries Open Right Now | PuffPrice",
+  title: "Central Illinois Dispensaries Open Right Now",
   description: "Find cannabis dispensaries open right now in Central Illinois. Real-time hours for every licensed dispensary. Updated continuously.",
   alternates: { canonical: "https://www.puffprice.com/cannabis/illinois/open-now" },
   openGraph: {

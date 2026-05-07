@@ -9,7 +9,7 @@ import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | PuffPrice",
+  title: "Privacy Policy",
   description:
     "PuffPrice Privacy Policy — what we collect (email, phone, ZIP, anonymous location), who we share it with (Stripe, Twilio, Resend, Google Analytics), and how to request deletion.",
   alternates: { canonical: "https://www.puffprice.com/privacy" },

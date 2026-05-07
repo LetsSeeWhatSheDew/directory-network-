@@ -3,7 +3,7 @@ import Nav from "../../../components/Nav";
 import Footer from "../../../components/Footer";
 
 export const metadata = {
-  title: "Deal submitted — thanks! | PuffPrice",
+  title: "Deal submitted — thanks!",
   description: "Your deal has been submitted to PuffPrice and will be reviewed within 24 hours.",
   robots: { index: false, follow: true },
 };

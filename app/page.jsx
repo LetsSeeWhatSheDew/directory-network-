@@ -29,7 +29,7 @@ import { filterActiveDeals as filterActive } from "../lib/dealActiveFilter";
 // via the "Browse all Illinois" link below; out-of-scope city pages keep
 // their own city-specific metadata for SEO retention.
 export const metadata = {
-  title: `Cannabis Deals in Central Illinois | ${brand.name}`,
+  title: `Cannabis Deals in Central Illinois`,
   description:
     "Live dispensary deals across Peoria, Bloomington-Normal, Champaign-Urbana, Springfield, and the rest of Central Illinois — updated continuously and always free to browse.",
   alternates: { canonical: brand.url },

@@ -7,7 +7,7 @@ import Nav from "./components/Nav";
 import Footer from "./components/Footer";
 
 export const metadata = {
-  title: "Page not found | PuffPrice",
+  title: "Page not found",
   description: "This page doesn't exist — but good cannabis deals do.",
   robots: { index: false, follow: true },
 };

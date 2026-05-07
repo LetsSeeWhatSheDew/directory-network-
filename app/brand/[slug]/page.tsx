@@ -37,9 +37,9 @@ export async function generateMetadata({
   const { slug } = await params;
   const data = await getBrand(slug);
   if (!data) {
-    return { title: "Brand not found | PuffPrice", robots: { index: false } };
+    return { title: "Brand not found", robots: { index: false } };
   }
-  const title = `${data.name} — Central IL dispensary deals | PuffPrice`;
+  const title = `${data.name} — Central IL dispensary deals`;
   const description =
     data.description?.slice(0, 180) ||
     `${data.name} deals at Central Illinois dispensaries, all in one place on PuffPrice.`;

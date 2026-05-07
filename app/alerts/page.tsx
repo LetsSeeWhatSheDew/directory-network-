@@ -51,7 +51,7 @@ const OG_DESC =
   "Central Illinois cannabis deal alerts. Free forever, no account needed. Pro is $0.99/month. Deal alerts within minutes.";
 
 export const metadata = {
-  title: "Get Deal Alerts | PuffPrice",
+  title: "Get Deal Alerts",
   description: OG_DESC,
   openGraph: {
     title: "Get Deal Alerts | PuffPrice",

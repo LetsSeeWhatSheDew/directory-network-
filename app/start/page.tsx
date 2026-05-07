@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import { brand } from "../../lib/brand";
 
 export const metadata: Metadata = {
-  title: `New to dispensaries? Start here | ${brand.name}`,
+  title: `New to dispensaries? Start here`,
   description:
     "First-time guide to Central Illinois dispensaries — what to expect, how to compare deals, and how to buy with confidence.",
   alternates: { canonical: `${brand.url}/start` },

@@ -14,7 +14,7 @@ const SUPABASE_ANON_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300";
 
 export const metadata = {
-  title: "All Central Illinois Dispensaries | PuffPrice",
+  title: "All Central Illinois Dispensaries",
   description: "Browse every licensed Central Illinois cannabis dispensary by city. Hours, ratings, and active deals from Peoria, Bloomington-Normal, Champaign-Urbana, and Springfield.",
   alternates: { canonical: "https://www.puffprice.com/dispensaries" },
   openGraph: {

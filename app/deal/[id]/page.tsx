@@ -157,7 +157,7 @@ export async function generateMetadata({
   const { id } = await params;
   const deal = await getDeal(id);
   if (!deal) {
-    return { title: "Deal not found | PuffPrice", robots: { index: false } };
+    return { title: "Deal not found", robots: { index: false } };
   }
   const listing = await getListing(deal.listing_slug);
   // Central IL scope gate — mirror the page component below.

@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const listing = await getListing(slug);
   const name = listing?.name || slug;
   return {
-    title: `Claim ${name} | PuffPrice`,
+    title: `Claim ${name}`,
     description: `Dispensary owner? Claim your PuffPrice listing for ${name} and take control of your deals.`,
     robots: { index: false, follow: true },
   };

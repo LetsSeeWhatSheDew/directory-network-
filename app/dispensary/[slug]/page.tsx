@@ -172,7 +172,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const listing = await getListing(slug);
   if (!listing) {
-    return { title: "Dispensary not found | PuffPrice", robots: { index: false } };
+    return { title: "Dispensary not found", robots: { index: false } };
   }
   // Central IL scope gate — non-CIL profile pages are hidden publicly.
   if (!isInCentralIL(listing.city)) {
@@ -180,7 +180,7 @@ export async function generateMetadata({
   }
   const name = listing.name || slug;
   const city = listing.city || cityFromSlug(slug) || null;
-  const title = `${name} — Deals, Hours & Directions | PuffPrice`;
+  const title = `${name} — Deals, Hours & Directions`;
   const description = city
     ? `${name} in ${city}, IL. See current cannabis deals, full week hours, phone, and directions.`
     : `${name} — Illinois cannabis dispensary. See current deals, full week hours, phone, and directions.`;
