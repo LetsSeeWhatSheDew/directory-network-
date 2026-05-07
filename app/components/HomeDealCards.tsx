@@ -281,21 +281,14 @@ export default function HomeDealCards({
     );
   }
 
-  // Honest headline rule (cleanup PR, 2026-05-04): if every visible deal
-  // belongs to one dispensary, name it explicitly rather than implying a
-  // selection across the metro that doesn't exist.
-  const visibleSlugs = new Set(
-    deals.map((d) => (d.listing_slug || d.slug || "").toLowerCase()).filter(Boolean)
-  );
-  const onlyOneDispensary = visibleSlugs.size === 1 && deals.length > 0;
-  const onlyDispensaryName = onlyOneDispensary ? displayName(deals[0]) : null;
-  const headline = onlyDispensaryName
-    ? `Top deals at ${onlyDispensaryName} today`
-    : mode === "all"
-    ? "Top deals in Central Illinois today"
+  // The homepage feed is diversified to one deal per dispensary
+  // (app/page.jsx getTopDeals), so the headline can lean on the
+  // 'across Central IL' framing without misrepresenting the data.
+  const headline = mode === "all"
+    ? "Today's top deals across Central Illinois"
     : city
     ? `Best deals near ${city} today`
-    : "Top deals in Central Illinois today";
+    : "Today's top deals across Central Illinois";
 
   return (
     <>

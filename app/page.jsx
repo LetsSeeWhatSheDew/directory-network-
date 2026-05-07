@@ -156,10 +156,22 @@ async function getTopDeals() {
     // The view applies active_days/active_until at the DB level, but Next.js
     // ISR can hold the response for up to 60s. Re-filter in JS so a deal
     // queried 5 minutes before midnight doesn't render at 12:01am Chicago.
-    return filterActive(filterExpired(data))
+    const ranked = filterActive(filterExpired(data))
       .map((d) => ({ ...d, _heroScore: rankFreshDealFirst(d, now) }))
-      .sort((a, b) => (b._heroScore || 0) - (a._heroScore || 0))
-      .slice(0, 3);
+      .sort((a, b) => (b._heroScore || 0) - (a._heroScore || 0));
+    // One deal per dispensary in the visible feed. Without this, a
+    // dispensary running three banger deals dominates the homepage and
+    // the "spread of options across Central IL" pitch breaks down.
+    const seen = new Set();
+    const diversified = [];
+    for (const d of ranked) {
+      const key = d.listing_slug || d.slug;
+      if (!key || seen.has(key)) continue;
+      seen.add(key);
+      diversified.push(d);
+      if (diversified.length >= 3) break;
+    }
+    return diversified;
   } catch {
     return [];
   }
