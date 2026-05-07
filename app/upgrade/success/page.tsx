@@ -4,7 +4,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "You're Pro — welcome | PuffPrice",
+  title: "You're Pro — welcome",
   description: "Your PuffPrice Pro subscription is active.",
 };
 

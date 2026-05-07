@@ -114,20 +114,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: p.pri,
   }));
 
-  // Individual listing pages — Central IL only. Non-CIL listings are
-  // hidden from the public app (middleware + notFound() gates), so they
-  // must not appear in the sitemap either.
-  const listingUrls: MetadataRoute.Sitemap = listings
-      .filter((l: { slug: string; city?: string | null }) =>
-        l.slug && !NOINDEX_SLUGS.includes(l.slug) && isInCentralIL(l.city))
-      .map((l: { slug: string; updated_at: string }) => ({
-              url: `${brand.url}/l/${l.slug}`,
-              lastModified: l.updated_at ? new Date(l.updated_at) : new Date(),
-              changeFrequency: "weekly" as const,
-              priority: 0.8,
-      }));
-
-  // /dispensary/[slug] full profile pages — Central IL only.
+  // /dispensary/[slug] is the canonical listing URL. /l/[slug] 308-redirects
+  // to it (next.config.ts), so we no longer emit /l/ URLs in the sitemap.
   const dispensaryProfileUrls: MetadataRoute.Sitemap = listings
     .filter((l: { slug: string; city?: string | null }) =>
       l.slug && !NOINDEX_SLUGS.includes(l.slug) && isInCentralIL(l.city))
@@ -184,7 +172,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...base,
     ...dealUrls,
     ...staticPages,
-    ...listingUrls,
     ...dispensaryProfileUrls,
     ...cityLandingUrls,
     ...brandDetailUrls,

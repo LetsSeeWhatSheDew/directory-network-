@@ -4,7 +4,7 @@ import Nav from "../../../components/Nav";
 import Footer from "../../../components/Footer";
 
 export const metadata: Metadata = {
-  title: "First Time Buying Cannabis in Illinois — Complete Beginner's Guide | PuffPrice",
+  title: "First Time Buying Cannabis in Illinois — Complete Beginner's Guide",
   description: "Everything first-time cannabis buyers need to know in Illinois. Laws, what to bring, how much you can buy, what to expect, and where to find dispensaries near you.",
   alternates: { canonical: "https://www.puffprice.com/cannabis/illinois/first-time-guide" },
   openGraph: {

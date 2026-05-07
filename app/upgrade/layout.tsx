@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Go Pro — $0.99/mo | PuffPrice",
+  title: "Go Pro — $0.99/mo",
   description:
     "Instant SMS when cannabis deals drop near you in Illinois. $0.99 a month. Cancel anytime.",
 };

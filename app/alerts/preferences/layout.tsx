@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Deal alert preferences | PuffPrice",
+  title: "Deal alert preferences",
   description: "Customize your PuffPrice deal alerts — city, radius, categories, and frequency.",
   robots: { index: false, follow: true },
 };

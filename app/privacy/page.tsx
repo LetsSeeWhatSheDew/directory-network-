@@ -9,7 +9,7 @@ import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | PuffPrice",
+  title: "Privacy Policy",
   description:
     "PuffPrice Privacy Policy — what we collect (email, phone, ZIP, anonymous location), who we share it with (Stripe, Twilio, Resend, Google Analytics), and how to request deletion.",
   alternates: { canonical: "https://www.puffprice.com/privacy" },
@@ -53,7 +53,7 @@ export default function PrivacyPage() {
             <strong>ZIP code</strong> — if you set a preferred ZIP to filter deals, we store the 5-digit ZIP. No street address.
           </p>
           <p>
-            <strong>Approximate location</strong> — if you allow browser geolocation, we read it in the browser to rank deals by proximity. We don&apos;t send your precise GPS coordinates to our server unless you click GO HERE on a specific listing.
+            <strong>Approximate location</strong> — if you allow browser geolocation, we read it in the browser to rank deals by proximity. Your precise GPS coordinates are not sent to our server.
           </p>
           <p>
             <strong>Payment information</strong> — Pro payments go through Stripe. Stripe receives your card details; <em>we never see your card number or expiry.</em> We only receive a Stripe customer ID and subscription status.

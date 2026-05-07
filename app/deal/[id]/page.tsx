@@ -1,8 +1,9 @@
 // app/deal/[id]/page.tsx
 // Individual deal page. Target queries: "[deal title] at [dispensary]",
-// "[dispensary] 20% off", etc. Each card in the product now has a
-// "Details →" link pointing here. The primary CTA is still GO HERE →
-// /l/[slug], which carries the full destination-screen UX.
+// "[dispensary] 20% off", etc. Each card in the product has a
+// "Details →" link pointing here. The primary CTA goes external —
+// to the dispensary's website (with utm_source=puffprice) when one
+// is on file, or to Google Maps directions otherwise.
 
 import Link from "next/link";
 import Nav from "../../components/Nav";
@@ -11,7 +12,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
-import { listingHref } from "../../../lib/links";
+import { visitDispensaryHref } from "../../../lib/links";
 import { displayDispensaryName } from "../../../lib/dispensaryName";
 import ShareDealButton from "../../components/ShareDealButton";
 import DealFreshnessBadge from "../../components/DealFreshnessBadge";
@@ -53,6 +54,7 @@ type ListingMini = {
   city: string | null;
   address1: string | null;
   phone: string | null;
+  website: string | null;
 };
 
 async function getDeal(id: string): Promise<Deal | null> {
@@ -81,7 +83,7 @@ async function getDeal(id: string): Promise<Deal | null> {
 async function getListing(slug: string): Promise<ListingMini | null> {
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/master_listings?slug=eq.${encodeURIComponent(slug)}&project_tag=eq.green&is_active=eq.true&select=slug,name,city,address1,phone&limit=1`,
+      `${SUPABASE_URL}/rest/v1/master_listings?slug=eq.${encodeURIComponent(slug)}&project_tag=eq.green&is_active=eq.true&select=slug,name,city,address1,phone,website&limit=1`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,
@@ -157,7 +159,7 @@ export async function generateMetadata({
   const { id } = await params;
   const deal = await getDeal(id);
   if (!deal) {
-    return { title: "Deal not found | PuffPrice", robots: { index: false } };
+    return { title: "Deal not found", robots: { index: false } };
   }
   const listing = await getListing(deal.listing_slug);
   // Central IL scope gate — mirror the page component below.
@@ -431,12 +433,20 @@ export default async function DealPage({
             → {code ? `Show this code at checkout: ${code}` : "No code needed — deal applies at checkout"}
           </div>
           {(() => {
-            const goHref = listingHref(deal.listing_slug, city);
-            if (!goHref) return null;
+            const visit = visitDispensaryHref({
+              website: listing?.website,
+              address1: listing?.address1,
+              city: listing?.city,
+            });
             return (
-              <Link href={goHref} className="cta">
-                GO HERE →
-              </Link>
+              <a
+                href={visit.href}
+                className="cta"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {visit.label}
+              </a>
             );
           })()}
           <div style={{ marginTop: 10 }}>

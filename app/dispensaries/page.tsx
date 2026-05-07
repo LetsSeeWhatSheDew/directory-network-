@@ -14,7 +14,7 @@ const SUPABASE_ANON_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300";
 
 export const metadata = {
-  title: "All Central Illinois Dispensaries | PuffPrice",
+  title: "All Central Illinois Dispensaries",
   description: "Browse every licensed Central Illinois cannabis dispensary by city. Hours, ratings, and active deals from Peoria, Bloomington-Normal, Champaign-Urbana, and Springfield.",
   alternates: { canonical: "https://www.puffprice.com/dispensaries" },
   openGraph: {
@@ -38,6 +38,15 @@ export const metadata = {
 // (Bartonville, Morton, Washington) from the publicly-indexed directory
 // since they have no listings to render and 404 publicly anyway.
 const CIL_CITY_IN_LIST = `("Peoria","East Peoria","Peoria Heights","Pekin","Bloomington","Normal","Champaign","Urbana","Springfield")`;
+
+// Defense-in-depth: never render these slugs on the public directory,
+// even if they get reactivated or accidentally tagged with a CIL city.
+// These are NOINDEX'd Chicago test/seed rows that should never surface.
+const NOINDEX_SLUGS = [
+  "emerald-city-dispensary-chicago-il",
+  "emerald-leaf-collective-chicago-il",
+  "lakefront-cannabis-co-chicago-il",
+] as const;
 
 export const dynamic = "force-dynamic";
 
@@ -72,11 +81,18 @@ async function getListings(): Promise<Listing[]> {
     return [];
   }
   const data = await res.json();
-  return Array.isArray(data) ? data : [];
+  if (!Array.isArray(data)) return [];
+  const noindex = new Set<string>(NOINDEX_SLUGS);
+  return data.filter((l: Listing) => l.slug && !noindex.has(l.slug));
 }
 
 async function getActiveDealSlugs(): Promise<Map<string, number>> {
-  const url = `${SUPABASE_URL}/rest/v1/deals?select=listing_slug&is_active=eq.true&project_tag=eq.green&limit=1000`;
+  // Query the active_deals_with_listings view so the count here matches
+  // exactly what the homepage feed and listing detail pages render.
+  // The view filters on is_active=true, project_tag=green, expiration,
+  // and day-of-week recurrence — raw `deals` was missing the last two
+  // and overcounting stale rows.
+  const url = `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=listing_slug&limit=1000`;
   const res = await fetch(url, {
     headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
     cache: "no-store",
@@ -160,7 +176,7 @@ export default async function DispensariesIndexPage() {
                       return (
                         <Link
                           key={l.slug}
-                          href={`/l/${l.slug}`}
+                          href={`/dispensary/${l.slug}`}
                           style={{
                             background: "#fff",
                             border: l.plan === "featured" ? "2px solid #7DBA47" : "1px solid #e8e4da",

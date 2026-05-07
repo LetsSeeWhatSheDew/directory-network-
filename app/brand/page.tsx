@@ -6,7 +6,7 @@ import { getAllBrands } from "../../lib/brands";
 import { brand as site } from "../../lib/brand";
 
 export const metadata: Metadata = {
-  title: "Central Illinois cannabis brands | PuffPrice",
+  title: "Central Illinois cannabis brands",
   description:
     "Cannabis brands carried at Central Illinois dispensaries, with live deals pulled from every shop PuffPrice tracks.",
   alternates: { canonical: `${site.url}/brand` },

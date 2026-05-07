@@ -3,7 +3,7 @@ import Link from "next/link";
 import NewDealForm from "./NewDealForm";
 
 export const metadata: Metadata = {
-  title: "New deal · Admin | PuffPrice",
+  title: "New deal · Admin",
   robots: "noindex, nofollow",
 };
 

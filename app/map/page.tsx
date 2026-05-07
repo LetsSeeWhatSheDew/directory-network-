@@ -14,7 +14,7 @@ const SUPABASE_ANON_KEY =
 export const revalidate = 600;
 
 export const metadata = {
-  title: "Central Illinois cannabis map — every dispensary + live deals | PuffPrice",
+  title: "Central Illinois cannabis map — every dispensary + live deals",
   description:
     "Every Central Illinois cannabis dispensary on one map. Green pins mark live deals. Click any pin to see the best deal today.",
 };

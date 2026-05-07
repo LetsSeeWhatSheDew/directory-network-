@@ -9,7 +9,7 @@ import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | PuffPrice",
+  title: "Terms of Service",
   description:
     "PuffPrice Terms of Service — plain-language terms covering the free tier, the $0.99/mo Pro tier, cancellation, data use, DMCA, and governing law (Illinois).",
   alternates: { canonical: "https://www.puffprice.com/terms" },
@@ -47,7 +47,7 @@ export default function TermsPage() {
 
           <h2 style={h2}>Free tier</h2>
           <p>
-            Browsing deals, filtering by city or category, and using the GO HERE / directions flow is free and requires no account. You can use PuffPrice forever without paying us anything.
+            Browsing deals, filtering by city or category, and using the directions flow is free and requires no account. You can use PuffPrice forever without paying us anything.
           </p>
 
           <h2 style={h2}>PuffPrice Pro — $0.99/month</h2>

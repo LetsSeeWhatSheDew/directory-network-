@@ -103,8 +103,8 @@ export default function TopDealsRow({
         {ranked.map(({ d, savings }) => {
           const slug = d.slug || d.listing_slug || "";
           const id = d.id || d.deal_id;
-          // Guard against null/undefined slug producing /l/undefined 404s.
-          const href = id ? `/deal/${id}` : slug ? `/l/${slug}` : null;
+          // Guard against null/undefined slug producing /dispensary/undefined 404s.
+          const href = id ? `/deal/${id}` : slug ? `/dispensary/${slug}` : null;
           if (!href) return null;
           return (
             <Link

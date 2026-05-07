@@ -34,7 +34,7 @@ export async function sendSMSAlert(
   const message =
     `${brand.name}: ${savingsPrefix}${dispensaryName}` +
     (city ? ` in ${city}` : "") +
-    `. ${dealTitle}. GO HERE: ${dealUrl}`;
+    `. ${dealTitle}. ${dealUrl}`;
 
   try {
     const authBasic = Buffer.from(

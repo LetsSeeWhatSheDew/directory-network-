@@ -12,7 +12,7 @@ import { brand } from "../../lib/brand";
 import GenericClaimForm from "./GenericClaimForm";
 
 export const metadata: Metadata = {
-  title: "Claim your dispensary listing | PuffPrice",
+  title: "Claim your dispensary listing",
   description:
     "Dispensary owner? Claim your PuffPrice listing to update your hours, add deals, and reach Illinois cannabis shoppers actively looking for offers near them.",
   alternates: { canonical: `${brand.url}/claim` },

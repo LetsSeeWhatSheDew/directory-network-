@@ -29,7 +29,7 @@ import { filterActiveDeals as filterActive } from "../lib/dealActiveFilter";
 // via the "Browse all Illinois" link below; out-of-scope city pages keep
 // their own city-specific metadata for SEO retention.
 export const metadata = {
-  title: `Cannabis Deals in Central Illinois | ${brand.name}`,
+  title: `Cannabis Deals in Central Illinois`,
   description:
     "Live dispensary deals across Peoria, Bloomington-Normal, Champaign-Urbana, Springfield, and the rest of Central Illinois — updated continuously and always free to browse.",
   alternates: { canonical: brand.url },
@@ -71,11 +71,20 @@ const CATEGORIES = HOME_HERO_CATEGORIES;
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300";
 
-// PostgREST `in.()` value list of Central IL city names. Keeps the
-// homepage deal feed + stats scoped to the 12 publicly-visible cities;
-// any deal attached to a non-CIL dispensary stays in the DB but never
-// appears here. Matches CENTRAL_IL_CITIES in lib/constants/regions.ts.
-const CIL_CITY_IN_LIST = `("Peoria","East Peoria","Peoria Heights","Pekin","Bartonville","Morton","Washington","Bloomington","Normal","Champaign","Urbana","Springfield")`;
+// Canonical 12-city Central Illinois scope for the homepage.
+// One source of truth — all three homepage queries (active deal count,
+// CIL dispensary count, per-city listing+deal counts) derive their
+// PostgREST `in.()` filter from this array so the stats line, the
+// "Browse by city" grid, and the deal feed agree on what's in scope.
+const CIL_CITIES = [
+  'Peoria', 'East Peoria', 'Peoria Heights', 'Pekin',
+  'Bartonville', 'Morton', 'Washington',
+  'Normal', 'Bloomington',
+  'Champaign', 'Urbana',
+  'Springfield',
+];
+
+const CIL_CITY_IN_LIST = `(${CIL_CITIES.map((c) => `"${c}"`).join(',')})`;
 
 export const revalidate = 300;
 
@@ -156,10 +165,22 @@ async function getTopDeals() {
     // The view applies active_days/active_until at the DB level, but Next.js
     // ISR can hold the response for up to 60s. Re-filter in JS so a deal
     // queried 5 minutes before midnight doesn't render at 12:01am Chicago.
-    return filterActive(filterExpired(data))
+    const ranked = filterActive(filterExpired(data))
       .map((d) => ({ ...d, _heroScore: rankFreshDealFirst(d, now) }))
-      .sort((a, b) => (b._heroScore || 0) - (a._heroScore || 0))
-      .slice(0, 3);
+      .sort((a, b) => (b._heroScore || 0) - (a._heroScore || 0));
+    // One deal per dispensary in the visible feed. Without this, a
+    // dispensary running three banger deals dominates the homepage and
+    // the "spread of options across Central IL" pitch breaks down.
+    const seen = new Set();
+    const diversified = [];
+    for (const d of ranked) {
+      const key = d.listing_slug || d.slug;
+      if (!key || seen.has(key)) continue;
+      seen.add(key);
+      diversified.push(d);
+      if (diversified.length >= 3) break;
+    }
+    return diversified;
   } catch {
     return [];
   }
@@ -310,7 +331,7 @@ async function getActiveDealCount() {
 // times in a row. Cached 5 minutes — counts move with each cron, not by
 // the second.
 async function getCityCounts() {
-  const cityList = `("Peoria","East Peoria","Peoria Heights","Pekin","Normal","Bloomington","Champaign","Urbana","Springfield")`;
+  const cityList = CIL_CITY_IN_LIST;
   const result = new Map();
   try {
     const [dealRes, listingRes] = await Promise.all([
@@ -356,8 +377,7 @@ async function getCityCounts() {
 // stats line — never hard-code "N dispensaries" when the DB can answer.
 async function getCentralILListingCount() {
   try {
-    // PostgREST `in.()` with spaces needs double-quoted values.
-    const cityList = `("Peoria","East Peoria","Peoria Heights","Pekin","Bartonville","Morton","Washington","Bloomington","Normal","Champaign","Urbana","Springfield")`;
+    const cityList = CIL_CITY_IN_LIST;
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/master_listings?select=id&state=eq.IL&project_tag=eq.green&is_active=eq.true&city=in.${encodeURIComponent(cityList)}`,
       {
@@ -444,6 +464,13 @@ export default async function HomePage() {
   const userCity = userLoc?.city || null;
   const localizedTopDeals = preferLocalDeals(topDeals, userCity);
   const localizedDealPool = preferLocalDeals(dealPool, userCity);
+  // Live count of CIL cities that actually have at least one listing.
+  // cityCounts is the Map produced by getCityCounts() — keyed by lower-
+  // cased city name. We filter to entries with listings > 0 so the
+  // headline number matches what's clickable below it.
+  const cilCityCount = Array.from(cityCounts.values()).filter(
+    (v) => v && v.listings > 0
+  ).length;
   // Featured deal: top-ranked active deal in the user's localized pool.
   // The hero used to gate on a 7-day verified_at window, but that gate
   // produced an empty state ("No featured deal today") on every day
@@ -1227,7 +1254,7 @@ export default async function HomePage() {
       <div className="stats">
         <div className="stats-inner">
           <span className="stats-line">
-            <strong>{dealCount !== null ? dealCount : "—"}</strong> active deals · <strong>{listingCount !== null ? listingCount : "—"}</strong> Central IL dispensaries · <strong>{CENTRAL_IL_PUBLIC_CITIES.length}</strong> cities
+            <strong>{dealCount !== null ? dealCount : "—"}</strong> active deals · <strong>{listingCount !== null ? listingCount : "—"}</strong> Central IL dispensaries · <strong>{cilCityCount > 0 ? cilCityCount : CENTRAL_IL_PUBLIC_CITIES.length}</strong> cities
           </span>
         </div>
       </div>

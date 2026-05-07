@@ -13,7 +13,7 @@ import TrackView from "../../components/TrackView";
 import DealCtaLink from "../../components/DealCtaLink";
 import ShareDealButton from "../../components/ShareDealButton";
 import { getServerLocation } from "../../../lib/location";
-import { listingHref } from "../../../lib/links";
+import { listingHref, visitDispensaryHref } from "../../../lib/links";
 import { displayDispensaryName } from "../../../lib/dispensaryName";
 import { brand } from "../../../lib/brand";
 
@@ -267,6 +267,26 @@ async function getTrendsForSlugs(slugs: string[]): Promise<Record<string, Trend>
   }
 }
 
+async function getListingCtaFields(
+  slug: string | null | undefined
+): Promise<{ website: string | null; address1: string | null; city: string | null } | null> {
+  if (!slug) return null;
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/master_listings?slug=eq.${encodeURIComponent(slug)}&project_tag=eq.green&is_active=eq.true&select=website,address1,city&limit=1`,
+      {
+        headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
+        next: { revalidate: 3600, tags: ["listings"] },
+      }
+    );
+    if (!res.ok) return null;
+    const rows = await res.json();
+    return Array.isArray(rows) && rows[0] ? rows[0] : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function generateMetadata({
   params,
   searchParams,
@@ -436,6 +456,13 @@ export default async function DealsPage({
     : CATEGORY_SUBTITLES[category] || "Best deals near you";
   const topDeal = deals[0] || null;
   const alternatives = deals.slice(1, 4);
+
+  // The view doesn't include website/address1 — fetch them for the
+  // primary CTA so the "Visit dispensary" / "Get directions" button
+  // can route externally.
+  const topListing = topDeal
+    ? await getListingCtaFields(topDeal.slug || topDeal.listing_slug)
+    : null;
   const showStatewideFallback = !!city && deals.length > 0 && deals.length < 3;
   const noLocalMatches = !!city && deals.length === 0;
   const itemListSchema = deals.length > 0 ? buildItemListSchema(deals, categoryLabel, category) : null;
@@ -699,11 +726,16 @@ export default async function DealsPage({
               )}
 
               {(() => {
-                const topGoHref = listingHref(topDeal.slug || topDeal.listing_slug, city);
-                if (!topGoHref) return null;
+                const visit = visitDispensaryHref({
+                  website: topListing?.website,
+                  address1: topListing?.address1,
+                  city: topListing?.city ?? topDeal.city,
+                });
                 return (
                   <DealCtaLink
-                    href={topGoHref}
+                    href={visit.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="card-cta"
                     deal={{
                       dispensary: topDeal.name || topDeal.listing_slug || "Illinois dispensary",
@@ -712,7 +744,7 @@ export default async function DealsPage({
                       category: topDeal.category || null,
                     }}
                   >
-                    GO HERE →
+                    {visit.label}
                   </DealCtaLink>
                 );
               })()}

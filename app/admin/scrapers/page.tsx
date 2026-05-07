@@ -5,7 +5,7 @@ import { ScraperRunRow } from "./ScraperRunRow";
 import { RunTimeline } from "./RunTimeline";
 
 export const metadata: Metadata = {
-  title: "Scrapers | PuffPrice Admin",
+  title: "Admin · Scrapers",
   robots: "noindex, nofollow",
 };
 

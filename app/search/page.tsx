@@ -239,7 +239,7 @@ export default async function SearchPage({
             {listings.map((l) => {
               const ds = dealMap[l.slug] || [];
               return (
-                <Link key={l.id || l.slug} href={`/l/${l.slug}`} className="card">
+                <Link key={l.id || l.slug} href={`/dispensary/${l.slug}`} className="card">
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div className="cname">{l.name}</div>
                     <div className="ccity">{[l.city, "IL"].filter(Boolean).join(", ")}</div>

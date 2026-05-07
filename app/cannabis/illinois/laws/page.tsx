@@ -4,7 +4,7 @@ import Nav from "../../../components/Nav";
 import Footer from "../../../components/Footer";
 
 export const metadata: Metadata = {
-  title: "Illinois Cannabis Laws 2025 — What's Legal, What's Not | PuffPrice",
+  title: "Illinois Cannabis Laws 2025 — What's Legal, What's Not",
   description: "Complete guide to Illinois cannabis laws. Legal age, possession limits, where you can smoke, driving rules, and what happens if you break the law. Updated for 2025.",
   alternates: { canonical: "https://www.puffprice.com/cannabis/illinois/laws" },
   openGraph: {
