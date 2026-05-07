@@ -616,6 +616,7 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
     for (const a of agedOut) {
       await supaPatch(cfg.supabaseUrl, cfg.serviceKey, `/deals?id=eq.${a.id}`, {
         status_reason: "not_seen_last_scrape",
+        is_active: false,
         updated_at: new Date().toISOString(),
       });
       summary.deals_aged.push({ slug: a.listing_slug, title: a.title });
