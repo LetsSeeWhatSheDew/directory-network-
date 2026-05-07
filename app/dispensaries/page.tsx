@@ -39,6 +39,15 @@ export const metadata = {
 // since they have no listings to render and 404 publicly anyway.
 const CIL_CITY_IN_LIST = `("Peoria","East Peoria","Peoria Heights","Pekin","Bloomington","Normal","Champaign","Urbana","Springfield")`;
 
+// Defense-in-depth: never render these slugs on the public directory,
+// even if they get reactivated or accidentally tagged with a CIL city.
+// These are NOINDEX'd Chicago test/seed rows that should never surface.
+const NOINDEX_SLUGS = [
+  "emerald-city-dispensary-chicago-il",
+  "emerald-leaf-collective-chicago-il",
+  "lakefront-cannabis-co-chicago-il",
+] as const;
+
 export const dynamic = "force-dynamic";
 
 type Listing = {
@@ -72,7 +81,9 @@ async function getListings(): Promise<Listing[]> {
     return [];
   }
   const data = await res.json();
-  return Array.isArray(data) ? data : [];
+  if (!Array.isArray(data)) return [];
+  const noindex = new Set<string>(NOINDEX_SLUGS);
+  return data.filter((l: Listing) => l.slug && !noindex.has(l.slug));
 }
 
 async function getActiveDealSlugs(): Promise<Map<string, number>> {
