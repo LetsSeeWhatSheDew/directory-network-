@@ -96,7 +96,7 @@ export default async function AdminScrapersPage() {
               <span className="text-[#F7F4ED]">
                 GitHub Actions → Daily deal scrape → Run workflow
               </span>
-              , or run <code className="rounded bg-white/5 px-1.5 py-0.5">npm run scrape</code> locally.
+              , or run <code className="rounded bg-white/5 px-1.5 py-0.5">npm run scrape:cil:live</code> locally.
             </p>
           </div>
         )}
