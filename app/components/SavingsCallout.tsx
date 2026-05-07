@@ -69,11 +69,11 @@ const calloutStyles = (
       margin-top:14px;
       font-size:.82rem;
       font-family:system-ui,sans-serif;
-      color:#6b7280;
+      color:rgba(247, 244, 237, 0.78);
       line-height:1.5;
       max-width:560px;
     }
-    .savings-callout strong{color:#1F3D2B;font-weight:600}
-    .savings-callout .savings-amt{color:#7DBA47;font-weight:700}
+    .savings-callout strong{color:var(--color-cream, #F7F4ED);font-weight:600}
+    .savings-callout .savings-amt{color:var(--color-sage-vibrant, #93CB5C);font-weight:700}
   `}</style>
 );
