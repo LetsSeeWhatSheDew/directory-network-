@@ -15,7 +15,7 @@ import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
 import { nowInCT, isOpen, formatTime as formatHourTime } from "../../../lib/hours";
-import { listingHref } from "../../../lib/links";
+import { visitDispensaryHref } from "../../../lib/links";
 import { cityFromSlug } from "../../../lib/cityNormalize";
 import { isInCentralIL } from "../../../lib/visibility";
 
@@ -462,12 +462,20 @@ export default async function DispensaryProfilePage({
                   </div>
                   {d.description && <p className="deal-desc">{d.description}</p>}
                   {(() => {
-                    const href = listingHref(slug, city);
-                    if (!href) return null;
+                    const visit = visitDispensaryHref({
+                      website: listing.website,
+                      address1: listing.address1,
+                      city: listing.city,
+                    });
                     return (
-                      <Link href={href} className="deal-cta">
-                        GO HERE →
-                      </Link>
+                      <a
+                        href={visit.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="deal-cta"
+                      >
+                        {visit.label}
+                      </a>
                     );
                   })()}
                   <Link href={`/deal/${d.id}`} className="deal-details">

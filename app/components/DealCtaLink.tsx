@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import type { ComponentProps, ReactNode } from "react";
+import type { AnchorHTMLAttributes, ReactNode } from "react";
 
 type DealInfo = {
   dispensary: string;
@@ -10,7 +9,7 @@ type DealInfo = {
   category: string | null;
 };
 
-type Props = ComponentProps<typeof Link> & {
+type Props = AnchorHTMLAttributes<HTMLAnchorElement> & {
   deal: DealInfo;
   children: ReactNode;
 };
@@ -36,9 +35,12 @@ function recordClick(deal: DealInfo) {
   } catch {}
 }
 
+// Renders a plain <a> (not next/link) so external destinations —
+// dispensary websites, Google Maps directions — work cleanly with
+// target="_blank". Click telemetry + savings logging unchanged.
 export default function DealCtaLink({ deal, onClick, children, ...rest }: Props) {
   return (
-    <Link
+    <a
       {...rest}
       onClick={(e) => {
         recordClick(deal);
@@ -56,6 +58,6 @@ export default function DealCtaLink({ deal, onClick, children, ...rest }: Props)
       }}
     >
       {children}
-    </Link>
+    </a>
   );
 }

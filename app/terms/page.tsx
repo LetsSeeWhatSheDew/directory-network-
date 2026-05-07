@@ -47,7 +47,7 @@ export default function TermsPage() {
 
           <h2 style={h2}>Free tier</h2>
           <p>
-            Browsing deals, filtering by city or category, and using the GO HERE / directions flow is free and requires no account. You can use PuffPrice forever without paying us anything.
+            Browsing deals, filtering by city or category, and using the directions flow is free and requires no account. You can use PuffPrice forever without paying us anything.
           </p>
 
           <h2 style={h2}>PuffPrice Pro — $0.99/month</h2>
