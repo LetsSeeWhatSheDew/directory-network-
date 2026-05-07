@@ -78,9 +78,10 @@ const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGci
 // "Browse by city" grid, and the deal feed agree on what's in scope.
 const CIL_CITIES = [
   'Peoria', 'East Peoria', 'Peoria Heights', 'Pekin',
+  'Bartonville', 'Morton', 'Washington',
   'Normal', 'Bloomington',
   'Champaign', 'Urbana',
-  'Springfield', 'Decatur', 'Lincoln', 'Galesburg',
+  'Springfield',
 ];
 
 const CIL_CITY_IN_LIST = `(${CIL_CITIES.map((c) => `"${c}"`).join(',')})`;
