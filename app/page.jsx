@@ -456,6 +456,13 @@ export default async function HomePage() {
   const userCity = userLoc?.city || null;
   const localizedTopDeals = preferLocalDeals(topDeals, userCity);
   const localizedDealPool = preferLocalDeals(dealPool, userCity);
+  // Live count of CIL cities that actually have at least one listing.
+  // cityCounts is the Map produced by getCityCounts() — keyed by lower-
+  // cased city name. We filter to entries with listings > 0 so the
+  // headline number matches what's clickable below it.
+  const cilCityCount = Array.from(cityCounts.values()).filter(
+    (v) => v && v.listings > 0
+  ).length;
   // Featured deal: top-ranked active deal in the user's localized pool.
   // The hero used to gate on a 7-day verified_at window, but that gate
   // produced an empty state ("No featured deal today") on every day
@@ -1239,7 +1246,7 @@ export default async function HomePage() {
       <div className="stats">
         <div className="stats-inner">
           <span className="stats-line">
-            <strong>{dealCount !== null ? dealCount : "—"}</strong> active deals · <strong>{listingCount !== null ? listingCount : "—"}</strong> Central IL dispensaries · <strong>{CENTRAL_IL_PUBLIC_CITIES.length}</strong> cities
+            <strong>{dealCount !== null ? dealCount : "—"}</strong> active deals · <strong>{listingCount !== null ? listingCount : "—"}</strong> Central IL dispensaries · <strong>{cilCityCount > 0 ? cilCityCount : CENTRAL_IL_PUBLIC_CITIES.length}</strong> cities
           </span>
         </div>
       </div>
