@@ -5,6 +5,23 @@
 // Scope lock: Central IL only. Aggregator hosts are blocklisted.
 // Policy: direct dispensary websites + social media only.
 
+const DAY_NAMES = [
+  "sunday",
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+] as const;
+
+export function extractRecurringDaysFromTitle(title: string): string[] | null {
+  if (!title) return null;
+  const t = title.toLowerCase();
+  const found = DAY_NAMES.filter((d) => t.includes(d));
+  return found.length > 0 ? [...found] : null;
+}
+
 const CENTRAL_IL_CITIES = new Set([
   "peoria",
   "east peoria",
@@ -567,6 +584,7 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
     for (const u of upsertPlan) {
       if (u.op === "insert") {
         const nowIso = new Date().toISOString();
+        const recurringDays = extractRecurringDaysFromTitle(u.scraped.title);
         const insertBase = {
           listing_slug: u.scraped.listing_slug,
           project_tag: "green",
@@ -583,6 +601,8 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
           source_url: u.scraped.source_url,
           is_active: true,
           status_reason: "scraped_direct_source",
+          recurring_days: recurringDays,
+          is_recurring: recurringDays !== null,
           verified_at: nowIso,
           verified_by: "scraper@puffprice.com",
           created_at: nowIso,
