@@ -241,7 +241,7 @@ function howToUseDeal(d: ActiveDeal | null | undefined): string {
   const codeMatch = body.match(/\b(?:code|use|promo)\s+([A-Z0-9]{3,15})\b/i);
   if (codeMatch) return `Use code ${codeMatch[1].toUpperCase()} at checkout`;
   if (/first[\s-]?time|new\s+customer/i.test(body)) {
-    return "For new customers only — mention PuffPrice at checkout";
+    return "For new customers — confirm at checkout";
   }
   if (/specific|select|chosen|only on|limited to/i.test(body)) {
     return "Ask the budtender for this deal by name";
