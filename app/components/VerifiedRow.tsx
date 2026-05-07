@@ -1,25 +1,32 @@
 // app/components/VerifiedRow.tsx
 // "✓ Verified [discount]% · [time]" — the trust signal that sits at the
-// foot of every deal card and below the hero deal headline. Replaces the
-// older "Verified May 4" plain-date pattern.
+// foot of every deal card and below the hero deal headline.
 //
-// Rules (cleanup PR, 2026-05-04):
+// Rules (P0 deal hygiene PR, 2026-11-05 rewrite):
 //   - Always lead with a sage check + "Verified".
 //   - Append the deal's discount when known (e.g. "25%"). Hidden when 0/null.
-//   - Append the timestamp formatted in the user's local timezone:
-//       within 24h → "11:09 AM"
-//       older     → "May 3"  (short date, no time)
-//   - Stale (>= 7 days) falls back to a muted "Last checked …" line so we
-//     don't dress up a stale check as fresh.
-//   - Returns null for missing verified_at AND missing discount_pct
-//     (no signal to render — caller should still show its empty state).
+//   - Append a HUMAN-RELATIVE timestamp anchored to America/Chicago time —
+//     not the user's machine time, not raw UTC. Central Illinois is the
+//     only audience; "5pm here means 5pm Chicago" is the contract.
+//
+//     < 6 hours        → "2 hours ago"             ("just now" under 1 min)
+//     same Chicago day → "today 9:14 AM"
+//     yesterday        → "yesterday"
+//     < 7 days         → "Mon" / "Tue" …
+//     < 30 days        → "May 4"
+//     ≥ 30 days        → still rendered as date so the row never lies; the
+//                        deal-visibility layer (active_until + 7-day stale
+//                        sweep) is what hides ancient deals from users.
+//   - Stale (≥ 7 days) flips the verb to "Last checked …" and mutes the
+//     palette so we don't dress up a stale check as fresh.
+//   - Returns null when both verified_at AND discountPct are missing.
 //
 // Pure presentational component; no client state, safe in RSC + client.
 
 import { Check } from "lucide-react";
 
 type Props = {
-  /** The deal's verified_at timestamp (ISO string, server-rendered). */
+  /** The deal's verified_at timestamp (ISO string). UTC at rest in the DB. */
   verifiedAt?: string | null;
   /** Percent discount when known (e.g. 25 for "25% off"). 0/null → omitted. */
   discountPct?: number | null;
@@ -29,24 +36,92 @@ type Props = {
   tone?: "light" | "dark";
 };
 
+const CHICAGO_TZ = "America/Chicago";
+
+/**
+ * Returns the YYYY-MM-DD calendar date for a given instant, evaluated in
+ * America/Chicago. Used so "yesterday" means "yesterday in Peoria", not
+ * "yesterday in whatever timezone the server happened to render in".
+ */
+function chicagoDayKey(date: Date): string {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: CHICAGO_TZ,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(date);
+  const y = parts.find((p) => p.type === "year")?.value ?? "0000";
+  const m = parts.find((p) => p.type === "month")?.value ?? "01";
+  const d = parts.find((p) => p.type === "day")?.value ?? "01";
+  return `${y}-${m}-${d}`;
+}
+
+function chicagoTimeOfDay(date: Date): string {
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: CHICAGO_TZ,
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(date);
+}
+
+function chicagoShortMonthDay(date: Date): string {
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: CHICAGO_TZ,
+    month: "short",
+    day: "numeric",
+  }).format(date);
+}
+
+function chicagoShortWeekday(date: Date): string {
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: CHICAGO_TZ,
+    weekday: "short",
+  }).format(date);
+}
+
 function formatVerifiedTime(iso: string): string | null {
   const d = new Date(iso);
   const ms = d.getTime();
   if (!Number.isFinite(ms)) return null;
-  const ageHours = (Date.now() - ms) / 3_600_000;
-  if (ageHours < 0) {
-    // Future timestamp — treat as "now".
-    return "just now";
+  const now = new Date();
+  const ageMs = now.getTime() - ms;
+  if (ageMs < 0) return "just now"; // future timestamp: clock skew, treat as now
+
+  const ageMin = ageMs / 60_000;
+  const ageHours = ageMs / 3_600_000;
+
+  if (ageMin < 1) return "just now";
+
+  // < 6 hours: relative phrasing. Reads as fresh on a deal card without
+  // forcing the user to do clock math.
+  if (ageHours < 6) {
+    if (ageMin < 60) {
+      const m = Math.max(1, Math.round(ageMin));
+      return `${m} minute${m === 1 ? "" : "s"} ago`;
+    }
+    const h = Math.round(ageHours);
+    return `${h} hour${h === 1 ? "" : "s"} ago`;
   }
-  if (ageHours < 24) {
-    // Local-time clock format. Falls back to UTC if the runtime can't
-    // resolve the user's timezone (very rare, but defensive).
-    return d.toLocaleTimeString(undefined, {
-      hour: "numeric",
-      minute: "2-digit",
-    });
+
+  // Calendar-aware buckets, anchored to Chicago. A 5pm local check verified
+  // at 9am the same morning should read "today 9:14 AM", not "9 hours ago".
+  const today = chicagoDayKey(now);
+  const verifiedDay = chicagoDayKey(d);
+  if (verifiedDay === today) {
+    return `today ${chicagoTimeOfDay(d)}`;
   }
-  return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+
+  // "Yesterday" = the calendar day immediately before today in Chicago.
+  const yesterday = chicagoDayKey(new Date(now.getTime() - 86_400_000));
+  if (verifiedDay === yesterday) {
+    return "yesterday";
+  }
+
+  const ageDays = ageMs / 86_400_000;
+  if (ageDays < 7) {
+    return chicagoShortWeekday(d);
+  }
+  return chicagoShortMonthDay(d);
 }
 
 function isStale(iso: string): boolean {

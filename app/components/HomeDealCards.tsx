@@ -446,7 +446,16 @@ export default function HomeDealCards({
                 {d.accepts_credit && <span className="deal-attr">Cards OK</span>}
                 {d.drive_thru && <span className="deal-attr">Drive-thru</span>}
                 {d.delivery && <span className="deal-attr">Delivery</span>}
-                {d.google_rating && d.google_rating > 0 && <span className="deal-attr">{d.google_rating} ★</span>}
+                {/* Strict > 0 guard: `d.google_rating && …` short-circuits on 0
+                    and React renders the literal `0`. The
+                    active_deals_with_listings view currently hardcodes
+                    google_rating to 0 (regression in 2026-04-22 view rewrite —
+                    flagged for a follow-up to project m.google_rating), so
+                    every grid card was rendering a stray "0". Same > 0 + label
+                    guard now applied to every numeric attribute pill. */}
+                {Number(d.google_rating) > 0 && (
+                  <span className="deal-attr">{Number(d.google_rating).toFixed(1)} ★</span>
+                )}
                 {d.is_recurring && <span className="deal-attr">Recurring</span>}
               </div>
               <div className="pp-deal-card-foot">
