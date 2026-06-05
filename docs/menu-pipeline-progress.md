@@ -51,7 +51,13 @@ Build the missing **baseline** layer under PuffPrice's deal scraper: structured 
   - Fixtures: `dutchie-65772a69ac53410009424572.json`, `sweed-ivy-hall-peoria-heights.json`, `joint-cookies-peoria-heights.json`.
   - `tests/menu/adapters.test.ts`: 3 parsers, all PASS.
   - **Coverage:** 8/10 stores have working adapters (Beyond Hello Bloomington needs Jane storeId backfill — Phase 9; Trinity Glen + RISE Canton need Dutchie slug backfill — Phase 9). VERIFY items return a clean `error` snapshot rather than crashing.
-- [ ] **Phase 5 — Normalization layer** (≥90% match rate target)
+- [x] **Phase 5 — Normalization layer** (≥90% match rate target)
+  - `lib/scraper/menu/normalize/units.ts`: alias map first, regex fallback. Confidence 1.0 / 0.7 / 0.6. Detects family from raw_category.
+  - `lib/scraper/menu/normalize/brands.ts`: 4-tier match (exact → loose → substring → Levenshtein ≤ 2). Pre-built alias indexes for O(1) hits on the common path.
+  - `lib/scraper/menu/normalize/thc.ts`: handles single value, range (midpoint), THCa-only (adjusted formula `0.877 × THCa`), labeled compound strings, and routes to `non_infused_le_35` / `non_infused_gt_35` / `infused` / `unknown` — the THC tier the Phase 7 tax engine consumes.
+  - `lib/scraper/menu/normalize/index.ts`: top-level `normalize()`. Returns `{ normalized, issues, product_key, product_display_name }`. Never silently drops — items missing brand or unit get a `review_queue` issue but the menu_item row is still patched with whatever signals resolved.
+  - `scripts/normalize-menu-items.ts`: drives the loop. Default-incremental (only rows where canonical_product_id IS NULL), `--all` to re-process, `--apply` to write. Batch upserts canonical_products with ON CONFLICT merge; PATCHes menu_items; inserts review_queue issues.
+  - `tests/menu/normalize.test.ts`: end-to-end across all 4 fixture stores. **Result: 100% match rate (25/25) on fixtures, 0 review issues.** Real-world rate will be lower (unseen brands, weird weight strings) — the 90% target is set against live data, not fixtures.
 - [ ] **Phase 6 — Baselines + sanity gate**
 - [ ] **Phase 7 — Tax engine extension + OTD + deal scoring**
 - [ ] **Phase 8 — Scheduler + breakage detection**
