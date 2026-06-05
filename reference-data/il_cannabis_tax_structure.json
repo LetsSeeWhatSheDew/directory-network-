@@ -3,11 +3,16 @@
     "file": "il_cannabis_tax_structure.json",
     "purpose": "Authoritative IL recreational cannabis tax stack for pre-tax -> out-the-door (OTD) modeling.",
     "rebuilt_by": "Claude (chat) on 2026-06-04, reconstructed from verified sources after Cowork's originals were lost in its sandbox.",
-    "confidence": "HIGH for state excise + state ROT + verified local cannabis ROT. MEDIUM for general municipal sales-tax add-ons (verify per store via IDOR MyTax Tax Rate Finder).",
+    "confidence": "HIGH for state excise + state ROT + verified local cannabis ROT. MEDIUM for general municipal sales-tax add-ons (now filled per-jurisdiction below, but business-district variance means Code should still confirm per store address via IDOR MyTax Tax Rate Finder).",
+    "updated_by": "Cowork 2026-06-04 (round 2): filled general_local_sales_tax_addon with per-jurisdiction values from 2026 sales-tax aggregators; resolved Tazewell/Fulton county cannabis ROT (no county cannabis ROT found for either — set to 0 with verify note); flagged Canton municipal as unconfirmed.",
     "sources": [
       "IL Dept of Revenue, Cannabis Taxes: https://tax.illinois.gov/research/taxinformation/other/cannabis-taxes.html",
       "410 ILCS 705/65-10 (excise tiers); 410 ILCS 705/65-5 (adjusted THC formula)",
-      "86 Ill. Adm. Code 423.105 (concentrates are NOT infused products)"
+      "86 Ill. Adm. Code 423.105 (concentrates are NOT infused products)",
+      "City of East Peoria Ordinance 4453 (3.0% municipal cannabis ROT)",
+      "Peoria Heights Village Code 4-9-2 (3.0% municipal cannabis ROT)",
+      "IDOR FY 2026-06 bulletin (no county cannabis ROT changes for 1/1/2026): https://tax.illinois.gov/research/publications/bulletins/fy-2026-06.html",
+      "2026 combined general-merchandise sales-tax rates: Avalara / SalesTaxHandbook per city (Peoria, East Peoria, Peoria Heights, Pekin, Canton)"
     ],
     "verified_date": "2026-06-04"
   },
@@ -30,25 +35,40 @@
       "peoria_heights": { "rate": 0.03, "source": "Peoria Heights Village Code 4-9-2" },
       "peoria": { "rate": 0.03, "source": "City of Peoria municipal cannabis ROT" },
       "pekin": { "rate": 0.03, "source": "City of Pekin municipal cannabis ROT" },
-      "canton": { "rate": 0.03, "confidence": "MEDIUM - verify Canton municipal cannabis ROT" }
+      "canton": { "rate": 0.03, "confidence": "LOW - Canton municipal cannabis ROT NOT independently confirmed this pass; 3.0% is the common default. Verify via MyTax before relying on RISE Canton OTD." }
     },
     "county": {
-      "peoria_county": { "rate": 0.03, "note": "3.0% in incorporated municipalities within the county; up to 3.75% in unincorporated areas." },
-      "tazewell_county": { "rate": 0.03, "confidence": "MEDIUM - East Peoria/Pekin are in Tazewell Co; verify county cannabis ROT" },
-      "fulton_county": { "rate": 0.0, "confidence": "MEDIUM - Canton is in Fulton Co; verify" }
+      "peoria_county": { "rate": 0.03, "confidence": "HIGH", "note": "3.0% in incorporated municipalities within the county; up to 3.75% in unincorporated areas. Applies to Peoria + Peoria Heights stores." },
+      "tazewell_county": { "rate": 0.0, "confidence": "MEDIUM - No Tazewell County cannabis ROT found in IDOR change bulletins or the East Peoria ordinance (which lists only city 3% + state share + non-home-rule). Treated as 0 pending MyTax verification. Affects East Peoria + Pekin stores." },
+      "fulton_county": { "rate": 0.0, "confidence": "MEDIUM - No Fulton County cannabis ROT found. Treated as 0 pending MyTax verification. Affects Canton store." }
     },
     "max_allowed": { "municipal": 0.03, "county_in_municipality": 0.03, "county_unincorporated": 0.0375 }
   },
   "general_local_sales_tax_addon": {
-    "description": "Beyond cannabis-specific ROT, general home-rule/local sales tax may also apply. This is the ESTIMATED layer.",
-    "estimate_range": [0.0, 0.0275],
-    "action_for_code": "Pull exact combined general rate per store address from IDOR MyTax Tax Rate Finder; do not hardcode."
+    "description": "Beyond the cannabis-specific ROT, the GENERAL MERCHANDISE retailers' occupation tax applies to rec cannabis. Value below = combined general-merchandise rate MINUS the 6.25% state portion already counted in state_retailers_occupation_tax. So total general merch rate = 0.0625 + addon.",
+    "confidence": "MEDIUM - city-level rates from 2026 sales-tax aggregators (Avalara/SalesTaxHandbook). Business/special-development districts can raise the rate block-by-block, so the actual rate at a given store address may be higher.",
+    "per_jurisdiction": {
+      "peoria":        { "general_merch_combined": 0.090,  "addon": 0.0275, "note": "Some Peoria business districts run up to ~10.0% combined (addon ~0.0375). Verify per address." },
+      "peoria_heights":{ "general_merch_combined": 0.0875, "addon": 0.025 },
+      "east_peoria":   { "general_merch_combined": 0.085,  "addon": 0.0225, "note": "Special business districts (e.g., Levee/Camp St) can reach ~9.5% combined (addon ~0.0325). Riverside Dr / S Main stores may sit in one - verify." },
+      "pekin":         { "general_merch_combined": 0.095,  "addon": 0.0325 },
+      "canton":        { "general_merch_combined": 0.0975, "addon": 0.035 }
+    },
+    "action_for_code": "Per-jurisdiction values are good defaults; for exactness pull the combined general rate per store ADDRESS from IDOR MyTax Tax Rate Finder (mytax.illinois.gov, Jan 2026) - business districts vary by address."
   },
   "worked_examples": {
-    "_note": "Effective rates below = sum of (excise + state ROT 6.25% + local cannabis ROT 3% muni + 3% county + ~general add-on). Use to VALIDATE the tax engine.",
-    "standard_eighth_le_35_thc": { "excise": 0.10, "approx_effective_otd_rate": 0.25, "example": "$30.00 pre-tax eighth -> ~$37.50 OTD" },
-    "vape_cart_concentrate_gt_35_thc": { "excise": 0.25, "approx_effective_otd_rate": 0.40, "example": "$40.00 pre-tax cart -> ~$56.00 OTD" },
-    "edible_infused": { "excise": 0.20, "approx_effective_otd_rate": 0.35, "example": "$25.00 pre-tax 100mg pack -> ~$33.75 OTD" }
+    "_note": "Worked examples assume a CITY OF PEORIA store: excise + state ROT 6.25% + general local addon 2.75% (= 9.0% general merch) + muni cannabis 3% + Peoria County cannabis 3%. Effective rate = excise + 9.0% + 3% + 3% = excise + 15%. Use to VALIDATE the tax engine. Other jurisdictions differ - see per_jurisdiction_effective below.",
+    "standard_eighth_le_35_thc": { "excise": 0.10, "approx_effective_otd_rate": 0.25, "example": "$30.00 pre-tax eighth -> $37.50 OTD (Peoria city)" },
+    "vape_cart_concentrate_gt_35_thc": { "excise": 0.25, "approx_effective_otd_rate": 0.40, "example": "$40.00 pre-tax cart -> $56.00 OTD (Peoria city)" },
+    "edible_infused": { "excise": 0.20, "approx_effective_otd_rate": 0.35, "example": "$25.00 pre-tax 100mg pack -> $33.75 OTD (Peoria city)" }
   },
-  "validation_targets": { "eighth_le_35": 0.25, "vape_concentrate": 0.40, "edible": 0.35, "tolerance": 0.02 }
+  "per_jurisdiction_effective": {
+    "_note": "Effective OTD rate for an eighth (<=35% THC, excise 10%) = 0.10 + general_merch_combined + muni_cannabis + county_cannabis. Add +0.15 to the non-excise sum for a vape (excise 25%) or +0.10 for an edible (excise 20%) relative to flower. Values use the per_jurisdiction defaults above (Tazewell/Fulton county cannabis = 0).",
+    "peoria":         { "flower_eighth": 0.250, "vape": 0.400, "edible": 0.350, "components": "10% excise + 9.0% gen + 3% muni + 3% county" },
+    "peoria_heights": { "flower_eighth": 0.2475, "vape": 0.3975, "edible": 0.3475, "components": "10% excise + 8.75% gen + 3% muni + 3% county" },
+    "east_peoria":    { "flower_eighth": 0.215, "vape": 0.365, "edible": 0.315, "components": "10% excise + 8.5% gen + 3% muni + 0% county (Tazewell unconfirmed)" },
+    "pekin":          { "flower_eighth": 0.225, "vape": 0.375, "edible": 0.325, "components": "10% excise + 9.5% gen + 3% muni + 0% county (Tazewell unconfirmed)" },
+    "canton":         { "flower_eighth": 0.2275, "vape": 0.3775, "edible": 0.3275, "components": "10% excise + 9.75% gen + 3% muni (unconfirmed) + 0% county (Fulton unconfirmed)" }
+  },
+  "validation_targets": { "_basis": "Peoria city store", "eighth_le_35": 0.25, "vape_concentrate": 0.40, "edible": 0.35, "tolerance": 0.02 }
 }

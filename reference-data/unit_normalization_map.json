@@ -4,7 +4,8 @@
     "purpose": "Map every raw weight/qty expression to ONE canonical unit so prices are comparable across stores. This is the backbone of the normalization layer.",
     "rebuilt_by": "Claude (chat) 2026-06-04.",
     "usage": "Lowercase + trim raw weight string, match against aliases. If no alias hit, apply regex_patterns. Always store canonical_unit + unit_count.",
-    "confidence": "HIGH (deterministic)."
+    "confidence": "HIGH (deterministic).",
+    "updated_by": "Cowork 2026-06-04 (round 2): added pre-roll multipacks (2/3/5/6/7/10/14pk in 0.35/0.5/0.75/1g), vape 0.25g + AIO/disposable aliases, concentrate 0.3g/3.5g/4g + subtype note, more edible pack sizes (10mg/50mg/100mg-1pk/100mg-4pk/200mg), and two new categories: beverages and rso_tinctures (RSO syringes are weight-based/$ per g; tinctures are dose-based/$ per mg - they tax differently)."
   },
   "flower": {
     "canonical": "grams",
@@ -19,40 +20,82 @@
   "pre_rolls": {
     "canonical": "count_and_grams",
     "map": {
-      "0.5g_1pk": { "aliases": ["0.5g preroll", "half gram preroll"], "grams_each": 0.5, "count": 1 },
-      "1g_1pk":   { "aliases": ["1g preroll", "1g pre-roll", "single preroll"], "grams_each": 1, "count": 1 },
-      "0.5g_5pk": { "aliases": ["5pk", "5 pack", "5-pack preroll"], "grams_each": 0.5, "count": 5 },
-      "0.35g_10pk":{ "aliases": ["10pk", "10 pack", "dogwalkers 10pk"], "grams_each": 0.35, "count": 10 }
+      "0.5g_1pk":  { "aliases": ["0.5g preroll", "half gram preroll", ".5g pre-roll", "0.5g joint"], "grams_each": 0.5, "count": 1 },
+      "0.75g_1pk": { "aliases": ["0.75g preroll", ".75g pre-roll"], "grams_each": 0.75, "count": 1 },
+      "1g_1pk":    { "aliases": ["1g preroll", "1g pre-roll", "single preroll", "1g joint"], "grams_each": 1, "count": 1 },
+      "0.5g_2pk":  { "aliases": ["2pk 0.5g", "0.5g x2", "2 x 0.5g"], "grams_each": 0.5, "count": 2 },
+      "1g_2pk":    { "aliases": ["2pk 1g", "1g x2", "2 x 1g"], "grams_each": 1, "count": 2 },
+      "0.5g_3pk":  { "aliases": ["3pk 0.5g", "0.5g x3", "3 pack preroll"], "grams_each": 0.5, "count": 3 },
+      "0.5g_5pk":  { "aliases": ["5pk", "5 pack", "5-pack preroll", "0.5g x5"], "grams_each": 0.5, "count": 5 },
+      "0.5g_6pk":  { "aliases": ["6pk 0.5g", "0.5g x6", "6 pack preroll"], "grams_each": 0.5, "count": 6 },
+      "1g_5pk":    { "aliases": ["5pk 1g", "1g x5", "5 pack 1g"], "grams_each": 1, "count": 5 },
+      "0.5g_7pk":  { "aliases": ["7pk 0.5g", "0.5g x7", "7 pack preroll"], "grams_each": 0.5, "count": 7 },
+      "0.35g_10pk":{ "aliases": ["10pk", "10 pack", "dogwalkers 10pk", "0.35g x10", "mini prerolls 10pk"], "grams_each": 0.35, "count": 10 },
+      "0.5g_10pk": { "aliases": ["10pk 0.5g", "0.5g x10"], "grams_each": 0.5, "count": 10 },
+      "0.35g_14pk":{ "aliases": ["14pk", "14 pack", "0.35g x14"], "grams_each": 0.35, "count": 14 }
     },
-    "note": "Pre-roll packs vary in per-unit weight; capture both count and grams_each, normalize price to $/g."
+    "note": "Pre-roll packs vary in per-unit weight; capture both count and grams_each, normalize price to $/g (total_g = grams_each * count). Infused pre-rolls carry the same weight keys - track 'infused' as a separate product attribute, not here."
   },
   "vapes": {
     "canonical": "grams",
     "map": {
-      "0.3g": { "aliases": ["0.3g", ".3g", "0.3 g"], "grams": 0.3 },
-      "0.5g": { "aliases": ["0.5g", ".5g", "half gram cart", "0.5 g"], "grams": 0.5 },
-      "1g":   { "aliases": ["1g", "1 g", "full gram cart", "1g cart"], "grams": 1 },
-      "2g":   { "aliases": ["2g", "2 g", "2g cart"], "grams": 2 }
+      "0.25g": { "aliases": ["0.25g", ".25g", "0.25 g", "250mg cart"], "grams": 0.25 },
+      "0.3g":  { "aliases": ["0.3g", ".3g", "0.3 g", "300mg cart"], "grams": 0.3 },
+      "0.5g":  { "aliases": ["0.5g", ".5g", "half gram cart", "0.5 g", "500mg cart", "0.5g disposable", "0.5g aio"], "grams": 0.5 },
+      "1g":    { "aliases": ["1g", "1 g", "full gram cart", "1g cart", "1g disposable", "1g aio", "all-in-one 1g", "1000mg cart"], "grams": 1 },
+      "2g":    { "aliases": ["2g", "2 g", "2g cart", "2g disposable", "2g aio", "2g all-in-one"], "grams": 2 }
     },
+    "note": "AIO = all-in-one disposable; same weight keys as carts - track form (cart vs disposable) as a separate attribute. For 2-packs of carts, capture count separately and normalize $/g on total grams.",
     "tax_note": "Vapes/concentrates use THC-based excise (10/25%), NOT the 20% infused rate. See il_cannabis_tax_structure.json."
   },
   "concentrates": {
     "canonical": "grams",
     "map": {
+      "0.3g": { "aliases": ["0.3g", ".3g"], "grams": 0.3 },
       "0.5g": { "aliases": ["0.5g", ".5g"], "grams": 0.5 },
       "1g":   { "aliases": ["1g", "1 g", "gram"], "grams": 1 },
       "2g":   { "aliases": ["2g", "2 g"], "grams": 2 },
-      "2.5g": { "aliases": ["2.5g", "2.5 g", "bucket"], "grams": 2.5 }
-    }
+      "2.5g": { "aliases": ["2.5g", "2.5 g", "bucket"], "grams": 2.5 },
+      "3.5g": { "aliases": ["3.5g", "3.5 g", "eighth concentrate"], "grams": 3.5 },
+      "4g":   { "aliases": ["4g", "4 g", "4g bucket"], "grams": 4 }
+    },
+    "note": "Concentrate subtypes (badder, budder, live rosin, live resin, sugar, sauce, diamonds, shatter, crumble, RSO) share these weight keys - track subtype as a separate attribute, not here. RSO sold in syringes is mapped under rso_tinctures."
   },
   "edibles": {
     "canonical": "total_mg_and_pack_count",
     "map": {
-      "100mg_10pk": { "aliases": ["100mg 10pk", "100mg 10 pack", "10pk 10mg", "100mg gummies"], "total_mg": 100, "count": 10, "mg_each": 10 },
-      "100mg_20pk": { "aliases": ["100mg 20pk", "100mg 20 pack", "20pk 5mg"], "total_mg": 100, "count": 20, "mg_each": 5 },
-      "200mg_20pk": { "aliases": ["200mg 20pk", "200mg 20 pack"], "total_mg": 200, "count": 20, "mg_each": 10 }
+      "10mg_1pk":   { "aliases": ["10mg single", "10mg 1pk", "single 10mg"], "total_mg": 10, "count": 1, "mg_each": 10 },
+      "50mg_5pk":   { "aliases": ["50mg 5pk", "50mg 5 pack", "5 x 10mg"], "total_mg": 50, "count": 5, "mg_each": 10 },
+      "100mg_1pk":  { "aliases": ["100mg single", "100mg bar", "100mg chocolate bar", "100mg 1pk"], "total_mg": 100, "count": 1, "mg_each": 100 },
+      "100mg_4pk":  { "aliases": ["100mg 4pk", "100mg 4 pack", "4 x 25mg", "4pk 25mg"], "total_mg": 100, "count": 4, "mg_each": 25 },
+      "100mg_10pk": { "aliases": ["100mg 10pk", "100mg 10 pack", "10pk 10mg", "100mg gummies", "10ct 10mg"], "total_mg": 100, "count": 10, "mg_each": 10 },
+      "100mg_20pk": { "aliases": ["100mg 20pk", "100mg 20 pack", "20pk 5mg", "100mg gummies 20ct"], "total_mg": 100, "count": 20, "mg_each": 5 },
+      "200mg_10pk": { "aliases": ["200mg 10pk", "200mg 10 pack", "10 x 20mg"], "total_mg": 200, "count": 10, "mg_each": 20 },
+      "200mg_20pk": { "aliases": ["200mg 20pk", "200mg 20 pack", "20 x 10mg"], "total_mg": 200, "count": 20, "mg_each": 10 }
     },
-    "note": "Normalize edible price to $/total_mg for comparability across pack sizes."
+    "note": "Normalize edible price to $/total_mg for comparability across pack sizes. For unlisted combos, parse mg + count via regex_patterns.edible_mg_pack and synthesize key '<total_mg>mg_<count>pk'."
+  },
+  "beverages": {
+    "canonical": "total_mg_and_volume",
+    "map": {
+      "10mg_single":  { "aliases": ["10mg beverage", "10mg drink", "10mg seltzer", "10mg shot", "10mg can"], "total_mg": 10, "count": 1 },
+      "5mg_single":   { "aliases": ["5mg beverage", "5mg seltzer", "5mg drink"], "total_mg": 5, "count": 1 },
+      "100mg_single": { "aliases": ["100mg drink", "100mg shot", "100mg beverage", "100mg drink mix", "100mg bottle"], "total_mg": 100, "count": 1 },
+      "100mg_4pk":    { "aliases": ["4pk 25mg seltzer", "100mg 4pk beverage", "4 x 25mg drink"], "total_mg": 100, "count": 4, "mg_each": 25 }
+    },
+    "note": "Cannabis beverages (seltzers, shots, drink mixes). Normalize to $/total_mg. Capture container count for multipacks. Volume (oz/ml) is secondary - dose (mg) is the comparison axis."
+  },
+  "rso_tinctures": {
+    "canonical": "grams_or_mg",
+    "map": {
+      "rso_0.5g":      { "aliases": ["rso 0.5g", "0.5g rso", "rso syringe 0.5g", "0.5g applicator"], "grams": 0.5, "form": "rso_syringe" },
+      "rso_1g":        { "aliases": ["rso 1g", "1g rso", "rso syringe", "1g applicator", "fbe 1g", "fso 1g"], "grams": 1, "form": "rso_syringe" },
+      "rso_2g":        { "aliases": ["rso 2g", "2g rso", "2g applicator"], "grams": 2, "form": "rso_syringe" },
+      "tincture_300mg":  { "aliases": ["300mg tincture", "tincture 300mg"], "total_mg": 300, "form": "tincture" },
+      "tincture_500mg":  { "aliases": ["500mg tincture", "tincture 500mg"], "total_mg": 500, "form": "tincture" },
+      "tincture_1000mg": { "aliases": ["1000mg tincture", "tincture 1000mg", "1g tincture"], "total_mg": 1000, "form": "tincture" }
+    },
+    "note": "RSO/FECO syringes are weight-based ($/g, THC-based excise like concentrates). Tinctures are dose-based ($/total_mg, taxed as infused 20%). Keep the two forms distinct - they tax differently."
   },
   "regex_patterns": {
     "grams":  "(\\d+(?:\\.\\d+)?)\\s*g\\b",
