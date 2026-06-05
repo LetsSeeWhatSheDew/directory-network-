@@ -6,7 +6,8 @@
     "updated_by": "Cowork 2026-06-04 (round 2): backfilled all 4 VERIFY_IDFPR license numbers + license_holders + addresses from the IDFPR Adult Use Dispensaries PDF.",
     "updated_by_code": "Code 2026-06-04 (round 3): reconciled platform_store_id + menu_platform + graphql_endpoint values for the 5 stores still showing VERIFY or stub values, using Chrome Round 2 live recon findings. Changes: (1) Ivy Hall storeId 169 + base URL; (2) Beyond Hello Bloomington slug beyond-hello-bloomington-rec (Jane adapter resolves to numeric storeId at fetch time via iheartjane v1/stores); (3) NOXX graphql_endpoint moved to dutchie.com/api-4/graphql (was noxx.com/api-1/graphql); (4) Trinity University and Glen both moved to dutchie.com/api-4/graphql; Glen slug=trinity-on-glen + dispensaryId 5f1084a105efe300b6392001; (5) Cookies storeId 5478; (6) RISE Canton corrected from menu_platform=dutchie to menu_platform=jane (Jane storeId 1343, separate Algolia cluster). Notes preserved where relevant; full per-store evidence is in commit message + docs/menu-pipeline-progress.md.",
     "source_idfpr": "https://idfprapps.illinois.gov/LicenseLookup/AdultUseDispensaries.pdf",
-    "CORRECTIONS_FROM_PRIOR_REGISTRY": "Cowork's prior registry listed 'Cloud 9 (East Peoria)' and 'Aroma Hill (Peoria)' as Peoria-metro stores. IDFPR shows Cloud9 Cannabis is in CHAMPAIGN (284.000259) and EDWARDSVILLE (284.000304), and Aroma Hill is in HOFFMAN ESTATES (284.000287). Neither is in the Peoria metro. They are EXCLUDED here as phantom entries. If a new Peoria-area location exists, verify against IDFPR before adding.",
+    "CORRECTIONS_FROM_PRIOR_REGISTRY": "RESOLVED 2026-06-04 (round 3 license reconciliation): the earlier 'phantom' exclusion of Cloud 9 (East Peoria) and Aroma Hill (Peoria) was a license-matching error, not a real-world one - both stores are real and operating. The IDFPR list carries SEPARATE Peoria-metro licenses deeper in the document: Exxotic Strains LLC holds BOTH Aroma Hill - Hoffman Estates (284.000287) AND Aroma Hill - Peoria, 1210 W Glen Ave (284.000265-AUDO, issued 5/3/2024, phone matches live store); the Cloud9 brand spans multiple operators - Fortunate Sons Partners LLC holds Champaign (284.000259) + Edwardsville (284.000304), while Fello Inc. holds Cloud 9 - East Peoria, 406 W Camp St (284.000303-AUDO, issued 4/9/2024, phone matches live store). Cloud 9's 284.000303 is independently corroborated by docs/data-audit-2026-04-23-il-license-registry.md. Both re-added below.",
+    "updated_by_round3_cowork": "Cowork 2026-06-04 (round 3): re-added aroma-hill-peoria + cloud9-east-peoria with IDFPR-matched licenses (address+phone+licensee matched to operating locations). Their menu_platform/platform_store_id are VERIFY - no Chrome recon findings exist for these two stores; do not scrape until Chrome confirms platform (see RISE Canton note for why platform guessing is dangerous).",
     "geocode_gap": "lat/lng remain hand-estimated (geocode_status='approx'). A true geocoder (Census Bureau / Google Geocoding API) could not be run in this environment, so coordinates were NOT machine-geocoded this pass. Ivy Hall coords were refined to its now-known street address. REMAINING GAP: Code should run each 'address' through a geocoder and set geocode_status='geocoded' before any hard radius filter.",
     "caveats": [
       "lat/lng are approximate (hand-estimated from address); see geocode_gap. Code MUST geocode each address before any hard radius filter.",
@@ -190,6 +191,40 @@
       "geocode_status": "approx",
       "edge_note": "~30mi SW of Peoria - radius edge.",
       "jane_cluster": "rise_gti"
+    },
+    {
+      "slug": "aroma-hill-peoria",
+      "name": "Aroma Hill",
+      "license_number": "284.000265-AUDO",
+      "license_holder": "Exxotic Strains, LLC",
+      "address": "1210 W Glen Ave",
+      "city": "Peoria",
+      "county": "Peoria",
+      "zip": "61614-4838",
+      "phone": "(309) 839-4080",
+      "lat": 40.7550, "lng": -89.6090,
+      "menu_platform": "VERIFY",
+      "platform_store_id": "VERIFY",
+      "menu_url": "https://shop.aromahillcannabis.com/peoria",
+      "geocode_status": "approx",
+      "note": "License reconciled 2026-06-04: IDFPR 'Aroma Hill - Peoria' (Exxotic Strains LLC, issued 5/3/2024) at 1210 W Glen Ave; phone matches the live store. Yelp/chamber listings show the storefront as 1204-1208 W Glen Ave - same parcel range, IDFPR address retained as canonical. Live menu at shop.aromahillcannabis.com/peoria; storefront page pattern ('Welcome to ... - buy cannabis online') matches Ivy Hall's Sweed shop, so Sweed is SUSPECTED - Chrome must confirm platform + store_id before scraping."
+    },
+    {
+      "slug": "cloud9-east-peoria",
+      "name": "Cloud 9 Cannabis",
+      "license_number": "284.000303-AUDO",
+      "license_holder": "Fello Inc.",
+      "address": "406 W Camp St",
+      "city": "East Peoria",
+      "county": "Tazewell",
+      "zip": "61611-2006",
+      "phone": "(309) 209-5001",
+      "lat": 40.6692, "lng": -89.5835,
+      "menu_platform": "VERIFY",
+      "platform_store_id": "VERIFY",
+      "menu_url": "https://cloud9cannabis.com/",
+      "geocode_status": "approx",
+      "note": "License reconciled 2026-06-04: IDFPR 'Cloud 9 - East Peoria' (Fello Inc., issued 4/9/2024) at 406 W Camp St; address + phone match the live store. Independently corroborated by docs/data-audit-2026-04-23-il-license-registry.md (cloud-9-east-peoria | 284.000303-AUDO). NOT the same operator as Fortunate Sons' Champaign/Edwardsville Cloud9s. Menu platform unknown - cloud9cannabis.com is the brand site; Chrome must resolve the East Peoria shop URL + platform + store_id before scraping."
     }
   ]
 }
