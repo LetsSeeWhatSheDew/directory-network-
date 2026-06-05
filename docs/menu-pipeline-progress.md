@@ -58,7 +58,11 @@ Build the missing **baseline** layer under PuffPrice's deal scraper: structured 
   - `lib/scraper/menu/normalize/index.ts`: top-level `normalize()`. Returns `{ normalized, issues, product_key, product_display_name }`. Never silently drops — items missing brand or unit get a `review_queue` issue but the menu_item row is still patched with whatever signals resolved.
   - `scripts/normalize-menu-items.ts`: drives the loop. Default-incremental (only rows where canonical_product_id IS NULL), `--all` to re-process, `--apply` to write. Batch upserts canonical_products with ON CONFLICT merge; PATCHes menu_items; inserts review_queue issues.
   - `tests/menu/normalize.test.ts`: end-to-end across all 4 fixture stores. **Result: 100% match rate (25/25) on fixtures, 0 review issues.** Real-world rate will be lower (unseen brands, weird weight strings) — the 90% target is set against live data, not fixtures.
-- [ ] **Phase 6 — Baselines + sanity gate**
+- [x] **Phase 6 — Baselines + sanity gate**
+  - `lib/scraper/menu/baselines.ts`: `computeBaseline()` produces median/min/max/p25/p75/sample_size with linear-interpolation percentiles. Filters non-positive prices. `applySanity()` reads `price_band_sanity.json` and flags computed medians outside `low*0.6 .. high*1.5`.
+  - `sanityKey()` maps `(category, unit)` → sanity band key. Unmapped classes (topical, tincture) pass-through.
+  - `scripts/compute-price-baselines.ts`: groups latest observations by canonical_product, applies a configurable sample-size floor (default 3), runs the sanity gate, appends to `price_baselines` (sanity-failed rows still recorded with `sanity_passed=false` + flag for audit history). Configurable `--window-days`, `--min-samples`, `--geo`.
+  - `tests/menu/baselines.test.ts`: PASS — median/percentiles, single-obs degenerate, non-positive filter, sanity-key mapping, sanity-gate behavior (low/high/edge/no-band).
 - [ ] **Phase 7 — Tax engine extension + OTD + deal scoring**
 - [ ] **Phase 8 — Scheduler + breakage detection**
 - [ ] **Phase 9 (optional) — VERIFY backfill probes**
