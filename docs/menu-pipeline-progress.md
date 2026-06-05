@@ -24,7 +24,12 @@ Build the missing **baseline** layer under PuffPrice's deal scraper: structured 
   - 2 convenience views: latest_menu_items, latest_baselines
   - Append-only pattern matching `sql/price-history-table.sql`
   - **Action required (Matthew):** apply via Supabase SQL Editor, then run `npx tsx scripts/seed-dispensaries-from-registry.ts --apply` with `SUPABASE_SERVICE_ROLE_KEY` set. Dry-run output shows all 10 rows resolve cleanly.
-- [ ] **Phase 2 — Geocoding** (script writes verified lat/lng back to dispensaries)
+- [x] **Phase 2 — Geocoding** (`scripts/geocode-dispensaries.ts`)
+  - Default provider: Nominatim (OpenStreetMap), zero-key, rate-limited 1 req/sec.
+  - Optional: `GEOCODER=google` + `GOOGLE_MAPS_API_KEY` for precision.
+  - Sanity: rejects coords outside IL bounding box, marks `failed`.
+  - Skips rows already `verified` unless `--force`.
+  - **Action required (Matthew):** after Phase 1 apply, run `SUPABASE_SERVICE_ROLE_KEY=... npx tsx scripts/geocode-dispensaries.ts --apply`.
 - [ ] **Phase 3 — Adapter framework + Jane adapter** (4 stores)
 - [ ] **Phase 4 — Dutchie + Sweed + Joint adapters** (6 stores)
 - [ ] **Phase 5 — Normalization layer** (≥90% match rate target)
