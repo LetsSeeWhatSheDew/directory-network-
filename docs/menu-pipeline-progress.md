@@ -260,3 +260,6 @@ Chrome re-verified the live Jane shape on 2026-06-05. Jane consolidated its Algo
 - `0e94460` feat(menu-pipeline): Phase 7 tax engine + OTD + deal scoring
 - `cc617ec` feat(menu-pipeline): Phase 8 scheduler + breakage detection
 - `d0aad6e` feat(menu-pipeline): Phase 9 VERIFY backfill probes
+- `df9ab1b` feat(menu-pipeline): Phase 9 round 3 -- reconcile adapters to live shapes
+- `8fd7e22` fix(menu-pipeline): correct stale iHeartJane store-lookup endpoint
+- `98c9b37` feat(menu-pipeline): reconcile Jane adapter to Algolia consolidation (Round 4)
