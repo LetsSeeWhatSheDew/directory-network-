@@ -82,6 +82,13 @@ Build the missing **baseline** layer under PuffPrice's deal scraper: structured 
   - `app/api/cron/menu-baseline/route.ts`: Vercel cron handler reusing `lib/cronAuth.ts` for the same bearer-token security as the existing scrape-deals cron. Returns 502 ("loud fail") if ALL stores failed in a run; 200 with summary otherwise.
   - `vercel.json`: added `/api/cron/menu-baseline` at `0 10 * * *` (1h after the deal scraper, daily — within Hobby plan limit).
   - Heavier downstream stages (normalize-writes, baseline compute, OTD backfill, deal scoring) remain CLI scripts run by ops or wired into additional cron entries as a follow-up. This keeps the cron function under the 300s ceiling and prevents one slow stage from breaking the others.
+- [x] **Phase 9 (optional) — VERIFY backfill probes**
+  - `scripts/verify-registry-items.ts`: probes live endpoints for resolvable VERIFY items. Does NOT edit `reference-data/` — emits findings the operator hands to Cowork.
+    - Beyond Hello Bloomington → `api.iheartjane.com/v1/stores` (filtered to IL/Bloom/BH).
+    - Trinity Glen → POSTs `dutchie.com/graphql` FilteredProducts with 5 candidate cName slugs; HIT = first candidate returning >0 products.
+    - RISE Canton → same probe with 5 RISE/Evergreen candidates.
+    - 4 `VERIFY_IDFPR` license-number entries → flagged as not-probeable; must be looked up manually at the IDFPR adult-use PDF.
+  - Run live: `npx tsx scripts/verify-registry-items.ts` (no auth required; rate-limited 2s between probes).
 
 
 
