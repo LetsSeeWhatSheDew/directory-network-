@@ -30,10 +30,15 @@ import { runFetch, sleep, jitter } from "../lib/scraper/menu/runFetch";
 import { persistSnapshot, type PersistEnv } from "../lib/scraper/menu/persist";
 
 import { janeAdapter } from "../lib/scraper/menu/adapters/jane";
+import { dutchieAdapter } from "../lib/scraper/menu/adapters/dutchie";
+import { sweedAdapter } from "../lib/scraper/menu/adapters/sweed";
+import { jointAdapter } from "../lib/scraper/menu/adapters/joint";
 
-// Phase 4 adapters will plug in here.
 const ADAPTERS = {
   jane: janeAdapter,
+  dutchie: dutchieAdapter,
+  sweed: sweedAdapter,
+  joint: jointAdapter,
 } as const;
 
 const SUPABASE_URL =

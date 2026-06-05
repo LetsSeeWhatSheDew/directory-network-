@@ -43,7 +43,14 @@ Build the missing **baseline** layer under PuffPrice's deal scraper: structured 
   - `tests/fixtures/menu/jane-1517.json` + `tests/menu/jane.test.ts` (self-contained, no test framework — exit 1 on assert fail)
   - `scripts/run-menu-snapshot.ts` — manual entry point (per-slug, --all, --fixture, --apply)
   - **Test result:** Jane parser produces 9 items from the fixture, all assertions pass. Bucket expansion correct, sale detection correct, THC range display correct, zero-price SKU dropped.
-- [ ] **Phase 4 — Dutchie + Sweed + Joint adapters** (6 stores)
+- [x] **Phase 4 — Dutchie + Sweed + Joint adapters** (6 stores)
+  - `lib/scraper/menu/adapters/dutchie.ts`: GraphQL `FilteredProducts`. Parameterized by endpoint (whitelabel like `noxx.com/api-1/graphql` vs `dutchie.com/graphql`) and by `dispensaryId` (24-char hex) OR slug. Expands POSMetaData.children buckets + falls back to Options/recPrices/recSpecialPrices pairs.
+  - `lib/scraper/menu/adapters/sweed.ts`: bootstraps `__sw-device-id` cookie from menu_url GET, then POSTs `Products/GetProductList`. Single-retry on AuthError re-establishes the session. Expands Variants[].
+  - `lib/scraper/menu/adapters/joint.ts` (v0.9): probes `/wp-json/joint-api/v1/sync-dutchie` first, then `/sync-jane`. If both empty, returns a documented `empty` snapshot with explanatory error (HTML/nonce fallback intentionally not implemented — per registry note, don't over-invest).
+  - All four adapters wired into `scripts/run-menu-snapshot.ts`.
+  - Fixtures: `dutchie-65772a69ac53410009424572.json`, `sweed-ivy-hall-peoria-heights.json`, `joint-cookies-peoria-heights.json`.
+  - `tests/menu/adapters.test.ts`: 3 parsers, all PASS.
+  - **Coverage:** 8/10 stores have working adapters (Beyond Hello Bloomington needs Jane storeId backfill — Phase 9; Trinity Glen + RISE Canton need Dutchie slug backfill — Phase 9). VERIFY items return a clean `error` snapshot rather than crashing.
 - [ ] **Phase 5 — Normalization layer** (≥90% match rate target)
 - [ ] **Phase 6 — Baselines + sanity gate**
 - [ ] **Phase 7 — Tax engine extension + OTD + deal scoring**

@@ -1,0 +1,58 @@
+{
+  "_meta": {
+    "purpose": "Hand-built sample mirroring Dutchie's FilteredProducts GraphQL response for NOXX East Peoria (dispensaryId 65772a69ac53410009424572). Covers POSMetaData.children flower buckets, vape sale, edible pack, and a no-price coming-soon product.",
+    "source": "Schema cross-referenced against Dutchie public storefront responses observed via Chrome (2026-06-04)."
+  },
+  "data": {
+    "filteredProducts": {
+      "queryInfo": { "totalCount": 4 },
+      "products": [
+        {
+          "id": "dut-001",
+          "name": "Cresco Mac n Cheese",
+          "type": "Flower",
+          "strainType": "Hybrid",
+          "brand": { "name": "Cresco" },
+          "POSMetaData": {
+            "children": [
+              { "option": "3.5g", "priceRec": 45, "specialPriceRec": 35 },
+              { "option": "7g",   "priceRec": 85 },
+              { "option": "14g",  "priceRec": 160 },
+              { "option": "28g",  "priceRec": 280 }
+            ]
+          },
+          "potencyThc": { "formatted": "26.4%", "unit": "%" }
+        },
+        {
+          "id": "dut-002",
+          "name": "RYTHM Cart Sunset Sherbert",
+          "type": "Vaporizers",
+          "brand": { "name": "RYTHM" },
+          "Options": ["0.5g", "1g"],
+          "recPrices": [40, 70],
+          "recSpecialPrices": [30, 55],
+          "potencyThc": { "formatted": "82%", "range": [80, 84], "unit": "%" }
+        },
+        {
+          "id": "dut-003",
+          "name": "incredibles Mile High Mint Bar",
+          "type": "Edible",
+          "brand": { "name": "incredibles" },
+          "POSMetaData": {
+            "children": [
+              { "option": "100mg", "priceRec": 22 }
+            ]
+          },
+          "potencyThc": { "formatted": "100mg", "unit": "mg" }
+        },
+        {
+          "id": "dut-004",
+          "name": "Mystery SKU (no price yet)",
+          "type": "Flower",
+          "brand": { "name": "Pending" },
+          "POSMetaData": { "children": [{ "option": "3.5g" }] }
+        }
+      ]
+    }
+  }
+}

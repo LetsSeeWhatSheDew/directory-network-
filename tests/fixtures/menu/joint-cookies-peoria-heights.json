@@ -1,0 +1,38 @@
+{
+  "_meta": {
+    "purpose": "Hand-built sample mirroring a /wp-json/joint-api/v1/sync-dutchie response shape for Cookies Peoria Heights. The sync endpoint flattens Dutchie's payload into Joint's own JSON; we mirror that flattened shape.",
+    "source": "Schema inferred from Joint WP plugin code references (2026-06-04). Real responses observed during Phase 8 will refine this."
+  },
+  "products": [
+    {
+      "id": "ck-001",
+      "name": "Cookies Berner's Cookies",
+      "brand": "Cookies",
+      "category": "Flower",
+      "thc": 24.6,
+      "variants": [
+        { "size": "3.5g", "price": 55, "sale_price": 45 },
+        { "size": "7g",   "price": 100 }
+      ]
+    },
+    {
+      "id": "ck-002",
+      "name": "Cookies Live Resin Cart Sherb Cream Pie",
+      "brand": "Cookies",
+      "category": "Vape",
+      "thc": "75%",
+      "variants": [
+        { "size": "0.5g", "price": 60 }
+      ]
+    },
+    {
+      "id": "ck-003",
+      "name": "Camino Yuzu Lemon Gummies",
+      "brand": "Camino",
+      "category": "Edible",
+      "thc": "100mg",
+      "weight": "100mg",
+      "price": 30
+    }
+  ]
+}

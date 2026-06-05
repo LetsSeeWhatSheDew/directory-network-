@@ -1,0 +1,40 @@
+{
+  "_meta": {
+    "purpose": "Hand-built sample mirroring SweedPos GetProductList for Ivy Hall Peoria Heights. Covers Variants[] expansion, brand-as-object, THC min/max range, and a sale variant.",
+    "source": "Schema cross-referenced against SweedPos public widget responses (2026-06-04)."
+  },
+  "TotalCount": 3,
+  "Products": [
+    {
+      "Id": "sw-001",
+      "Name": "Ivy Hall House Eighth — OG Kush",
+      "Brand": { "Name": "Ivy Hall" },
+      "Category": { "Name": "Flower" },
+      "Thc": { "Min": 19.0, "Max": 22.5 },
+      "Variants": [
+        { "Id": "v1", "Size": "3.5g", "OriginalPrice": 35, "Price": 28 },
+        { "Id": "v2", "Size": "7g",   "OriginalPrice": 65, "Price": 65 },
+        { "Id": "v3", "Size": "14g",  "OriginalPrice": 120, "Price": 120 }
+      ]
+    },
+    {
+      "Id": "sw-002",
+      "Name": "Aeriz Live Cart Wedding Cake",
+      "Brand": "Aeriz",
+      "Category": "Vape",
+      "Thc": { "Min": 86.4, "Max": 86.4 },
+      "Variants": [
+        { "Id": "v4", "Size": "1g", "OriginalPrice": 75, "Price": 75 }
+      ]
+    },
+    {
+      "Id": "sw-003",
+      "Name": "Wyld Pomegranate Gummies",
+      "Brand": "Wyld",
+      "Category": "Edible",
+      "Variants": [
+        { "Id": "v5", "Size": "100mg", "OriginalPrice": 25, "Price": 25 }
+      ]
+    }
+  ]
+}
