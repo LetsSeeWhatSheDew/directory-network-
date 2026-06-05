@@ -30,7 +30,19 @@ Build the missing **baseline** layer under PuffPrice's deal scraper: structured 
   - Sanity: rejects coords outside IL bounding box, marks `failed`.
   - Skips rows already `verified` unless `--force`.
   - **Action required (Matthew):** after Phase 1 apply, run `SUPABASE_SERVICE_ROLE_KEY=... npx tsx scripts/geocode-dispensaries.ts --apply`.
-- [ ] **Phase 3 — Adapter framework + Jane adapter** (4 stores)
+- [x] **Phase 3 — Adapter framework + Jane adapter** (4 stores)
+  - Framework: `lib/scraper/menu/{types,runFetch,persist}.ts`
+    - Shared `Adapter` interface (fetch → FetchResult, never throws to caller)
+    - `runFetch` translates AdapterAuth/AdapterSchema errors into FetchResult.error
+    - `persistSnapshot` writes the snapshot ledger ALWAYS; items only when status=ok and non-empty (no overwriting good data with empties)
+  - `lib/scraper/menu/adapters/jane.ts` (Algolia `menu-products-production`)
+    - Single adapter covers nuEra E. Peoria (1517), nuEra Pekin (3050), Beyond Hello Peoria (6926), Beyond Hello Bloomington (VERIFY)
+    - Flower SKUs auto-expand to one raw row per bucket (3.5g/7g/14g/28g + 1g if listed)
+    - Loud fail (AdapterAuthError) on 401/403 — Algolia key rotation surfaces immediately
+    - Fixture-loader support for offline tests
+  - `tests/fixtures/menu/jane-1517.json` + `tests/menu/jane.test.ts` (self-contained, no test framework — exit 1 on assert fail)
+  - `scripts/run-menu-snapshot.ts` — manual entry point (per-slug, --all, --fixture, --apply)
+  - **Test result:** Jane parser produces 9 items from the fixture, all assertions pass. Bucket expansion correct, sale detection correct, THC range display correct, zero-price SKU dropped.
 - [ ] **Phase 4 — Dutchie + Sweed + Joint adapters** (6 stores)
 - [ ] **Phase 5 — Normalization layer** (≥90% match rate target)
 - [ ] **Phase 6 — Baselines + sanity gate**

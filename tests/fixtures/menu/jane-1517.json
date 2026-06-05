@@ -1,0 +1,91 @@
+{
+  "_meta": {
+    "purpose": "Hand-built sample payload mirroring Jane's Algolia 'menu-products-production' shape for nuEra East Peoria (store 1517). Covers flower bucket pricing, vape single pricing, edible, sale price, and THC range. Used by tests/menu/jane.test.ts to validate the parser offline.",
+    "source": "Schema cross-referenced against Chrome live recon (2026-06-04). Brand and product names match real RYTHM / Simply Herb / Wyld SKUs observed at this store."
+  },
+  "hits": [
+    {
+      "objectID": "1517-rythm-mac1-eighth",
+      "product_id": 100001,
+      "name": "RYTHM MAC #1",
+      "brand": "RYTHM",
+      "kind": "flower",
+      "category": "flower",
+      "root_subtype": "hybrid",
+      "amount": "3.5g",
+      "percent_thc": 28.4,
+      "price_eighth_ounce": 50,
+      "price_quarter_ounce": 95,
+      "price_half_ounce": 180,
+      "price_ounce": 320,
+      "store_id": 1517
+    },
+    {
+      "objectID": "1517-simply-herb-popcorn-oz",
+      "product_id": 100002,
+      "name": "Simply Herb Popcorn — Indica",
+      "brand": "Simply Herb",
+      "kind": "flower",
+      "category": "flower",
+      "root_subtype": "indica",
+      "amount": "28g",
+      "thc_low": 18.2,
+      "thc_high": 22.0,
+      "price_eighth_ounce": 25,
+      "price_ounce": 130,
+      "discounted_price_ounce": 99,
+      "store_id": 1517
+    },
+    {
+      "objectID": "1517-rythm-cart-blue-dream-1g",
+      "product_id": 100003,
+      "name": "RYTHM Cart — Blue Dream",
+      "brand": "RYTHM",
+      "kind": "vape",
+      "category": "vape",
+      "amount": "1g",
+      "percent_thc": 78.5,
+      "price": 70,
+      "discounted_price": 55,
+      "store_id": 1517
+    },
+    {
+      "objectID": "1517-wyld-rasp-gummies",
+      "product_id": 100004,
+      "name": "Wyld Raspberry Gummies",
+      "brand": "Wyld",
+      "kind": "edible",
+      "category": "edible",
+      "amount": "100mg",
+      "percent_thc": 0,
+      "price": 25,
+      "store_id": 1517
+    },
+    {
+      "objectID": "1517-aeriz-preroll-1g",
+      "product_id": 100005,
+      "name": "Aeriz Live Resin Pre-Roll",
+      "brand": "Aeriz",
+      "kind": "pre-rolls",
+      "category": "pre-rolls",
+      "amount": "1g",
+      "percent_thc": 31.0,
+      "price": 18,
+      "store_id": 1517
+    },
+    {
+      "objectID": "1517-empty-no-price",
+      "product_id": 100006,
+      "name": "Coming Soon SKU",
+      "brand": "Mystery",
+      "kind": "flower",
+      "category": "flower",
+      "amount": "3.5g",
+      "store_id": 1517
+    }
+  ],
+  "nbHits": 6,
+  "page": 0,
+  "nbPages": 1,
+  "hitsPerPage": 100
+}
