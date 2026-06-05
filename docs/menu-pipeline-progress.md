@@ -77,7 +77,13 @@ Build the missing **baseline** layer under PuffPrice's deal scraper: structured 
   - `scripts/score-deals.ts`: joins active deals → dispensaries → latest_baselines (class-level aggregate when single-SKU match isn't possible). Logs `unknown` with explanatory reason when no baseline can be found — never silently drops.
   - `tests/menu/scoreDeal.test.ts`: PASS — every label boundary covered.
 - [ ] **Phase 8 — Scheduler + breakage detection**
-- [ ] **Phase 9 (optional) — VERIFY backfill probes**
+- [x] **Phase 8 — Scheduler + breakage detection**
+  - `lib/scraper/menu/pipeline.ts`: `runMenuPipeline(env)` runs the snapshot stage in-process across all active stores. Per-store failure → snapshot ledger entry with `status='error'` + `error_message`; items table untouched (prior good day preserved). Returns structured summary: `{stores_attempted, stores_ok, stores_empty, stores_error}`.
+  - `app/api/cron/menu-baseline/route.ts`: Vercel cron handler reusing `lib/cronAuth.ts` for the same bearer-token security as the existing scrape-deals cron. Returns 502 ("loud fail") if ALL stores failed in a run; 200 with summary otherwise.
+  - `vercel.json`: added `/api/cron/menu-baseline` at `0 10 * * *` (1h after the deal scraper, daily — within Hobby plan limit).
+  - Heavier downstream stages (normalize-writes, baseline compute, OTD backfill, deal scoring) remain CLI scripts run by ops or wired into additional cron entries as a follow-up. This keeps the cron function under the 300s ceiling and prevents one slow stage from breaking the others.
+
+
 
 ## Known blockers / risks
 - **Vape excise gap in `lib/taxRates.ts`**: existing `concentrate` tier hardcodes 25% — correct only for >35% THC. Reference data requires `non_infused_le_35` (10%) and `non_infused_gt_35` (25%) separation. Phase 7 will extend, not rewrite.
