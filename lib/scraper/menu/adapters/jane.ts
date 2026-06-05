@@ -24,7 +24,7 @@
 //
 // Slug → storeId resolution (BH Bloomington)
 //   If platform_store_id is non-numeric we treat it as a Jane storefront
-//   slug and GET api.iheartjane.com/v1/stores?slug=<slug> to resolve the
+//   slug and GET www.iheartjane.com/api/v1/stores?slug=<slug> to resolve the
 //   numeric store_id. Cached in-process for the life of the runner.
 //
 // Loud-fail: 401/403 from Algolia (key rotation) throws AdapterAuthError.

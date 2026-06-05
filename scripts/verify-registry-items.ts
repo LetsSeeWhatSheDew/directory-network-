@@ -9,7 +9,7 @@
 //
 // Probes
 //   1. Beyond Hello Bloomington Jane store ID:
-//      GET https://api.iheartjane.com/v1/stores
+//      GET https://www.iheartjane.com/api/v1/stores?slug=…
 //      filter by zip/lat/lng match.
 //   2. Trinity Peoria Glen Dutchie slug:
 //      POST dutchie.com/graphql FilteredProducts with candidate cNames
@@ -42,7 +42,10 @@ const findings: Finding[] = [];
 
 // ------ Beyond Hello Bloomington -- Jane store ID -------
 async function probeBeyondHelloBloomington(): Promise<void> {
-  const url = "https://api.iheartjane.com/v1/stores";
+  // Live endpoint confirmed by Chrome Round 2: www.iheartjane.com/api/v1/stores
+  // (the older api.iheartjane.com/v1/stores host is dead). Slug-scope the query
+  // to match the production Jane adapter (lib/scraper/menu/adapters/jane.ts).
+  const url = "https://www.iheartjane.com/api/v1/stores?slug=beyond-hello-bloomington-rec";
   console.log(`\n[BH Bloomington] GET ${url}`);
   try {
     const res = await fetch(url, { headers: { "User-Agent": USER_AGENT, Accept: "application/json" } });
