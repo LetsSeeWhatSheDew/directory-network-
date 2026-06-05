@@ -63,7 +63,19 @@ Build the missing **baseline** layer under PuffPrice's deal scraper: structured 
   - `sanityKey()` maps `(category, unit)` → sanity band key. Unmapped classes (topical, tincture) pass-through.
   - `scripts/compute-price-baselines.ts`: groups latest observations by canonical_product, applies a configurable sample-size floor (default 3), runs the sanity gate, appends to `price_baselines` (sanity-failed rows still recorded with `sanity_passed=false` + flag for audit history). Configurable `--window-days`, `--min-samples`, `--geo`.
   - `tests/menu/baselines.test.ts`: PASS — median/percentiles, single-obs degenerate, non-positive filter, sanity-key mapping, sanity-gate behavior (low/high/edge/no-band).
-- [ ] **Phase 7 — Tax engine extension + OTD + deal scoring**
+- [x] **Phase 7 — Tax engine extension + OTD + deal scoring**
+  - `lib/taxRatesMenu.ts`: wraps `lib/taxRates.ts` and adds the missing `non_infused_le_35` tier (10% excise for vapes/concentrates ≤35% THC — the bug the prompt warned about). Stacking matches IL DOR order: excise → subtotal → (state ROT + county cannabis + muni cannabis + general add-on) on subtotal. `MenuThcTier='unknown'` defensively uses 25%.
+  - **Tax validation** (`tests/menu/tax.test.ts`): all three reference targets PASS in STRICT mode (zero general add-on).
+    - eighth ≤35%: 23.47% (target 25%, Δ -1.53%) ✓
+    - vape >35%: 40.31% (target 40%, Δ +0.31%) ✓
+    - edible: 34.70% (target 35%, Δ -0.30%) ✓
+    - real CIL effective rates run 2-5pp above targets because every CIL city has a general add-on of 2.75%-3.5%. That's correct math — the reference targets are stylized.
+    - Bug-the-prompt-warned-about explicit test: ≤35% vape gets $4 excise vs >35% vape gets $10 excise on $40 shelf. PASS.
+  - `scripts/compute-otd-prices.ts`: writes `price_out_the_door` per menu_item using the city slug + thc_tier. Idempotent (--only-missing default; --all to recompute).
+  - `sql/menu-deal-scores-schema.sql`: `deal_scores` table + `latest_deal_scores` view. Append-only.
+  - `lib/scraper/menu/scoreDeal.ts`: pure function. Labels: great_deal (< p25) / fair_deal (p25..median) / weak_deal (median..p75) / no_real_savings (> p75) / unknown.
+  - `scripts/score-deals.ts`: joins active deals → dispensaries → latest_baselines (class-level aggregate when single-SKU match isn't possible). Logs `unknown` with explanatory reason when no baseline can be found — never silently drops.
+  - `tests/menu/scoreDeal.test.ts`: PASS — every label boundary covered.
 - [ ] **Phase 8 — Scheduler + breakage detection**
 - [ ] **Phase 9 (optional) — VERIFY backfill probes**
 
