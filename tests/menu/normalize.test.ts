@@ -30,24 +30,37 @@ const STORES: Array<{ store: StoreRef; adapter: Adapter }> = [
   {
     adapter: janeAdapter,
     store: { id: "x", slug: "nuera-east-peoria", name: "nuEra", city: "East Peoria",
-      platform: "jane", platform_store_id: "1517", menu_url: null, graphql_endpoint: null },
+      platform: "jane", platform_store_id: "1517", menu_url: null, graphql_endpoint: null,
+      jane_cluster: "default" },
+  },
+  {
+    adapter: janeAdapter,
+    store: { id: "x", slug: "rise-canton", name: "RISE", city: "Canton",
+      platform: "jane", platform_store_id: "1343", menu_url: null, graphql_endpoint: null,
+      jane_cluster: "rise_gti" },
   },
   {
     adapter: dutchieAdapter,
     store: { id: "x", slug: "noxx-east-peoria", name: "NOXX", city: "East Peoria",
       platform: "dutchie", platform_store_id: "65772a69ac53410009424572", menu_url: null,
-      graphql_endpoint: "https://noxx.com/api-1/graphql" },
+      graphql_endpoint: "https://dutchie.com/api-4/graphql" },
+  },
+  {
+    adapter: dutchieAdapter,
+    store: { id: "x", slug: "trinity-peoria-glen", name: "Trinity", city: "Peoria",
+      platform: "dutchie", platform_store_id: "5f1084a105efe300b6392001", menu_url: null,
+      graphql_endpoint: "https://dutchie.com/api-4/graphql" },
   },
   {
     adapter: sweedAdapter,
-    store: { id: "x", slug: "ivy-hall-peoria-heights", name: "Ivy Hall", city: "Peoria Heights",
-      platform: "sweed", platform_store_id: "session-routed",
+    store: { id: "x", slug: "ivy-hall-peoria-heights", name: "Ivy Hall", city: "Peoria",
+      platform: "sweed", platform_store_id: "169",
       menu_url: "https://ivyhalldispensary.com/locations/peoria/menu", graphql_endpoint: null },
   },
   {
     adapter: jointAdapter,
     store: { id: "x", slug: "cookies-peoria-heights", name: "Cookies", city: "Peoria Heights",
-      platform: "joint", platform_store_id: "wp-nonce-gated",
+      platform: "joint", platform_store_id: "5478",
       menu_url: "https://peoriaheights.cookies.co/menu/", graphql_endpoint: null },
   },
 ];
@@ -116,12 +129,12 @@ const STORES: Array<{ store: StoreRef; adapter: Adapter }> = [
   }
 
   const matchRate = (totalMatched / nonGearItems) * 100;
-  console.log(`\nNormalize summary across 4 fixture stores:`);
+  console.log(`\nNormalize summary across ${STORES.length} fixture stores:`);
   console.log(`  total raw items parsed:    ${totalParsed}`);
   console.log(`  non-gear items:            ${nonGearItems}`);
   console.log(`  mapped to canonical_product: ${totalMatched}  (${matchRate.toFixed(1)}%)`);
   console.log(`  review_queue issues:       ${totalReviewIssues}`);
   assert(matchRate >= 90, `Phase 5 done-condition: match rate >=90% (got ${matchRate.toFixed(1)}%)`);
 
-  console.log("\nPASS: Phase 5 normalization >=90% match rate across all 4 fixtures.");
+  console.log(`\nPASS: Phase 5 normalization >=90% match rate across all ${STORES.length} fixtures.`);
 })().catch((e) => { console.error(e); process.exit(1); });

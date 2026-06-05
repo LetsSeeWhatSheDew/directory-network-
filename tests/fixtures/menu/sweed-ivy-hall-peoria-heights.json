@@ -1,7 +1,8 @@
 {
   "_meta": {
-    "purpose": "Hand-built sample mirroring SweedPos GetProductList for Ivy Hall Peoria Heights. Covers Variants[] expansion, brand-as-object, THC min/max range, and a sale variant.",
-    "source": "Schema cross-referenced against SweedPos public widget responses (2026-06-04)."
+    "purpose": "Fixture for Ivy Hall (Sweed StoreId 169) — POST /Products/GetProductList response. Reflects Chrome Round 2 (2026-06-04) live shape: top-level Products[] with Variants[], Brand/Category sometimes string sometimes {Name:string}, Thc {Min,Max}, OriginalPrice vs Price for sale detection.",
+    "source": "Chrome Round 2 (2026-06-04) live response capture for storeId 169.",
+    "request_body_format": "POST web-ui-production.sweedpos.com/_api/proxy/Products/GetProductList with { StoreId: 169, SaleType: 'RECREATIONAL', Page, PageSize, ... } and Cookie: __sw-device-id=<uuid>"
   },
   "TotalCount": 3,
   "Products": [

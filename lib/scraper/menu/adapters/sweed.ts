@@ -1,31 +1,31 @@
 // lib/scraper/menu/adapters/sweed.ts
 // =============================================================================
-// Sweed (SweedPos) menu adapter.
+// Sweed (SweedPos) menu adapter — reconciled to Chrome Round 2 recon.
 //
-// Covers Ivy Hall Peoria Heights. Sweed's menu is session-gated: the
-// catalog endpoint won't respond until you've GET'd the menu page and
-// established the `__sw-device-id` cookie.
+// Covers Ivy Hall (Sweed storeId 169).
 //
-// Flow
-//   1. GET <menu_url> -- response sets `__sw-device-id`.
-//   2. POST <api>/Products/GetProductList with that cookie.
-//   3. If a 401/403 comes back later, re-establish the session and retry once.
+// Live flow (Chrome Round 2)
+//   1. Page 1 of the menu is delivered SSR (no fetch needed); the page
+//      load mints a `__sw-device-id` UUID into localStorage.
+//   2. Client filter/sort actions POST
+//        https://web-ui-production.sweedpos.com/_api/proxy/Products/GetProductList
+//      with body { StoreId: 169, SaleType: "RECREATIONAL", Page, PageSize, ... }
+//   3. A single call with a large PageSize pulls the entire menu.
 //
-// API endpoint
-//   https://web-ui-production.sweedpos.com/_api/proxy/Products/GetProductList
-//
-// Schema
-//   GetProductList returns Products[] each with: Id, Name, Brand, Category,
-//   Variants[{Id, Sku, Size, OriginalPrice, Price, IsLowStock}], Thc{Min,Max}.
-//   Variants ARE the buckets -- one row per variant.
+// For our server-side adapter we don't have localStorage, so we GET the
+// menu page once (which may also set `__sw-device-id` as a cookie in
+// some deployments) and either reuse that cookie or mint our own UUID.
+// Sweed treats the device id as opaque -- a synthetic UUID works.
 // =============================================================================
 
 import type { Adapter, AdapterOpts, FetchResult, RawMenuItem, StoreRef } from "../types";
 import { AdapterAuthError, AdapterSchemaError } from "../types";
 
-const ADAPTER_VERSION = "sweed@1.0.0";
+const ADAPTER_VERSION = "sweed@2.0.0";
 const PRODUCT_LIST_URL = "https://web-ui-production.sweedpos.com/_api/proxy/Products/GetProductList";
-const PER_PAGE = 200;
+// One big page pulls the full menu per Chrome Round 2 -- avoids needing
+// to handle pagination state in the typical case.
+const PER_PAGE = 500;
 
 interface SweedVariant {
   Id?: string;
@@ -84,6 +84,13 @@ function cryptoRandom(): string {
 }
 
 async function fetchProducts(deviceId: string, store: StoreRef, page: number): Promise<SweedResponse> {
+  // platform_store_id is the numeric Sweed StoreId (e.g. "169" for Ivy Hall).
+  const storeId = Number(store.platform_store_id);
+  if (!Number.isFinite(storeId) || storeId <= 0) {
+    throw new AdapterSchemaError(
+      `Sweed needs a numeric storeId; got "${store.platform_store_id}" for ${store.slug}`
+    );
+  }
   const res = await fetch(PRODUCT_LIST_URL, {
     method: "POST",
     headers: {
@@ -94,11 +101,13 @@ async function fetchProducts(deviceId: string, store: StoreRef, page: number): P
       Referer: store.menu_url || "",
     },
     body: JSON.stringify({
-      pageIndex: page,
-      pageSize: PER_PAGE,
-      sortBy: "popularity",
-      sortDirection: "desc",
-      filters: {},
+      StoreId: storeId,
+      SaleType: "RECREATIONAL",
+      Page: page,
+      PageSize: PER_PAGE,
+      SortBy: "popularity",
+      SortDirection: "desc",
+      Filters: {},
     }),
   });
   if (res.status === 401 || res.status === 403) {
@@ -205,11 +214,13 @@ export const sweedAdapter: Adapter = {
     let deviceId = await establishSession(store.menu_url);
     let all: RawMenuItem[] = [];
     let totalCount = 0;
+    // Sweed lets us pull the whole menu in one big page (PER_PAGE=500),
+    // but loop a few times defensively in case a store ever exceeds it.
     let page = 0;
     let returned = -1;
     let retriedAuth = false;
 
-    while (page < 20 && returned !== 0) {
+    while (page < 10 && returned !== 0) {
       try {
         const resp = await fetchProducts(deviceId, store, page);
         const products = resp.Products ?? [];

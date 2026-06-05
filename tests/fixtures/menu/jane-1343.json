@@ -1,0 +1,83 @@
+{
+  "_meta": {
+    "purpose": "Fixture for RISE Canton (Jane storeId 1343) on the rise_gti Algolia cluster (app 4O7QMAY0VJ, index production_menu_items). Cluster B's hit shape carries `amount` + flat `price`, `available`, and `sale_type` fields the default cluster doesn't.",
+    "source": "Chrome Round 2 (2026-06-04). Brand names match RISE Canton's live menu (RYTHM / Good Green / incredibles -- all GTI house brands)."
+  },
+  "hits": [
+    {
+      "objectID": "rise-1343-rythm-gmo-eighth",
+      "product_id": 700001,
+      "name": "RYTHM GMO 3.5g",
+      "brand": "RYTHM",
+      "kind": "flower",
+      "category": "flower",
+      "amount": "3.5g",
+      "price": 40,
+      "discounted_price": 30,
+      "percent_thc": 27.3,
+      "available": true,
+      "sale_type": "RECREATIONAL",
+      "store_id": 1343
+    },
+    {
+      "objectID": "rise-1343-good-green-relax-oz",
+      "product_id": 700002,
+      "name": "Good Green Relax 28g",
+      "brand": "Good Green",
+      "kind": "flower",
+      "category": "flower",
+      "amount": "28g",
+      "price": 150,
+      "thc_low": 17.5,
+      "thc_high": 19.0,
+      "available": true,
+      "sale_type": "RECREATIONAL",
+      "store_id": 1343
+    },
+    {
+      "objectID": "rise-1343-rythm-cart-pineapple",
+      "product_id": 700003,
+      "name": "RYTHM Live Resin Cart - Pineapple Express",
+      "brand": "RYTHM",
+      "kind": "vape",
+      "category": "vape",
+      "amount": "1g",
+      "price": 75,
+      "discounted_price": 60,
+      "percent_thc": 79.6,
+      "available": true,
+      "sale_type": "RECREATIONAL",
+      "store_id": 1343
+    },
+    {
+      "objectID": "rise-1343-incredibles-bar",
+      "product_id": 700004,
+      "name": "incredibles Black Cherry Bar",
+      "brand": "incredibles",
+      "kind": "edible",
+      "category": "edible",
+      "amount": "100mg",
+      "price": 25,
+      "available": true,
+      "sale_type": "RECREATIONAL",
+      "store_id": 1343
+    },
+    {
+      "objectID": "rise-1343-out-of-stock",
+      "product_id": 700005,
+      "name": "Aeriz Live Sugar (sold out)",
+      "brand": "Aeriz",
+      "kind": "concentrate",
+      "category": "concentrate",
+      "amount": "1g",
+      "price": 55,
+      "available": false,
+      "sale_type": "RECREATIONAL",
+      "store_id": 1343
+    }
+  ],
+  "nbHits": 5,
+  "page": 0,
+  "nbPages": 1,
+  "hitsPerPage": 100
+}

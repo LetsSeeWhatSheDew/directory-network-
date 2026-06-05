@@ -1,48 +1,52 @@
 // lib/scraper/menu/adapters/dutchie.ts
 // =============================================================================
-// Dutchie menu adapter.
+// Dutchie menu adapter — reconciled to live api-4 + persisted queries
+// (Chrome Round 2 recon, 2026-06-04).
 //
-// Covers the four Dutchie-platform Central IL stores:
-//   * NOXX East Peoria   (graphql_endpoint=noxx.com/api-1/graphql, dispensaryId 65772a69ac53410009424572)
-//   * Trinity Peoria (University)  (dutchie.com/graphql, slug trinity-compassionate-care-rec)
-//   * Trinity Peoria (Glen)        (slug VERIFY)
-//   * RISE Canton                  (slug VERIFY)
+// Coverage
+//   * NOXX East Peoria          dispensaryId 65772a69ac53410009424572
+//   * Trinity Peoria University slug trinity-compassionate-care-rec
+//   * Trinity Peoria Glen       dispensaryId 5f1084a105efe300b6392001
 //
 // API
-//   GraphQL POST. Two endpoints in use:
-//     1. dutchie.com/graphql           — the main Dutchie storefront
-//     2. <whitelabel>.com/api-1/graphql — Dutchie's embedded-menu proxy
-//        for white-label storefronts like NOXX.
-//   Both speak the same FilteredProducts schema. Parameterize by endpoint
-//   + (dispensaryId OR dispensary slug); the rest of the parser is shared.
+//   GET https://dutchie.com/api-4/graphql
+//     ?operationName=FilteredProducts
+//     &variables=<URL-encoded JSON>
+//     &extensions=<URL-encoded JSON containing persistedQuery.sha256Hash>
 //
-// Pagination
-//   `page` (0-indexed) + `perPage`. Loop until we've covered the total or
-//   hit a safety cap.
+//   The variables payload includes dispensaryId, pricingType:"rec",
+//   page (0-based), perPage (≤50), sortBy:"popularSortIdx", useCache:true.
 //
-// Schema
-//   FilteredProducts returns products[] each with: id, name, brand{name},
-//   strainType, type ("Flower"|"Vaporizers"|...), POSMetaData{children[
-//     {option:"3.5g", priceRec, specialPriceRec}]}, potency{thc{value,unit,range[]}}.
-//   We expand each child option into its own raw row (parallels Jane's
-//   bucket expansion) so each weight is observable.
+//   Pagination: filteredProducts.paginate.{total, perPage, page}.
+//
+//   Persisted-query hash CAN rotate without notice. We send the hash and
+//   the full inline query on every request (Apollo's Automatic Persisted
+//   Queries handshake). If the server signals PERSISTED_QUERY_NOT_FOUND,
+//   the inline query is consumed and the server learns the new hash --
+//   subsequent calls are cache hits. Allows operator to leave hash blank
+//   on first run; adapter recovers.
+//
+// Per-store fixture filename used by tests / offline runs:
+//   tests/fixtures/menu/dutchie-<platform_store_id>.json
 // =============================================================================
 
 import type { Adapter, AdapterOpts, FetchResult, RawMenuItem, StoreRef } from "../types";
 import { AdapterAuthError, AdapterSchemaError } from "../types";
 
-const ADAPTER_VERSION = "dutchie@1.0.0";
-const PER_PAGE = 100;
+const ADAPTER_VERSION = "dutchie@2.0.0";
+const ENDPOINT = "https://dutchie.com/api-4/graphql";
+const PER_PAGE = 50;          // Dutchie api-4 caps at 50 per request
 const MAX_PAGES = 30;
 
-// GraphQL query for the public FilteredProducts resolver. Pruned to the
-// fields the parser uses to keep payloads tight.
-const PRODUCTS_QUERY = `
+// Operator may override via env when Dutchie rotates the hash.
+// Empty string is fine: the inline query travels with every request and
+// teaches the server on the first call (Apollo APQ).
+const DEFAULT_QUERY_HASH = process.env.DUTCHIE_QUERY_HASH || "";
+
+const FILTERED_PRODUCTS_QUERY = `
   query FilteredProducts($filter: ProductFilter) {
     filteredProducts(filter: $filter) {
-      queryInfo {
-        totalCount
-      }
+      paginate { total perPage page }
       products {
         id
         name
@@ -50,7 +54,6 @@ const PRODUCTS_QUERY = `
         strainType
         brand { name }
         brandName
-        Status
         Options
         Prices
         recPrices
@@ -64,13 +67,8 @@ const PRODUCTS_QUERY = `
             specialPriceMed
           }
         }
-        Image
-        Description
-        Weight
-        type
         potencyThc { formatted range unit }
         potencyCbd { formatted range unit }
-        terpenes { terpene { name } value }
         special
       }
     }
@@ -84,7 +82,7 @@ interface DutchiePotency {
 }
 
 interface DutchieChildOption {
-  option?: string;          // "3.5g", "1g cart", etc.
+  option?: string;
   priceRec?: number;
   specialPriceRec?: number;
   priceMed?: number;
@@ -111,46 +109,88 @@ interface DutchieProduct {
 interface DutchieResponse {
   data?: {
     filteredProducts?: {
-      queryInfo?: { totalCount?: number };
+      paginate?: { total?: number; perPage?: number; page?: number };
       products?: DutchieProduct[];
     } | null;
   };
-  errors?: Array<{ message: string }>;
+  errors?: Array<{
+    message: string;
+    extensions?: { code?: string };
+  }>;
 }
 
-function endpoint(store: StoreRef): string {
-  return store.graphql_endpoint || "https://dutchie.com/graphql";
-}
-
-function buildFilter(store: StoreRef, page: number): unknown {
-  // Whitelabel endpoints (noxx) accept dispensaryId; the main Dutchie
-  // endpoint accepts dispensary slug. The id-vs-slug check is purely
-  // formatting: 24-char hex = ObjectId, otherwise slug.
+function buildVariables(store: StoreRef, page: number): Record<string, unknown> {
+  // Dutchie's ProductFilter accepts EITHER dispensaryId (Mongo ObjectId-
+  // shaped 24-char hex) OR cName (the storefront slug). Both Trinity
+  // stores have an id; older slug-only entries fall back to cName.
   const ref = store.platform_store_id;
   const isObjectId = /^[0-9a-f]{24}$/i.test(ref);
   const filter: Record<string, unknown> = {
     menuType: "Rec",
     page,
     perPage: PER_PAGE,
-    sortBy: "popular",
+    sortBy: "popularSortIdx",
     sortDirection: -1,
     productsOnSpecial: false,
     bypassKioskMenu: false,
     bypassOnlineThresholds: false,
     isKioskMenu: false,
     pricingType: "rec",
+    useCache: true,
   };
   if (isObjectId) {
     filter.dispensaryId = ref;
   } else {
-    filter.cName = ref;            // Dutchie's "canonical name" / slug filter
+    filter.cName = ref;
   }
-  return filter;
+  return { filter };
 }
 
-async function queryPage(store: StoreRef, page: number): Promise<DutchieResponse> {
-  const url = endpoint(store);
-  const res = await fetch(url, {
+function buildUrl(store: StoreRef, page: number, hash: string): string {
+  const variables = encodeURIComponent(JSON.stringify(buildVariables(store, page)));
+  const extensions = encodeURIComponent(
+    JSON.stringify({
+      persistedQuery: { version: 1, sha256Hash: hash },
+    })
+  );
+  const endpoint = store.graphql_endpoint || ENDPOINT;
+  return `${endpoint}?operationName=FilteredProducts&variables=${variables}&extensions=${extensions}`;
+}
+
+async function queryPage(
+  store: StoreRef,
+  page: number,
+  hash: string
+): Promise<DutchieResponse> {
+  // First attempt: GET with persisted-query hash (cheap).
+  const getUrl = buildUrl(store, page, hash);
+  const getRes = await fetch(getUrl, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "User-Agent": "PuffPriceMenuPipeline/1.0 (+https://puffprice.com/about)",
+    },
+  });
+
+  if (getRes.status === 401 || getRes.status === 403) {
+    throw new AdapterAuthError(`Dutchie api-4 GET auth ${getRes.status} for ${store.slug}`);
+  }
+
+  if (getRes.ok) {
+    const body = (await getRes.json()) as DutchieResponse;
+    if (!isPersistedQueryMiss(body)) return ensureValid(body, store);
+    // Fall through to POST below if PERSISTED_QUERY_NOT_FOUND.
+  } else if (getRes.status !== 400 && getRes.status !== 404) {
+    // Unexpected status that's not the typical APQ-miss signal.
+    throw new AdapterSchemaError(
+      `Dutchie api-4 GET ${getRes.status}: ${await getRes.text().catch(() => "(no body)")}`
+    );
+  }
+
+  // Second attempt: POST with full query body + extensions. Server
+  // consumes the inline query, registers the hash for future GETs.
+  const endpoint = store.graphql_endpoint || ENDPOINT;
+  const postRes = await fetch(endpoint, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -159,22 +199,42 @@ async function queryPage(store: StoreRef, page: number): Promise<DutchieResponse
     },
     body: JSON.stringify({
       operationName: "FilteredProducts",
-      query: PRODUCTS_QUERY,
-      variables: { filter: buildFilter(store, page) },
+      query: FILTERED_PRODUCTS_QUERY,
+      variables: buildVariables(store, page),
+      extensions: { persistedQuery: { version: 1, sha256Hash: hash } },
     }),
   });
-  if (res.status === 401 || res.status === 403) {
-    throw new AdapterAuthError(`Dutchie auth ${res.status} at ${url} for ${store.slug}`);
+  if (postRes.status === 401 || postRes.status === 403) {
+    throw new AdapterAuthError(`Dutchie api-4 POST auth ${postRes.status} for ${store.slug}`);
   }
-  if (!res.ok) {
-    throw new AdapterSchemaError(`Dutchie ${res.status}: ${await res.text().catch(() => "(no body)")}`);
+  if (!postRes.ok) {
+    throw new AdapterSchemaError(
+      `Dutchie api-4 POST ${postRes.status}: ${await postRes.text().catch(() => "(no body)")}`
+    );
   }
-  const body = (await res.json()) as DutchieResponse;
-  if (body.errors && body.errors.length > 0) {
-    throw new AdapterSchemaError(`Dutchie GraphQL errors: ${body.errors.map((e) => e.message).join("; ")}`);
+  const postBody = (await postRes.json()) as DutchieResponse;
+  return ensureValid(postBody, store);
+}
+
+function isPersistedQueryMiss(body: DutchieResponse): boolean {
+  if (!body.errors) return false;
+  return body.errors.some(
+    (e) =>
+      e?.extensions?.code === "PERSISTED_QUERY_NOT_FOUND" ||
+      /persisted.?query/i.test(e.message)
+  );
+}
+
+function ensureValid(body: DutchieResponse, store: StoreRef): DutchieResponse {
+  if (body.errors && body.errors.length > 0 && !isPersistedQueryMiss(body)) {
+    throw new AdapterSchemaError(
+      `Dutchie GraphQL errors at ${store.slug}: ${body.errors.map((e) => e.message).join("; ")}`
+    );
   }
   if (!body.data || !body.data.filteredProducts) {
-    throw new AdapterSchemaError(`Dutchie response missing data.filteredProducts: ${JSON.stringify(body).slice(0, 200)}`);
+    throw new AdapterSchemaError(
+      `Dutchie response missing data.filteredProducts at ${store.slug}: ${JSON.stringify(body).slice(0, 200)}`
+    );
   }
   return body;
 }
@@ -182,7 +242,10 @@ async function queryPage(store: StoreRef, page: number): Promise<DutchieResponse
 function thcDisplay(p?: DutchiePotency): string | null {
   if (!p) return null;
   if (p.formatted) return p.formatted;
-  if (p.range && p.range.length === 2) return `${p.range[0]}${p.unit || "%"}-${p.range[1]}${p.unit || "%"}`;
+  if (p.range && p.range.length === 2) {
+    const unit = p.unit || "%";
+    return `${p.range[0]}${unit}-${p.range[1]}${unit}`;
+  }
   return null;
 }
 
@@ -191,8 +254,6 @@ function expandProduct(prod: DutchieProduct): RawMenuItem[] {
   const category = (prod.type || prod.strainType || null) || null;
   const thc = thcDisplay(prod.potencyThc);
 
-  // POSMetaData.children is Dutchie's per-option pricing — flower buckets,
-  // vape sizes, edible packs. Prefer it when present.
   const children = prod.POSMetaData?.children?.filter((c) => c.option) ?? [];
   if (children.length > 0) {
     const out: RawMenuItem[] = [];
@@ -216,7 +277,7 @@ function expandProduct(prod: DutchieProduct): RawMenuItem[] {
     if (out.length > 0) return out;
   }
 
-  // Fall back to recPrices / recSpecialPrices arrays paired with Options.
+  // Fallback path: Options[] + recPrices[] + recSpecialPrices[].
   const options = prod.Options ?? [];
   const prices = prod.recPrices ?? prod.Prices ?? [];
   const specials = prod.recSpecialPrices ?? [];
@@ -295,18 +356,20 @@ export const dutchieAdapter: Adapter = {
       }
     }
 
+    const hash = opts.apiKey || DEFAULT_QUERY_HASH;
     const all: RawMenuItem[] = [];
-    let totalCount = 0;
+    let total = 0;
     let page = 0;
     let returned = -1;
+
     while (page < MAX_PAGES && returned !== 0) {
-      const resp = await queryPage(store, page);
+      const resp = await queryPage(store, page, hash);
       const products = resp.data?.filteredProducts?.products ?? [];
       returned = products.length;
-      totalCount = resp.data?.filteredProducts?.queryInfo?.totalCount ?? totalCount;
+      total = resp.data?.filteredProducts?.paginate?.total ?? total;
       for (const p of products) all.push(...expandProduct(p));
       page++;
-      if (returned > 0 && all.length < totalCount) await new Promise((r) => setTimeout(r, 500));
+      if (returned > 0 && all.length < total) await new Promise((r) => setTimeout(r, 500));
     }
 
     const status = all.length === 0 ? "empty" : "ok";
@@ -316,9 +379,9 @@ export const dutchieAdapter: Adapter = {
       items: all,
       duration_ms: Date.now() - start,
       adapter_version: ADAPTER_VERSION,
-      error: totalCount === 0 ? `Dutchie returned 0 products for ${store.slug}` : undefined,
+      error: total === 0 ? `Dutchie api-4 returned 0 products for ${store.slug}` : undefined,
     };
   },
 };
 
-export const __testing = { expandProduct, ADAPTER_VERSION };
+export const __testing = { expandProduct, buildVariables, buildUrl, isPersistedQueryMiss, ADAPTER_VERSION };

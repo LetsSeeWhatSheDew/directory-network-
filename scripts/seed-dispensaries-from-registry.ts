@@ -41,6 +41,7 @@ interface RegistryEntry {
   geocode_status?: "approx" | "verified" | "failed";
   note?: string;
   edge_note?: string;
+  jane_cluster?: string;
 }
 
 interface Registry {
@@ -97,6 +98,7 @@ function toDbRow(e: RegistryEntry) {
     menu_url: e.menu_url ?? null,
     graphql_endpoint: e.graphql_endpoint ?? null,
     shadow_dom: e.shadow_dom ?? false,
+    jane_cluster: e.menu_platform === "jane" ? (e.jane_cluster ?? "default") : null,
     notes,
     is_active: true,
   };

@@ -1,7 +1,8 @@
 {
   "_meta": {
-    "purpose": "Hand-built sample mirroring a /wp-json/joint-api/v1/sync-dutchie response shape for Cookies Peoria Heights. The sync endpoint flattens Dutchie's payload into Joint's own JSON; we mirror that flattened shape.",
-    "source": "Schema inferred from Joint WP plugin code references (2026-06-04). Real responses observed during Phase 8 will refine this."
+    "purpose": "Fixture for Cookies Peoria Heights (Joint WP, storeId 5478) — /wp-json/joint-api/v1/products response. Reflects Chrome Round 2 (2026-06-04) live shape after WP nonce scrape.",
+    "source": "Chrome Round 2 (2026-06-04). The previous fixture assumed an upstream sync-dutchie shape; Chrome confirmed sync-dutchie and sync-jane both 404 -- the nonce-gated /products endpoint is the only path.",
+    "request_format": "GET https://peoriaheights.cookies.co/wp-json/joint-api/v1/products?per_page=20&page=1&_wpnonce=<NONCE>  +  header X-WP-Nonce: <NONCE>"
   },
   "products": [
     {
@@ -10,6 +11,7 @@
       "brand": "Cookies",
       "category": "Flower",
       "thc": 24.6,
+      "store_id": 5478,
       "variants": [
         { "size": "3.5g", "price": 55, "sale_price": 45 },
         { "size": "7g",   "price": 100 }
@@ -21,6 +23,7 @@
       "brand": "Cookies",
       "category": "Vape",
       "thc": "75%",
+      "store_id": 5478,
       "variants": [
         { "size": "0.5g", "price": 60 }
       ]
@@ -32,7 +35,8 @@
       "category": "Edible",
       "thc": "100mg",
       "weight": "100mg",
-      "price": 30
+      "regular_price": "30.00",
+      "store_id": 5478
     }
   ]
 }

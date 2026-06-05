@@ -30,9 +30,23 @@ const nuEraEastPeoria: StoreRef = {
   platform_store_id: "1517",
   menu_url: "https://nueracannabis.com/shop/store/1517/featured",
   graphql_endpoint: null,
+  jane_cluster: "default",
+};
+
+const riseCanton: StoreRef = {
+  id: "00000000-0000-0000-0000-000000000002",
+  slug: "rise-canton",
+  name: "RISE",
+  city: "Canton",
+  platform: "jane",
+  platform_store_id: "1343",
+  menu_url: "https://risecannabis.com/dispensaries/illinois/canton/",
+  graphql_endpoint: null,
+  jane_cluster: "rise_gti",
 };
 
 (async () => {
+  // ---------------- DEFAULT CLUSTER (nuEra fixture) ----------------
   const result = await janeAdapter.fetch(nuEraEastPeoria, { fixtureLoader: loadFixture });
 
   if (result.status !== "ok") {
@@ -81,7 +95,43 @@ const nuEraEastPeoria: StoreRef = {
   const mystery = result.items.find((i) => i.raw_brand === "Mystery");
   assert(!mystery, "coming-soon SKU with no price should be dropped");
 
-  console.log(`PASS: Jane adapter parsed ${result.items.length} items from fixture, all expectations met.`);
+  console.log(`PASS Jane default cluster (nuEra 1517): ${result.items.length} items`);
+
+  // ---------------- RISE_GTI CLUSTER (RISE Canton fixture) ----------------
+  const rise = await janeAdapter.fetch(riseCanton, { fixtureLoader: loadFixture });
+  if (rise.status !== "ok") console.error("RISE failure:", rise.error);
+  assert(rise.status === "ok", `RISE status=ok got ${rise.status}`);
+
+  // RYTHM GMO 3.5g: simple row (no bucket expansion -- rise_gti hits carry `amount`).
+  const gmo = rise.items.find((i) => i.raw_name.startsWith("RYTHM GMO"))!;
+  assert(gmo, "RYTHM GMO present");
+  assert(gmo.raw_weight === "3.5g", `GMO weight 3.5g, got ${gmo.raw_weight}`);
+  assert(gmo.is_on_sale && gmo.raw_sale_price === 30, `GMO 3.5g sale 30, got ${gmo.raw_sale_price}`);
+
+  // Good Green 28g: flower with thc range -> midpoint display.
+  const gg = rise.items.find((i) => i.raw_name.startsWith("Good Green"))!;
+  assert(gg.raw_weight === "28g" && gg.raw_price === 150, "Good Green oz $150");
+  assert(gg.raw_thc === "17.5%-19%", `Good Green THC range, got ${gg.raw_thc}`);
+
+  // Vape on sale: 75 -> 60.
+  const cart = rise.items.find((i) => i.raw_name.includes("Pineapple"))!;
+  assert(cart.is_on_sale && cart.raw_sale_price === 60, "RYTHM cart on sale 60");
+  assert(cart.raw_thc === "79.6%", `cart THC 79.6%, got ${cart.raw_thc}`);
+
+  // incredibles edible: not on sale, 100mg.
+  const inc = rise.items.find((i) => i.raw_name.startsWith("incredibles"))!;
+  assert(!inc.is_on_sale && inc.raw_weight === "100mg", "incredibles 100mg list");
+
+  // Out-of-stock Aeriz: parser still emits it (`available:false` is informational
+  // -- the live RISE adapter filters by available:true at the Algolia level, so
+  // this row would never arrive in production; in the fixture it does, and that's
+  // fine because the menu_snapshots ledger records what the API returned).
+  const aer = rise.items.find((i) => i.raw_name.includes("Aeriz"));
+  assert(aer, "out-of-stock Aeriz still parsed when present in payload");
+
+  console.log(`PASS Jane rise_gti cluster (RISE 1343): ${rise.items.length} items`);
+
+  console.log(`\nAll Jane multi-cluster tests passed.`);
 })().catch((err) => {
   console.error(err);
   process.exit(1);

@@ -71,7 +71,7 @@ async function loadStores(slug?: string): Promise<StoreRef[]> {
     ? `slug=eq.${encodeURIComponent(slug)}&is_active=eq.true`
     : `is_active=eq.true&order=slug`;
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/dispensaries?select=id,slug,name,city,menu_platform,platform_store_id,menu_url,graphql_endpoint&${q}`,
+    `${SUPABASE_URL}/rest/v1/dispensaries?select=id,slug,name,city,menu_platform,platform_store_id,menu_url,graphql_endpoint,jane_cluster&${q}`,
     { headers: { apikey: READ_KEY!, Authorization: `Bearer ${READ_KEY!}` } }
   );
   if (!res.ok) throw new Error(`fetch dispensaries ${res.status}: ${await res.text()}`);
@@ -84,6 +84,7 @@ async function loadStores(slug?: string): Promise<StoreRef[]> {
     platform_store_id: string;
     menu_url: string | null;
     graphql_endpoint: string | null;
+    jane_cluster: string | null;
   }>;
   return rows.map((r) => ({
     id: r.id,
@@ -94,6 +95,7 @@ async function loadStores(slug?: string): Promise<StoreRef[]> {
     platform_store_id: r.platform_store_id,
     menu_url: r.menu_url,
     graphql_endpoint: r.graphql_endpoint,
+    jane_cluster: r.jane_cluster,
   }));
 }
 

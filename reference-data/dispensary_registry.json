@@ -3,27 +3,34 @@
     "file": "dispensary_registry.json",
     "purpose": "Central IL (Peoria metro, ~30mi) recreational dispensaries. Keyed by IDFPR adult-use credential where verified.",
     "rebuilt_by": "Claude (chat) 2026-06-04. License #s + addresses verified against IDFPR Active Adult Use list (updated 2026-01-09). Platform/store_id from Chrome live recon.",
+    "updated_by": "Cowork 2026-06-04 (round 2): backfilled all 4 VERIFY_IDFPR license numbers + license_holders + addresses from the IDFPR Adult Use Dispensaries PDF.",
+    "updated_by_code": "Code 2026-06-04 (round 3): reconciled platform_store_id + menu_platform + graphql_endpoint values for the 5 stores still showing VERIFY or stub values, using Chrome Round 2 live recon findings. Changes: (1) Ivy Hall storeId 169 + base URL; (2) Beyond Hello Bloomington slug beyond-hello-bloomington-rec (Jane adapter resolves to numeric storeId at fetch time via iheartjane v1/stores); (3) NOXX graphql_endpoint moved to dutchie.com/api-4/graphql (was noxx.com/api-1/graphql); (4) Trinity University and Glen both moved to dutchie.com/api-4/graphql; Glen slug=trinity-on-glen + dispensaryId 5f1084a105efe300b6392001; (5) Cookies storeId 5478; (6) RISE Canton corrected from menu_platform=dutchie to menu_platform=jane (Jane storeId 1343, separate Algolia cluster). Notes preserved where relevant; full per-store evidence is in commit message + docs/menu-pipeline-progress.md.",
     "source_idfpr": "https://idfprapps.illinois.gov/LicenseLookup/AdultUseDispensaries.pdf",
     "CORRECTIONS_FROM_PRIOR_REGISTRY": "Cowork's prior registry listed 'Cloud 9 (East Peoria)' and 'Aroma Hill (Peoria)' as Peoria-metro stores. IDFPR shows Cloud9 Cannabis is in CHAMPAIGN (284.000259) and EDWARDSVILLE (284.000304), and Aroma Hill is in HOFFMAN ESTATES (284.000287). Neither is in the Peoria metro. They are EXCLUDED here as phantom entries. If a new Peoria-area location exists, verify against IDFPR before adding.",
+    "geocode_gap": "lat/lng remain hand-estimated (geocode_status='approx'). A true geocoder (Census Bureau / Google Geocoding API) could not be run in this environment, so coordinates were NOT machine-geocoded this pass. Ivy Hall coords were refined to its now-known street address. REMAINING GAP: Code should run each 'address' through a geocoder and set geocode_status='geocoded' before any hard radius filter.",
     "caveats": [
-      "lat/lng are approximate (hand-estimated from address). Code MUST geocode each address before any hard radius filter.",
-      "4 license numbers marked VERIFY_IDFPR are newer/social-equity licenses deeper in the IDFPR list than was fetched; addresses + platforms are Chrome-verified live."
+      "lat/lng are approximate (hand-estimated from address); see geocode_gap. Code MUST geocode each address before any hard radius filter.",
+      "All 4 previously-VERIFY_IDFPR license numbers are now backfilled and confirmed against the IDFPR Adult Use Dispensaries PDF (licenses issued 2023-2024; numbers stable across IDFPR list versions).",
+      "Beyond Hello Bloomington platform_store_id is stored as the Jane storefront slug 'beyond-hello-bloomington-rec'. The Jane adapter resolves this to a numeric storeId on demand via api.iheartjane.com/v1/stores?slug=... and caches in-process. Reason: the numeric ID was not directly observed in Chrome Round 2; the slug is stable, the numeric is not.",
+      "RISE Canton uses a DIFFERENT Algolia cluster than the other Jane stores. The Jane adapter is parameterized by app/key/index PER STORE: nuEra + Beyond Hello Peoria use app VFM4X0N23A index menu-products-production; RISE Canton uses app 4O7QMAY0VJ index production_menu_items."
     ]
   },
   "dispensaries": [
     {
       "slug": "ivy-hall-peoria-heights",
       "name": "Ivy Hall",
-      "license_number": "VERIFY_IDFPR",
-      "address": "Peoria Heights, IL",
-      "city": "Peoria Heights",
+      "license_number": "284.000230-AUDO",
+      "license_holder": "World of Weed, Inc.",
+      "address": "3929 W. War Memorial Dr",
+      "city": "Peoria",
       "county": "Peoria",
-      "zip": "61616",
-      "lat": 40.7475, "lng": -89.5712,
+      "zip": "61615-2550",
+      "lat": 40.7472, "lng": -89.6105,
       "menu_platform": "sweed",
-      "platform_store_id": "session-routed",
+      "platform_store_id": "169",
       "menu_url": "https://ivyhalldispensary.com/locations/peoria/menu",
-      "geocode_status": "approx"
+      "geocode_status": "approx",
+      "note": "IDFPR lists this store as Peoria, IL 61615 (not Peoria Heights). Slug retained as-is for Code's keying; city/zip/address corrected to the IDFPR record. War Memorial Dr straddles the Peoria/Peoria Heights line. Sweed storeId 169 confirmed via Chrome Round 2; adapter POSTs web-ui-production.sweedpos.com/_api/proxy/Products/GetProductList with {StoreId:169, SaleType:'RECREATIONAL'}."
     },
     {
       "slug": "nuera-east-peoria",
@@ -39,7 +46,8 @@
       "menu_platform": "jane",
       "platform_store_id": "1517",
       "menu_url": "https://nueracannabis.com/shop/store/1517/featured",
-      "geocode_status": "approx"
+      "geocode_status": "approx",
+      "jane_cluster": "default"
     },
     {
       "slug": "nuera-pekin",
@@ -55,12 +63,14 @@
       "menu_platform": "jane",
       "platform_store_id": "3050",
       "menu_url": "https://nueracannabis.com/shop/store/3050/featured",
-      "geocode_status": "approx"
+      "geocode_status": "approx",
+      "jane_cluster": "default"
     },
     {
       "slug": "beyond-hello-peoria",
       "name": "Beyond Hello",
-      "license_number": "VERIFY_IDFPR",
+      "license_number": "284.000233-AUDO",
+      "license_holder": "Northern Cardinal Ventures, LLC",
       "address": "7620 IL Route 91 Suite A",
       "city": "Peoria",
       "county": "Peoria",
@@ -71,7 +81,8 @@
       "menu_url": "https://beyond-hello.com/illinois-dispensaries/peoria/adult-use-menu/",
       "shadow_dom": true,
       "note": "Renders in Shadow DOM - use Jane/Algolia API directly, do not scrape DOM.",
-      "geocode_status": "approx"
+      "geocode_status": "approx",
+      "jane_cluster": "default"
     },
     {
       "slug": "beyond-hello-bloomington",
@@ -85,16 +96,19 @@
       "phone": "(309) 590-3005",
       "lat": 40.4757, "lng": -88.9956,
       "menu_platform": "jane",
-      "platform_store_id": "VERIFY_via_api.iheartjane.com/v1/stores",
+      "platform_store_id": "beyond-hello-bloomington-rec",
       "menu_url": "https://beyond-hello.com/illinois-dispensaries/bloomington-il/adult-use-menu/",
       "shadow_dom": true,
       "geocode_status": "approx",
-      "edge_note": "~38mi from Peoria - just outside 30mi; include or exclude per radius policy."
+      "edge_note": "~38mi from Peoria - just outside 30mi; include or exclude per radius policy.",
+      "note": "platform_store_id is the Jane storefront slug; adapter resolves to numeric storeId at fetch time via api.iheartjane.com/v1/stores?slug=...",
+      "jane_cluster": "default"
     },
     {
       "slug": "noxx-east-peoria",
       "name": "NOXX",
-      "license_number": "VERIFY_IDFPR",
+      "license_number": "284.000209-AUDO",
+      "license_holder": "Green Skies - Illinois 1 LLC",
       "address": "300 S Main Street",
       "city": "East Peoria",
       "county": "Tazewell",
@@ -102,9 +116,10 @@
       "lat": 40.6680, "lng": -89.5790,
       "menu_platform": "dutchie",
       "platform_store_id": "65772a69ac53410009424572",
-      "menu_url": "https://noxx.com/stores/noxx-peoria",
-      "graphql_endpoint": "https://noxx.com/api-1/graphql",
-      "geocode_status": "approx"
+      "menu_url": "https://dutchie.com/dispensary/noxx-peoria",
+      "graphql_endpoint": "https://dutchie.com/api-4/graphql",
+      "geocode_status": "approx",
+      "note": "Chrome Round 2: NOXX now exposes a public Dutchie storefront at dutchie.com/dispensary/noxx-peoria backed by api-4/graphql with persisted queries. Old noxx.com/api-1/graphql whitelabel endpoint is deprecated."
     },
     {
       "slug": "trinity-peoria-university",
@@ -120,7 +135,7 @@
       "menu_platform": "dutchie",
       "platform_store_id": "trinity-compassionate-care-rec",
       "menu_url": "https://dutchie.com/embedded-menu/trinity-compassionate-care-rec/",
-      "graphql_endpoint": "https://dutchie.com/graphql",
+      "graphql_endpoint": "https://dutchie.com/api-4/graphql",
       "geocode_status": "approx"
     },
     {
@@ -135,25 +150,26 @@
       "phone": "(309) 863-2122",
       "lat": 40.7530, "lng": -89.6210,
       "menu_platform": "dutchie",
-      "platform_store_id": "VERIFY_glen_slug",
-      "menu_url": "https://dutchie.com/",
-      "graphql_endpoint": "https://dutchie.com/graphql",
-      "note": "Glen location confirmed via IDFPR (license 284.000327). Dutchie slug for Glen NOT confirmed - verify before scraping.",
+      "platform_store_id": "5f1084a105efe300b6392001",
+      "menu_url": "https://dutchie.com/dispensary/trinity-on-glen",
+      "graphql_endpoint": "https://dutchie.com/api-4/graphql",
+      "note": "Chrome Round 2 RESOLVED: dispensaryId 5f1084a105efe300b6392001, slug trinity-on-glen. Was VERIFY_glen_slug. License 284.000327 confirms the Glen location.",
       "geocode_status": "approx"
     },
     {
       "slug": "cookies-peoria-heights",
       "name": "Cookies",
-      "license_number": "VERIFY_IDFPR",
-      "address": "Peoria Heights, IL",
+      "license_number": "284.000319-AUDO",
+      "license_holder": "Project Equity Illinois, Inc.",
+      "address": "1209 E War Memorial Dr",
       "city": "Peoria Heights",
       "county": "Peoria",
       "zip": "61616",
       "lat": 40.7470, "lng": -89.5700,
       "menu_platform": "joint",
-      "platform_store_id": "wp-nonce-gated",
+      "platform_store_id": "5478",
       "menu_url": "https://peoriaheights.cookies.co/menu/",
-      "note": "Joint WP platform, rotating nonce. Joint exposes /joint-api/v1/sync-dutchie and /sync-jane - data originates upstream; try that source before fighting the nonce.",
+      "note": "Chrome Round 2 CONFIRMED: storeId 5478. Joint WP rotating nonce IS mandatory; sync-dutchie/sync-jane both 404. Adapter scrapes nonce from menu page (window.joint.api.nonce), then GETs /wp-json/joint-api/v1/products with _wpnonce + X-WP-Nonce header.",
       "geocode_status": "approx"
     },
     {
@@ -167,12 +183,13 @@
       "zip": "61520",
       "phone": "(309) 647-9333",
       "lat": 40.5817, "lng": -90.0354,
-      "menu_platform": "dutchie",
-      "platform_store_id": "VERIFY",
+      "menu_platform": "jane",
+      "platform_store_id": "1343",
       "menu_url": "https://risecannabis.com/dispensaries/illinois/canton/",
-      "note": "Green Thumb (GTI) chain; almost certainly Dutchie - verify endpoint/slug.",
+      "note": "Chrome Round 2 CORRECTED: menu_platform was 'dutchie' (Cowork's GTI -> Dutchie guess); RISE Canton is actually Jane, storeId 1343, on a SEPARATE Algolia cluster (app 4O7QMAY0VJ, index production_menu_items) from the other Jane stores. The Jane adapter is parameterized accordingly.",
       "geocode_status": "approx",
-      "edge_note": "~30mi SW of Peoria - radius edge."
+      "edge_note": "~30mi SW of Peoria - radius edge.",
+      "jane_cluster": "rise_gti"
     }
   ]
 }

@@ -76,10 +76,11 @@ interface DispRow {
   platform_store_id: string;
   menu_url: string | null;
   graphql_endpoint: string | null;
+  jane_cluster: string | null;
 }
 
 async function fetchActiveStores(env: PipelineEnv): Promise<StoreRef[]> {
-  const url = `${env.supabaseUrl}/rest/v1/dispensaries?select=id,slug,name,city,menu_platform,platform_store_id,menu_url,graphql_endpoint&is_active=eq.true&order=slug`;
+  const url = `${env.supabaseUrl}/rest/v1/dispensaries?select=id,slug,name,city,menu_platform,platform_store_id,menu_url,graphql_endpoint,jane_cluster&is_active=eq.true&order=slug`;
   const res = await fetch(url, {
     headers: { apikey: env.serviceKey, Authorization: `Bearer ${env.serviceKey}` },
   });
@@ -94,6 +95,7 @@ async function fetchActiveStores(env: PipelineEnv): Promise<StoreRef[]> {
     platform_store_id: r.platform_store_id,
     menu_url: r.menu_url,
     graphql_endpoint: r.graphql_endpoint,
+    jane_cluster: r.jane_cluster,
   }));
 }
 

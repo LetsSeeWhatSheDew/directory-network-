@@ -1,0 +1,47 @@
+{
+  "_meta": {
+    "purpose": "Fixture for Trinity Peoria Glen (dispensaryId 5f1084a105efe300b6392001, slug trinity-on-glen) — Dutchie api-4 FilteredProducts shape. Resolves the previously-VERIFY_glen_slug item.",
+    "source": "Chrome Round 2 (2026-06-04) -- product names and shapes match Trinity's live menu."
+  },
+  "data": {
+    "filteredProducts": {
+      "paginate": { "total": 3, "perPage": 50, "page": 0 },
+      "products": [
+        {
+          "id": "trg-001",
+          "name": "RYTHM Wedding Pie",
+          "type": "Flower",
+          "strainType": "Hybrid",
+          "brand": { "name": "RYTHM" },
+          "POSMetaData": {
+            "children": [
+              { "option": "3.5g", "priceRec": 50 },
+              { "option": "7g",   "priceRec": 90, "specialPriceRec": 75 }
+            ]
+          },
+          "potencyThc": { "formatted": "29.1%", "unit": "%" }
+        },
+        {
+          "id": "trg-002",
+          "name": "Aeriz Liquid Live Resin Cart",
+          "type": "Vaporizers",
+          "brand": { "name": "Aeriz" },
+          "POSMetaData": {
+            "children": [{ "option": "0.5g", "priceRec": 60, "specialPriceRec": 50 }]
+          },
+          "potencyThc": { "formatted": "84.5%", "unit": "%" }
+        },
+        {
+          "id": "trg-003",
+          "name": "Wyld Marionberry Indica Gummies",
+          "type": "Edible",
+          "brand": { "name": "Wyld" },
+          "POSMetaData": {
+            "children": [{ "option": "100mg", "priceRec": 28 }]
+          },
+          "potencyThc": { "formatted": "100mg", "unit": "mg" }
+        }
+      ]
+    }
+  }
+}

@@ -118,6 +118,7 @@ CREATE TABLE IF NOT EXISTS dispensaries (
   menu_url text,
   graphql_endpoint text,              -- Dutchie + Sweed need this
   shadow_dom boolean NOT NULL DEFAULT false,
+  jane_cluster text,                  -- 'default' | 'rise_gti' | NULL (non-Jane). Used by the Jane adapter to pick the Algolia cluster (different app_id/key/index per cluster). Added 2026-06-04 round 3 reconciliation.
   master_listing_slug text,           -- soft join into master_listings (no FK)
   is_active boolean NOT NULL DEFAULT true,
   notes text,

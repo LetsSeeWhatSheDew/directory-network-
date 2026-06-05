@@ -10,7 +10,7 @@ Build the missing **baseline** layer under PuffPrice's deal scraper: structured 
 ## Reference data (consumed as-is from `reference-data/`)
 | File | Use | Confidence |
 |---|---|---|
-| `dispensary_registry.json` | Seed `dispensaries` table (10 stores, IDFPR license-keyed where verified) | **10/10 license #s** (Cowork round 2 backfilled IDFPR) + 1 Bloomington Jane ID + 2 Dutchie slugs still VERIFY |
+| `dispensary_registry.json` | Seed `dispensaries` table (10 stores, IDFPR license-keyed where verified) | **10/10 license #s** (Cowork round 2 backfilled IDFPR). **Round 3 (Code, 2026-06-04):** all VERIFY platform_store_id resolved against Chrome Round 2 live recon — see "Round 3 reconciliation" section below. |
 | `brand_master.json` | Phase 5 brand normalization | HIGH on canonical names + variants |
 | `unit_normalization_map.json` | Phase 5 unit canonicalization | HIGH (deterministic) |
 | `il_cannabis_tax_structure.json` | Phase 7 OTD engine | HIGH on excise + state ROT; MEDIUM on general add-on |
@@ -165,6 +165,65 @@ tests/menu/scoreDeal.test.ts   PASS  every label boundary covered
    SUPABASE_SERVICE_ROLE_KEY=… npx tsx scripts/score-deals.ts --apply
    ```
 10. Cron: Vercel auto-picks `vercel.json`'s new `/api/cron/menu-baseline` entry on next deploy. Confirm `CRON_SECRET` is already set (it is — reused from existing crons).
+
+## Round 3 reconciliation against Chrome live recon (2026-06-04)
+
+Phase 3/4 adapters were originally written against synthetic fixtures based on platform assumptions. Round 3 reconciles them to actual live shapes captured in Chrome Round 2. Net changes:
+
+### Adapter changes
+- **Dutchie → api-4 + persisted queries.** Switched from POST `api-1/graphql` to **GET `dutchie.com/api-4/graphql`** with operationName + URL-encoded variables + persistedQuery sha256Hash extension. Response envelope changed from `filteredProducts.queryInfo.totalCount` (api-1) to `filteredProducts.paginate.{total,perPage,page}` (api-4). When the hash is missing/rotated, adapter falls back to POST with the full inline query (Apollo APQ handshake) and the server learns the new hash for subsequent GETs. `DUTCHIE_QUERY_HASH` env override. Per-page cap 50.
+- **Jane → multi-cluster.** Adapter parameterized by `jane_cluster` per store (DB column added):
+  - `default` (nuEra ×2, Beyond Hello ×2): app `VFM4X0N23A`, index `menu-products-production`, body uses `numericFilters` + `facetFilters` by `kind`. Same as before but pulled into a JaneCluster config.
+  - `rise_gti` (RISE Canton 1343): app `4O7QMAY0VJ`, key `e1b4dada43202e5a1a88124a9ad956f2`, index `production_menu_items`, body uses a single `filters` string `"store_id:N AND sale_type:RECREATIONAL AND available:true"`. Hits carry flat `price` + `amount` (no per-bucket pricing).
+  - Flower bucket-expansion now triggers ONLY when a hit has at least one bucket-specific price field (price_eighth_ounce / price_quarter_ounce / etc.). Without those, the hit emits a single row with weight = `amount` — fixes the bug where RISE flower was being assigned to a "1g" bucket from its flat `price`.
+  - **Slug → storeId resolution:** if `platform_store_id` is non-numeric (e.g. Beyond Hello Bloomington = `beyond-hello-bloomington-rec`), adapter GETs `api.iheartjane.com/v1/stores?slug=…` and caches the numeric id in-process.
+- **Sweed → real config.** Body now `{ StoreId: 169, SaleType: "RECREATIONAL", Page, PageSize, ... }`. PageSize bumped to 500 (one big call pulls the full menu). Numeric storeId required.
+- **Joint → nonce-gated /products.** Old sync-dutchie / sync-jane probes removed (Chrome confirmed both 404). Adapter now scrapes `window.joint.api.nonce` (or 3 other fallback patterns) from the menu page HTML, then GETs `/wp-json/joint-api/v1/products?per_page=20&page=N&_wpnonce=…` with the `X-WP-Nonce` header. Pagination via `X-WP-TotalPages` response header. Single-retry on 401/403 re-scrapes the nonce.
+
+### Registry changes (reference-data/dispensary_registry.json)
+| store | field | from | to |
+|---|---|---|---|
+| ivy-hall-peoria-heights | platform_store_id | `session-routed` | `169` |
+| beyond-hello-bloomington | platform_store_id | `VERIFY_via_api.iheartjane.com/v1/stores` | `beyond-hello-bloomington-rec` (slug; adapter resolves at fetch) |
+| noxx-east-peoria | graphql_endpoint | `noxx.com/api-1/graphql` | `dutchie.com/api-4/graphql` |
+| noxx-east-peoria | menu_url | `noxx.com/stores/noxx-peoria` | `dutchie.com/dispensary/noxx-peoria` |
+| trinity-peoria-university | graphql_endpoint | `dutchie.com/graphql` | `dutchie.com/api-4/graphql` |
+| trinity-peoria-glen | platform_store_id | `VERIFY_glen_slug` | `5f1084a105efe300b6392001` |
+| trinity-peoria-glen | menu_url | `dutchie.com/` | `dutchie.com/dispensary/trinity-on-glen` |
+| trinity-peoria-glen | graphql_endpoint | `dutchie.com/graphql` | `dutchie.com/api-4/graphql` |
+| cookies-peoria-heights | platform_store_id | `wp-nonce-gated` | `5478` |
+| rise-canton | menu_platform | `dutchie` (guess) | `jane` (actual) |
+| rise-canton | platform_store_id | `VERIFY` | `1343` |
+| rise-canton | jane_cluster | (added field) | `rise_gti` |
+| nuera-east-peoria, nuera-pekin, beyond-hello-peoria, beyond-hello-bloomington | jane_cluster | (added field) | `default` |
+
+### Schema delta
+- `dispensaries.jane_cluster text` added to `sql/menu-baseline-schema.sql` (still pre-apply, so no migration needed — re-paste the file).
+
+### Fixtures (all replaced with live shapes)
+- `dutchie-65772a69ac53410009424572.json` → api-4 `paginate` envelope
+- `dutchie-5f1084a105efe300b6392001.json` → **NEW** (Trinity Glen, api-4 shape)
+- `jane-1517.json` → unchanged (already correct for default cluster)
+- `jane-1343.json` → **NEW** (RISE Canton, rise_gti cluster, flat-price hits)
+- `sweed-ivy-hall-peoria-heights.json` → header notes new request body format
+- `joint-cookies-peoria-heights.json` → notes nonce-gated /products path, adds string-price field (Camino `regular_price:"30.00"`) to exercise numeric coercion
+
+### Tests
+All 6 test files PASS against live-shape fixtures:
+```
+adapters.test.ts:  dutchie NOXX api-4 (7), Trinity Glen (4), sweed 169 (5), joint nonce (4)
+jane.test.ts:      default cluster nuEra 1517 (9), rise_gti cluster RISE 1343 (5)
+normalize.test.ts: 34 items across 6 fixture stores, 100% match rate, 0 review issues
+baselines.test.ts: median/percentiles/sanity gate all pass
+tax.test.ts:       all 3 reference targets within tolerance (strict mode)
+scoreDeal.test.ts: every label boundary covered
+```
+
+### Coverage today (post-Round-3)
+**10/10 stores** have adapters routed to live endpoints. The 3 previously-VERIFY items are resolved at the data layer:
+- Beyond Hello Bloomington: storeId resolved at fetch time via Jane v1/stores (slug stored in registry).
+- Trinity Glen: dispensaryId `5f1084a105efe300b6392001` resolved.
+- RISE Canton: confirmed Jane (not Dutchie), storeId 1343, cluster `rise_gti`.
 
 ## Commit log
 - `bcb5c6b` chore(reference-data): vendor Cowork-built reference data on pipeline branch

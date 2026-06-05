@@ -2,50 +2,68 @@
 // =============================================================================
 // Joint (WordPress) menu adapter — Cookies Peoria Heights.
 //
-// Joint's main menu endpoint is admin-ajax.php with a rotating WP nonce.
-// Per the registry note, Joint exposes /joint-api/v1/sync-dutchie and
-// /sync-jane: Cookies' data ORIGINATES from a Dutchie or Jane backend
-// upstream. Probe those upstream paths first; if they return product
-// data, parse them. If not, fall back to parsing the server-rendered
-// /menu/ HTML.
+// Chrome Round 2 (2026-06-04) confirmed: /joint-api/v1/sync-dutchie and
+// /joint-api/v1/sync-jane both return 404. There is NO upstream backdoor.
+// The rotating WordPress nonce IS mandatory.
 //
-// Strategy (in order)
-//   1. GET /wp-json/joint-api/v1/sync-dutchie?store=... — if 200 + JSON
-//      products, use those. (Most likely path — Cookies normally proxies
-//      a Dutchie store.)
-//   2. GET /wp-json/joint-api/v1/sync-jane — same idea, Jane upstream.
-//   3. GET /menu/ HTML and parse JSON-LD product schema.
+// Flow
+//   1. GET <menu_url> (the storefront page) once per session.
+//   2. Parse `window.joint.api.nonce = "<NONCE>"` (or similar) out of
+//      the HTML response.
+//   3. GET <base>/wp-json/joint-api/v1/products?per_page=20&page=N
+//        &_wpnonce=<nonce>
+//      with header `X-WP-Nonce: <nonce>`.
+//   4. Paginate by `page`. WP returns `X-WP-Total` / `X-WP-TotalPages`
+//      headers for pagination; we read those.
 //
-// This adapter is intentionally minimal. The registry note says don't
-// over-invest in fighting the rotating nonce. If 1+2 fail, we record an
-// empty snapshot with an explanatory error — Phase 8 alerts on
-// repeated empties and a human resolves whether to add HTML parsing.
+// platform_store_id for Cookies is the numeric Joint storeId (5478).
+// We don't actually need it in the URL (the wp-json endpoint is store-
+// scoped by host), but we keep it in the registry so the adapter can
+// sanity-check the right store responded.
 // =============================================================================
 
 import type { Adapter, AdapterOpts, FetchResult, RawMenuItem, StoreRef } from "../types";
 import { AdapterAuthError, AdapterSchemaError } from "../types";
 
-const ADAPTER_VERSION = "joint@0.9.0";  // 0.9 = HTML fallback not yet implemented
+const ADAPTER_VERSION = "joint@2.0.0";
+const PER_PAGE = 20;
+const MAX_PAGES = 30;
+
+// Match either of:
+//   window.joint = { ... api: { nonce: "abc123" } ... }
+//   window.joint.api.nonce = "abc123"
+//   jointApi = { nonce: "abc123" }
+// Cookies' template can wrap the nonce in any of these.
+const NONCE_PATTERNS: RegExp[] = [
+  /joint(?:Api)?\.?[\w.]*nonce\s*[:=]\s*["']([a-f0-9]{6,32})["']/i,
+  /wpApiSettings\s*=\s*\{[^}]*?nonce\s*:\s*["']([a-f0-9]{6,32})["']/i,
+  /name="_wpnonce"\s+value="([a-f0-9]{6,32})"/i,
+  /data-wpnonce="([a-f0-9]{6,32})"/i,
+];
 
 interface JointSyncProduct {
-  id?: string;
+  id?: string | number;
   name?: string;
-  brand?: string;
+  brand?: string | { name?: string };
   category?: string;
   type?: string;
   weight?: string;
   size?: string;
-  price?: number;
-  list_price?: number;
-  sale_price?: number;
+  price?: number | string;
+  list_price?: number | string;
+  sale_price?: number | string;
+  regular_price?: number | string;
   thc?: number | string;
-  options?: Array<{ size?: string; price?: number; sale_price?: number }>;
-  variants?: Array<{ size?: string; price?: number; sale_price?: number }>;
+  options?: Array<{ size?: string; price?: number | string; sale_price?: number | string }>;
+  variants?: Array<{ size?: string; price?: number | string; sale_price?: number | string }>;
+  store_id?: number | string;
 }
 
-interface JointSyncResponse {
+interface JointProductsResponse {
   products?: JointSyncProduct[];
-  data?: { products?: JointSyncProduct[] };
+  data?: { products?: JointSyncProduct[] } | JointSyncProduct[];
+  // Some Joint deployments return a bare array.
+  // We coerce in the parser.
 }
 
 function baseUrlFromMenuUrl(menuUrl: string): string {
@@ -53,29 +71,78 @@ function baseUrlFromMenuUrl(menuUrl: string): string {
   return `${u.protocol}//${u.host}`;
 }
 
-async function trySync(base: string, kind: "dutchie" | "jane"): Promise<JointSyncProduct[] | null> {
-  const url = `${base}/wp-json/joint-api/v1/sync-${kind}`;
-  try {
-    const res = await fetch(url, {
-      headers: {
-        Accept: "application/json",
-        "User-Agent": "PuffPriceMenuPipeline/1.0 (+https://puffprice.com/about)",
-      },
-    });
-    if (res.status === 401 || res.status === 403) {
-      throw new AdapterAuthError(`Joint sync-${kind} auth ${res.status}`);
-    }
-    if (!res.ok) return null;
-    const body = (await res.json()) as JointSyncResponse;
-    return body.products ?? body.data?.products ?? null;
-  } catch (err) {
-    if (err instanceof AdapterAuthError) throw err;
-    return null;
+async function scrapeNonce(menuUrl: string): Promise<string> {
+  const res = await fetch(menuUrl, {
+    headers: {
+      Accept: "text/html",
+      "User-Agent": "PuffPriceMenuPipeline/1.0 (+https://puffprice.com/about)",
+    },
+    redirect: "follow",
+  });
+  if (!res.ok) {
+    throw new AdapterAuthError(`Joint menu GET ${res.status} at ${menuUrl}`);
   }
+  const html = await res.text();
+  for (const re of NONCE_PATTERNS) {
+    const m = html.match(re);
+    if (m) return m[1];
+  }
+  throw new AdapterAuthError(
+    `Joint nonce not found in ${menuUrl} HTML (tried ${NONCE_PATTERNS.length} patterns). Page template may have changed.`
+  );
 }
 
-function expandSyncProduct(p: JointSyncProduct): RawMenuItem[] {
-  const brand = p.brand ?? null;
+async function fetchProductsPage(
+  base: string,
+  nonce: string,
+  page: number
+): Promise<{ products: JointSyncProduct[]; totalPages: number; total: number }> {
+  const url = `${base}/wp-json/joint-api/v1/products?per_page=${PER_PAGE}&page=${page}&_wpnonce=${encodeURIComponent(nonce)}`;
+  const res = await fetch(url, {
+    headers: {
+      Accept: "application/json",
+      "X-WP-Nonce": nonce,
+      "User-Agent": "PuffPriceMenuPipeline/1.0 (+https://puffprice.com/about)",
+    },
+  });
+  if (res.status === 401 || res.status === 403) {
+    throw new AdapterAuthError(`Joint products auth ${res.status}; nonce stale or wrong`);
+  }
+  if (!res.ok) {
+    throw new AdapterSchemaError(
+      `Joint products ${res.status}: ${await res.text().catch(() => "(no body)")}`
+    );
+  }
+  const totalPages = Number(res.headers.get("x-wp-totalpages") || "1");
+  const total = Number(res.headers.get("x-wp-total") || "0");
+  const body = (await res.json()) as JointProductsResponse | JointSyncProduct[];
+
+  let products: JointSyncProduct[];
+  if (Array.isArray(body)) {
+    products = body;
+  } else if (Array.isArray(body.products)) {
+    products = body.products;
+  } else if (Array.isArray((body.data as JointSyncProduct[] | undefined))) {
+    products = body.data as JointSyncProduct[];
+  } else if (body.data && Array.isArray((body.data as { products?: JointSyncProduct[] }).products)) {
+    products = (body.data as { products?: JointSyncProduct[] }).products ?? [];
+  } else {
+    throw new AdapterSchemaError(
+      `Joint products: unexpected response shape: ${JSON.stringify(body).slice(0, 200)}`
+    );
+  }
+  return { products, totalPages, total };
+}
+
+function num(v: number | string | undefined | null): number | null {
+  if (v == null) return null;
+  if (typeof v === "number") return Number.isFinite(v) ? v : null;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+}
+
+function expandProduct(p: JointSyncProduct): RawMenuItem[] {
+  const brand = typeof p.brand === "string" ? p.brand : p.brand?.name ?? null;
   const category = p.category ?? p.type ?? null;
   const thc = typeof p.thc === "number" ? `${p.thc}%` : (p.thc ?? null);
   const variants = p.variants ?? p.options ?? [];
@@ -83,9 +150,9 @@ function expandSyncProduct(p: JointSyncProduct): RawMenuItem[] {
   if (variants.length > 0) {
     const out: RawMenuItem[] = [];
     for (const v of variants) {
-      const list = v.price;
-      const sale = v.sale_price;
-      if (!list || list <= 0) continue;
+      const list = num(v.price);
+      const sale = num(v.sale_price);
+      if (list == null || list <= 0) continue;
       const onSale = sale != null && sale > 0 && sale < list;
       out.push({
         raw_name: p.name?.trim() || "(unnamed)",
@@ -102,15 +169,15 @@ function expandSyncProduct(p: JointSyncProduct): RawMenuItem[] {
     if (out.length > 0) return out;
   }
 
-  const list = p.list_price ?? p.price;
-  const sale = p.sale_price;
-  if (!list || list <= 0) return [];
+  const list = num(p.list_price ?? p.regular_price ?? p.price);
+  const sale = num(p.sale_price);
+  if (list == null || list <= 0) return [];
   const onSale = sale != null && sale > 0 && sale < list;
   return [{
     raw_name: p.name?.trim() || "(unnamed)",
     raw_brand: brand,
     raw_category: category,
-    raw_weight: p.weight?.trim() || p.size?.trim() || null,
+    raw_weight: (p.weight?.trim() || p.size?.trim()) ?? null,
     raw_price: list,
     raw_sale_price: onSale ? sale! : null,
     raw_thc: thc,
@@ -146,9 +213,11 @@ export const jointAdapter: Adapter = {
 
     if (opts.fixtureLoader) {
       try {
-        const fixture = (await opts.fixtureLoader(`joint-${store.slug}.json`)) as JointSyncResponse;
-        const products = fixture.products ?? fixture.data?.products ?? [];
-        const items = products.flatMap(expandSyncProduct);
+        const fixture = (await opts.fixtureLoader(`joint-${store.slug}.json`)) as JointProductsResponse;
+        const products = Array.isArray(fixture)
+          ? (fixture as JointSyncProduct[])
+          : (fixture.products ?? (fixture.data as JointSyncProduct[] | undefined) ?? []);
+        const items = (products as JointSyncProduct[]).flatMap(expandProduct);
         return {
           status: items.length > 0 ? "ok" : "empty",
           platform: "joint",
@@ -170,50 +239,52 @@ export const jointAdapter: Adapter = {
 
     const base = baseUrlFromMenuUrl(store.menu_url);
 
-    // Strategy 1: sync-dutchie
+    // Step 1: scrape the nonce from the menu page HTML.
+    let nonce: string;
     try {
-      const dutchie = await trySync(base, "dutchie");
-      if (dutchie && dutchie.length > 0) {
-        const items = dutchie.flatMap(expandSyncProduct);
-        return {
-          status: items.length > 0 ? "ok" : "empty",
-          platform: "joint",
-          items,
-          duration_ms: Date.now() - start,
-          adapter_version: ADAPTER_VERSION,
-        };
-      }
+      nonce = await scrapeNonce(store.menu_url);
     } catch (err) {
-      throw err; // auth surfaces loudly
+      return {
+        status: "error",
+        platform: "joint",
+        items: [],
+        duration_ms: Date.now() - start,
+        error: (err as Error).message,
+        adapter_version: ADAPTER_VERSION,
+      };
     }
 
-    // Strategy 2: sync-jane
-    try {
-      const jane = await trySync(base, "jane");
-      if (jane && jane.length > 0) {
-        const items = jane.flatMap(expandSyncProduct);
-        return {
-          status: items.length > 0 ? "ok" : "empty",
-          platform: "joint",
-          items,
-          duration_ms: Date.now() - start,
-          adapter_version: ADAPTER_VERSION,
-        };
+    // Step 2: page through /products with the nonce.
+    const all: RawMenuItem[] = [];
+    let page = 1;
+    let totalPages = 1;
+    let retriedNonce = false;
+    while (page <= Math.min(totalPages, MAX_PAGES)) {
+      try {
+        const resp = await fetchProductsPage(base, nonce, page);
+        totalPages = resp.totalPages || 1;
+        for (const p of resp.products) all.push(...expandProduct(p));
+        page++;
+        if (page <= totalPages) await new Promise((r) => setTimeout(r, 600));
+      } catch (err) {
+        if (err instanceof AdapterAuthError && !retriedNonce) {
+          retriedNonce = true;
+          nonce = await scrapeNonce(store.menu_url);
+          continue;
+        }
+        throw err;
       }
-    } catch (err) {
-      throw err;
     }
 
-    // Strategy 3: not yet implemented. Record empty + explain.
     return {
-      status: "empty",
+      status: all.length === 0 ? "empty" : "ok",
       platform: "joint",
-      items: [],
+      items: all,
       duration_ms: Date.now() - start,
-      error: "Joint sync-dutchie and sync-jane both returned no products. HTML fallback parser is not implemented (v0.9). Investigate WP nonce flow before adding.",
       adapter_version: ADAPTER_VERSION,
+      error: all.length === 0 ? `Joint /products returned no items for ${store.slug}` : undefined,
     };
   },
 };
 
-export const __testing = { expandSyncProduct, ADAPTER_VERSION };
+export const __testing = { expandProduct, scrapeNonce, NONCE_PATTERNS, ADAPTER_VERSION };

@@ -1,11 +1,11 @@
 {
   "_meta": {
-    "purpose": "Hand-built sample mirroring Dutchie's FilteredProducts GraphQL response for NOXX East Peoria (dispensaryId 65772a69ac53410009424572). Covers POSMetaData.children flower buckets, vape sale, edible pack, and a no-price coming-soon product.",
-    "source": "Schema cross-referenced against Dutchie public storefront responses observed via Chrome (2026-06-04)."
+    "purpose": "Fixture for Dutchie api-4 FilteredProducts response shape — NOXX East Peoria (dispensaryId 65772a69ac53410009424572). Reflects Chrome Round 2 (2026-06-04) recon: response envelope uses filteredProducts.paginate.{total,perPage,page} (api-4) NOT filteredProducts.queryInfo.totalCount (the old api-1 shape).",
+    "source": "Live response shape captured via Chrome Round 2 against dutchie.com/api-4/graphql. Product fields trimmed to those the parser uses (POSMetaData.children, Options/recPrices/recSpecialPrices, potencyThc)."
   },
   "data": {
     "filteredProducts": {
-      "queryInfo": { "totalCount": 4 },
+      "paginate": { "total": 4, "perPage": 50, "page": 0 },
       "products": [
         {
           "id": "dut-001",

@@ -19,9 +19,13 @@ export interface StoreRef {
   name: string;
   city: string;
   platform: Platform;
-  platform_store_id: string;      // Jane storeId, Dutchie dispensaryId/slug, etc.
+  platform_store_id: string;      // Jane storeId or slug, Dutchie dispensaryId/slug, etc.
   menu_url: string | null;
   graphql_endpoint: string | null;
+  /** Jane only: which Algolia cluster this store belongs to. Defaults to
+   *  'default' if not set. Currently 'default' (nuEra + Beyond Hello) or
+   *  'rise_gti' (RISE Canton -- separate Algolia app/key/index). */
+  jane_cluster?: string | null;
 }
 
 /** One row coming back from an adapter. Mirrors the raw_* columns on menu_items. */
