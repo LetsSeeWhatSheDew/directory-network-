@@ -1,83 +1,88 @@
 {
   "_meta": {
-    "purpose": "Fixture for RISE Canton (Jane storeId 1343) on the rise_gti Algolia cluster (app 4O7QMAY0VJ, index production_menu_items). Cluster B's hit shape carries `amount` + flat `price`, `available`, and `sale_type` fields the default cluster doesn't.",
-    "source": "Chrome Round 2 (2026-06-04). Brand names match RISE Canton's live menu (RYTHM / Good Green / incredibles -- all GTI house brands)."
+    "purpose": "Fixture for RISE Canton (Jane storeId 1343) AFTER the 2026-06-05 Algolia consolidation. RISE now lives in the single app VFM4X0N23A / index menu-products-production (the old rise_gti app 4O7QMAY0VJ / production_menu_items is dead). Wrapped in the multi-index batch envelope { results: [ ... ] } returned by POST https://search.iheartjane.com/1/indexes/*/queries.",
+    "source": "Endpoint + envelope + consolidation verified live by Chrome 2026-06-05. NOTE: hit field contents are carried from the 2026-06-04 RISE recon (flat `price` + `amount` per-weight SKUs) and rewrapped to the new envelope. The parser is shape-driven, so it handles flat-price OR per-bucket flower identically; a fresh full live RISE capture on the consolidated index should replace this fixture when available (flagged in progress log).",
+    "store_id_note": "store_id remains the per-store discriminator; the request filters on store_id=1343 against menu-products-production."
   },
-  "hits": [
+  "results": [
     {
-      "objectID": "rise-1343-rythm-gmo-eighth",
-      "product_id": 700001,
-      "name": "RYTHM GMO 3.5g",
-      "brand": "RYTHM",
-      "kind": "flower",
-      "category": "flower",
-      "amount": "3.5g",
-      "price": 40,
-      "discounted_price": 30,
-      "percent_thc": 27.3,
-      "available": true,
-      "sale_type": "RECREATIONAL",
-      "store_id": 1343
-    },
-    {
-      "objectID": "rise-1343-good-green-relax-oz",
-      "product_id": 700002,
-      "name": "Good Green Relax 28g",
-      "brand": "Good Green",
-      "kind": "flower",
-      "category": "flower",
-      "amount": "28g",
-      "price": 150,
-      "thc_low": 17.5,
-      "thc_high": 19.0,
-      "available": true,
-      "sale_type": "RECREATIONAL",
-      "store_id": 1343
-    },
-    {
-      "objectID": "rise-1343-rythm-cart-pineapple",
-      "product_id": 700003,
-      "name": "RYTHM Live Resin Cart - Pineapple Express",
-      "brand": "RYTHM",
-      "kind": "vape",
-      "category": "vape",
-      "amount": "1g",
-      "price": 75,
-      "discounted_price": 60,
-      "percent_thc": 79.6,
-      "available": true,
-      "sale_type": "RECREATIONAL",
-      "store_id": 1343
-    },
-    {
-      "objectID": "rise-1343-incredibles-bar",
-      "product_id": 700004,
-      "name": "incredibles Black Cherry Bar",
-      "brand": "incredibles",
-      "kind": "edible",
-      "category": "edible",
-      "amount": "100mg",
-      "price": 25,
-      "available": true,
-      "sale_type": "RECREATIONAL",
-      "store_id": 1343
-    },
-    {
-      "objectID": "rise-1343-out-of-stock",
-      "product_id": 700005,
-      "name": "Aeriz Live Sugar (sold out)",
-      "brand": "Aeriz",
-      "kind": "concentrate",
-      "category": "concentrate",
-      "amount": "1g",
-      "price": 55,
-      "available": false,
-      "sale_type": "RECREATIONAL",
-      "store_id": 1343
+      "hits": [
+        {
+          "objectID": "rise-1343-rythm-gmo-eighth",
+          "product_id": 700001,
+          "name": "RYTHM GMO 3.5g",
+          "brand": "RYTHM",
+          "kind": "flower",
+          "category": "flower",
+          "amount": "3.5g",
+          "price": 40,
+          "discounted_price": 30,
+          "percent_thc": 27.3,
+          "available": true,
+          "sale_type": "RECREATIONAL",
+          "store_id": 1343
+        },
+        {
+          "objectID": "rise-1343-good-green-relax-oz",
+          "product_id": 700002,
+          "name": "Good Green Relax 28g",
+          "brand": "Good Green",
+          "kind": "flower",
+          "category": "flower",
+          "amount": "28g",
+          "price": 150,
+          "thc_low": 17.5,
+          "thc_high": 19.0,
+          "available": true,
+          "sale_type": "RECREATIONAL",
+          "store_id": 1343
+        },
+        {
+          "objectID": "rise-1343-rythm-cart-pineapple",
+          "product_id": 700003,
+          "name": "RYTHM Live Resin Cart - Pineapple Express",
+          "brand": "RYTHM",
+          "kind": "vape",
+          "category": "vape",
+          "amount": "1g",
+          "price": 75,
+          "discounted_price": 60,
+          "percent_thc": 79.6,
+          "available": true,
+          "sale_type": "RECREATIONAL",
+          "store_id": 1343
+        },
+        {
+          "objectID": "rise-1343-incredibles-bar",
+          "product_id": 700004,
+          "name": "incredibles Black Cherry Bar",
+          "brand": "incredibles",
+          "kind": "edible",
+          "category": "edible",
+          "amount": "100mg",
+          "price": 25,
+          "available": true,
+          "sale_type": "RECREATIONAL",
+          "store_id": 1343
+        },
+        {
+          "objectID": "rise-1343-out-of-stock",
+          "product_id": 700005,
+          "name": "Aeriz Live Sugar (sold out)",
+          "brand": "Aeriz",
+          "kind": "concentrate",
+          "category": "concentrate",
+          "amount": "1g",
+          "price": 55,
+          "available": false,
+          "sale_type": "RECREATIONAL",
+          "store_id": 1343
+        }
+      ],
+      "nbHits": 5,
+      "page": 0,
+      "nbPages": 1,
+      "hitsPerPage": 48
     }
-  ],
-  "nbHits": 5,
-  "page": 0,
-  "nbPages": 1,
-  "hitsPerPage": 100
+  ]
 }

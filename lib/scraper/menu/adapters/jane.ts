@@ -1,100 +1,57 @@
 // lib/scraper/menu/adapters/jane.ts
 // =============================================================================
-// Jane (iHeartJane) menu adapter — multi-cluster Algolia + slug-resolution.
+// Jane (iHeartJane) menu adapter — single consolidated Algolia config.
 //
-// Chrome Round 2 found TWO Algolia clusters in use across our 5 Jane
-// storefronts. The adapter is parameterized per-store via the registry's
-// optional `jane_cluster` field (defaults to 'default').
+// Chrome re-verified the live shape on 2026-06-05. Jane consolidated its
+// Algolia setup: there is now ONE cluster for every Jane storefront we cover
+// (nuEra ×2, Beyond Hello ×2, RISE Canton). The former `rise_gti` cluster
+// (app 4O7QMAY0VJ / index production_menu_items) is DEAD — it returns
+// "Index not allowed with this API key". RISE Canton (store 1343) now lives
+// in the same app VFM4X0N23A / index menu-products-production as the rest.
 //
-// Coverage (5 stores)
-//   * nuEra East Peoria       (1517)            cluster=default
-//   * nuEra Pekin             (3050)            cluster=default
-//   * Beyond Hello Peoria     (6926)            cluster=default
-//   * Beyond Hello Bloomington(slug)            cluster=default  (slug→id resolved at fetch)
-//   * RISE Canton             (1343)            cluster=rise_gti
+// Coverage (5 stores), all on the single cluster
+//   * nuEra East Peoria        (1517)
+//   * nuEra Pekin              (3050)
+//   * Beyond Hello Peoria      (6926)
+//   * Beyond Hello Bloomington (slug -> id resolved at fetch)
+//   * RISE Canton              (1343)
 //
-// Clusters
-//   default  -- app VFM4X0N23A, index menu-products-production
-//               body uses numericFilters [store_id=N] + facetFilters by `kind`
-//               (matches nuEra / Beyond Hello storefront behavior)
-//   rise_gti -- app 4O7QMAY0VJ, index production_menu_items
-//               body uses single `filters` string:
-//                 "store_id:N AND sale_type:RECREATIONAL AND available:true"
-//               (matches RISE / GTI storefront behavior)
+// Live request shape (verified 2026-06-05) — the multi-index batch endpoint:
+//   POST https://search.iheartjane.com/1/indexes/*/queries
+//   headers: x-algolia-application-id, x-algolia-api-key, Content-Type
+//   body:   { "requests": [ { "indexName": "menu-products-production",
+//             "params": "filters=store_id%3D<ID>&hitsPerPage=48&page=0" } ] }
+//   response: results[0].{ hits, nbHits, page, nbPages, hitsPerPage }
 //
-// Slug → storeId resolution (BH Bloomington)
+// `store_id` is the per-store discriminator. The embedded search key is
+// public and WILL rotate — keep it env-driven (JANE_ALGOLIA_KEY) and fail
+// loud (AdapterAuthError) on 401/403 so a rotation surfaces immediately.
+//
+// Slug -> storeId resolution (Beyond Hello Bloomington)
 //   If platform_store_id is non-numeric we treat it as a Jane storefront
 //   slug and GET www.iheartjane.com/api/v1/stores?slug=<slug> to resolve the
 //   numeric store_id. Cached in-process for the life of the runner.
 //
-// Loud-fail: 401/403 from Algolia (key rotation) throws AdapterAuthError.
+// NOTE on jane_cluster: the registry's `jane_cluster` field is now vestigial
+// (single cluster). The adapter ignores its value — a lingering legacy value
+// like "rise_gti" routes to the one config rather than throwing, so RISE
+// Canton keeps working before Cowork retires the field.
 // =============================================================================
 
 import type { Adapter, AdapterOpts, FetchResult, RawMenuItem, StoreRef } from "../types";
 import { AdapterAuthError, AdapterSchemaError } from "../types";
 
-const ADAPTER_VERSION = "jane@2.0.0";
-const HITS_PER_PAGE = 100;
+const ADAPTER_VERSION = "jane@3.0.0";
+const HITS_PER_PAGE = 48; // Live storefront uses 48; Algolia caps if exceeded.
 const MAX_PAGES = 30;
 
-interface JaneCluster {
-  appId: string;
-  apiKey: string;
-  indexName: string;
-  /** Build the Algolia query body for this cluster + store. */
-  buildBody: (storeId: number, page: number) => unknown;
-}
-
-const VALID_PRODUCT_TYPES = [
-  "flower",
-  "pre-rolls",
-  "vape",
-  "cartridges",
-  "extracts",
-  "concentrate",
-  "edible",
-  "edibles",
-  "tincture",
-  "topical",
-  "accessories",
-  "gear",
-  "merch",
-];
-
-/** Default cluster (nuEra + Beyond Hello). */
-const DEFAULT_CLUSTER: JaneCluster = {
-  appId: "VFM4X0N23A",
-  // Search-only key from Jane's public storefront bundle (2026-06-04).
-  // Override via JANE_ALGOLIA_KEY env when rotated.
-  apiKey: process.env.JANE_ALGOLIA_KEY || "f9b53d83d1e96b97c4f80ab1ac6cdbfb",
-  indexName: "menu-products-production",
-  buildBody: (storeId, page) => ({
-    query: "",
-    page,
-    hitsPerPage: HITS_PER_PAGE,
-    facetFilters: [VALID_PRODUCT_TYPES.map((t) => `kind:${t}`)],
-    numericFilters: [`store_id=${storeId}`],
-    attributesToRetrieve: ["*"],
-  }),
-};
-
-/** RISE / GTI cluster (RISE Canton storeId 1343). */
-const RISE_CLUSTER: JaneCluster = {
-  appId: "4O7QMAY0VJ",
-  apiKey: process.env.JANE_ALGOLIA_KEY_RISE || "e1b4dada43202e5a1a88124a9ad956f2",
-  indexName: "production_menu_items",
-  buildBody: (storeId, page) => ({
-    filters: `store_id:${storeId} AND sale_type:RECREATIONAL AND available:true`,
-    hitsPerPage: HITS_PER_PAGE,    // RISE storefront uses 24 in the wild; 100 is fine -- Algolia caps if needed
-    page,
-    attributesToRetrieve: ["*"],
-  }),
-};
-
-const CLUSTERS: Record<string, JaneCluster> = {
-  default: DEFAULT_CLUSTER,
-  rise_gti: RISE_CLUSTER,
-};
+// ---- Single consolidated Jane Algolia config (2026-06-05) -------------------
+const JANE_APP_ID = "VFM4X0N23A";
+const JANE_INDEX = "menu-products-production";
+// Public embedded search key. Rotates without notice — override via env.
+const JANE_API_KEY = process.env.JANE_ALGOLIA_KEY || "edc5435c65d771cecbd98bbd488aa8d3";
+// Multi-index batch endpoint the live storefront posts to.
+const SEARCH_ENDPOINT = "https://search.iheartjane.com/1/indexes/*/queries";
 
 interface AlgoliaHit {
   objectID?: string;
@@ -135,12 +92,17 @@ interface AlgoliaHit {
   sale_type?: string;
 }
 
-interface AlgoliaResponse {
+interface AlgoliaResult {
   hits: AlgoliaHit[];
   nbHits: number;
   page: number;
   nbPages: number;
   hitsPerPage: number;
+}
+
+/** Batch response envelope: { results: [ AlgoliaResult ] }. */
+interface AlgoliaBatchResponse {
+  results?: AlgoliaResult[];
 }
 
 interface JaneStoreLookup {
@@ -174,35 +136,65 @@ async function resolveStoreId(slugOrId: string): Promise<number> {
   return candidate;
 }
 
-function algoliaEndpoint(cluster: JaneCluster): string {
-  return `https://${cluster.appId.toLowerCase()}-dsn.algolia.net/1/indexes/${cluster.indexName}/query`;
+/** Build the `params` querystring for one store/page on the batch endpoint. */
+function buildParams(storeId: number, page: number): string {
+  // store_id is the discriminator; `=` must be percent-encoded inside the
+  // filters value -> store_id%3D<ID>. encodeURIComponent does this for us.
+  const filters = encodeURIComponent(`store_id=${storeId}`);
+  return `filters=${filters}&hitsPerPage=${HITS_PER_PAGE}&page=${page}`;
 }
 
-async function queryPage(cluster: JaneCluster, storeId: number, page: number): Promise<AlgoliaResponse> {
-  const url =
-    `${algoliaEndpoint(cluster)}?x-algolia-application-id=${cluster.appId}&x-algolia-api-key=${cluster.apiKey}`;
-  const res = await fetch(url, {
+/**
+ * Pull one AlgoliaResult from a raw payload.
+ * - Live / new fixtures: batch envelope { results: [ {hits,...} ] }.
+ * - Legacy single-query fixtures: bare { hits, nbHits, ... } (back-compat).
+ * The live network path uses requireResult() which is strict (batch-only) so
+ * a real prod shape change fails loud; fixtures may use either envelope.
+ */
+function extractResult(raw: unknown): AlgoliaResult {
+  const obj = raw as AlgoliaBatchResponse & Partial<AlgoliaResult>;
+  if (obj && Array.isArray(obj.results)) {
+    const r = obj.results[0];
+    if (r && Array.isArray(r.hits)) return r;
+    throw new AdapterSchemaError(
+      `Jane batch envelope has no results[0].hits: ${JSON.stringify(raw).slice(0, 200)}`
+    );
+  }
+  if (obj && Array.isArray(obj.hits)) {
+    return obj as AlgoliaResult; // legacy single-query shape
+  }
+  throw new AdapterSchemaError(`Jane payload missing hits[]: ${JSON.stringify(raw).slice(0, 200)}`);
+}
+
+async function queryPage(storeId: number, page: number, apiKey: string): Promise<AlgoliaResult> {
+  const res = await fetch(SEARCH_ENDPOINT, {
     method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify(cluster.buildBody(storeId, page)),
+    headers: {
+      "x-algolia-application-id": JANE_APP_ID,
+      "x-algolia-api-key": apiKey,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({ requests: [{ indexName: JANE_INDEX, params: buildParams(storeId, page) }] }),
   });
   if (res.status === 401 || res.status === 403) {
     throw new AdapterAuthError(
-      `Jane Algolia auth failed (${res.status}) for store ${storeId} on cluster ${cluster.indexName}. Key likely rotated; set JANE_ALGOLIA_KEY (default) or JANE_ALGOLIA_KEY_RISE (rise_gti).`
+      `Jane Algolia auth failed (${res.status}) for store ${storeId}. Public search key likely rotated; set JANE_ALGOLIA_KEY.`
     );
   }
   if (!res.ok) {
     throw new AdapterSchemaError(
-      `Jane Algolia ${res.status} on ${cluster.indexName}: ${await res.text().catch(() => "(no body)")}`
+      `Jane Algolia ${res.status} on ${JANE_INDEX}: ${await res.text().catch(() => "(no body)")}`
     );
   }
-  const json = (await res.json()) as AlgoliaResponse;
-  if (!Array.isArray(json.hits) || typeof json.nbHits !== "number") {
+  const json = (await res.json()) as AlgoliaBatchResponse;
+  const result = json.results?.[0];
+  if (!result || !Array.isArray(result.hits) || typeof result.nbHits !== "number") {
     throw new AdapterSchemaError(
-      `Jane Algolia returned unexpected shape on ${cluster.indexName}: ${JSON.stringify(json).slice(0, 200)}`
+      `Jane Algolia returned unexpected batch shape: ${JSON.stringify(json).slice(0, 200)}`
     );
   }
-  return json;
+  return result;
 }
 
 function thcDisplay(hit: AlgoliaHit): string | null {
@@ -239,7 +231,10 @@ function rawRow(args: {
   };
 }
 
-/** Hit -> RawMenuItem[]; flower SKUs auto-expand to one row per bucket. */
+/** Hit -> RawMenuItem[]; flower SKUs auto-expand to one row per bucket.
+ *  Shape-driven (NOT cluster-driven): a hit with per-bucket price fields
+ *  expands; a hit with a flat `price` + `amount` emits a single row. Works
+ *  for any Jane store regardless of how its flower is encoded. */
 function expandHit(hit: AlgoliaHit): RawMenuItem[] {
   const baseName = hit.name?.trim() || "(unnamed)";
   const brand = hit.brand?.trim() || null;
@@ -248,14 +243,6 @@ function expandHit(hit: AlgoliaHit): RawMenuItem[] {
   const thcStr = thcDisplay(hit);
 
   if (isFlower) {
-    // Two flower conventions across Jane clusters:
-    //  A) Default cluster (menu-products-production): one hit per SKU with
-    //     per-bucket price fields (price_eighth_ounce, price_quarter_ounce,
-    //     price_half_ounce, price_ounce, plus optional price_each for 1g).
-    //     We auto-expand to one row per non-null bucket.
-    //  B) RISE / rise_gti cluster (production_menu_items): one hit per
-    //     (SKU x weight), with a flat `price` and an `amount` like "3.5g".
-    //     No per-bucket fields. We emit a single row using `amount` as weight.
     const hasBucketField =
       hit.price_eighth_ounce != null ||
       hit.price_quarter_ounce != null ||
@@ -282,8 +269,7 @@ function expandHit(hit: AlgoliaHit): RawMenuItem[] {
       }
       if (out.length > 0) return out;
     }
-    // Flat-price flower (rise_gti cluster): fall through to the single-row
-    // path below, which uses hit.amount as the weight.
+    // Flat-price flower: fall through to the single-row path (uses hit.amount).
   }
 
   const list = hit.price ?? hit.bucket_price ?? hit.price_each;
@@ -295,24 +281,10 @@ function expandHit(hit: AlgoliaHit): RawMenuItem[] {
   })];
 }
 
-interface StoreWithCluster extends StoreRef {
-  jane_cluster?: string;
-}
-
-function pickCluster(store: StoreWithCluster): JaneCluster {
-  const key = store.jane_cluster || "default";
-  const c = CLUSTERS[key];
-  if (!c) {
-    throw new AdapterSchemaError(`Unknown Jane cluster "${key}" for store ${store.slug}`);
-  }
-  return c;
-}
-
 export const janeAdapter: Adapter = {
   platform: "jane",
   async fetch(store: StoreRef, opts: AdapterOpts = {}): Promise<FetchResult> {
     const start = Date.now();
-    const withCluster = store as StoreWithCluster;
 
     if (store.platform !== "jane") {
       return {
@@ -336,14 +308,13 @@ export const janeAdapter: Adapter = {
     }
 
     // Fixture mode (offline tests). Fixture filename matches the
-    // ORIGINAL platform_store_id (slug or numeric) so tests can hold a
-    // separate fixture per store/cluster.
+    // platform_store_id (slug or numeric) so tests can hold one fixture per
+    // store. Tolerates both the new batch envelope and legacy single-query.
     if (opts.fixtureLoader) {
       try {
-        const fixture = (await opts.fixtureLoader(
-          `jane-${store.platform_store_id}.json`
-        )) as AlgoliaResponse;
-        const items = fixture.hits.flatMap(expandHit);
+        const fixture = await opts.fixtureLoader(`jane-${store.platform_store_id}.json`);
+        const result = extractResult(fixture);
+        const items = result.hits.flatMap(expandHit);
         return {
           status: items.length > 0 ? "ok" : "empty",
           platform: "jane",
@@ -363,7 +334,7 @@ export const janeAdapter: Adapter = {
       }
     }
 
-    const cluster = pickCluster(withCluster);
+    const apiKey = opts.apiKey || JANE_API_KEY;
 
     // Resolve slug -> numeric storeId when needed.
     let storeId: number;
@@ -386,7 +357,7 @@ export const janeAdapter: Adapter = {
     let totalHits = 0;
 
     while (page < Math.min(nbPages, MAX_PAGES)) {
-      const resp = await queryPage(cluster, storeId, page);
+      const resp = await queryPage(storeId, page, apiKey);
       totalHits = resp.nbHits;
       nbPages = resp.nbPages;
       for (const hit of resp.hits) all.push(...expandHit(hit));
@@ -400,7 +371,7 @@ export const janeAdapter: Adapter = {
       items: all,
       duration_ms: Date.now() - start,
       adapter_version: ADAPTER_VERSION,
-      error: totalHits === 0 ? `Jane returned 0 hits for store ${storeId} on cluster ${cluster.indexName}` : undefined,
+      error: totalHits === 0 ? `Jane returned 0 hits for store ${storeId} on ${JANE_INDEX}` : undefined,
     };
   },
 };
@@ -408,7 +379,10 @@ export const janeAdapter: Adapter = {
 export const __testing = {
   expandHit,
   resolveStoreId,
-  CLUSTERS,
-  algoliaEndpoint,
+  extractResult,
+  buildParams,
+  SEARCH_ENDPOINT,
+  JANE_APP_ID,
+  JANE_INDEX,
   ADAPTER_VERSION,
 };

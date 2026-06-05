@@ -225,6 +225,30 @@ scoreDeal.test.ts: every label boundary covered
 - Trinity Glen: dispensaryId `5f1084a105efe300b6392001` resolved.
 - RISE Canton: confirmed Jane (not Dutchie), storeId 1343, cluster `rise_gti`.
 
+## Round 4 — Jane Algolia consolidation (2026-06-05)
+
+Chrome re-verified the live Jane shape on 2026-06-05. Jane consolidated its Algolia setup since Round-2 recon; the Round-3 multi-cluster adapter now 403s even with a fresh key. Reconciled `lib/scraper/menu/adapters/jane.ts` (`jane@2.0.0` → `jane@3.0.0`).
+
+### What changed
+- **Endpoint host + request shape.** Was `POST https://VFM4X0N23A-dsn.algolia.net/1/indexes/<index>/query` (per-app host, single-query body). Now `POST https://search.iheartjane.com/1/indexes/*/queries` — the multi-index **batch** endpoint. Body is `{ "requests": [ { "indexName": "menu-products-production", "params": "filters=store_id%3D<ID>&hitsPerPage=48&page=0" } ] }`. Response moved from top-level `{hits,nbHits,…}` to `results[0].{hits,nbHits,page,nbPages,hitsPerPage}`.
+- **Clusters collapsed to ONE.** The `rise_gti` cluster (app `4O7QMAY0VJ` / index `production_menu_items`) is **dead** — verified to return "Index not allowed with this API key". Removed the `rise_gti` / `RISE_CLUSTER` / `CLUSTERS` map and the per-cluster `buildBody` machinery entirely. ALL Jane stores — including RISE Canton (1343) — now query the single app `VFM4X0N23A` / index `menu-products-production`, discriminated by `store_id`. The old `numericFilters`+`facetFilters`(by kind) request was replaced by the single `filters=store_id=<id>` string per the verified shape.
+- **Key rotated** to `edc5435c65d771cecbd98bbd488aa8d3`, still read from env `JANE_ALGOLIA_KEY` (public embedded key, will rotate again). Fail-loud on 401/403 unchanged.
+- **Pagination:** `hitsPerPage=48`, loop `page` until `page >= nbPages`.
+- **`jane_cluster` is now vestigial.** The adapter ignores the field's value, so a lingering legacy `rise_gti` row still routes to the single config (RISE keeps working before the registry is updated). `resolveStoreId` (BH Bloomington slug→id via `www.iheartjane.com/api/v1/stores`) is unchanged.
+- **Parser unchanged — it is shape-driven, not cluster-driven.** `expandHit` already handles both per-bucket-priced flower and flat-`price`+`amount` SKUs, so consolidation required no parser logic change; only the response-envelope unwrap (`extractResult`) was added. `extractResult` accepts the new batch envelope (and tolerates the legacy single-query envelope for back-compat); the live network path is strict batch-only so a real prod shape change fails loud.
+
+### Fixtures + tests
+- `tests/fixtures/menu/jane-1517.json` and `jane-1343.json` rewrapped into the `{results:[{…}]}` batch envelope, `hitsPerPage` 48. **Provenance note:** the endpoint/envelope/consolidation are Chrome-verified (2026-06-05); the individual hit *contents* carry over from the 2026-06-04 `menu-products-production` recon and are rewrapped. nuEra (1517) exercises bucket-priced flower; RISE (1343) exercises flat-price+amount flower. Because the parser is shape-driven both paths are valid.
+- `tests/menu/jane.test.ts` labels/comments updated for the single cluster; assertions unchanged and **PASS** (nuEra 9 items, RISE 5 items). `adapters.test.ts` and `normalize.test.ts` (34/34) still pass.
+
+### Verification status
+- ✅ Deterministic: `jane.test.ts` passes against the new live-shape fixtures.
+- ✅ End-to-end wiring: `run-menu-snapshot.ts --slug=nuera-east-peoria --fixture` and `--slug=rise-canton --fixture` both load the **real DB row** and return `status=ok` (9 / 5 items, `v=jane@3.0.0`). RISE's DB row still carries `jane_cluster=rise_gti` and routes correctly — proving the adapter's tolerance of the legacy value.
+- ⚠️ **Live network run from this build environment is Cloudflare-bot-blocked** (`search.iheartjane.com` returns a Cloudflare 403 challenge page to automated requests from this host — distinct from Algolia's "Index not allowed" error). The adapter surfaces it as a fail-loud `AdapterAuthError`, which is correct. A real browser (Chrome) confirmed the request shape works live. To satisfy the literal live `--slug=… ` acceptance check, run from an un-challenged host with `JANE_ALGOLIA_KEY` set. **This is an environment gap, not an adapter defect.**
+
+### Registry note for Cowork (do NOT let Code edit reference-data)
+- `rise-canton`: set `jane_cluster` → `default` (or retire the `jane_cluster` field across all Jane rows — it no longer affects routing). The adapter already ignores the value, so this is cleanup, not a functional blocker. Applies to both `reference-data/dispensary_registry.json` and the `dispensaries` DB rows (`nuera-*`, `beyond-hello-*` are `default`; only `rise-canton` is the stale `rise_gti`).
+
 ## Commit log
 - `bcb5c6b` chore(reference-data): vendor Cowork-built reference data on pipeline branch
 - `917ec99` feat(menu-pipeline): Phase 1 schema + dispensary seed

@@ -33,6 +33,9 @@ const nuEraEastPeoria: StoreRef = {
   jane_cluster: "default",
 };
 
+// jane_cluster intentionally left as the legacy "rise_gti" value to prove the
+// adapter ignores it post-consolidation (Cowork will retire the field). RISE
+// now resolves to the single VFM4X0N23A / menu-products-production config.
 const riseCanton: StoreRef = {
   id: "00000000-0000-0000-0000-000000000002",
   slug: "rise-canton",
@@ -46,7 +49,7 @@ const riseCanton: StoreRef = {
 };
 
 (async () => {
-  // ---------------- DEFAULT CLUSTER (nuEra fixture) ----------------
+  // ---------- CONSOLIDATED CLUSTER, bucket-priced flower (nuEra fixture) ----------
   const result = await janeAdapter.fetch(nuEraEastPeoria, { fixtureLoader: loadFixture });
 
   if (result.status !== "ok") {
@@ -95,14 +98,15 @@ const riseCanton: StoreRef = {
   const mystery = result.items.find((i) => i.raw_brand === "Mystery");
   assert(!mystery, "coming-soon SKU with no price should be dropped");
 
-  console.log(`PASS Jane default cluster (nuEra 1517): ${result.items.length} items`);
+  console.log(`PASS Jane consolidated cluster, bucket-priced flower (nuEra 1517): ${result.items.length} items`);
 
-  // ---------------- RISE_GTI CLUSTER (RISE Canton fixture) ----------------
+  // ---------- CONSOLIDATED CLUSTER, flat-priced flower (RISE Canton fixture) ----------
   const rise = await janeAdapter.fetch(riseCanton, { fixtureLoader: loadFixture });
   if (rise.status !== "ok") console.error("RISE failure:", rise.error);
   assert(rise.status === "ok", `RISE status=ok got ${rise.status}`);
 
-  // RYTHM GMO 3.5g: simple row (no bucket expansion -- rise_gti hits carry `amount`).
+  // RYTHM GMO 3.5g: simple row (no bucket expansion -- RISE flower hits carry a
+  // flat `price` + `amount`, which the shape-driven parser emits as one row).
   const gmo = rise.items.find((i) => i.raw_name.startsWith("RYTHM GMO"))!;
   assert(gmo, "RYTHM GMO present");
   assert(gmo.raw_weight === "3.5g", `GMO weight 3.5g, got ${gmo.raw_weight}`);
@@ -122,16 +126,17 @@ const riseCanton: StoreRef = {
   const inc = rise.items.find((i) => i.raw_name.startsWith("incredibles"))!;
   assert(!inc.is_on_sale && inc.raw_weight === "100mg", "incredibles 100mg list");
 
-  // Out-of-stock Aeriz: parser still emits it (`available:false` is informational
-  // -- the live RISE adapter filters by available:true at the Algolia level, so
-  // this row would never arrive in production; in the fixture it does, and that's
-  // fine because the menu_snapshots ledger records what the API returned).
+  // Out-of-stock Aeriz: parser still emits it (`available:false` is informational).
+  // The consolidated request filters only on store_id (no available filter in the
+  // verified 2026-06-05 shape), so an unavailable row CAN arrive; the parser emits
+  // it and the menu_snapshots ledger records what the API returned. Downstream
+  // normalization/scoring decides what to surface.
   const aer = rise.items.find((i) => i.raw_name.includes("Aeriz"));
   assert(aer, "out-of-stock Aeriz still parsed when present in payload");
 
-  console.log(`PASS Jane rise_gti cluster (RISE 1343): ${rise.items.length} items`);
+  console.log(`PASS Jane consolidated cluster, flat-priced flower (RISE 1343): ${rise.items.length} items`);
 
-  console.log(`\nAll Jane multi-cluster tests passed.`);
+  console.log(`\nAll Jane consolidated-cluster tests passed.`);
 })().catch((err) => {
   console.error(err);
   process.exit(1);
