@@ -1,0 +1,63 @@
+{
+  "_meta": {
+    "file": "unit_normalization_map.json",
+    "purpose": "Map every raw weight/qty expression to ONE canonical unit so prices are comparable across stores. This is the backbone of the normalization layer.",
+    "rebuilt_by": "Claude (chat) 2026-06-04.",
+    "usage": "Lowercase + trim raw weight string, match against aliases. If no alias hit, apply regex_patterns. Always store canonical_unit + unit_count.",
+    "confidence": "HIGH (deterministic)."
+  },
+  "flower": {
+    "canonical": "grams",
+    "map": {
+      "1g":  { "aliases": ["1g", "1 g", "1 gram", "gram", "single"], "grams": 1 },
+      "3.5g":{ "aliases": ["3.5g", "3.5 g", "3.5 grams", "eighth", "1/8", "1/8 oz", "eighth oz", "8th"], "grams": 3.5 },
+      "7g":  { "aliases": ["7g", "7 g", "7 grams", "quarter", "1/4", "1/4 oz", "quarter oz"], "grams": 7 },
+      "14g": { "aliases": ["14g", "14 g", "14 grams", "half", "1/2", "1/2 oz", "half oz"], "grams": 14 },
+      "28g": { "aliases": ["28g", "28 g", "28 grams", "ounce", "oz", "1 oz", "full oz"], "grams": 28 }
+    }
+  },
+  "pre_rolls": {
+    "canonical": "count_and_grams",
+    "map": {
+      "0.5g_1pk": { "aliases": ["0.5g preroll", "half gram preroll"], "grams_each": 0.5, "count": 1 },
+      "1g_1pk":   { "aliases": ["1g preroll", "1g pre-roll", "single preroll"], "grams_each": 1, "count": 1 },
+      "0.5g_5pk": { "aliases": ["5pk", "5 pack", "5-pack preroll"], "grams_each": 0.5, "count": 5 },
+      "0.35g_10pk":{ "aliases": ["10pk", "10 pack", "dogwalkers 10pk"], "grams_each": 0.35, "count": 10 }
+    },
+    "note": "Pre-roll packs vary in per-unit weight; capture both count and grams_each, normalize price to $/g."
+  },
+  "vapes": {
+    "canonical": "grams",
+    "map": {
+      "0.3g": { "aliases": ["0.3g", ".3g", "0.3 g"], "grams": 0.3 },
+      "0.5g": { "aliases": ["0.5g", ".5g", "half gram cart", "0.5 g"], "grams": 0.5 },
+      "1g":   { "aliases": ["1g", "1 g", "full gram cart", "1g cart"], "grams": 1 },
+      "2g":   { "aliases": ["2g", "2 g", "2g cart"], "grams": 2 }
+    },
+    "tax_note": "Vapes/concentrates use THC-based excise (10/25%), NOT the 20% infused rate. See il_cannabis_tax_structure.json."
+  },
+  "concentrates": {
+    "canonical": "grams",
+    "map": {
+      "0.5g": { "aliases": ["0.5g", ".5g"], "grams": 0.5 },
+      "1g":   { "aliases": ["1g", "1 g", "gram"], "grams": 1 },
+      "2g":   { "aliases": ["2g", "2 g"], "grams": 2 },
+      "2.5g": { "aliases": ["2.5g", "2.5 g", "bucket"], "grams": 2.5 }
+    }
+  },
+  "edibles": {
+    "canonical": "total_mg_and_pack_count",
+    "map": {
+      "100mg_10pk": { "aliases": ["100mg 10pk", "100mg 10 pack", "10pk 10mg", "100mg gummies"], "total_mg": 100, "count": 10, "mg_each": 10 },
+      "100mg_20pk": { "aliases": ["100mg 20pk", "100mg 20 pack", "20pk 5mg"], "total_mg": 100, "count": 20, "mg_each": 5 },
+      "200mg_20pk": { "aliases": ["200mg 20pk", "200mg 20 pack"], "total_mg": 200, "count": 20, "mg_each": 10 }
+    },
+    "note": "Normalize edible price to $/total_mg for comparability across pack sizes."
+  },
+  "regex_patterns": {
+    "grams":  "(\\d+(?:\\.\\d+)?)\\s*g\\b",
+    "ounce_fraction": "(\\b1/8\\b|\\b1/4\\b|\\b1/2\\b|\\beighth\\b|\\bquarter\\b|\\bhalf\\b|\\bounce\\b|\\boz\\b)",
+    "edible_mg_pack": "(\\d+)\\s*mg.*?(\\d+)\\s*(?:pk|pack|ct|count)",
+    "instructions": "Try alias map first; fall back to regex. Flag any weight string that matches neither to the review queue."
+  }
+}

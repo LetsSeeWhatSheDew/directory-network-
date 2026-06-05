@@ -1,0 +1,54 @@
+{
+  "_meta": {
+    "file": "il_cannabis_tax_structure.json",
+    "purpose": "Authoritative IL recreational cannabis tax stack for pre-tax -> out-the-door (OTD) modeling.",
+    "rebuilt_by": "Claude (chat) on 2026-06-04, reconstructed from verified sources after Cowork's originals were lost in its sandbox.",
+    "confidence": "HIGH for state excise + state ROT + verified local cannabis ROT. MEDIUM for general municipal sales-tax add-ons (verify per store via IDOR MyTax Tax Rate Finder).",
+    "sources": [
+      "IL Dept of Revenue, Cannabis Taxes: https://tax.illinois.gov/research/taxinformation/other/cannabis-taxes.html",
+      "410 ILCS 705/65-10 (excise tiers); 410 ILCS 705/65-5 (adjusted THC formula)",
+      "86 Ill. Adm. Code 423.105 (concentrates are NOT infused products)"
+    ],
+    "verified_date": "2026-06-04"
+  },
+  "cannabis_purchaser_excise_tax": {
+    "description": "Imposed on the purchaser, by product type and ADJUSTED THC level. Applied to purchase price.",
+    "tiers": {
+      "non_infused_thc_le_35": { "rate": 0.10, "applies_to": "Flower, pre-rolls, concentrates, and vapes with adjusted THC <= 35%" },
+      "non_infused_thc_gt_35": { "rate": 0.25, "applies_to": "Flower, pre-rolls, concentrates, and vapes with adjusted THC > 35%" },
+      "infused_products": { "rate": 0.20, "applies_to": "Cannabis-infused products only: edibles, tinctures, topicals. Rate is flat regardless of THC." }
+    },
+    "CRITICAL_TRAP": "Concentrates and vapes are NOT cannabis-infused products. Per 86 Ill. Adm. Code 423.105 they are taxed by adjusted THC (10% or 25%), NOT the 20% infused rate. Do not classify a vape/concentrate as 'infused'.",
+    "adjusted_thc_formula": "adjusted_THC% = delta9_THC% + (0.877 * THCa%). Use this against the 35% threshold for non-infused products. Menu-displayed total THC% is usually a close proxy, but where THCa is listed separately, compute it.",
+    "infused_uses_adjusted_thc": false
+  },
+  "state_retailers_occupation_tax": { "rate": 0.0625, "note": "Standard 6.25% IL state sales tax (ROT) applies to rec cannabis purchase price." },
+  "local_cannabis_retailers_occupation_tax": {
+    "description": "Municipal + county cannabis ROT, specific to cannabis, on top of state. Verified for Peoria-metro jurisdictions.",
+    "municipal": {
+      "east_peoria": { "rate": 0.03, "source": "City of East Peoria Ordinance 4453" },
+      "peoria_heights": { "rate": 0.03, "source": "Peoria Heights Village Code 4-9-2" },
+      "peoria": { "rate": 0.03, "source": "City of Peoria municipal cannabis ROT" },
+      "pekin": { "rate": 0.03, "source": "City of Pekin municipal cannabis ROT" },
+      "canton": { "rate": 0.03, "confidence": "MEDIUM - verify Canton municipal cannabis ROT" }
+    },
+    "county": {
+      "peoria_county": { "rate": 0.03, "note": "3.0% in incorporated municipalities within the county; up to 3.75% in unincorporated areas." },
+      "tazewell_county": { "rate": 0.03, "confidence": "MEDIUM - East Peoria/Pekin are in Tazewell Co; verify county cannabis ROT" },
+      "fulton_county": { "rate": 0.0, "confidence": "MEDIUM - Canton is in Fulton Co; verify" }
+    },
+    "max_allowed": { "municipal": 0.03, "county_in_municipality": 0.03, "county_unincorporated": 0.0375 }
+  },
+  "general_local_sales_tax_addon": {
+    "description": "Beyond cannabis-specific ROT, general home-rule/local sales tax may also apply. This is the ESTIMATED layer.",
+    "estimate_range": [0.0, 0.0275],
+    "action_for_code": "Pull exact combined general rate per store address from IDOR MyTax Tax Rate Finder; do not hardcode."
+  },
+  "worked_examples": {
+    "_note": "Effective rates below = sum of (excise + state ROT 6.25% + local cannabis ROT 3% muni + 3% county + ~general add-on). Use to VALIDATE the tax engine.",
+    "standard_eighth_le_35_thc": { "excise": 0.10, "approx_effective_otd_rate": 0.25, "example": "$30.00 pre-tax eighth -> ~$37.50 OTD" },
+    "vape_cart_concentrate_gt_35_thc": { "excise": 0.25, "approx_effective_otd_rate": 0.40, "example": "$40.00 pre-tax cart -> ~$56.00 OTD" },
+    "edible_infused": { "excise": 0.20, "approx_effective_otd_rate": 0.35, "example": "$25.00 pre-tax 100mg pack -> ~$33.75 OTD" }
+  },
+  "validation_targets": { "eighth_le_35": 0.25, "vape_concentrate": 0.40, "edible": 0.35, "tolerance": 0.02 }
+}
