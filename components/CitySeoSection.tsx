@@ -8,7 +8,7 @@ export function CitySeoSection({ content }: { content: CityContent }) {
   return (
     <section style={{
       background: "#fff",
-      borderTop: "1px solid #e8e4da",
+      borderTop: "1px solid #DCDED2",
       padding: "52px 28px",
     }}>
       <div style={{ maxWidth: 760, margin: "0 auto" }}>
@@ -17,7 +17,7 @@ export function CitySeoSection({ content }: { content: CityContent }) {
           fontWeight: 700,
           letterSpacing: ".14em",
           textTransform: "uppercase",
-          color: "#7DBA47",
+          color: "#2E7D32",
           fontFamily: "system-ui, sans-serif",
           marginBottom: 6,
         }}>
@@ -26,7 +26,7 @@ export function CitySeoSection({ content }: { content: CityContent }) {
         <h2 style={{
           fontSize: "clamp(1.4rem, 3vw, 1.8rem)",
           fontWeight: 700,
-          color: "#1F3D2B",
+          color: "#1C3A22",
           letterSpacing: "-.03em",
           marginBottom: 18,
         }}>
@@ -44,8 +44,8 @@ export function CitySeoSection({ content }: { content: CityContent }) {
         </p>
 
         <div style={{
-          background: "#F7F4ED",
-          borderLeft: "3px solid #7DBA47",
+          background: "#F4F5EF",
+          borderLeft: "3px solid #2E7D32",
           padding: "20px 24px",
           borderRadius: "0 8px 8px 0",
           marginBottom: 32,
@@ -53,7 +53,7 @@ export function CitySeoSection({ content }: { content: CityContent }) {
           <h3 style={{
             fontSize: ".85rem",
             fontWeight: 700,
-            color: "#1F3D2B",
+            color: "#1C3A22",
             fontFamily: "system-ui, sans-serif",
             marginBottom: 12,
             letterSpacing: ".02em",
@@ -74,7 +74,7 @@ export function CitySeoSection({ content }: { content: CityContent }) {
                   position: "absolute",
                   left: 0,
                   top: 2,
-                  color: "#7DBA47",
+                  color: "#2E7D32",
                   fontWeight: 700,
                 }}>
                   {i + 1}.
@@ -89,7 +89,7 @@ export function CitySeoSection({ content }: { content: CityContent }) {
           <h3 style={{
             fontSize: "1.05rem",
             fontWeight: 700,
-            color: "#1F3D2B",
+            color: "#1C3A22",
             marginBottom: 8,
           }}>
             {content.faq.q}

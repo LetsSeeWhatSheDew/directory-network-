@@ -234,12 +234,12 @@ export default function HomeDealCards({
         <div className="deal-cards">
           {[0, 1, 2].map((i) => (
             <div key={`skel-${i}`} className="deal-card" style={{ padding: 18, minHeight: 220 }} aria-hidden="true">
-              <div style={{ height: 14, width: "55%", borderRadius: 6, background: "#e8e4da", marginBottom: 8 }} />
+              <div style={{ height: 14, width: "55%", borderRadius: 6, background: "#DCDED2", marginBottom: 8 }} />
               <div style={{ height: 10, width: "35%", borderRadius: 5, background: "#f0ece3", marginBottom: 18 }} />
-              <div style={{ height: 16, width: "75%", borderRadius: 6, background: "#e8e4da", marginBottom: 10 }} />
+              <div style={{ height: 16, width: "75%", borderRadius: 6, background: "#DCDED2", marginBottom: 10 }} />
               <div style={{ height: 10, width: "92%", borderRadius: 5, background: "#f0ece3", marginBottom: 6 }} />
               <div style={{ height: 10, width: "68%", borderRadius: 5, background: "#f0ece3", marginBottom: 18 }} />
-              <div style={{ height: 42, width: "100%", borderRadius: 10, background: "#F2F8E9", border: "1px solid #C7E5A8" }} />
+              <div style={{ height: 42, width: "100%", borderRadius: 10, background: "#E8F0DF", border: "1px solid #CBE0B4" }} />
             </div>
           ))}
         </div>
@@ -249,14 +249,14 @@ export default function HomeDealCards({
       <div
         style={{
           background: "#fff",
-          border: "1px solid #e8e4da",
+          border: "1px solid #DCDED2",
           borderRadius: 14,
           padding: "28px 24px",
           textAlign: "center",
           fontFamily: "system-ui, sans-serif",
         }}
       >
-        <div style={{ fontFamily: "Georgia, serif", fontSize: "1.1rem", fontWeight: 700, color: "#1F3D2B", marginBottom: 6 }}>
+        <div style={{ fontFamily: "Georgia, serif", fontSize: "1.1rem", fontWeight: 700, color: "#1C3A22", marginBottom: 6 }}>
           We're refreshing Central IL deals — check back soon.
         </div>
         <p style={{ fontSize: ".9rem", color: "#6b7280", margin: "0 auto 14px", maxWidth: 420, lineHeight: 1.5 }}>
@@ -266,7 +266,7 @@ export default function HomeDealCards({
           href="/alerts"
           style={{
             display: "inline-block",
-            background: "#7DBA47",
+            background: "#2E7D32",
             color: "#fff",
             padding: "10px 20px",
             borderRadius: 10,
@@ -321,7 +321,7 @@ export default function HomeDealCards({
                 aria-selected={mode === "near"}
                 onClick={() => setMode("near")}
                 style={{
-                  background: mode === "near" ? "#7DBA47" : "transparent",
+                  background: mode === "near" ? "#2E7D32" : "transparent",
                   color: mode === "near" ? "#fff" : "#6b7280",
                   border: "none",
                   borderRadius: 100,
@@ -340,7 +340,7 @@ export default function HomeDealCards({
                 aria-selected={mode === "all"}
                 onClick={() => setMode("all")}
                 style={{
-                  background: mode === "all" ? "#7DBA47" : "transparent",
+                  background: mode === "all" ? "#2E7D32" : "transparent",
                   color: mode === "all" ? "#fff" : "#6b7280",
                   border: "none",
                   borderRadius: 100,
@@ -361,7 +361,7 @@ export default function HomeDealCards({
             href="/deals/all"
             style={{
               fontSize: ".85rem",
-              color: "#7DBA47",
+              color: "#2E7D32",
               fontFamily: "system-ui, sans-serif",
               fontWeight: 600,
               textDecoration: "none",
@@ -493,10 +493,10 @@ export default function HomeDealCards({
           font-family: Manrope, system-ui, -apple-system, sans-serif;
           font-weight: 700;
           font-size: 0.82rem;
-          color: var(--color-sage-deep, #6BA63B);
+          color: var(--color-sage-deep, #2E5320);
           letter-spacing: -0.005em;
         }
-        .pp-deal-card:hover .pp-deal-card-cta { color: var(--color-deep, #1F3D2B); }
+        .pp-deal-card:hover .pp-deal-card-cta { color: var(--color-deep, #1C3A22); }
 
         /* "Open today" pill — primary trust signal on every card. Solid
            sage, white text, padded for confidence. Replaces the older
@@ -513,10 +513,10 @@ export default function HomeDealCards({
           border-radius: 100px;
           white-space: nowrap;
           line-height: 1.2;
-          box-shadow: 0 1px 2px rgba(31, 61, 43, 0.10);
+
         }
         .pp-open-pill.is-open {
-          background: var(--color-sage, #7DBA47);
+          background: var(--color-sage, #2E7D32);
           color: #fff;
         }
         .pp-open-pill.is-open::before {

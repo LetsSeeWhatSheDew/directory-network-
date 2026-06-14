@@ -102,7 +102,7 @@ export default function Footer() {
 
       <style>{`
         .pp-footer {
-          color: var(--color-cream, #F7F4ED);
+          color: var(--color-cream, #F4F5EF);
           padding: 4rem 0 3rem;
           margin-top: auto;
         }
@@ -131,10 +131,10 @@ export default function Footer() {
           font-size: 1.0625rem;
           letter-spacing: -0.015em;
           line-height: 1.4;
-          color: var(--color-cream, #F7F4ED);
+          color: var(--color-cream, #F4F5EF);
           margin: 0;
         }
-        .pp-footer-dollar { color: var(--color-sage-vibrant, #93CB5C); font-weight: 800; }
+        .pp-footer-dollar { color: var(--color-sage-vibrant, #9DBE7E); font-weight: 800; }
         .pp-footer-tagline-sub {
           font-weight: 400;
           color: rgba(247, 244, 237, 0.72);
@@ -151,7 +151,7 @@ export default function Footer() {
           font-size: 0.6875rem;
           letter-spacing: 0.14em;
           text-transform: uppercase;
-          color: var(--color-sage-vibrant, #93CB5C);
+          color: var(--color-sage-vibrant, #9DBE7E);
           margin: 0 0 1rem;
         }
         .pp-footer-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.625rem; }
@@ -165,7 +165,7 @@ export default function Footer() {
           transition: color 160ms ease;
         }
         .pp-footer-link:hover, .pp-footer-link-inline:hover {
-          color: var(--color-cream, #F7F4ED);
+          color: var(--color-cream, #F4F5EF);
         }
         .pp-footer-link-inline { text-decoration: underline; text-decoration-color: rgba(247, 244, 237, 0.30); text-underline-offset: 3px; }
         .pp-footer-bottom {
@@ -179,7 +179,7 @@ export default function Footer() {
           font-weight: 600;
           font-size: 0.875rem;
           letter-spacing: 0.01em;
-          color: var(--color-cream, #F7F4ED);
+          color: var(--color-cream, #F4F5EF);
           margin: 0;
         }
         .pp-footer-meta, .pp-footer-disclaimer {

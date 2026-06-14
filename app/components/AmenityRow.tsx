@@ -117,7 +117,7 @@ export function AmenityRow({
             fontWeight: 500,
             color: "var(--color-gray-700, #374151)",
             background: "var(--color-white, #FFFFFF)",
-            border: "1px solid var(--color-gray-200, #E8E4DA)",
+            border: "1px solid var(--color-gray-200, #DCDED2)",
             padding: "4px 10px",
             borderRadius: 100,
             transition: "border-color 150ms ease, color 150ms ease",
