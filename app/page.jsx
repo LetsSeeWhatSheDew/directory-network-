@@ -6,8 +6,7 @@ import Footer from "./components/Footer";
 import LocationAware from "./components/LocationAware";
 import TrackedLink from "./components/TrackedLink";
 import HomeDealCards from "./components/HomeDealCards";
-import HeroDealCard from "./components/HeroDealCard";
-import SavingsCallout from "./components/SavingsCallout";
+import PriceBoard, { SAMPLE_BOARD } from "./components/PriceBoard";
 import SearchTracker from "./components/SearchTracker";
 import FourTwentyBanner from "./components/FourTwentyBanner";
 import RecentlyViewedRow from "./components/RecentlyViewedRow";
@@ -16,7 +15,6 @@ import PuffPriceIndexCard from "./components/PuffPriceIndexCard";
 import StickyMobileCTA from "./components/StickyMobileCTA";
 import { CategoryIcon, HOME_HERO_CATEGORIES } from "../lib/categoryIcons";
 import { brand } from "../lib/brand";
-import { estimateSavings, formatSavingsDollars } from "../lib/dealScoring";
 import { getServerLocation } from "../lib/location";
 import { getLiveDealsValueThisMonth, getDealsRunThisMonth } from "../lib/stats";
 import {
@@ -491,7 +489,10 @@ export default async function HomePage() {
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
         html{scroll-behavior:smooth}
-        body{font-family:Georgia,serif;background:#F7F4ED;min-height:100vh;color:#1F3D2B}
+        /* Design v2: body font/background/color governed by globals.css
+           (Inter on warm paper). The old Georgia-serif + cream override
+           is retired. */
+        body{min-height:100vh}
 
         /* The 4px green top-stripe was removed 2026-04-30 — it read as an
            orphan green line above the nav rather than a "money signal", per
@@ -503,7 +504,7 @@ export default async function HomePage() {
           display:flex;justify-content:space-between;align-items:center;
           padding:14px 28px;background:#fff;
           position:sticky;top:0;z-index:100;
-          border-bottom:1px solid #e8e4da;
+          border-bottom:1px solid #DCDED2;
         }
         .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
         /* Logo sizing — desktop 60px tall, mobile 46px tall.
@@ -513,26 +514,26 @@ export default async function HomePage() {
         @media(max-width:768px){.nav .logo img{height:46px!important}}
         .footer .footer-logo img{width:auto!important;height:40px!important}
         .logo-mark{position:relative;width:28px;height:28px;display:inline-block;flex-shrink:0}
-        .logo-mark-dot{position:absolute;top:-2px;right:-2px;width:10px;height:10px;border-radius:50%;background:#7DBA47;border:2px solid #fff;animation:pulse 2.5s infinite}
-        .logo-dot{width:8px;height:8px;border-radius:50%;background:#7DBA47;animation:pulse 2.5s infinite}
+        .logo-mark-dot{position:absolute;top:-2px;right:-2px;width:10px;height:10px;border-radius:50%;background:#2E7D32;border:2px solid #fff;animation:pulse 2.5s infinite}
+        .logo-dot{width:8px;height:8px;border-radius:50%;background:#2E7D32;animation:pulse 2.5s infinite}
         @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.9)}}
-        .logo-text{font-size:1.15rem;font-weight:700;color:#1F3D2B;letter-spacing:-.02em}
-        .logo-text span{color:#7DBA47}
+        .logo-text{font-size:1.15rem;font-weight:700;color:#1C3A22;letter-spacing:-.02em}
+        .logo-text span{color:#2E7D32}
         .nav-links{display:flex;align-items:center;gap:20px}
         .nav-link{font-size:.82rem;color:#6b7280;text-decoration:none;font-family:system-ui,sans-serif}
-        .nav-link:hover{color:#1F3D2B}
+        .nav-link:hover{color:#1C3A22}
         .nav-cta{
           font-size:.82rem;font-family:system-ui,sans-serif;font-weight:600;
-          color:#fff;background:#7DBA47;padding:6px 14px;border-radius:6px;
+          color:#fff;background:#2E7D32;padding:6px 14px;border-radius:6px;
           text-decoration:none;
         }
-        .nav-cta:hover{background:#6BA63B}
+        .nav-cta:hover{background:#2E5320}
 
         /* 4/20 PROMO BANNER */
-        .promo-banner{background:#6BA63B;color:#fff}
+        .promo-banner{background:#2E5320;color:#fff}
         .promo-inner{max-width:1100px;margin:0 auto;padding:8px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
         .promo-left{display:flex;align-items:center;gap:10px;font-family:system-ui,sans-serif;font-size:.82rem;font-weight:600}
-        .promo-dot{width:7px;height:7px;border-radius:50%;background:#93CB5C;animation:pulse 2s infinite;flex-shrink:0}
+        .promo-dot{width:7px;height:7px;border-radius:50%;background:#9DBE7E;animation:pulse 2s infinite;flex-shrink:0}
         .promo-text{line-height:1.3}
         .promo-cta{color:#fff;text-decoration:none;font-family:system-ui,sans-serif;font-size:.82rem;font-weight:600;white-space:nowrap}
         .promo-cta:hover{text-decoration:underline}
@@ -546,7 +547,7 @@ export default async function HomePage() {
           padding:36px 28px 56px;
           position:relative;
           overflow:hidden;
-          border-bottom:1px solid #e8e4da;
+          border-bottom:1px solid #DCDED2;
           isolation:isolate;
         }
         .hero-photo{position:absolute;inset:0;z-index:0;pointer-events:none}
@@ -595,7 +596,7 @@ export default async function HomePage() {
 
         /* LOCATION LINE */
         .hero-loc-line{
-          font-size:.8rem;color:#7DBA47;font-family:system-ui,sans-serif;
+          font-size:.8rem;color:#2E7D32;font-family:system-ui,sans-serif;
           font-weight:500;margin-bottom:2px;
         }
 
@@ -603,11 +604,11 @@ export default async function HomePage() {
           /* Spec 2.3 hero: 56-72px Geist Display 700, tight tracking. */
           font-family:var(--font-display, var(--font-geist-sans));
           font-size:clamp(2.5rem, 6vw + 1rem, 4.25rem);
-          font-weight:700;color:#1F3D2B;
+          font-weight:700;color:#1C3A22;
           letter-spacing:-.04em;line-height:1.02;
           margin-bottom:10px;
         }
-        .hero h1 em{color:#7DBA47;font-style:normal}
+        .hero h1 em{color:#2E7D32;font-style:normal}
         .hero-sub{
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:1.05rem;color:#4B5563;
@@ -618,8 +619,8 @@ export default async function HomePage() {
         /* HERO DEAL CARD — THE hero element */
         .hero-deal-card{
           background:#fff;
-          border:1px solid #e8e4da;
-          border-left:4px solid #7DBA47;
+          border:1px solid #DCDED2;
+          border-left:4px solid #2E7D32;
           border-radius:14px;
           padding:22px 22px 18px;
           box-shadow:0 4px 16px rgba(15,31,61,.06);
@@ -634,7 +635,7 @@ export default async function HomePage() {
         }
         .hero-deal-savings{
           font-size:clamp(2.4rem,9vw,3.4rem);
-          font-weight:700;color:#7DBA47;
+          font-weight:700;color:#2E7D32;
           letter-spacing:-.04em;line-height:1;
         }
         .hero-deal-vs{
@@ -644,7 +645,7 @@ export default async function HomePage() {
         }
         .hero-deal-name{
           font-size:1.1rem;font-weight:700;
-          color:#1F3D2B;line-height:1.2;
+          color:#1C3A22;line-height:1.2;
         }
         .hero-deal-title{
           font-size:.9rem;color:#374151;
@@ -664,7 +665,7 @@ export default async function HomePage() {
         }
         .hero-deal-urgent{color:#991b1b;font-weight:700}
         .hero-deal-cta{
-          background:#7DBA47;color:#fff;
+          background:#2E7D32;color:#fff;
           padding:12px 22px;border-radius:10px;
           text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif);
           font-weight:700;font-size:.92rem;letter-spacing:.02em;
@@ -672,14 +673,14 @@ export default async function HomePage() {
           white-space:nowrap;
           min-height:44px;display:inline-flex;align-items:center;
         }
-        .hero-deal-cta:hover{background:#6BA63B;transform:translateY(-1px)}
+        .hero-deal-cta:hover{background:#2E5320;transform:translateY(-1px)}
         .hero-deal-more{
           margin-top:14px;align-self:flex-start;
           font-size:.82rem;color:#6b7280;
           font-family:system-ui,sans-serif;
           text-decoration:none;
         }
-        .hero-deal-more:hover{color:#7DBA47}
+        .hero-deal-more:hover{color:#2E7D32}
         .skeleton{pointer-events:none}
 
         /* HERO RIGHT — desktop category stack */
@@ -697,20 +698,20 @@ export default async function HomePage() {
         .cat-btn{
           display:flex;align-items:center;justify-content:center;gap:8px;
           background:#fff;
-          border:1px solid #e8e4da;
+          border:1px solid #DCDED2;
           border-radius:10px;padding:11px 14px;
           font-size:.85rem;font-family:system-ui,sans-serif;font-weight:500;
-          color:#1F3D2B;cursor:pointer;text-decoration:none;
+          color:#1C3A22;cursor:pointer;text-decoration:none;
           transition:all .15s;
         }
-        .cat-btn:hover{background:#F2F8E9;border-color:#7DBA47;color:#1F3D2B}
+        .cat-btn:hover{background:#E8F0DF;border-color:#2E7D32;color:#1C3A22}
         .cat-btn svg{flex-shrink:0;width:24px;height:24px}
 
         /* STATS STRIP — minimal credibility line */
-        .stats{background:#F7F4ED;padding:22px 28px;text-align:center}
+        .stats{background:#F4F5EF;padding:22px 28px;text-align:center}
         .stats-inner{max-width:900px;margin:0 auto}
         .stats-line{font-size:.85rem;color:#6b7280;font-family:system-ui,sans-serif;letter-spacing:.01em}
-        .stats-line strong{color:#7DBA47;font-weight:700}
+        .stats-line strong{color:#2E7D32;font-weight:700}
         @media(max-width:520px){.stats-line{font-size:.78rem}}
 
         /* DEALS SECTION */
@@ -718,12 +719,12 @@ export default async function HomePage() {
 
         .section-eyebrow{
           font-size:.7rem;font-weight:700;letter-spacing:.14em;
-          text-transform:uppercase;color:#7DBA47;
+          text-transform:uppercase;color:#2E7D32;
           font-family:system-ui,sans-serif;margin-bottom:6px;
         }
         .section-title{
           font-size:clamp(1.4rem,3vw,1.8rem);font-weight:700;
-          color:#1F3D2B;letter-spacing:-.03em;margin-bottom:4px;
+          color:#1C3A22;letter-spacing:-.03em;margin-bottom:4px;
         }
         .section-sub{
           font-size:.875rem;color:#6b7280;
@@ -733,18 +734,18 @@ export default async function HomePage() {
         /* DEAL CARDS */
         .deal-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
         .deal-card{
-          background:#fff;border:1px solid #e8e4da;border-radius:14px;
+          background:#fff;border:1px solid #DCDED2;border-radius:14px;
           padding:18px;position:relative;
           transition:border-color .15s;
         }
-        .deal-card:hover{border-color:#7DBA47}
+        .deal-card:hover{border-color:#2E7D32}
         .deal-card.top-pick{
-          border:2px solid #7DBA47;
-          background:linear-gradient(135deg,#F2F8E9 0%,#fff 60%);
+          border:1px solid #CBE0B4;
+          background:#E8F0DF;
         }
         .top-pick-badge{
           position:absolute;top:-10px;left:16px;
-          background:#7DBA47;color:#fff;
+          background:#2E7D32;color:#fff;
           font-size:.68rem;font-family:system-ui,sans-serif;
           font-weight:700;letter-spacing:.08em;text-transform:uppercase;
           padding:3px 10px;border-radius:100px;
@@ -754,12 +755,11 @@ export default async function HomePage() {
           min-width:36px;height:36px;padding:0 8px;
           display:inline-flex;align-items:center;justify-content:center;
           border-radius:10px;
-          font-family:system-ui,sans-serif;font-weight:800;font-size:.95rem;
+          font-family:var(--font-mono,ui-monospace,monospace);font-weight:700;font-size:.95rem;
           letter-spacing:-.01em;
-          box-shadow:0 1px 3px rgba(0,0,0,.12);
         }
         .deal-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
-        .deal-name{font-size:.95rem;font-weight:700;color:#1F3D2B}
+        .deal-name{font-size:.95rem;font-weight:700;color:#1C3A22}
         .deal-city{font-size:.75rem;color:#9ca3af;font-family:system-ui,sans-serif;margin-top:2px}
         .open-badge{
           font-size:.68rem;font-weight:600;
@@ -767,10 +767,10 @@ export default async function HomePage() {
           font-family:system-ui,sans-serif;
           white-space:nowrap;
         }
-        .open-badge.open{color:#3F6B1F;background:#dcfce7}
+        .open-badge.open{color:#2E5320;background:#dcfce7}
         .open-badge.closed{color:#6b7280;background:#f1f5f9}
         .deal-highlight{
-          font-size:.95rem;font-weight:700;color:#7DBA47;
+          font-size:.95rem;font-weight:700;color:#2E7D32;
           margin-bottom:6px;
         }
         .deal-reason{
@@ -781,43 +781,43 @@ export default async function HomePage() {
         .deal-attrs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
         .deal-attr{
           font-size:.68rem;color:#6b7280;
-          background:#F7F4ED;border-radius:100px;
+          background:#F4F5EF;border-radius:100px;
           padding:2px 9px;font-family:system-ui,sans-serif;
         }
         .deal-savings{
           display:flex;align-items:center;justify-content:space-between;
-          gap:10px;background:#F2F8E9;border:1px solid #C7E5A8;border-radius:10px;
+          gap:10px;background:#E8F0DF;border:1px solid #CBE0B4;border-radius:10px;
           padding:14px 16px;margin-top:auto;
         }
         .savings-copy{display:flex;flex-direction:column}
-        .savings-label{font-size:.65rem;font-weight:700;color:#3F6B1F;font-family:system-ui,sans-serif;text-transform:uppercase;letter-spacing:.12em}
+        .savings-label{font-size:.65rem;font-weight:700;color:#2E5320;font-family:system-ui,sans-serif;text-transform:uppercase;letter-spacing:.12em}
         .savings-sub{font-size:.68rem;color:rgba(22,101,52,.7);font-family:system-ui,sans-serif;margin-top:2px}
-        .savings-num{font-size:2rem;font-weight:700;color:#7DBA47;letter-spacing:-.03em;line-height:1}
+        .savings-num{font-size:2rem;font-weight:700;color:#2E7D32;letter-spacing:-.03em;line-height:1}
 
         /* FOOTER */
         .footer{
-          background:#fff;border-top:1px solid #e8e4da;
+          background:#fff;border-top:1px solid #DCDED2;
           padding:20px 28px;
           display:flex;justify-content:space-between;align-items:center;
           flex-wrap:wrap;gap:12px;
         }
-        .footer-logo{font-size:.9rem;font-weight:700;color:#1F3D2B}
-        .footer-logo span{color:#7DBA47}
+        .footer-logo{font-size:.9rem;font-weight:700;color:#1C3A22}
+        .footer-logo span{color:#2E7D32}
         .footer-links{display:flex;gap:18px}
         .footer-link{font-size:.75rem;color:#6b7280;font-family:system-ui,sans-serif;text-decoration:none}
-        .footer-link:hover{color:#1F3D2B}
+        .footer-link:hover{color:#1C3A22}
         .footer-copy{font-size:.72rem;color:#9ca3af;font-family:system-ui,sans-serif}
 
         /* TAX CALCULATOR CALLOUT — sits between deals and cities. Navy
            bg with a single CTA; the differentiator we lead with. */
-        .tax-callout{background:#1F3D2B;color:#FAFAF7;padding:64px 28px}
+        .tax-callout{background:#1C3A22;color:#FCFCFA;padding:64px 28px}
         .tax-callout-inner{max-width:760px;margin:0 auto;text-align:center}
-        .tax-callout .pp-eyebrow{color:#93CB5C}
+        .tax-callout .pp-eyebrow{color:#9DBE7E}
         .tax-callout-h2{
           font-family:var(--font-display, var(--font-geist-sans));
           font-size:clamp(1.5rem, 3vw, 2rem);font-weight:600;
           letter-spacing:-.03em;line-height:1.2;
-          color:#FAFAF7;margin:8px 0 14px;
+          color:#FCFCFA;margin:8px 0 14px;
         }
         .tax-callout-body{
           font-family:var(--font-ui, system-ui, sans-serif);
@@ -826,20 +826,20 @@ export default async function HomePage() {
         }
         .tax-callout-cta{
           display:inline-flex;align-items:center;
-          background:#7DBA47;color:#fff;
+          background:#2E7D32;color:#fff;
           padding:13px 26px;border-radius:10px;
           font-family:var(--font-ui, system-ui, sans-serif);
           font-weight:700;font-size:.95rem;
           text-decoration:none;min-height:44px;
           transition:background 150ms ease, transform 150ms ease;
         }
-        .tax-callout-cta:hover{background:#6BA63B;transform:translateY(-1px)}
+        .tax-callout-cta:hover{background:#2E5320;transform:translateY(-1px)}
         @media(max-width:520px){
           .tax-callout{padding:52px 18px}
         }
 
         /* SECTION 3 — CITIES GRID (Phase 4 layout consolidation) */
-        .cities-section{background:#fff;border-top:1px solid #e8e4da;border-bottom:1px solid #e8e4da;padding:0 0 64px;position:relative}
+        .cities-section{background:#fff;border-top:1px solid #DCDED2;border-bottom:1px solid #DCDED2;padding:0 0 64px;position:relative}
         /* Banner photo above the city grid — positions us geographically. */
         .cities-banner{
           position:relative;
@@ -851,11 +851,8 @@ export default async function HomePage() {
         .cities-banner img{object-fit:cover;object-position:center 60%}
         .cities-banner-tint{
           position:absolute;inset:0;
-          background:
-            linear-gradient(to bottom,
-              rgba(245,244,240,0) 60%,
-              rgba(255,255,255,0.85) 100%),
-            linear-gradient(rgba(15,31,61,0.06), rgba(15,31,61,0.06));
+          background:rgba(28,58,34,0.06);
+          border-bottom:1px solid #DCDED2;
           pointer-events:none;
         }
         .cities-inner{max-width:1100px;margin:0 auto;padding:0 28px}
@@ -871,29 +868,30 @@ export default async function HomePage() {
         .city-card-name{
           font-family:var(--font-display, var(--font-geist-sans));
           font-weight:600;font-size:1.125rem;letter-spacing:-.01em;
-          color:#1F3D2B;
+          color:#1C3A22;
         }
         .city-card-count{
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:.78rem;font-weight:600;letter-spacing:.01em;
-          color:#7DBA47;background:#F2F8E9;
+          color:#2E7D32;background:#E8F0DF;
           padding:4px 10px;border-radius:100px;
           font-variant-numeric:tabular-nums;
         }
         .city-card-count-quiet{
-          color:#9ca3af;background:transparent;border:1px solid #e8e4da;
+          color:#9ca3af;background:transparent;border:1px solid #DCDED2;
         }
         .cities-foot{margin-top:28px;text-align:center}
         .cities-all-link{
           font-family:var(--font-ui, system-ui, sans-serif);
-          font-size:.92rem;font-weight:600;color:#7DBA47;
+          font-size:.92rem;font-weight:600;color:#2E7D32;
           text-decoration:none;
         }
         .cities-all-link:hover{text-decoration:underline}
 
         /* SECTION 4 — TRUST + BRAND */
         .trust-section{
-          background:linear-gradient(180deg, #F7F4ED 0%, #FFFFFF 100%);
+          background:#F4F5EF;
+          border-top:1px solid #DCDED2;
           padding:72px 28px;
         }
         .trust-grid{
@@ -909,7 +907,7 @@ export default async function HomePage() {
           aspect-ratio:4/3;
           border-radius:14px;
           overflow:hidden;
-          box-shadow:0 1px 3px rgba(15,31,61,0.06), 0 8px 24px rgba(15,31,61,0.08);
+          border:1px solid #DCDED2;
         }
         .trust-photo img{object-fit:cover}
         .trust-inner{max-width:560px;margin:0 auto;text-align:left}
@@ -927,19 +925,19 @@ export default async function HomePage() {
         .trust-cta-row{display:flex;gap:18px;justify-content:center;align-items:center;flex-wrap:wrap}
         .trust-cta{
           font-family:var(--font-ui, system-ui, sans-serif);
-          font-size:.92rem;font-weight:700;color:#fff;background:#7DBA47;
+          font-size:.92rem;font-weight:700;color:#fff;background:#2E7D32;
           text-decoration:none;padding:11px 22px;border-radius:10px;
           min-height:44px;display:inline-flex;align-items:center;
           transition:background 150ms ease, transform 150ms ease;
         }
-        .trust-cta:hover{background:#6BA63B;transform:translateY(-1px)}
+        .trust-cta:hover{background:#2E5320;transform:translateY(-1px)}
         .trust-cta-muted{
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:.92rem;font-weight:600;color:#374151;
           text-decoration:none;padding:11px 4px;
           min-height:44px;display:inline-flex;align-items:center;
         }
-        .trust-cta-muted:hover{color:#1F3D2B}
+        .trust-cta-muted:hover{color:#1C3A22}
 
         /* RESPONSIVE */
         @media(max-width:768px){
@@ -990,7 +988,7 @@ export default async function HomePage() {
           max-width: 1280px;
           margin: 0 auto;
           padding: clamp(1.75rem, 4vw, 3rem) clamp(1rem, 4vw, 2rem) 0;
-          color: var(--color-cream, #F7F4ED);
+          color: var(--color-cream, #F4F5EF);
         }
         .pp-home-hero-grid {
           display: grid;
@@ -1036,34 +1034,35 @@ export default async function HomePage() {
               rgba(31, 61, 43, 0.30));
         }
         .pp-home-hero-eyebrow {
-          color: var(--color-sage-vibrant, #93CB5C);
-          font-family: Manrope, system-ui, -apple-system, sans-serif;
-          font-weight: 600;
-          font-size: 0.875rem;
-          letter-spacing: 0.01em;
+          color: var(--pp-canopy-eyebrow, #9DBE7E);
+          font-family: var(--font-mono, ui-monospace, monospace);
+          font-weight: 500;
+          font-size: 0.75rem;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
           margin: 0;
         }
         .pp-home-hero-h1 {
-          font-family: Manrope, system-ui, -apple-system, sans-serif;
-          font-weight: 800;
+          font-family: var(--font-display, system-ui, sans-serif);
+          font-weight: 700;
           font-size: clamp(2.25rem, 4vw + 1rem, 3.75rem);
-          line-height: 1.05;
-          letter-spacing: -0.04em;
-          color: var(--color-cream, #F7F4ED);
+          line-height: 1.04;
+          letter-spacing: -0.035em;
+          color: var(--pp-canopy-text, #F4F1E8);
           max-width: 18ch;
           margin: 0;
         }
-        .pp-home-hero-dollar { color: var(--color-sage-vibrant, #93CB5C); }
+        .pp-home-hero-dollar { color: var(--pp-signal, #2E7D32); }
         .pp-home-hero-h1-region {
-          color: var(--color-sand, #C9A876);
-          font-weight: 700;
+          color: rgba(244, 241, 232, 0.62);
+          font-weight: 500;
           font-size: 0.86em;
         }
         .pp-home-hero-sub {
-          font-family: Manrope, system-ui, -apple-system, sans-serif;
-          font-weight: 500;
+          font-family: var(--font-body, system-ui, sans-serif);
+          font-weight: 400;
           font-size: clamp(0.95rem, 0.5vw + 0.75rem, 1.0625rem);
-          color: rgba(247, 244, 237, 0.78);
+          color: rgba(244, 241, 232, 0.78);
           max-width: 52ch;
           margin: 0;
         }
@@ -1091,12 +1090,12 @@ export default async function HomePage() {
           backdrop-filter: blur(2px);
         }
         .pp-home-hero-cats-label {
-          font-family: Manrope, system-ui, -apple-system, sans-serif;
-          font-weight: 800;
+          font-family: var(--font-mono, ui-monospace, monospace);
+          font-weight: 500;
           font-size: 0.6875rem;
-          letter-spacing: 0.14em;
+          letter-spacing: 0.10em;
           text-transform: uppercase;
-          color: var(--color-sage-vibrant, #93CB5C);
+          color: var(--pp-canopy-eyebrow, #9DBE7E);
           margin: 0 0 0.625rem 0.25rem;
         }
         .pp-home-hero-cats-grid {
@@ -1112,21 +1111,19 @@ export default async function HomePage() {
           gap: 0.375rem;
           padding: 0.875rem 0.5rem;
           border-radius: 12px;
-          background: var(--color-cream-pure, #FAFAF7);
+          background: var(--color-cream-pure, #FCFCFA);
           border: 1px solid transparent;
-          color: var(--color-deep, #1F3D2B);
+          color: var(--pp-ink, #15231A);
           text-decoration: none;
-          font-family: Manrope, system-ui, -apple-system, sans-serif;
-          font-weight: 600;
+          font-family: var(--font-body, system-ui, sans-serif);
+          font-weight: 500;
           font-size: 0.8125rem;
           letter-spacing: -0.005em;
-          transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+          transition: border-color 160ms ease;
           min-height: 78px;
         }
         .pp-home-hero-cat-tile:hover {
-          border-color: var(--color-sage, #7DBA47);
-          transform: translateY(-1px);
-          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+          border-color: var(--pp-signal, #2E7D32);
         }
         .pp-home-hero-cat-icon { display: inline-flex; }
         .pp-home-hero-cat-label { display: inline-block; }
@@ -1162,24 +1159,13 @@ export default async function HomePage() {
         {/* 4/20 DEALS WEEK BANNER — only renders Apr 17–20, 2026 */}
         <FourTwentyBanner />
 
-        {/* Right-edge bud photo accent — desktop only. ~38% width bleed
-            with a deep-green tint scrim to keep the headline legible. */}
-        <div className="pp-home-hero-photo" aria-hidden="true">
-          <Image
-            src="/photography/hero-bud-edge.jpg"
-            alt=""
-            fill
-            priority
-            sizes="(max-width: 1023px) 0px, 38vw"
-          />
-          <div className="pp-home-hero-photo-scrim" aria-hidden="true" />
-        </div>
-
+        {/* Design v2: flat canopy hero — the bud-photo edge + gradient
+            scrim were removed (zero gradients, substance over polish). */}
         <div className="pp-home-hero-inner pp-fade-up">
           <div className="pp-home-hero-grid">
             {/* LEFT — copy + CTAs */}
             <div className="pp-home-hero-left">
-              <p className="pp-home-hero-eyebrow"><LocationAware /></p>
+              <div className="pp-home-hero-eyebrow"><LocationAware /></div>
 
               <h1 className="pp-home-hero-h1">
                 Best Bud For Your Buck<span className="pp-home-hero-dollar">$</span>
@@ -1202,11 +1188,17 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* RIGHT — featured deal card + 6-tile category grid */}
+            {/* RIGHT — the signature PriceBoard (live "who's cheapest right
+                now" ranking) replaces the old % OFF hero card. Seed data
+                until the menu-baseline pipeline populates canonical_products
+                + price bands (brief §10); the canopy tag personalizes to the
+                user's metro when known. */}
             <div className="pp-home-hero-right">
               <div className="pp-home-hero-featured">
-                <HeroDealCard initial={featuredDeal} totalDealCount={dealCount ?? 0} />
-                <SavingsCallout initialSavings={featuredDeal ? estimateSavings(featuredDeal) : null} />
+                <PriceBoard
+                  {...SAMPLE_BOARD}
+                  locationTag={`${userCity ? userCity.toUpperCase() : "CENTRAL IL"} · LIVE`}
+                />
               </div>
 
               <div className="pp-home-hero-cats-shell">
@@ -1393,7 +1385,7 @@ export default async function HomePage() {
         aria-labelledby="faq-heading"
         style={{
           background: "#fff",
-          borderTop: "1px solid #e8e4da",
+          borderTop: "1px solid #DCDED2",
           padding: "52px 28px 44px",
         }}
       >
@@ -1403,7 +1395,7 @@ export default async function HomePage() {
             style={{
               fontSize: "clamp(1.3rem,3vw,1.7rem)",
               fontWeight: 700,
-              color: "#1F3D2B",
+              color: "#1C3A22",
               letterSpacing: "-.03em",
               marginBottom: 24,
             }}
@@ -1415,8 +1407,8 @@ export default async function HomePage() {
               <div
                 key={i}
                 style={{
-                  background: "#F7F4ED",
-                  border: "1px solid #e8e4da",
+                  background: "#F4F5EF",
+                  border: "1px solid #DCDED2",
                   borderRadius: 12,
                   padding: "16px 18px",
                 }}
@@ -1425,7 +1417,7 @@ export default async function HomePage() {
                   style={{
                     fontSize: "1rem",
                     fontWeight: 700,
-                    color: "#1F3D2B",
+                    color: "#1C3A22",
                     fontFamily: "system-ui, sans-serif",
                     marginBottom: 6,
                   }}
