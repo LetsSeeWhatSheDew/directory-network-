@@ -882,9 +882,9 @@ export default async function HomePage() {
         }
         .cities-inner{max-width:1100px;margin:0 auto;padding:0 28px}
         .cities-h2{margin:8px 0 28px}
-        .cities-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-        @media(min-width:720px){.cities-grid{grid-template-columns:repeat(3,1fr);gap:18px}}
-        @media(min-width:1080px){.cities-grid{grid-template-columns:repeat(3,1fr);gap:20px}}
+        .cities-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+        @media(min-width:720px){.cities-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}}
+        @media(min-width:1080px){.cities-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}}
         .city-card{
           display:flex;justify-content:space-between;align-items:center;
           padding:18px 22px;text-decoration:none;color:inherit;
