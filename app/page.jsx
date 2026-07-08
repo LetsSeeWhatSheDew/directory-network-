@@ -1186,7 +1186,12 @@ export default async function HomePage() {
 
         {/* Design v2: flat canopy hero — the bud-photo edge + gradient
             scrim were removed (zero gradients, substance over polish). */}
-        <div className="pp-home-hero-inner pp-fade-up">
+        {/* No pp-fade-up on this wrapper: it holds the LCP element (the hero
+            H1). An opacity entrance animation on the LCP node defers its
+            "contentful" paint (LCP measured 3.9s while Speed Index was 1.9s).
+            Rendering the hero at full opacity immediately pulls LCP down to
+            ~FCP. Below-the-fold sections keep their fade-ins. */}
+        <div className="pp-home-hero-inner">
           <div className="pp-home-hero-grid">
             {/* LEFT — copy + CTAs */}
             <div className="pp-home-hero-left">
