@@ -173,7 +173,9 @@ export async function generateMetadata({
   const cityPhrase = rawCity ? `${rawCity}, IL` : "Illinois";
   const dollars = estimateSavings(deal);
   const savingsSuffix = dollars ? ` — Save $${dollars}` : "";
-  const title = `${headline} at ${disp}${savingsSuffix} | ${brand.name}`;
+  // Title suffix comes from the root layout's title.template (`%s | PuffPrice`),
+  // so do NOT append the brand here or it renders "… | PuffPrice | PuffPrice".
+  const title = `${headline} at ${disp}${savingsSuffix}`;
   const description = deal.description
     ? deal.description.slice(0, 180)
     : `${headline} at ${disp} in ${cityPhrase}. ${brand.name} tracks active cannabis deals across Central Illinois.`;

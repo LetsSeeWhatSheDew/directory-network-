@@ -171,7 +171,8 @@ export async function generateMetadata({
   const city = toCityCase(raw);
   const deals = await getCityDeals(city);
   const dispensaryCount = new Set(deals.map((d) => d.listing_slug).filter(Boolean)).size;
-  const title = `${city} Dispensary Deals Today | ${brand.name}`;
+  // Root layout title.template appends "| PuffPrice"; don't double it here.
+  const title = `${city} Dispensary Deals Today`;
   const description =
     deals.length > 0
       ? `Browse ${deals.length} active dispensary deals at ${dispensaryCount} dispensar${dispensaryCount === 1 ? "y" : "ies"} in ${city}, IL.`

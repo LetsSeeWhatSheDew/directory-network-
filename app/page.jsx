@@ -541,7 +541,7 @@ export default async function HomePage() {
         .logo-text{font-size:1.15rem;font-weight:700;color:#1C3A22;letter-spacing:-.02em}
         .logo-text span{color:#2E7D32}
         .nav-links{display:flex;align-items:center;gap:20px}
-        .nav-link{font-size:.82rem;color:#6b7280;text-decoration:none;font-family:var(--font-body)}
+        .nav-link{font-size:.82rem;color:#545B52;text-decoration:none;font-family:var(--font-body)}
         .nav-link:hover{color:#1C3A22}
         .nav-cta{
           font-size:.82rem;font-family:var(--font-body);font-weight:600;
@@ -649,7 +649,7 @@ export default async function HomePage() {
           max-width:560px;
         }
         .hero-deal-label{
-          font-size:.7rem;color:#6b7280;
+          font-size:.7rem;color:#545B52;
           font-family:var(--font-body);
           font-weight:500;letter-spacing:.02em;
           margin-bottom:4px;
@@ -660,7 +660,7 @@ export default async function HomePage() {
           letter-spacing:-.04em;line-height:1;
         }
         .hero-deal-vs{
-          font-size:.72rem;color:#9ca3af;
+          font-size:.72rem;color:#5A6260;
           font-family:var(--font-body);
           margin-top:2px;margin-bottom:16px;
         }
@@ -681,7 +681,7 @@ export default async function HomePage() {
         }
         .hero-deal-meta{
           display:flex;gap:12px;flex-wrap:wrap;
-          font-size:.8rem;color:#6b7280;
+          font-size:.8rem;color:#545B52;
           font-family:var(--font-body);font-weight:500;
         }
         .hero-deal-urgent{color:#991b1b;font-weight:700}
@@ -697,7 +697,7 @@ export default async function HomePage() {
         .hero-deal-cta:hover{background:#2E5320;transform:translateY(-1px)}
         .hero-deal-more{
           margin-top:14px;align-self:flex-start;
-          font-size:.82rem;color:#6b7280;
+          font-size:.82rem;color:#545B52;
           font-family:var(--font-body);
           text-decoration:none;
         }
@@ -708,7 +708,7 @@ export default async function HomePage() {
         .hero-right{display:flex;flex-direction:column;gap:10px}
         .hero-right-label{
           font-size:.68rem;font-weight:700;letter-spacing:.14em;
-          text-transform:uppercase;color:#9ca3af;
+          text-transform:uppercase;color:#5A6260;
           font-family:var(--font-body);margin-bottom:2px;
         }
         @media(max-width:899px){
@@ -731,7 +731,7 @@ export default async function HomePage() {
         /* STATS STRIP — minimal credibility line */
         .stats{background:#F4F5EF;padding:22px 28px;text-align:center}
         .stats-inner{max-width:900px;margin:0 auto}
-        .stats-line{font-size:.85rem;color:#6b7280;font-family:var(--font-body);letter-spacing:.01em}
+        .stats-line{font-size:.85rem;color:#545B52;font-family:var(--font-body);letter-spacing:.01em}
         .stats-line strong{color:#2E7D32;font-weight:700}
         @media(max-width:520px){.stats-line{font-size:.78rem}}
 
@@ -748,7 +748,7 @@ export default async function HomePage() {
           color:#1C3A22;letter-spacing:-.03em;margin-bottom:4px;
         }
         .section-sub{
-          font-size:.875rem;color:#6b7280;
+          font-size:.875rem;color:#545B52;
           font-family:var(--font-body);margin-bottom:28px;
         }
 
@@ -781,7 +781,7 @@ export default async function HomePage() {
         }
         .deal-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
         .deal-name{font-size:.95rem;font-weight:700;color:#1C3A22}
-        .deal-city{font-size:.75rem;color:#9ca3af;font-family:var(--font-body);margin-top:2px}
+        .deal-city{font-size:.75rem;color:#5A6260;font-family:var(--font-body);margin-top:2px}
         .open-badge{
           font-size:.68rem;font-weight:600;
           padding:2px 8px;border-radius:100px;
@@ -789,19 +789,19 @@ export default async function HomePage() {
           white-space:nowrap;
         }
         .open-badge.open{color:#2E5320;background:#dcfce7}
-        .open-badge.closed{color:#6b7280;background:#f1f5f9}
+        .open-badge.closed{color:#545B52;background:#f1f5f9}
         .deal-highlight{
           font-size:.95rem;font-weight:700;color:#2E7D32;
           margin-bottom:6px;
         }
         .deal-reason{
-          font-size:.78rem;color:#6b7280;
+          font-size:.78rem;color:#545B52;
           font-family:var(--font-body);margin-bottom:12px;
           line-height:1.5;
         }
         .deal-attrs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
         .deal-attr{
-          font-size:.68rem;color:#6b7280;
+          font-size:.68rem;color:#545B52;
           background:#F4F5EF;border-radius:100px;
           padding:2px 9px;font-family:var(--font-body);
         }
@@ -825,9 +825,9 @@ export default async function HomePage() {
         .footer-logo{font-size:.9rem;font-weight:700;color:#1C3A22}
         .footer-logo span{color:#2E7D32}
         .footer-links{display:flex;gap:18px}
-        .footer-link{font-size:.75rem;color:#6b7280;font-family:var(--font-body);text-decoration:none}
+        .footer-link{font-size:.75rem;color:#545B52;font-family:var(--font-body);text-decoration:none}
         .footer-link:hover{color:#1C3A22}
-        .footer-copy{font-size:.72rem;color:#9ca3af;font-family:var(--font-body)}
+        .footer-copy{font-size:.72rem;color:#5A6260;font-family:var(--font-body)}
 
         /* TAX CALCULATOR CALLOUT — sits between deals and cities. Navy
            bg with a single CTA; the differentiator we lead with. */
@@ -899,7 +899,7 @@ export default async function HomePage() {
           font-variant-numeric:tabular-nums;
         }
         .city-card-count-quiet{
-          color:#9ca3af;background:transparent;border:1px solid #DCDED2;
+          color:#5A6260;background:transparent;border:1px solid #DCDED2;
         }
         .cities-foot{margin-top:28px;text-align:center}
         .cities-all-link{

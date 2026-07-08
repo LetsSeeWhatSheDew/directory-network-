@@ -40,7 +40,7 @@ export default function StickyMobileCTA() {
           parent layout drops `<div id="pp-hero-sentinel" />` in place
           right after the hero markup. */}
       <div
-        aria-hidden="true"
+        aria-hidden={!visible}
         style={{
           position: "fixed",
           bottom: 0,
@@ -61,6 +61,7 @@ export default function StickyMobileCTA() {
       >
         <Link
           href="/deals/all"
+          tabIndex={visible ? undefined : -1}
           style={{
             display: "flex",
             justifyContent: "center",

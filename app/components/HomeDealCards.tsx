@@ -259,7 +259,7 @@ export default function HomeDealCards({
         <div style={{ fontFamily: "Georgia, serif", fontSize: "1.1rem", fontWeight: 700, color: "#1C3A22", marginBottom: 6 }}>
           We're refreshing Central IL deals — check back soon.
         </div>
-        <p style={{ fontSize: ".9rem", color: "#6b7280", margin: "0 auto 14px", maxWidth: 420, lineHeight: 1.5 }}>
+        <p style={{ fontSize: ".9rem", color: "#545B52", margin: "0 auto 14px", maxWidth: 420, lineHeight: 1.5 }}>
           Or get an alert the moment a new deal drops near you.
         </p>
         <Link
@@ -322,7 +322,7 @@ export default function HomeDealCards({
                 onClick={() => setMode("near")}
                 style={{
                   background: mode === "near" ? "#2E7D32" : "transparent",
-                  color: mode === "near" ? "#fff" : "#6b7280",
+                  color: mode === "near" ? "#fff" : "#545B52",
                   border: "none",
                   borderRadius: 100,
                   padding: "6px 14px",
@@ -341,7 +341,7 @@ export default function HomeDealCards({
                 onClick={() => setMode("all")}
                 style={{
                   background: mode === "all" ? "#2E7D32" : "transparent",
-                  color: mode === "all" ? "#fff" : "#6b7280",
+                  color: mode === "all" ? "#fff" : "#545B52",
                   border: "none",
                   borderRadius: 100,
                   padding: "6px 14px",

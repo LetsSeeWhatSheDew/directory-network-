@@ -8,6 +8,14 @@ import { brand } from "../lib/brand";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-TML9Y6VMC2";
 
+// Every page fetches deals/listings — and renders dispensary logo images —
+// from the Supabase origin. Preconnecting shaves the TLS/DNS handshake off
+// the critical path (Lighthouse flagged ~310ms of uses-rel-preconnect
+// savings on deal/listing pages).
+const SUPABASE_ORIGIN = (
+  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co"
+).replace(/\/+$/, "");
+
 // Design Direction v2 (2026-06-13): the "warm price-truth instrument".
 // Three self-hosted families via next/font (no layout shift):
 //   Display  — Space Grotesk  (headlines, store names, section titles)
@@ -87,6 +95,9 @@ export default function RootLayout({
       className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
       <body className="antialiased">
+        {/* Hoisted to <head> by React 19 — warms the Supabase connection. */}
+        <link rel="preconnect" href={SUPABASE_ORIGIN} crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href={SUPABASE_ORIGIN} />
         {children}
         <UtmCapture />
         <CityPickerHost />
