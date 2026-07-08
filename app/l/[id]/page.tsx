@@ -617,7 +617,7 @@ export default async function ListingPage({
       <div className="dn-root">
         <Nav variant="light" />
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(1rem, 4vw, 2rem) 4px", fontSize: 13 }}>
-          <Link href={backHref} style={{ color: "var(--color-gray-500, #6B7280)", textDecoration: "none", fontFamily: "Manrope, system-ui, sans-serif", fontWeight: 500 }}>
+          <Link href={backHref} style={{ color: "var(--color-gray-500, #6B7280)", textDecoration: "none", fontFamily: "var(--font-body)", fontWeight: 500 }}>
             {backLabel}
           </Link>
         </div>

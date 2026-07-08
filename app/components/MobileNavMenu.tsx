@@ -89,7 +89,7 @@ export default function MobileNavMenu({ variant = "light" }: Props) {
         }
         .mobile-menu-link{
           padding:16px 24px;
-          font-family:Manrope, system-ui, -apple-system, sans-serif;
+          font-family:var(--font-body);
           font-weight:500;
           font-size:1rem;
           color:var(--color-deep, #1C3A22);

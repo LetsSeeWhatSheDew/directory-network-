@@ -126,7 +126,7 @@ export default function Footer() {
           align-items: flex-start;
         }
         .pp-footer-tagline {
-          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-family: var(--font-body);
           font-weight: 600;
           font-size: 1.0625rem;
           letter-spacing: -0.015em;
@@ -146,7 +146,7 @@ export default function Footer() {
           gap: clamp(1.25rem, 3vw, 2rem);
         }
         .pp-footer-heading {
-          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-family: var(--font-body);
           font-weight: 800;
           font-size: 0.6875rem;
           letter-spacing: 0.14em;
@@ -158,7 +158,7 @@ export default function Footer() {
         .pp-footer-link, .pp-footer-link-inline {
           color: rgba(247, 244, 237, 0.78);
           text-decoration: none;
-          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-family: var(--font-body);
           font-weight: 500;
           font-size: 0.9375rem;
           letter-spacing: -0.005em;
@@ -175,7 +175,7 @@ export default function Footer() {
           gap: 0.5rem;
         }
         .pp-footer-anchor {
-          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-family: var(--font-body);
           font-weight: 600;
           font-size: 0.875rem;
           letter-spacing: 0.01em;
@@ -183,7 +183,7 @@ export default function Footer() {
           margin: 0;
         }
         .pp-footer-meta, .pp-footer-disclaimer {
-          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-family: var(--font-body);
           font-weight: 400;
           font-size: 0.8125rem;
           color: rgba(247, 244, 237, 0.55);

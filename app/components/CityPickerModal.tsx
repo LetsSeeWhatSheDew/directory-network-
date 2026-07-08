@@ -286,7 +286,7 @@ export default function CityPickerModal({ open, onClose, onPicked }: Props) {
           margin-bottom: 0.5rem;
         }
         .pp-citypicker-headline h2 {
-          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-family: var(--font-body);
           font-weight: 800;
           font-size: 1.4rem;
           letter-spacing: -0.025em;
@@ -294,7 +294,7 @@ export default function CityPickerModal({ open, onClose, onPicked }: Props) {
           margin: 0;
         }
         .pp-citypicker-sub {
-          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-family: var(--font-body);
           font-size: 0.92rem;
           color: var(--color-gray-600, #4B5563);
           margin: 0 0 1.25rem;
@@ -312,7 +312,7 @@ export default function CityPickerModal({ open, onClose, onPicked }: Props) {
           border: 1px solid var(--color-sage, #2E7D32);
           border-radius: 12px;
           padding: 0.875rem 1rem;
-          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-family: var(--font-body);
           font-weight: 700;
           font-size: 0.95rem;
           cursor: pointer;
@@ -331,7 +331,7 @@ export default function CityPickerModal({ open, onClose, onPicked }: Props) {
           border: 1px solid var(--color-gray-200, #E8E2D5);
           border-radius: 12px;
           padding: 0.625rem 1rem;
-          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-family: var(--font-body);
           font-weight: 600;
           font-size: 0.875rem;
           color: var(--color-gray-700, #374151);
@@ -354,7 +354,7 @@ export default function CityPickerModal({ open, onClose, onPicked }: Props) {
           border: 1px solid var(--color-gray-200, #E8E2D5);
           border-radius: 10px;
           padding: 0.625rem 0.75rem;
-          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-family: var(--font-body);
           font-weight: 500;
           font-size: 0.875rem;
           cursor: pointer;
@@ -377,7 +377,7 @@ export default function CityPickerModal({ open, onClose, onPicked }: Props) {
           background: transparent;
           border: none;
           color: var(--color-sage-deep, #2E5320);
-          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-family: var(--font-body);
           font-weight: 600;
           font-size: 0.875rem;
           padding: 0.5rem 0.25rem;
@@ -386,7 +386,7 @@ export default function CityPickerModal({ open, onClose, onPicked }: Props) {
         .pp-citypicker-gps:hover { color: var(--color-deep, #1C3A22); }
         .pp-citypicker-gps:disabled { color: var(--color-gray-400, #9CA3AF); cursor: wait; }
         .pp-citypicker-error {
-          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-family: var(--font-body);
           font-size: 0.82rem;
           color: #B91C1C;
           margin: 0.5rem 0 0;

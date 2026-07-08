@@ -105,7 +105,7 @@ export default function Nav({ variant = "light", sticky = true }: Props) {
           margin: 0 auto 0 1rem;
         }
         .pp-nav-link {
-          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-family: var(--font-body);
           font-weight: 500;
           font-size: 0.9375rem;
           letter-spacing: -0.005em;

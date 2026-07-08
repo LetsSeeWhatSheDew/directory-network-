@@ -17,7 +17,7 @@ export default function GetListedPage() {
       <header style={{ padding: "clamp(2rem, 4vw, 3rem) clamp(1rem, 4vw, 2rem) 0", maxWidth: 880, margin: "0 auto" }}>
         <p className="pp-eyebrow" style={{ marginBottom: 12 }}>For dispensaries</p>
         <h1 className="pp-h1" style={{ marginBottom: 14 }}>List your dispensary</h1>
-        <p style={{ color: "var(--color-gray-600, #4B5563)", fontFamily: "Manrope, system-ui, sans-serif", fontSize: 17, lineHeight: 1.55, maxWidth: 640 }}>
+        <p style={{ color: "var(--color-gray-600, #4B5563)", fontFamily: "var(--font-body)", fontSize: 17, lineHeight: 1.55, maxWidth: 640 }}>
           Free, forever. No featured tier, no paid placement. Submit the basics and we&apos;ll
           get the listing live on PuffPrice within 24 hours.
         </p>

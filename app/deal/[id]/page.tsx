@@ -345,7 +345,7 @@ export default async function DealPage({
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(1rem, 4vw, 2rem) 4px", fontSize: 13 }}>
         <Link
           href={city ? `/city/${encodeURIComponent(city.toLowerCase())}` : "/deals/all"}
-          style={{ color: "var(--color-gray-500, #6B7280)", textDecoration: "none", fontFamily: "Manrope, system-ui, sans-serif", fontWeight: 500 }}
+          style={{ color: "var(--color-gray-500, #6B7280)", textDecoration: "none", fontFamily: "var(--font-body)", fontWeight: 500 }}
         >
           ← {city ? `${city} deals` : "All deals"}
         </Link>

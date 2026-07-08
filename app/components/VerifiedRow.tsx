@@ -155,7 +155,7 @@ export default function VerifiedRow({
     display: "inline-flex",
     alignItems: "center",
     gap: variant === "detail" ? 6 : 4,
-    fontFamily: "Manrope, system-ui, -apple-system, sans-serif",
+    fontFamily: "var(--font-body)",
     fontSize: variant === "detail" ? "0.82rem" : "0.72rem",
     fontWeight: 500,
     letterSpacing: "0.01em",

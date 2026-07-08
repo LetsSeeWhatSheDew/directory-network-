@@ -131,10 +131,10 @@ export default async function DispensariesIndexPage() {
           <p className="pp-eyebrow" style={{ color: "var(--color-sage-vibrant, #93CB5C)", marginBottom: 10 }}>
             Central Illinois directory
           </p>
-          <h1 style={{ fontFamily: "Manrope, system-ui, sans-serif", fontWeight: 800, fontSize: "clamp(2rem, 5vw, 3.25rem)", letterSpacing: "-0.035em", lineHeight: 1.1, color: "var(--color-cream, #F7F4ED)", marginBottom: 12 }}>
+          <h1 style={{ fontFamily: "var(--font-body)", fontWeight: 800, fontSize: "clamp(2rem, 5vw, 3.25rem)", letterSpacing: "-0.035em", lineHeight: 1.1, color: "var(--color-cream, #F7F4ED)", marginBottom: 12 }}>
             Every licensed Central Illinois dispensary
           </h1>
-          <p style={{ color: "rgba(247, 244, 237, 0.72)", fontFamily: "Manrope, system-ui, sans-serif", fontWeight: 500, maxWidth: 580, margin: "0 auto", lineHeight: 1.6 }}>
+          <p style={{ color: "rgba(247, 244, 237, 0.72)", fontFamily: "var(--font-body)", fontWeight: 500, maxWidth: 580, margin: "0 auto", lineHeight: 1.6 }}>
             {listings.length} dispensaries across {cities.length} cities. Click a city to see deals
             and hours, or jump to a specific store.
           </p>

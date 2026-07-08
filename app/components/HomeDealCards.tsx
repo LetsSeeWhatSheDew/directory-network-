@@ -490,7 +490,7 @@ export default function HomeDealCards({
         .pp-deal-card-foot { margin-top: auto; display: flex; flex-direction: column; gap: 10px; }
         .pp-deal-card-cta-row { display: flex; justify-content: flex-end; padding-top: 4px; }
         .pp-deal-card-cta {
-          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-family: var(--font-body);
           font-weight: 700;
           font-size: 0.82rem;
           color: var(--color-sage-deep, #2E5320);
@@ -505,7 +505,7 @@ export default function HomeDealCards({
           display: inline-flex;
           align-items: center;
           gap: 5px;
-          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-family: var(--font-body);
           font-weight: 600;
           font-size: 0.72rem;
           letter-spacing: 0.01em;
