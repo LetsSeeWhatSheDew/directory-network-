@@ -16,6 +16,7 @@ import { visitDispensaryHref } from "../../../lib/links";
 import { displayDispensaryName } from "../../../lib/dispensaryName";
 import ShareDealButton from "../../components/ShareDealButton";
 import DealFreshnessBadge from "../../components/DealFreshnessBadge";
+import ReportIssueLink from "../../components/ReportIssueLink";
 import { isInCentralIL } from "../../../lib/visibility";
 import { isDealActiveNow, describeActiveDays } from "../../../lib/dealActiveFilter";
 
@@ -423,6 +424,26 @@ export default async function DealPage({
               variant="detail"
             />
           </div>
+          {/* Sourcing line — where this deal was seen. Only renders when we
+              actually have a source_url on file (no fabricated attribution).
+              rel=nofollow: it's an outbound menu link, not an endorsement. */}
+          {deal.source_url && (
+            <a
+              href={deal.source_url}
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              style={{
+                display: "inline-block",
+                marginBottom: 8,
+                fontFamily: "var(--font-body)",
+                fontSize: "0.78rem",
+                color: "var(--pp-muted, #6B7268)",
+                textDecoration: "none",
+              }}
+            >
+              Sourced from {disp}&rsquo;s live menu ↗
+            </a>
+          )}
           {code && (
             <div className="code-box">
               <span className="code-label">Use code at checkout</span>
@@ -461,6 +482,20 @@ export default async function DealPage({
           <Link href={`/dispensary/${deal.listing_slug}`} className="secondary">
             See full {disp} profile
           </Link>
+          <div
+            style={{
+              marginTop: 14,
+              paddingTop: 12,
+              borderTop: "1px solid var(--pp-border, #DCDED2)",
+            }}
+          >
+            <ReportIssueLink
+              context={`${headline} at ${disp}`}
+              url={`${brand.url}/deal/${id}`}
+              dealId={id}
+              label="Price wrong or expired? Report it"
+            />
+          </div>
         </div>
       </main>
     </>

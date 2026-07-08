@@ -9,6 +9,8 @@ import Link from "next/link";
 import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
 import AmenityRow from "../../components/AmenityRow";
+import DealFreshnessBadge from "../../components/DealFreshnessBadge";
+import ReportIssueLink from "../../components/ReportIssueLink";
 import { MapPin, Phone, Menu as MenuIcon } from "lucide-react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -74,6 +76,8 @@ type Deal = {
   expires_at: string | null;
   is_recurring: boolean | null;
   source_url: string | null;
+  verified_at: string | null;
+  status_reason: string | null;
 };
 
 async function sbFetch<T>(path: string): Promise<T | null> {
@@ -108,7 +112,7 @@ async function getHours(listingId: string): Promise<Hours[]> {
 
 async function getDeals(slug: string): Promise<Deal[]> {
   const rows = await sbFetch<Deal[]>(
-    `deals?listing_slug=eq.${encodeURIComponent(slug)}&is_active=eq.true&project_tag=eq.green&select=id,title,description,category,discount_value,discount_unit,discount_type,original_price,sale_price,expires_at,is_recurring,source_url&order=discount_value.desc&limit=10`
+    `deals?listing_slug=eq.${encodeURIComponent(slug)}&is_active=eq.true&project_tag=eq.green&select=id,title,description,category,discount_value,discount_unit,discount_type,original_price,sale_price,expires_at,is_recurring,source_url,verified_at,status_reason&order=discount_value.desc&limit=10`
   );
   // Defensive: strip expired rows even if is_active wasn't flipped yet
   const now = Date.now();
@@ -461,6 +465,19 @@ export default async function DispensaryProfilePage({
                     {expiresLabel && <span className="deal-expires">{expiresLabel}</span>}
                   </div>
                   {d.description && <p className="deal-desc">{d.description}</p>}
+                  <div style={{ margin: "6px 0 8px", display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12 }}>
+                    <DealFreshnessBadge verifiedAt={d.verified_at} statusReason={d.status_reason} />
+                    {d.source_url && (
+                      <a
+                        href={d.source_url}
+                        target="_blank"
+                        rel="noopener noreferrer nofollow"
+                        style={{ fontFamily: "var(--font-body)", fontSize: "0.72rem", color: "var(--pp-muted, #6B7268)", textDecoration: "none" }}
+                      >
+                        Sourced from menu ↗
+                      </a>
+                    )}
+                  </div>
                   {(() => {
                     const visit = visitDispensaryHref({
                       website: listing.website,
@@ -478,9 +495,16 @@ export default async function DispensaryProfilePage({
                       </a>
                     );
                   })()}
-                  <Link href={`/deal/${d.id}`} className="deal-details">
-                    Deal details →
-                  </Link>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+                    <Link href={`/deal/${d.id}`} className="deal-details">
+                      Deal details →
+                    </Link>
+                    <ReportIssueLink
+                      context={`${formatDealTitle(d)} at ${listing.name || slug}`}
+                      url={`${brand.url}/dispensary/${slug}`}
+                      dealId={d.id}
+                    />
+                  </div>
                 </div>
               );
             })
