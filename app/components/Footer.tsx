@@ -25,7 +25,7 @@ const FOOTER_COLUMNS: { heading: string; links: { href: string; label: string }[
       { href: "/deals/flower", label: "Flower" },
       { href: "/deals/edibles", label: "Edibles" },
       { href: "/deals/vapes", label: "Vapes" },
-      { href: "/deals/concentrates", label: "Concentrates" },
+      { href: "/deals/concentrate", label: "Concentrates" },
       { href: "/cannabis/illinois/open-now", label: "Open now" },
     ],
   },

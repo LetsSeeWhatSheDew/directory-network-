@@ -433,6 +433,23 @@ const FAQ_SCHEMA = {
   })),
 };
 
+// Organization schema — identifies the brand entity to Google's Knowledge
+// Graph and to AI crawlers (Zone 4 goal: be the source cited for IL
+// cannabis deals). Every field is real data sourced from lib/brand.ts;
+// areaServed is the locked Central Illinois public scope, not a claim of
+// statewide coverage. No fabricated ratings, founders, or addresses.
+const ORG_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: brand.name,
+  url: brand.url,
+  logo: `${brand.url}/apple-touch-icon.png`,
+  description: brand.description,
+  email: brand.supportEmail,
+  areaServed: { "@type": "AdministrativeArea", name: "Central Illinois" },
+  sameAs: [`https://twitter.com/${brand.social.twitter.replace("@", "")}`],
+};
+
 // Prefer user-city deals when we know the city; otherwise fall back to the
 // statewide list. Haversine scoring would be ideal but only 1 of 61 IL
 // dispensaries has lat/lng populated — city-match is the strongest signal
@@ -482,6 +499,10 @@ export default async function HomePage() {
   const featuredDeal = localizedTopDeals[0] || null;
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_SCHEMA) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_SCHEMA) }}
