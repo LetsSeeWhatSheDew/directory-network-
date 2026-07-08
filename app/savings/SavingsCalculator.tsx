@@ -104,7 +104,7 @@ export default function SavingsCalculator() {
           <p style={resultBody}>
             At a typical {Math.round(AVG_DISCOUNT_RATE * 100)}% discount on tracked deals, your
             profile would save about{" "}
-            <strong style={{ color: "#7DBA47" }}>${result.puffpriceSaves} / year</strong>.
+            <strong style={{ color: "#2E7D32" }}>${result.puffpriceSaves} / year</strong>.
           </p>
           {result.eighths > 0 && (
             <p style={resultSub}>That&apos;s <strong>{result.eighths} free eighth{result.eighths === 1 ? "" : "s"} of flower.</strong></p>
@@ -169,7 +169,7 @@ function Question<T extends string>({
 
 const wrap: React.CSSProperties = {
   background: "#fff",
-  border: "1px solid #e8e4da",
+  border: "1px solid #DCDED2",
   borderRadius: 16,
   padding: 28,
 };
@@ -178,7 +178,7 @@ const questionHeader: React.CSSProperties = { display: "flex", alignItems: "base
 const questionNum: React.CSSProperties = {
   fontSize: ".75rem",
   fontWeight: 700,
-  color: "#7DBA47",
+  color: "#2E7D32",
   fontFamily: "system-ui, sans-serif",
   letterSpacing: ".08em",
 };
@@ -249,7 +249,7 @@ const resultSub: React.CSSProperties = {
 };
 const cta: React.CSSProperties = {
   display: "inline-block",
-  background: "#7DBA47",
+  background: "#2E7D32",
   color: "#fff",
   padding: "12px 22px",
   borderRadius: 10,

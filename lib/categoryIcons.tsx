@@ -97,7 +97,7 @@ export function CategoryIcon({ slug, size = 28, tone = "light", className }: Pro
   const color =
     tone === "dark"
       ? "var(--color-sand, #C9A876)"
-      : "var(--color-sage, #7DBA47)";
+      : "var(--color-sage, #2E7D32)";
   return (
     <Icon
       size={size}

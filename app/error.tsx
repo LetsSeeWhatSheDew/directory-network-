@@ -19,7 +19,7 @@ export default function RouteError({
   return (
     <div
       style={{
-        fontFamily: "Manrope, system-ui, sans-serif",
+        fontFamily: "var(--font-body)",
         background: "var(--color-cream, #F7F4ED)",
         color: "var(--color-deep, #1F3D2B)",
         minHeight: "100vh",
@@ -45,20 +45,20 @@ export default function RouteError({
             letterSpacing: "0.14em",
             textTransform: "uppercase",
             color: "var(--color-status-expired, #B91C1C)",
-            fontFamily: "Manrope, system-ui, sans-serif",
+            fontFamily: "var(--font-body)",
             marginBottom: 12,
           }}
         >
           Something didn&apos;t load
         </div>
-        <h1 style={{ fontFamily: "Manrope, system-ui, sans-serif", fontSize: "1.5rem", fontWeight: 800, letterSpacing: "-0.025em", marginBottom: 12, color: "var(--color-deep, #1F3D2B)" }}>
+        <h1 style={{ fontFamily: "var(--font-body)", fontSize: "1.5rem", fontWeight: 800, letterSpacing: "-0.025em", marginBottom: 12, color: "var(--color-deep, #1F3D2B)" }}>
           Try that again
         </h1>
         <p
           style={{
             fontSize: ".9375rem",
             color: "var(--color-gray-600, #4B5563)",
-            fontFamily: "Manrope, system-ui, sans-serif",
+            fontFamily: "var(--font-body)",
             lineHeight: 1.55,
             marginBottom: 20,
           }}

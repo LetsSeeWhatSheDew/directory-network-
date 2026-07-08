@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Manrope } from "next/font/google";
+import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import UtmCapture from "./components/UtmCapture";
 import CityPickerHost from "./components/CityPickerHost";
@@ -8,15 +8,38 @@ import { brand } from "../lib/brand";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-TML9Y6VMC2";
 
-// Brand spec § 3 (locked 2026-05-04): Manrope, single family, four weights.
-// Wired as a CSS variable so globals.css references the loaded family
-// regardless of next/font's hash. Legacy variable names (--font-geist-sans,
-// --font-inter, --font-source-serif) are aliased to Manrope inside
-// globals.css so older component code keeps working until it's migrated.
-const manrope = Manrope({
-  variable: "--font-manrope-loaded",
+// Every page fetches deals/listings — and renders dispensary logo images —
+// from the Supabase origin. Preconnecting shaves the TLS/DNS handshake off
+// the critical path (Lighthouse flagged ~310ms of uses-rel-preconnect
+// savings on deal/listing pages).
+const SUPABASE_ORIGIN = (
+  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co"
+).replace(/\/+$/, "");
+
+// Design Direction v2 (2026-06-13): the "warm price-truth instrument".
+// Three self-hosted families via next/font (no layout shift):
+//   Display  — Space Grotesk  (headlines, store names, section titles)
+//   Body     — Inter          (paragraphs, nav, buttons, labels)
+//   Numerals — JetBrains Mono  (ALL prices, %, counts, timestamps, eyebrows)
+// Exposed as --font-display / --font-body / --font-mono; globals.css aliases
+// the legacy --font-manrope-loaded / --font-display / --font-ui names onto
+// these so unmigrated components keep working through the transition.
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-display-loaded",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "800"],
+  weight: ["500", "700"],
+  display: "swap",
+});
+const inter = Inter({
+  variable: "--font-body-loaded",
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  display: "swap",
+});
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono-loaded",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
   display: "swap",
 });
 
@@ -67,8 +90,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${manrope.variable} antialiased`}>
+    <html
+      lang="en"
+      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}
+    >
+      <body className="antialiased">
+        {/* Hoisted to <head> by React 19 — warms the Supabase connection. */}
+        <link rel="preconnect" href={SUPABASE_ORIGIN} crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href={SUPABASE_ORIGIN} />
         {children}
         <UtmCapture />
         <CityPickerHost />

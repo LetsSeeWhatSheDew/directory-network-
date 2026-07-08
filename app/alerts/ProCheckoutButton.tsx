@@ -166,7 +166,7 @@ export default function ProCheckoutButton() {
           type="checkbox"
           checked={smsOptIn}
           onChange={(e) => setSmsOptIn(e.target.checked)}
-          style={{ accentColor: "#7DBA47", width: 16, height: 16 }}
+          style={{ accentColor: "#2E7D32", width: 16, height: 16 }}
         />
         Text me when new deals drop near me
       </label>

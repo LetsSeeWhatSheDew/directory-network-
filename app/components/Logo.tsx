@@ -42,9 +42,9 @@ export default function Logo({
   ariaLabel = "PuffPrice",
   priority: _priority = false,
 }: Props) {
-  const stroke = inverse ? "#F7F4ED" : "#7DBA47";
-  const wordmarkFill = inverse ? "#F7F4ED" : "#7DBA47";
-  const pinFill = inverse ? "transparent" : "#F7F4ED";
+  const stroke = inverse ? "#F4F5EF" : "#2E7D32";
+  const wordmarkFill = inverse ? "#F4F5EF" : "#2E7D32";
+  const pinFill = inverse ? "transparent" : "#F4F5EF";
 
   const svg = glyphOnly ? (
     <svg

@@ -23,7 +23,7 @@ export default function FourTwentyBanner() {
       role="region"
       aria-label="4/20 deals banner"
       style={{
-        background: "#7DBA47",
+        background: "#2E7D32",
         color: "#fff",
       }}
     >

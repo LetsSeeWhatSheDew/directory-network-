@@ -28,7 +28,7 @@ export default function MedicalFriendlyToggle({
         padding: "6px 12px",
         borderRadius: 100,
         border: "1px solid #e8e5de",
-        background: disabled ? "#F7F4ED" : "#fff",
+        background: disabled ? "#F4F5EF" : "#fff",
         opacity: disabled ? 0.55 : 1,
         cursor: disabled ? "not-allowed" : "pointer",
         fontSize: ".82rem",
@@ -42,7 +42,7 @@ export default function MedicalFriendlyToggle({
         checked={checked}
         disabled={disabled}
         onChange={(e) => onChange?.(e.target.checked)}
-        style={{ accentColor: "#7DBA47" }}
+        style={{ accentColor: "#2E7D32" }}
       />
       Medical tax rate
       {disabled && (

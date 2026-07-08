@@ -55,7 +55,7 @@ export default function TaxCalculatorPage() {
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
         body{font-family:var(--font-ui, system-ui, sans-serif);background:#F7F4ED;color:#1F3D2B;min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #e8e4da;position:sticky;top:0;z-index:100}
+        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #DCDED2;position:sticky;top:0;z-index:100}
         .logo-link{display:flex;align-items:center}
         .nav-links{display:flex;gap:18px;align-items:center}
         .nav-link{font-size:.88rem;color:#6b7280;text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif);font-weight:500}
@@ -71,7 +71,7 @@ export default function TaxCalculatorPage() {
         .eyebrow{
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:.74rem;font-weight:700;letter-spacing:.14em;
-          text-transform:uppercase;color:#7DBA47;margin-bottom:14px;
+          text-transform:uppercase;color:#2E7D32;margin-bottom:14px;
         }
         h1{
           font-family:var(--font-display, var(--font-geist-sans));
@@ -95,7 +95,7 @@ export default function TaxCalculatorPage() {
 
         .article-link{
           margin-top:24px;
-          background:#fff;border:1px solid #e8e4da;border-radius:10px;
+          background:#fff;border:1px solid #DCDED2;border-radius:10px;
           padding:14px 18px;
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:.88rem;color:#374151;line-height:1.5;
@@ -104,21 +104,21 @@ export default function TaxCalculatorPage() {
         @media(min-width:560px){
           .article-link{flex-direction:row;justify-content:space-between;align-items:center;gap:18px}
         }
-        .article-link a{color:#7DBA47;font-weight:700;text-decoration:none;white-space:nowrap}
+        .article-link a{color:#2E7D32;font-weight:700;text-decoration:none;white-space:nowrap}
         .article-link a:hover{text-decoration:underline}
 
         .source-note{
           margin-top:32px;padding:18px;
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:.82rem;color:#6b7280;line-height:1.6;
-          border-top:1px solid #e8e4da;
+          border-top:1px solid #DCDED2;
         }
         .source-note strong{color:#374151;font-weight:700}
-        .source-note a{color:#7DBA47;text-decoration:none}
+        .source-note a{color:#2E7D32;text-decoration:none}
         .source-note a:hover{text-decoration:underline}
 
         .footer{
-          background:#fff;border-top:1px solid #e8e4da;
+          background:#fff;border-top:1px solid #DCDED2;
           padding:24px 28px;
           display:flex;justify-content:space-between;align-items:center;
           flex-wrap:wrap;gap:12px;

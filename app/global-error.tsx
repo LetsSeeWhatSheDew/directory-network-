@@ -21,7 +21,7 @@ export default function GlobalError({
     <html lang="en">
       <body
         style={{
-          fontFamily: "Manrope, -apple-system, BlinkMacSystemFont, system-ui, sans-serif",
+          fontFamily: "-apple-system, BlinkMacSystemFont, system-ui, sans-serif",
           background: "#F7F4ED",
           color: "#1F3D2B",
           minHeight: "100vh",
@@ -55,8 +55,8 @@ export default function GlobalError({
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
-              background: "#7DBA47",
-              color: "#1F3D2B",
+              background: "#2E7D32",
+              color: "#fff",
               padding: "12px 22px",
               borderRadius: 9999,
               fontFamily: "inherit",

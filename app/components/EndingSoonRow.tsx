@@ -91,7 +91,7 @@ export default function EndingSoonRow({ deals }: { deals: EndingSoonDeal[] }) {
               borderRadius: 12,
               padding: "12px 14px",
               textDecoration: "none",
-              color: "#1F3D2B",
+              color: "#1C3A22",
               fontFamily: "system-ui, sans-serif",
               minWidth: 220,
               maxWidth: 280,

@@ -86,7 +86,7 @@ export default function TopDealsRow({
           fontWeight: 700,
           letterSpacing: ".14em",
           textTransform: "uppercase",
-          color: "#7DBA47",
+          color: "#2E7D32",
           fontFamily: "system-ui, sans-serif",
           marginBottom: 10,
         }}
@@ -112,12 +112,12 @@ export default function TopDealsRow({
               href={href}
               style={{
                 background: "#fff",
-                border: "1px solid #e8e4da",
-                borderLeft: "4px solid #7DBA47",
+                border: "1px solid #DCDED2",
+                borderLeft: "4px solid #2E7D32",
                 borderRadius: 12,
                 padding: "14px 16px",
                 textDecoration: "none",
-                color: "#1F3D2B",
+                color: "#1C3A22",
                 fontFamily: "system-ui, sans-serif",
                 display: "flex",
                 justifyContent: "space-between",
@@ -173,7 +173,7 @@ export default function TopDealsRow({
                   style={{
                     fontSize: "1.35rem",
                     fontWeight: 700,
-                    color: "#7DBA47",
+                    color: "#2E7D32",
                     letterSpacing: "-.03em",
                     fontFamily: "Georgia, serif",
                     lineHeight: 1,

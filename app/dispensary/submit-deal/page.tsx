@@ -243,11 +243,11 @@ export default function SubmitDealPage() {
           </Field>
 
           {/* LIVE PREVIEW */}
-          <div style={{ marginTop: 8, padding: "18px", background: "#fff", border: "1px solid #e8e4da", borderRadius: 14, position: "relative" }}>
-            <div style={{ fontSize: ".68rem", fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: "#7DBA47", fontFamily: "system-ui,sans-serif", marginBottom: 10 }}>
+          <div style={{ marginTop: 8, padding: "18px", background: "#fff", border: "1px solid #DCDED2", borderRadius: 14, position: "relative" }}>
+            <div style={{ fontSize: ".68rem", fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: "#2E7D32", fontFamily: "system-ui,sans-serif", marginBottom: 10 }}>
               Preview — this is how it will appear
             </div>
-            <div style={{ background: "linear-gradient(135deg,#F2F8E9 0%,#fff 60%)", border: "2px solid #7DBA47", borderRadius: 12, padding: 18 }}>
+            <div style={{ background: "linear-gradient(135deg,#F2F8E9 0%,#fff 60%)", border: "2px solid #2E7D32", borderRadius: 12, padding: 18 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10, marginBottom: 8 }}>
                 <div>
                   <div style={{ fontSize: "1rem", fontWeight: 700, color: "#1F3D2B" }}>
@@ -261,7 +261,7 @@ export default function SubmitDealPage() {
                   Likely open
                 </span>
               </div>
-              <div style={{ fontSize: "1.02rem", fontWeight: 700, color: "#7DBA47", marginBottom: 6 }}>
+              <div style={{ fontSize: "1.02rem", fontWeight: 700, color: "#2E7D32", marginBottom: 6 }}>
                 {form.deal_title || "Your deal headline"}
               </div>
               {form.deal_description && (
@@ -279,7 +279,7 @@ export default function SubmitDealPage() {
                   <div style={{ fontSize: ".65rem", fontWeight: 700, color: "#3F6B1F", fontFamily: "system-ui,sans-serif", textTransform: "uppercase", letterSpacing: ".12em" }}>You save</div>
                   <div style={{ fontSize: ".68rem", color: "rgba(22,101,52,.7)", fontFamily: "system-ui,sans-serif", marginTop: 2 }}>vs. Illinois average</div>
                 </div>
-                <div style={{ fontSize: "1.7rem", fontWeight: 700, color: "#7DBA47", letterSpacing: "-.02em", lineHeight: 1, fontFamily: "Georgia,serif" }}>
+                <div style={{ fontSize: "1.7rem", fontWeight: 700, color: "#2E7D32", letterSpacing: "-.02em", lineHeight: 1, fontFamily: "Georgia,serif" }}>
                   {previewSavings || "—"}
                 </div>
               </div>
@@ -287,7 +287,7 @@ export default function SubmitDealPage() {
           </div>
 
           <button type="submit" disabled={submitting} style={{
-            background: "#7DBA47", color: "#fff", border: "none",
+            background: "#2E7D32", color: "#fff", border: "none",
             padding: "14px 24px", borderRadius: 10, fontSize: "1rem",
             fontFamily: "system-ui, sans-serif", fontWeight: 700,
             cursor: submitting ? "not-allowed" : "pointer",

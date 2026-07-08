@@ -9,6 +9,8 @@ import Link from "next/link";
 import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
 import AmenityRow from "../../components/AmenityRow";
+import DealFreshnessBadge from "../../components/DealFreshnessBadge";
+import ReportIssueLink from "../../components/ReportIssueLink";
 import { MapPin, Phone, Menu as MenuIcon } from "lucide-react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -74,6 +76,8 @@ type Deal = {
   expires_at: string | null;
   is_recurring: boolean | null;
   source_url: string | null;
+  verified_at: string | null;
+  status_reason: string | null;
 };
 
 async function sbFetch<T>(path: string): Promise<T | null> {
@@ -108,7 +112,7 @@ async function getHours(listingId: string): Promise<Hours[]> {
 
 async function getDeals(slug: string): Promise<Deal[]> {
   const rows = await sbFetch<Deal[]>(
-    `deals?listing_slug=eq.${encodeURIComponent(slug)}&is_active=eq.true&project_tag=eq.green&select=id,title,description,category,discount_value,discount_unit,discount_type,original_price,sale_price,expires_at,is_recurring,source_url&order=discount_value.desc&limit=10`
+    `deals?listing_slug=eq.${encodeURIComponent(slug)}&is_active=eq.true&project_tag=eq.green&select=id,title,description,category,discount_value,discount_unit,discount_type,original_price,sale_price,expires_at,is_recurring,source_url,verified_at,status_reason&order=discount_value.desc&limit=10`
   );
   // Defensive: strip expired rows even if is_active wasn't flipped yet
   const now = Date.now();
@@ -288,17 +292,17 @@ export default async function DispensaryProfilePage({
       />
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:Georgia,serif;background:#F7F4ED;color:#1F3D2B;min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;position:sticky;top:0;z-index:100;border-bottom:1px solid #e8e4da}
+        /* Design v2: body styling from globals.css (Inter on warm paper). */ body{min-height:100vh}
+        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;position:sticky;top:0;z-index:100;border-bottom:1px solid #DCDED2}
         .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
-        .logo-dot{width:8px;height:8px;border-radius:50%;background:#7DBA47;animation:pulse 2.5s infinite}
+        .logo-dot{width:8px;height:8px;border-radius:50%;background:#2E7D32;animation:pulse 2.5s infinite}
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-        .logo-text{font-size:1.1rem;font-weight:700;color:#1F3D2B}
-        .logo-text span{color:#7DBA47}
+        .logo-text{font-size:1.1rem;font-weight:700;color:#1C3A22}
+        .logo-text span{color:#2E7D32}
         .back{font-size:.82rem;color:#6b7280;text-decoration:none;font-family:system-ui,sans-serif}
 
         .wrap{max-width:900px;margin:0 auto;padding:40px 20px 64px}
-        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#7DBA47;font-family:system-ui,sans-serif;margin-bottom:10px}
+        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#2E7D32;font-family:system-ui,sans-serif;margin-bottom:10px}
         h1{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:8px}
         .city-line{font-size:.95rem;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:18px}
 
@@ -307,19 +311,19 @@ export default async function DispensaryProfilePage({
         .status-open{background:#dcfce7;color:#14532d}
         .status-closed{background:#fee2e2;color:#991b1b}
         .status-dot{width:7px;height:7px;border-radius:50%}
-        .status-dot-open{background:#7DBA47}
+        .status-dot-open{background:#2E7D32}
         .status-dot-closed{background:#dc2626}
 
         .contact-grid{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
         .contact-btn{
           flex:1 1 220px;min-width:200px;min-height:52px;
           display:flex;align-items:center;gap:10px;
-          background:#fff;border:1px solid #e8e4da;border-radius:12px;
-          padding:12px 16px;text-decoration:none;color:#1F3D2B;
+          background:#fff;border:1px solid #DCDED2;border-radius:12px;
+          padding:12px 16px;text-decoration:none;color:#1C3A22;
           font-family:system-ui,sans-serif;font-size:.92rem;font-weight:600;
           transition:border-color .15s,transform .05s;
         }
-        .contact-btn:hover{border-color:#7DBA47}
+        .contact-btn:hover{border-color:#2E7D32}
         .contact-btn:active{transform:translateY(1px)}
         .contact-btn .ico{font-size:1.15rem}
         .contact-btn .sub{display:block;font-size:.72rem;color:#9ca3af;font-weight:500;margin-top:2px}
@@ -327,35 +331,35 @@ export default async function DispensaryProfilePage({
         .section{margin-bottom:32px}
         .section-h{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#9ca3af;font-family:system-ui,sans-serif;margin-bottom:14px}
 
-        .deal-card{background:#fff;border:1px solid #e8e4da;border-left:4px solid #7DBA47;border-radius:14px;padding:18px 20px;margin-bottom:10px}
-        .deal-title{font-size:1.05rem;font-weight:700;color:#1F3D2B;margin-bottom:4px}
+        .deal-card{background:#fff;border:1px solid #DCDED2;border-left:4px solid #2E7D32;border-radius:14px;padding:18px 20px;margin-bottom:10px}
+        .deal-title{font-size:1.05rem;font-weight:700;color:#1C3A22;margin-bottom:4px}
         .deal-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:baseline;margin-bottom:8px}
-        .deal-savings{font-size:1.4rem;font-weight:700;color:#7DBA47;letter-spacing:-.02em}
+        .deal-savings{font-size:1.4rem;font-weight:700;color:#2E7D32;letter-spacing:-.02em}
         .deal-savings-label{font-size:.68rem;color:#6b7280;font-family:system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
         .deal-expires{font-size:.74rem;color:#92400e;background:#fef3c7;padding:2px 8px;border-radius:100px;font-family:system-ui,sans-serif;font-weight:600}
         .deal-desc{font-size:.88rem;color:#374151;font-family:system-ui,sans-serif;line-height:1.5;margin-bottom:12px}
-        .deal-cta{display:block;width:100%;text-align:center;background:#7DBA47;color:#fff;padding:14px;border-radius:10px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:700;font-size:.92rem;min-height:44px}
-        .deal-cta:hover{background:#6BA63B}
-        .deal-details{font-size:.76rem;color:#7DBA47;text-decoration:none;display:inline-block;margin-top:8px;font-family:system-ui,sans-serif;font-weight:600}
+        .deal-cta{display:block;width:100%;text-align:center;background:#2E7D32;color:#fff;padding:14px;border-radius:10px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:700;font-size:.92rem;min-height:44px}
+        .deal-cta:hover{background:#2E5320}
+        .deal-details{font-size:.76rem;color:#2E7D32;text-decoration:none;display:inline-block;margin-top:8px;font-family:system-ui,sans-serif;font-weight:600}
         .deal-details:hover{text-decoration:underline}
 
-        .no-deals{background:#fff;border:1px solid #e8e4da;border-radius:14px;padding:28px 24px;text-align:center}
-        .no-deals-t{font-size:.98rem;font-weight:700;color:#1F3D2B}
+        .no-deals{background:#fff;border:1px solid #DCDED2;border-radius:14px;padding:28px 24px;text-align:center}
+        .no-deals-t{font-size:.98rem;font-weight:700;color:#1C3A22}
         .no-deals-s{font-size:.82rem;color:#6b7280;font-family:system-ui,sans-serif;margin-top:4px}
 
-        .hours{background:#fff;border:1px solid #e8e4da;border-radius:14px;padding:18px 22px}
+        .hours{background:#fff;border:1px solid #DCDED2;border-radius:14px;padding:18px 22px}
         .hr{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-family:system-ui,sans-serif;font-size:.9rem;color:#374151}
-        .hr-today{background:#F2F8E9;margin:0 -10px;padding:8px 10px;border-radius:8px}
+        .hr-today{background:#E8F0DF;margin:0 -10px;padding:8px 10px;border-radius:8px}
         .hr-today-day,.hr-today-t{color:#14532d;font-weight:700}
         .hr-closed{color:#9ca3af}
 
         .amenities{display:flex;flex-wrap:wrap;gap:8px}
-        .amenity{font-size:.78rem;font-family:system-ui,sans-serif;color:#374151;background:#fff;border:1px solid #e8e4da;padding:4px 12px;border-radius:100px}
+        .amenity{font-size:.78rem;font-family:system-ui,sans-serif;color:#374151;background:#fff;border:1px solid #DCDED2;padding:4px 12px;border-radius:100px}
 
-        .about{background:#fff;border:1px solid #e8e4da;border-radius:14px;padding:18px 22px;font-size:.925rem;color:#374151;line-height:1.7;font-family:system-ui,sans-serif}
+        .about{background:#fff;border:1px solid #DCDED2;border-radius:14px;padding:18px 22px;font-size:.925rem;color:#374151;line-height:1.7;font-family:system-ui,sans-serif}
 
-        .claim-cta{margin-top:32px;padding:18px;background:#fff;border:1px dashed #e8e4da;border-radius:12px;text-align:center;font-family:system-ui,sans-serif;font-size:.82rem;color:#6b7280}
-        .claim-cta a{color:#7DBA47;font-weight:700;text-decoration:none}
+        .claim-cta{margin-top:32px;padding:18px;background:#fff;border:1px dashed #DCDED2;border-radius:12px;text-align:center;font-family:system-ui,sans-serif;font-size:.82rem;color:#6b7280}
+        .claim-cta a{color:#2E7D32;font-weight:700;text-decoration:none}
         .claim-cta a:hover{text-decoration:underline}
 
         @media(max-width:600px){.wrap{padding:24px 14px}.contact-btn{flex-basis:100%}}
@@ -365,7 +369,7 @@ export default async function DispensaryProfilePage({
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(1rem, 4vw, 2rem) 4px", fontSize: 13 }}>
         <Link
           href={city ? `/city/${encodeURIComponent(city.toLowerCase())}` : "/deals/all"}
-          style={{ color: "var(--color-gray-500, #6B7280)", textDecoration: "none", fontFamily: "Manrope, system-ui, sans-serif", fontWeight: 500 }}
+          style={{ color: "var(--color-gray-500, #6B7280)", textDecoration: "none", fontFamily: "var(--font-body)", fontWeight: 500 }}
         >
           {city ? `← ${city} deals` : "← All deals"}
         </Link>
@@ -436,7 +440,7 @@ export default async function DispensaryProfilePage({
               <div className="no-deals-t">No active deals right now</div>
               <div className="no-deals-s">
                 We check daily. Get an alert when a new deal drops here →{" "}
-                <Link href="/alerts" style={{ color: "#7DBA47", fontWeight: 700, textDecoration: "none" }}>
+                <Link href="/alerts" style={{ color: "#2E7D32", fontWeight: 700, textDecoration: "none" }}>
                   Get alerts
                 </Link>
               </div>
@@ -461,6 +465,19 @@ export default async function DispensaryProfilePage({
                     {expiresLabel && <span className="deal-expires">{expiresLabel}</span>}
                   </div>
                   {d.description && <p className="deal-desc">{d.description}</p>}
+                  <div style={{ margin: "6px 0 8px", display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12 }}>
+                    <DealFreshnessBadge verifiedAt={d.verified_at} statusReason={d.status_reason} />
+                    {d.source_url && (
+                      <a
+                        href={d.source_url}
+                        target="_blank"
+                        rel="noopener noreferrer nofollow"
+                        style={{ fontFamily: "var(--font-body)", fontSize: "0.72rem", color: "var(--pp-muted, #6B7268)", textDecoration: "none" }}
+                      >
+                        Sourced from menu ↗
+                      </a>
+                    )}
+                  </div>
                   {(() => {
                     const visit = visitDispensaryHref({
                       website: listing.website,
@@ -478,9 +495,16 @@ export default async function DispensaryProfilePage({
                       </a>
                     );
                   })()}
-                  <Link href={`/deal/${d.id}`} className="deal-details">
-                    Deal details →
-                  </Link>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+                    <Link href={`/deal/${d.id}`} className="deal-details">
+                      Deal details →
+                    </Link>
+                    <ReportIssueLink
+                      context={`${formatDealTitle(d)} at ${listing.name || slug}`}
+                      url={`${brand.url}/dispensary/${slug}`}
+                      dealId={d.id}
+                    />
+                  </div>
                 </div>
               );
             })

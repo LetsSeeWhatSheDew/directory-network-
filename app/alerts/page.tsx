@@ -109,9 +109,9 @@ export default async function AlertsPage() {
 
         .tiers{max-width:960px;margin:0 auto;padding:48px 20px 24px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
         @media(max-width:720px){.tiers{grid-template-columns:1fr}}
-        .tier{background:#fff;border:1px solid #e8e4da;border-radius:16px;padding:28px 26px;display:flex;flex-direction:column;gap:14px;position:relative}
+        .tier{background:#fff;border:1px solid #DCDED2;border-radius:16px;padding:28px 26px;display:flex;flex-direction:column;gap:14px;position:relative}
         .tier.pro{background:#0b172f;color:#fff;border-color:rgba(74,222,128,.35);box-shadow:0 8px 24px rgba(22,163,74,.08)}
-        .tier-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#7DBA47;font-family:system-ui,sans-serif}
+        .tier-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#2E7D32;font-family:system-ui,sans-serif}
         .tier.pro .tier-eyebrow{color:#93CB5C}
         .tier-name{font-size:1.35rem;font-weight:700;letter-spacing:-.02em;font-family:Georgia,serif;line-height:1.1}
         .tier.pro .tier-name{color:#fff}
@@ -122,33 +122,33 @@ export default async function AlertsPage() {
         .tier.pro .tier-price-period{color:rgba(255,255,255,.55)}
         .tier-anchor{font-size:.82rem;color:#6b7280;font-family:system-ui,sans-serif;line-height:1.5}
         .tier.pro .tier-anchor{color:rgba(255,255,255,.7)}
-        .tier-anchor strong{color:#7DBA47;font-weight:700}
+        .tier-anchor strong{color:#2E7D32;font-weight:700}
         .tier.pro .tier-anchor strong{color:#93CB5C}
         .tier-headline{font-size:.95rem;font-weight:600;color:#374151;font-family:system-ui,sans-serif;line-height:1.5}
         .tier.pro .tier-headline{color:rgba(255,255,255,.8)}
         ul.tier-features{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:7px}
         ul.tier-features li{display:flex;gap:8px;align-items:flex-start;font-size:.86rem;color:#374151;font-family:system-ui,sans-serif;line-height:1.5}
         .tier.pro ul.tier-features li{color:rgba(255,255,255,.82)}
-        .check{color:#7DBA47;font-weight:700;flex-shrink:0}
+        .check{color:#2E7D32;font-weight:700;flex-shrink:0}
         .tier.pro .check{color:#93CB5C}
         .testimonial{background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.22);border-radius:10px;padding:14px 16px;margin-top:6px}
         .tier:not(.pro) .testimonial{background:#F2F8E9;border-color:#C7E5A8}
         .testimonial blockquote{font-family:Georgia,serif;font-style:italic;font-size:.92rem;line-height:1.5;color:inherit;margin:0;opacity:.88}
         .testimonial figcaption{font-family:system-ui,sans-serif;font-size:.74rem;color:rgba(255,255,255,.55);margin-top:8px}
-        .tier:not(.pro) .testimonial figcaption{color:#7DBA47}
+        .tier:not(.pro) .testimonial figcaption{color:#2E7D32}
         .tier.pro .testimonial figcaption strong{color:#fff}
 
         .cta{display:inline-block;padding:13px 22px;border-radius:10px;font-family:system-ui,sans-serif;font-weight:700;font-size:.95rem;text-decoration:none;text-align:center;transition:all .15s;cursor:pointer;border:none;width:100%}
         .cta-free{background:#1F3D2B;color:#fff}
         .cta-free:hover{background:#2A4F38}
-        .cta-pro{background:#7DBA47;color:#fff}
+        .cta-pro{background:#2E7D32;color:#fff}
         .cta-pro:hover{background:#6BA63B}
         .cta-pro:disabled{opacity:.7;cursor:not-allowed}
 
         .feels{max-width:760px;margin:24px auto 0;padding:48px 24px}
         .feels h2{font-size:clamp(1.5rem,3.5vw,2rem);font-weight:700;letter-spacing:-.03em;line-height:1.15;margin-bottom:24px;font-family:Georgia,serif}
         .feels p{font-family:Georgia,serif;font-size:1.02rem;line-height:1.7;color:#374151;margin-bottom:20px}
-        .feels p em{color:#7DBA47;font-style:normal;font-weight:700}
+        .feels p em{color:#2E7D32;font-style:normal;font-weight:700}
         .feels p.closer{color:#1F3D2B;font-weight:600}
 
         .calc{max-width:640px;margin:0 auto;padding:12px 20px 64px}

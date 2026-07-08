@@ -81,7 +81,7 @@ export default function DispensaryAutocomplete({
             top: "100%",
             marginTop: 4,
             background: "#fff",
-            border: "1px solid #e8e4da",
+            border: "1px solid #DCDED2",
             borderRadius: 10,
             boxShadow: "0 6px 18px rgba(15,31,61,.08)",
             zIndex: 10,

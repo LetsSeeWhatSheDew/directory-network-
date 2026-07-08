@@ -31,13 +31,13 @@ const PROJECTS: Record<
     label: "PuffPrice · Cannabis",
     tagline: "Licensed dispensaries, delivery services & patient-first cannabis brands.",
     badge: "Cannabis",
-    color: "#7DBA47",
+    color: "#2E7D32",
   },
   heal: {
     label: "Project Heal · Holistic",
     tagline: "Somatic workers, energy healers, bodyworkers & alternative care.",
     badge: "Holistic",
-    color: "#7DBA47",
+    color: "#2E7D32",
   },
   her: {
     label: "Project Her · Women’s Wellness",
@@ -168,7 +168,7 @@ export default async function Home({
             </Link>
             <Link
               href="/get-listed"
-              className="rounded-full bg-[#7DBA47] px-3.5 py-1.5 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#3da85e]"
+              className="rounded-full bg-[#2E7D32] px-3.5 py-1.5 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#3da85e]"
             >
               Get listed
             </Link>
@@ -178,7 +178,7 @@ export default async function Home({
           <div className="flex items-center gap-2 md:hidden">
             <Link
               href="/get-listed"
-              className="rounded-full bg-[#7DBA47] px-3 py-1.5 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#3da85e]"
+              className="rounded-full bg-[#2E7D32] px-3 py-1.5 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#3da85e]"
             >
               Get listed
             </Link>
@@ -191,14 +191,14 @@ export default async function Home({
         <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-8 md:flex-row md:items-center md:py-12">
           {/* Left: copy */}
           <div className="flex-1 space-y-5">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#7DBA47]/20 bg-[#7DBA47]/5 px-3 py-1 text-[11px] font-medium text-[#7DBA47]/80 tracking-wide uppercase">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#7DBA47]" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#2E7D32]/20 bg-[#2E7D32]/5 px-3 py-1 text-[11px] font-medium text-[#2E7D32]/80 tracking-wide uppercase">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#2E7D32]" />
               Live &middot; Cannabis-led rollout
             </div>
 
             <h1 className="text-2xl font-semibold tracking-tight text-[#F7F4ED] sm:text-3xl md:text-4xl">
               The curated directory for{" "}
-              <span className="text-[#7DBA47]">
+              <span className="text-[#2E7D32]">
                 licensed cannabis operators
               </span>
               .
@@ -239,13 +239,13 @@ export default async function Home({
             <div className="flex flex-wrap gap-3 pt-1 text-xs">
               <Link
                 href="/get-listed"
-                className="inline-flex items-center rounded-full bg-[#7DBA47] px-4 py-2 text-[12px] font-semibold text-[#1F3D2B] shadow-sm hover:bg-[#3da85e] transition-colors"
+                className="inline-flex items-center rounded-full bg-[#2E7D32] px-4 py-2 text-[12px] font-semibold text-[#1F3D2B] shadow-sm hover:bg-[#3da85e] transition-colors"
               >
                 Request a listing
               </Link>
               <Link
                 href="/cannabis/illinois"
-                className="inline-flex items-center rounded-full border border-white/10 bg-transparent px-4 py-2 text-[12px] font-medium text-[#F7F4ED] hover:border-[#7DBA47]/30 hover:bg-white/5 transition-colors"
+                className="inline-flex items-center rounded-full border border-white/10 bg-transparent px-4 py-2 text-[12px] font-medium text-[#F7F4ED] hover:border-[#2E7D32]/30 hover:bg-white/5 transition-colors"
               >
                 Browse Illinois
               </Link>
@@ -276,7 +276,7 @@ export default async function Home({
                     <Link
                       key={listing.id}
                       href={`/l/${listing.id}`}
-                      className="flex items-start justify-between gap-3 rounded-2xl border border-white/5 bg-slate-900/80 px-3 py-2.5 text-xs text-slate-100 transition hover:border-[#7DBA47]/60 hover:bg-slate-900"
+                      className="flex items-start justify-between gap-3 rounded-2xl border border-white/5 bg-slate-900/80 px-3 py-2.5 text-xs text-slate-100 transition hover:border-[#2E7D32]/60 hover:bg-slate-900"
                     >
                       <div>
                         <div className="flex items-center gap-2">
@@ -284,7 +284,7 @@ export default async function Home({
                             {getListingName(listing)}
                           </h3>
                           {listing.is_featured && (
-                            <span className="rounded-full bg-[#7DBA47]/15 px-2 py-0.5 text-[10px] font-medium text-[#7DBA47]">
+                            <span className="rounded-full bg-[#2E7D32]/15 px-2 py-0.5 text-[10px] font-medium text-[#2E7D32]">
                               Featured
                             </span>
                           )}
@@ -337,7 +337,7 @@ export default async function Home({
                     className={[
                       "inline-flex items-center rounded-full border px-3 py-1 transition-colors",
                       isActive
-                        ? "border-[#7DBA47] bg-[#7DBA47]/15 text-[#7DBA47]"
+                        ? "border-[#2E7D32] bg-[#2E7D32]/15 text-[#2E7D32]"
                         : "border-slate-700 bg-slate-900 text-slate-300 hover:border-slate-500 hover:bg-slate-800",
                     ].join(" ")}
                   >
@@ -356,7 +356,7 @@ export default async function Home({
                 first operators —{" "}
                 <Link
                   href="/get-listed"
-                  className="font-medium text-[#7DBA47] underline-offset-2 hover:underline"
+                  className="font-medium text-[#2E7D32] underline-offset-2 hover:underline"
                 >
                   apply to be one of them
                 </Link>
@@ -369,7 +369,7 @@ export default async function Home({
                 <Link
                   key={listing.id}
                   href={`/l/${listing.id}`}
-                  className="group flex flex-col rounded-3xl border border-slate-800 bg-slate-900/60 p-4 text-xs text-slate-100 shadow-sm transition hover:border-[#7DBA47]/60 hover:bg-slate-900"
+                  className="group flex flex-col rounded-3xl border border-slate-800 bg-slate-900/60 p-4 text-xs text-slate-100 shadow-sm transition hover:border-[#2E7D32]/60 hover:bg-slate-900"
                 >
                   <div className="mb-2 flex items-start justify-between gap-2">
                     <div>
@@ -381,7 +381,7 @@ export default async function Home({
                       </p>
                     </div>
                     {listing.is_featured && (
-                      <span className="rounded-full bg-[#7DBA47]/15 px-2 py-0.5 text-[10px] font-medium text-[#7DBA47]">
+                      <span className="rounded-full bg-[#2E7D32]/15 px-2 py-0.5 text-[10px] font-medium text-[#2E7D32]">
                         Featured
                       </span>
                     )}
@@ -393,7 +393,7 @@ export default async function Home({
                   )}
                   <div className="mt-auto flex items-center justify-between pt-1 text-[11px] text-slate-400">
                     <span>View profile</span>
-                    <span className="text-slate-500 group-hover:text-[#7DBA47]">
+                    <span className="text-slate-500 group-hover:text-[#2E7D32]">
                       →
                     </span>
                   </div>
@@ -421,7 +421,7 @@ export default async function Home({
             </div>
             <Link
               href="/get-listed"
-              className="inline-flex items-center rounded-full bg-[#7DBA47] px-4 py-2 text-[11px] font-semibold text-[#1F3D2B] shadow-sm hover:bg-[#3da85e] transition-colors"
+              className="inline-flex items-center rounded-full bg-[#2E7D32] px-4 py-2 text-[11px] font-semibold text-[#1F3D2B] shadow-sm hover:bg-[#3da85e] transition-colors"
             >
               Submit for review
             </Link>
@@ -429,7 +429,7 @@ export default async function Home({
 
           <div className="grid gap-4 md:grid-cols-3">
             <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-5 text-xs text-[#F7F4ED]">
-              <div className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#7DBA47]">
+              <div className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#2E7D32]">
                 Verification
               </div>
               <p className="text-[#8a9490] leading-relaxed">
@@ -439,7 +439,7 @@ export default async function Home({
               </p>
             </div>
             <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-5 text-xs text-[#F7F4ED]">
-              <div className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#7DBA47]">
+              <div className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#2E7D32]">
                 Local authority
               </div>
               <p className="text-[#8a9490] leading-relaxed">
@@ -449,7 +449,7 @@ export default async function Home({
               </p>
             </div>
             <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-5 text-xs text-[#F7F4ED]">
-              <div className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#7DBA47]">
+              <div className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#2E7D32]">
                 Curation
               </div>
               <p className="text-[#8a9490] leading-relaxed">
@@ -474,7 +474,7 @@ export default async function Home({
             <span className="hidden text-slate-700 md:inline">|</span>
             <Link
               href="/get-listed"
-              className="text-[#7DBA47] underline-offset-2 hover:text-[#3da85e]"
+              className="text-[#2E7D32] underline-offset-2 hover:text-[#3da85e]"
             >
               Request a listing
             </Link>

@@ -1,7 +1,7 @@
 import type { ScraperRun } from "./page";
 
 const STATUS_BADGE: Record<ScraperRun["status"], { color: string; label: string }> = {
-  success: { color: "bg-[#7DBA47]/15 text-[#7DBA47]", label: "Success" },
+  success: { color: "bg-[#2E7D32]/15 text-[#2E7D32]", label: "Success" },
   partial: { color: "bg-[#C9A876]/15 text-[#C9A876]", label: "Partial" },
   failed: { color: "bg-[#E24B4A]/15 text-[#E24B4A]", label: "Failed" },
   running: { color: "bg-white/10 text-[#F7F4ED]", label: "Running" },
@@ -88,7 +88,7 @@ function Stat({
         {label}
       </dt>
       <dd
-        className={`text-lg font-bold ${accent ? "text-[#7DBA47]" : "text-[#F7F4ED]"}`}
+        className={`text-lg font-bold ${accent ? "text-[#2E7D32]" : "text-[#F7F4ED]"}`}
       >
         {value}
       </dd>

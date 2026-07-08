@@ -73,7 +73,7 @@ export default function ShareDealButton({
         style={{
           background: "transparent",
           border: "none",
-          color: copied ? "#7DBA47" : "#6b7280",
+          color: copied ? "#2E7D32" : "#6b7280",
           cursor: "pointer",
           padding: "4px 8px",
           borderRadius: 6,
@@ -108,8 +108,8 @@ export default function ShareDealButton({
           minHeight: 44,
           padding: "12px 16px",
           background: copied ? "#dcfce7" : "#fff",
-          color: copied ? "#14532d" : "#1F3D2B",
-          border: `1px solid ${copied ? "#C7E5A8" : "#e8e4da"}`,
+          color: copied ? "#14532d" : "#1C3A22",
+          border: `1px solid ${copied ? "#CBE0B4" : "#DCDED2"}`,
           borderRadius: 10,
           fontFamily: "system-ui, sans-serif",
           fontWeight: 700,
@@ -133,7 +133,7 @@ export default function ShareDealButton({
       title={copied ? "Link copied!" : "Share this deal"}
       style={{
         background: copied ? "#dcfce7" : "rgba(255,255,255,.9)",
-        border: `1px solid ${copied ? "#C7E5A8" : "#e8e4da"}`,
+        border: `1px solid ${copied ? "#CBE0B4" : "#DCDED2"}`,
         color: copied ? "#14532d" : "#6b7280",
         borderRadius: "50%",
         cursor: "pointer",

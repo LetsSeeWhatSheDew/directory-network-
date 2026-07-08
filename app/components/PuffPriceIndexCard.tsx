@@ -106,11 +106,11 @@ export default async function PuffPriceIndexCard() {
       <style>{`
         .ppi-card{
           background:#fff;
-          border:1px solid #e8e4da;
-          border-left:4px solid #7DBA47;
+          border:1px solid #DCDED2;
+          border-left:4px solid #2E7D32;
           border-radius:14px;
           padding:28px 28px 24px;
-          box-shadow:0 4px 16px rgba(15,31,61,.06);
+
           max-width:1100px;
           margin:24px auto 8px;
           position:relative;
@@ -122,7 +122,7 @@ export default async function PuffPriceIndexCard() {
           top:-40px;right:-40px;
           width:180px;height:180px;
           border-radius:50%;
-          background:radial-gradient(circle at center,rgba(22,163,74,.06),transparent 70%);
+          background:transparent;
           pointer-events:none;
         }
         .ppi-sr-only{
@@ -132,12 +132,12 @@ export default async function PuffPriceIndexCard() {
         .ppi-eyebrow{
           font-family:system-ui,sans-serif;
           font-size:.7rem;font-weight:700;letter-spacing:.14em;
-          text-transform:uppercase;color:#7DBA47;
+          text-transform:uppercase;color:#2E7D32;
           margin-bottom:8px;
         }
         .ppi-price-line,.ppi-teaser-price{
           font-family:Georgia,serif;
-          color:#1F3D2B;
+          color:#1C3A22;
           letter-spacing:-.04em;
           line-height:1;
           display:flex;align-items:baseline;gap:0;
@@ -146,7 +146,7 @@ export default async function PuffPriceIndexCard() {
         .ppi-currency{
           font-size:clamp(1.6rem,3.4vw,2.1rem);
           font-weight:700;
-          color:#7DBA47;
+          color:#2E7D32;
           margin-right:2px;
         }
         .ppi-dollars{
@@ -180,7 +180,7 @@ export default async function PuffPriceIndexCard() {
         }
         .ppi-progress{
           height:6px;
-          background:#F7F4ED;
+          background:#F4F5EF;
           border-radius:100px;
           overflow:hidden;
           margin:4px 0 12px;
@@ -188,7 +188,7 @@ export default async function PuffPriceIndexCard() {
         }
         .ppi-progress-fill{
           height:100%;
-          background:linear-gradient(90deg,#7DBA47,#93CB5C);
+          background:#2E7D32;
           border-radius:100px;
           transition:width .4s ease-out;
         }
@@ -198,7 +198,7 @@ export default async function PuffPriceIndexCard() {
           color:#6b7280;
         }
         .ppi-link{
-          color:#7DBA47;
+          color:#2E7D32;
           text-decoration:none;
           font-weight:600;
         }

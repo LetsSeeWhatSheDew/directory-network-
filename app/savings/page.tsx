@@ -21,7 +21,7 @@ export default function SavingsPage() {
         .back{font-size:.82rem;color:rgba(255,255,255,.55);text-decoration:none;font-family:system-ui,sans-serif}
         .back:hover{color:#fff}
         .wrap{max-width:620px;margin:0 auto;padding:48px 20px 60px}
-        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#7DBA47;font-family:system-ui,sans-serif;margin-bottom:12px}
+        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#2E7D32;font-family:system-ui,sans-serif;margin-bottom:12px}
         h1{font-size:clamp(1.8rem,4.5vw,2.6rem);font-weight:700;letter-spacing:-.04em;line-height:1.1;margin-bottom:10px}
         .sub{font-size:1rem;color:#6b7280;font-family:system-ui,sans-serif;line-height:1.6;margin-bottom:28px;max-width:520px}
       `}</style>

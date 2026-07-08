@@ -142,8 +142,8 @@ export default function VerifiedRow({
   if (pct == null && !time) return null;
 
   const stale = verifiedAt ? isStale(verifiedAt) : false;
-  const sage = "var(--color-sage, #7DBA47)";
-  const sageVibrant = "var(--color-sage-vibrant, #93CB5C)";
+  const sage = "var(--color-sage, #2E7D32)";
+  const sageVibrant = "var(--color-sage-vibrant, #9DBE7E)";
   const mutedDark = "rgba(247, 244, 237, 0.62)";
   const mutedLight = "var(--color-gray-500, #6B7280)";
 
@@ -155,7 +155,7 @@ export default function VerifiedRow({
     display: "inline-flex",
     alignItems: "center",
     gap: variant === "detail" ? 6 : 4,
-    fontFamily: "Manrope, system-ui, -apple-system, sans-serif",
+    fontFamily: "var(--font-body)",
     fontSize: variant === "detail" ? "0.82rem" : "0.72rem",
     fontWeight: 500,
     letterSpacing: "0.01em",
@@ -174,7 +174,7 @@ export default function VerifiedRow({
       />
       <span>
         {verb}
-        {pct != null ? <strong style={{ fontWeight: 700, color: stale ? labelColor : tone === "dark" ? "var(--color-cream, #F7F4ED)" : "var(--color-deep, #1F3D2B)" }}>{` ${pct}%`}</strong> : null}
+        {pct != null ? <strong style={{ fontWeight: 700, color: stale ? labelColor : tone === "dark" ? "var(--color-cream, #F4F5EF)" : "var(--color-deep, #1C3A22)" }}>{` ${pct}%`}</strong> : null}
         {time ? <span style={{ color: metaColor }}> · {time}</span> : null}
       </span>
     </span>

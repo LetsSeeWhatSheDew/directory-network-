@@ -131,7 +131,7 @@ function Field({
 const styles: Record<string, React.CSSProperties> = {
   form: {
     background: "#fff",
-    border: "1px solid #e8e4da",
+    border: "1px solid #DCDED2",
     borderRadius: 14,
     padding: 24,
   },
@@ -183,7 +183,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   submit: {
     width: "100%",
-    background: "#7DBA47",
+    background: "#2E7D32",
     color: "#fff",
     border: "none",
     borderRadius: 10,

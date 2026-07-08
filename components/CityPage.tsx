@@ -209,9 +209,9 @@ export default function CityPage({ config, listings = [] }: Props) {
         />
       ))}
 
-      <main className="min-h-screen bg-[#1F3D2B] text-slate-50">
+      <main className="min-h-screen bg-[#1C3A22] text-slate-50">
         {/* ---- Top gradient halo ---- */}
-        <div className="pointer-events-none fixed inset-x-0 top-0 z-0 h-64 bg-gradient-to-b from-[#1F3D2B] via-[#1F3D2B] to-transparent opacity-80" />
+        <div className="pointer-events-none fixed inset-x-0 top-0 z-0 h-64 bg-gradient-to-b from-[#1C3A22] via-[#1C3A22] to-transparent opacity-80" />
 
         {/* ---- Header / Nav ---- */}
         <div className="relative z-10">
@@ -245,7 +245,7 @@ export default function CityPage({ config, listings = [] }: Props) {
         {/* ============================================================ */}
         {/*  HERO SECTION                                                */}
         {/* ============================================================ */}
-        <section className="relative z-10 border-b border-white/5 bg-gradient-to-b from-black/60 via-[#1F3D2B] to-[#1F3D2B]">
+        <section className="relative z-10 border-b border-white/5 bg-gradient-to-b from-black/60 via-[#1C3A22] to-[#1C3A22]">
           <div className="mx-auto max-w-6xl px-4 py-10 md:py-16">
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-[11px] font-medium text-emerald-200">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />
@@ -254,7 +254,7 @@ export default function CityPage({ config, listings = [] }: Props) {
 
             <h1 className="mt-5 text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl md:text-4xl">
               Dispensaries in{" "}
-              <span className="bg-gradient-to-r from-[#7DBA47] to-[#C9A876] bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[#2E7D32] to-[#2E7D32] bg-clip-text text-transparent">
                 {city}, {state}
               </span>
             </h1>
@@ -283,7 +283,7 @@ export default function CityPage({ config, listings = [] }: Props) {
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
                 href="/get-listed"
-                className="inline-flex items-center rounded-full bg-[#7DBA47] px-4 py-2 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#6BA63B]"
+                className="inline-flex items-center rounded-full bg-[#2E7D32] px-4 py-2 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#2E5320]"
               >
                 Claim your dispensary listing
               </Link>
@@ -301,7 +301,7 @@ export default function CityPage({ config, listings = [] }: Props) {
         {/*  DISPENSARY LISTINGS (dynamic from Supabase)                  */}
         {/* ============================================================ */}
         {listings.length > 0 && (
-          <section className="relative z-10 border-b border-white/5 bg-[#1F3D2B]">
+          <section className="relative z-10 border-b border-white/5 bg-[#1C3A22]">
             <div className="mx-auto max-w-6xl px-4 py-10 md:py-14">
               <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <div>
@@ -315,7 +315,7 @@ export default function CityPage({ config, listings = [] }: Props) {
                 </div>
                 <Link
                   href="/get-listed"
-                  className="inline-flex items-center rounded-full bg-[#7DBA47] px-4 py-2 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#6BA63B]"
+                  className="inline-flex items-center rounded-full bg-[#2E7D32] px-4 py-2 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#2E5320]"
                 >
                   Add your dispensary
                 </Link>
@@ -333,7 +333,7 @@ export default function CityPage({ config, listings = [] }: Props) {
                     <Link
                       key={listing.id}
                       href={`/dispensary/${listing.slug || listing.id}`}
-                      className="group flex flex-col rounded-3xl border border-slate-800 bg-slate-900/60 p-4 text-xs text-slate-100 shadow-sm transition hover:border-[#7DBA47]/60 hover:bg-slate-900"
+                      className="group flex flex-col rounded-3xl border border-slate-800 bg-slate-900/60 p-4 text-xs text-slate-100 shadow-sm transition hover:border-[#2E7D32]/60 hover:bg-slate-900"
                     >
                       <div className="mb-2 flex items-start justify-between gap-2">
                         <div>
@@ -345,7 +345,7 @@ export default function CityPage({ config, listings = [] }: Props) {
                           </p>
                         </div>
                         {listing.is_featured && (
-                          <span className="rounded-full bg-[#7DBA47]/15 px-2 py-0.5 text-[10px] font-medium text-[#7DBA47]">
+                          <span className="rounded-full bg-[#2E7D32]/15 px-2 py-0.5 text-[10px] font-medium text-[#2E7D32]">
                             Featured
                           </span>
                         )}
@@ -357,7 +357,7 @@ export default function CityPage({ config, listings = [] }: Props) {
                       )}
                       <div className="mt-auto flex items-center justify-between pt-1 text-[11px] text-slate-400">
                         <span>View profile</span>
-                        <span className="text-slate-500 group-hover:text-[#7DBA47]">
+                        <span className="text-slate-500 group-hover:text-[#2E7D32]">
                           →
                         </span>
                       </div>
@@ -371,14 +371,14 @@ export default function CityPage({ config, listings = [] }: Props) {
 
         {/* Empty state — no listings yet */}
         {listings.length === 0 && (
-          <section className="relative z-10 border-b border-white/5 bg-[#1F3D2B]">
+          <section className="relative z-10 border-b border-white/5 bg-[#1C3A22]">
             <div className="mx-auto max-w-6xl px-4 py-10 md:py-14">
               <div className="rounded-3xl border border-dashed border-slate-700 bg-slate-900/40 px-4 py-10 text-center text-sm text-slate-400 md:px-8">
                 <p>
                   We&apos;re building the {city} dispensary directory now.{" "}
                   <Link
                     href="/get-listed"
-                    className="font-medium text-[#7DBA47] underline-offset-2 hover:underline"
+                    className="font-medium text-[#2E7D32] underline-offset-2 hover:underline"
                   >
                     Claim your listing
                   </Link>{" "}
@@ -394,7 +394,7 @@ export default function CityPage({ config, listings = [] }: Props) {
         {/* ============================================================ */}
         <section
           id="laws"
-          className="relative z-10 border-b border-white/5 bg-[#1F3D2B]"
+          className="relative z-10 border-b border-white/5 bg-[#1C3A22]"
         >
           <div className="mx-auto max-w-6xl px-4 py-10 md:py-14">
             <h2 className="mb-2 text-lg font-semibold tracking-tight text-slate-100 md:text-xl">
@@ -413,7 +413,7 @@ export default function CityPage({ config, listings = [] }: Props) {
                   key={law.title}
                   className="rounded-2xl border border-white/10 bg-slate-950/80 p-5"
                 >
-                  <div className="mb-2 text-[11px] font-semibold text-[#7DBA47]">
+                  <div className="mb-2 text-[11px] font-semibold text-[#2E7D32]">
                     {law.title}
                   </div>
                   <p className="text-xs leading-relaxed text-slate-300 md:text-sm">
@@ -445,7 +445,7 @@ export default function CityPage({ config, listings = [] }: Props) {
                   key={step.title}
                   className="rounded-3xl border border-white/10 bg-slate-950/80 p-4 text-xs text-slate-200"
                 >
-                  <div className="mb-2 text-[11px] font-semibold text-[#7DBA47]">
+                  <div className="mb-2 text-[11px] font-semibold text-[#2E7D32]">
                     {String(i + 1).padStart(2, "0")} · {step.title}
                   </div>
                   <p className="text-slate-300">{step.body}</p>
@@ -467,7 +467,7 @@ export default function CityPage({ config, listings = [] }: Props) {
         {/* ============================================================ */}
         {/*  FAQ SECTION                                                 */}
         {/* ============================================================ */}
-        <section className="relative z-10 border-b border-white/5 bg-[#1F3D2B]">
+        <section className="relative z-10 border-b border-white/5 bg-[#1C3A22]">
           <div className="mx-auto max-w-6xl px-4 py-10 md:py-14">
             <h2 className="mb-2 text-lg font-semibold tracking-tight text-slate-100 md:text-xl">
               Frequently Asked Questions
@@ -511,10 +511,10 @@ export default function CityPage({ config, listings = [] }: Props) {
                 <Link
                   key={nearby.slug}
                   href={`/cannabis/illinois/${nearby.slug}`}
-                  className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-3.5 py-1.5 text-[11px] text-slate-300 transition-colors hover:border-[#7DBA47]/60 hover:bg-slate-800 hover:text-slate-50"
+                  className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-3.5 py-1.5 text-[11px] text-slate-300 transition-colors hover:border-[#2E7D32]/60 hover:bg-slate-800 hover:text-slate-50"
                 >
                   <span>{nearby.name}</span>
-                  <span className="ml-2 rounded bg-slate-800 px-1.5 py-0.5 text-[10px] font-medium text-[#7DBA47]">
+                  <span className="ml-2 rounded bg-slate-800 px-1.5 py-0.5 text-[10px] font-medium text-[#2E7D32]">
                     {nearby.distanceMi} mi
                   </span>
                 </Link>
@@ -526,7 +526,7 @@ export default function CityPage({ config, listings = [] }: Props) {
         {/* ============================================================ */}
         {/*  EMAIL CAPTURE                                               */}
         {/* ============================================================ */}
-        <section className="relative z-10 border-b border-white/5 bg-[#1F3D2B]">
+        <section className="relative z-10 border-b border-white/5 bg-[#1C3A22]">
           <div className="mx-auto max-w-xl px-4 py-10 md:py-14">
             <CityEmailCapture city={city} state={state} />
           </div>
@@ -551,7 +551,7 @@ export default function CityPage({ config, listings = [] }: Props) {
                 <Link
                   key={c.slug}
                   href={`/cannabis/illinois/${c.slug}`}
-                  className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-[11px] text-slate-300 transition-colors hover:border-[#7DBA47]/60 hover:bg-slate-800 hover:text-slate-50"
+                  className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-[11px] text-slate-300 transition-colors hover:border-[#2E7D32]/60 hover:bg-slate-800 hover:text-slate-50"
                 >
                   {c.name}
                 </Link>
@@ -560,7 +560,7 @@ export default function CityPage({ config, listings = [] }: Props) {
 
             <div className="mt-6 flex flex-col gap-3 border-t border-white/5 pt-5 text-[11px] text-slate-500 md:flex-row md:items-center md:justify-between">
               <div className="flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#7DBA47]/10 text-[10px] font-semibold text-[#7DBA47]">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#2E7D32]/10 text-[10px] font-semibold text-[#2E7D32]">
                   PG
                 </div>
                 <span>

@@ -1,87 +1,115 @@
 @import "tailwindcss";
 
 /* ============================================================
- * PuffPrice global tokens — locked per docs/brand-system.md
- * (2026-05-04, with Image-1 sampled-color correction).
+ * PuffPrice — Design Direction v2 (2026-06-13)
+ * "Warm price-truth instrument."
  *
- * Two layers:
- *   :root          — raw token hexes
- *   @theme inline  — Tailwind v4 token bridge (utility class names)
+ * Foundation layer. Three greens + warm neutrals, mono numerals,
+ * FLAT fills, hairline rules instead of shadows. No gradients, no
+ * glow, no soft shadows — anywhere.
  *
- * Older identifiers (--color-navy, --color-terracotta) are aliased to
- * the new values for backwards compatibility while components migrate
- * to the semantic names (--color-deep, --color-sand).
+ * Two token layers:
+ *   :root          — raw v2 tokens (--pp-*) + legacy --color-* aliases
+ *   @theme inline  — Tailwind v4 utility bridge
+ *
+ * Legacy --color-* / --font-* names are REMAPPED onto the v2 palette so
+ * components written against the old token names inherit the new look
+ * during migration. The tan/gold (--color-sand / --color-terracotta) is
+ * remapped to signal-green so no warm-tan survives anywhere.
  * ============================================================ */
 
 :root {
-  /* --- Brand primitives (locked, sampled from Image 1) --- */
-  --color-deep: #1F3D2B;          /* Deep cannabis-green — hero panel, footer band, dark surfaces */
-  --color-deep-ink: #2A4F38;      /* Slightly lifted for hover surfaces / nested dark cards */
-  --color-sage: #7DBA47;          /* Signature accent — CTAs, $ in tagline, verified pills */
-  --color-sage-vibrant: #93CB5C;  /* Hover / pulse */
-  --color-sage-deep: #6BA63B;     /* Active / pressed */
-  --color-sand: #C9A876;          /* Warm earth secondary — sparingly */
-  --color-sand-deep: #B6925E;     /* Pressed / sand-on-dark variant */
-  --color-cream: #F7F4ED;         /* Default page background — warmer than white */
-  --color-cream-pure: #FAFAF7;    /* Card / input surface */
+  /* --- v2 palette (§3) --- */
+  --pp-ink: #15231A;            /* primary text — near-black green */
+  --pp-paper: #F4F5EF;          /* page background — warm-neutral */
+  --pp-surface: #FCFCFA;        /* card / board surfaces */
+  --pp-canopy: #1C3A22;         /* deep brand green — header strips, dark sections (FLAT) */
+  --pp-canopy-text: #F4F1E8;    /* text on canopy */
+  --pp-canopy-eyebrow: #9DBE7E; /* eyebrow / label on canopy */
+  --pp-signal: #2E7D32;         /* the ONE earned accent — best price, verified, savings */
+  --pp-signal-ink: #2E5320;     /* text on signal-tint */
+  --pp-best-tint: #E8F0DF;      /* fill behind the #1 / best-price row */
+  --pp-best-border: #CBE0B4;    /* border on the best-price row */
+  --pp-high: #C24A1E;           /* above-median / pricier marker — used sparingly */
+  --pp-muted: #6B7268;          /* secondary text */
+  --pp-strike: #9A9A8E;         /* struck shelf price */
+  --pp-border: #DCDED2;         /* hairline borders (replaces shadows) */
+
+  /* Body text — readable dark on paper, a touch warmer than pure ink */
+  --pp-body: #2C382F;
+
+  /* --- Legacy --color-* names remapped onto v2 (do not add new uses) --- */
+  --color-deep: var(--pp-canopy);
+  --color-deep-ink: #24492C;            /* slightly lifted canopy for hover/nested */
+  --color-sage: var(--pp-signal);       /* legacy accent -> signal green */
+  --color-sage-vibrant: #379A3D;        /* signal hover */
+  --color-sage-deep: var(--pp-signal-ink);
+  --color-sand: var(--pp-signal);       /* tan/gold GONE -> signal (readable, never tan) */
+  --color-sand-deep: var(--pp-signal-ink);
+  --color-cream: var(--pp-paper);
+  --color-cream-pure: var(--pp-surface);
   --color-white: #FFFFFF;
-  --color-text-on-deep: #F7F4ED;  /* Body / headlines on deep surface */
+  --color-text-on-deep: var(--pp-canopy-text);
 
-  /* --- Backwards-compat aliases (do not introduce new uses) --- */
-  --color-navy: var(--color-deep);          /* legacy: was #0F1F3D */
+  /* Backwards-compat aliases */
+  --color-navy: var(--pp-canopy);
   --color-navy-ink: var(--color-deep-ink);
-  --color-green: var(--color-sage);         /* legacy: was #16A34A */
+  --color-green: var(--pp-signal);
   --color-green-vibrant: var(--color-sage-vibrant);
-  --color-green-deep: var(--color-sage-deep);
-  --color-terracotta: var(--color-sand);    /* legacy: was #C8765E */
+  --color-green-deep: var(--pp-signal-ink);
+  --color-terracotta: var(--pp-signal);  /* tan/gold GONE */
 
-  /* --- Neutral scale (warm-tinted) --- */
-  --color-gray-50: #FAFAF7;
-  --color-gray-100: #F1EEE7;
-  --color-gray-200: #E8E2D5;
-  --color-gray-300: #D1CABB;
-  --color-gray-400: #9CA3AF;
-  --color-gray-500: #6B7280;
-  --color-gray-600: #4B5563;
-  --color-gray-700: #374151;       /* primary body text on cream */
-  --color-gray-900: #1F3D2B;       /* alias of deep */
+  /* --- Neutral scale (warm-tinted, pulled toward the v2 paper/border) --- */
+  --color-gray-50: var(--pp-surface);
+  --color-gray-100: #ECEDE5;
+  --color-gray-200: var(--pp-border);
+  --color-gray-300: #CFD2C6;
+  --color-gray-400: #9CA39A;
+  --color-gray-500: var(--pp-muted);
+  --color-gray-600: #545B52;
+  --color-gray-700: var(--pp-body);      /* primary body text on paper */
+  --color-gray-900: var(--pp-ink);
 
   /* --- Status --- */
-  --color-status-verified: var(--color-sage);
-  --color-status-stale: #D97706;
-  --color-status-expired: #B91C1C;
+  --color-status-verified: var(--pp-signal);
+  --color-status-stale: #B8741C;
+  --color-status-expired: #B0331A;
   --color-status-info: #2563EB;
 
   /* --- Semantic surface aliases --- */
-  --color-bg: var(--color-cream);
-  --color-surface: var(--color-cream-pure);
+  --color-bg: var(--pp-paper);
+  --color-surface: var(--pp-surface);
   --color-surface-strong: var(--color-white);
-  --color-text: var(--color-gray-700);
-  --color-text-strong: var(--color-deep);
-  --color-text-muted: var(--color-gray-500);
-  --color-border: var(--color-gray-200);
+  --color-text: var(--pp-body);
+  --color-text-strong: var(--pp-ink);
+  --color-text-muted: var(--pp-muted);
+  --color-border: var(--pp-border);
 
-  /* --- Type stack — Manrope single family per spec § 3 --- */
-  --font-manrope: var(--font-manrope-loaded), -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-  --font-display: var(--font-manrope);
-  --font-ui: var(--font-manrope);
-  --font-serif: var(--font-manrope);     /* spec retires the serif; alias to Manrope so any straggler ref still works */
-  --font-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
-  --font-sans: var(--font-manrope);
+  /* --- Type — Space Grotesk (display) / Inter (body) / JetBrains Mono (numerals) --- */
+  --font-display: var(--font-display-loaded), "Space Grotesk", system-ui, sans-serif;
+  --font-body: var(--font-body-loaded), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-mono: var(--font-mono-loaded), "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  /* Legacy role aliases */
+  --font-manrope: var(--font-body);
+  --font-ui: var(--font-body);
+  --font-sans: var(--font-body);
+  --font-serif: var(--font-body);       /* serif retired -> body */
 
-  /* --- Elevation (warm shadows that lean into deep tint) --- */
-  --shadow-sm: 0 1px 2px rgba(31, 61, 43, 0.05), 0 1px 3px rgba(31, 61, 43, 0.07);
-  --shadow-md: 0 4px 12px rgba(31, 61, 43, 0.08), 0 2px 4px rgba(31, 61, 43, 0.05);
-  --shadow-lg: 0 12px 32px rgba(31, 61, 43, 0.14), 0 4px 12px rgba(31, 61, 43, 0.08);
+  /* --- Elevation REMOVED — flat fills + hairline rules only.
+   *     Shadow tokens kept as `none` so any component referencing them
+   *     contributes no shadow. --- */
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
 
-  /* --- Radii (modern, not bouncy) --- */
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 20px;
+  /* --- Radii (restrained, never the only structural device; ≤14px) --- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 14px;
   --radius-pill: 9999px;
 
-  /* --- Spacing scale (px, exposed as vars for inline use) --- */
+  /* --- Spacing scale --- */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -95,51 +123,63 @@
 }
 
 @theme inline {
-  --color-background: var(--color-cream);
-  --color-foreground: var(--color-gray-700);
+  --color-background: var(--pp-paper);
+  --color-foreground: var(--pp-body);
 
-  /* New semantic names */
-  --color-deep: var(--color-deep);
+  /* v2 palette as utilities */
+  --color-pp-ink: var(--pp-ink);
+  --color-pp-paper: var(--pp-paper);
+  --color-pp-surface: var(--pp-surface);
+  --color-pp-canopy: var(--pp-canopy);
+  --color-pp-canopy-text: var(--pp-canopy-text);
+  --color-pp-canopy-eyebrow: var(--pp-canopy-eyebrow);
+  --color-pp-signal: var(--pp-signal);
+  --color-pp-signal-ink: var(--pp-signal-ink);
+  --color-pp-best-tint: var(--pp-best-tint);
+  --color-pp-best-border: var(--pp-best-border);
+  --color-pp-high: var(--pp-high);
+  --color-pp-muted: var(--pp-muted);
+  --color-pp-strike: var(--pp-strike);
+  --color-pp-border: var(--pp-border);
+
+  /* Legacy names (remapped above) kept as utilities */
+  --color-deep: var(--pp-canopy);
   --color-deep-ink: var(--color-deep-ink);
-  --color-sage: var(--color-sage);
+  --color-sage: var(--pp-signal);
   --color-sage-vibrant: var(--color-sage-vibrant);
-  --color-sage-deep: var(--color-sage-deep);
-  --color-sand: var(--color-sand);
-  --color-sand-deep: var(--color-sand-deep);
-  --color-cream: var(--color-cream);
-  --color-cream-pure: var(--color-cream-pure);
+  --color-sage-deep: var(--pp-signal-ink);
+  --color-sand: var(--pp-signal);
+  --color-cream: var(--pp-paper);
+  --color-cream-pure: var(--pp-surface);
 
-  /* Backwards-compat utility names */
-  --color-navy: var(--color-navy);
-  --color-navy-ink: var(--color-navy-ink);
-  --color-green: var(--color-green);
-  --color-green-vibrant: var(--color-green-vibrant);
-  --color-green-deep: var(--color-green-deep);
-  --color-terracotta: var(--color-terracotta);
+  --color-navy: var(--pp-canopy);
+  --color-green: var(--pp-signal);
+  --color-terracotta: var(--pp-signal);
 
-  /* Neutrals */
   --color-gray-50: var(--color-gray-50);
   --color-gray-100: var(--color-gray-100);
-  --color-gray-200: var(--color-gray-200);
+  --color-gray-200: var(--pp-border);
   --color-gray-300: var(--color-gray-300);
   --color-gray-400: var(--color-gray-400);
-  --color-gray-500: var(--color-gray-500);
+  --color-gray-500: var(--pp-muted);
   --color-gray-600: var(--color-gray-600);
-  --color-gray-700: var(--color-gray-700);
-  --color-gray-900: var(--color-gray-900);
+  --color-gray-700: var(--pp-body);
+  --color-gray-900: var(--pp-ink);
 
-  /* Status */
-  --color-status-verified: var(--color-status-verified);
+  --color-status-verified: var(--pp-signal);
   --color-status-stale: var(--color-status-stale);
   --color-status-expired: var(--color-status-expired);
   --color-status-info: var(--color-status-info);
 
-  /* Type roles */
-  --font-display: var(--font-display);
-  --font-ui: var(--font-ui);
-  --font-serif: var(--font-serif);
-  --font-mono: var(--font-mono);
-  --font-sans: var(--font-sans);
+  /* Type roles — reference the next/font-loaded families directly.
+     (Must NOT self-reference: `--font-x: var(--font-x)` resolves to empty
+     and silently drops the whole site to system fonts.) */
+  --font-display: var(--font-display-loaded), "Space Grotesk", system-ui, sans-serif;
+  --font-body: var(--font-body-loaded), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-ui: var(--font-body-loaded), "Inter", system-ui, sans-serif;
+  --font-serif: var(--font-body-loaded), "Inter", system-ui, sans-serif;
+  --font-mono: var(--font-mono-loaded), "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-sans: var(--font-body-loaded), "Inter", system-ui, sans-serif;
 }
 
 /* ============================================================
@@ -149,9 +189,9 @@
 html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 
 body {
-  background: var(--color-cream);
-  color: var(--color-gray-700);
-  font-family: var(--font-ui);
+  background: var(--pp-paper);
+  color: var(--pp-body);
+  font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.55;
   font-weight: 400;
@@ -159,135 +199,123 @@ body {
 }
 
 /* ============================================================
- * Type scale — spec § 3
- * Class names match role rather than visual size.
+ * Type scale — Space Grotesk display, Inter body, JetBrains numerals
  * ============================================================ */
 
 h1, .pp-h1 {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(2.5rem, 5vw + 1rem, 3.25rem);    /* 40 → 52px */
-  letter-spacing: -0.035em;
+  font-weight: 700;
+  font-size: clamp(2.5rem, 5vw + 1rem, 3.25rem);
+  letter-spacing: -0.030em;
   line-height: 1.10;
-  color: var(--color-deep);
+  color: var(--pp-ink);
 }
 
 .pp-hero {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(3rem, 6vw + 1rem, 4.5rem);       /* 48 → 72px */
-  letter-spacing: -0.04em;
-  line-height: 1.05;
-  color: var(--color-deep);
+  font-weight: 700;
+  font-size: clamp(3rem, 6vw + 1rem, 4.5rem);
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+  color: var(--pp-ink);
 }
 
 h2, .pp-h2 {
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 700;
   font-size: clamp(2rem, 3vw + 1rem, 2.5rem);
-  letter-spacing: -0.030em;
+  letter-spacing: -0.025em;
   line-height: 1.15;
-  color: var(--color-deep);
+  color: var(--pp-ink);
 }
 
 h3, .pp-h3 {
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 500;
   font-size: clamp(1.375rem, 1vw + 1rem, 1.75rem);
-  letter-spacing: -0.020em;
+  letter-spacing: -0.018em;
   line-height: 1.20;
-  color: var(--color-deep);
+  color: var(--pp-ink);
 }
 
 h4, .pp-h4 {
-  font-family: var(--font-ui);
-  font-weight: 600;
-  font-size: 1.0625rem;                              /* 17px */
-  letter-spacing: -0.010em;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.0625rem;
+  letter-spacing: -0.008em;
   line-height: 1.30;
-  color: var(--color-deep);
+  color: var(--pp-ink);
 }
 
+/* Eyebrows / labels — the "data texture": JetBrains Mono, uppercase,
+   wide tracking. Muted by default so signal-green stays earned. */
 .pp-eyebrow {
-  font-family: var(--font-ui);
-  font-weight: 800;
-  font-size: 0.6875rem;                              /* 11px */
-  letter-spacing: 0.14em;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.6875rem;
+  letter-spacing: 0.10em;
   text-transform: uppercase;
   line-height: 1.4;
-  color: var(--color-sage);
+  color: var(--pp-muted);
 }
+.pp-eyebrow-signal { color: var(--pp-signal-ink); }
+.pp-eyebrow-canopy { color: var(--pp-canopy-eyebrow); }
 
 .pp-meta, .pp-metadata {
-  font-family: var(--font-ui);
-  font-weight: 500;
-  font-size: 0.8125rem;                              /* 13px */
-  letter-spacing: 0.01em;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.8125rem;
+  letter-spacing: 0.005em;
   line-height: 1.4;
-  color: var(--color-gray-500);
+  color: var(--pp-muted);
 }
 
 .pp-longform {
-  font-family: var(--font-ui);
-  font-size: 1.0625rem;                              /* 17px */
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
   font-weight: 400;
   line-height: 1.65;
-  color: var(--color-gray-700);
+  color: var(--pp-body);
 }
 
-.pp-price, .price, .discount, .distance, .timestamp, .tabular {
+/* Numerals — ALL prices, %, counts, timestamps. Mono, tabular. */
+.price, .pp-price, .discount, .distance, .timestamp, .tabular {
+  font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1;
-  font-family: var(--font-display);
-  font-weight: 800;
-  letter-spacing: -0.020em;
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 /* ============================================================
- * Surfaces
+ * Surfaces — flat fills, hairline rules, NO shadows
  * ============================================================ */
 
 .pp-card {
-  background: var(--color-cream-pure);
-  border: 1px solid var(--color-gray-200);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow 200ms ease, transform 200ms ease, border-color 200ms ease;
+  background: var(--pp-surface);
+  border: 1px solid var(--pp-border);
+  border-radius: var(--radius-lg);
+  transition: border-color 160ms ease, background-color 160ms ease;
 }
-
-.pp-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
-  border-color: var(--color-gray-300);
-}
+.pp-card:hover { border-color: var(--color-gray-300); }
 
 .pp-card-elevated {
-  background: var(--color-cream-pure);
-  border: 1px solid var(--color-gray-200);
+  background: var(--pp-surface);
+  border: 1px solid var(--pp-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  transition: box-shadow 200ms ease, transform 200ms ease;
+  transition: border-color 160ms ease;
 }
+.pp-card-elevated:hover { border-color: var(--color-gray-300); }
 
-.pp-card-elevated:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
-}
-
-/* Deep brand surface — used on hero panel + footer band. */
+/* Deep brand surface — canopy strips + footer band. FLAT. */
 .pp-surface-deep {
-  background-color: var(--color-deep);
-  color: var(--color-text-on-deep);
+  background-color: var(--pp-canopy);
+  color: var(--pp-canopy-text);
 }
 
-/* Leaf-pattern watermark utility — applied alongside .pp-surface-deep.
-   Uses public/brand/leaf-pattern.svg as a 96px tile via mask so the
-   currentColor in the SVG inherits from text color. Opacity is the
-   responsibility of the variant class (pp-leaf-04 / 05 / 06).        */
-.pp-leaf {
-  position: relative;
-  isolation: isolate;
-}
+/* Leaf-pattern watermark — retained but flattened (very low opacity,
+   no gradient). Used alongside .pp-surface-deep on canopy moments. */
+.pp-leaf { position: relative; isolation: isolate; }
 .pp-leaf::before {
   content: "";
   position: absolute;
@@ -296,7 +324,7 @@ h4, .pp-h4 {
   background-image: url("/brand/leaf-pattern.svg");
   background-size: 96px 96px;
   background-repeat: repeat;
-  opacity: 0.06;
+  opacity: 0.05;
   pointer-events: none;
 }
 .pp-leaf > * { position: relative; z-index: 1; }
@@ -304,24 +332,19 @@ h4, .pp-h4 {
 .pp-leaf-05::before { opacity: 0.05; }
 .pp-leaf-06::before { opacity: 0.06; }
 
-/* Hero gradient — kept for legacy components; new heroes use pp-surface-deep */
-.pp-hero-bg {
-  background:
-    radial-gradient(ellipse at 80% 20%, rgba(201, 168, 118, 0.10), transparent 55%),
-    radial-gradient(ellipse at 20% 80%, rgba(125, 186, 71, 0.06), transparent 50%),
-    var(--color-cream);
-}
+/* Legacy hero-gradient utility — flattened to plain paper (no gradient). */
+.pp-hero-bg { background: var(--pp-paper); }
 
-/* Section divider — thin gradient rule */
+/* Section divider — single hairline rule (no gradient). */
 .pp-divider {
   height: 1px;
-  background: linear-gradient(to right, transparent, var(--color-gray-200) 20%, var(--color-gray-200) 80%, transparent);
+  background: var(--pp-border);
   border: 0;
   margin: 0;
 }
 
 /* ============================================================
- * Section padding scale (spec § 4)
+ * Section padding scale
  * ============================================================ */
 
 .pp-section-hero      { padding-top: clamp(4rem, 8vw, 8rem);  padding-bottom: clamp(4rem, 8vw, 8rem); }
@@ -336,8 +359,8 @@ h4, .pp-h4 {
 .pp-container-admin   { width: 100%; max-width: 1440px; margin: 0 auto; padding-inline: clamp(1rem, 4vw, 2rem); }
 
 /* ============================================================
- * Buttons — primary CTA (sage) and secondary (outline / ghost)
- * Used by all CTAs sitewide. Minimum touch target 44px.
+ * Buttons — flat fills, hairline borders, no glow/shadow.
+ * Primary uses signal green (sanctioned for the action CTA, §6).
  * ============================================================ */
 
 .pp-btn {
@@ -345,54 +368,56 @@ h4, .pp-h4 {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  font-family: var(--font-ui);
-  font-weight: 600;
-  font-size: 0.9375rem;       /* 15px */
-  letter-spacing: -0.005em;
-  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  letter-spacing: 0;
+  border-radius: var(--radius-md);
   padding: 0.75rem 1.5rem;
   min-height: 44px;
   border: 1px solid transparent;
-  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
 }
-.pp-btn:focus-visible { outline: 2px solid var(--color-sage); outline-offset: 2px; }
+.pp-btn:focus-visible { outline: 2px solid var(--pp-signal); outline-offset: 2px; }
 
 .pp-btn-primary {
-  background: var(--color-sage);
-  color: var(--color-deep);
-  border-color: var(--color-sage);
+  background: var(--pp-signal);
+  color: #FFFFFF;
+  border-color: var(--pp-signal);
 }
 .pp-btn-primary:hover  { background: var(--color-sage-vibrant); border-color: var(--color-sage-vibrant); }
-.pp-btn-primary:active { background: var(--color-sage-deep);    border-color: var(--color-sage-deep); transform: translateY(1px); }
+.pp-btn-primary:active { background: var(--pp-signal-ink);      border-color: var(--pp-signal-ink); }
 
+/* Legacy "sand" button -> canopy fill (tan removed). Used where a second
+   solid CTA appears on paper. */
 .pp-btn-sand {
-  background: var(--color-sand);
-  color: var(--color-deep);
-  border-color: var(--color-sand);
+  background: var(--pp-canopy);
+  color: var(--pp-canopy-text);
+  border-color: var(--pp-canopy);
 }
-.pp-btn-sand:hover  { background: var(--color-sand-deep); border-color: var(--color-sand-deep); color: var(--color-cream); }
-.pp-btn-sand:active { transform: translateY(1px); }
+.pp-btn-sand:hover  { background: var(--color-deep-ink); border-color: var(--color-deep-ink); }
+.pp-btn-sand:active { background: var(--pp-canopy); }
 
 .pp-btn-outline {
   background: transparent;
-  color: var(--color-deep);
+  color: var(--pp-ink);
   border-color: var(--color-gray-300);
 }
-.pp-btn-outline:hover { border-color: var(--color-deep); }
+.pp-btn-outline:hover { border-color: var(--pp-canopy); }
 
 .pp-btn-outline-cream {
   background: transparent;
-  color: var(--color-cream);
-  border-color: rgba(247, 244, 237, 0.5);
+  color: var(--pp-canopy-text);
+  border-color: rgba(244, 241, 232, 0.45);
 }
-.pp-btn-outline-cream:hover { border-color: var(--color-cream); }
+.pp-btn-outline-cream:hover { border-color: var(--pp-canopy-text); }
 
 .pp-btn-ghost {
   background: transparent;
-  color: var(--color-deep);
+  color: var(--pp-ink);
   border-color: transparent;
 }
 .pp-btn-ghost:hover { background: var(--color-gray-100); }
@@ -402,61 +427,60 @@ h4, .pp-h4 {
 .pp-btn-xl  { padding: 1.125rem 2.25rem; min-height: 64px; font-size: 1.0625rem; }
 
 /* ============================================================
- * Badges and pills (used in deal cards, status indicators)
+ * Badges and pills — flat, hairline where outlined
  * ============================================================ */
 
 .pp-pill {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  font-family: var(--font-ui);
-  font-weight: 600;
+  font-family: var(--font-body);
+  font-weight: 500;
   font-size: 0.75rem;
-  letter-spacing: 0.01em;
+  letter-spacing: 0;
   padding: 0.25rem 0.625rem;
   border-radius: var(--radius-pill);
   white-space: nowrap;
 }
-.pp-pill-sage     { background: var(--color-sage);          color: var(--color-deep); }
-.pp-pill-sage-soft { background: rgba(125, 186, 71, 0.16);  color: var(--color-sage-deep); }
-.pp-pill-sand     { background: var(--color-sand);          color: var(--color-deep); }
-.pp-pill-deep     { background: var(--color-deep);          color: var(--color-cream); }
-.pp-pill-stale    { background: rgba(217, 119, 6, 0.16);    color: #92510A; }
-.pp-pill-expired  { background: rgba(185, 28, 28, 0.12);    color: #7F1818; }
-.pp-pill-outline  { background: transparent;                color: var(--color-gray-600); border: 1px solid var(--color-gray-300); }
+.pp-pill-sage     { background: var(--pp-signal);        color: #FFFFFF; }
+.pp-pill-sage-soft { background: var(--pp-best-tint);    color: var(--pp-signal-ink); }
+.pp-pill-sand     { background: var(--pp-canopy);        color: var(--pp-canopy-text); }
+.pp-pill-deep     { background: var(--pp-canopy);        color: var(--pp-canopy-text); }
+.pp-pill-stale    { background: rgba(184, 116, 28, 0.14); color: #8A540E; }
+.pp-pill-expired  { background: rgba(176, 51, 26, 0.12);  color: #7F1818; }
+.pp-pill-outline  { background: transparent;             color: var(--pp-muted); border: 1px solid var(--color-gray-300); }
 
-/* Discount pill — solid sage, larger and more visible than meta pills */
+/* Legacy discount pill — kept for compatibility but de-emphasized
+   (it is no longer the deal hero). Mono numerals, flat signal-tint. */
 .pp-discount {
   display: inline-flex;
   align-items: center;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 0.8125rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.75rem;
   letter-spacing: 0;
-  padding: 0.3125rem 0.625rem;
+  padding: 0.25rem 0.5rem;
   border-radius: var(--radius-sm);
-  background: var(--color-sage);
-  color: var(--color-deep);
+  background: var(--pp-best-tint);
+  color: var(--pp-signal-ink);
   font-variant-numeric: tabular-nums;
 }
 
 /* ============================================================
- * Motion — load + scroll-in, prefers-reduced-motion-aware
+ * Motion — load + scroll-in, reduced-motion-aware. No glow pulses.
  * ============================================================ */
 
 @keyframes pp-fade-up {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes pp-fade-in {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
-
-@keyframes pp-pulse-dot {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(125, 186, 71, 0.45); }
-  50%      { box-shadow: 0 0 0 6px rgba(125, 186, 71, 0); }
+@keyframes pp-blink-dot {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
 }
 
 .pp-fade-up { animation: pp-fade-up 600ms cubic-bezier(0.16, 1, 0.3, 1) both; }
@@ -465,13 +489,14 @@ h4, .pp-h4 {
 .pp-fade-up-delay-3 { animation: pp-fade-up 600ms cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: 240ms; }
 .pp-fade-in { animation: pp-fade-in 400ms ease both; }
 
+/* Live dot — opacity blink only (no box-shadow glow). */
 .pp-pulse-dot {
   display: inline-block;
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 9999px;
-  background: var(--color-sage-vibrant);
-  animation: pp-pulse-dot 1800ms ease-in-out infinite;
+  background: var(--pp-signal);
+  animation: pp-blink-dot 1800ms ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -495,8 +520,8 @@ h4, .pp-h4 {
 }
 
 ::selection {
-  background: rgba(125, 186, 71, 0.20);
-  color: var(--color-deep);
+  background: var(--pp-best-tint);
+  color: var(--pp-ink);
 }
 
 /* ============================================================
@@ -506,25 +531,226 @@ h4, .pp-h4 {
 .pp-input {
   display: block;
   width: 100%;
-  background: var(--color-cream-pure);
-  color: var(--color-deep);
-  border: 1px solid var(--color-gray-200);
+  background: var(--pp-surface);
+  color: var(--pp-ink);
+  border: 1px solid var(--pp-border);
   border-radius: var(--radius-md);
   padding: 0.75rem 1rem;
-  font-family: var(--font-ui);
+  font-family: var(--font-body);
   font-size: 1rem;
   line-height: 1.4;
-  transition: border-color 160ms ease, box-shadow 160ms ease;
+  transition: border-color 160ms ease;
 }
 .pp-input::placeholder { color: var(--color-gray-400); }
-.pp-input:focus { outline: none; border-color: var(--color-sage); box-shadow: 0 0 0 3px rgba(125, 186, 71, 0.18); }
+.pp-input:focus { border-color: var(--pp-signal); outline: 2px solid var(--pp-signal); outline-offset: 1px; }
 
 .pp-label {
-  font-family: var(--font-ui);
+  font-family: var(--font-body);
   font-weight: 500;
   font-size: 0.8125rem;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.005em;
   color: var(--color-gray-600);
   display: inline-block;
   margin-bottom: 0.375rem;
+}
+
+/* The .price utility convenience (§10) — mono tabular numerals anywhere. */
+.price { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+/* ============================================================
+ * PriceBoard — the signature object (brief §4)
+ * Flat fills, hairline ruled rows, mono numerals. Shared by the
+ * homepage, city pages, and the single-deal card.
+ * ============================================================ */
+
+.pb {
+  background: var(--pp-surface);
+  border: 1px solid var(--pp-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  width: 100%;
+}
+
+/* 1 — Canopy strip */
+.pb-canopy {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: var(--pp-canopy);
+  color: var(--pp-canopy-text);
+  padding: 0.625rem 1rem;
+}
+.pb-wordmark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  letter-spacing: -0.01em;
+  color: var(--pp-canopy-text);
+}
+.pb-wordmark-dollar { color: var(--pp-signal); }
+.pb-canopy-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+  color: var(--pp-canopy-eyebrow);
+}
+
+/* 2 — Unit header */
+.pb-head {
+  padding: 0.875rem 1rem 0.75rem;
+  border-bottom: 1px solid var(--pp-border);
+}
+.pb-head .pp-eyebrow { margin: 0 0 0.375rem; }
+.pb-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.125rem;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  color: var(--pp-ink);
+  margin: 0;
+}
+.pb-subline {
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  color: var(--pp-muted);
+  text-transform: uppercase;
+  margin: 0.375rem 0 0;
+}
+
+/* 3 — Ranked rows */
+.pb-rows { display: flex; flex-direction: column; }
+.pb-row {
+  display: grid;
+  grid-template-columns: 1.75rem 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.8125rem 1rem;
+  border-top: 1px solid var(--pp-border);
+  text-decoration: none;
+  color: inherit;
+}
+.pb-rows > .pb-row:first-child { border-top: 0; }
+.pb-row-link { transition: background-color 140ms ease; }
+.pb-row-link:hover { background: rgba(46, 125, 50, 0.04); }
+.pb-row-best {
+  background: var(--pp-best-tint);
+  border-top-color: var(--pp-best-border);
+}
+.pb-row-best + .pb-row { border-top-color: var(--pp-best-border); }
+
+.pb-rank {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: var(--pp-muted);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.pb-row-best .pb-rank { color: var(--pp-signal-ink); }
+
+.pb-row-main { display: flex; flex-direction: column; gap: 0.1875rem; min-width: 0; }
+.pb-store {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  letter-spacing: -0.01em;
+  color: var(--pp-ink);
+  line-height: 1.2;
+}
+.pb-row-best .pb-store { font-weight: 700; }
+.pb-row-sub {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.6875rem;
+  color: var(--pp-muted);
+  letter-spacing: 0.02em;
+}
+.pb-row-sub .price { font-size: 0.6875rem; }
+.pb-dot { color: var(--pp-border); }
+
+.pb-row-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.125rem;
+  text-align: right;
+}
+.pb-otd {
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: var(--pp-ink);
+  line-height: 1.05;
+}
+.pb-row-best .pb-otd { color: var(--pp-signal-ink); }
+.pb-strike {
+  font-size: 0.6875rem;
+  color: var(--pp-strike);
+  text-decoration: line-through;
+}
+.pb-best-flag {
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--pp-signal-ink);
+  background: rgba(46, 125, 50, 0.14);
+  padding: 0.125rem 0.3125rem;
+  border-radius: var(--radius-sm);
+  margin-top: 0.125rem;
+}
+.pb-above {
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--pp-high);
+}
+
+/* 4 — Reference line */
+.pb-ref {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.625rem 1rem;
+  border-top: 1px solid var(--pp-border);
+  background: var(--pp-surface);
+}
+.pb-ref-median {
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  color: var(--pp-muted);
+}
+.pb-ref-verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+  color: var(--pp-signal-ink);
+}
+
+/* 5 — Kicker */
+.pb-kicker {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--pp-signal-ink);
+  background: rgba(46, 125, 50, 0.08);
+  border-top: 1px solid var(--pp-best-border);
+  padding: 0.75rem 1rem;
+  margin: 0;
+}
+
+@media (max-width: 380px) {
+  .pb-row { gap: 0.5rem; padding: 0.75rem; grid-template-columns: 1.5rem 1fr auto; }
+  .pb-otd { font-size: 1.0625rem; }
+  .pb-title { font-size: 1.0625rem; }
 }

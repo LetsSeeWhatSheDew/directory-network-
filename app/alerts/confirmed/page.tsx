@@ -13,7 +13,7 @@ export const metadata = {
 
 export default function AlertsConfirmedPage() {
   return (
-    <div className="pp-surface-deep pp-leaf pp-leaf-04" style={{ fontFamily: "Manrope, system-ui, sans-serif", minHeight: "100vh", color: "var(--color-cream, #F7F4ED)", display: "flex", flexDirection: "column" }}>
+    <div className="pp-surface-deep pp-leaf pp-leaf-04" style={{ fontFamily: "var(--font-body)", minHeight: "100vh", color: "var(--color-cream, #F7F4ED)", display: "flex", flexDirection: "column" }}>
       <Nav variant="deep" />
 
       <main style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 24px" }}>
@@ -71,7 +71,7 @@ export default function AlertsConfirmedPage() {
 
           <Link href="/" style={{
             display: "inline-block",
-            background: "#7DBA47", color: "#fff",
+            background: "#2E7D32", color: "#fff",
             padding: "12px 28px", borderRadius: 10,
             textDecoration: "none", fontFamily: "system-ui, sans-serif",
             fontWeight: 700, fontSize: ".95rem",

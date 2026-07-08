@@ -41,13 +41,13 @@ export default function AboutIndexPage() {
         .wrap{max-width:720px;margin:0 auto;padding:56px 28px 80px}
         .eyebrow{
           font-family:system-ui,sans-serif;font-size:.72rem;font-weight:700;
-          letter-spacing:.14em;text-transform:uppercase;color:#7DBA47;margin-bottom:14px;
+          letter-spacing:.14em;text-transform:uppercase;color:#2E7D32;margin-bottom:14px;
         }
         h1{
           font-size:clamp(2rem,5vw,2.8rem);font-weight:700;color:#1F3D2B;
           letter-spacing:-.04em;line-height:1.08;margin-bottom:18px;
         }
-        h1 em{color:#7DBA47;font-style:normal}
+        h1 em{color:#2E7D32;font-style:normal}
         .lede{
           font-size:1.1rem;color:#374151;line-height:1.55;
           margin-bottom:32px;max-width:60ch;
@@ -63,11 +63,11 @@ export default function AboutIndexPage() {
         ul{padding-left:20px;margin-bottom:20px}
         code{
           font-family:ui-monospace,Menlo,monospace;font-size:.92em;
-          background:#fff;border:1px solid #e8e4da;padding:1px 6px;border-radius:4px;
+          background:#fff;border:1px solid #DCDED2;padding:1px 6px;border-radius:4px;
         }
         .promise{
           margin-top:40px;padding:22px 24px;
-          background:#fff;border:1px solid #e8e4da;border-left:4px solid #7DBA47;
+          background:#fff;border:1px solid #DCDED2;border-left:4px solid #2E7D32;
           border-radius:12px;box-shadow:0 4px 16px rgba(15,31,61,.04);
         }
         .promise h2{margin:0 0 8px;font-size:1.1rem}
@@ -75,7 +75,7 @@ export default function AboutIndexPage() {
         .back-link{
           display:inline-block;margin-top:36px;
           font-family:system-ui,sans-serif;font-size:.88rem;font-weight:600;
-          color:#7DBA47;text-decoration:none;
+          color:#2E7D32;text-decoration:none;
         }
         .back-link:hover{text-decoration:underline}
       `}</style>
@@ -133,7 +133,7 @@ export default function AboutIndexPage() {
             We will never round up a sample size. We will never publish an
             Index from fewer than 10 deals. If we can't calculate it
             honestly, we won't publish it — that's why you see a progress
-            bar instead of a placeholder number. <Link href="/about" style={{color:"#7DBA47",fontWeight:600,textDecoration:"none"}}>More about how we work →</Link>
+            bar instead of a placeholder number. <Link href="/about" style={{color:"#2E7D32",fontWeight:600,textDecoration:"none"}}>More about how we work →</Link>
           </p>
         </div>
 

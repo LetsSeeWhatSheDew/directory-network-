@@ -192,20 +192,20 @@ export default async function SearchPage({
         .wrap{max-width:800px;margin:0 auto;padding:40px 20px}
         h1{font-size:clamp(1.4rem,3vw,1.9rem);font-weight:700;letter-spacing:-.03em;margin-bottom:6px}
         .sub{font-size:.88rem;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:24px}
-        form{display:flex;gap:8px;background:#fff;border:1px solid #e8e4da;border-radius:10px;padding:6px;margin-bottom:24px}
+        form{display:flex;gap:8px;background:#fff;border:1px solid #DCDED2;border-radius:10px;padding:6px;margin-bottom:24px}
         input[type=search]{flex:1;border:none;outline:none;background:transparent;padding:10px 12px;font-family:system-ui,sans-serif;font-size:.95rem;color:#1F3D2B;min-width:0}
         input[type=search]::placeholder{color:#9ca3af}
         .sbtn{background:#1F3D2B;color:#fff;border:none;border-radius:7px;padding:0 18px;font-family:system-ui,sans-serif;font-weight:600;font-size:.9rem;cursor:pointer}
         .sbtn:hover{background:#2A4F38}
         .cards{display:flex;flex-direction:column;gap:10px}
-        .card{background:#fff;border:1px solid #e8e4da;border-radius:12px;padding:16px;text-decoration:none;color:inherit;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;transition:border-color .15s}
-        .card:hover{border-color:#7DBA47}
+        .card{background:#fff;border:1px solid #DCDED2;border-radius:12px;padding:16px;text-decoration:none;color:inherit;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;transition:border-color .15s}
+        .card:hover{border-color:#2E7D32}
         .cname{font-size:1rem;font-weight:700;color:#1F3D2B}
         .ccity{font-size:.78rem;color:#9ca3af;font-family:system-ui,sans-serif;margin-top:2px}
         .cdesc{font-size:.82rem;color:#6b7280;font-family:system-ui,sans-serif;margin-top:6px;line-height:1.5}
         .cdeals{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-        .cdeal{font-size:.72rem;color:#7DBA47;background:#F2F8E9;border:1px solid #C7E5A8;border-radius:100px;padding:2px 9px;font-family:system-ui,sans-serif}
-        .empty{background:#fff;border:1px solid #e8e4da;border-radius:12px;padding:32px 20px;text-align:center}
+        .cdeal{font-size:.72rem;color:#2E7D32;background:#F2F8E9;border:1px solid #C7E5A8;border-radius:100px;padding:2px 9px;font-family:system-ui,sans-serif}
+        .empty{background:#fff;border:1px solid #DCDED2;border-radius:12px;padding:32px 20px;text-align:center}
         .empty-title{font-size:1rem;font-weight:700;margin-bottom:6px}
         .empty-sub{font-size:.85rem;color:#6b7280;font-family:system-ui,sans-serif}
       `}</style>

@@ -105,7 +105,7 @@ export default function Nav({ variant = "light", sticky = true }: Props) {
           margin: 0 auto 0 1rem;
         }
         .pp-nav-link {
-          font-family: Manrope, system-ui, -apple-system, sans-serif;
+          font-family: var(--font-body);
           font-weight: 500;
           font-size: 0.9375rem;
           letter-spacing: -0.005em;
@@ -119,18 +119,18 @@ export default function Nav({ variant = "light", sticky = true }: Props) {
         /* Light variant */
         .pp-nav-light {
           background: transparent;
-          color: var(--color-deep, #1F3D2B);
+          color: var(--color-deep, #1C3A22);
         }
-        .pp-nav-light .pp-nav-link { color: var(--color-deep, #1F3D2B); }
-        .pp-nav-light .pp-nav-link:hover { color: var(--color-sage-deep, #6BA63B); }
+        .pp-nav-light .pp-nav-link { color: var(--color-deep, #1C3A22); }
+        .pp-nav-light .pp-nav-link:hover { color: var(--color-sage-deep, #2E5320); }
 
         /* Deep variant */
         .pp-nav-deep {
           background: transparent;
-          color: var(--color-cream, #F7F4ED);
+          color: var(--color-cream, #F4F5EF);
         }
-        .pp-nav-deep .pp-nav-link { color: var(--color-cream, #F7F4ED); }
-        .pp-nav-deep .pp-nav-link:hover { color: var(--color-sage-vibrant, #93CB5C); }
+        .pp-nav-deep .pp-nav-link { color: var(--color-cream, #F4F5EF); }
+        .pp-nav-deep .pp-nav-link:hover { color: var(--color-sage-vibrant, #9DBE7E); }
 
         /* Sticky behaviour */
         .pp-nav-sticky { position: sticky; top: 0; }
@@ -139,7 +139,7 @@ export default function Nav({ variant = "light", sticky = true }: Props) {
           backdrop-filter: saturate(140%) blur(8px);
           -webkit-backdrop-filter: saturate(140%) blur(8px);
           border-bottom: 1px solid var(--color-gray-200, #E8E2D5);
-          box-shadow: 0 2px 8px rgba(31, 61, 43, 0.06);
+          border-bottom: 1px solid var(--pp-border, #DCDED2);
         }
         .pp-nav-sticky.pp-nav-deep.pp-nav-scrolled {
           background: rgba(31, 61, 43, 0.94);
