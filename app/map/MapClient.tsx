@@ -80,7 +80,7 @@ export default function MapClient({ points }: { points: Point[] }) {
   function popupHtml(p: Point) {
     const display = /^[a-z0-9-]+$/.test(p.name) ? humanize(p.slug) : p.name;
     const dealHtml = p.deal
-      ? `<div style="margin-top:6px;font-size:.82rem;color:#7DBA47;font-weight:600;">
+      ? `<div style="margin-top:6px;font-size:.82rem;color:#2E7D32;font-weight:600;">
            ${escapeHtml(p.deal.deal_title)}
          </div>`
       : "";
@@ -114,7 +114,7 @@ export default function MapClient({ points }: { points: Point[] }) {
 
     const greenIcon = L.divIcon({
       className: "cl-pin cl-pin-deal",
-      html: `<div style="background:#7DBA47;color:#fff;width:28px;height:28px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;font-family:system-ui,sans-serif;font-weight:800;box-shadow:0 2px 6px rgba(0,0,0,.25);border:2px solid #fff;"><span style="transform:rotate(45deg);font-size:.8rem;">$</span></div>`,
+      html: `<div style="background:#2E7D32;color:#fff;width:28px;height:28px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;font-family:system-ui,sans-serif;font-weight:800;box-shadow:0 2px 6px rgba(0,0,0,.25);border:2px solid #fff;"><span style="transform:rotate(45deg);font-size:.8rem;">$</span></div>`,
       iconSize: [28, 28],
       iconAnchor: [14, 28],
       popupAnchor: [0, -28],
@@ -173,7 +173,7 @@ export default function MapClient({ points }: { points: Point[] }) {
           <Link
             href="/dispensaries"
             style={{
-              background: "#7DBA47",
+              background: "#2E7D32",
               color: "#fff",
               padding: "10px 20px",
               borderRadius: 10,

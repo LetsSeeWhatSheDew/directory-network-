@@ -132,7 +132,7 @@ function Row<T extends string>({
 
 const wrap: React.CSSProperties = {
   background: "#fff",
-  border: "1px solid #e8e4da",
+  border: "1px solid #DCDED2",
   borderRadius: 16,
   padding: 24,
   marginTop: 12,
@@ -142,7 +142,7 @@ const eyebrow: React.CSSProperties = {
   fontWeight: 700,
   letterSpacing: ".14em",
   textTransform: "uppercase",
-  color: "#7DBA47",
+  color: "#2E7D32",
   fontFamily: "system-ui, sans-serif",
   marginBottom: 6,
 };
@@ -174,8 +174,8 @@ const pill: React.CSSProperties = {
   transition: "all .15s",
 };
 const pillActive: React.CSSProperties = {
-  background: "#7DBA47",
-  borderColor: "#7DBA47",
+  background: "#2E7D32",
+  borderColor: "#2E7D32",
   color: "#fff",
   fontWeight: 700,
 };
@@ -203,7 +203,7 @@ const resultSmall: React.CSSProperties = {
   lineHeight: 1.5,
 };
 const cta: React.CSSProperties = {
-  background: "#7DBA47",
+  background: "#2E7D32",
   color: "#fff",
   border: "none",
   borderRadius: 10,

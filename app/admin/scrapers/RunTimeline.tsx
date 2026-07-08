@@ -1,7 +1,7 @@
 import type { ScraperRun } from "./page";
 
 const STATUS_DOT: Record<ScraperRun["status"], string> = {
-  success: "bg-[#7DBA47]",
+  success: "bg-[#2E7D32]",
   partial: "bg-[#C9A876]",
   failed: "bg-[#E24B4A]",
   running: "bg-white/40",

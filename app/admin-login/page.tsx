@@ -45,8 +45,8 @@ function LoginForm() {
     <div style={{minHeight:"100vh",background:"#f7f6f2",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"system-ui,sans-serif",padding:"24px"}}>
       <div style={{background:"#fff",borderRadius:"16px",border:"1px solid #e8e5de",padding:"40px",width:"100%",maxWidth:"380px"}}>
         <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"28px"}}>
-          <div style={{width:"10px",height:"10px",borderRadius:"50%",background:"#7DBA47"}}/>
-          <span style={{fontSize:"1rem",fontWeight:700,color:"#1F3D2B",letterSpacing:"-.02em"}}>puff<span style={{color:"#7DBA47"}}>price</span></span>
+          <div style={{width:"10px",height:"10px",borderRadius:"50%",background:"#2E7D32"}}/>
+          <span style={{fontSize:"1rem",fontWeight:700,color:"#1F3D2B",letterSpacing:"-.02em"}}>puff<span style={{color:"#2E7D32"}}>price</span></span>
         </div>
         <h1 style={{fontSize:"1.3rem",fontWeight:700,color:"#1F3D2B",marginBottom:"6px",letterSpacing:"-.02em"}}>Admin access</h1>
         <p style={{fontSize:".85rem",color:"#6b7280",marginBottom:"24px"}}>Enter your password to continue</p>

@@ -13,7 +13,7 @@ type DispensaryResult = {
 };
 
 const STATUS_BADGE: Record<DispensaryResult["status"], string> = {
-  success: "bg-[#7DBA47]/15 text-[#7DBA47]",
+  success: "bg-[#2E7D32]/15 text-[#2E7D32]",
   failed: "bg-[#E24B4A]/15 text-[#E24B4A]",
   skipped: "bg-white/5 text-[#8a9490]",
 };

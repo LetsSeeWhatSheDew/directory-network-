@@ -213,7 +213,7 @@ export default function NewDealForm() {
         disabled={submitting}
         style={{
           marginTop: 22,
-          background: "#7DBA47",
+          background: "#2E7D32",
           color: "#fff",
           border: "none",
           padding: "12px 20px",

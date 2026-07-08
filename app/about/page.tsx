@@ -32,7 +32,7 @@ export default function AboutPage() {
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
         body{font-family:var(--font-ui, system-ui, sans-serif);background:#F7F4ED;color:#1F3D2B;min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #e8e4da;position:sticky;top:0;z-index:100}
+        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #DCDED2;position:sticky;top:0;z-index:100}
         .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none}
         .back{font-size:.82rem;color:#6b7280;text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif)}
         .back:hover{color:#1F3D2B}
@@ -59,7 +59,7 @@ export default function AboutPage() {
           text-shadow:0 1px 2px rgba(0,0,0,0.4);
         }
         .wrap{max-width:680px;margin:0 auto;padding:48px 28px 64px}
-        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#7DBA47;font-family:var(--font-ui, system-ui, sans-serif);margin-bottom:14px}
+        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#2E7D32;font-family:var(--font-ui, system-ui, sans-serif);margin-bottom:14px}
         h1{
           font-family:var(--font-display, var(--font-geist-sans));
           font-size:clamp(2rem,4.5vw,3rem);font-weight:700;
@@ -71,11 +71,11 @@ export default function AboutPage() {
         }
         p:last-of-type{margin-bottom:32px}
         .contact{
-          margin-top:48px;padding-top:24px;border-top:1px solid #e8e4da;
+          margin-top:48px;padding-top:24px;border-top:1px solid #DCDED2;
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:.92rem;color:#6b7280
         }
-        .contact a{color:#7DBA47;text-decoration:none;font-weight:600}
+        .contact a{color:#2E7D32;text-decoration:none;font-weight:600}
         .contact a:hover{text-decoration:underline}
         .built{
           margin-top:48px;

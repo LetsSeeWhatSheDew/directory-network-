@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
   <title>Digest preview — ${escapeHtml(rendered.subject)}</title>
   <style>
     body { background: #f5f4f0; margin: 0; padding: 20px; font-family: system-ui, sans-serif; }
-    .meta { max-width: 600px; margin: 0 auto 16px; padding: 12px 16px; background: #fff; border: 1px solid #e8e4da; border-radius: 8px; font-size: .85rem; color: #6b7280; }
+    .meta { max-width: 600px; margin: 0 auto 16px; padding: 12px 16px; background: #fff; border: 1px solid #DCDED2; border-radius: 8px; font-size: .85rem; color: #6b7280; }
     .meta strong { color: #0f1f3d; }
   </style>
 </head>

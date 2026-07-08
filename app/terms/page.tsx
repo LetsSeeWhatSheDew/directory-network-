@@ -32,7 +32,7 @@ export default function TermsPage() {
       </div>
 
       <section style={{ maxWidth: 720, margin: "-32px auto 0", padding: "0 28px 80px", position: "relative" }}>
-        <article style={{ background: "#fff", border: "1px solid #e8e4da", borderRadius: 14, padding: "32px 28px", lineHeight: 1.7, fontSize: "1.02rem" }}>
+        <article style={{ background: "#fff", border: "1px solid #DCDED2", borderRadius: 14, padding: "32px 28px", lineHeight: 1.7, fontSize: "1.02rem" }}>
 
           <h2 style={h2}>Who we are</h2>
           <p>
@@ -125,6 +125,6 @@ const h2: React.CSSProperties = {
 };
 
 const link: React.CSSProperties = {
-  color: "#7DBA47",
+  color: "#2E7D32",
   textDecoration: "underline",
 };

@@ -195,7 +195,7 @@ export default async function AdminDashboard() {
           <div>
             <Link
               href="/"
-              className="text-[11px] uppercase tracking-widest text-[#8a9490] transition-colors hover:text-[#7DBA47]"
+              className="text-[11px] uppercase tracking-widest text-[#8a9490] transition-colors hover:text-[#2E7D32]"
             >
               &larr; Site
             </Link>
@@ -206,19 +206,19 @@ export default async function AdminDashboard() {
           <div className="flex items-center gap-4 text-sm">
             <Link
               href="/admin/deals/new"
-              className="text-[11px] uppercase tracking-widest text-[#8a9490] transition-colors hover:text-[#7DBA47]"
+              className="text-[11px] uppercase tracking-widest text-[#8a9490] transition-colors hover:text-[#2E7D32]"
             >
               + New deal
             </Link>
             <Link
               href="/admin/submissions"
-              className="text-[11px] uppercase tracking-widest text-[#8a9490] transition-colors hover:text-[#7DBA47]"
+              className="text-[11px] uppercase tracking-widest text-[#8a9490] transition-colors hover:text-[#2E7D32]"
             >
               Submissions →
             </Link>
             <div className="flex items-baseline gap-1.5">
               <span className="text-[#8a9490]">Project</span>
-              <span className="font-semibold text-[#7DBA47]">Green</span>
+              <span className="font-semibold text-[#2E7D32]">Green</span>
             </div>
           </div>
         </div>
@@ -244,7 +244,7 @@ export default async function AdminDashboard() {
           </h2>
 
           {focusItems.length === 0 ? (
-            <p className="py-4 text-center text-sm text-[#7DBA47]">
+            <p className="py-4 text-center text-sm text-[#2E7D32]">
               All clear — nothing needs your attention right now.
             </p>
           ) : (
@@ -327,7 +327,7 @@ export default async function AdminDashboard() {
                           <td className="py-3 pr-4 font-medium">
                             {listingName(l)}
                             {l.is_featured && (
-                              <span className="ml-2 text-[10px] text-[#7DBA47]">
+                              <span className="ml-2 text-[10px] text-[#2E7D32]">
                                 ★
                               </span>
                             )}
@@ -346,7 +346,7 @@ export default async function AdminDashboard() {
                             <span
                               className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${
                                 isClaimed
-                                  ? "bg-[#7DBA47]/15 text-[#7DBA47]"
+                                  ? "bg-[#2E7D32]/15 text-[#2E7D32]"
                                   : "bg-white/5 text-[#8a9490]"
                               }`}
                             >
@@ -451,7 +451,7 @@ export default async function AdminDashboard() {
                           <td className="py-3 pr-4">
                             <a
                               href={`mailto:${lead.email}`}
-                              className="text-[#8a9490] transition-colors hover:text-[#7DBA47]"
+                              className="text-[#8a9490] transition-colors hover:text-[#2E7D32]"
                             >
                               {lead.email}
                             </a>
@@ -501,7 +501,7 @@ function StatCard({
         {label}
       </p>
       <p
-        className={`mt-2 text-2xl font-bold ${accent ? "text-[#7DBA47]" : "text-[#F7F4ED]"}`}
+        className={`mt-2 text-2xl font-bold ${accent ? "text-[#2E7D32]" : "text-[#F7F4ED]"}`}
       >
         {value}
       </p>

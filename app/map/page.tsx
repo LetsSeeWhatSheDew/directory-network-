@@ -109,14 +109,14 @@ export default async function MapPage() {
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
         html,body{height:100%;font-family:Georgia,serif;background:#F7F4ED}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #e8e4da}
+        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #DCDED2}
         .logo{color:#1F3D2B;text-decoration:none;font-weight:700;letter-spacing:-.02em}
-        .logo span{color:#7DBA47}
+        .logo span{color:#2E7D32}
         .back{font-size:.82rem;color:#6b7280;text-decoration:none;font-family:system-ui,sans-serif}
         .back:hover{color:#1F3D2B}
-        .map-shell{position:relative;width:100%;height:calc(100vh - 60px);min-height:520px;background:#e8e4da}
-        .map-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#e8e4da;font-family:system-ui,sans-serif;color:#6b7280;z-index:1;pointer-events:none}
-        .map-loading-spinner{width:36px;height:36px;border:3px solid #d1cfc6;border-top-color:#7DBA47;border-radius:50%;animation:mapspin 1s linear infinite}
+        .map-shell{position:relative;width:100%;height:calc(100vh - 60px);min-height:520px;background:#DCDED2}
+        .map-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#DCDED2;font-family:system-ui,sans-serif;color:#6b7280;z-index:1;pointer-events:none}
+        .map-loading-spinner{width:36px;height:36px;border:3px solid #d1cfc6;border-top-color:#2E7D32;border-radius:50%;animation:mapspin 1s linear infinite}
         @keyframes mapspin{to{transform:rotate(360deg)}}
       `}</style>
 
@@ -133,7 +133,7 @@ export default async function MapPage() {
             textAlign: "center",
             fontFamily: "system-ui, sans-serif",
             background: "#fff",
-            borderTop: "1px solid #e8e4da",
+            borderTop: "1px solid #DCDED2",
           }}
         >
           <h2
@@ -154,7 +154,7 @@ export default async function MapPage() {
             href="/dispensaries"
             style={{
               display: "inline-block",
-              background: "#7DBA47",
+              background: "#2E7D32",
               color: "#fff",
               padding: "12px 28px",
               borderRadius: 10,

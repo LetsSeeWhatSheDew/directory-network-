@@ -70,24 +70,24 @@ export default function AlertPreferencesPage() {
         .wrap{max-width:600px;margin:0 auto;padding:40px 20px}
         h1{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:700;letter-spacing:-.03em;margin-bottom:8px;font-family:Georgia,serif}
         .sub{font-size:.9rem;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:28px}
-        form{background:#fff;border:1px solid #e8e4da;border-radius:14px;padding:24px}
+        form{background:#fff;border:1px solid #DCDED2;border-radius:14px;padding:24px}
         .field{margin-bottom:20px}
         label.field-label{display:block;font-size:.8rem;font-weight:600;color:#1F3D2B;font-family:system-ui,sans-serif;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
         input[type=email],input[type=text]{width:100%;padding:10px 12px;border:1px solid #d1cfc6;border-radius:8px;font-family:system-ui,sans-serif;font-size:.92rem;color:#1F3D2B;outline:none}
-        input[type=email]:focus,input[type=text]:focus{border-color:#7DBA47}
+        input[type=email]:focus,input[type=text]:focus{border-color:#2E7D32}
         .radio-row,.check-row{display:flex;gap:8px;flex-wrap:wrap}
         .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid #d1cfc6;border-radius:100px;font-family:system-ui,sans-serif;font-size:.85rem;cursor:pointer;background:#fff;color:#374151;transition:all .15s}
-        .pill input{accent-color:#7DBA47;margin:0}
+        .pill input{accent-color:#2E7D32;margin:0}
         .pill:hover{border-color:#9ca3af}
-        .pill.active{background:#F2F8E9;border-color:#7DBA47;color:#3F6B1F;font-weight:600}
+        .pill.active{background:#F2F8E9;border-color:#2E7D32;color:#3F6B1F;font-weight:600}
         .freq{display:grid;grid-template-columns:1fr;gap:8px}
         .freq label{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid #d1cfc6;border-radius:10px;cursor:pointer;font-family:system-ui,sans-serif;font-size:.88rem;color:#374151;background:#fff;transition:all .15s}
-        .freq label.active{background:#F2F8E9;border-color:#7DBA47;color:#3F6B1F}
-        .freq label input{margin-top:3px;accent-color:#7DBA47}
+        .freq label.active{background:#F2F8E9;border-color:#2E7D32;color:#3F6B1F}
+        .freq label input{margin-top:3px;accent-color:#2E7D32}
         .freq-title{font-weight:600;display:block}
         .freq-desc{font-size:.78rem;color:#6b7280;margin-top:2px}
-        .freq label.active .freq-desc{color:#7DBA47}
-        .save{background:#7DBA47;color:#fff;border:none;border-radius:10px;padding:12px 24px;font-family:system-ui,sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;width:100%;margin-top:8px;transition:background .15s}
+        .freq label.active .freq-desc{color:#2E7D32}
+        .save{background:#2E7D32;color:#fff;border:none;border-radius:10px;padding:12px 24px;font-family:system-ui,sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;width:100%;margin-top:8px;transition:background .15s}
         .save:hover{background:#6BA63B}
         .save:disabled{opacity:.6;cursor:not-allowed}
         .msg{margin-top:14px;padding:10px 14px;border-radius:8px;font-family:system-ui,sans-serif;font-size:.85rem}

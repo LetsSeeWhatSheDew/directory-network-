@@ -58,7 +58,7 @@ function StatCard({ label, value, sub, accent }) {
     <div style={{
       background: "#fff", border: "1px solid #e2e8f0",
       borderRadius: "12px", padding: "24px 28px",
-      borderTop: `3px solid ${accent || "#7DBA47"}`,
+      borderTop: `3px solid ${accent || "#2E7D32"}`,
     }}>
       <p style={{ margin: "0 0 6px", fontSize: "0.75rem", fontFamily: "system-ui", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#94a3b8" }}>{label}</p>
       <p style={{ margin: "0 0 4px", fontSize: "2.2rem", fontWeight: 700, color: "#1F3D2B", letterSpacing: "-0.03em", fontFamily: "Georgia, serif" }}>{value}</p>
@@ -191,7 +191,7 @@ export default function AdminPage() {
     <div style={{ minHeight: "100vh", background: "#f8f7f4", fontFamily: "system-ui, sans-serif" }}>
       <div style={{ background: "#1F3D2B", padding: "16px 40px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <span style={{ fontFamily: "Georgia, serif", fontSize: "1.1rem", fontWeight: 700, color: "#fff" }}>
-          puff<span style={{ color: "#7DBA47" }}>price</span>
+          puff<span style={{ color: "#2E7D32" }}>price</span>
           <span style={{ fontSize: "0.7rem", fontWeight: 400, color: "#64748b", marginLeft: "12px", fontFamily: "system-ui", letterSpacing: "0.1em", textTransform: "uppercase" }}>Admin</span>
         </span>
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
@@ -200,7 +200,7 @@ export default function AdminPage() {
               Updated {lastRefresh.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}
             </span>
           )}
-          <button onClick={load} disabled={loading} style={{ background: "#7DBA47", color: "#fff", border: "none", padding: "8px 18px", borderRadius: "6px", cursor: "pointer", fontSize: "0.8rem", fontWeight: 600 }}>
+          <button onClick={load} disabled={loading} style={{ background: "#2E7D32", color: "#fff", border: "none", padding: "8px 18px", borderRadius: "6px", cursor: "pointer", fontSize: "0.8rem", fontWeight: 600 }}>
             {loading ? "Loading…" : "↻ Refresh"}
           </button>
         </div>
@@ -214,15 +214,15 @@ export default function AdminPage() {
         )}
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px", marginBottom: "40px" }}>
-          <StatCard label="Total Leads" value={total} sub="All time" accent="#7DBA47" />
+          <StatCard label="Total Leads" value={total} sub="All time" accent="#2E7D32" />
           <StatCard label="New Today" value={newToday} sub="Submitted today" accent="#3b82f6" />
           <StatCard label="Live Listings" value={listed} sub="Listed or Boosted" accent="#8b5cf6" />
           <StatCard label="Top Niche" value={topNiche ? topNiche[1] : "—"} sub={topNiche ? topNiche[0] : "No data yet"} accent="#f59e0b" />
         </div>
 
         {todayFocus.length > 0 && (
-          <div style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: "12px", padding: "24px 28px", marginBottom: "24px", borderLeft: "4px solid #7DBA47" }}>
-            <p style={{ margin: "0 0 16px", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#7DBA47" }}>
+          <div style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: "12px", padding: "24px 28px", marginBottom: "24px", borderLeft: "4px solid #2E7D32" }}>
+            <p style={{ margin: "0 0 16px", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#2E7D32" }}>
               Today's Focus — {todayFocus.length} new lead{todayFocus.length !== 1 ? "s" : ""} to contact
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>

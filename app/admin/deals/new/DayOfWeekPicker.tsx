@@ -51,7 +51,7 @@ export function DayOfWeekPicker({ value, onChange, disabled }: Props) {
                 padding: "8px 12px",
                 borderRadius: 999,
                 border: active ? "1px solid #6BA63B" : "1px solid #d1d5db",
-                background: active ? "#7DBA47" : "#fff",
+                background: active ? "#2E7D32" : "#fff",
                 color: active ? "#fff" : "#374151",
                 fontFamily: "system-ui, sans-serif",
                 fontSize: ".84rem",

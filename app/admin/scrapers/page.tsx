@@ -71,7 +71,7 @@ export default async function AdminScrapersPage() {
           <div>
             <Link
               href="/admin"
-              className="text-[11px] uppercase tracking-widest text-[#8a9490] transition-colors hover:text-[#7DBA47]"
+              className="text-[11px] uppercase tracking-widest text-[#8a9490] transition-colors hover:text-[#2E7D32]"
             >
               &larr; Dashboard
             </Link>
@@ -81,7 +81,7 @@ export default async function AdminScrapersPage() {
           </div>
           <div className="flex items-baseline gap-1.5 text-sm">
             <span className="text-[#8a9490]">Project</span>
-            <span className="font-semibold text-[#7DBA47]">Green</span>
+            <span className="font-semibold text-[#2E7D32]">Green</span>
           </div>
         </div>
       </header>

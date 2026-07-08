@@ -19,7 +19,7 @@ export default function NotFound() {
         body { background: var(--color-cream, #F7F4ED); }
         .nf-shell { min-height: calc(100vh - 80px); display:flex; flex-direction:column; }
         .nf-wrap { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:4rem 1.25rem; text-align:center; }
-        .nf-eyebrow { font-family: var(--font-body); font-size: 0.6875rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-sage, #7DBA47); margin-bottom: 12px; }
+        .nf-eyebrow { font-family: var(--font-body); font-size: 0.6875rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-sage, #2E7D32); margin-bottom: 12px; }
         .nf-title { font-family: var(--font-body); font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.05; color: var(--color-deep, #1F3D2B); margin-bottom: 14px; }
         .nf-sub { font-family: var(--font-body); font-size: 1rem; color: var(--color-gray-600, #4B5563); line-height: 1.55; max-width: 460px; margin: 0 auto 28px; }
         .nf-links { margin-top: 18px; display:flex; gap:18px; justify-content:center; flex-wrap:wrap; font-family: var(--font-body); font-size: 0.875rem; }

@@ -165,7 +165,7 @@ export default function SubmitForm({ listings }: Props) {
         style={{
           background: "#F2F8E9",
           border: "1px solid #C7E5A8",
-          borderLeft: "4px solid #7DBA47",
+          borderLeft: "4px solid #2E7D32",
           borderRadius: 12,
           padding: "22px 22px 20px",
           fontFamily: "system-ui, sans-serif",
@@ -184,7 +184,7 @@ export default function SubmitForm({ listings }: Props) {
           type="button"
           onClick={reset}
           style={{
-            background: "#7DBA47",
+            background: "#2E7D32",
             color: "#fff",
             border: "none",
             padding: "10px 18px",
@@ -641,8 +641,8 @@ const styles: Record<string, React.CSSProperties> = {
   },
   section: {
     background: "#fff",
-    border: "1px solid #e8e4da",
-    borderLeft: "4px solid #7DBA47",
+    border: "1px solid #DCDED2",
+    borderLeft: "4px solid #2E7D32",
     borderRadius: 12,
     padding: "18px 18px 16px",
     display: "flex",
@@ -654,7 +654,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: 700,
     letterSpacing: ".14em",
     textTransform: "uppercase",
-    color: "#7DBA47",
+    color: "#2E7D32",
     padding: "0 6px",
   },
   field: { display: "flex", flexDirection: "column", gap: 6 },
@@ -686,7 +686,7 @@ const styles: Record<string, React.CSSProperties> = {
   link: {
     background: "none",
     border: "none",
-    color: "#7DBA47",
+    color: "#2E7D32",
     fontSize: ".85rem",
     textAlign: "left",
     padding: "4px 0",
@@ -704,7 +704,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: ".92rem",
   },
   cta: {
-    background: "#7DBA47",
+    background: "#2E7D32",
     color: "#fff",
     border: "none",
     padding: "14px 20px",
@@ -727,5 +727,5 @@ const styles: Record<string, React.CSSProperties> = {
     userSelect: "none",
     background: "#fff",
   },
-  dayChipOn: { background: "#7DBA47", color: "#fff", borderColor: "#7DBA47", fontWeight: 700 },
+  dayChipOn: { background: "#2E7D32", color: "#fff", borderColor: "#2E7D32", fontWeight: 700 },
 };

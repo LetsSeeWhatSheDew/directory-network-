@@ -195,7 +195,7 @@ export function SubmissionsTable({ rows }: { rows: Submission[] }) {
                   </Td>
                   <Td>
                     {r.source_url ? (
-                      <a href={r.source_url} target="_blank" rel="noreferrer noopener" style={{ color: "#7DBA47" }}>
+                      <a href={r.source_url} target="_blank" rel="noreferrer noopener" style={{ color: "#2E7D32" }}>
                         link ↗
                       </a>
                     ) : (
@@ -267,7 +267,7 @@ const fieldStyle: React.CSSProperties = {
 };
 
 const approveBtn: React.CSSProperties = {
-  background: "#7DBA47",
+  background: "#2E7D32",
   color: "white",
   border: "none",
   padding: "6px 10px",

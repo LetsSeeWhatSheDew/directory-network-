@@ -83,7 +83,7 @@ export default function GenericClaimForm() {
       onSubmit={onSubmit}
       style={{
         background: "#fff",
-        border: "1px solid #e8e4da",
+        border: "1px solid #DCDED2",
         borderRadius: 14,
         padding: "22px 24px",
         display: "flex",
@@ -157,7 +157,7 @@ export default function GenericClaimForm() {
         type="submit"
         disabled={busy}
         style={{
-          background: "#7DBA47",
+          background: "#2E7D32",
           color: "#fff",
           border: "none",
           borderRadius: 10,
@@ -185,7 +185,7 @@ const labelStyle: React.CSSProperties = {
 };
 
 const inputStyle: React.CSSProperties = {
-  border: "1px solid #e8e4da",
+  border: "1px solid #DCDED2",
   borderRadius: 10,
   padding: "12px 14px",
   fontFamily: "system-ui, sans-serif",

@@ -140,7 +140,7 @@ export default function EarlyAccessPage() {
           <button
             type="submit"
             style={{
-              background: "#7DBA47",
+              background: "#2E7D32",
               color: "#fff",
               border: "none",
               padding: "14px 22px",

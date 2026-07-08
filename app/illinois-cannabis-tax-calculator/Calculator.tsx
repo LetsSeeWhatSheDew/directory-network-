@@ -206,7 +206,7 @@ export default function Calculator({ defaultCitySlug = "peoria" }: { defaultCity
       <style>{`
         .calc{
           background:#fff;
-          border:1px solid #e8e4da;
+          border:1px solid #DCDED2;
           border-radius:14px;
           padding:24px;
           box-shadow:0 1px 3px rgba(15,31,61,0.04), 0 8px 24px rgba(15,31,61,0.06);
@@ -232,11 +232,11 @@ export default function Calculator({ defaultCitySlug = "peoria" }: { defaultCity
         }
         .calc-input-wrap{
           display:flex;align-items:center;
-          background:#F7F4ED;border:1px solid #e8e4da;border-radius:10px;
+          background:#F7F4ED;border:1px solid #DCDED2;border-radius:10px;
           padding:0 14px;height:52px;
         }
         .calc-input-wrap:focus-within{
-          background:#fff;border-color:#7DBA47;
+          background:#fff;border-color:#2E7D32;
           box-shadow:0 0 0 3px rgba(22,163,74,.12);
         }
         .calc-input-prefix{
@@ -251,7 +251,7 @@ export default function Calculator({ defaultCitySlug = "peoria" }: { defaultCity
         }
         .calc-select{
           height:52px;padding:0 14px;
-          background:#F7F4ED;border:1px solid #e8e4da;border-radius:10px;
+          background:#F7F4ED;border:1px solid #DCDED2;border-radius:10px;
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:1rem;font-weight:600;color:#1F3D2B;
           appearance:none;
@@ -259,7 +259,7 @@ export default function Calculator({ defaultCitySlug = "peoria" }: { defaultCity
           background-position:right 14px center;background-repeat:no-repeat;
           padding-right:36px;cursor:pointer;
         }
-        .calc-select:focus{outline:none;border-color:#7DBA47;box-shadow:0 0 0 3px rgba(22,163,74,.12);background-color:#fff}
+        .calc-select:focus{outline:none;border-color:#2E7D32;box-shadow:0 0 0 3px rgba(22,163,74,.12);background-color:#fff}
 
         .calc-tier-row{
           display:grid;grid-template-columns:1fr;gap:8px;
@@ -269,14 +269,14 @@ export default function Calculator({ defaultCitySlug = "peoria" }: { defaultCity
         }
         .calc-tier{
           display:flex;flex-direction:column;gap:2px;
-          padding:12px 14px;border:1px solid #e8e4da;border-radius:10px;
+          padding:12px 14px;border:1px solid #DCDED2;border-radius:10px;
           cursor:pointer;background:#F7F4ED;
           transition:all 150ms ease;
           min-height:60px;
         }
         .calc-tier:hover{background:#fff}
         .calc-tier.is-active{
-          background:#fff;border-color:#7DBA47;
+          background:#fff;border-color:#2E7D32;
           box-shadow:0 0 0 2px rgba(22,163,74,0.15);
         }
         .calc-tier-input{position:absolute;opacity:0;pointer-events:none}
@@ -291,7 +291,7 @@ export default function Calculator({ defaultCitySlug = "peoria" }: { defaultCity
         }
 
         .calc-output{
-          background:#F7F4ED;border:1px solid #e8e4da;border-radius:12px;
+          background:#F7F4ED;border:1px solid #DCDED2;border-radius:12px;
           padding:24px;
         }
         @media(min-width:720px){.calc-output{padding:28px}}
@@ -308,7 +308,7 @@ export default function Calculator({ defaultCitySlug = "peoria" }: { defaultCity
         .calc-output-hero{
           display:grid;grid-template-columns:1fr;gap:4px;
           padding-bottom:18px;margin-bottom:18px;
-          border-bottom:1px solid #e8e4da;
+          border-bottom:1px solid #DCDED2;
           align-items:baseline;
         }
         @media(min-width:560px){
@@ -332,7 +332,7 @@ export default function Calculator({ defaultCitySlug = "peoria" }: { defaultCity
         .calc-output-effective{
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:.78rem;font-weight:600;
-          color:#7DBA47;background:#F2F8E9;
+          color:#2E7D32;background:#F2F8E9;
           padding:4px 10px;border-radius:100px;
           justify-self:start;
         }
@@ -342,7 +342,7 @@ export default function Calculator({ defaultCitySlug = "peoria" }: { defaultCity
         .calc-row-line{
           display:flex;justify-content:space-between;align-items:baseline;
           padding:8px 0;
-          border-bottom:1px dashed #e8e4da;
+          border-bottom:1px dashed #DCDED2;
         }
         .calc-row-line:last-child{border-bottom:none}
         .calc-row-line dt{
@@ -360,7 +360,7 @@ export default function Calculator({ defaultCitySlug = "peoria" }: { defaultCity
           font-variant-numeric:tabular-nums;
           margin:0;
         }
-        .calc-row-total{padding-top:14px;margin-top:6px;border-top:1px solid #e8e4da}
+        .calc-row-total{padding-top:14px;margin-top:6px;border-top:1px solid #DCDED2}
         .calc-row-total dt{font-weight:700;color:#1F3D2B}
         .calc-row-total dd.num{font-size:1.1rem;font-weight:700}
 

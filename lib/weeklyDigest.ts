@@ -155,7 +155,7 @@ export function renderDigestEmail(payload: DigestPayload): { subject: string; ht
           ${payload.totalDeals} active deals · week of ${payload.weekOf}
         </p>
       </div>
-      <div style="background: #fff; padding: 24px; border: 1px solid #e8e4da; border-top: none; border-radius: 0 0 12px 12px;">
+      <div style="background: #fff; padding: 24px; border: 1px solid #DCDED2; border-top: none; border-radius: 0 0 12px 12px;">
         ${payload.topDealOverall ? `
           <div style="background: #f0fdf4; border-left: 3px solid #16a34a; padding: 14px 18px; margin-bottom: 24px; border-radius: 0 8px 8px 0;">
             <p style="margin: 0 0 4px; font-size: .7rem; text-transform: uppercase; letter-spacing: .12em; color: #166534; font-family: system-ui, sans-serif; font-weight: 700;">Best deal this week</p>
@@ -167,7 +167,7 @@ export function renderDigestEmail(payload: DigestPayload): { subject: string; ht
         ` : ""}
         ${payload.byCity.map((s) => `
           <div style="margin-bottom: 20px;">
-            <h2 style="font-size: .95rem; margin: 0 0 8px; color: #0f1f3d; border-bottom: 1px solid #e8e4da; padding-bottom: 6px;">${escapeHtml(s.city)}</h2>
+            <h2 style="font-size: .95rem; margin: 0 0 8px; color: #0f1f3d; border-bottom: 1px solid #DCDED2; padding-bottom: 6px;">${escapeHtml(s.city)}</h2>
             ${s.deals.map((d) => `
               <p style="margin: 6px 0; font-family: system-ui, sans-serif; font-size: .88rem;">
                 <strong>${escapeHtml(d.deal_title)}</strong> — ${escapeHtml(d.name)} · save $${d.savings_amount.toFixed(2)}

@@ -71,7 +71,7 @@ export default function AlertsConfirmedPage() {
 
           <Link href="/" style={{
             display: "inline-block",
-            background: "#7DBA47", color: "#fff",
+            background: "#2E7D32", color: "#fff",
             padding: "12px 28px", borderRadius: 10,
             textDecoration: "none", fontFamily: "system-ui, sans-serif",
             fontWeight: 700, fontSize: ".95rem",

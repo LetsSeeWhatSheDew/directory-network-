@@ -153,11 +153,11 @@ export default async function DispensariesIndexPage() {
               const items = byCity.get(city)!;
               return (
                 <div key={city}>
-                  <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", borderBottom: "1px solid #e8e4da", paddingBottom: 8, marginBottom: 14 }}>
+                  <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", borderBottom: "1px solid #DCDED2", paddingBottom: 8, marginBottom: 14 }}>
                     <h2 style={{ fontSize: "1.3rem", fontWeight: 700, letterSpacing: "-0.02em" }}>
                       {city}
                     </h2>
-                    <Link href={`/city/${slug}`} style={{ fontSize: ".8rem", color: "#7DBA47", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontWeight: 600 }}>
+                    <Link href={`/city/${slug}`} style={{ fontSize: ".8rem", color: "#2E7D32", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontWeight: 600 }}>
                       Deals in {city} →
                     </Link>
                   </div>
@@ -179,7 +179,7 @@ export default async function DispensariesIndexPage() {
                           href={`/dispensary/${l.slug}`}
                           style={{
                             background: "#fff",
-                            border: l.plan === "featured" ? "2px solid #7DBA47" : "1px solid #e8e4da",
+                            border: l.plan === "featured" ? "2px solid #2E7D32" : "1px solid #DCDED2",
                             borderRadius: 10,
                             padding: 14,
                             textDecoration: "none",
@@ -190,7 +190,7 @@ export default async function DispensariesIndexPage() {
                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
                             <div style={{ fontSize: ".95rem", fontWeight: 700 }}>{display}</div>
                             {l.plan === "featured" && (
-                              <span style={{ fontSize: ".62rem", background: "#7DBA47", color: "#fff", padding: "2px 7px", borderRadius: 100, fontFamily: "system-ui, sans-serif", fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase" }}>
+                              <span style={{ fontSize: ".62rem", background: "#2E7D32", color: "#fff", padding: "2px 7px", borderRadius: 100, fontFamily: "system-ui, sans-serif", fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase" }}>
                                 Featured
                               </span>
                             )}
@@ -201,7 +201,7 @@ export default async function DispensariesIndexPage() {
                           </div>
                           {count > 0 && (
                             <div style={{ marginTop: 10, display: "inline-flex", alignItems: "center", gap: 6, fontSize: ".7rem", fontFamily: "system-ui, sans-serif", fontWeight: 700, color: "#3F6B1F", background: "#F2F8E9", border: "1px solid #C7E5A8", padding: "3px 9px", borderRadius: 100 }}>
-                              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#7DBA47" }} />
+                              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#2E7D32" }} />
                               {count} active deal{count === 1 ? "" : "s"}
                             </div>
                           )}

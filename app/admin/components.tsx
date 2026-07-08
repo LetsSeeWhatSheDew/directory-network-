@@ -26,7 +26,7 @@ export function CollapsibleSection({
         <div className="flex items-center gap-3">
           <h2 className="text-base font-semibold text-[#F7F4ED]">{title}</h2>
           {typeof count === "number" && (
-            <span className="rounded-full bg-[#7DBA47]/10 px-2.5 py-0.5 text-xs font-medium text-[#7DBA47]">
+            <span className="rounded-full bg-[#2E7D32]/10 px-2.5 py-0.5 text-xs font-medium text-[#2E7D32]">
               {count}
             </span>
           )}
@@ -56,7 +56,7 @@ const STATUS_OPTIONS = ["new", "contacted", "converted", "closed"] as const;
 type StatusValue = (typeof STATUS_OPTIONS)[number];
 
 const STATUS_STYLES: Record<StatusValue, string> = {
-  new: "bg-[#7DBA47]/15 text-[#7DBA47]",
+  new: "bg-[#2E7D32]/15 text-[#2E7D32]",
   contacted: "bg-amber-500/15 text-amber-400",
   converted: "bg-sky-500/15 text-sky-400",
   closed: "bg-white/10 text-[#8a9490]",
