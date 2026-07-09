@@ -6,7 +6,7 @@ import Footer from "./components/Footer";
 import LocationAware from "./components/LocationAware";
 import TrackedLink from "./components/TrackedLink";
 import HomeDealCards from "./components/HomeDealCards";
-import PriceBoard, { SAMPLE_BOARD } from "./components/PriceBoard";
+import PriceBoard from "./components/PriceBoard";
 import SearchTracker from "./components/SearchTracker";
 import FourTwentyBanner from "./components/FourTwentyBanner";
 import RecentlyViewedRow from "./components/RecentlyViewedRow";
@@ -22,6 +22,7 @@ import {
   CENTRAL_IL_PUBLIC_CITIES,
 } from "../lib/constants/regions";
 import { filterActiveDeals as filterActive } from "../lib/dealActiveFilter";
+import { getLivePriceBoard } from "../lib/priceBoard";
 
 // Metadata — Central IL framing. The full IL footprint stays discoverable
 // via the "Browse all Illinois" link below; out-of-scope city pages keep
@@ -464,7 +465,7 @@ function preferLocalDeals(deals, userCity) {
 }
 
 export default async function HomePage() {
-  const [dealCount, listingCount, topDeals, mostRecentTs, endingSoon, dealPool, userLoc, liveValue, dealsThisMonth, cityCounts] = await Promise.all([
+  const [dealCount, listingCount, topDeals, mostRecentTs, endingSoon, dealPool, userLoc, liveValue, dealsThisMonth, cityCounts, livePriceBoard] = await Promise.all([
     getActiveDealCount(),
     getCentralILListingCount(),
     getTopDeals(),
@@ -475,6 +476,9 @@ export default async function HomePage() {
     getLiveDealsValueThisMonth().catch(() => null),
     getDealsRunThisMonth().catch(() => null),
     getCityCounts(),
+    // Real per-store PriceBoard, or null when the menu-baseline pipeline
+    // has no comparable multi-store SKU yet. NEVER renders invented prices.
+    getLivePriceBoard().catch(() => null),
   ]);
   const userCity = userLoc?.city || null;
   const localizedTopDeals = preferLocalDeals(topDeals, userCity);
@@ -878,9 +882,9 @@ export default async function HomePage() {
         }
         .cities-inner{max-width:1100px;margin:0 auto;padding:0 28px}
         .cities-h2{margin:8px 0 28px}
-        .cities-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-        @media(min-width:720px){.cities-grid{grid-template-columns:repeat(3,1fr);gap:18px}}
-        @media(min-width:1080px){.cities-grid{grid-template-columns:repeat(3,1fr);gap:20px}}
+        .cities-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+        @media(min-width:720px){.cities-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}}
+        @media(min-width:1080px){.cities-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}}
         .city-card{
           display:flex;justify-content:space-between;align-items:center;
           padding:18px 22px;text-decoration:none;color:inherit;
@@ -1182,7 +1186,12 @@ export default async function HomePage() {
 
         {/* Design v2: flat canopy hero — the bud-photo edge + gradient
             scrim were removed (zero gradients, substance over polish). */}
-        <div className="pp-home-hero-inner pp-fade-up">
+        {/* No pp-fade-up on this wrapper: it holds the LCP element (the hero
+            H1). An opacity entrance animation on the LCP node defers its
+            "contentful" paint (LCP measured 3.9s while Speed Index was 1.9s).
+            Rendering the hero at full opacity immediately pulls LCP down to
+            ~FCP. Below-the-fold sections keep their fade-ins. */}
+        <div className="pp-home-hero-inner">
           <div className="pp-home-hero-grid">
             {/* LEFT — copy + CTAs */}
             <div className="pp-home-hero-left">
@@ -1210,17 +1219,19 @@ export default async function HomePage() {
             </div>
 
             {/* RIGHT — the signature PriceBoard (live "who's cheapest right
-                now" ranking) replaces the old % OFF hero card. Seed data
-                until the menu-baseline pipeline populates canonical_products
-                + price bands (brief §10); the canopy tag personalizes to the
-                user's metro when known. */}
+                now" ranking). Renders ONLY when the menu-baseline pipeline
+                has real per-store prices for a comparable SKU (getLivePriceBoard
+                returns null otherwise — no invented prices ever reach prod).
+                The canopy tag personalizes to the user's metro when known. */}
             <div className="pp-home-hero-right">
-              <div className="pp-home-hero-featured">
-                <PriceBoard
-                  {...SAMPLE_BOARD}
-                  locationTag={`${userCity ? userCity.toUpperCase() : "CENTRAL IL"} · LIVE`}
-                />
-              </div>
+              {livePriceBoard && (
+                <div className="pp-home-hero-featured">
+                  <PriceBoard
+                    {...livePriceBoard}
+                    locationTag={`${userCity ? userCity.toUpperCase() : "CENTRAL IL"} · LIVE`}
+                  />
+                </div>
+              )}
 
               <div className="pp-home-hero-cats-shell">
                 <p className="pp-home-hero-cats-label">Browse by category</p>

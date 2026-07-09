@@ -186,7 +186,12 @@
  * Base styles
  * ============================================================ */
 
-html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+/* overflow-x: clip is the site-wide horizontal-scroll backstop. `clip`
+   (not `hidden`) leaves the vertical axis `visible`, so the sticky nav and
+   scroll-behavior keep working while any element that overshoots the viewport
+   is clipped instead of dragging the whole page sideways. Root offenders are
+   still fixed at source (e.g. the city grid's minmax(0,1fr) tracks). */
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: clip; }
 
 body {
   background: var(--pp-paper);
@@ -196,6 +201,7 @@ body {
   line-height: 1.55;
   font-weight: 400;
   text-rendering: optimizeLegibility;
+  overflow-x: clip;
 }
 
 /* ============================================================

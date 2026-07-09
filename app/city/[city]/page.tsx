@@ -20,7 +20,8 @@ import {
 } from "../../../lib/constants/regions";
 import { estimateSavings } from "../../../lib/dealScoring";
 import EndingSoonRow, { type EndingSoonDeal } from "../../components/EndingSoonRow";
-import PriceBoard, { SAMPLE_BOARD } from "../../components/PriceBoard";
+import PriceBoard from "../../components/PriceBoard";
+import { getLivePriceBoard } from "../../../lib/priceBoard";
 
 export const revalidate = 300;
 
@@ -216,9 +217,12 @@ export default async function CityPage({
   // data scope but no longer render a public page. They 404 publicly.
   if (!isCentralILPublicCity(raw)) notFound();
 
-  const [deals, listings] = await Promise.all([
+  const [deals, listings, livePriceBoard] = await Promise.all([
     getCityDeals(city),
     getCityListings(city),
+    // Real per-store board or null. Hidden until the menu-baseline pipeline
+    // has comparable prices — no invented data on city pages either.
+    getLivePriceBoard({ locationTag: `${city.toUpperCase()} · LIVE` }).catch(() => null),
   ]);
 
   const dispensaryCount = new Set(
@@ -307,19 +311,19 @@ export default async function CityPage({
         <h1>{city} dispensary deals today</h1>
         {intro && <p className="intro">{intro}</p>}
 
-        {/* Signature PriceBoard — the "who's cheapest right now" ranking for
-            this city. Seed data until the menu-baseline pipeline populates
-            canonical_products + price bands per category (brief §5/§6/§10);
-            then this becomes one board per active category (Flower, Edibles,
-            Vapes…), each ranking this city's stores on the best available
-            unit, with empty categories collapsed. */}
-        <div style={{ margin: "8px 0 28px", maxWidth: 560 }}>
-          <PriceBoard
-            {...SAMPLE_BOARD}
-            locationTag={`${city.toUpperCase()} · LIVE`}
-            subline={`FLOWER · 3.5G · 24% THC · SAME JAR · ${city.toUpperCase()}`}
-          />
-        </div>
+        {/* Signature PriceBoard — the "who's cheapest right now" ranking.
+            Renders ONLY when the menu-baseline pipeline has real comparable
+            prices (getLivePriceBoard returns null otherwise). No invented
+            prices. TODO(pipeline): scope the board to this city's stores and
+            split one board per active category once data lands. */}
+        {livePriceBoard && (
+          <div style={{ margin: "8px 0 28px", maxWidth: 560 }}>
+            <PriceBoard
+              {...livePriceBoard}
+              locationTag={`${city.toUpperCase()} · LIVE`}
+            />
+          </div>
+        )}
 
         {/* Ending-soon urgency row, scoped to this city */}
         <EndingSoonRow

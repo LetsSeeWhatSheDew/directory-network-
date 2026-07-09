@@ -235,9 +235,11 @@ export default function PriceBoard({
   );
 }
 
-/** Seed/placeholder board so the design ships now and goes live once the
- *  menu-baseline pipeline populates canonical_products + price bands
- *  (brief §10 data dependency). */
+/** ⚠️ DEV / STORYBOOK ONLY — invented prices. NEVER render this on a
+ *  production path. Production surfaces (homepage, city pages) build a REAL
+ *  board via lib/priceBoard.ts#getLivePriceBoard and render nothing when it
+ *  returns null. Rendering SAMPLE_BOARD live shows fake "VERIFIED" prices and
+ *  violates the no-fake-data rule (hotfix, July 2026). */
 export const SAMPLE_BOARD: PriceBoardProps = {
   rung: "same_sku",
   title: "Rythm · Blue Dream",
