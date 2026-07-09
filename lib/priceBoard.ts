@@ -12,9 +12,13 @@
 // nothing. SAMPLE_BOARD in app/components/PriceBoard.tsx is for
 // dev/storybook only and must never reach a production render path.
 //
-// As of this hotfix the pipeline tables (latest_menu_items, latest_baselines,
-// canonical_products) are empty, so this returns null and the board is hidden.
-// It lights up automatically once the pipeline populates real rows.
+// As of 2026-07-09 the pipeline holds real rows for 2 stores (nuEra East
+// Peoria + Ivy Hall Peoria Heights) with one comparable cross-store SKU, so
+// this returns a real board. Store identity resolves from `dispensaries`
+// (see step 3). `dispensaries` has RLS on with no anon policy, so that one
+// lookup uses the service-role key (this module is server-only; the key is
+// never bundled to the client). Everything else uses the anon key. Falls back
+// to null (board hidden) on any error or when < 2 stores share a SKU.
 // =============================================================================
 
 // NOTE: server-only in effect — imported solely by RSC data paths (homepage,
@@ -32,6 +36,19 @@ const SUPABASE_ANON_KEY =
 const HEADERS = {
   apikey: SUPABASE_ANON_KEY,
   Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+};
+
+// Server-only. `dispensaries` (RLS on, no anon policy) is not anon-readable,
+// so the store-identity lookup in step 3 uses the service-role key. This
+// module is imported solely by RSC data paths, so the key never reaches the
+// client. Vercel sets SUPABASE_SERVICE_ROLE_KEY; local .env.local uses
+// SUPABASE_SERVICE_KEY — accept either. If absent, that lookup 401s and the
+// board falls back to null (hidden), never a broken render.
+const SUPABASE_SERVICE_KEY =
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY || "";
+const SERVICE_HEADERS = {
+  apikey: SUPABASE_SERVICE_KEY,
+  Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
 };
 
 type MenuItem = {
@@ -104,32 +121,56 @@ export async function getLivePriceBoard(
     }
     if (cheapestByStore.size < 2) return null;
 
-    // 3. Resolve store identity (Central IL, PuffPrice scope only).
+    // 3. Resolve store identity from the pipeline's `dispensaries` table — the
+    //    ID-space that latest_menu_items.dispensary_id actually lives in.
+    //    (The previous version looked these ids up in master_listings.id, a
+    //    DIFFERENT id-space with zero overlap, so the board never resolved a
+    //    store and always returned null.) `dispensaries` carries name/city/slug.
+    //    master_listings is consulted ONLY to decide which stores have a live
+    //    PuffPrice listing page for the link — a store with no listing page
+    //    still renders on the board, just without an href.
     const ids = Array.from(cheapestByStore.keys());
-    const lres = await fetch(
-      `${SUPABASE_URL}/rest/v1/master_listings?id=in.(${ids.join(",")})&project_tag=eq.green&is_active=eq.true&select=id,name,slug,city`,
-      { headers: HEADERS, next: { revalidate: 600, tags: ["listings"] } }
+    const dres = await fetch(
+      `${SUPABASE_URL}/rest/v1/dispensaries?id=in.(${ids.join(",")})&is_active=eq.true&select=id,name,slug,city`,
+      { headers: SERVICE_HEADERS, next: { revalidate: 600, tags: ["dispensaries"] } }
     );
-    if (!lres.ok) return null;
-    const listings: ListingMini[] = await lres.json();
-    const listingById = new Map(listings.map((l) => [l.id, l]));
+    if (!dres.ok) return null;
+    const disps: ListingMini[] = await dres.json();
+    const dispById = new Map(disps.map((d) => [d.id, d]));
+
+    // Which of these stores have a live PuffPrice (green) listing page?
+    // Matched by slug (dispensaries.slug === master_listings.slug). Only those
+    // get an href; the rest render unlinked.
+    const slugs = disps.map((d) => d.slug).filter((s): s is string => !!s);
+    const linkableSlugs = new Set<string>();
+    if (slugs.length > 0) {
+      const lres = await fetch(
+        `${SUPABASE_URL}/rest/v1/master_listings?slug=in.(${slugs.join(",")})&project_tag=eq.green&is_active=eq.true&select=slug`,
+        { headers: HEADERS, next: { revalidate: 600, tags: ["listings"] } }
+      );
+      if (lres.ok) {
+        const ls: Array<{ slug: string | null }> = await lres.json();
+        for (const l of ls) if (l.slug) linkableSlugs.add(l.slug);
+      }
+    }
 
     const stores: PriceBoardStore[] = [];
     let sampleItem: MenuItem | null = null;
     for (const [dispId, item] of cheapestByStore.entries()) {
-      const listing = listingById.get(dispId);
-      if (!listing || !listing.name || item.price_out_the_door == null) continue;
+      const disp = dispById.get(dispId);
+      if (!disp || !disp.name || item.price_out_the_door == null) continue;
       sampleItem = sampleItem || item;
       const shelf =
         item.price_pretax != null && item.price_pretax > item.price_out_the_door
           ? item.price_pretax
           : null;
+      const linkable = disp.slug ? linkableSlugs.has(disp.slug) : false;
       stores.push({
-        slug: listing.slug || undefined,
-        storeName: listing.city ? `${listing.name} · ${listing.city}` : listing.name,
+        slug: disp.slug || undefined,
+        storeName: disp.city ? `${disp.name} · ${disp.city}` : disp.name,
         otdPrice: Number(item.price_out_the_door),
         shelfPrice: shelf,
-        href: listing.slug ? `/dispensary/${listing.slug}` : undefined,
+        href: linkable && disp.slug ? `/dispensary/${disp.slug}` : undefined,
       });
     }
     if (stores.length < 2 || !sampleItem) return null;
