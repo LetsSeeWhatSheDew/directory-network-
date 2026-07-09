@@ -50,6 +50,11 @@ const SLUG = argv.find((a) => a.startsWith("--slug="))?.split("=")[1];
 const ALL = argv.includes("--all");
 const APPLY = argv.includes("--apply");
 const FIXTURE = argv.includes("--fixture");
+// Optional: load fixtures from a custom dir (e.g. capture-derived fixtures)
+// instead of tests/fixtures/menu. Keeps real test fixtures untouched.
+const FIXTURE_DIR =
+  argv.find((a) => a.startsWith("--fixture-dir="))?.split("=")[1] ||
+  join("tests", "fixtures", "menu");
 
 if (!SLUG && !ALL) {
   console.error("ERROR: pass --slug=<dispensary-slug> or --all.");
@@ -100,10 +105,12 @@ async function loadStores(slug?: string): Promise<StoreRef[]> {
 }
 
 function fixtureLoader(): (name: string) => Promise<unknown> {
-  return async (name: string) =>
-    JSON.parse(
-      await readFile(join(process.cwd(), "tests", "fixtures", "menu", name), "utf8")
-    );
+  return async (name: string) => {
+    const path = FIXTURE_DIR.startsWith("/")
+      ? join(FIXTURE_DIR, name)
+      : join(process.cwd(), FIXTURE_DIR, name);
+    return JSON.parse(await readFile(path, "utf8"));
+  };
 }
 
 async function runOne(store: StoreRef): Promise<void> {

@@ -1,0 +1,3895 @@
+{
+  "capture_meta": {
+    "store": "Ivy Hall Peoria (Peoria Heights, IL) - Sweed platform",
+    "category": "flower",
+    "captured_at": "2026-07-09T15:07:49.079Z",
+    "platform": "Sweed POS 'web-ui-shop' storefront (Next.js SSR/RSC on Flywheel/Fastly)",
+    "contract_surprise": "There is NO distinct client-side XHR/fetch call that returns the product catalog JSON. The product list is rendered server-side and embedded as a JSON blob inside a <script> tag (window.__sw...chunks) within the full HTML document response for the category page URL. Client-side pagination (?page=N) triggers a full document re-fetch (SSR), not a separate JSON API call. The 'request' captured below is therefore the category page's own document GET request, and the 'response' is the embedded product list extracted from that HTML.",
+    "page": 1,
+    "page_size": 24,
+    "total_reported": 248
+  },
+  "request": {
+    "method": "GET",
+    "url": "https://ivyhalldispensary.com/locations/peoria/menu/menu/flower-611",
+    "note": "Standard document navigation request (not XHR/fetch) - Accept: text/html, browser-standard headers, no custom API headers required.",
+    "cookie_names_present": [
+      "_gcl_au",
+      "_ga",
+      "swa_Common/isAgeChecked",
+      "cebs",
+      "_ce.clock_data",
+      "_ce.seg.targeting",
+      "ageGateClosed",
+      "surfses.c4b1",
+      "UniqueId",
+      "surfses.c4b1",
+      "last_store",
+      "cebsp_",
+      "_ce.s",
+      "_ga_ERK8MWQK9E",
+      "ph_phc_mGT2oFJv0Dwvi26vbLjQxFPvPLGHuUpFeyBknthFatj_posthog",
+      "surfid.c4b1",
+      "surfid.c4b1"
+    ],
+    "cookies_note": "Anonymous/guest session cookies (analytics + a JWT-looking session cookie for cart state). Values redacted in this capture for privacy; names listed above."
+  },
+  "response": {
+    "status": 200,
+    "content_type": "text/html",
+    "relevant_response_headers": {
+      "cache-tag": "web-ui-shop-ssr-production",
+      "cdn-cache-control": "public, max-age=900, stale-while-revalidate=43200",
+      "server": "Flywheel/5.1.0",
+      "vary": "Accept-Encoding, Authorization"
+    },
+    "embedded_product_list_page1": [
+      {
+        "id": 272779,
+        "name": "Lemon Voltage",
+        "description": "New Strain from Simply Herb! \n\nSimply Herb's Lemon Voltage is a Sativa-dominant flower known for delivering energetic, uplifting, and creative effects, often with bright, citrusy lemon aromas and flavors, making it great for daytime focus and inspiration. As a Sativa, it provides a cerebral, energizing buzz that boosts mood and motivation, keeping users functional and happy.",
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://media.sweedpos.com/store/production/1780411316_e977b7f0-8b7c-4dce-9416-d6773f5b3155.png"
+        ],
+        "brand": {
+          "name": "Simply Herb",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Lemon Voltage",
+          "prevalence": {
+            "name": "Sativa Dominant",
+            "canonicalName": "sativa-dominant"
+          },
+          "flavors": [
+            {
+              "name": "Citrus ",
+              "canonicalName": "citrus"
+            },
+            {
+              "name": "Herbal",
+              "canonicalName": "herbal"
+            },
+            {
+              "name": "Lemon",
+              "canonicalName": "lemon"
+            }
+          ],
+          "terpenes": [
+            {
+              "name": "Myrcene",
+              "canonicalName": "myrcene"
+            },
+            {
+              "name": "Linalool",
+              "canonicalName": "linalool"
+            },
+            {
+              "name": "Pinene",
+              "canonicalName": "pinene"
+            },
+            {
+              "name": "Limonene",
+              "canonicalName": "limonene"
+            },
+            {
+              "name": "Caryophyllene",
+              "canonicalName": "caryophyllene"
+            },
+            {
+              "name": "Humulene",
+              "canonicalName": "humulene"
+            },
+            {
+              "name": "Bisabolol",
+              "canonicalName": "bisabolol"
+            },
+            {
+              "name": "B Pinene",
+              "canonicalName": "b-pinene"
+            },
+            {
+              "name": "Caryophyllene Oxide",
+              "canonicalName": "caryophyllene-oxide"
+            }
+          ],
+          "canonicalName": "lemon-voltage"
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": null,
+        "variants": [
+          {
+            "id": 377019,
+            "name": "3.5g",
+            "sku": "Sim-Flo-",
+            "images": [
+              "https://media.sweedpos.com/store/production/1780411326_1eec4b40-1670-4516-87bb-6df5e8ceaa00.png"
+            ],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  28.538
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": {
+                "value": [
+                  32.426
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": {
+                "value": [
+                  1.251
+                ],
+                "unitAbbr": "%"
+              }
+            },
+            "saleType": "Both",
+            "availableQty": 68,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 30,
+            "promoPrice": 25,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 108518,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "$25",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "3.5g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "lemon-voltage"
+      },
+      {
+        "id": 267528,
+        "name": "Head Cracker",
+        "description": "[orig: Tres Dawg IX x Tres OG] is a relaxing indica dominant strain that features a robust herbal, earthy, diesel, and citrus aroma with notes of spice and pine.\n",
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://media.sweedpos.com/store/production/1735576015_3510c687-2ca2-47b9-a1f8-c2dd2d0d2eeb.png"
+        ],
+        "brand": {
+          "name": "Good Green",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Head Cracker ",
+          "prevalence": {
+            "name": "Indica Dominant",
+            "canonicalName": "indica-dominant"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Nerolidol",
+              "canonicalName": "nerolidol"
+            },
+            {
+              "name": "Camphene",
+              "canonicalName": "camphene"
+            }
+          ],
+          "canonicalName": "head-cracker"
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Popcorn",
+          "canonicalName": "popcorn"
+        },
+        "variants": [
+          {
+            "id": 369930,
+            "name": "3.5g",
+            "sku": "Goo-Flo-Pop-",
+            "images": [
+              "https://media.sweedpos.com/store/production/1735576003_752e4ef0-fe96-4a7e-90e9-c92fb753998b.png"
+            ],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  28.05
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": {
+                "value": [
+                  31.91
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": null
+            },
+            "saleType": "Both",
+            "availableQty": 48,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 30,
+            "promoPrice": 25,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 34625,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "GoodGreen3.5g",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              },
+              {
+                "id": 108518,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "$25",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              },
+              {
+                "id": 131274,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "25% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "3.5g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "head-cracker"
+      },
+      {
+        "id": 48517,
+        "name": "Jenny Kush",
+        "description": "Named in memory of the late cannabis activist Jenny Monson, this perfectly balanced hybrid was first bred for a foundation that helped support Monson’s children. Jenny Kush combines elevating and mentally stimulating effects with a subtle relaxation, allowing it to be enjoyed all throughout the day. A fresh, sharp aroma announces the fruity and herbal notes that define this sought-after strain.",
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://media.sweedpos.com/store/production/1715983437_7fa6f71b-bc11-4cf2-86f9-63cc007867ec-1.avif"
+        ],
+        "brand": {
+          "name": "Aeriz",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Jenny Kush",
+          "prevalence": {
+            "name": "Hybrid",
+            "canonicalName": "hybrid"
+          },
+          "flavors": [
+            {
+              "name": "Sweet ",
+              "canonicalName": "sweet"
+            },
+            {
+              "name": "Herbal",
+              "canonicalName": "herbal"
+            },
+            {
+              "name": "Fruity",
+              "canonicalName": "fruity"
+            }
+          ],
+          "terpenes": [
+            {
+              "name": "Myrcene",
+              "canonicalName": "myrcene"
+            },
+            {
+              "name": "Linalool",
+              "canonicalName": "linalool"
+            },
+            {
+              "name": "Pinene",
+              "canonicalName": "pinene"
+            },
+            {
+              "name": "Limonene",
+              "canonicalName": "limonene"
+            },
+            {
+              "name": "Caryophyllene",
+              "canonicalName": "caryophyllene"
+            },
+            {
+              "name": "Humulene",
+              "canonicalName": "humulene"
+            },
+            {
+              "name": "Bisabolol",
+              "canonicalName": "bisabolol"
+            },
+            {
+              "name": "B Pinene",
+              "canonicalName": "b-pinene"
+            },
+            {
+              "name": "Caryophyllene Oxide",
+              "canonicalName": "caryophyllene-oxide"
+            }
+          ],
+          "canonicalName": "jenny-kush"
+        },
+        "tags": [],
+        "effects": [
+          {
+            "name": "Stimulated",
+            "canonicalName": "stimulated"
+          },
+          {
+            "name": "Body High",
+            "canonicalName": "body-high"
+          },
+          {
+            "name": "Relaxed",
+            "canonicalName": "relaxed"
+          }
+        ],
+        "qualityLine": null,
+        "productType": null,
+        "variants": [
+          {
+            "id": 55770,
+            "name": "3.5g",
+            "sku": "aer-Flo-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  30.11
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": {
+                "value": [
+                  34.27
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": {
+                "value": [
+                  2.48
+                ],
+                "unitAbbr": "%"
+              }
+            },
+            "saleType": "Both",
+            "availableQty": 19,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 48,
+            "promoPrice": null,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "3.5g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "jenny-kush"
+      },
+      {
+        "id": 48034,
+        "name": "Butterstuff ",
+        "description": "Butterstuff is a colorful and potent flower that has an aroma and taste that can be described as very loud with hints of nut, fuel, garlic and cream. Butterstuff greets you with a relaxing, sedative and spacey high that is fantastic for a relaxing night in or just trying to wind down for the evening.",
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://media.sweedpos.com/store/production/1777643269_cc93a641-bd0a-4caa-b69b-bc633f6e264e.jpg"
+        ],
+        "brand": {
+          "name": "Ozone",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Butterstuff",
+          "prevalence": {
+            "name": "Indica",
+            "canonicalName": "indica"
+          },
+          "flavors": [
+            {
+              "name": "Sweet ",
+              "canonicalName": "sweet"
+            },
+            {
+              "name": "Earthy",
+              "canonicalName": "earthy"
+            },
+            {
+              "name": "Creamy",
+              "canonicalName": "creamy"
+            }
+          ],
+          "terpenes": [
+            {
+              "name": "Myrcene",
+              "canonicalName": "myrcene"
+            },
+            {
+              "name": "Linalool",
+              "canonicalName": "linalool"
+            },
+            {
+              "name": "Pinene",
+              "canonicalName": "pinene"
+            },
+            {
+              "name": "Limonene",
+              "canonicalName": "limonene"
+            },
+            {
+              "name": "Caryophyllene",
+              "canonicalName": "caryophyllene"
+            },
+            {
+              "name": "Humulene",
+              "canonicalName": "humulene"
+            },
+            {
+              "name": "Bisabolol",
+              "canonicalName": "bisabolol"
+            },
+            {
+              "name": "B Pinene",
+              "canonicalName": "b-pinene"
+            },
+            {
+              "name": "Caryophyllene Oxide",
+              "canonicalName": "caryophyllene-oxide"
+            }
+          ],
+          "canonicalName": "butterstuff"
+        },
+        "tags": [
+          {
+            "name": "Indica",
+            "canonicalName": "indica"
+          }
+        ],
+        "effects": [
+          {
+            "name": "Body High",
+            "canonicalName": "body-high"
+          },
+          {
+            "name": "Calming",
+            "canonicalName": "calming"
+          },
+          {
+            "name": "Euphoric",
+            "canonicalName": "euphoric"
+          }
+        ],
+        "qualityLine": null,
+        "productType": {
+          "name": "Shake",
+          "canonicalName": "shake"
+        },
+        "variants": [
+          {
+            "id": 55203,
+            "name": "7g",
+            "sku": "Ozo-Flo-Sha-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  31.66
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": {
+                "value": [
+                  30.43
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": {
+                "value": [
+                  1.77
+                ],
+                "unitAbbr": "%"
+              }
+            },
+            "saleType": "Both",
+            "availableQty": 29,
+            "unitSize": {
+              "value": 7,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 55,
+            "promoPrice": 38.5,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 131268,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "30% Off!",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "7g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "butterstuff"
+      },
+      {
+        "id": 383630,
+        "name": "Tri Berry",
+        "description": "Primarily produced as a regular hybrid strain by Crockett Family Farms in their Strawnana Juice line.\nAroma & Flavor: Complex blend of sharp diesel from Sour Chem, earthy notes from Triangle Kush, and sweet fruity notes from Strawnana.",
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://sweedpos.s3.amazonaws.com/store/production/1679085372_ec15ed24-db00-4cce-89e2-ea060b250cf7"
+        ],
+        "brand": {
+          "name": "Find.",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Hybrid",
+          "prevalence": {
+            "name": "Hybrid",
+            "canonicalName": "hybrid"
+          },
+          "flavors": [],
+          "terpenes": [],
+          "canonicalName": "hybrid"
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": null,
+        "variants": [
+          {
+            "id": 578577,
+            "name": "3.5g",
+            "sku": "Fin-Flo-",
+            "images": [
+              "https://media.sweedpos.com/store/production/1750193444_cf7ecb48-5165-4c3d-9d06-8108f65a9931.jpg"
+            ],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  32.72
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": {
+                "value": [
+                  0.052
+                ],
+                "unitAbbr": "%"
+              },
+              "displayThc": {
+                "value": [
+                  30.673
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": null
+            },
+            "saleType": "Both",
+            "availableQty": 37,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 35,
+            "promoPrice": null,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "3.5g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "tri-berry"
+      },
+      {
+        "id": 83376,
+        "name": "Blockberry ",
+        "description": "Blockberry is a true hybrid that brings balance in both structure and effect. Bred from Black Cherry Punch and Tropicana Cookies, this strain delivers dense olive green buds streaked with purple and coated in frosty trichomes. Best suited for those who want a potent well rounded experience. \nThe aroma blends earthy berries, citrus, and a touch of funk, thanks to a terpene profile led by Myrcene, Caryophyllene, and Limonene. \n\nEffects come on smooth. Expect an uplifting euphoric headspace paired with calm focus and creativity. Whether you are heading out for a hike or sinking into a new project, Blockberry keeps your mood high and your mind grounded.   Top Terpenes: Myrcene, Caryophyllene, Limonene\n\nFlavor: Berries, citrus, sweet funk\nLineage: Black Cherry Punch x Tropicana Cookies \n\nBest For: Daytime vibes, creative focus, feel good energy     \n\nSimply Herb keeps it uncomplicated: good weed, no frills. Whether it's flower, pre-rolls, or flavorful vapes, the goal is always the same; quality cannabis without the inflated price or the industry ego. No buzzwords, no fluff. Just straightforward products that do what they're supposed to do.",
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://media.sweedpos.com/store/production/1780410755_2192906b-9f7f-4272-83d2-5992f1777a6a.png"
+        ],
+        "brand": {
+          "name": "Simply Herb",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Blockberry",
+          "prevalence": {
+            "name": "Hybrid",
+            "canonicalName": "hybrid"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Myrcene",
+              "canonicalName": "myrcene"
+            },
+            {
+              "name": "Linalool",
+              "canonicalName": "linalool"
+            },
+            {
+              "name": "Pinene",
+              "canonicalName": "pinene"
+            },
+            {
+              "name": "Limonene",
+              "canonicalName": "limonene"
+            },
+            {
+              "name": "Caryophyllene",
+              "canonicalName": "caryophyllene"
+            },
+            {
+              "name": "Humulene",
+              "canonicalName": "humulene"
+            },
+            {
+              "name": "Bisabolol",
+              "canonicalName": "bisabolol"
+            },
+            {
+              "name": "B Pinene",
+              "canonicalName": "b-pinene"
+            },
+            {
+              "name": "Caryophyllene Oxide",
+              "canonicalName": "caryophyllene-oxide"
+            }
+          ],
+          "canonicalName": "blockberry"
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": null,
+        "variants": [
+          {
+            "id": 104712,
+            "name": "3.5g",
+            "sku": "Sim-Flo-",
+            "images": [
+              "https://media.sweedpos.com/store/production/1780410763_868d553e-38b9-4b8d-a97b-bef0de82b883.png"
+            ],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  24.07
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": {
+                "value": [
+                  24.072
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": {
+                "value": [
+                  1.167
+                ],
+                "unitAbbr": "%"
+              }
+            },
+            "saleType": "Both",
+            "availableQty": 32,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 30,
+            "promoPrice": 25,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 108518,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "$25",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "3.5g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "blockberry"
+      },
+      {
+        "id": 46321,
+        "name": "Animal Cake",
+        "description": "This bud has a sweet and sour citrusy cake overtone that's accented by creamy vanilla and flowery herbs. The aroma is very similar, with a sour citrus overtone that's accented by spicy pepper and earthy flowers. ",
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://media.sweedpos.com/store/production/1777497798_c958fd2b-e680-49e2-ac57-ea1962ae0a7c.jpg"
+        ],
+        "brand": {
+          "name": "Ozone",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Animal Cake",
+          "prevalence": {
+            "name": "Sativa",
+            "canonicalName": "sativa"
+          },
+          "flavors": [
+            {
+              "name": "Floral",
+              "canonicalName": "floral"
+            },
+            {
+              "name": "Earthy",
+              "canonicalName": "earthy"
+            },
+            {
+              "name": "Chemical",
+              "canonicalName": "chemical"
+            }
+          ],
+          "terpenes": [
+            {
+              "name": "Myrcene",
+              "canonicalName": "myrcene"
+            },
+            {
+              "name": "Linalool",
+              "canonicalName": "linalool"
+            },
+            {
+              "name": "Pinene",
+              "canonicalName": "pinene"
+            },
+            {
+              "name": "Limonene",
+              "canonicalName": "limonene"
+            },
+            {
+              "name": "Caryophyllene",
+              "canonicalName": "caryophyllene"
+            },
+            {
+              "name": "Humulene",
+              "canonicalName": "humulene"
+            },
+            {
+              "name": "Bisabolol",
+              "canonicalName": "bisabolol"
+            },
+            {
+              "name": "B Pinene",
+              "canonicalName": "b-pinene"
+            },
+            {
+              "name": "Caryophyllene Oxide",
+              "canonicalName": "caryophyllene-oxide"
+            }
+          ],
+          "canonicalName": "animal-cake"
+        },
+        "tags": [
+          {
+            "name": "Sativa",
+            "canonicalName": "sativa"
+          }
+        ],
+        "effects": [
+          {
+            "name": "Creative",
+            "canonicalName": "creative"
+          },
+          {
+            "name": "Uplifting",
+            "canonicalName": "uplifting"
+          }
+        ],
+        "qualityLine": null,
+        "productType": {
+          "name": "Shake",
+          "canonicalName": "shake"
+        },
+        "variants": [
+          {
+            "id": 53165,
+            "name": "7g",
+            "sku": "Ozo-Con-Sha-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  29.46
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": {
+                "value": [
+                  29.463
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": {
+                "value": [
+                  1.432
+                ],
+                "unitAbbr": "%"
+              }
+            },
+            "saleType": "Both",
+            "availableQty": 6,
+            "unitSize": {
+              "value": 7,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 55,
+            "promoPrice": 38.5,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 131268,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "30% Off!",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "7g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "animal-cake"
+      },
+      {
+        "id": 46446,
+        "name": "Butterstuff",
+        "description": "Butterstuff is a colorful and potent flower that has an aroma and taste that can be described as very loud with hints of nut, fuel, garlic and cream. Butterstuff greets you with a relaxing, sedative and spacey high that is fantastic for a relaxing night in or just trying to wind down for the evening.",
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://media.sweedpos.com/store/production/1777494725_dddbcfad-c88b-4f1a-b98b-666cf6695b82.jpg"
+        ],
+        "brand": {
+          "name": "Ozone",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Butterstuff",
+          "prevalence": {
+            "name": "Indica",
+            "canonicalName": "indica"
+          },
+          "flavors": [
+            {
+              "name": "Sweet ",
+              "canonicalName": "sweet"
+            },
+            {
+              "name": "Earthy",
+              "canonicalName": "earthy"
+            },
+            {
+              "name": "Creamy",
+              "canonicalName": "creamy"
+            }
+          ],
+          "terpenes": [
+            {
+              "name": "Myrcene",
+              "canonicalName": "myrcene"
+            },
+            {
+              "name": "Linalool",
+              "canonicalName": "linalool"
+            },
+            {
+              "name": "Pinene",
+              "canonicalName": "pinene"
+            },
+            {
+              "name": "Limonene",
+              "canonicalName": "limonene"
+            },
+            {
+              "name": "Caryophyllene",
+              "canonicalName": "caryophyllene"
+            },
+            {
+              "name": "Humulene",
+              "canonicalName": "humulene"
+            },
+            {
+              "name": "Bisabolol",
+              "canonicalName": "bisabolol"
+            },
+            {
+              "name": "B Pinene",
+              "canonicalName": "b-pinene"
+            }
+          ],
+          "canonicalName": "butterstuff"
+        },
+        "tags": [
+          {
+            "name": "Indica",
+            "canonicalName": "indica"
+          }
+        ],
+        "effects": [
+          {
+            "name": "Body High",
+            "canonicalName": "body-high"
+          },
+          {
+            "name": "Calming",
+            "canonicalName": "calming"
+          },
+          {
+            "name": "Euphoric",
+            "canonicalName": "euphoric"
+          }
+        ],
+        "qualityLine": null,
+        "productType": {
+          "name": "Popcorn",
+          "canonicalName": "popcorn"
+        },
+        "variants": [
+          {
+            "id": 53290,
+            "name": "7g",
+            "sku": "Ozo-Flo-Pop-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  33.08
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": {
+                "value": [
+                  33.474
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": {
+                "value": [
+                  1.348
+                ],
+                "unitAbbr": "%"
+              }
+            },
+            "saleType": "Both",
+            "availableQty": 46,
+            "unitSize": {
+              "value": 7,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 70,
+            "promoPrice": 49,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 131268,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "30% Off!",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "7g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "butterstuff"
+      },
+      {
+        "id": 83919,
+        "name": "Kush and Cream",
+        "description": "Kush and Cream delivers a rich flavorful experience. This hybrid leans heavy on the creamy kush side, with notes of gas, earth, and smooth vanilla that linger on the palate. The inhale is soft and smooth, followed by a relaxing wave that melts stress without knocking you out cold.\n\nEuphoric uplifting effects up front, tapering into a mellow calm. Ideal for winding down without full couch lock. Whether you are easing into the evening or coasting through a lazy Sunday, this strain keeps things grounded and easygoing.\n\nTop Terpenes: Limonene, Beta Caryophyllene, Alpha Humulene\nBest For: Relaxation, mood boost, anytime calm     \n\nSimply Herb keeps it uncomplicated: good weed, no frills. Whether it's flower, pre-rolls, or flavorful vapes, the goal is always the same; quality cannabis without the inflated price or the industry ego. No buzzwords, no fluff. Just straightforward products that do what they're supposed to do.",
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://media.sweedpos.com/store/production/1780411266_d21e6701-1b26-48f8-99c9-55aa9de11410.png"
+        ],
+        "brand": {
+          "name": "Simply Herb",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Kush and Cream",
+          "prevalence": {
+            "name": "Indica",
+            "canonicalName": "indica"
+          },
+          "flavors": [
+            {
+              "name": "Gassy",
+              "canonicalName": "gassy"
+            },
+            {
+              "name": "Earthy",
+              "canonicalName": "earthy"
+            },
+            {
+              "name": " Creamy ",
+              "canonicalName": "creamy"
+            }
+          ],
+          "terpenes": [
+            {
+              "name": "Myrcene",
+              "canonicalName": "myrcene"
+            },
+            {
+              "name": "Linalool",
+              "canonicalName": "linalool"
+            },
+            {
+              "name": "Pinene",
+              "canonicalName": "pinene"
+            },
+            {
+              "name": "Limonene",
+              "canonicalName": "limonene"
+            },
+            {
+              "name": "Caryophyllene",
+              "canonicalName": "caryophyllene"
+            },
+            {
+              "name": "Humulene",
+              "canonicalName": "humulene"
+            },
+            {
+              "name": "Bisabolol",
+              "canonicalName": "bisabolol"
+            },
+            {
+              "name": "B Pinene",
+              "canonicalName": "b-pinene"
+            },
+            {
+              "name": "Caryophyllene Oxide",
+              "canonicalName": "caryophyllene-oxide"
+            }
+          ],
+          "canonicalName": "kush-and-cream"
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": null,
+        "variants": [
+          {
+            "id": 105450,
+            "name": "3.5g",
+            "sku": "Sim-Flo-",
+            "images": [
+              "https://media.sweedpos.com/store/production/1780411276_65c4ebbe-8f5c-4049-9668-324194e43bec.png"
+            ],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  26.45
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": {
+                "value": [
+                  26.451
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": {
+                "value": [
+                  1.292
+                ],
+                "unitAbbr": "%"
+              }
+            },
+            "saleType": "Both",
+            "availableQty": 4,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 30,
+            "promoPrice": 25,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 108518,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "$25",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "3.5g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "kush-and-cream"
+      },
+      {
+        "id": 380615,
+        "name": "Mayday",
+        "description": "Mayday by Galaxy Labs is a potent, indica-dominant strain that is known for relaxation and a strong cerebral fog. It is a cross between GMO Crasher and I-95, featuring a highly pungent aroma with notes of garlic, skunk, and jet fuel.",
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://media.sweedpos.com/store/production/1722015489_03c1c52b-59be-4f69-90da-39c35dd30fb1.png"
+        ],
+        "brand": {
+          "name": "Galaxy Labs",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Indica Dominant Hybrid",
+          "prevalence": {
+            "name": "Indica Dominant",
+            "canonicalName": "indica-dominant"
+          },
+          "flavors": [],
+          "terpenes": [],
+          "canonicalName": "indica-dominant-hybrid"
+        },
+        "tags": [],
+        "effects": [
+          {
+            "name": "Calming",
+            "canonicalName": "calming"
+          },
+          {
+            "name": "Relaxed",
+            "canonicalName": "relaxed"
+          },
+          {
+            "name": "Uplifting",
+            "canonicalName": "uplifting"
+          }
+        ],
+        "qualityLine": null,
+        "productType": null,
+        "variants": [
+          {
+            "id": 574088,
+            "name": "3.5g",
+            "sku": "Gal-Flo-",
+            "images": [
+              "https://media.sweedpos.com/store/production/1738604800_7943342a-7ee3-4f36-8bb9-5340857b5b03.png"
+            ],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  37.13
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": {
+                "value": [
+                  37.752
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": null
+            },
+            "saleType": "Both",
+            "availableQty": 15,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 50,
+            "promoPrice": 35,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 125997,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "$15 Off!",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "3.5g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "mayday"
+      },
+      {
+        "id": 346530,
+        "name": "Singapore Sling",
+        "description": "Fruity aromas of citrus and a sweetness of sugar are most obvious when you first pop open the jar. No matter how you enjoy the flower, the flavors stay as prevalent as the smells. The obvious citric smell turns into a medley of fruit flavors, with lemon, raspberry and black cherry all swirling together. A sweet, smoky flavor sticks around on the palate long after every exhale. With its family tree having firm roots in equatorial strains (Tiki Cookies and Creamsicle), Singapore Sling has been a favorite for creativity and uplifted moods.\n\nLineage: Tiki Cookies X Creamsicle\nFlavors: Muddled Fruit, Orange Zest, Smoky Sugar\nAromas: Fresh Lemons, Floral, Sweetener\nTop Terpenes: Caryophyllene, Limonene, Myrcene\nDominance: Sativa",
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://sweedpos.s3.amazonaws.com/store/production/1679085372_ec15ed24-db00-4cce-89e2-ea060b250cf7"
+        ],
+        "brand": {
+          "name": "Find.",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Singapore Sling",
+          "prevalence": {
+            "name": "Sativa",
+            "canonicalName": "sativa"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Myrcene",
+              "canonicalName": "myrcene"
+            },
+            {
+              "name": "Limonene",
+              "canonicalName": "limonene"
+            },
+            {
+              "name": "Caryophyllene",
+              "canonicalName": "caryophyllene"
+            }
+          ],
+          "canonicalName": "singapore-sling"
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": null,
+        "variants": [
+          {
+            "id": 513874,
+            "name": "3.5g",
+            "sku": "Fin-Flo-",
+            "images": [
+              "https://media.sweedpos.com/store/production/1750193416_9e9741c8-10cd-48d9-a6c6-73c73dbf5b1e.jpg"
+            ],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  36.91
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": {
+                "value": [
+                  0.042
+                ],
+                "unitAbbr": "%"
+              },
+              "displayThc": {
+                "value": [
+                  33.041
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": null
+            },
+            "saleType": "Both",
+            "availableQty": 2,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 35,
+            "promoPrice": null,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "3.5g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "singapore-sling"
+      },
+      {
+        "id": 48527,
+        "name": "Animal Cake",
+        "description": "This bud has a sweet and sour citrusy cake overtone that's accented by creamy vanilla and flowery herbs. The aroma is very similar, with a sour citrus overtone that's accented by spicy pepper and earthy flowers. Animal Cake buds have fluffy popcorn-shaped olive green nugs with thin red-orange hairs and a coating of frosty, tiny purple-white crystal trichomes.",
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://media.sweedpos.com/store/production/1777494362_94ad9f7c-98af-423a-bcd2-68f19844f7bc.jpg"
+        ],
+        "brand": {
+          "name": "Ozone",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Animal Cake",
+          "prevalence": {
+            "name": "Sativa",
+            "canonicalName": "sativa"
+          },
+          "flavors": [
+            {
+              "name": "Floral",
+              "canonicalName": "floral"
+            },
+            {
+              "name": "Earthy",
+              "canonicalName": "earthy"
+            },
+            {
+              "name": "Chemical",
+              "canonicalName": "chemical"
+            }
+          ],
+          "terpenes": [
+            {
+              "name": "Myrcene",
+              "canonicalName": "myrcene"
+            },
+            {
+              "name": "Linalool",
+              "canonicalName": "linalool"
+            },
+            {
+              "name": "Pinene",
+              "canonicalName": "pinene"
+            },
+            {
+              "name": "Limonene",
+              "canonicalName": "limonene"
+            },
+            {
+              "name": "Caryophyllene",
+              "canonicalName": "caryophyllene"
+            },
+            {
+              "name": "Humulene",
+              "canonicalName": "humulene"
+            },
+            {
+              "name": "Bisabolol",
+              "canonicalName": "bisabolol"
+            },
+            {
+              "name": "B Pinene",
+              "canonicalName": "b-pinene"
+            }
+          ],
+          "canonicalName": "animal-cake"
+        },
+        "tags": [
+          {
+            "name": "Sativa",
+            "canonicalName": "sativa"
+          }
+        ],
+        "effects": [
+          {
+            "name": "Energized",
+            "canonicalName": "energized"
+          },
+          {
+            "name": "Creative",
+            "canonicalName": "creative"
+          }
+        ],
+        "qualityLine": null,
+        "productType": {
+          "name": "Popcorn",
+          "canonicalName": "popcorn"
+        },
+        "variants": [
+          {
+            "id": 55780,
+            "name": "7g",
+            "sku": "Ozo-Flo-Pop-",
+            "images": [
+              "https://media.sweedpos.com/store/production/1777494371_87d27555-8bbb-4225-9c20-be956827c300.jpg"
+            ],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  26.267
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": {
+                "value": [
+                  29.909
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": {
+                "value": [
+                  1.394
+                ],
+                "unitAbbr": "%"
+              }
+            },
+            "saleType": "Both",
+            "availableQty": 37,
+            "unitSize": {
+              "value": 7,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 70,
+            "promoPrice": 49,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 131268,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "30% Off!",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "7g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "animal-cake"
+      },
+      {
+        "id": 48032,
+        "name": "Banana Daddy",
+        "description": "Banana Daddy rolls up a smooth hybrid experience with standout flavor and feel good effects. Bred from Granddaddy Purple and Banana Hammock R1, this strain hits with creamy banana and berry on the inhale, rounded out by a bubblegum diesel finish that sticks with you.      \n\nExpect an energetic euphoric lift that softens into a calm body forward buzz. Ideal for mornings with momentum or evenings on cruise control. \n\nTop Terpenes: Myrcene, Limonene, Caryophyllene, Valencene     \n\nFlavor: Banana, berry, bubblegum, diesel     \n",
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://media.sweedpos.com/store/production/1777497860_cc4011f5-6723-4224-b429-1c828da80ad6.jpg"
+        ],
+        "brand": {
+          "name": "Ozone",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Banana Daddy",
+          "prevalence": {
+            "name": "Hybrid",
+            "canonicalName": "hybrid"
+          },
+          "flavors": [
+            {
+              "name": "Earthy",
+              "canonicalName": "earthy"
+            },
+            {
+              "name": "Diesel",
+              "canonicalName": "diesel"
+            },
+            {
+              "name": "Berry",
+              "canonicalName": "berry"
+            }
+          ],
+          "terpenes": [
+            {
+              "name": "Myrcene",
+              "canonicalName": "myrcene"
+            },
+            {
+              "name": "Linalool",
+              "canonicalName": "linalool"
+            },
+            {
+              "name": "Pinene",
+              "canonicalName": "pinene"
+            },
+            {
+              "name": "Limonene",
+              "canonicalName": "limonene"
+            },
+            {
+              "name": "Caryophyllene",
+              "canonicalName": "caryophyllene"
+            },
+            {
+              "name": "Humulene",
+              "canonicalName": "humulene"
+            },
+            {
+              "name": "Bisabolol",
+              "canonicalName": "bisabolol"
+            },
+            {
+              "name": "B Pinene",
+              "canonicalName": "b-pinene"
+            },
+            {
+              "name": "Caryophyllene Oxide",
+              "canonicalName": "caryophyllene-oxide"
+            }
+          ],
+          "canonicalName": "banana-daddy"
+        },
+        "tags": [
+          {
+            "name": "Hybrid",
+            "canonicalName": "hybrid"
+          }
+        ],
+        "effects": [
+          {
+            "name": "Creative",
+            "canonicalName": "creative"
+          },
+          {
+            "name": "Uplifting",
+            "canonicalName": "uplifting"
+          }
+        ],
+        "qualityLine": null,
+        "productType": {
+          "name": "Shake",
+          "canonicalName": "shake"
+        },
+        "variants": [
+          {
+            "id": 55201,
+            "name": "7g",
+            "sku": "Ozo-Flo-Sha-",
+            "images": [
+              "https://media.sweedpos.com/store/production/1777497868_0c80721f-697d-4d47-aeb3-3df840a0e3a5.jpg"
+            ],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  24.209
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": {
+                "value": [
+                  27.564
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": {
+                "value": [
+                  1.183
+                ],
+                "unitAbbr": "%"
+              }
+            },
+            "saleType": "Both",
+            "availableQty": 38,
+            "unitSize": {
+              "value": 7,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 55,
+            "promoPrice": 38.5,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 131268,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "30% Off!",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "7g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "banana-daddy"
+      },
+      {
+        "id": 213709,
+        "name": "Gas and Glue",
+        "description": "Gas and Glue [orig. The White x GSC x GG4] is a heavy-hitting hybrid strain that produces uniquely sweet aromas with hints of gassiness.",
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://media.sweedpos.com/store/production/1724990492_879bed41-e4de-46c2-acdd-46041bbb4c18.png"
+        ],
+        "brand": {
+          "name": "Good Green",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Gas and Glue",
+          "prevalence": {
+            "name": "Hybrid",
+            "canonicalName": "hybrid"
+          },
+          "flavors": [
+            {
+              "name": "Gassy",
+              "canonicalName": "gassy"
+            },
+            {
+              "name": "Sweet ",
+              "canonicalName": "sweet"
+            }
+          ],
+          "terpenes": [
+            {
+              "name": "Myrcene",
+              "canonicalName": "myrcene"
+            },
+            {
+              "name": "Terpinolene",
+              "canonicalName": "terpinolene"
+            }
+          ],
+          "canonicalName": "gas-and-glue"
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Popcorn",
+          "canonicalName": "popcorn"
+        },
+        "variants": [
+          {
+            "id": 299804,
+            "name": "3.5g",
+            "sku": "Goo-Flo-Pop-",
+            "images": [
+              "https://media.sweedpos.com/store/production/1724990503_b9a6af7d-d10d-45b8-8811-0e8cb27a777a.png"
+            ],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  35.49
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": {
+                "value": [
+                  35.49
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": null
+            },
+            "saleType": "Both",
+            "availableQty": 32,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 30,
+            "promoPrice": 25,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 34625,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "GoodGreen3.5g",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              },
+              {
+                "id": 108518,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "$25",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              },
+              {
+                "id": 131274,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "25% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "3.5g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "gas-and-glue"
+      },
+      {
+        "id": 288287,
+        "name": "Pomme Jelly",
+        "description": null,
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://media.sweedpos.com/store/production/1747665934_ca7ccb49-f929-4832-bb12-5ef400436f7a.jpg"
+        ],
+        "brand": {
+          "name": "Find.",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Sativa",
+          "prevalence": {
+            "name": "Sativa",
+            "canonicalName": "sativa"
+          },
+          "flavors": [],
+          "terpenes": [],
+          "canonicalName": "sativa"
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Popcorn",
+          "canonicalName": "popcorn"
+        },
+        "variants": [
+          {
+            "id": 399253,
+            "name": "28g",
+            "sku": "Fin-Flo-Pop-",
+            "images": [
+              "https://media.sweedpos.com/store/production/1747665974_b32735be-cc85-4faf-b080-24ab5054ab6c.jpg"
+            ],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  24.442
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": {
+                "value": [
+                  0.05
+                ],
+                "unitAbbr": "%"
+              },
+              "displayThc": {
+                "value": [
+                  27.849
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": null
+            },
+            "saleType": "Both",
+            "availableQty": 9,
+            "unitSize": {
+              "value": 28,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 180,
+            "promoPrice": 100,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 110597,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "$100 Oz!",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "28g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "pomme-jelly"
+      },
+      {
+        "id": 73922,
+        "name": "Mac 1",
+        "description": "Mac 1 is a hybrid strain created from Alien Cookies F2 and Miracle 15. \n\nIt delivers a smooth potent experience that pairs well with a variety of moods and settings. The buds are dense and frosty, shimmering with trichomes and offering a creamy diesel kick on the inhale. A citrus forward aroma comes from the dominant terpene Limonene, while Terpinolene and Pinene add earthy and herbal undertones. The flavor is bold and layered, with a funky citrus finish that lingers.\n\n This strain offers a balanced high that uplifts the mood and relaxes the body. Whether you are diving into a creative project, catching up with friends, or just unwinding with your favorite show, Mac 1 fits right in.\n\nTop Terpenes: Limonene, Terpinolene, Pinene\n\nSimply Herb keeps cannabis simple. No gimmicks, no distractions. Just thoughtfully cultivated flower, smooth-burning pre-rolls, flavorful vapes, and fresh gummies. Grown in state-of-the-art indoor facilities, Simply Herb products are consistent, aromatic, and easy to enjoy. From their full-nug flower to their tasty vape flavors, everything is made to pass the vibe check.\n",
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://media.sweedpos.com/store/production/1780411385_ed7742ca-a5d7-4573-83bf-074c21d438cf.png"
+        ],
+        "brand": {
+          "name": "Simply Herb",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Mac 1 (Simply Herb)",
+          "prevalence": {
+            "name": "Indica",
+            "canonicalName": "indica"
+          },
+          "flavors": [
+            {
+              "name": "Citrus ",
+              "canonicalName": "citrus"
+            },
+            {
+              "name": "Floral",
+              "canonicalName": "floral"
+            },
+            {
+              "name": "Earthy",
+              "canonicalName": "earthy"
+            }
+          ],
+          "terpenes": [
+            {
+              "name": "Myrcene",
+              "canonicalName": "myrcene"
+            },
+            {
+              "name": "Linalool",
+              "canonicalName": "linalool"
+            },
+            {
+              "name": "Pinene",
+              "canonicalName": "pinene"
+            },
+            {
+              "name": "Limonene",
+              "canonicalName": "limonene"
+            },
+            {
+              "name": "Caryophyllene",
+              "canonicalName": "caryophyllene"
+            },
+            {
+              "name": "Humulene",
+              "canonicalName": "humulene"
+            },
+            {
+              "name": "Bisabolol",
+              "canonicalName": "bisabolol"
+            },
+            {
+              "name": "B Pinene",
+              "canonicalName": "b-pinene"
+            },
+            {
+              "name": "Caryophyllene Oxide",
+              "canonicalName": "caryophyllene-oxide"
+            }
+          ],
+          "canonicalName": "mac-1-simply-herb"
+        },
+        "tags": [
+          {
+            "name": "Hybrid",
+            "canonicalName": "hybrid"
+          }
+        ],
+        "effects": [
+          {
+            "name": "Relief",
+            "canonicalName": "relief"
+          },
+          {
+            "name": "Euphoric",
+            "canonicalName": "euphoric"
+          }
+        ],
+        "qualityLine": null,
+        "productType": null,
+        "variants": [
+          {
+            "id": 93918,
+            "name": "3.5g",
+            "sku": "Sim-Flo-",
+            "images": [
+              "https://media.sweedpos.com/store/production/1780411395_8046fb0d-9ff4-4a6b-826d-324ae88eaa0c.png"
+            ],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  24.358
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": {
+                "value": [
+                  27.733
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": {
+                "value": [
+                  1.507
+                ],
+                "unitAbbr": "%"
+              }
+            },
+            "saleType": "Both",
+            "availableQty": 12,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 30,
+            "promoPrice": 25,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 108518,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "$25",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "3.5g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "mac-1"
+      },
+      {
+        "id": 46432,
+        "name": "Banana Daddy",
+        "description": "Banana Daddy rolls up a smooth hybrid experience with standout flavor and feel good effects. Bred from Granddaddy Purple and Banana Hammock R1, this strain hits with creamy banana and berry on the inhale, rounded out by a bubblegum diesel finish that sticks with you.      \n\nExpect an energetic euphoric lift that softens into a calm body forward buzz. Ideal for mornings with momentum or evenings on cruise control. \n\nTop Terpenes: Myrcene, Limonene, Caryophyllene, Valencene     \n\nFlavor: Banana, berry, bubblegum, diesel     \n",
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://media.sweedpos.com/store/production/1777648594_fd0828f2-6bfc-45d9-9b7b-669e7e21a2ab.jpg"
+        ],
+        "brand": {
+          "name": "Ozone",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Banana Daddy",
+          "prevalence": {
+            "name": "Hybrid",
+            "canonicalName": "hybrid"
+          },
+          "flavors": [
+            {
+              "name": "Earthy",
+              "canonicalName": "earthy"
+            },
+            {
+              "name": "Diesel",
+              "canonicalName": "diesel"
+            },
+            {
+              "name": "Berry",
+              "canonicalName": "berry"
+            }
+          ],
+          "terpenes": [
+            {
+              "name": "Myrcene",
+              "canonicalName": "myrcene"
+            },
+            {
+              "name": "Linalool",
+              "canonicalName": "linalool"
+            },
+            {
+              "name": "Pinene",
+              "canonicalName": "pinene"
+            },
+            {
+              "name": "Limonene",
+              "canonicalName": "limonene"
+            },
+            {
+              "name": "Caryophyllene",
+              "canonicalName": "caryophyllene"
+            },
+            {
+              "name": "Humulene",
+              "canonicalName": "humulene"
+            },
+            {
+              "name": "Bisabolol",
+              "canonicalName": "bisabolol"
+            },
+            {
+              "name": "B Pinene",
+              "canonicalName": "b-pinene"
+            },
+            {
+              "name": "Caryophyllene Oxide",
+              "canonicalName": "caryophyllene-oxide"
+            }
+          ],
+          "canonicalName": "banana-daddy"
+        },
+        "tags": [
+          {
+            "name": "Hybrid",
+            "canonicalName": "hybrid"
+          }
+        ],
+        "effects": [
+          {
+            "name": "Body High",
+            "canonicalName": "body-high"
+          },
+          {
+            "name": "Giggly",
+            "canonicalName": "giggly"
+          },
+          {
+            "name": "Euphoric",
+            "canonicalName": "euphoric"
+          }
+        ],
+        "qualityLine": null,
+        "productType": null,
+        "variants": [
+          {
+            "id": 53276,
+            "name": "3.5g",
+            "sku": "Ozo-Flo-",
+            "images": [
+              "https://media.sweedpos.com/store/production/1777648634_50ff3467-6e5f-4ba4-9678-0dfa6a446099.jpg"
+            ],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  29.255,
+                  30.89
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": {
+                "value": [
+                  33.055
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": {
+                "value": [
+                  1.253
+                ],
+                "unitAbbr": "%"
+              }
+            },
+            "saleType": "Both",
+            "availableQty": 23,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 45,
+            "promoPrice": 31.5,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 131268,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "30% Off!",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "3.5g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "banana-daddy"
+      },
+      {
+        "id": 46296,
+        "name": "Durban Poison",
+        "description": "Amazing Sativa Landrace from South Africa. \nFlavors: Very dank, diesel, citrus and pine \n",
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://media.sweedpos.com/store/production/1733785982_c0ac6ee6-d69a-4a2a-bfa9-0ea0d33e4e33-1.avif"
+        ],
+        "brand": {
+          "name": "UPNORTH",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Durban Poison",
+          "prevalence": {
+            "name": "Sativa",
+            "canonicalName": "sativa"
+          },
+          "flavors": [
+            {
+              "name": "Citrus ",
+              "canonicalName": "citrus"
+            },
+            {
+              "name": "Peppery ",
+              "canonicalName": "peppery"
+            }
+          ],
+          "terpenes": [
+            {
+              "name": "Limonene",
+              "canonicalName": "limonene"
+            },
+            {
+              "name": "Ocimene",
+              "canonicalName": "ocimene"
+            },
+            {
+              "name": "Terpinolene",
+              "canonicalName": "terpinolene"
+            }
+          ],
+          "canonicalName": "durban-poison"
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": null,
+        "variants": [
+          {
+            "id": 53140,
+            "name": "3.5g",
+            "sku": "Flo-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  26.89
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": {
+                "value": [
+                  30.57
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": null
+            },
+            "saleType": "Both",
+            "availableQty": 15,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 48,
+            "promoPrice": 35,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 82844,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "$35!",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "3.5g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "durban-poison"
+      },
+      {
+        "id": 383659,
+        "name": "Singapore Sling",
+        "description": null,
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://media.sweedpos.com/store/production/1781552879_03b45b46-62e4-4b9e-972a-11cb6e882895.webp"
+        ],
+        "brand": {
+          "name": "Find.",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Singapore Sling",
+          "prevalence": {
+            "name": "Sativa",
+            "canonicalName": "sativa"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Myrcene",
+              "canonicalName": "myrcene"
+            },
+            {
+              "name": "Limonene",
+              "canonicalName": "limonene"
+            },
+            {
+              "name": "Caryophyllene",
+              "canonicalName": "caryophyllene"
+            }
+          ],
+          "canonicalName": "singapore-sling"
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Shake",
+          "canonicalName": "shake"
+        },
+        "variants": [
+          {
+            "id": 578619,
+            "name": "14g",
+            "sku": "Fin-Flo-Sha-",
+            "images": [
+              "https://media.sweedpos.com/store/production/1781552997_af2003ea-9f57-4ffd-9cbc-6e39729f5640.jpg"
+            ],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  26.4
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": {
+                "value": [
+                  0.043
+                ],
+                "unitAbbr": "%"
+              },
+              "displayThc": {
+                "value": [
+                  23.992
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": null
+            },
+            "saleType": "Both",
+            "availableQty": 17,
+            "unitSize": {
+              "value": 14,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 60,
+            "promoPrice": null,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "14g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "singapore-sling"
+      },
+      {
+        "id": 329258,
+        "name": "Yellow - Point Breeze",
+        "description": "The latest strain from Wiz and the Khalifa Kush team — Point Breeze (KK x Gastro Pop) will quickly impress with its big, bubbly, \npurple-pointed trichome covered buds. The unmistakable KK gas notes are followed by \na unique berry candy aroma straight from its Gastro Pop lineage. \n\nAs you grind this Khalifa Kush masterpiece, you will immediately notice the grape bubblegum mixed with classic diesel fuel.The high is a \ntop-of-head trip to the upper atmosphere, \nslowly drifting you back to earth to keep \nyour day moving. \nThe name “Point Breeze” is a nod to the \nPittsburgh neighborhood where it all started \n(and company is still based out of today)",
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://media.sweedpos.com/store/production/1767037413_ee8813ea-8ae9-4173-99c0-6e4461f409f1.png"
+        ],
+        "brand": {
+          "name": "Khalifa Kush",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Point Breeze",
+          "prevalence": {
+            "name": "Hybrid",
+            "canonicalName": "hybrid"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Myrcene",
+              "canonicalName": "myrcene"
+            },
+            {
+              "name": "Linalool",
+              "canonicalName": "linalool"
+            },
+            {
+              "name": "Pinene",
+              "canonicalName": "pinene"
+            },
+            {
+              "name": "Limonene",
+              "canonicalName": "limonene"
+            },
+            {
+              "name": "Caryophyllene",
+              "canonicalName": "caryophyllene"
+            },
+            {
+              "name": "Humulene",
+              "canonicalName": "humulene"
+            },
+            {
+              "name": "Ocimene",
+              "canonicalName": "ocimene"
+            },
+            {
+              "name": "Bisabolol",
+              "canonicalName": "bisabolol"
+            },
+            {
+              "name": "B Pinene",
+              "canonicalName": "b-pinene"
+            }
+          ],
+          "canonicalName": "point-breeze"
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Popcorn",
+          "canonicalName": "popcorn"
+        },
+        "variants": [
+          {
+            "id": 480878,
+            "name": "7g",
+            "sku": "Yel-Flo-Pop-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  29.634
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": {
+                "value": [
+                  0.102
+                ],
+                "unitAbbr": "%"
+              },
+              "displayThc": {
+                "value": [
+                  33.689
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": {
+                "value": [
+                  3.21
+                ],
+                "unitAbbr": "%"
+              }
+            },
+            "saleType": "Both",
+            "availableQty": 10,
+            "unitSize": {
+              "value": 7,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 80,
+            "promoPrice": null,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "7g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "yellow-point-breeze"
+      },
+      {
+        "id": 286846,
+        "name": "Citrus Crush",
+        "description": null,
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://media.sweedpos.com/store/production/1776112092_43662bcc-c173-413e-84b2-66b2e5a03e44.png"
+        ],
+        "brand": {
+          "name": "Simply Herb",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Citrus Crush",
+          "prevalence": {
+            "name": "Hybrid",
+            "canonicalName": "hybrid"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Myrcene",
+              "canonicalName": "myrcene"
+            },
+            {
+              "name": "Linalool",
+              "canonicalName": "linalool"
+            },
+            {
+              "name": "Pinene",
+              "canonicalName": "pinene"
+            },
+            {
+              "name": "Limonene",
+              "canonicalName": "limonene"
+            },
+            {
+              "name": "Caryophyllene",
+              "canonicalName": "caryophyllene"
+            },
+            {
+              "name": "Humulene",
+              "canonicalName": "humulene"
+            },
+            {
+              "name": "Bisabolol",
+              "canonicalName": "bisabolol"
+            },
+            {
+              "name": "B Pinene",
+              "canonicalName": "b-pinene"
+            },
+            {
+              "name": "Caryophyllene Oxide",
+              "canonicalName": "caryophyllene-oxide"
+            }
+          ],
+          "canonicalName": "citrus-crush"
+        },
+        "tags": [
+          {
+            "name": "Hybrid",
+            "canonicalName": "hybrid"
+          }
+        ],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Popcorn",
+          "canonicalName": "popcorn"
+        },
+        "variants": [
+          {
+            "id": 397174,
+            "name": "28g",
+            "sku": "Sim-Flo-Pop-",
+            "images": [],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  25.22
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": {
+                "value": [
+                  25.216
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": {
+                "value": [
+                  1.667
+                ],
+                "unitAbbr": "%"
+              }
+            },
+            "saleType": "Both",
+            "availableQty": 6,
+            "unitSize": {
+              "value": 28,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 180,
+            "promoPrice": 100,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 23253,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "$20 Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              },
+              {
+                "id": 110597,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "$100 Oz!",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "28g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "citrus-crush"
+      },
+      {
+        "id": 379857,
+        "name": "Problem Child",
+        "description": "Problem Child is a hybrid strain born from the flavorful cross of Tangie and 9LB Hammer.",
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://sweedpos.s3.amazonaws.com/store/production/1698088696_aa1ed1a8-5df2-49cc-96ac-82172099c20b"
+        ],
+        "brand": {
+          "name": "Grassroots",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Hybrid",
+          "prevalence": {
+            "name": "Hybrid",
+            "canonicalName": "hybrid"
+          },
+          "flavors": [],
+          "terpenes": [],
+          "canonicalName": "hybrid"
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Popcorn",
+          "canonicalName": "popcorn"
+        },
+        "variants": [
+          {
+            "id": 573037,
+            "name": "7g",
+            "sku": "Gra-Flo-Pop-",
+            "images": [
+              "https://sweedpos.s3.amazonaws.com/store/production/1698088778_5ebb8d98-e2ed-4d94-b336-135c702ef483"
+            ],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  35.5
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": {
+                "value": [
+                  0.082
+                ],
+                "unitAbbr": "%"
+              },
+              "displayThc": {
+                "value": [
+                  33.437
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": null
+            },
+            "saleType": "Both",
+            "availableQty": 21,
+            "unitSize": {
+              "value": 7,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 60,
+            "promoPrice": null,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "7g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "problem-child"
+      },
+      {
+        "id": 283157,
+        "name": "Ganamos!",
+        "description": "Gorilla Cookies + Sour Diesel",
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://media.sweedpos.com/store/production/1741618652_624f952f-be7a-4b86-b7ce-0db2c7d33be2.jpg"
+        ],
+        "brand": {
+          "name": "Daze Off",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Ganamos!",
+          "prevalence": {
+            "name": "Hybrid",
+            "canonicalName": "hybrid"
+          },
+          "flavors": [],
+          "terpenes": [
+            {
+              "name": "Myrcene",
+              "canonicalName": "myrcene"
+            },
+            {
+              "name": "Linalool",
+              "canonicalName": "linalool"
+            },
+            {
+              "name": "Pinene",
+              "canonicalName": "pinene"
+            },
+            {
+              "name": "Limonene",
+              "canonicalName": "limonene"
+            },
+            {
+              "name": "Caryophyllene",
+              "canonicalName": "caryophyllene"
+            },
+            {
+              "name": "Humulene",
+              "canonicalName": "humulene"
+            },
+            {
+              "name": "Terpinolene",
+              "canonicalName": "terpinolene"
+            },
+            {
+              "name": "Bisabolol",
+              "canonicalName": "bisabolol"
+            },
+            {
+              "name": "B Pinene",
+              "canonicalName": "b-pinene"
+            }
+          ],
+          "canonicalName": "ganamos"
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": null,
+        "variants": [
+          {
+            "id": 391823,
+            "name": "3.5g",
+            "sku": "Daz-Flo-",
+            "images": [
+              "https://media.sweedpos.com/store/production/1741618775_ed92ca48-c935-4252-be3d-864c6f9ea6d5.jpg"
+            ],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  24.63
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": {
+                "value": [
+                  28.03
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": {
+                "value": [
+                  2.16
+                ],
+                "unitAbbr": "%"
+              }
+            },
+            "saleType": "Both",
+            "availableQty": 24,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 30,
+            "promoPrice": 25,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 108518,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "$25",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              },
+              {
+                "id": 131271,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "BOGO 50%",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "3.5g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "ganamos"
+      },
+      {
+        "id": 268057,
+        "name": "Jack Herer",
+        "description": "Good Green Jack Herer Pre-Pack Mixed Buds – 3.5g\n\nUnleash the power of an icon with Good Green’s Jack Herer Pre-Pack Mixed Buds. Revered for its energizing and uplifting effects, Jack Herer is a sativa-dominant hybrid that blends legendary genetics with bold, earthy flavors. This 3.5g pre-pack offers hand-selected, premium mixed buds that deliver a consistent and satisfying experience every time.\n\nWhy Choose Jack Herer?\nStrain Heritage: A masterful cross of Haze Hybrid, Northern Lights #5, and Shiva Skunk.\nUplifting Effects: Boosts energy, enhances focus, and inspires creativity—perfect for daytime use.\nFlavor Notes: Earthy and herbal with bright hints of citrus and pine for a refreshing finish.\nVersatile Enjoyment: Ideal for sparking creativity, tackling projects, or simply enjoying an upbeat mood.\nWhat’s Inside the Pack?\nCannabis Type: Sativa-dominant hybrid\nPotency: High THC content for a reliable, vibrant experience\nTerpenes: Myrcene, Limonene, and Beta-Caryophyllene for an enhanced flavor and aroma profile",
+        "category": {
+          "id": 611,
+          "name": "Flower",
+          "canonicalName": "flower"
+        },
+        "subcategory": null,
+        "images": [
+          "https://media.sweedpos.com/store/production/1724990542_218c1cab-ead0-4abd-9eed-8f1a0098e190.png"
+        ],
+        "brand": {
+          "name": "Good Green",
+          "filter": null,
+          "tagId": null
+        },
+        "strain": {
+          "name": "Jack Herer",
+          "prevalence": {
+            "name": "Sativa",
+            "canonicalName": "sativa"
+          },
+          "flavors": [
+            {
+              "name": "Citrus ",
+              "canonicalName": "citrus"
+            },
+            {
+              "name": "Peppery ",
+              "canonicalName": "peppery"
+            },
+            {
+              "name": "Lemon",
+              "canonicalName": "lemon"
+            }
+          ],
+          "terpenes": [
+            {
+              "name": "Terpinolene",
+              "canonicalName": "terpinolene"
+            },
+            {
+              "name": "Phellandrene",
+              "canonicalName": "phellandrene"
+            },
+            {
+              "name": "Carene",
+              "canonicalName": "carene"
+            }
+          ],
+          "canonicalName": "jack-herer"
+        },
+        "tags": [],
+        "effects": [],
+        "qualityLine": null,
+        "productType": {
+          "name": "Popcorn",
+          "canonicalName": "popcorn"
+        },
+        "variants": [
+          {
+            "id": 370619,
+            "name": "3.5g",
+            "sku": "Goo-Flo-Pop-",
+            "images": [
+              "https://media.sweedpos.com/store/production/1724985609_68b6a830-4142-4205-ad22-3e2af55eeefb.png"
+            ],
+            "strengthLevel": null,
+            "labTests": {
+              "thc": {
+                "value": [
+                  25.58
+                ],
+                "unitAbbr": "%"
+              },
+              "cbd": null,
+              "displayThc": {
+                "value": [
+                  25.58
+                ],
+                "unitAbbr": "%",
+                "label": "THC"
+              },
+              "terpenes": null
+            },
+            "saleType": "Both",
+            "availableQty": 24,
+            "unitSize": {
+              "value": 3.5,
+              "unitAbbr": "G"
+            },
+            "unitsInPackage": 1,
+            "price": 35,
+            "promoPrice": 25,
+            "discount": 0,
+            "tierPricePresetId": null,
+            "tierPricing": [],
+            "promos": [
+              {
+                "id": 34625,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "GoodGreen3.5g",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              },
+              {
+                "id": 108518,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "$25",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              },
+              {
+                "id": 131274,
+                "name": null,
+                "canonicalName": null,
+                "shortName": "25% Off",
+                "description": null,
+                "isBogo": null,
+                "startDate": null,
+                "endDate": null,
+                "interval": null,
+                "bannerUrl": null,
+                "mobileBannerUrl": null,
+                "displayInUpsellModal": false,
+                "displayInCatalog": false,
+                "productImages": null,
+                "filter": null,
+                "displayInDiscountMenu": false,
+                "isConditional": false,
+                "applicationMode": null,
+                "discountAmount": null,
+                "discountPercent": null,
+                "minCartAmount": null,
+                "minCartAmountNeeded": null,
+                "matchedUserSegmentIds": null,
+                "scheduleDisplayText": null,
+                "isActiveBySchedule": true,
+                "fulfilmentTypes": [],
+                "promoWizardGeneration": null,
+                "shopInShop": null
+              }
+            ],
+            "reminderStatus": null,
+            "isPacked": true,
+            "qtyStepSize": 1,
+            "stockType": "Default",
+            "orderingAvailability": {
+              "reason": "Available",
+              "canBuyProductFrom": null
+            },
+            "canonicalName": "3.5g"
+          }
+        ],
+        "customName": null,
+        "canonicalName": "jack-herer"
+      }
+    ]
+  }
+}

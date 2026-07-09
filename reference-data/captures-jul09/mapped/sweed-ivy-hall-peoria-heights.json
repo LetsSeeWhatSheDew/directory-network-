@@ -1,0 +1,509 @@
+{
+  "TotalCount": 24,
+  "Products": [
+    {
+      "Id": 272779,
+      "Name": "Lemon Voltage",
+      "Brand": {
+        "Name": "Simply Herb"
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 28.538,
+        "Max": 28.538
+      },
+      "Variants": [
+        {
+          "Size": "3.5g",
+          "OriginalPrice": 30,
+          "Price": 25
+        }
+      ]
+    },
+    {
+      "Id": 267528,
+      "Name": "Head Cracker",
+      "Brand": {
+        "Name": "Good Green"
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 28.05,
+        "Max": 28.05
+      },
+      "Variants": [
+        {
+          "Size": "3.5g",
+          "OriginalPrice": 30,
+          "Price": 25
+        }
+      ]
+    },
+    {
+      "Id": 48517,
+      "Name": "Jenny Kush",
+      "Brand": {
+        "Name": "Aeriz"
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 30.11,
+        "Max": 30.11
+      },
+      "Variants": [
+        {
+          "Size": "3.5g",
+          "OriginalPrice": 48,
+          "Price": 48
+        }
+      ]
+    },
+    {
+      "Id": 48034,
+      "Name": "Butterstuff ",
+      "Brand": {
+        "Name": "Ozone"
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 31.66,
+        "Max": 31.66
+      },
+      "Variants": [
+        {
+          "Size": "7g",
+          "OriginalPrice": 55,
+          "Price": 38.5
+        }
+      ]
+    },
+    {
+      "Id": 383630,
+      "Name": "Tri Berry",
+      "Brand": {
+        "Name": "Find."
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 32.72,
+        "Max": 32.72
+      },
+      "Variants": [
+        {
+          "Size": "3.5g",
+          "OriginalPrice": 35,
+          "Price": 35
+        }
+      ]
+    },
+    {
+      "Id": 83376,
+      "Name": "Blockberry ",
+      "Brand": {
+        "Name": "Simply Herb"
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 24.07,
+        "Max": 24.07
+      },
+      "Variants": [
+        {
+          "Size": "3.5g",
+          "OriginalPrice": 30,
+          "Price": 25
+        }
+      ]
+    },
+    {
+      "Id": 46321,
+      "Name": "Animal Cake",
+      "Brand": {
+        "Name": "Ozone"
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 29.46,
+        "Max": 29.46
+      },
+      "Variants": [
+        {
+          "Size": "7g",
+          "OriginalPrice": 55,
+          "Price": 38.5
+        }
+      ]
+    },
+    {
+      "Id": 46446,
+      "Name": "Butterstuff",
+      "Brand": {
+        "Name": "Ozone"
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 33.08,
+        "Max": 33.08
+      },
+      "Variants": [
+        {
+          "Size": "7g",
+          "OriginalPrice": 70,
+          "Price": 49
+        }
+      ]
+    },
+    {
+      "Id": 83919,
+      "Name": "Kush and Cream",
+      "Brand": {
+        "Name": "Simply Herb"
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 26.45,
+        "Max": 26.45
+      },
+      "Variants": [
+        {
+          "Size": "3.5g",
+          "OriginalPrice": 30,
+          "Price": 25
+        }
+      ]
+    },
+    {
+      "Id": 380615,
+      "Name": "Mayday",
+      "Brand": {
+        "Name": "Galaxy Labs"
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 37.13,
+        "Max": 37.13
+      },
+      "Variants": [
+        {
+          "Size": "3.5g",
+          "OriginalPrice": 50,
+          "Price": 35
+        }
+      ]
+    },
+    {
+      "Id": 346530,
+      "Name": "Singapore Sling",
+      "Brand": {
+        "Name": "Find."
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 36.91,
+        "Max": 36.91
+      },
+      "Variants": [
+        {
+          "Size": "3.5g",
+          "OriginalPrice": 35,
+          "Price": 35
+        }
+      ]
+    },
+    {
+      "Id": 48527,
+      "Name": "Animal Cake",
+      "Brand": {
+        "Name": "Ozone"
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 26.267,
+        "Max": 26.267
+      },
+      "Variants": [
+        {
+          "Size": "7g",
+          "OriginalPrice": 70,
+          "Price": 49
+        }
+      ]
+    },
+    {
+      "Id": 48032,
+      "Name": "Banana Daddy",
+      "Brand": {
+        "Name": "Ozone"
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 24.209,
+        "Max": 24.209
+      },
+      "Variants": [
+        {
+          "Size": "7g",
+          "OriginalPrice": 55,
+          "Price": 38.5
+        }
+      ]
+    },
+    {
+      "Id": 213709,
+      "Name": "Gas and Glue",
+      "Brand": {
+        "Name": "Good Green"
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 35.49,
+        "Max": 35.49
+      },
+      "Variants": [
+        {
+          "Size": "3.5g",
+          "OriginalPrice": 30,
+          "Price": 25
+        }
+      ]
+    },
+    {
+      "Id": 288287,
+      "Name": "Pomme Jelly",
+      "Brand": {
+        "Name": "Find."
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 24.442,
+        "Max": 24.442
+      },
+      "Variants": [
+        {
+          "Size": "28g",
+          "OriginalPrice": 180,
+          "Price": 100
+        }
+      ]
+    },
+    {
+      "Id": 73922,
+      "Name": "Mac 1",
+      "Brand": {
+        "Name": "Simply Herb"
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 24.358,
+        "Max": 24.358
+      },
+      "Variants": [
+        {
+          "Size": "3.5g",
+          "OriginalPrice": 30,
+          "Price": 25
+        }
+      ]
+    },
+    {
+      "Id": 46432,
+      "Name": "Banana Daddy",
+      "Brand": {
+        "Name": "Ozone"
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 29.255,
+        "Max": 29.255
+      },
+      "Variants": [
+        {
+          "Size": "3.5g",
+          "OriginalPrice": 45,
+          "Price": 31.5
+        }
+      ]
+    },
+    {
+      "Id": 46296,
+      "Name": "Durban Poison",
+      "Brand": {
+        "Name": "UPNORTH"
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 26.89,
+        "Max": 26.89
+      },
+      "Variants": [
+        {
+          "Size": "3.5g",
+          "OriginalPrice": 48,
+          "Price": 35
+        }
+      ]
+    },
+    {
+      "Id": 383659,
+      "Name": "Singapore Sling",
+      "Brand": {
+        "Name": "Find."
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 26.4,
+        "Max": 26.4
+      },
+      "Variants": [
+        {
+          "Size": "14g",
+          "OriginalPrice": 60,
+          "Price": 60
+        }
+      ]
+    },
+    {
+      "Id": 329258,
+      "Name": "Yellow - Point Breeze",
+      "Brand": {
+        "Name": "Khalifa Kush"
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 29.634,
+        "Max": 29.634
+      },
+      "Variants": [
+        {
+          "Size": "7g",
+          "OriginalPrice": 80,
+          "Price": 80
+        }
+      ]
+    },
+    {
+      "Id": 286846,
+      "Name": "Citrus Crush",
+      "Brand": {
+        "Name": "Simply Herb"
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 25.22,
+        "Max": 25.22
+      },
+      "Variants": [
+        {
+          "Size": "28g",
+          "OriginalPrice": 180,
+          "Price": 100
+        }
+      ]
+    },
+    {
+      "Id": 379857,
+      "Name": "Problem Child",
+      "Brand": {
+        "Name": "Grassroots"
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 35.5,
+        "Max": 35.5
+      },
+      "Variants": [
+        {
+          "Size": "7g",
+          "OriginalPrice": 60,
+          "Price": 60
+        }
+      ]
+    },
+    {
+      "Id": 283157,
+      "Name": "Ganamos!",
+      "Brand": {
+        "Name": "Daze Off"
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 24.63,
+        "Max": 24.63
+      },
+      "Variants": [
+        {
+          "Size": "3.5g",
+          "OriginalPrice": 30,
+          "Price": 25
+        }
+      ]
+    },
+    {
+      "Id": 268057,
+      "Name": "Jack Herer",
+      "Brand": {
+        "Name": "Good Green"
+      },
+      "Category": {
+        "Name": "Flower"
+      },
+      "Thc": {
+        "Min": 25.58,
+        "Max": 25.58
+      },
+      "Variants": [
+        {
+          "Size": "3.5g",
+          "OriginalPrice": 35,
+          "Price": 25
+        }
+      ]
+    }
+  ]
+}
