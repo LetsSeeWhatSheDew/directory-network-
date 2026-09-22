@@ -8,7 +8,7 @@
 import Link from "next/link";
 import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
@@ -220,11 +220,15 @@ export default async function DealPage({
 }) {
   const { id } = await params;
   const deal = await getDeal(id);
-  if (!deal || !deal.is_active) notFound();
+  if (!deal) notFound();
 
   const listing = await getListing(deal.listing_slug);
   // Central IL scope gate — deals on non-CIL listings are hidden publicly.
   if (!isInCentralIL(listing?.city)) notFound();
+  // Expired / deactivated deal: send people (and Google) to the store's page
+  // instead of a 404. Deal URLs get shared and indexed; the dispensary page
+  // is the durable resource they hang off (it's already the canonical).
+  if (!deal.is_active) permanentRedirect(`/dispensary/${deal.listing_slug}`);
   // Day-of-week + active_until visibility gate. The page renders even when
   // not active today (so the URL stays a stable resource), but the savings
   // block flips to a "not active today" notice that names the days the
