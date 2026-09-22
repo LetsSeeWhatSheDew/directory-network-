@@ -478,7 +478,7 @@ export default async function HomePage() {
     getCityCounts(),
     // Real per-store PriceBoard, or null when the menu-baseline pipeline
     // has no comparable multi-store SKU yet. NEVER renders invented prices.
-    getLivePriceBoard().catch(() => null),
+    getLivePriceBoard({ locationTag: "CENTRAL IL" }).catch(() => null),
   ]);
   const userCity = userLoc?.city || null;
   const localizedTopDeals = preferLocalDeals(topDeals, userCity);
@@ -1226,10 +1226,7 @@ export default async function HomePage() {
             <div className="pp-home-hero-right">
               {livePriceBoard && (
                 <div className="pp-home-hero-featured">
-                  <PriceBoard
-                    {...livePriceBoard}
-                    locationTag={`${userCity ? userCity.toUpperCase() : "CENTRAL IL"} · LIVE`}
-                  />
+                  <PriceBoard {...livePriceBoard} />
                 </div>
               )}
 

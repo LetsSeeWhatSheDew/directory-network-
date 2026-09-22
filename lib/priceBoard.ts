@@ -26,6 +26,7 @@
 // isn't a dependency of this project; keep this module out of client bundles
 // by only importing it from server components.
 import type { PriceBoardProps, PriceBoardStore } from "../app/components/PriceBoard";
+import { getCityProfile, milesBetween } from "./cityProfiles";
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -60,9 +61,26 @@ type MenuItem = {
   raw_brand: string | null;
   canonical_category: string | null;
   canonical_unit: string | null;
+  scraped_at?: string | null;
 };
 
 type ListingMini = { id: string; name: string | null; slug: string | null; city: string | null };
+
+// Honest freshness suffix for the canopy tag. "LIVE" only when the prices
+// were captured in the last 2 days; otherwise say when they're from.
+function freshnessSuffix(newestIso: string | null): string {
+  if (!newestIso) return "";
+  const t = new Date(newestIso).getTime();
+  if (!Number.isFinite(t)) return "";
+  const ageDays = (Date.now() - t) / 86_400_000;
+  if (ageDays <= 2) return "LIVE";
+  const d = new Date(t).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    timeZone: "America/Chicago",
+  });
+  return `PRICES AS OF ${d.toUpperCase()}`;
+}
 
 function titleFrom(item: MenuItem): string {
   const brand = (item.raw_brand || "").trim();
@@ -78,17 +96,53 @@ function titleFrom(item: MenuItem): string {
  * renders nothing rather than a broken or invented board.
  */
 export async function getLivePriceBoard(
-  opts: { locationTag?: string } = {}
+  opts: {
+    /** Area label for the canopy strip, e.g. "CENTRAL IL". A freshness
+     *  suffix ("LIVE" / "PRICES AS OF JUL 9") is appended here. */
+    locationTag?: string;
+    /** City slug: only compare stores within `radiusMiles` of this city. */
+    nearCity?: string;
+    radiusMiles?: number;
+  } = {}
 ): Promise<PriceBoardProps | null> {
   try {
     // 1. Recent canonicalized menu items that carry a real out-the-door price.
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/latest_menu_items?select=canonical_product_id,dispensary_id,price_out_the_door,price_pretax,raw_name,raw_brand,canonical_category,canonical_unit&price_out_the_door=not.is.null&canonical_product_id=not.is.null&dispensary_id=not.is.null&limit=500`,
+      `${SUPABASE_URL}/rest/v1/latest_menu_items?select=canonical_product_id,dispensary_id,price_out_the_door,price_pretax,raw_name,raw_brand,canonical_category,canonical_unit,scraped_at&price_out_the_door=not.is.null&canonical_product_id=not.is.null&dispensary_id=not.is.null&limit=500`,
       { headers: HEADERS, next: { revalidate: 300, tags: ["price-board"] } }
     );
     if (!res.ok) return null;
-    const rows: MenuItem[] = await res.json();
+    let rows: MenuItem[] = await res.json();
     if (!Array.isArray(rows) || rows.length === 0) return null;
+
+    // 1b. Optional geographic scope — a city page must only compare stores
+    //     near that city, never label Peoria-area prices as "Springfield".
+    if (opts.nearCity) {
+      const center = getCityProfile(opts.nearCity);
+      if (!center) return null;
+      const radius = opts.radiusMiles ?? 15;
+      const allIds = Array.from(
+        new Set(rows.map((r) => r.dispensary_id).filter((x): x is string => !!x))
+      );
+      if (allIds.length === 0) return null;
+      const gres = await fetch(
+        `${SUPABASE_URL}/rest/v1/dispensaries?id=in.(${allIds.join(",")})&select=id,city`,
+        { headers: SERVICE_HEADERS, next: { revalidate: 600, tags: ["dispensaries"] } }
+      );
+      if (!gres.ok) return null;
+      const geo: Array<{ id: string; city: string | null }> = await gres.json();
+      const nearIds = new Set(
+        geo
+          .filter((d) => {
+            const slug = (d.city || "").trim().toLowerCase().replace(/\s+/g, "-");
+            const p = getCityProfile(slug);
+            return !!p && milesBetween(center, p) <= radius;
+          })
+          .map((d) => d.id)
+      );
+      rows = rows.filter((r) => r.dispensary_id && nearIds.has(r.dispensary_id));
+      if (rows.length === 0) return null;
+    }
 
     // 2. Pick the canonical product with the most DISTINCT stores (≥ 2) —
     //    the most legitimately comparable board.
@@ -186,12 +240,19 @@ export async function getLivePriceBoard(
       .filter(Boolean)
       .join(" · ");
 
+    const newest = Array.from(cheapestByStore.values())
+      .map((i) => i.scraped_at || "")
+      .sort()
+      .pop() || null;
+    const suffix = freshnessSuffix(newest);
+    const base = (opts.locationTag || "CENTRAL IL").replace(/\s*·\s*LIVE$/i, "");
+
     return {
       rung: "same_sku",
       title: titleFrom(sampleItem),
       subline,
       stores,
-      locationTag: opts.locationTag,
+      locationTag: suffix ? `${base} · ${suffix}` : base,
     };
   } catch {
     return null;
