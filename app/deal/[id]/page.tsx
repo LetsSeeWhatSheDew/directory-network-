@@ -81,6 +81,26 @@ async function getDeal(id: string): Promise<Deal | null> {
   }
 }
 
+// Server-only: the service key never reaches the client (RSC data path).
+async function getRetiredDealSlug(id: string): Promise<string | null> {
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
+  if (!key || !/^[0-9a-f-]{36}$/i.test(id)) return null;
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/deals?id=eq.${id}&project_tag=eq.green&select=listing_slug&limit=1`,
+      { headers: { apikey: key, Authorization: `Bearer ${key}` }, next: { revalidate: 3600 } }
+    );
+    if (!res.ok) return null;
+    const rows = await res.json();
+    const slug = Array.isArray(rows) && rows[0]?.listing_slug;
+    if (!slug) return null;
+    const listing = await getListing(slug);
+    return listing && isInCentralIL(listing.city) ? slug : null;
+  } catch {
+    return null;
+  }
+}
+
 async function getListing(slug: string): Promise<ListingMini | null> {
   try {
     const res = await fetch(
@@ -220,7 +240,14 @@ export default async function DealPage({
 }) {
   const { id } = await params;
   const deal = await getDeal(id);
-  if (!deal) notFound();
+  if (!deal) {
+    // Anon RLS hides inactive deals, so an expired deal looks "missing".
+    // Look up just its listing slug server-side and send people (and
+    // Google) to the store page instead of a 404.
+    const gone = await getRetiredDealSlug(id);
+    if (gone) permanentRedirect(`/dispensary/${gone}`);
+    notFound();
+  }
 
   const listing = await getListing(deal.listing_slug);
   // Central IL scope gate — deals on non-CIL listings are hidden publicly.

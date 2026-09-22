@@ -11,6 +11,8 @@ import Footer from "../../components/Footer";
 import AmenityRow from "../../components/AmenityRow";
 import DealFreshnessBadge from "../../components/DealFreshnessBadge";
 import ReportIssueLink from "../../components/ReportIssueLink";
+import ReviewsSection from "../../components/ReviewsSection";
+import { getApprovedReviews, getReviewStats, reviewsEnabled } from "../../../lib/reviews";
 import { MapPin, Phone, Menu as MenuIcon } from "lucide-react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -223,9 +225,12 @@ export default async function DispensaryProfilePage({
   // Central IL scope gate — non-CIL listings are hidden publicly.
   if (!isInCentralIL(listing.city)) notFound();
 
-  const [hours, deals] = await Promise.all([
+  const [hours, deals, reviews, reviewStats, reviewsOn] = await Promise.all([
     getHours(listing.id),
     getDeals(slug),
+    getApprovedReviews(slug),
+    getReviewStats(slug),
+    reviewsEnabled(),
   ]);
 
   const ct = nowInCT();
@@ -264,6 +269,25 @@ export default async function DispensaryProfilePage({
     ...(listing.logo_url ? { image: listing.logo_url } : {}),
     ...(openingHours.length > 0 ? { openingHoursSpecification: openingHours } : {}),
     ...(listing.short_description ? { description: listing.short_description } : {}),
+    // Stars in search: only from real, approved PuffPrice-user reviews.
+    ...(reviewStats && reviewStats.review_count > 0
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: reviewStats.avg_rating,
+            reviewCount: reviewStats.review_count,
+            bestRating: 5,
+            worstRating: 1,
+          },
+          review: reviews.slice(0, 5).map((r) => ({
+            "@type": "Review",
+            reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5, worstRating: 1 },
+            author: { "@type": "Person", name: r.display_name || "PuffPrice user" },
+            datePublished: r.created_at.slice(0, 10),
+            ...(r.body ? { reviewBody: r.body } : {}),
+          })),
+        }
+      : {}),
     sameAs: [
       `${brand.url}/dispensary/${slug}`,
     ],
@@ -553,6 +577,15 @@ export default async function DispensaryProfilePage({
             <AmenityRow listing={listing} variant="pill" />
           </section>
         )}
+
+        {/* Reviews — moderated, real users only */}
+        <ReviewsSection
+          slug={slug}
+          name={name}
+          reviews={reviews}
+          stats={reviewStats}
+          enabled={reviewsOn}
+        />
 
         {/* Claim CTA — subtle, non-intrusive */}
         <div className="claim-cta">

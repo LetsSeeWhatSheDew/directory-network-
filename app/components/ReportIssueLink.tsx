@@ -3,7 +3,9 @@
 // the brand — every deal/listing surface should let a real person flag a
 // price that changed, a deal that expired, or a wrong store in one tap.
 //
-// Ships as a mailto today (works with zero backend dependency). The durable
+// Renders FeedbackWidget (POST /api/feedback -> deal_reports). The mailto
+// below is kept only as the fallback when the POST fails.
+// (History: shipped as a mailto first.) The durable
 // path — writing to a `deal_reports` table — is scaffolded in
 // sql/deal-reports.sql; once Matthew runs that migration, swap this for a
 // POST to /api/deals/report without touching any caller. See
@@ -13,6 +15,7 @@
 // URL in since a server component can't read window.location.
 
 import { brand } from "../../lib/brand";
+import FeedbackWidget from "./FeedbackWidget";
 
 type Props = {
   /** Short context for the email subject, e.g. `${dealTitle} at ${disp}`. */
@@ -50,24 +53,22 @@ export default function ReportIssueLink({
     subject
   )}&body=${encodeURIComponent(body)}`;
 
+  // Durable path: the deal_reports table is live, so render the one-tap
+  // widget (POST /api/feedback). The mailto stays as the failure fallback.
+  const listingSlug = (() => {
+    const m = url.match(/\/dispensary\/([a-z0-9-]+)/);
+    return m ? m[1] : undefined;
+  })();
   return (
-    <a
-      href={href}
-      className={className}
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 6,
-        fontFamily: "var(--font-body)",
-        fontSize: "0.75rem",
-        fontWeight: 500,
-        color: "var(--pp-muted, #6B7268)",
-        textDecoration: "none",
-        minHeight: 44,
-      }}
-    >
-      <span aria-hidden="true" style={{ fontSize: "0.8rem" }}>⚑</span>
-      {label}
-    </a>
+    <div className={className}>
+      <FeedbackWidget
+        mode={dealId ? "deal" : "page"}
+        dealId={dealId}
+        listingSlug={listingSlug}
+        pageUrl={url}
+        mailtoHref={href}
+        label={dealId ? undefined : label}
+      />
+    </div>
   );
 }
