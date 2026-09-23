@@ -14,6 +14,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { runCilScrape } from "@/lib/scraper/cil-deal-scraper";
 import { runDailyVerificationSweep } from "@/lib/scraper/dailyVerification";
 import { checkCronAuth } from "@/lib/cronAuth";
+import { insertScraperRun, patchScraperRun, finishScraperRun } from "@/lib/scraper/runLog";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -43,6 +44,8 @@ async function handle(req: NextRequest): Promise<NextResponse> {
     );
   }
 
+  const startMs = Date.now();
+  const runId = await insertScraperRun(SUPABASE_URL, SERVICE_KEY, "cron");
   try {
     const summary = await runCilScrape({
       supabaseUrl: SUPABASE_URL,
@@ -56,6 +59,8 @@ async function handle(req: NextRequest): Promise<NextResponse> {
     // didn't touch this run (within-48h trust tier) and deactivate ones
     // that have gone 7+ days without an independent verification. See
     // lib/scraper/dailyVerification.ts for the tier policy.
+    if (runId) await finishScraperRun(SUPABASE_URL, SERVICE_KEY, runId, summary, startMs);
+
     const verification = await runDailyVerificationSweep({
       supabaseUrl: SUPABASE_URL,
       serviceKey: SERVICE_KEY,
@@ -82,6 +87,14 @@ async function handle(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ ...summary, verification });
   } catch (err) {
     console.error("[scrape-deals] fatal", err);
+    if (runId) {
+      await patchScraperRun(SUPABASE_URL, SERVICE_KEY, runId, {
+        status: "failed",
+        finished_at: new Date().toISOString(),
+        duration_ms: Date.now() - startMs,
+        error_summary: String((err as Error).message).slice(0, 500),
+      });
+    }
     return NextResponse.json(
       { error: String((err as Error).message), ran_at: new Date().toISOString() },
       { status: 500 }
