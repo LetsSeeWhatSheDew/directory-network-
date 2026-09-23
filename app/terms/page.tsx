@@ -52,7 +52,7 @@ export default function TermsPage() {
 
           <h2 style={h2}>PuffPrice Pro — $0.99/month</h2>
           <p>
-            Pro adds SMS alerts, a daily digest email, price history on products you watch, and a personal savings dashboard. Pro is a recurring monthly subscription at $0.99 per month, billed through Stripe.
+            Pro adds instant email and browser alerts, a daily digest email, price history on products you watch, and a personal savings dashboard. Pro is a recurring monthly subscription at $0.99 per month, billed through Stripe.
           </p>
           <p>
             <strong>Cancellation.</strong> You can cancel Pro at any time from your Stripe customer portal (link included in every Pro email) or by emailing{" "}

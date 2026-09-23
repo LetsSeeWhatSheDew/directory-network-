@@ -149,49 +149,9 @@ export default function ProCheckoutButton() {
           minHeight: 44,
         }}
       />
-      <label
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          fontSize: ".82rem",
-          color: "rgba(255,255,255,.78)",
-          fontFamily: "system-ui, sans-serif",
-          cursor: "pointer",
-          userSelect: "none",
-          paddingTop: 2,
-        }}
-      >
-        <input
-          type="checkbox"
-          checked={smsOptIn}
-          onChange={(e) => setSmsOptIn(e.target.checked)}
-          style={{ accentColor: "#2E7D32", width: 16, height: 16 }}
-        />
-        Text me when new deals drop near me
-      </label>
-      {smsOptIn && (
-        <input
-          type="tel"
-          inputMode="tel"
-          placeholder="(309) 555-0100 — optional, SMS coming soon"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          autoComplete="tel"
-          aria-label="Phone number for SMS alerts (optional)"
-          style={{
-            background: "rgba(255,255,255,.08)",
-            border: "1px solid rgba(255,255,255,.18)",
-            borderRadius: 10,
-            padding: "12px 12px",
-            color: "#fff",
-            fontFamily: "system-ui, sans-serif",
-            fontSize: ".95rem",
-            outline: "none",
-            minHeight: 44,
-          }}
-        />
-      )}
+      {/* No SMS: phone carriers block cannabis-related texts on every
+          channel (10DLC, toll-free, short code), so Pro alerts go by email
+          and browser notification. Phone is no longer collected. */}
       <button type="button" className="cta cta-pro" onClick={onClick} disabled={busy}>
         {busy ? "One sec…" : "Get Pro for $0.99/month →"}
       </button>

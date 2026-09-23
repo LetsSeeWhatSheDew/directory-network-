@@ -1,7 +1,7 @@
 export const metadata = {
   title: "Go Pro — $0.99/mo",
   description:
-    "Instant SMS when cannabis deals drop near you in Illinois. $0.99 a month. Cancel anytime.",
+    "Instant alerts when cannabis deals drop near you in Central Illinois. $0.99 a month. Cancel anytime.",
 };
 
 export default function UpgradeLayout({ children }: { children: React.ReactNode }) {

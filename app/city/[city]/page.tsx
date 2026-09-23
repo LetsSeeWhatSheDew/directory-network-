@@ -5,6 +5,7 @@
 // all three via internal linking.
 
 import Link from "next/link";
+import { getFeatureRows, featuresBySlug } from "@/lib/waysToBuy";
 import StoreAvatar from "@/app/components/StoreAvatar";
 import { storeImageUrl } from "@/lib/storeImage";
 import Nav from "../../components/Nav";
@@ -175,8 +176,10 @@ function endingWithin24h(list: DealRow[]): DealRow[] {
   });
 }
 
-function amenityChips(l: Listing): string[] {
+function amenityChips(l: Listing, f?: Partial<Record<string, { status: string }>>): string[] {
   const out: string[] = [];
+  if (f?.medical?.status === "yes") out.push("Medical");
+  if (f?.curbside?.status === "yes") out.push("Curbside");
   if (l.online_ordering) out.push("Order ahead");
   if (l.loyalty_program) out.push("Loyalty program");
   if (l.drive_thru) out.push("Drive-thru");
@@ -285,6 +288,7 @@ export default async function CityPage({
   const slug = citySlug(city);
   const profile = getCityProfile(slug);
 
+  const featureMap = featuresBySlug(await getFeatureRows());
   const [allDeals, listings, livePriceBoard] = await Promise.all([
     getAllActiveDeals(),
     getCityListings(city),
@@ -622,7 +626,7 @@ export default async function CityPage({
               </div>
             )}
             <Link href="/alerts" className="cp-alert">
-              Text me when {city} gets a deal →
+              Get the best {city} deals every Monday →
             </Link>
           </div>
         )}
@@ -635,9 +639,12 @@ export default async function CityPage({
               </span>
               {hasHours && <span>Open first</span>}
             </div>
+            <p style={{ margin: "0 0 10px", fontSize: ".85rem" }}>
+              <Link href="/ways-to-buy#compare" style={{ color: "var(--pp-signal-ink)", fontWeight: 600 }}>Compare drive-thru, medical, order-ahead &amp; curbside for every store →</Link>
+            </p>
             <div className="st">
               {stores.map(({ l, status, openNow, todayLabel, dealCount }) => {
-                const chips = amenityChips(l);
+                const chips = amenityChips(l, featureMap.get(l.slug));
                 const maps =
                   l.lat != null && l.lng != null
                     ? `https://www.google.com/maps/dir/?api=1&destination=${l.lat},${l.lng}`

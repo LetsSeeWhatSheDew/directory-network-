@@ -55,6 +55,8 @@ export default function MobileNavMenu({ variant = "light" }: Props) {
           />
           <div className="mobile-menu-panel" role="menu" onClick={() => setOpen(false)}>
             <Link href="/" className="mobile-menu-link">Home</Link>
+            <Link href="/ways-to-buy" className="mobile-menu-link">Ways to buy · drive-thru, medical</Link>
+            <Link href="/this-week" className="mobile-menu-link">This week&apos;s deals</Link>
             <Link href="/cannabis/illinois/open-now" className="mobile-menu-link">Open now</Link>
             <Link href="/dispensaries" className="mobile-menu-link">Browse Central IL</Link>
             <Link href="/map" className="mobile-menu-link">Map view</Link>
@@ -62,7 +64,7 @@ export default function MobileNavMenu({ variant = "light" }: Props) {
             <Link href="/savings/dashboard" className="mobile-menu-link">My savings</Link>
             <Link href="/about" className="mobile-menu-link">About PuffPrice</Link>
             <Link href="/alerts" className="mobile-menu-link highlight">Get deal alerts &rarr;</Link>
-            <Link href="/dispensaries" className="mobile-menu-link muted">For dispensaries</Link>
+            <Link href="/for-dispensaries" className="mobile-menu-link muted">For dispensaries</Link>
           </div>
         </>
       )}

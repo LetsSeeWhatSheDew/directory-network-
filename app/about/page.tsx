@@ -138,7 +138,7 @@ export default function AboutPage() {
         <p>
           The model is plain. Listings are free for dispensaries — forever.
           The plan is to fund PuffPrice through Pro subscriptions ($0.99 a
-          month, when we ship them) for SMS alerts and a daily digest. No
+          month, when we ship them) for instant email alerts and a daily digest. No
           ads. No sponsored placements. No selling your data. If the model
           breaks, we&apos;ll tell you and figure something else out.
         </p>

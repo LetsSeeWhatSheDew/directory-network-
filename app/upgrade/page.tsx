@@ -10,12 +10,12 @@ import Footer from "../components/Footer";
 export const metadata: Metadata = {
   title: "Go Pro — $0.99/mo",
   description:
-    "Instant SMS when cannabis deals drop near you in Illinois. $0.99 a month. Cancel anytime.",
+    "Instant alerts when cannabis deals drop near you in Central Illinois. $0.99 a month. Cancel anytime.",
   alternates: { canonical: "https://www.puffprice.com/upgrade" },
   openGraph: {
     title: "PuffPrice Pro — $0.99/mo",
     description:
-      "Never miss a deal. Instant SMS the moment prices drop near you in Illinois.",
+      "Never miss a deal. Instant alerts the moment prices drop near you in Central Illinois.",
     url: "https://www.puffprice.com/upgrade",
     siteName: "PuffPrice",
     type: "website",
@@ -25,13 +25,13 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "PuffPrice Pro — $0.99/mo",
     description:
-      "Never miss a deal. Instant SMS the moment prices drop near you in Illinois.",
+      "Never miss a deal. Instant alerts the moment prices drop near you in Central Illinois.",
     images: ["https://www.puffprice.com/og-image.png"],
   },
 };
 
 const FEATURES: string[] = [
-  "Instant SMS the moment a deal goes live near you",
+  "Instant alerts by email and browser notification the moment a deal goes live near you",
   'Price drop alerts — "Flower just dropped below $30 near you"',
   "Flash-sale early access — 15 minutes before public",
   "Your total-savings dashboard",
@@ -40,8 +40,12 @@ const FEATURES: string[] = [
 
 const FAQ: { q: string; a: string }[] = [
   {
-    q: "When do Pro SMS alerts start?",
-    a: "Within 24 hours of signup. You'll get a confirmation text first, then start receiving alerts based on your ZIP code and chosen categories.",
+    q: "When does Pro start?",
+    a: "We're finishing the alert system now. Join the early list and you'll be first in at $0.99/mo — nothing is charged until Pro is live.",
+  },
+  {
+    q: "Why email and browser alerts instead of texts?",
+    a: "Phone carriers block cannabis-related text messages, even for legal businesses. Email and browser notifications actually reach you.",
   },
   {
     q: "Is there a contract?",
@@ -62,8 +66,7 @@ const FAQ: { q: string; a: string }[] = [
 ];
 
 const CHECKOUT_URL =
-  process.env.NEXT_PUBLIC_STRIPE_PRO_CHECKOUT_URL ||
-  "mailto:matthew@jacarandapeoria.com?subject=PuffPrice%20Pro%20interest";
+  process.env.NEXT_PUBLIC_STRIPE_PRO_CHECKOUT_URL || "/alerts#pro";
 
 export default function UpgradePage() {
   return (

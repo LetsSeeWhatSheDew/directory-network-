@@ -8,6 +8,7 @@
 import Link from "next/link";
 import StoreAvatar from "@/app/components/StoreAvatar";
 import { storeImageUrl } from "@/lib/storeImage";
+import { getFeaturesForSlug, FEATURE_LABEL } from "@/lib/waysToBuy";
 import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
 import AmenityRow from "../../components/AmenityRow";
@@ -240,6 +241,7 @@ export default async function DispensaryProfilePage({
     reviewsEnabled(),
     getListingDealHistory(slug),
   ]);
+  const waysToBuy = (await getFeaturesForSlug(slug)).filter((r) => r.status === "yes" || r.status === "announced");
   const dealHistory = historyIsMeaningful(dealHistoryRaw) ? dealHistoryRaw : null;
   const confirmed = await getConfirmationsToday(deals.map((d) => d.id));
 
@@ -429,6 +431,30 @@ export default async function DispensaryProfilePage({
             {status.label}
           </span>
         </div>
+
+        {waysToBuy.length > 0 && (
+          <div style={{ margin: "-6px 0 18px" }} aria-label="Ways to buy">
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+              {waysToBuy.map((w) => (
+                <Link key={w.feature} href={w.feature === "drive_thru" ? "/drive-thru" : w.feature === "medical" ? "/medical" : "/ways-to-buy#compare"}
+                  title={w.evidence}
+                  style={{ fontSize: ".78rem", fontWeight: 700, padding: "4px 10px", borderRadius: 999, background: "var(--pp-best-tint)", color: "var(--pp-signal-ink)", textDecoration: "none" }}>
+                  {w.status === "announced" ? "Coming: " : "✓ "}{FEATURE_LABEL[w.feature]}
+                </Link>
+              ))}
+            </div>
+            <details style={{ marginTop: 6, fontSize: ".78rem", color: "var(--pp-muted)" }}>
+              <summary style={{ cursor: "pointer" }}>How we know</summary>
+              <ul style={{ margin: "6px 0 0", paddingLeft: 18, lineHeight: 1.6 }}>
+                {waysToBuy.map((w) => (
+                  <li key={w.feature}>
+                    {FEATURE_LABEL[w.feature]}: {w.evidence} — <a href={w.source_url} target="_blank" rel="nofollow noopener noreferrer" style={{ color: "inherit" }}>store&apos;s site</a>, checked {new Date(w.verified_at).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "America/Chicago" })}
+                  </li>
+                ))}
+              </ul>
+            </details>
+          </div>
+        )}
 
         {/* Contact actions — big tap targets for mobile */}
         <div className="contact-grid">

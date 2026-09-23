@@ -42,7 +42,7 @@ const faqSchema = JSON.stringify({
       name: "How much cannabis can I buy at once in Illinois?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Illinois residents can purchase up to 30 grams of cannabis flower, 500 milligrams of THC in cannabis-infused products, or 5 grams of cannabis concentrate per transaction. Out-of-state visitors are limited to half those amounts.",
+        text: "Since June 12, 2026, Illinois residents can possess up to 60 grams of cannabis flower, 1,000 milligrams of THC in cannabis-infused products, or 10 grams of cannabis concentrate. Out-of-state visitors are limited to half those amounts (30 g, 500 mg, 5 g).",
       },
     },
     {
@@ -223,18 +223,18 @@ export default function FirstTimeGuidePage() {
               <tbody>
                 <tr>
                   <td>Cannabis flower</td>
+                  <td>60 grams</td>
                   <td>30 grams</td>
-                  <td>15 grams</td>
                 </tr>
                 <tr>
                   <td>THC in infused products</td>
+                  <td>1,000mg</td>
                   <td>500mg</td>
-                  <td>250mg</td>
                 </tr>
                 <tr>
                   <td>Cannabis concentrate</td>
+                  <td>10 grams</td>
                   <td>5 grams</td>
-                  <td>2.5 grams</td>
                 </tr>
               </tbody>
             </table>

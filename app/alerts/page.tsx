@@ -201,7 +201,7 @@ export default async function AlertsPage() {
         </article>
 
         {/* PRO */}
-        <article className="tier pro">
+        <article className="tier pro" id="pro">
           <div className="tier-eyebrow">Pro · $0.99/month</div>
           <div className="tier-name">Pay to stop missing deals.</div>
           <div className="tier-price">
@@ -224,11 +224,11 @@ export default async function AlertsPage() {
       <section className="feels">
         <h2>What Pro actually feels like</h2>
         <p>
-          You&apos;re about to drive to a dispensary. Your phone buzzes. <em>&ldquo;Zen Leaf just posted 30% off
-          vapes — 6 minutes away.&rdquo;</em> You save $18. That&apos;s Pro.
+          You&apos;re about to drive to a dispensary. Your phone buzzes. <em>&ldquo;A store 6 minutes away just posted 30% off
+          vapes.&rdquo;</em> You save $18. That&apos;s Pro.
         </p>
         <p>
-          You paid $35 for an eighth last month. You told us. This week we texted you: <em>&ldquo;Same strain,
+          You paid $35 for an eighth last month. You told us. This week we emailed you: <em>&ldquo;Same strain,
           $27, two miles away.&rdquo;</em> That&apos;s Pro.
         </p>
         <p className="closer">

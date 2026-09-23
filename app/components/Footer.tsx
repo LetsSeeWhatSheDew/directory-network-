@@ -25,6 +25,17 @@ const FOOTER_COLUMNS: { heading: string; links: { href: string; label: string }[
     ],
   },
   {
+    heading: "Ways to buy",
+    links: [
+      { href: "/ways-to-buy", label: "Compare every store" },
+      { href: "/drive-thru", label: "Drive-thru" },
+      { href: "/medical", label: "Medical" },
+      { href: "/open-late", label: "Open latest tonight" },
+      { href: "/illinois-cannabis-delivery", label: "Delivery (law tracker)" },
+      { href: "/illinois-hemp-law", label: "Nov 12 hemp change" },
+    ],
+  },
+  {
     heading: "Categories",
     links: [
       { href: "/deals/flower", label: "Flower" },
@@ -40,6 +51,7 @@ const FOOTER_COLUMNS: { heading: string; links: { href: string; label: string }[
       { href: "/about", label: "About" },
       { href: "/about/index", label: "PuffPrice Index" },
       { href: "/this-week", label: "This week's deals" },
+      { href: "/deal-index", label: "Deal Index" },
       { href: "/how-we-rank", label: "How we rank" },
       { href: "/illinois-cannabis-tax-calculator", label: "Tax calculator" },
       { href: "/cannabis/illinois/first-time-guide", label: "First-time guide" },
@@ -49,6 +61,7 @@ const FOOTER_COLUMNS: { heading: string; links: { href: string; label: string }[
   {
     heading: "For dispensaries",
     links: [
+      { href: "/for-dispensaries", label: "Free store report" },
       { href: "/get-listed", label: "Get listed" },
       { href: "/claim", label: "Claim a listing" },
       { href: "/dispensaries", label: "Dispensary directory" },
@@ -149,7 +162,7 @@ export default function Footer() {
         }
         .pp-footer-cols {
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
+          grid-template-columns: repeat(5, minmax(0, 1fr));
           gap: clamp(1.25rem, 3vw, 2rem);
         }
         .pp-footer-heading {

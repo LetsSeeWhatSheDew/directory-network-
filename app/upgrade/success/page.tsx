@@ -41,7 +41,7 @@ export default async function UpgradeSuccessPage({
           </h1>
 
           <p style={{ fontSize: "1.1rem", color: "rgba(255,255,255,0.7)", fontFamily: "system-ui, sans-serif", lineHeight: 1.6, marginBottom: 32 }}>
-            You&apos;ll get instant SMS alerts when dispensaries near you post
+            You&apos;ll get instant email alerts when dispensaries near you post
             a deal worth knowing about.
           </p>
 

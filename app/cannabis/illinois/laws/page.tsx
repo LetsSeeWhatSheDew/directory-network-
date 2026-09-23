@@ -29,7 +29,7 @@ const faqSchema = JSON.stringify({
     {
       "@type": "Question",
       name: "How much cannabis can you possess in Illinois?",
-      acceptedAnswer: { "@type": "Answer", text: "Illinois residents may possess up to 30 grams of cannabis flower, 500 milligrams of THC in cannabis-infused products, and 5 grams of cannabis concentrate. Non-residents are limited to half those amounts." },
+      acceptedAnswer: { "@type": "Answer", text: "Since June 12, 2026 (SB 3222), Illinois residents may possess up to 60 grams of cannabis flower, 1,000 milligrams of THC in cannabis-infused products, and 10 grams of cannabis concentrate. Non-residents are limited to half those amounts (30 g, 500 mg, 5 g)." },
     },
     {
       "@type": "Question",
@@ -101,10 +101,21 @@ export default function IllinoisLawsPage() {
           <span style={{ color: "#374151" }}>Laws</span>
         </div>
         <div className="laws-inner">
-          <span className="laws-updated">✓ Updated April 2026</span>
+          <span className="laws-updated">✓ Updated September 2026</span>
           <p className="laws-label">Illinois Cannabis Guide</p>
           <h1 className="laws-h1">Illinois Cannabis Laws — Complete Guide</h1>
           <p className="laws-intro">Illinois legalized adult-use cannabis on January 1, 2020 under the Cannabis Regulation and Tax Act. This guide covers what is legal, what is not, possession limits, consumption rules, and penalties.</p>
+          <div className="laws-section">
+            <h2 className="laws-h2">What changed in 2026</h2>
+            <ul className="laws-p" style={{ paddingLeft: 18, lineHeight: 1.7 }}>
+              <li><strong>Drive-thru is legal</strong> (SB 3222, signed June 12, 2026) once IDFPR approves a store&apos;s setup. <Link href="/drive-thru">Who has one in Central Illinois →</Link></li>
+              <li><strong>Stores may stay open until 2 a.m.</strong> with city approval. <Link href="/open-late">Who&apos;s open latest tonight →</Link></li>
+              <li><strong>Possession limits doubled</strong> — 60 g flower, 1,000 mg infused, 10 g concentrate for residents.</li>
+              <li><strong>Every dispensary can add medical sales</strong> (IDFPR began issuing licenses Sept 10, 2026). <Link href="/medical">Central IL medical dispensaries →</Link></li>
+              <li><strong>Delta-8 and other intoxicating hemp leave gas stations and smoke shops</strong> on Nov 12, 2026. <Link href="/illinois-hemp-law">What changes →</Link></li>
+              <li><strong>Delivery is still not legal.</strong> <Link href="/illinois-cannabis-delivery">Where the delivery bills stand →</Link></li>
+            </ul>
+          </div>
           <div className="laws-section">
             <h2 className="laws-h2">Is Cannabis Legal in Illinois?</h2>
             <div className="laws-ok">
@@ -118,14 +129,14 @@ export default function IllinoisLawsPage() {
             <table className="laws-table">
               <thead><tr><th>Product Type</th><th>Illinois Residents</th><th>Out-of-State Visitors</th></tr></thead>
               <tbody>
-                <tr><td>Cannabis flower</td><td>30 grams</td><td>15 grams</td></tr>
-                <tr><td>THC in infused products</td><td>500mg</td><td>250mg</td></tr>
-                <tr><td>Cannabis concentrate</td><td>5 grams</td><td>2.5 grams</td></tr>
+                <tr><td>Cannabis flower</td><td>60 grams</td><td>30 grams</td></tr>
+                <tr><td>THC in infused products</td><td>1,000mg</td><td>500mg</td></tr>
+                <tr><td>Cannabis concentrate</td><td>10 grams</td><td>5 grams</td></tr>
               </tbody>
             </table>
             <div className="laws-warn">
               <p className="laws-warn-title">Over the limit</p>
-              <p className="laws-warn-text">Possessing between 30–100 grams is a civil infraction up to $200. Over 100 grams is a criminal offense.</p>
+              <p className="laws-warn-text">Limits doubled on June 12, 2026 (SB 3222). Possessing more than the limit is a civil or criminal offense depending on the amount.</p>
             </div>
           </div>
           <div className="laws-section">

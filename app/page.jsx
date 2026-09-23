@@ -8,6 +8,7 @@ import TrackedLink from "./components/TrackedLink";
 import HomeDealCards from "./components/HomeDealCards";
 import HeroDealCard from "./components/HeroDealCard";
 import { getConfirmationsToday } from "../lib/confirmations";
+import { getFeatureRows } from "../lib/waysToBuy";
 import PriceBoard from "./components/PriceBoard";
 import SearchTracker from "./components/SearchTracker";
 import FourTwentyBanner from "./components/FourTwentyBanner";
@@ -419,7 +420,7 @@ const FAQ_ENTRIES = [
   },
   {
     q: "Is PuffPrice free to use?",
-    a: "Yes. Browsing deals is always free with no account required. Pro is $0.99 a month and adds SMS alerts, a daily digest, price history, and a savings dashboard.",
+    a: "Yes. Browsing deals is always free with no account required. Pro ($0.99 a month, launching soon) adds instant email and browser alerts, a daily digest, price history, and a savings dashboard.",
   },
   {
     q: "Which Central Illinois cities does PuffPrice cover?",
@@ -512,6 +513,11 @@ export default async function HomePage() {
   // whichever deal is top-ranked and the per-card freshness badge tells
   // the truth at the row level.
   const featuredDeal = localizedTopDeals[0] || null;
+  const waysRows = await getFeatureRows();
+  const waysCounts = ["medical", "order_ahead", "curbside"].reduce(
+    (acc, f) => ({ ...acc, [f]: waysRows.filter((r) => r.feature === f && r.status === "yes").length }),
+    {}
+  );
   // Social proof: "✓ N people confirmed this today" on home cards.
   // Real Yes taps only (deal_reports reason='confirmed', last 24h).
   const confirmedToday = await getConfirmationsToday(
@@ -1324,6 +1330,33 @@ export default async function HomePage() {
       <div className="deals-section">
         <HomeDealCards initial={localizedTopDeals} dealCount={dealCount} mostRecent={mostRecentTs} confirmed={confirmedToday} />
       </div>
+
+      {/* WAYS TO BUY — new in 2026: drive-thru, medical everywhere, 2 a.m.
+          hours. Counts are verified facts from listing_features only. */}
+      <section aria-labelledby="wtb-heading" style={{ maxWidth: 1180, margin: "0 auto", padding: "8px clamp(1rem,4vw,2rem) 28px" }}>
+        <p className="pp-eyebrow">New in Illinois this year</p>
+        <h2 id="wtb-heading" style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.4rem,3.5vw,2rem)", margin: "4px 0 14px", letterSpacing: "-.02em" }}>
+          Drive-thru, medical, open late — compared
+        </h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 12 }}>
+          <Link href="/drive-thru" style={{ background: "var(--pp-canopy)", color: "var(--pp-canopy-text)", borderRadius: 14, padding: 18, textDecoration: "none", display: "flex", flexDirection: "column", gap: 6 }}>
+            <b style={{ fontFamily: "var(--font-display)", fontSize: "1.15rem" }}>Drive-thru</b>
+            <span style={{ fontSize: ".9rem", opacity: .88 }}>Legal since June 12. We&apos;re tracking who opens first in Central IL →</span>
+          </Link>
+          <Link href="/medical" style={{ background: "var(--pp-surface)", border: "1px solid var(--pp-border)", color: "var(--pp-ink)", borderRadius: 14, padding: 18, textDecoration: "none", display: "flex", flexDirection: "column", gap: 6 }}>
+            <b style={{ fontFamily: "var(--font-display)", fontSize: "1.15rem" }}>Medical · {waysCounts.medical} stores</b>
+            <span style={{ fontSize: ".9rem", color: "var(--pp-muted)" }}>Confirmed on their own sites. 1% state tax with a card →</span>
+          </Link>
+          <Link href="/open-late" style={{ background: "var(--pp-surface)", border: "1px solid var(--pp-border)", color: "var(--pp-ink)", borderRadius: 14, padding: 18, textDecoration: "none", display: "flex", flexDirection: "column", gap: 6 }}>
+            <b style={{ fontFamily: "var(--font-display)", fontSize: "1.15rem" }}>Open latest tonight</b>
+            <span style={{ fontSize: ".9rem", color: "var(--pp-muted)" }}>Every store sorted by closing time — 2 a.m. is now allowed →</span>
+          </Link>
+          <Link href="/ways-to-buy#compare" style={{ background: "var(--pp-surface)", border: "1px solid var(--pp-border)", color: "var(--pp-ink)", borderRadius: 14, padding: 18, textDecoration: "none", display: "flex", flexDirection: "column", gap: 6 }}>
+            <b style={{ fontFamily: "var(--font-display)", fontSize: "1.15rem" }}>Order ahead · {waysCounts.order_ahead} stores</b>
+            <span style={{ fontSize: ".9rem", color: "var(--pp-muted)" }}>Plus curbside at {waysCounts.curbside}. Every store side by side →</span>
+          </Link>
+        </div>
+      </section>
 
       {/* TAX CALCULATOR CALLOUT — between deals and city grid. The
           calculator is the moat play: no aggregator builds this, and

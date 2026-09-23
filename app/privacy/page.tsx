@@ -47,7 +47,7 @@ export default function PrivacyPage() {
             <strong>Email</strong> — if you subscribe to alerts, Pro, or sign up for the waitlist. We use it to send you the alerts or receipts you asked for.
           </p>
           <p>
-            <strong>Phone number</strong> — only if you opt into SMS alerts. Used only for sending the deal alerts you requested. You can reply STOP to unsubscribe at any time.
+            <strong>Phone number</strong> — we don&apos;t collect one for alerts. Phone carriers block cannabis-related text messages, so alerts go by email and browser notification.
           </p>
           <p>
             <strong>ZIP code</strong> — if you set a preferred ZIP to filter deals, we store the 5-digit ZIP. No street address.
@@ -68,7 +68,7 @@ export default function PrivacyPage() {
               <strong>Stripe</strong> — payment processing for Pro. Stripe&apos;s privacy practices: <a href="https://stripe.com/privacy" style={link}>stripe.com/privacy</a>.
             </li>
             <li>
-              <strong>Twilio</strong> — SMS alert delivery. Your phone number is sent to Twilio only if you opt into SMS. Twilio&apos;s policy: <a href="https://www.twilio.com/legal/privacy" style={link}>twilio.com/legal/privacy</a>.
+              <strong>Resend</strong> — email delivery for the alerts and weekly report you sign up for.
             </li>
             <li>
               <strong>Resend</strong> — email delivery (alerts, digest, receipts). Your email is sent to Resend only for sending messages you requested. Resend&apos;s policy: <a href="https://resend.com/legal/privacy-policy" style={link}>resend.com/legal/privacy-policy</a>.
