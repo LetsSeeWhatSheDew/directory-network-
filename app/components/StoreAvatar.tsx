@@ -1,9 +1,15 @@
 "use client";
 // Small square store image with a monogram fallback (no broken-image icons).
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function StoreAvatar({ src, name, size = 44 }: { src: string | null; name: string; size?: number }) {
   const [failed, setFailed] = useState(false);
+  const ref = useRef<HTMLImageElement>(null);
+  // SSR'd <img> can fail before hydration attaches onError — check once mounted.
+  useEffect(() => {
+    const el = ref.current;
+    if (el && el.complete && el.naturalWidth === 0) setFailed(true);
+  }, [src]);
   const initials = (name || "?").replace(/[^A-Za-z0-9 ]/g, "").split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase() || "?";
   const box: React.CSSProperties = {
     width: size, height: size, flex: `0 0 ${size}px`, borderRadius: 10, overflow: "hidden",
@@ -20,7 +26,7 @@ export default function StoreAvatar({ src, name, size = 44 }: { src: string | nu
   return (
     <span style={{ ...box, background: "#fff" }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt="" width={size} height={size} loading="lazy" decoding="async" onError={() => setFailed(true)} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+      <img ref={ref} src={src} alt="" referrerPolicy="no-referrer" width={size} height={size} loading="lazy" decoding="async" onError={() => setFailed(true)} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
     </span>
   );
 }

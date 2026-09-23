@@ -553,7 +553,7 @@ export default async function CityPage({
           <Link href="/how-we-rank" style={{ color: "var(--pp-signal-ink)", fontWeight: 600 }}>How we rank</Link>
         </p>
 
-        {livePriceBoard && (
+        {livePriceBoard && /· LIVE$/.test(livePriceBoard.locationTag || "") && (
           <div style={{ margin: "0 0 2rem", maxWidth: 560 }}>
             <PriceBoard {...livePriceBoard} />
           </div>
