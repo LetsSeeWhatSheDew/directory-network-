@@ -14,7 +14,7 @@ import ReportIssueLink from "../../components/ReportIssueLink";
 import ReviewsSection from "../../components/ReviewsSection";
 import TrustLine from "../../components/TrustLine";
 import { dealContextTag } from "../../../lib/dealContext";
-import { getListingDealHistory, historyIsMeaningful } from "../../../lib/dealHistory";
+import { getListingDealHistory, historyIsMeaningful, dayCountsReliable } from "../../../lib/dealHistory";
 import { getConfirmationsToday } from "../../../lib/confirmations";
 import { getApprovedReviews, getReviewStats, reviewsEnabled } from "../../../lib/reviews";
 import { MapPin, Phone, Menu as MenuIcon } from "lucide-react";
@@ -475,9 +475,11 @@ export default async function DispensaryProfilePage({
           {deals.length > 0 && <TrustLine />}
           {dealHistory && (
             <div className="track">
-              <span>
-                <b className="mono">{dealHistory.deal_days_30d}</b> of the last 30 days with a deal
-              </span>
+              {dayCountsReliable() && (
+                <span>
+                  <b className="mono">{dealHistory.deal_days_30d}</b> of the last 30 days with a deal
+                </span>
+              )}
               {dealHistory.typical_discount_pct != null && (
                 <span>
                   Typical <b className="mono">{dealHistory.typical_discount_pct}%</b> off

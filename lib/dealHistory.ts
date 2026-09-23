@@ -21,6 +21,14 @@ export type ListingDealHistory = {
   first_seen_day: string | null;
 };
 
+/** The trigger started logging every day on this date. Before it, only a
+ *  deal's first + last sighting survive (backfill), so day counts would
+ *  undercount. Day-count claims wait for 30 full days of daily logging. */
+export const DAILY_LOG_START = "2026-09-22";
+export function dayCountsReliable(): boolean {
+  return Date.now() - new Date(DAILY_LOG_START + "T05:00:00Z").getTime() >= 30 * 86_400_000;
+}
+
 /** Minimum history before we say anything about "typical" or "best". */
 export const MIN_HISTORY_DAYS = 7;
 
