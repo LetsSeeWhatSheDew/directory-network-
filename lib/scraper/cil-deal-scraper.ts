@@ -1,3 +1,4 @@
+import { inferCategory } from "../inferCategory";
 // lib/scraper/cil-deal-scraper.ts
 // Shared scraper core used by both the CLI script (scripts/scrape-cil-deals.ts)
 // and the Vercel cron route (app/api/cron/scrape-deals/route.ts).
@@ -589,6 +590,7 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
           listing_slug: u.scraped.listing_slug,
           project_tag: "green",
           title: u.scraped.title,
+          category: inferCategory(u.scraped.title),
           discount_value: u.scraped.discount_value,
           discount_unit:
             u.scraped.discount_unit === "percent"
@@ -623,6 +625,9 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
           status_reason: "scraped_direct_source",
           is_active: true,
           updated_at: nowIso,
+          // Fill category only when we can infer one; never blank out a
+          // category someone set by hand.
+          ...(inferCategory(u.scraped.title) ? { category: inferCategory(u.scraped.title) } : {}),
         };
         await tryColumns(
           `/deals?id=eq.${u.existingId}`,

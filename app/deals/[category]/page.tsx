@@ -5,6 +5,7 @@ import Link from "next/link";
 import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
 import TrustLine from "../../components/TrustLine";
+import { effectiveCategory } from "../../../lib/inferCategory";
 import { redirect } from "next/navigation";
 import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
 import DealBadge from "../../components/DealBadge";
@@ -111,12 +112,10 @@ async function getDeals(category: string, city?: string | null) {
     const viewParams = new URLSearchParams({
       select: "*",
       order: "discount_value.desc",
-      limit: city ? "100" : "10",
+      // Category is filtered in JS (effectiveCategory) because the scraper
+      // leaves the column NULL on most rows — pull the full active set.
+      limit: city || category !== "all" ? "100" : "10",
     });
-
-    if (category !== "all") {
-      viewParams.set("category", `eq.${category}`);
-    }
     // Central IL scope — never surface non-CIL deals on the public page.
     viewParams.set("city", `in.${CIL_CITY_IN_LIST}`);
 
@@ -134,9 +133,13 @@ async function getDeals(category: string, city?: string | null) {
     if (viewRes.ok) {
       const data = await viewRes.json();
       if (Array.isArray(data)) {
-        if (!city) return { deals: data, source: "view" };
+        const inCat =
+          category === "all"
+            ? data
+            : data.filter((d: any) => effectiveCategory(d) === category);
+        if (!city) return { deals: inCat.slice(0, 10), source: "view" };
 
-        const metroFiltered = data.filter((d: any) =>
+        const metroFiltered = inCat.filter((d: any) =>
           isInMetro(d.city, d.slug || d.listing_slug, city)
         );
         if (metroFiltered.length > 0) {

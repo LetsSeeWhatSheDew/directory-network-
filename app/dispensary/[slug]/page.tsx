@@ -15,6 +15,7 @@ import ReviewsSection from "../../components/ReviewsSection";
 import TrustLine from "../../components/TrustLine";
 import { dealContextTag } from "../../../lib/dealContext";
 import { getListingDealHistory, historyIsMeaningful } from "../../../lib/dealHistory";
+import { getConfirmationsToday } from "../../../lib/confirmations";
 import { getApprovedReviews, getReviewStats, reviewsEnabled } from "../../../lib/reviews";
 import { MapPin, Phone, Menu as MenuIcon } from "lucide-react";
 import { notFound } from "next/navigation";
@@ -237,6 +238,7 @@ export default async function DispensaryProfilePage({
     getListingDealHistory(slug),
   ]);
   const dealHistory = historyIsMeaningful(dealHistoryRaw) ? dealHistoryRaw : null;
+  const confirmed = await getConfirmationsToday(deals.map((d) => d.id));
 
   const ct = nowInCT();
   const status = todayOpenStatus(hours, ct);
@@ -370,6 +372,7 @@ export default async function DispensaryProfilePage({
         .track{display:flex;flex-wrap:wrap;gap:6px 16px;margin:-4px 0 14px;font-size:.8rem;color:var(--pp-muted,#6B7268)}
         .track b{color:var(--pp-ink,#15231A);font-weight:600}
         .mono{font-family:var(--font-mono,ui-monospace),monospace;font-variant-numeric:tabular-nums}
+        .confirmed{font-size:.78rem;font-weight:600;color:var(--pp-signal-ink,#2E5320);margin:2px 0 6px}
         .best-seen{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.02em;color:var(--pp-signal-ink,#2E5320);background:var(--pp-best-tint,#E8F0DF);border:1px solid var(--pp-best-border,#CBE0B4);border-radius:999px;padding:2px 9px;margin-bottom:6px}
         /* Lighter per-deal CTA: outline, so a stack of 3 deals doesn't read as 3 slabs. */
         .deal-cta{display:block;width:100%;text-align:center;background:var(--pp-surface,#FCFCFA);color:var(--pp-signal-ink,#2E5320);border:1.5px solid var(--pp-signal,#2E7D32);padding:12px;border-radius:10px;text-decoration:none;font-family:var(--font-body,system-ui),sans-serif;font-weight:700;font-size:.9rem;min-height:44px}
@@ -524,6 +527,11 @@ export default async function DispensaryProfilePage({
                     )}
                     {expiresLabel && <span className="deal-expires">{expiresLabel}</span>}
                   </div>
+                  {confirmed[d.id] > 0 && (
+                    <div className="confirmed">
+                      ✓ {confirmed[d.id]} {confirmed[d.id] === 1 ? "person" : "people"} confirmed this today
+                    </div>
+                  )}
                   {d.description && <p className="deal-desc">{d.description}</p>}
                   <div style={{ margin: "6px 0 8px", display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12 }}>
                     <DealFreshnessBadge verifiedAt={d.verified_at} statusReason={d.status_reason} />

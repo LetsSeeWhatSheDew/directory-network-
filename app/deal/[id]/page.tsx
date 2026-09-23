@@ -17,6 +17,7 @@ import { displayDispensaryName } from "../../../lib/dispensaryName";
 import ShareDealButton from "../../components/ShareDealButton";
 import DealFreshnessBadge from "../../components/DealFreshnessBadge";
 import ReportIssueLink from "../../components/ReportIssueLink";
+import { getConfirmationsToday } from "../../../lib/confirmations";
 import { isInCentralIL } from "../../../lib/visibility";
 import { isDealActiveNow, describeActiveDays } from "../../../lib/dealActiveFilter";
 
@@ -256,6 +257,7 @@ export default async function DealPage({
   // instead of a 404. Deal URLs get shared and indexed; the dispensary page
   // is the durable resource they hang off (it's already the canonical).
   if (!deal.is_active) permanentRedirect(`/dispensary/${deal.listing_slug}`);
+  const confirmedToday = (await getConfirmationsToday([deal.id]))[deal.id] || 0;
   // Day-of-week + active_until visibility gate. The page renders even when
   // not active today (so the URL stays a stable resource), but the savings
   // block flips to a "not active today" notice that names the days the
@@ -522,6 +524,11 @@ export default async function DealPage({
               borderTop: "1px solid var(--pp-border, #DCDED2)",
             }}
           >
+            {confirmedToday > 0 && (
+              <p style={{ margin: "0 0 8px", fontSize: ".82rem", fontWeight: 600, color: "var(--pp-signal-ink)" }}>
+                ✓ {confirmedToday} {confirmedToday === 1 ? "person" : "people"} confirmed this today
+              </p>
+            )}
             <ReportIssueLink
               context={`${headline} at ${disp}`}
               url={`${brand.url}/deal/${id}`}

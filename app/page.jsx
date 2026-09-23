@@ -14,6 +14,7 @@ import EndingSoonRow from "./components/EndingSoonRow";
 import PuffPriceIndexCard from "./components/PuffPriceIndexCard";
 import StickyMobileCTA from "./components/StickyMobileCTA";
 import { CategoryIcon, HOME_HERO_CATEGORIES } from "../lib/categoryIcons";
+import { effectiveCategory } from "../lib/inferCategory";
 import { brand } from "../lib/brand";
 import { getServerLocation } from "../lib/location";
 import { getLiveDealsValueThisMonth, getDealsRunThisMonth } from "../lib/stats";
@@ -483,6 +484,14 @@ export default async function HomePage() {
   const userCity = userLoc?.city || null;
   const localizedTopDeals = preferLocalDeals(topDeals, userCity);
   const localizedDealPool = preferLocalDeals(dealPool, userCity);
+  // Live deal count per category tile (category column is mostly NULL from
+  // the scraper, so infer from the deal text). A tile never promises deals
+  // that aren't there.
+  const catCounts = {};
+  for (const d of dealPool || []) {
+    const c = effectiveCategory(d);
+    if (c) catCounts[c] = (catCounts[c] || 0) + 1;
+  }
   // Live count of CIL cities that actually have at least one listing.
   // cityCounts is the Map produced by getCityCounts() — keyed by lower-
   // cased city name. We filter to entries with listings > 0 so the
@@ -1127,7 +1136,7 @@ export default async function HomePage() {
         }
         .pp-home-hero-cats-grid {
           display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
+          grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 0.625rem;
         }
         .pp-home-hero-cat-tile {
@@ -1153,6 +1162,7 @@ export default async function HomePage() {
           border-color: var(--pp-signal, #2E7D32);
         }
         .pp-home-hero-cat-icon { display: inline-flex; }
+        .pp-home-hero-cat-count{display:block;font-family:var(--font-mono);font-size:.62rem;letter-spacing:.04em;color:var(--pp-muted);margin-top:2px}
         .pp-home-hero-cat-label { display: inline-block; }
 
         @media (max-width: 1023px) {
@@ -1166,7 +1176,15 @@ export default async function HomePage() {
           }
         }
         @media (max-width: 640px) {
-          .pp-home-hero-cats-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+          /* Phone: categories collapse to one swipeable chip row so the
+             first deal shows up a screen sooner. */
+          .pp-home-hero-cats-shell { padding: 12px !important; }
+          .pp-home-hero-cats-label { display: none; }
+          .pp-home-hero-cats-grid { display: flex !important; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+          .pp-home-hero-cats-grid::-webkit-scrollbar { display: none; }
+          .pp-home-hero-cat-tile { flex: 0 0 auto; flex-direction: row !important; gap: 8px; padding: 10px 14px !important; min-height: 44px; }
+          .pp-home-hero-cat-icon { display: none; }
+          .pp-home-hero-cat-count { margin-top: 0; }
           .pp-home-hero-cta-row { flex-direction: column; align-items: stretch; }
           .pp-home-hero-cta-row .pp-btn { width: 100%; }
         }
@@ -1247,6 +1265,11 @@ export default async function HomePage() {
                         <CategoryIcon slug={cat.slug} size={28} tone="light" />
                       </span>
                       <span className="pp-home-hero-cat-label">{cat.label}</span>
+                      <span className="pp-home-hero-cat-count">
+                        {catCounts[cat.slug]
+                          ? `${catCounts[cat.slug]} deal${catCounts[cat.slug] === 1 ? "" : "s"}`
+                          : "none today"}
+                      </span>
                     </TrackedLink>
                   ))}
                 </div>
