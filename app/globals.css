@@ -191,7 +191,7 @@
    scroll-behavior keep working while any element that overshoots the viewport
    is clipped instead of dragging the whole page sideways. Root offenders are
    still fixed at source (e.g. the city grid's minmax(0,1fr) tracks). */
-html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: clip; }
+html { background: var(--pp-paper); scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: clip; }
 
 body {
   background: var(--pp-paper);

@@ -124,7 +124,7 @@ export default function SubmitDealPage() {
   }
 
   return (
-    <div style={{ fontFamily: "Georgia, serif", background: "#F7F4ED", minHeight: "100vh", color: "#1F3D2B" }}>
+    <div style={{ fontFamily: "var(--font-display), system-ui, sans-serif", background: "var(--pp-paper)", minHeight: "100vh", color: "#1F3D2B" }}>
       <nav style={{ padding: "14px 28px", background: "#1F3D2B" }}>
         <Link href="/" style={{ color: "#fff", textDecoration: "none", fontWeight: 700 }}>
           puff<span style={{ color: "#93CB5C" }}>price</span>
@@ -270,16 +270,16 @@ export default function SubmitDealPage() {
                 </div>
               )}
               <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10 }}>
-                {form.category && <span style={{ fontSize: ".68rem", color: "#6b7280", background: "#F7F4ED", borderRadius: 100, padding: "2px 9px", fontFamily: "system-ui,sans-serif" }}>{form.category}</span>}
-                {form.is_recurring && <span style={{ fontSize: ".68rem", color: "#6b7280", background: "#F7F4ED", borderRadius: 100, padding: "2px 9px", fontFamily: "system-ui,sans-serif" }}>Recurring</span>}
-                {form.expires_at && <span style={{ fontSize: ".68rem", color: "#6b7280", background: "#F7F4ED", borderRadius: 100, padding: "2px 9px", fontFamily: "system-ui,sans-serif" }}>Expires {new Date(form.expires_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>}
+                {form.category && <span style={{ fontSize: ".68rem", color: "#6b7280", background: "var(--pp-paper)", borderRadius: 100, padding: "2px 9px", fontFamily: "system-ui,sans-serif" }}>{form.category}</span>}
+                {form.is_recurring && <span style={{ fontSize: ".68rem", color: "#6b7280", background: "var(--pp-paper)", borderRadius: 100, padding: "2px 9px", fontFamily: "system-ui,sans-serif" }}>Recurring</span>}
+                {form.expires_at && <span style={{ fontSize: ".68rem", color: "#6b7280", background: "var(--pp-paper)", borderRadius: 100, padding: "2px 9px", fontFamily: "system-ui,sans-serif" }}>Expires {new Date(form.expires_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>}
               </div>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#F2F8E9", border: "1px solid #C7E5A8", borderRadius: 10, padding: "12px 14px" }}>
                 <div>
                   <div style={{ fontSize: ".65rem", fontWeight: 700, color: "#3F6B1F", fontFamily: "system-ui,sans-serif", textTransform: "uppercase", letterSpacing: ".12em" }}>You save</div>
                   <div style={{ fontSize: ".68rem", color: "rgba(22,101,52,.7)", fontFamily: "system-ui,sans-serif", marginTop: 2 }}>vs. Illinois average</div>
                 </div>
-                <div style={{ fontSize: "1.7rem", fontWeight: 700, color: "#2E7D32", letterSpacing: "-.02em", lineHeight: 1, fontFamily: "Georgia,serif" }}>
+                <div style={{ fontSize: "1.7rem", fontWeight: 700, color: "#2E7D32", letterSpacing: "-.02em", lineHeight: 1, fontFamily: "var(--font-display), system-ui, sans-serif" }}>
                   {previewSavings || "—"}
                 </div>
               </div>

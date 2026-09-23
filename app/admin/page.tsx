@@ -216,6 +216,12 @@ export default async function AdminDashboard() {
             >
               Submissions →
             </Link>
+            <Link
+              href="/admin/reviews"
+              className="text-[11px] uppercase tracking-widest text-[#8a9490] transition-colors hover:text-[#2E7D32]"
+            >
+              Reviews →
+            </Link>
             <div className="flex items-baseline gap-1.5">
               <span className="text-[#8a9490]">Project</span>
               <span className="font-semibold text-[#2E7D32]">Green</span>

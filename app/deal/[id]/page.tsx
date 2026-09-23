@@ -8,7 +8,7 @@
 import Link from "next/link";
 import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
@@ -17,6 +17,7 @@ import { displayDispensaryName } from "../../../lib/dispensaryName";
 import ShareDealButton from "../../components/ShareDealButton";
 import DealFreshnessBadge from "../../components/DealFreshnessBadge";
 import ReportIssueLink from "../../components/ReportIssueLink";
+import { getConfirmationsToday } from "../../../lib/confirmations";
 import { isInCentralIL } from "../../../lib/visibility";
 import { isDealActiveNow, describeActiveDays } from "../../../lib/dealActiveFilter";
 
@@ -76,6 +77,26 @@ async function getDeal(id: string): Promise<Deal | null> {
     if (!res.ok) return null;
     const rows = await res.json();
     return Array.isArray(rows) && rows[0] ? rows[0] : null;
+  } catch {
+    return null;
+  }
+}
+
+// Server-only: the service key never reaches the client (RSC data path).
+async function getRetiredDealSlug(id: string): Promise<string | null> {
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
+  if (!key || !/^[0-9a-f-]{36}$/i.test(id)) return null;
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/deals?id=eq.${id}&project_tag=eq.green&select=listing_slug&limit=1`,
+      { headers: { apikey: key, Authorization: `Bearer ${key}` }, next: { revalidate: 3600 } }
+    );
+    if (!res.ok) return null;
+    const rows = await res.json();
+    const slug = Array.isArray(rows) && rows[0]?.listing_slug;
+    if (!slug) return null;
+    const listing = await getListing(slug);
+    return listing && isInCentralIL(listing.city) ? slug : null;
   } catch {
     return null;
   }
@@ -220,11 +241,23 @@ export default async function DealPage({
 }) {
   const { id } = await params;
   const deal = await getDeal(id);
-  if (!deal || !deal.is_active) notFound();
+  if (!deal) {
+    // Anon RLS hides inactive deals, so an expired deal looks "missing".
+    // Look up just its listing slug server-side and send people (and
+    // Google) to the store page instead of a 404.
+    const gone = await getRetiredDealSlug(id);
+    if (gone) permanentRedirect(`/dispensary/${gone}`);
+    notFound();
+  }
 
   const listing = await getListing(deal.listing_slug);
   // Central IL scope gate — deals on non-CIL listings are hidden publicly.
   if (!isInCentralIL(listing?.city)) notFound();
+  // Expired / deactivated deal: send people (and Google) to the store's page
+  // instead of a 404. Deal URLs get shared and indexed; the dispensary page
+  // is the durable resource they hang off (it's already the canonical).
+  if (!deal.is_active) permanentRedirect(`/dispensary/${deal.listing_slug}`);
+  const confirmedToday = (await getConfirmationsToday([deal.id]))[deal.id] || 0;
   // Day-of-week + active_until visibility gate. The page renders even when
   // not active today (so the URL stays a stable resource), but the savings
   // block flips to a "not active today" notice that names the days the
@@ -491,6 +524,11 @@ export default async function DealPage({
               borderTop: "1px solid var(--pp-border, #DCDED2)",
             }}
           >
+            {confirmedToday > 0 && (
+              <p style={{ margin: "0 0 8px", fontSize: ".82rem", fontWeight: 600, color: "var(--pp-signal-ink)" }}>
+                ✓ {confirmedToday} {confirmedToday === 1 ? "person" : "people"} confirmed this today
+              </p>
+            )}
             <ReportIssueLink
               context={`${headline} at ${disp}`}
               url={`${brand.url}/deal/${id}`}

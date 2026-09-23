@@ -13,8 +13,13 @@ const FOOTER_COLUMNS: { heading: string; links: { href: string; label: string }[
     heading: "Browse Central Illinois",
     links: [
       { href: "/city/peoria", label: "Peoria" },
+      { href: "/city/east-peoria", label: "East Peoria" },
+      { href: "/city/peoria-heights", label: "Peoria Heights" },
+      { href: "/city/pekin", label: "Pekin" },
       { href: "/city/bloomington", label: "Bloomington" },
+      { href: "/city/normal", label: "Normal" },
       { href: "/city/champaign", label: "Champaign" },
+      { href: "/city/urbana", label: "Urbana" },
       { href: "/city/springfield", label: "Springfield" },
       { href: "/dispensaries", label: "All dispensaries" },
     ],
@@ -34,6 +39,7 @@ const FOOTER_COLUMNS: { heading: string; links: { href: string; label: string }[
     links: [
       { href: "/about", label: "About" },
       { href: "/about/index", label: "PuffPrice Index" },
+      { href: "/how-we-rank", label: "How we rank" },
       { href: "/illinois-cannabis-tax-calculator", label: "Tax calculator" },
       { href: "/cannabis/illinois/first-time-guide", label: "First-time guide" },
       { href: "/cannabis/illinois/laws", label: "Illinois cannabis laws" },

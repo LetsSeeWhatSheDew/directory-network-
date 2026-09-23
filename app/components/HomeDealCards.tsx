@@ -10,6 +10,9 @@ import ShareDealButton from "./ShareDealButton";
 import DealBadge from "./DealBadge";
 import { isFreshnessHidden, isFreshnessStale } from "./DealFreshnessBadge";
 import VerifiedRow from "./VerifiedRow";
+import { dealContextTag } from "../../lib/dealContext";
+import { isCentralILCity } from "../../lib/constants/regions";
+import TrustLine from "./TrustLine";
 
 type Deal = {
   deal_id?: string;
@@ -199,6 +202,7 @@ export default function HomeDealCards({
     try {
       c = sessionStorage.getItem("cl_city");
     } catch {}
+    if (c && !isCentralILCity(c.trim().toLowerCase().replace(/\s+/g, "-"))) c = null;
     if (c) refetchFor(c);
 
     const handler = (e: Event) => {
@@ -256,7 +260,7 @@ export default function HomeDealCards({
           fontFamily: "system-ui, sans-serif",
         }}
       >
-        <div style={{ fontFamily: "Georgia, serif", fontSize: "1.1rem", fontWeight: 700, color: "#1C3A22", marginBottom: 6 }}>
+        <div style={{ fontFamily: "var(--font-display), system-ui, sans-serif", fontSize: "1.1rem", fontWeight: 700, color: "#1C3A22", marginBottom: 6 }}>
           We're refreshing Central IL deals — check back soon.
         </div>
         <p style={{ fontSize: ".9rem", color: "#545B52", margin: "0 auto 14px", maxWidth: 420, lineHeight: 1.5 }}>
@@ -301,6 +305,7 @@ export default function HomeDealCards({
             {updated && typeof dealCount === "number" && dealCount > 0 && ` · ${dealCount} active deals`}
             {loading && " · Refreshing…"}
           </p>
+          <TrustLine />
           {city && (
             <div
               role="tablist"
@@ -426,7 +431,11 @@ export default function HomeDealCards({
                   )}
                 </div>
               </div>
-              <div className="deal-highlight">{d.deal_title || "Active deal"}</div>
+              <div className="deal-highlight">
+                {(dollars == null || dollars <= 0) && formatted !== "Deal active"
+                  ? dealContextTag(d.deal_title) || d.deal_title || "Active deal"
+                  : d.deal_title || "Active deal"}
+              </div>
               {urgency && (
                 <div style={{ display: "inline-block", marginTop: 4, marginBottom: 6, fontSize: ".7rem", fontFamily: "system-ui,sans-serif", fontWeight: 700, color: urgency.fg, background: urgency.bg, padding: "2px 9px", borderRadius: 100 }}>
                   {urgency.text}

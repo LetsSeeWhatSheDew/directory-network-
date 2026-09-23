@@ -186,7 +186,7 @@ const questionLabel: React.CSSProperties = {
   fontSize: "1rem",
   fontWeight: 700,
   color: "#1F3D2B",
-  fontFamily: "Georgia, serif",
+  fontFamily: "var(--font-display), system-ui, sans-serif",
   lineHeight: 1.3,
 };
 const optionRow: React.CSSProperties = { display: "flex", gap: 8, flexWrap: "wrap" };
@@ -230,7 +230,7 @@ const resultBig: React.CSSProperties = {
   fontSize: "1.4rem",
   fontWeight: 700,
   color: "#fff",
-  fontFamily: "Georgia, serif",
+  fontFamily: "var(--font-display), system-ui, sans-serif",
   lineHeight: 1.3,
   marginBottom: 14,
 };

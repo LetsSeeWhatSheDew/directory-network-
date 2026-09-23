@@ -11,6 +11,12 @@ import Footer from "../../components/Footer";
 import AmenityRow from "../../components/AmenityRow";
 import DealFreshnessBadge from "../../components/DealFreshnessBadge";
 import ReportIssueLink from "../../components/ReportIssueLink";
+import ReviewsSection from "../../components/ReviewsSection";
+import TrustLine from "../../components/TrustLine";
+import { dealContextTag } from "../../../lib/dealContext";
+import { getListingDealHistory, historyIsMeaningful } from "../../../lib/dealHistory";
+import { getConfirmationsToday } from "../../../lib/confirmations";
+import { getApprovedReviews, getReviewStats, reviewsEnabled } from "../../../lib/reviews";
 import { MapPin, Phone, Menu as MenuIcon } from "lucide-react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -223,10 +229,16 @@ export default async function DispensaryProfilePage({
   // Central IL scope gate — non-CIL listings are hidden publicly.
   if (!isInCentralIL(listing.city)) notFound();
 
-  const [hours, deals] = await Promise.all([
+  const [hours, deals, reviews, reviewStats, reviewsOn, dealHistoryRaw] = await Promise.all([
     getHours(listing.id),
     getDeals(slug),
+    getApprovedReviews(slug),
+    getReviewStats(slug),
+    reviewsEnabled(),
+    getListingDealHistory(slug),
   ]);
+  const dealHistory = historyIsMeaningful(dealHistoryRaw) ? dealHistoryRaw : null;
+  const confirmed = await getConfirmationsToday(deals.map((d) => d.id));
 
   const ct = nowInCT();
   const status = todayOpenStatus(hours, ct);
@@ -264,6 +276,25 @@ export default async function DispensaryProfilePage({
     ...(listing.logo_url ? { image: listing.logo_url } : {}),
     ...(openingHours.length > 0 ? { openingHoursSpecification: openingHours } : {}),
     ...(listing.short_description ? { description: listing.short_description } : {}),
+    // Stars in search: only from real, approved PuffPrice-user reviews.
+    ...(reviewStats && reviewStats.review_count > 0
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: reviewStats.avg_rating,
+            reviewCount: reviewStats.review_count,
+            bestRating: 5,
+            worstRating: 1,
+          },
+          review: reviews.slice(0, 5).map((r) => ({
+            "@type": "Review",
+            reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5, worstRating: 1 },
+            author: { "@type": "Person", name: r.display_name || "PuffPrice user" },
+            datePublished: r.created_at.slice(0, 10),
+            ...(r.body ? { reviewBody: r.body } : {}),
+          })),
+        }
+      : {}),
     sameAs: [
       `${brand.url}/dispensary/${slug}`,
     ],
@@ -338,8 +369,14 @@ export default async function DispensaryProfilePage({
         .deal-savings-label{font-size:.68rem;color:#6b7280;font-family:system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
         .deal-expires{font-size:.74rem;color:#92400e;background:#fef3c7;padding:2px 8px;border-radius:100px;font-family:system-ui,sans-serif;font-weight:600}
         .deal-desc{font-size:.88rem;color:#374151;font-family:system-ui,sans-serif;line-height:1.5;margin-bottom:12px}
-        .deal-cta{display:block;width:100%;text-align:center;background:#2E7D32;color:#fff;padding:14px;border-radius:10px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:700;font-size:.92rem;min-height:44px}
-        .deal-cta:hover{background:#2E5320}
+        .track{display:flex;flex-wrap:wrap;gap:6px 16px;margin:-4px 0 14px;font-size:.8rem;color:var(--pp-muted,#6B7268)}
+        .track b{color:var(--pp-ink,#15231A);font-weight:600}
+        .mono{font-family:var(--font-mono,ui-monospace),monospace;font-variant-numeric:tabular-nums}
+        .confirmed{font-size:.78rem;font-weight:600;color:var(--pp-signal-ink,#2E5320);margin:2px 0 6px}
+        .best-seen{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.02em;color:var(--pp-signal-ink,#2E5320);background:var(--pp-best-tint,#E8F0DF);border:1px solid var(--pp-best-border,#CBE0B4);border-radius:999px;padding:2px 9px;margin-bottom:6px}
+        /* Lighter per-deal CTA: outline, so a stack of 3 deals doesn't read as 3 slabs. */
+        .deal-cta{display:block;width:100%;text-align:center;background:var(--pp-surface,#FCFCFA);color:var(--pp-signal-ink,#2E5320);border:1.5px solid var(--pp-signal,#2E7D32);padding:12px;border-radius:10px;text-decoration:none;font-family:var(--font-body,system-ui),sans-serif;font-weight:700;font-size:.9rem;min-height:44px}
+        .deal-cta:hover{background:var(--pp-best-tint,#E8F0DF)}
         .deal-details{font-size:.76rem;color:#2E7D32;text-decoration:none;display:inline-block;margin-top:8px;font-family:system-ui,sans-serif;font-weight:600}
         .deal-details:hover{text-decoration:underline}
 
@@ -435,6 +472,24 @@ export default async function DispensaryProfilePage({
           <div className="section-h">
             Active deals · {deals.length} {deals.length === 1 ? "offer" : "offers"}
           </div>
+          {deals.length > 0 && <TrustLine />}
+          {dealHistory && (
+            <div className="track">
+              <span>
+                <b className="mono">{dealHistory.deal_days_30d}</b> of the last 30 days with a deal
+              </span>
+              {dealHistory.typical_discount_pct != null && (
+                <span>
+                  Typical <b className="mono">{dealHistory.typical_discount_pct}%</b> off
+                </span>
+              )}
+              {dealHistory.best_discount_pct != null && (
+                <span>
+                  Best seen <b className="mono">{dealHistory.best_discount_pct}%</b>
+                </span>
+              )}
+            </div>
+          )}
           {deals.length === 0 ? (
             <div className="no-deals">
               <div className="no-deals-t">No active deals right now</div>
@@ -452,7 +507,15 @@ export default async function DispensaryProfilePage({
               const expiresLabel = formatExpires(d.expires_at);
               return (
                 <div className="deal-card" key={d.id}>
-                  <div className="deal-title">{formatDealTitle(d)}</div>
+                  <div className="deal-title">{(dollars == null && savingsLabel !== "Deal active" ? dealContextTag(formatDealTitle(d)) : null) || formatDealTitle(d)}</div>
+                  {dealHistory &&
+                    dealHistory.best_discount_pct != null &&
+                    dealHistory.deals_seen_90d >= 3 &&
+                    d.discount_unit === "percent" &&
+                    d.discount_value != null &&
+                    Math.round(d.discount_value) >= dealHistory.best_discount_pct && (
+                      <div className="best-seen">Best discount we&apos;ve seen here</div>
+                    )}
                   <div className="deal-meta">
                     {dollars != null ? (
                       <>
@@ -464,6 +527,11 @@ export default async function DispensaryProfilePage({
                     )}
                     {expiresLabel && <span className="deal-expires">{expiresLabel}</span>}
                   </div>
+                  {confirmed[d.id] > 0 && (
+                    <div className="confirmed">
+                      ✓ {confirmed[d.id]} {confirmed[d.id] === 1 ? "person" : "people"} confirmed this today
+                    </div>
+                  )}
                   {d.description && <p className="deal-desc">{d.description}</p>}
                   <div style={{ margin: "6px 0 8px", display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12 }}>
                     <DealFreshnessBadge verifiedAt={d.verified_at} statusReason={d.status_reason} />
@@ -553,6 +621,15 @@ export default async function DispensaryProfilePage({
             <AmenityRow listing={listing} variant="pill" />
           </section>
         )}
+
+        {/* Reviews — moderated, real users only */}
+        <ReviewsSection
+          slug={slug}
+          name={name}
+          reviews={reviews}
+          stats={reviewStats}
+          enabled={reviewsOn}
+        />
 
         {/* Claim CTA — subtle, non-intrusive */}
         <div className="claim-cta">

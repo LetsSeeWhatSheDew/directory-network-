@@ -16,7 +16,7 @@ export default async function UpgradeSuccessPage({
   await searchParams;
 
   return (
-    <div style={{ fontFamily: "Georgia, serif", background: "#1F3D2B", minHeight: "100vh", color: "#fff", display: "flex", flexDirection: "column" }}>
+    <div style={{ fontFamily: "var(--font-display), system-ui, sans-serif", background: "#1F3D2B", minHeight: "100vh", color: "#fff", display: "flex", flexDirection: "column" }}>
       <nav style={{ padding: "14px 28px" }}>
         <Link href="/" style={{ color: "#fff", textDecoration: "none", fontWeight: 700, fontSize: "1.15rem" }}>
           puff<span style={{ color: "#93CB5C" }}>price</span>

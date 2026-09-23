@@ -124,16 +124,6 @@ export default function UpgradePage() {
             Less than a single pre-roll — every three years.
           </p>
         </div>
-
-        <figure className="mt-10 text-sm text-gray-600">
-          <blockquote className="italic">
-            &ldquo;I saved $23 on my last order just from a Tuesday morning
-            text. Worth every penny.&rdquo;
-          </blockquote>
-          <figcaption className="text-xs mt-2 text-gray-500 not-italic">
-            — K.M., Peoria IL · Beta user
-          </figcaption>
-        </figure>
       </section>
 
       <section className="max-w-2xl mx-auto px-6 pb-16">

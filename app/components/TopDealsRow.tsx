@@ -175,7 +175,7 @@ export default function TopDealsRow({
                     fontWeight: 700,
                     color: "#2E7D32",
                     letterSpacing: "-.03em",
-                    fontFamily: "Georgia, serif",
+                    fontFamily: "var(--font-display), system-ui, sans-serif",
                     lineHeight: 1,
                   }}
                 >

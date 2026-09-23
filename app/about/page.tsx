@@ -31,7 +31,7 @@ export default function AboutPage() {
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:var(--font-ui, system-ui, sans-serif);background:#F7F4ED;color:#1F3D2B;min-height:100vh}
+        body{font-family:var(--font-ui, system-ui, sans-serif);background:var(--pp-paper);color:#1F3D2B;min-height:100vh}
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #DCDED2;position:sticky;top:0;z-index:100}
         .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none}
         .back{font-size:.82rem;color:#6b7280;text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif)}
@@ -66,7 +66,7 @@ export default function AboutPage() {
           letter-spacing:-.04em;line-height:1.1;margin-bottom:32px;color:#1F3D2B
         }
         p{
-          font-family:var(--font-serif, Georgia, serif);
+          font-family:var(--font-display), system-ui, sans-serif;
           font-size:1.0625rem;line-height:1.7;margin-bottom:22px;color:#374151
         }
         p:last-of-type{margin-bottom:32px}

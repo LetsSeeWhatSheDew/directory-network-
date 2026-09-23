@@ -78,7 +78,7 @@ export default function FirstTimeGuidePage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: faqSchema }} />
       <style>{`
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        .guide-root { min-height: 100vh; background: #f7f6f2; font-family: Georgia, 'Times New Roman', serif; }
+        .guide-root { min-height: 100vh; background: var(--pp-paper); font-family:var(--font-display), system-ui, sans-serif; }
         .guide-nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 32px; background: #fff; border-bottom: 1px solid #e8e5de; position: sticky; top: 0; z-index: 50; }
         .guide-nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
         .guide-nav-dot { width: 10px; height: 10px; border-radius: 50%; background: #2E7D32; display: inline-block; }
@@ -111,7 +111,7 @@ export default function FirstTimeGuidePage() {
         .guide-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
         .guide-table th { background: #1F3D2B; color: #fff; font-size: 0.8rem; font-family: system-ui, sans-serif; font-weight: 700; padding: 10px 14px; text-align: left; }
         .guide-table td { font-size: 0.875rem; font-family: system-ui, sans-serif; color: #374151; padding: 10px 14px; border-bottom: 1px solid #f0ede6; }
-        .guide-table tr:nth-child(even) td { background: #f7f6f2; }
+        .guide-table tr:nth-child(even) td { background: var(--pp-paper); }
         .guide-faq { margin-bottom: 48px; }
         .guide-faq-item { border-bottom: 1px solid #e8e5de; padding: 20px 0; }
         .guide-faq-q { font-size: 1rem; font-weight: 700; color: #1F3D2B; margin-bottom: 8px; line-height: 1.4; }
@@ -121,7 +121,7 @@ export default function FirstTimeGuidePage() {
         .guide-cta-sub { font-size: 0.9rem; color: #94a3b8; font-family: system-ui, sans-serif; margin-bottom: 20px; }
         .guide-cta-btn { display: inline-block; background: #2E7D32; color: #fff; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 700; font-size: 0.9rem; }
         .guide-footer { background: #1F3D2B; padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 80px; }
-        .guide-footer-brand { font-size: 1rem; font-weight: 700; color: #fff; font-family: Georgia, serif; }
+        .guide-footer-brand { font-size: 1rem; font-weight: 700; color: #fff; font-family:var(--font-display), system-ui, sans-serif; }
         .guide-footer-note { font-size: 0.78rem; color: #475569; font-family: system-ui, sans-serif; }
         @media (max-width: 768px) {
           .guide-nav { padding: 14px 20px; }

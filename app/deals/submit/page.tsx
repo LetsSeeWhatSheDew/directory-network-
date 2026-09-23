@@ -82,7 +82,7 @@ export default async function SubmitDealPage() {
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:Georgia,serif;background:#F7F4ED;color:#1F3D2B;min-height:100vh}
+        body{font-family:var(--font-body),system-ui,sans-serif;background:var(--pp-paper);color:var(--pp-body);min-height:100vh}
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #DCDED2}
         .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
         .logo-text{font-size:1.1rem;font-weight:700;color:#1F3D2B}

@@ -4,6 +4,8 @@
 import Link from "next/link";
 import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
+import TrustLine from "../../components/TrustLine";
+import { effectiveCategory } from "../../../lib/inferCategory";
 import { redirect } from "next/navigation";
 import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
 import DealBadge from "../../components/DealBadge";
@@ -110,12 +112,10 @@ async function getDeals(category: string, city?: string | null) {
     const viewParams = new URLSearchParams({
       select: "*",
       order: "discount_value.desc",
-      limit: city ? "100" : "10",
+      // Category is filtered in JS (effectiveCategory) because the scraper
+      // leaves the column NULL on most rows — pull the full active set.
+      limit: city || category !== "all" ? "100" : "10",
     });
-
-    if (category !== "all") {
-      viewParams.set("category", `eq.${category}`);
-    }
     // Central IL scope — never surface non-CIL deals on the public page.
     viewParams.set("city", `in.${CIL_CITY_IN_LIST}`);
 
@@ -133,9 +133,13 @@ async function getDeals(category: string, city?: string | null) {
     if (viewRes.ok) {
       const data = await viewRes.json();
       if (Array.isArray(data)) {
-        if (!city) return { deals: data, source: "view" };
+        const inCat =
+          category === "all"
+            ? data
+            : data.filter((d: any) => effectiveCategory(d) === category);
+        if (!city) return { deals: inCat.slice(0, 10), source: "view" };
 
-        const metroFiltered = data.filter((d: any) =>
+        const metroFiltered = inCat.filter((d: any) =>
           isInMetro(d.city, d.slug || d.listing_slug, city)
         );
         if (metroFiltered.length > 0) {
@@ -509,7 +513,7 @@ export default async function DealsPage({
       ))}
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:Georgia,serif;background:#F7F4ED;color:#1F3D2B;min-height:100vh}
+        body{font-family:var(--font-body),system-ui,sans-serif;background:var(--pp-paper);color:var(--pp-body);min-height:100vh}
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;position:sticky;top:0;z-index:100;border-bottom:1px solid #DCDED2}
         .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
         .logo-dot{width:8px;height:8px;border-radius:50%;background:#2E7D32;animation:pulse 2.5s infinite}
@@ -540,7 +544,7 @@ export default async function DealsPage({
         .disp-detail{font-size:.8rem;color:#9ca3af;font-family:system-ui,sans-serif;margin-top:2px;margin-bottom:6px}
         .deal-title-big{font-size:.92rem;font-weight:600;color:#374151;margin-bottom:14px;font-family:system-ui,sans-serif;line-height:1.4;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
         .attrs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:16px}
-        .attr{font-size:.66rem;color:#9ca3af;background:#F7F4ED;border-radius:100px;padding:2px 8px;font-family:system-ui,sans-serif}
+        .attr{font-size:.66rem;color:#9ca3af;background:var(--pp-paper);border-radius:100px;padding:2px 8px;font-family:system-ui,sans-serif}
         .deal-more-toggle{font-size:.78rem;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:16px;cursor:pointer;text-decoration:none;display:inline-block;list-style:none}
         .deal-more-toggle::-webkit-details-marker{display:none}
         .deal-more-toggle:hover{color:#1F3D2B}
@@ -617,6 +621,7 @@ export default async function DealsPage({
             ? `No active ${categoryLabel.toLowerCase()} deals within 15 miles of ${city} right now`
             : "No active deals right now — check back soon"}
         </p>
+        <TrustLine />
 
         {city && (
           <div className="city-banner">
@@ -914,6 +919,7 @@ export default async function DealsPage({
           </div>
         )}
       </div>
+      <Footer />
     </>
   );
 }

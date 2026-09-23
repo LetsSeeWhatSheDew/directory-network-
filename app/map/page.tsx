@@ -108,7 +108,7 @@ export default async function MapPage() {
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        html,body{height:100%;font-family:Georgia,serif;background:#F7F4ED}
+        html,body{height:100%;font-family:var(--font-display), system-ui, sans-serif;background:var(--pp-paper)}
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #DCDED2}
         .logo{color:#1F3D2B;text-decoration:none;font-weight:700;letter-spacing:-.02em}
         .logo span{color:#2E7D32}
@@ -140,7 +140,7 @@ export default async function MapPage() {
             style={{
               fontSize: "1.5rem",
               color: "#1F3D2B",
-              fontFamily: "Georgia, serif",
+              fontFamily: "var(--font-display), system-ui, sans-serif",
               marginBottom: 10,
               letterSpacing: "-0.02em",
             }}

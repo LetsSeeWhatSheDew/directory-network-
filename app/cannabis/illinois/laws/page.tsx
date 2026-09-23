@@ -50,7 +50,7 @@ export default function IllinoisLawsPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: faqSchema }} />
       <style>{`
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        .laws-root { min-height: 100vh; background: #f7f6f2; font-family: Georgia, serif; }
+        .laws-root { min-height: 100vh; background: var(--pp-paper); font-family:var(--font-display), system-ui, sans-serif; }
         .laws-nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 32px; background: #fff; border-bottom: 1px solid #e8e5de; position: sticky; top: 0; z-index: 50; }
         .laws-nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
         .laws-nav-dot { width: 10px; height: 10px; border-radius: 50%; background: #2E7D32; display: inline-block; }
@@ -70,7 +70,7 @@ export default function IllinoisLawsPage() {
         .laws-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; border-radius: 12px; overflow: hidden; }
         .laws-table th { background: #1F3D2B; color: #fff; font-size: 0.8rem; font-family: system-ui, sans-serif; font-weight: 700; padding: 12px 16px; text-align: left; }
         .laws-table td { font-size: 0.875rem; font-family: system-ui, sans-serif; color: #374151; padding: 12px 16px; border-bottom: 1px solid #f0ede6; }
-        .laws-table tr:nth-child(even) td { background: #f7f6f2; }
+        .laws-table tr:nth-child(even) td { background: var(--pp-paper); }
         .laws-ok { background: #F2F8E9; border-left: 4px solid #2E7D32; border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 16px; }
         .laws-ok-title { font-size: 0.8rem; font-family: system-ui, sans-serif; font-weight: 700; color: #14532d; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
         .laws-ok-text { font-size: 0.875rem; color: #3F6B1F; font-family: system-ui, sans-serif; line-height: 1.6; }
@@ -88,7 +88,7 @@ export default function IllinoisLawsPage() {
         .laws-cta-sub { font-size: 0.875rem; color: #94a3b8; font-family: system-ui, sans-serif; margin-bottom: 20px; }
         .laws-cta-btn { display: inline-block; background: #2E7D32; color: #fff; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 700; font-size: 0.9rem; }
         .laws-footer { background: #1F3D2B; padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 80px; }
-        .laws-footer-brand { font-size: 1rem; font-weight: 700; color: #fff; font-family: Georgia, serif; }
+        .laws-footer-brand { font-size: 1rem; font-weight: 700; color: #fff; font-family:var(--font-display), system-ui, sans-serif; }
         .laws-footer-note { font-size: 0.78rem; color: #475569; font-family: system-ui, sans-serif; }
         @media (max-width: 768px) { .laws-nav { padding: 14px 20px; } .laws-breadcrumb { padding: 10px 20px; } .laws-inner { padding: 24px 16px 60px; } }
       `}</style>

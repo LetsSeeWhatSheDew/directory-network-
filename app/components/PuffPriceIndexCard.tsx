@@ -136,7 +136,7 @@ export default async function PuffPriceIndexCard() {
           margin-bottom:8px;
         }
         .ppi-price-line,.ppi-teaser-price{
-          font-family:Georgia,serif;
+          font-family:var(--font-display), system-ui, sans-serif;
           color:#1C3A22;
           letter-spacing:-.04em;
           line-height:1;
@@ -171,7 +171,7 @@ export default async function PuffPriceIndexCard() {
           letter-spacing:0;
         }
         .ppi-subhead{
-          font-family:Georgia,serif;
+          font-family:var(--font-display), system-ui, sans-serif;
           font-size:clamp(.95rem,1.7vw,1.05rem);
           color:#374151;
           margin-bottom:14px;

@@ -157,7 +157,7 @@ const rowLabel: React.CSSProperties = {
   fontSize: ".88rem",
   fontWeight: 700,
   color: "#1F3D2B",
-  fontFamily: "Georgia, serif",
+  fontFamily: "var(--font-display), system-ui, sans-serif",
   marginBottom: 8,
 };
 const pillRow: React.CSSProperties = { display: "flex", gap: 8, flexWrap: "wrap" };
@@ -190,7 +190,7 @@ const resultBig: React.CSSProperties = {
   fontSize: "1.4rem",
   fontWeight: 700,
   color: "#fff",
-  fontFamily: "Georgia, serif",
+  fontFamily: "var(--font-display), system-ui, sans-serif",
   letterSpacing: "-.02em",
   marginBottom: 8,
   lineHeight: 1.3,

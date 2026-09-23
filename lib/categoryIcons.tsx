@@ -79,8 +79,9 @@ export const HOME_HERO_CATEGORIES: { slug: CategorySlug; label: string }[] = [
   { slug: "edibles", label: "Edibles" },
   { slug: "vapes", label: "Vapes" },
   { slug: "concentrate", label: "Concentrates" },
-  { slug: "topicals", label: "Topicals" },
-  { slug: "accessories", label: "Accessories" },
+  // Topicals / Accessories removed from the home grid 2026-09-22: they
+  // aren't valid /deals/[category] routes (the page treated them as a city)
+  // so both tiles were dead ends.
 ];
 
 type Props = {

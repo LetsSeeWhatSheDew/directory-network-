@@ -233,7 +233,7 @@ export default function HeroDealCard({
           Browse Central IL dispensaries →
         </Link>
         <style>{`
-          .hero-deal-empty-headline{font-family:Georgia,serif;font-size:1.6rem;font-weight:700;color:#1C3A22;letter-spacing:-.02em;margin:8px 0 6px}
+          .hero-deal-empty-headline{font-family:var(--font-display), system-ui, sans-serif;font-size:1.6rem;font-weight:700;color:#1C3A22;letter-spacing:-.02em;margin:8px 0 6px}
           .hero-deal-empty-sub{font-size:.92rem;color:#6b7280;font-family:system-ui,sans-serif;line-height:1.55;margin:0 0 18px;max-width:520px}
           .hero-deal-empty-cta{display:inline-block;text-align:center;text-decoration:none}
         `}</style>

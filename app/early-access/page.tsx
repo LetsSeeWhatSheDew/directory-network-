@@ -25,7 +25,7 @@ export const metadata = {
 export default function EarlyAccessPage() {
   return (
     <div style={{
-      fontFamily: "Georgia, serif",
+      fontFamily: "var(--font-display), system-ui, sans-serif",
       background: "linear-gradient(180deg, #1F3D2B 0%, #142847 100%)",
       minHeight: "100vh",
       color: "#fff",
