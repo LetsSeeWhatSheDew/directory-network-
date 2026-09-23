@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import LocationAware from "./components/LocationAware";
 import TrackedLink from "./components/TrackedLink";
 import HomeDealCards from "./components/HomeDealCards";
+import HeroDealCard from "./components/HeroDealCard";
 import PriceBoard from "./components/PriceBoard";
 import SearchTracker from "./components/SearchTracker";
 import FourTwentyBanner from "./components/FourTwentyBanner";
@@ -1245,11 +1246,19 @@ export default async function HomePage() {
                 returns null otherwise — no invented prices ever reach prod).
                 The canopy tag personalizes to the user's metro when known. */}
             <div className="pp-home-hero-right">
-              {livePriceBoard && (
+              {/* Signature slot: the PriceBoard only while its prices are
+                  fresh ("… · LIVE"). When the menu captures are stale the
+                  first thing a visitor sees must not be old prices — show
+                  today's best verified deal instead. */}
+              {livePriceBoard && /· LIVE$/.test(livePriceBoard.locationTag || "") ? (
                 <div className="pp-home-hero-featured">
                   <PriceBoard {...livePriceBoard} />
                 </div>
-              )}
+              ) : localizedTopDeals && localizedTopDeals[0] ? (
+                <div className="pp-home-hero-featured">
+                  <HeroDealCard initial={localizedTopDeals[0]} totalDealCount={dealCount} />
+                </div>
+              ) : null}
 
               <div className="pp-home-hero-cats-shell">
                 <p className="pp-home-hero-cats-label">Browse by category</p>
