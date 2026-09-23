@@ -61,7 +61,7 @@ export default async function DirectionB() {
             <div className="tb-kick">Today&apos;s biggest discount</div>
             {top ? (
               <>
-                <h2 className="tb-head">{top.store} goes {top.pct != null ? `${top.pct}% off` : "big"}: {top.title.replace(/^\d+%\s*off\s*/i, "")}</h2>
+                <h2 className="tb-head">{top.pct != null && !top.title.includes(`${top.pct}%`) ? `${top.store} goes ${top.pct}% off: ${top.title}` : `${top.store}: ${top.title}`}</h2>
                 <p className="tb-deck">Checked this morning on {top.store}&apos;s own site in {top.city}. {d.storesWithDeals} Central Illinois stores are running deals today{d.avgPct != null ? `, averaging ${d.avgPct}% off` : ""}.</p>
                 <p style={{ marginTop: 12 }}><Link href={`/dispensary/${top.slug}`} style={{ borderBottom: "2px solid var(--red)", fontWeight: 700 }}>Read the full listing →</Link></p>
               </>

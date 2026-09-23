@@ -16,12 +16,13 @@ const CSS = `
 .tc-sign{font-family:var(--font-display);font-weight:700;font-size:.8rem;letter-spacing:.2em;color:var(--pink);border:2px solid var(--pink);border-radius:8px;padding:6px 10px;text-shadow:0 0 8px var(--pink),0 0 18px var(--pink);box-shadow:0 0 12px rgba(255,95,162,.5),inset 0 0 10px rgba(255,95,162,.35);animation:tc-flicker 6s infinite}
 @keyframes tc-flicker{0%,19%,21%,62%,64%,100%{opacity:1}20%,63%{opacity:.45}}
 .tc-hero{padding:26px 0 18px}
-.tc-h1{font-family:var(--font-display);font-weight:700;font-size:clamp(3rem,14vw,6.5rem);line-height:.9;letter-spacing:-.04em;margin:0}
+.tc-h1{color:var(--ink);font-family:var(--font-display);font-weight:700;font-size:clamp(3rem,14vw,6.5rem);line-height:.9;letter-spacing:-.04em;margin:0}
 .tc-h1 em{font-style:normal;color:var(--neon);text-shadow:0 0 14px rgba(124,255,178,.55)}
 .tc-lede{font-size:1.1rem;color:var(--dim);max-width:34ch;margin:14px 0 0;line-height:1.5}
 .tc-late{display:flex;gap:14px;align-items:center;margin:22px 0 6px;padding:14px 16px;border:1px solid #2B2650;border-radius:14px;background:rgba(255,255,255,.03)}
 .tc-late b{font-family:var(--font-mono);font-size:1.8rem;color:var(--amber);text-shadow:0 0 10px rgba(255,200,87,.45)}
 .tc-slips{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;margin:22px 0}
+.tc a.tc-slip{color:#1a1a1a}
 .tc-slip{background:#F7F4EA;color:#1a1a1a;font-family:var(--font-mono);padding:16px 16px 22px;position:relative;transform:rotate(var(--r,0deg));box-shadow:0 10px 30px rgba(0,0,0,.45);transition:transform .2s}
 .tc-slip:hover{transform:rotate(0deg) translateY(-3px)}
 .tc-slip:after{content:"";position:absolute;left:0;right:0;bottom:-10px;height:10px;background:linear-gradient(-45deg,transparent 7px,#F7F4EA 0) 0 0/14px 10px,linear-gradient(45deg,transparent 7px,#F7F4EA 0) 0 0/14px 10px}
@@ -29,7 +30,7 @@ const CSS = `
 .tc-slip .t{font-weight:700;font-size:.95rem;line-height:1.3;margin:8px 0}
 .tc-slip .p{font-size:2.2rem;font-weight:700;line-height:1;border-top:1px dashed #999;border-bottom:1px dashed #999;padding:8px 0;margin:8px 0}
 .tc-sec{margin:28px 0}
-.tc-h2{font-family:var(--font-display);font-size:1.5rem;margin:0 0 12px}
+.tc-h2{color:var(--ink);font-family:var(--font-display);font-size:1.5rem;margin:0 0 12px}
 .tc-lanes{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
 .tc-lane{border:1px solid #2B2650;border-radius:14px;padding:16px;background:rgba(255,255,255,.03)}
 .tc-lane b{font-family:var(--font-display);font-size:1.15rem;display:block}
