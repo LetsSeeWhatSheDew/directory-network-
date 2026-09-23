@@ -95,7 +95,7 @@ const DISCOUNT_PATTERNS: Array<{
   {
     pattern: /(veteran[s]?|military)[^.\n]{0,40}?(\d{1,2})\s?%[^.\n]{0,20}?off/gi,
     label: (m) => ({
-      title: `${m[1][0].toUpperCase()}${m[1].slice(1)} ${m[2]}% off`,
+      title: `${m[1][0].toUpperCase()}${m[1].slice(1).toLowerCase()} ${m[2]}% off`,
       discount_value: Number(m[2]),
       discount_unit: "percent" as const,
     }),
@@ -130,6 +130,26 @@ const DISCOUNT_PATTERNS: Array<{
       /(\d{2})\s?%\s+off[^.\n]{0,40}?(flower|vapes?|cartridges?|carts?|concentrates?|edibles?|pre[-\s]rolls?|drinks?|beverages?|gummies?|infused)/gi,
     label: (m) => ({
       title: `${m[1]}% off ${m[2].toLowerCase()}`,
+      discount_value: Number(m[1]),
+      discount_unit: "percent" as const,
+    }),
+  },
+  // Storewide: "25% Off the Entire Store!" / "20% off everything"
+  {
+    pattern: /(\d{2})\s?%\s+off\s+(?:the\s+)?(entire\s+store|everything|storewide|sitewide|all\s+products)/gi,
+    label: (m) => ({
+      title: `${m[1]}% off entire store`,
+      discount_value: Number(m[1]),
+      discount_unit: "percent" as const,
+    }),
+  },
+  // Brand-wide: "30% Off NGW Brands!" / "20% off Cresco products". Case-
+  // sensitive on purpose: the brand must be Capitalized so "30% off all
+  // products" or random prose doesn't match.
+  {
+    pattern: /(\d{2})\s?%\s+[Oo][Ff][Ff]\s+([A-Z][A-Za-z0-9&'.]*(?:\s+[A-Z][A-Za-z0-9&'.]*){0,3})\s+([Bb]rands?|[Pp]roducts)\b/g,
+    label: (m) => ({
+      title: `${m[1]}% off ${m[2]} ${m[3].toLowerCase()}`,
       discount_value: Number(m[1]),
       discount_unit: "percent" as const,
     }),
@@ -250,7 +270,7 @@ export function normalizeTitle(t: string): string {
   return t.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 }
 
-function extractDealsFromHtml(html: string, sourceUrl: string, listingSlug: string): ScrapedDeal[] {
+export function extractDealsFromHtml(html: string, sourceUrl: string, listingSlug: string): ScrapedDeal[] {
   const found: ScrapedDeal[] = [];
   const seen = new Set<string>();
 
@@ -333,6 +353,30 @@ async function isAllowedByRobots(url: string): Promise<boolean> {
   return true;
 }
 
+/**
+ * Where to look for a store's deals.
+ * Chain sites list many stores under one host (nueracannabis.com,
+ * beyond-hello.com, ascendwellness.com…). Their host-root /deals page is
+ * chain-wide, so attributing it to one store is wrong — and for nuEra it's
+ * where the East Peoria/Champaign/Pekin/Urbana deals stopped matching on
+ * Sep 1. When the listing's website has a store path, look ONLY under that
+ * path (the store page and its /deals, /specials, /promotions children).
+ * Single-store sites keep the original host-root candidates.
+ */
+export function candidateUrls(baseUrl: URL): string[] {
+  const origin = `${baseUrl.protocol}//${baseUrl.host}`;
+  const storePath = baseUrl.pathname.replace(/\/+$/, "");
+  if (storePath && storePath !== "") {
+    return [
+      `${origin}${storePath}/deals/`,
+      `${origin}${storePath}/specials/`,
+      `${origin}${storePath}/promotions/`,
+      `${origin}${storePath}/`,
+    ];
+  }
+  return DEAL_PATH_CANDIDATES.map((p) => `${origin}${p}`);
+}
+
 async function scrapeListing(listing: Listing): Promise<{ deals: ScrapedDeal[]; error?: string; skipped?: string }> {
   if (!listing.website) return { deals: [], skipped: "no_website" };
 
@@ -350,8 +394,8 @@ async function scrapeListing(listing: Listing): Promise<{ deals: ScrapedDeal[]; 
   const combined: ScrapedDeal[] = [];
   const seenKeys = new Set<string>();
 
-  for (const path of DEAL_PATH_CANDIDATES) {
-    const candidateUrl = `${baseUrl.protocol}//${baseUrl.host}${path}`;
+  for (const candidateUrl of candidateUrls(baseUrl)) {
+    const path = new URL(candidateUrl).pathname;
     const allowed = await isAllowedByRobots(candidateUrl);
     if (!allowed) continue;
 
