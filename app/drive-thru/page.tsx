@@ -90,6 +90,16 @@ export default async function DriveThruPage() {
       <p className="gp-p"><b>Have your ID ready.</b> Stores still have to verify you&apos;re 21+ (or a registered medical patient) at the window.</p>
       <p className="gp-p"><b>Every store needs state sign-off.</b> IDFPR has to review and approve a store&apos;s drive-thru or curbside setup before it can open one. <span className="gp-src">(<a href="https://www.marijuanamoment.net/illinois-officials-update-marijuana-dispensaries-on-increased-possession-limits-and-ability-to-add-drive-thru-windows/" rel="nofollow noopener" target="_blank">Marijuana Moment</a>)</span></p>
 
+      <h2 className="gp-h2">Why there&apos;s none in Central Illinois yet</h2>
+      <p className="gp-p">The state law opened the door; each store still has four gates to clear, and the first two are slow:</p>
+      <ol className="gp-p" style={{ paddingLeft: 20, lineHeight: 1.7 }}>
+        <li><b>The city changes its cannabis ordinance.</b> Most local rules were written in 2019–20 and don&apos;t allow a pickup window — Dixon had to amend its ordinance before its store could apply. <span className="gp-src">(<a href="https://www.shawlocal.com/sauk-valley/2026/09/13/dixon-council-clears-way-for-cannabis-drive-thru/" rel="nofollow noopener" target="_blank">Shaw Local</a>)</span></li>
+        <li><b>A building permit and a real lane and window.</b> Stores in strip centers or on campus streets may not have room for one.</li>
+        <li><b>IDFPR reviews the floor plan, security plan and procedures.</b> <span className="gp-src">(<a href="https://www.shawlocal.com/sauk-valley/2026/09/13/dixon-council-clears-way-for-cannabis-drive-thru/" rel="nofollow noopener" target="_blank">Shaw Local</a>)</span></li>
+        <li><b>Time and money.</b> The law is new, and September went to adding medical sales.</li>
+      </ol>
+      <p className="gp-p"><b>Watching the city councils:</b> as of {LAST_CHECKED} we haven&apos;t seen a drive-thru ordinance on the agenda in Peoria, East Peoria, Peoria Heights, Pekin, Bloomington, Normal, Champaign, Urbana or Springfield. The first one to show up goes here — sign up above and you&apos;ll hear it first.</p>
+
       <h2 className="gp-h2">Fastest pickup in Central Illinois today</h2>
       <p className="gp-p">No drive-thru yet — but these stores let you order ahead or pick up curbside, which is the closest thing.</p>
       <div className="gp-list">

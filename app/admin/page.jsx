@@ -17,15 +17,10 @@ async function sbFetch(path) {
 }
 
 async function updateLead(id, patch) {
-  const res = await fetch(`${SB_URL}/rest/v1/leads?id=eq.${id}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      apikey: SB_KEY,
-      Authorization: `Bearer ${SB_KEY}`,
-      Prefer: "return=minimal",
-    },
-    body: JSON.stringify(patch),
+  const res = await fetch("/api/admin/update-lead-status", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id, status: patch.status }),
   });
   if (!res.ok) throw new Error("Update failed");
 }
@@ -156,7 +151,9 @@ export default function AdminPage() {
   const load = async () => {
     setLoading(true);
     try {
-      const data = await sbFetch("leads?select=*&order=created_at.desc");
+      const res = await fetch("/api/admin/leads", { cache: "no-store" });
+      if (!res.ok) throw new Error(`Admin API error: ${res.status}`);
+      const data = await res.json();
       setLeads(data);
       setLastRefresh(new Date());
     } catch (e) {

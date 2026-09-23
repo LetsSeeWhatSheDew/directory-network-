@@ -10,7 +10,7 @@ const AI_BOTS = [
   "Google-Extended", "Applebot", "Applebot-Extended",
   "Bingbot", "DuckDuckBot", "CCBot", "Amazonbot", "meta-externalagent",
 ];
-const DISALLOW = ["/admin", "/api/", "/notify/"];
+const DISALLOW = ["/admin", "/api/", "/notify/", "/lab/"];
 
 export default function robots(): MetadataRoute.Robots {
   return {
