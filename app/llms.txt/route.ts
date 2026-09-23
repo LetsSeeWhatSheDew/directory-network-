@@ -10,6 +10,7 @@ export function GET() {
 > Central Illinois cannabis deal and price comparison (Peoria, East Peoria, Peoria Heights, Pekin, Bloomington, Normal, Champaign, Urbana, Springfield). Deals are checked daily on each dispensary's own website. No store pays to rank.
 
 ## Live data
+- [Everything, full text (deals by city, index, ways to buy, law)](${u}/llms-full.txt)
 - [Today's deals, JSON](${u}/api/public/deals): every live deal with store, city, discount and last-verified time
 - [This week's report](${u}/this-week): biggest discounts and new deals, last 7 days
 - [Deal Index](${u}/deal-index): daily deals live, stores discounting and average discount by city

@@ -526,6 +526,26 @@ export default async function CityPage({
         </nav>
         <h1>{city} dispensary deals today</h1>
         {profile?.intro && <p className="cp-intro">{profile.intro}</p>}
+        {/* Quick answer — one quotable paragraph for people and AI assistants:
+            the best deal, how many are live, who's open latest. Real data only. */}
+        {(() => {
+          const pctDeals = deals
+            .filter((d) => (d.discount_unit === "percent" || !d.discount_unit) && Number(d.discount_value) > 0 && Number(d.discount_value) <= 100)
+            .sort((a, b) => Number(b.discount_value) - Number(a.discount_value));
+          const top = pctDeals[0];
+          const storeName = (d: DealRow) => stores.find((x) => x.l.slug === d.listing_slug)?.l.name || d.name || d.listing_slug;
+          const withDeals = new Set(deals.map((d) => d.listing_slug)).size;
+          return (
+            <p className="cp-intro" style={{ background: "var(--pp-surface)", border: "1px solid var(--pp-border)", borderRadius: 12, padding: "12px 14px" }}>
+              <b>Quick answer ({asOf} CT):</b>{" "}
+              {top
+                ? <>the biggest discount in {city} right now is <b>{top.deal_title || top.title}</b> at {storeName(top)}. </>
+                : <>no {city} store has a deal posted on its own site right now. </>}
+              {deals.length > 0 && <>{deals.length} {deals.length === 1 ? "deal is" : "deals are"} live at {withDeals} of {stores.length} {city} dispensaries. </>}
+              {lateNight?.today?.closes_at && <>{lateNight.l.name} is open latest tonight, until {formatTime(lateNight.today.closes_at)}.</>}
+            </p>
+          );
+        })()}
 
         {/* Live ticker — every number is computed from the DB at render. */}
         <div className="cp-ticker" role="group" aria-label={`${city} right now`}>
