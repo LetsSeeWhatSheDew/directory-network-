@@ -10,6 +10,7 @@ import ShareDealButton from "./ShareDealButton";
 import DealBadge from "./DealBadge";
 import { isFreshnessHidden, isFreshnessStale } from "./DealFreshnessBadge";
 import VerifiedRow from "./VerifiedRow";
+import { dealContextTag } from "../../lib/dealContext";
 
 type Deal = {
   deal_id?: string;
@@ -426,7 +427,11 @@ export default function HomeDealCards({
                   )}
                 </div>
               </div>
-              <div className="deal-highlight">{d.deal_title || "Active deal"}</div>
+              <div className="deal-highlight">
+                {(dollars == null || dollars <= 0) && formatted !== "Deal active"
+                  ? dealContextTag(d.deal_title) || d.deal_title || "Active deal"
+                  : d.deal_title || "Active deal"}
+              </div>
               {urgency && (
                 <div style={{ display: "inline-block", marginTop: 4, marginBottom: 6, fontSize: ".7rem", fontFamily: "system-ui,sans-serif", fontWeight: 700, color: urgency.fg, background: urgency.bg, padding: "2px 9px", borderRadius: 100 }}>
                   {urgency.text}

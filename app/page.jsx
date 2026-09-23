@@ -895,6 +895,8 @@ export default async function HomePage() {
           font-weight:600;font-size:1.125rem;letter-spacing:-.01em;
           color:#1C3A22;
         }
+        .city-card-meta{display:flex;align-items:center;gap:8px;flex-shrink:0}
+        .city-card-stores{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-size:.72rem;color:var(--pp-muted)}
         .city-card-count{
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:.78rem;font-weight:600;letter-spacing:.01em;
@@ -1208,7 +1210,7 @@ export default async function HomePage() {
               </p>
 
               <div className="pp-home-hero-cta-row">
-                <Link href="/cannabis/illinois/open-now" className="pp-btn pp-btn-lg pp-btn-sand">
+                <Link href="/cannabis/illinois/open-now" className="pp-btn pp-btn-lg pp-btn-primary">
                   <MapPin size={18} strokeWidth={2.25} aria-hidden="true" />
                   Find Deals Near Me
                 </Link>
@@ -1348,15 +1350,16 @@ export default async function HomePage() {
               return (
                 <Link key={c.slug} href={`/city/${c.slug}`} className={`city-card pp-card pp-fade-up${delay}`}>
                   <span className="city-card-name">{c.name}</span>
-                  {dealN > 0 ? (
-                    <span className="city-card-count">{dealN} deal{dealN === 1 ? "" : "s"}</span>
-                  ) : listingN > 0 ? (
-                    <span className="city-card-count city-card-count-quiet">
-                      {listingN} dispensar{listingN === 1 ? "y" : "ies"}
-                    </span>
-                  ) : (
-                    <span className="city-card-count city-card-count-quiet">View dispensaries →</span>
-                  )}
+                  <span className="city-card-meta">
+                    {listingN > 0 && (
+                      <span className="city-card-stores">
+                        {listingN} store{listingN === 1 ? "" : "s"}
+                      </span>
+                    )}
+                    {dealN > 0 && (
+                      <span className="city-card-count">{dealN} deal{dealN === 1 ? "" : "s"}</span>
+                    )}
+                  </span>
                 </Link>
               );
             })}
