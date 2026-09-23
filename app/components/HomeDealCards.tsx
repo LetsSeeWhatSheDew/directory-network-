@@ -10,6 +10,8 @@ import ShareDealButton from "./ShareDealButton";
 import DealBadge from "./DealBadge";
 import { isFreshnessHidden, isFreshnessStale } from "./DealFreshnessBadge";
 import VerifiedRow from "./VerifiedRow";
+import StoreAvatar from "./StoreAvatar";
+import { storeImageUrl } from "../../lib/storeImage";
 import { dealContextTag } from "../../lib/dealContext";
 import { isCentralILCity } from "../../lib/constants/regions";
 import TrustLine from "./TrustLine";
@@ -35,6 +37,7 @@ type Deal = {
   verified_at?: string | null;
   status_reason?: string | null;
   scope?: "local" | "statewide";
+  logo_url?: string | null;
 };
 
 function slugToName(s: string) {
@@ -146,10 +149,13 @@ export default function HomeDealCards({
   initial,
   dealCount,
   mostRecent,
+  confirmed,
 }: {
   initial: Deal[];
   dealCount?: number | null;
   mostRecent?: string | null;
+  // deal id → "Yes, this deal was right" taps in the last 24h (server-computed)
+  confirmed?: Record<string, number>;
 }) {
   // "near" (GPS city) vs "all" (statewide best savings). The default
   // mirrors the prior behavior: use GPS if available, else statewide.
@@ -409,12 +415,15 @@ export default function HomeDealCards({
                 <DealBadge dealId={d.deal_id || d.id} />
               </div>
               <div className="deal-card-header">
-                <div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
+                <StoreAvatar src={storeImageUrl(d.logo_url, slug)} name={name} size={40} />
+                <div style={{ minWidth: 0 }}>
                   <div className="deal-name">{name}</div>
                   <div className="deal-city">
                     {displayCity(d)}
                     {d.scope === "statewide" && city ? " · nearby" : ""}
                   </div>
+                </div>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                   <span className={`pp-open-pill ${likelyOpen ? "is-open" : "is-closed"}`}>
@@ -436,6 +445,14 @@ export default function HomeDealCards({
                   ? dealContextTag(d.deal_title) || d.deal_title || "Active deal"
                   : d.deal_title || "Active deal"}
               </div>
+              {(() => {
+                const n = confirmed?.[(d.deal_id || d.id) as string] || 0;
+                return n > 0 ? (
+                  <div className="pp-confirmed-line" style={{ fontSize: ".78rem", fontWeight: 600, color: "var(--pp-canopy)", margin: "2px 0 6px" }}>
+                    ✓ {n} {n === 1 ? "person" : "people"} confirmed this today
+                  </div>
+                ) : null;
+              })()}
               {urgency && (
                 <div style={{ display: "inline-block", marginTop: 4, marginBottom: 6, fontSize: ".7rem", fontFamily: "system-ui,sans-serif", fontWeight: 700, color: urgency.fg, background: urgency.bg, padding: "2px 9px", borderRadius: 100 }}>
                   {urgency.text}

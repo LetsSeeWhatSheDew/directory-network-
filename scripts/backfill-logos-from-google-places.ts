@@ -477,8 +477,8 @@ function namesMatch(listingName: string, placeName: string | null | undefined): 
 
 function buildPhotoMediaUrl(photoName: string): string {
   return (
-    `https://places.googleapis.com/v1/${photoName}/media` +
-    `?maxWidthPx=400&key=${PLACES_KEY}`
+    // Never persist the API key — /api/store-photo/[slug] resolves it server-side.
+    `https://places.googleapis.com/v1/${photoName}`
   );
 }
 

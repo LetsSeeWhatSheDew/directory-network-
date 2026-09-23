@@ -1,6 +1,7 @@
 export const revalidate = 0;
 
 import Link from "next/link";
+import { storeImageUrl } from "@/lib/storeImage";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { MapPin, Phone } from "lucide-react";
@@ -304,7 +305,7 @@ export async function generateMetadata({
   // SEO weight to the right place.
   const profileUrl = `https://www.puffprice.com/dispensary/${listing.slug}`;
   const ogUrl = profileUrl;
-  const image = listing.logo_url || listing.hero_image_url;
+  const image = storeImageUrl(listing.logo_url, listing.slug) || listing.hero_image_url;
 
   return {
     title,
@@ -372,7 +373,7 @@ function buildSchemaOrg(listing: Listing, hours: ListingHour[]) {
     } : {}),
     ...(listing.phone ? { telephone: listing.phone } : {}),
     url: listing.website ?? `https://www.puffprice.com/dispensary/${listing.slug}`,
-    ...(listing.logo_url ? { image: listing.logo_url } : {}),
+    ...(storeImageUrl(listing.logo_url, listing.slug) ? { image: storeImageUrl(listing.logo_url, listing.slug) } : {}),
     ...(openingHours.length > 0 ? { openingHoursSpecification: openingHours } : {}),
     ...(listing.short_description ? { description: listing.short_description } : {}),
     sameAs: [`https://www.puffprice.com/dispensary/${listing.slug}`],
@@ -761,9 +762,9 @@ export default async function ListingPage({
           <div className="dn-hero">
             <div className="dn-hero-top">
               <div className="dn-logo-wrap">
-                {listing.logo_url ? (
+                {storeImageUrl(listing.logo_url, listing.slug) ? (
                   /* eslint-disable-next-line @next/next/no-img-element */
-                  <img src={listing.logo_url} alt={`${listing.name ?? "Dispensary"} logo`} className="dn-logo-img" width={80} height={80} loading="lazy" decoding="async" />
+                  <img src={storeImageUrl(listing.logo_url, listing.slug) as string} alt={`${listing.name ?? "Dispensary"} logo`} className="dn-logo-img" width={80} height={80} loading="lazy" decoding="async" />
                 ) : (
                   <span className="dn-logo-fallback-mono" role="img" aria-label={`${listing.name ?? "Dispensary"} monogram`}>{initial}</span>
                 )}
@@ -972,10 +973,10 @@ export default async function ListingPage({
                   <div className="dn-related-grid">
                     {related.map((r) => (
                       <Link key={r.id} href={`/dispensary/${r.slug}`} className="dn-related-card">
-                        <div className="dn-related-logo" aria-hidden={r.logo_url ? undefined : "true"}>
-                          {r.logo_url ? (
+                        <div className="dn-related-logo" aria-hidden={storeImageUrl(r.logo_url, r.slug) ? undefined : "true"}>
+                          {storeImageUrl(r.logo_url, r.slug) ? (
                             /* eslint-disable-next-line @next/next/no-img-element */
-                            <img src={r.logo_url} alt={`${r.name ?? "Dispensary"} logo`} className="dn-related-img" width={48} height={48} loading="lazy" decoding="async" />
+                            <img src={storeImageUrl(r.logo_url, r.slug) as string} alt={`${r.name ?? "Dispensary"} logo`} className="dn-related-img" width={48} height={48} loading="lazy" decoding="async" />
                           ) : (
                             (r.name ?? "?").charAt(0)
                           )}

@@ -137,7 +137,8 @@ function sleep(ms: number) {
     const patch: { logo_url?: string; lat?: number; lng?: number } = {};
     const photoName = place.photos?.[0]?.name;
     if (photoName) {
-      patch.logo_url = `https://places.googleapis.com/v1/${photoName}/media?maxWidthPx=400&key=${PLACES_KEY}`;
+      // Never persist the API key — /api/store-photo/[slug] resolves it server-side.
+      patch.logo_url = `https://places.googleapis.com/v1/${photoName}`;
     }
     if (typeof place.location?.latitude === "number") patch.lat = place.location.latitude;
     if (typeof place.location?.longitude === "number") patch.lng = place.location.longitude;

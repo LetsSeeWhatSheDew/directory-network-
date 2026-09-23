@@ -2,13 +2,8 @@
 // Upsert a subscriber's alert preferences into deal_alerts (match on email).
 
 import { NextRequest, NextResponse } from "next/server";
+import { upsertAlert } from "@/lib/alertSubscribers";
 
-const SUPABASE_URL =
-  process.env.NEXT_PUBLIC_SUPABASE_URL ||
-  "https://hnbjufmtmrhexmdrfubw.supabase.co";
-const SUPABASE_ANON_KEY =
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300";
 
 const VALID_RADIUS = new Set(["10", "25", "50", "statewide"]);
 const VALID_FREQ = new Set(["weekly", "daily", "sms"]);
@@ -28,36 +23,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Valid email required." }, { status: 400 });
     }
 
-    const payload = {
+    // deal_alerts has no radius/frequency/updated_at columns — map the
+    // frequency onto alert_type and keep the rest out of the write.
+    void radius;
+    const ok = await upsertAlert({
       email,
-      city: city || null,
-      radius,
+      city: city ? city.toLowerCase() : null,
       categories: categories.length ? categories : ["all"],
-      frequency,
-      updated_at: new Date().toISOString(),
-    };
-
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/deal_alerts?on_conflict=email`,
-      {
-        method: "POST",
-        headers: {
-          apikey: SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-          "Content-Type": "application/json",
-          Prefer: "resolution=merge-duplicates,return=minimal",
-        },
-        body: JSON.stringify(payload),
-      }
-    );
-
-    if (!res.ok) {
-      const errText = await res.text();
-      console.error("[api/alerts/preferences] supabase error:", res.status, errText);
-      return NextResponse.json(
-        { error: "Could not save preferences. Please try again." },
-        { status: 502 }
-      );
+      alert_type: frequency === "daily" ? "daily" : frequency === "sms" ? "instant" : "weekly",
+    });
+    if (!ok) {
+      return NextResponse.json({ error: "Could not save preferences. Please try again." }, { status: 502 });
     }
 
     return NextResponse.json({ ok: true });

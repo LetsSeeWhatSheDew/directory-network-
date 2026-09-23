@@ -7,6 +7,7 @@ import LocationAware from "./components/LocationAware";
 import TrackedLink from "./components/TrackedLink";
 import HomeDealCards from "./components/HomeDealCards";
 import HeroDealCard from "./components/HeroDealCard";
+import { getConfirmationsToday } from "../lib/confirmations";
 import PriceBoard from "./components/PriceBoard";
 import SearchTracker from "./components/SearchTracker";
 import FourTwentyBanner from "./components/FourTwentyBanner";
@@ -511,6 +512,11 @@ export default async function HomePage() {
   // whichever deal is top-ranked and the per-card freshness badge tells
   // the truth at the row level.
   const featuredDeal = localizedTopDeals[0] || null;
+  // Social proof: "✓ N people confirmed this today" on home cards.
+  // Real Yes taps only (deal_reports reason='confirmed', last 24h).
+  const confirmedToday = await getConfirmationsToday(
+    [...(topDeals || []), ...(dealPool || [])].map((d) => d.deal_id || d.id).filter(Boolean)
+  );
   return (
     <>
       <script
@@ -1310,13 +1316,13 @@ export default async function HomePage() {
       <div className="stats">
         <div className="stats-inner">
           <span className="stats-line">
-            <strong>{dealCount !== null ? dealCount : "—"}</strong> active deals · <strong>{listingCount !== null ? listingCount : "—"}</strong> Central IL dispensaries · <strong>{cilCityCount > 0 ? cilCityCount : CENTRAL_IL_PUBLIC_CITIES.length}</strong> cities
+            <strong>{dealCount !== null ? dealCount : "—"}</strong> active deals · <strong>{listingCount !== null ? listingCount : "—"}</strong> Central IL dispensaries · <strong>{cilCityCount > 0 ? cilCityCount : CENTRAL_IL_PUBLIC_CITIES.length}</strong> cities · <Link href="/this-week" style={{ color: "inherit", fontWeight: 700 }}>This week&apos;s report →</Link>
           </span>
         </div>
       </div>
 
       <div className="deals-section">
-        <HomeDealCards initial={localizedTopDeals} dealCount={dealCount} mostRecent={mostRecentTs} />
+        <HomeDealCards initial={localizedTopDeals} dealCount={dealCount} mostRecent={mostRecentTs} confirmed={confirmedToday} />
       </div>
 
       {/* TAX CALCULATOR CALLOUT — between deals and city grid. The

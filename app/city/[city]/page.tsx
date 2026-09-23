@@ -5,6 +5,8 @@
 // all three via internal linking.
 
 import Link from "next/link";
+import StoreAvatar from "@/app/components/StoreAvatar";
+import { storeImageUrl } from "@/lib/storeImage";
 import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
 import { notFound } from "next/navigation";
@@ -53,6 +55,7 @@ type Listing = {
   drive_thru: boolean | null;
   delivery: boolean | null;
   wheelchair_accessible: boolean | null;
+  logo_url?: string | null;
 };
 
 type ListingHoursRow = HoursRow & { listing_id: string; weekday: number };
@@ -192,7 +195,7 @@ function joinNames(names: string[]): string {
 async function getCityListings(city: string): Promise<Listing[]> {
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/master_listings?select=id,slug,name,city,address1,phone,lat,lng,short_description,online_ordering,loyalty_program,parking,drive_thru,delivery,wheelchair_accessible&city=eq.${encodeURIComponent(city)}&project_tag=eq.green&state=eq.IL&is_active=eq.true&limit=50`,
+      `${SUPABASE_URL}/rest/v1/master_listings?select=id,slug,name,city,address1,phone,lat,lng,short_description,online_ordering,loyalty_program,parking,drive_thru,delivery,wheelchair_accessible,logo_url&city=eq.${encodeURIComponent(city)}&project_tag=eq.green&state=eq.IL&is_active=eq.true&limit=50`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,
@@ -643,8 +646,9 @@ export default async function CityPage({
                     : null;
                 return (
                   <div key={l.id} className="st-row">
-                    <Link href={`/dispensary/${l.slug}`} className="st-name">
-                      {l.name || l.slug}
+                    <Link href={`/dispensary/${l.slug}`} className="st-name" style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
+                      <StoreAvatar src={storeImageUrl(l.logo_url, l.slug)} name={l.name || l.slug} size={36} />
+                      <span>{l.name || l.slug}</span>
                     </Link>
                     {status ? (
                       <span className={`st-status ${openNow ? "open" : "closed"}`}>{status.label}</span>

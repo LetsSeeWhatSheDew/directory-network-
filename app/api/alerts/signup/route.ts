@@ -8,19 +8,37 @@
 // ============================================================
 
 import { NextRequest, NextResponse } from "next/server";
+import { upsertAlert, type AlertRow } from "@/lib/alertSubscribers";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 export async function POST(req: NextRequest) {
   try {
-    const formData = await req.formData();
-    const email = formData.get("email") as string;
-    const city = formData.get("city") as string;
-    const categories = formData.getAll("categories") as string[];
-    const tier = (formData.get("tier") as string) || "free";
-    const phoneRaw = (formData.get("phone") as string | null) ?? null;
-    const smsOptInRaw = (formData.get("sms_opted_in") as string | null) ?? null;
+    // Accepts a regular form POST (redirects) or JSON (returns {ok}).
+    const wantsJson = (req.headers.get("content-type") || "").includes("application/json");
+    let email = "", city = "", tier = "free";
+    let categories: string[] = [];
+    let phoneRaw: string | null = null, smsOptInRaw: string | null = null;
+    if (wantsJson) {
+      const b = await req.json().catch(() => ({}));
+      if (b.website) return NextResponse.json({ ok: true }); // honeypot
+      email = typeof b.email === "string" ? b.email.trim() : "";
+      city = typeof b.city === "string" ? b.city : "";
+      tier = typeof b.tier === "string" ? b.tier : "free";
+      categories = Array.isArray(b.categories) ? b.categories.filter((c: unknown) => typeof c === "string") : [];
+    } else {
+      const formData = await req.formData();
+      email = (formData.get("email") as string) || "";
+      city = (formData.get("city") as string) || "";
+      categories = formData.getAll("categories") as string[];
+      tier = (formData.get("tier") as string) || "free";
+      phoneRaw = (formData.get("phone") as string | null) ?? null;
+      smsOptInRaw = (formData.get("sms_opted_in") as string | null) ?? null;
+    }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return NextResponse.json({ error: "Enter a valid email" }, { status: 400 });
+    }
 
     // Validate
     if (!email || !city) {
@@ -55,28 +73,11 @@ export async function POST(req: NextRequest) {
     // once the migration lands. Captured flag (unused on insert):
     void smsOptedIn;
 
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/deal_alerts`,
-      {
-        method: "POST",
-        headers: {
-          apikey: SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-          "Content-Type": "application/json",
-          Prefer: "return=representation",
-        },
-        body: JSON.stringify(payload),
-      }
-    );
-
-    if (!res.ok) {
-      const error = await res.text();
-      console.error("Supabase error:", error);
-      return NextResponse.json(
-        { error: "Failed to save signup" },
-        { status: 500 }
-      );
+    const ok = await upsertAlert(payload as unknown as AlertRow);
+    if (!ok) {
+      return NextResponse.json({ error: "Failed to save signup" }, { status: 500 });
     }
+    if (wantsJson) return NextResponse.json({ ok: true });
 
     // Redirect to success page
     return NextResponse.redirect(

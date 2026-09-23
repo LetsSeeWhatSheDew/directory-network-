@@ -8,6 +8,7 @@ import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import AlertsCalculator from "./AlertsCalculator";
 import ProCheckoutButton from "./ProCheckoutButton";
+import WeeklySignup from "../components/WeeklySignup";
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL ||
@@ -194,7 +195,9 @@ export default async function AlertsPage() {
             ))}
           </ul>
           <div style={{ flex: 1 }} />
-          <Link href="/deals/all" className="cta cta-free">Start using free →</Link>
+          <div style={{ fontWeight: 700, fontSize: ".9rem" }}>Get the Monday report</div>
+          <WeeklySignup tone="light" />
+          <Link href="/this-week" style={{ fontSize: ".85rem", color: "var(--pp-canopy)" }}>See this week&apos;s report →</Link>
         </article>
 
         {/* PRO */}

@@ -6,6 +6,8 @@
 // serves as the bookmark/permalink destination for repeat visitors.
 
 import Link from "next/link";
+import StoreAvatar from "@/app/components/StoreAvatar";
+import { storeImageUrl } from "@/lib/storeImage";
 import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
 import AmenityRow from "../../components/AmenityRow";
@@ -195,7 +197,8 @@ export async function generateMetadata({
     ? `${name} in ${city}, IL. See current cannabis deals, full week hours, phone, and directions.`
     : `${name} — Illinois cannabis dispensary. See current deals, full week hours, phone, and directions.`;
   const url = `${brand.url}/dispensary/${slug}`;
-  const ogImage = listing.logo_url || `${brand.url}/og-image.png`;
+  const safeImg = storeImageUrl(listing.logo_url, listing.slug);
+  const ogImage = safeImg ? (safeImg.startsWith("/") ? `${brand.url}${safeImg}` : safeImg) : `${brand.url}/og-image.png`;
   return {
     title,
     description,
@@ -273,7 +276,7 @@ export default async function DispensaryProfilePage({
       : {}),
     ...(listing.phone ? { telephone: listing.phone } : {}),
     url: `${brand.url}/dispensary/${slug}`,
-    ...(listing.logo_url ? { image: listing.logo_url } : {}),
+    ...(storeImageUrl(listing.logo_url, listing.slug) ? { image: (storeImageUrl(listing.logo_url, listing.slug) as string).replace(/^\//, `${brand.url}/`) } : {}),
     ...(openingHours.length > 0 ? { openingHoursSpecification: openingHours } : {}),
     ...(listing.short_description ? { description: listing.short_description } : {}),
     // Stars in search: only from real, approved PuffPrice-user reviews.
@@ -414,7 +417,10 @@ export default async function DispensaryProfilePage({
 
       <main className="wrap">
         <div className="eyebrow">{listing.type || "Dispensary"}</div>
-        <h1>{name}</h1>
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <StoreAvatar src={storeImageUrl(listing.logo_url, listing.slug)} name={name} size={56} />
+          <h1 style={{ margin: 0 }}>{name}</h1>
+        </div>
         <div className="city-line">{city ? `${city}, IL` : "Illinois"}</div>
 
         <div className="status-row">

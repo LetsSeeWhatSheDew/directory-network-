@@ -1,6 +1,7 @@
 export const revalidate = 300; // revalidate every 5 minutes — hours change throughout the day
 
 import { Metadata } from "next";
+import { storeImageUrl } from "@/lib/storeImage";
 import Link from "next/link";
 import Nav from "../../../components/Nav";
 import Footer from "../../../components/Footer";
@@ -230,9 +231,9 @@ export default async function OpenNowPage() {
                     return (
                       <Link key={l.id} href={`/dispensary/${l.slug}`} className="on-card">
                         <div className="on-logo">
-                          {l.logo_url ? (
+                          {storeImageUrl(l.logo_url, l.slug) ? (
                             /* eslint-disable-next-line @next/next/no-img-element */
-                            <img src={l.logo_url} alt={l.name + " logo"} className="on-logo-img" width={48} height={48} loading="lazy" decoding="async" />
+                            <img src={storeImageUrl(l.logo_url, l.slug) as string} alt={l.name + " logo"} className="on-logo-img" width={48} height={48} loading="lazy" decoding="async" />
                           ) : initial}
                         </div>
                         <div className="on-info">
