@@ -92,8 +92,8 @@ export default function FeedbackWidget({
         .fbw button:disabled{opacity:.5;cursor:default}
         .fbw-more{margin-top:.55rem;display:grid;gap:.5rem;max-width:420px}
         .fbw textarea{font:inherit;font-size:.85rem;width:100%;min-height:64px;padding:.5rem .6rem;border:1px solid var(--pp-border);border-radius:8px;background:var(--pp-surface);color:var(--pp-ink);resize:vertical}
-        .fbw .fbw-send{justify-self:start;background:var(--pp-signal);border-color:var(--pp-signal);color:#fff}
-        .fbw .fbw-send:hover{color:#fff;background:var(--pp-signal-ink)}
+        .fbw .fbw-send{justify-self:start;background:var(--pp-signal-fill);border-color:var(--pp-signal-fill);color:var(--pp-on-dark)}
+        .fbw .fbw-send:hover{color:var(--pp-on-dark);background:var(--pp-signal-ink)}
         .fbw-done{margin:0}
         .fbw-done a{color:var(--pp-signal-ink);font-weight:600}
         .fbw-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}

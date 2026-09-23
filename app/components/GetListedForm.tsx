@@ -83,7 +83,7 @@ export function GetListedForm() {
             id="directory"
             name="directory"
             required
-            className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2D1B69]/40 focus:border-[#2D1B69]/60"
+            className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[color:var(--pp-signal)]/40 focus:border-[color:var(--pp-signal)]"
             defaultValue=""
           >
             <option value="" disabled>
@@ -107,7 +107,7 @@ export function GetListedForm() {
               id="business_name"
               name="business_name"
               required
-              className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2D1B69]/40 focus:border-[#2D1B69]/60"
+              className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[color:var(--pp-signal)]/40 focus:border-[color:var(--pp-signal)]"
               placeholder="Mile High Greens"
             />
           </div>
@@ -118,7 +118,7 @@ export function GetListedForm() {
             <input
               id="website"
               name="website"
-              className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2D1B69]/40 focus:border-[#2D1B69]/60"
+              className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[color:var(--pp-signal)]/40 focus:border-[color:var(--pp-signal)]"
               placeholder="https://example.com"
             />
           </div>
@@ -134,7 +134,7 @@ export function GetListedForm() {
               id="name"
               name="name"
               required
-              className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2D1B69]/40 focus:border-[#2D1B69]/60"
+              className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[color:var(--pp-signal)]/40 focus:border-[color:var(--pp-signal)]"
               placeholder="Jane Doe"
             />
           </div>
@@ -147,7 +147,7 @@ export function GetListedForm() {
               name="email"
               type="email"
               required
-              className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2D1B69]/40 focus:border-[#2D1B69]/60"
+              className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[color:var(--pp-signal)]/40 focus:border-[color:var(--pp-signal)]"
               placeholder="you@example.com"
             />
           </div>
@@ -162,7 +162,7 @@ export function GetListedForm() {
             id="message"
             name="message"
             rows={4}
-            className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2D1B69]/40 focus:border-[#2D1B69]/60"
+            className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[color:var(--pp-signal)]/40 focus:border-[color:var(--pp-signal)]"
             placeholder="Licensing info, specialties, service area, or how you heard about us."
           />
         </div>
@@ -172,7 +172,7 @@ export function GetListedForm() {
           <button
             type="submit"
             disabled={status === "submitting"}
-            className="inline-flex items-center rounded-full bg-[#2D1B69] px-4 py-1.5 text-xs font-semibold text-[#FFF7E9] shadow-sm hover:bg-[#221450] disabled:opacity-60 disabled:cursor-not-allowed"
+            className="inline-flex items-center rounded-full bg-[color:var(--pp-signal-fill)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {status === "submitting" ? "Submitting…" : "Submit request"}
           </button>

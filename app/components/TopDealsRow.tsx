@@ -86,7 +86,7 @@ export default function TopDealsRow({
           fontWeight: 700,
           letterSpacing: ".14em",
           textTransform: "uppercase",
-          color: "#2E7D32",
+          color: "var(--pp-signal)",
           fontFamily: "system-ui, sans-serif",
           marginBottom: 10,
         }}
@@ -111,13 +111,13 @@ export default function TopDealsRow({
               key={id || slug}
               href={href}
               style={{
-                background: "#fff",
-                border: "1px solid #DCDED2",
-                borderLeft: "4px solid #2E7D32",
+                background: "var(--pp-surface)",
+                border: "1px solid var(--pp-border)",
+                borderLeft: "4px solid var(--pp-signal-fill)",
                 borderRadius: 12,
                 padding: "14px 16px",
                 textDecoration: "none",
-                color: "#1C3A22",
+                color: "var(--pp-ink)",
                 fontFamily: "system-ui, sans-serif",
                 display: "flex",
                 justifyContent: "space-between",
@@ -141,7 +141,7 @@ export default function TopDealsRow({
                 <div
                   style={{
                     fontSize: ".78rem",
-                    color: "#6b7280",
+                    color: "var(--pp-muted)",
                     marginTop: 2,
                     lineHeight: 1.4,
                     whiteSpace: "nowrap",
@@ -152,7 +152,7 @@ export default function TopDealsRow({
                   {d.deal_title || d.title || "Active deal"}
                 </div>
                 {d.city && (
-                  <div style={{ fontSize: ".7rem", color: "#9ca3af", marginTop: 3 }}>
+                  <div style={{ fontSize: ".7rem", color: "var(--pp-muted)", marginTop: 3 }}>
                     {d.city}
                   </div>
                 )}
@@ -163,7 +163,7 @@ export default function TopDealsRow({
                     fontSize: ".58rem",
                     letterSpacing: ".14em",
                     textTransform: "uppercase",
-                    color: "#6b7280",
+                    color: "var(--pp-muted)",
                     fontWeight: 700,
                   }}
                 >
@@ -173,7 +173,7 @@ export default function TopDealsRow({
                   style={{
                     fontSize: "1.35rem",
                     fontWeight: 700,
-                    color: "#2E7D32",
+                    color: "var(--pp-signal)",
                     letterSpacing: "-.03em",
                     fontFamily: "var(--font-display), system-ui, sans-serif",
                     lineHeight: 1,

@@ -81,7 +81,7 @@ export function AmenityRow({
           gap: 16,
           fontFamily: "var(--font-ui, system-ui, sans-serif)",
           fontSize: "0.875rem",
-          color: "var(--color-gray-700, #374151)",
+          color: "var(--color-gray-700, var(--pp-body))",
         }}
       >
         {items.map(([icon, label]) => (
@@ -94,7 +94,7 @@ export function AmenityRow({
               minHeight: 24,
             }}
           >
-            <span style={{ display: "inline-flex", color: "var(--color-gray-500, #6B7280)" }}>{icon}</span>
+            <span style={{ display: "inline-flex", color: "var(--color-gray-500, var(--pp-muted))" }}>{icon}</span>
             <span>{label}</span>
           </span>
         ))}
@@ -115,15 +115,15 @@ export function AmenityRow({
             fontFamily: "var(--font-ui, system-ui, sans-serif)",
             fontSize: "0.78rem",
             fontWeight: 500,
-            color: "var(--color-gray-700, #374151)",
-            background: "var(--color-white, #FFFFFF)",
-            border: "1px solid var(--color-gray-200, #DCDED2)",
+            color: "var(--color-gray-700, var(--pp-body))",
+            background: "var(--color-var(--pp-surface), var(--pp-surface))",
+            border: "1px solid var(--color-gray-200, var(--pp-border))",
             padding: "4px 10px",
             borderRadius: 100,
             transition: "border-color 150ms ease, color 150ms ease",
           }}
         >
-          <span style={{ display: "inline-flex", color: "var(--color-gray-500, #6B7280)" }}>{icon}</span>
+          <span style={{ display: "inline-flex", color: "var(--color-gray-500, var(--pp-muted))" }}>{icon}</span>
           {label}
         </span>
       ))}

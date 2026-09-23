@@ -20,8 +20,8 @@ export default function RouteError({
     <div
       style={{
         fontFamily: "var(--font-body)",
-        background: "var(--color-cream, #F7F4ED)",
-        color: "var(--color-deep, #1F3D2B)",
+        background: "var(--pp-paper)",
+        color: "var(--pp-ink)",
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",
@@ -51,13 +51,13 @@ export default function RouteError({
         >
           Something didn&apos;t load
         </div>
-        <h1 style={{ fontFamily: "var(--font-body)", fontSize: "1.5rem", fontWeight: 800, letterSpacing: "-0.025em", marginBottom: 12, color: "var(--color-deep, #1F3D2B)" }}>
+        <h1 style={{ fontFamily: "var(--font-body)", fontSize: "1.5rem", fontWeight: 800, letterSpacing: "-0.025em", marginBottom: 12, color: "var(--pp-ink)" }}>
           Try that again
         </h1>
         <p
           style={{
             fontSize: ".9375rem",
-            color: "var(--color-gray-600, #4B5563)",
+            color: "var(--color-gray-600, var(--pp-body))",
             fontFamily: "var(--font-body)",
             lineHeight: 1.55,
             marginBottom: 20,

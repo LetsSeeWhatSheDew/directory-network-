@@ -194,7 +194,7 @@ export default function HeroDealCard({
   if (!resolved && !deal) {
     return (
       <div className="hero-deal-card skeleton" aria-busy="true" aria-live="polite">
-        <div className="hero-deal-label" style={{ color: "#9ca3af" }}>
+        <div className="hero-deal-label" style={{ color: "var(--pp-muted)" }}>
           Finding the top Central Illinois deal…
         </div>
         <div className="skeleton-savings" />
@@ -203,10 +203,10 @@ export default function HeroDealCard({
         <div className="skeleton-subline" style={{ width: "85%" }} />
         <div className="skeleton-cta" />
         <style>{`
-          .skeleton-savings{height:54px;width:62%;background:linear-gradient(90deg,#f0ece3 0%,#f8f6f0 50%,#f0ece3 100%);background-size:200% 100%;animation:cl-shimmer 1.4s linear infinite;border-radius:8px;margin:8px 0 4px}
-          .skeleton-subline{height:12px;width:40%;background:#F4F5EF;border-radius:6px;margin-bottom:18px}
-          .skeleton-name{height:18px;width:70%;background:#f0ece3;border-radius:6px;margin-bottom:8px}
-          .skeleton-cta{height:46px;background:#f0ece3;border-radius:10px;margin-top:18px}
+          .skeleton-savings{height:54px;width:62%;background:linear-gradient(90deg,var(--pp-paper) 0%,#f8f6f0 50%,var(--pp-paper) 100%);background-size:200% 100%;animation:cl-shimmer 1.4s linear infinite;border-radius:8px;margin:8px 0 4px}
+          .skeleton-subline{height:12px;width:40%;background:var(--pp-paper);border-radius:6px;margin-bottom:18px}
+          .skeleton-name{height:18px;width:70%;background:var(--pp-paper);border-radius:6px;margin-bottom:8px}
+          .skeleton-cta{height:46px;background:var(--pp-paper);border-radius:10px;margin-top:18px}
           @keyframes cl-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
         `}</style>
       </div>
@@ -221,7 +221,7 @@ export default function HeroDealCard({
   if (!deal) {
     return (
       <div className="hero-deal-card hero-deal-empty">
-        <div className="hero-deal-label" style={{ color: "#9ca3af" }}>
+        <div className="hero-deal-label" style={{ color: "var(--pp-muted)" }}>
           {city ? `Deals near ${city}` : "Central Illinois deals"}
         </div>
         <div className="hero-deal-empty-headline">Pulling today's deals…</div>
@@ -233,8 +233,8 @@ export default function HeroDealCard({
           Browse Central IL dispensaries →
         </Link>
         <style>{`
-          .hero-deal-empty-headline{font-family:var(--font-display), system-ui, sans-serif;font-size:1.6rem;font-weight:700;color:#1C3A22;letter-spacing:-.02em;margin:8px 0 6px}
-          .hero-deal-empty-sub{font-size:.92rem;color:#6b7280;font-family:system-ui,sans-serif;line-height:1.55;margin:0 0 18px;max-width:520px}
+          .hero-deal-empty-headline{font-family:var(--font-display), system-ui, sans-serif;font-size:1.6rem;font-weight:700;color:var(--pp-ink);letter-spacing:-.02em;margin:8px 0 6px}
+          .hero-deal-empty-sub{font-size:.92rem;color:var(--pp-muted);font-family:system-ui,sans-serif;line-height:1.55;margin:0 0 18px;max-width:520px}
           .hero-deal-empty-cta{display:inline-block;text-align:center;text-decoration:none}
         `}</style>
       </div>
@@ -310,11 +310,11 @@ export default function HeroDealCard({
         {city ? `More deals near ${city} →` : "See more Central Illinois deals →"}
       </Link>
       <style>{`
-        .hero-deal-price{font-size:.9rem;color:#6b7280;font-family:system-ui,sans-serif;margin:-4px 0 8px}
+        .hero-deal-price{font-size:.9rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin:-4px 0 8px}
         .hero-deal-price .strike{text-decoration:line-through}
-        .hero-deal-price strong{color:#2E7D32;font-weight:700}
-        .hero-deal-open{color:#2E7D32;font-size:.75rem;font-weight:600;background:#E8F0DF;padding:2px 8px;border-radius:100px}
-        .hero-deal-closed{color:#9ca3af;font-size:.72rem;font-family:system-ui,sans-serif}
+        .hero-deal-price strong{color:var(--pp-signal);font-weight:700}
+        .hero-deal-open{color:var(--pp-signal);font-size:.75rem;font-weight:600;background:var(--pp-best-tint);padding:2px 8px;border-radius:100px}
+        .hero-deal-closed{color:var(--pp-muted);font-size:.72rem;font-family:system-ui,sans-serif}
       `}</style>
     </div>
   );

@@ -27,34 +27,34 @@ export default function StartPage() {
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
         body{font-family:var(--font-body),system-ui,sans-serif;background:var(--pp-paper);color:var(--pp-body);min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;position:sticky;top:0;z-index:100;border-bottom:1px solid #DCDED2}
+        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-surface);position:sticky;top:0;z-index:100;border-bottom:1px solid var(--pp-border)}
         .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
-        .logo-dot{width:8px;height:8px;border-radius:50%;background:#2E7D32;animation:pulse 2.5s infinite}
+        .logo-dot{width:8px;height:8px;border-radius:50%;background:var(--pp-signal-fill);animation:pulse 2.5s infinite}
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-        .logo-text{font-size:1.1rem;font-weight:700;color:#1F3D2B}
-        .logo-text span{color:#2E7D32}
-        .back{font-size:.82rem;color:#6b7280;text-decoration:none;font-family:system-ui,sans-serif}
+        .logo-text{font-size:1.1rem;font-weight:700;color:var(--pp-ink)}
+        .logo-text span{color:var(--pp-signal)}
+        .back{font-size:.82rem;color:var(--pp-muted);text-decoration:none;font-family:system-ui,sans-serif}
 
         .wrap{max-width:720px;margin:0 auto;padding:48px 22px 72px}
-        .eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#2E7D32;font-family:system-ui,sans-serif;margin-bottom:10px}
+        .eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);font-family:system-ui,sans-serif;margin-bottom:10px}
         h1{font-size:clamp(2rem,5vw,2.8rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:14px}
-        .lede{font-size:1.05rem;color:#374151;font-family:system-ui,sans-serif;line-height:1.65;margin-bottom:36px}
+        .lede{font-size:1.05rem;color:var(--pp-body);font-family:system-ui,sans-serif;line-height:1.65;margin-bottom:36px}
 
         section{margin-bottom:40px}
-        h2{font-size:1.35rem;font-weight:700;letter-spacing:-.02em;margin-bottom:14px;color:#1F3D2B}
-        p,li{font-family:system-ui,sans-serif;color:#374151;font-size:1rem;line-height:1.7}
+        h2{font-size:1.35rem;font-weight:700;letter-spacing:-.02em;margin-bottom:14px;color:var(--pp-ink)}
+        p,li{font-family:system-ui,sans-serif;color:var(--pp-body);font-size:1rem;line-height:1.7}
         p{margin-bottom:12px}
         ul{margin:0 0 12px 22px}
         li{margin-bottom:8px}
-        strong{color:#1F3D2B}
+        strong{color:var(--pp-ink)}
 
-        .callout{background:#fff;border:1px solid #DCDED2;border-left:4px solid #2E7D32;border-radius:12px;padding:16px 18px;margin:12px 0}
-        .callout p{margin:0;font-size:.95rem;color:#374151}
+        .callout{background:var(--pp-surface);border:1px solid var(--pp-border);border-left:4px solid var(--pp-signal-fill);border-radius:12px;padding:16px 18px;margin:12px 0}
+        .callout p{margin:0;font-size:.95rem;color:var(--pp-body)}
 
-        .cta-row{margin-top:32px;padding:22px 24px;background:#fff;border:1px solid #DCDED2;border-radius:14px;text-align:center}
-        .cta-row p{font-size:.92rem;color:#374151;margin-bottom:12px}
-        .cta-btn{display:inline-block;background:#2E7D32;color:#fff;padding:14px 26px;border-radius:10px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:700;font-size:1rem}
-        .cta-btn:hover{background:#6BA63B}
+        .cta-row{margin-top:32px;padding:22px 24px;background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:14px;text-align:center}
+        .cta-row p{font-size:.92rem;color:var(--pp-body);margin-bottom:12px}
+        .cta-btn{display:inline-block;background:var(--pp-signal-fill);color:var(--pp-on-dark);padding:14px 26px;border-radius:10px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:700;font-size:1rem}
+        .cta-btn:hover{background:var(--pp-signal-fill)}
 
         @media(max-width:600px){.wrap{padding:32px 16px 56px}h2{font-size:1.2rem}p,li{font-size:.98rem}}
       `}</style>
@@ -179,7 +179,7 @@ export default function StartPage() {
             <li>We flag genuinely extraordinary deals with a 🔥 badge. No letter grades, no padding.</li>
             <li>It&rsquo;s free and no account is needed.</li>
             <li>
-              Optional <strong>Pro alerts ($0.99/month)</strong> text you when a new
+              Optional <strong>Pro alerts ($0.99/month)</strong> email you the moment a new
               deal drops near you.
             </li>
           </ul>
@@ -198,6 +198,7 @@ export default function StartPage() {
           <Link href="/" className="cta-btn">See deals near me →</Link>
         </div>
       </main>
+      <Footer />
     </>
   );
 }

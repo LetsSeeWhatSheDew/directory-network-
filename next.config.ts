@@ -17,6 +17,10 @@ const nextConfig: NextConfig = {
         destination: "/dispensary/:slug",
         permanent: true,
       },
+      // Breathe consolidation (2026-09-23): legacy/off-scope pages.
+      { source: "/cannabis", destination: "/", permanent: true },
+      { source: "/grow", destination: "/for-dispensaries", permanent: true },
+      { source: "/early-access", destination: "/alerts", permanent: true },
     ];
   },
 };

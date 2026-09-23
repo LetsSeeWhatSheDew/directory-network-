@@ -104,7 +104,7 @@ export default function SavingsCalculator() {
           <p style={resultBody}>
             At a typical {Math.round(AVG_DISCOUNT_RATE * 100)}% discount on tracked deals, your
             profile would save about{" "}
-            <strong style={{ color: "#2E7D32" }}>${result.puffpriceSaves} / year</strong>.
+            <strong style={{ color: "var(--pp-signal)" }}>${result.puffpriceSaves} / year</strong>.
           </p>
           {result.eighths > 0 && (
             <p style={resultSub}>That&apos;s <strong>{result.eighths} free eighth{result.eighths === 1 ? "" : "s"} of flower.</strong></p>
@@ -121,7 +121,7 @@ export default function SavingsCalculator() {
       )}
 
       {!result && (
-        <p style={{ fontFamily: "system-ui, sans-serif", fontSize: ".85rem", color: "#9ca3af", textAlign: "center", marginTop: 6 }}>
+        <p style={{ fontFamily: "system-ui, sans-serif", fontSize: ".85rem", color: "var(--pp-muted)", textAlign: "center", marginTop: 6 }}>
           Answer all three to see your result.
         </p>
       )}
@@ -168,8 +168,8 @@ function Question<T extends string>({
 }
 
 const wrap: React.CSSProperties = {
-  background: "#fff",
-  border: "1px solid #DCDED2",
+  background: "var(--pp-surface)",
+  border: "1px solid var(--pp-border)",
   borderRadius: 16,
   padding: 28,
 };
@@ -178,24 +178,24 @@ const questionHeader: React.CSSProperties = { display: "flex", alignItems: "base
 const questionNum: React.CSSProperties = {
   fontSize: ".75rem",
   fontWeight: 700,
-  color: "#2E7D32",
+  color: "var(--pp-signal)",
   fontFamily: "system-ui, sans-serif",
   letterSpacing: ".08em",
 };
 const questionLabel: React.CSSProperties = {
   fontSize: "1rem",
   fontWeight: 700,
-  color: "#1F3D2B",
+  color: "var(--pp-ink)",
   fontFamily: "var(--font-display), system-ui, sans-serif",
   lineHeight: 1.3,
 };
 const optionRow: React.CSSProperties = { display: "flex", gap: 8, flexWrap: "wrap" };
 const pillStyle: React.CSSProperties = {
   padding: "9px 16px",
-  border: "1px solid #d1cfc6",
+  border: "1px solid var(--pp-border)",
   borderRadius: 100,
-  background: "#fff",
-  color: "#374151",
+  background: "var(--pp-surface)",
+  color: "var(--pp-body)",
   cursor: "pointer",
   fontFamily: "system-ui, sans-serif",
   fontSize: ".88rem",
@@ -203,17 +203,17 @@ const pillStyle: React.CSSProperties = {
   transition: "all .15s",
 };
 const pillActive: React.CSSProperties = {
-  background: "#1F3D2B",
-  borderColor: "#1F3D2B",
-  color: "#fff",
+  background: "var(--pp-canopy)",
+  borderColor: "var(--pp-canopy)",
+  color: "var(--pp-on-dark)",
   fontWeight: 700,
 };
 
 const resultCard: React.CSSProperties = {
   marginTop: 10,
   padding: "24px",
-  background: "#1F3D2B",
-  color: "#fff",
+  background: "var(--pp-canopy)",
+  color: "var(--pp-on-dark)",
   borderRadius: 14,
   textAlign: "center",
 };
@@ -221,7 +221,7 @@ const resultEyebrow: React.CSSProperties = {
   fontSize: ".7rem",
   fontWeight: 700,
   letterSpacing: ".14em",
-  color: "#93CB5C",
+  color: "var(--pp-canopy-eyebrow)",
   fontFamily: "system-ui, sans-serif",
   textTransform: "uppercase",
   marginBottom: 14,
@@ -229,7 +229,7 @@ const resultEyebrow: React.CSSProperties = {
 const resultBig: React.CSSProperties = {
   fontSize: "1.4rem",
   fontWeight: 700,
-  color: "#fff",
+  color: "var(--pp-on-dark)",
   fontFamily: "var(--font-display), system-ui, sans-serif",
   lineHeight: 1.3,
   marginBottom: 14,
@@ -249,8 +249,8 @@ const resultSub: React.CSSProperties = {
 };
 const cta: React.CSSProperties = {
   display: "inline-block",
-  background: "#2E7D32",
-  color: "#fff",
+  background: "var(--pp-signal-fill)",
+  color: "var(--pp-on-dark)",
   padding: "12px 22px",
   borderRadius: 10,
   textDecoration: "none",

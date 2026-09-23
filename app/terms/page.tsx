@@ -17,22 +17,22 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <div style={{ fontFamily: "var(--font-body)", background: "var(--color-cream, #F7F4ED)", minHeight: "100vh", color: "var(--color-deep, #1F3D2B)" }}>
-      <div className="pp-surface-deep pp-leaf pp-leaf-04">
-        <Nav variant="deep" />
-        <header style={{ color: "var(--color-cream, #F7F4ED)", padding: "clamp(2rem, 5vw, 4rem) clamp(1rem, 4vw, 2rem)", textAlign: "center", position: "relative", zIndex: 2 }}>
-          <p className="pp-eyebrow" style={{ color: "var(--color-sage-vibrant, #93CB5C)", marginBottom: 10 }}>Legal</p>
-          <h1 style={{ fontFamily: "var(--font-body)", fontWeight: 800, fontSize: "clamp(2rem, 5vw, 3rem)", letterSpacing: "-0.035em", lineHeight: 1.1, marginBottom: 12, color: "var(--color-cream, #F7F4ED)" }}>
+    <div style={{ fontFamily: "var(--font-body)", background: "var(--pp-paper)", minHeight: "100vh", color: "var(--pp-ink)" }}>
+      <div>
+        <Nav variant="light" />
+        <header style={{ color: "var(--pp-ink)", padding: "clamp(2rem, 5vw, 4rem) clamp(1rem, 4vw, 2rem)", textAlign: "center", position: "relative", zIndex: 2 }}>
+          <p className="pp-eyebrow" style={{ color: "var(--pp-muted)", marginBottom: 10 }}>Legal</p>
+          <h1 style={{ fontFamily: "var(--font-body)", fontWeight: 800, fontSize: "clamp(2rem, 5vw, 3rem)", letterSpacing: "-0.035em", lineHeight: 1.1, marginBottom: 12, color: "var(--pp-ink)" }}>
             Terms of Service
           </h1>
-          <p style={{ color: "rgba(247, 244, 237, 0.72)", fontFamily: "var(--font-body)", maxWidth: 520, margin: "0 auto", lineHeight: 1.6, fontSize: "1rem" }}>
+          <p style={{ color: "var(--pp-muted)", fontFamily: "var(--font-body)", maxWidth: 520, margin: "0 auto", lineHeight: 1.6, fontSize: "1rem" }}>
             Last updated: April 18, 2026. Short, plain English, no tricks.
           </p>
         </header>
       </div>
 
       <section style={{ maxWidth: 720, margin: "-32px auto 0", padding: "0 28px 80px", position: "relative" }}>
-        <article style={{ background: "#fff", border: "1px solid #DCDED2", borderRadius: 14, padding: "32px 28px", lineHeight: 1.7, fontSize: "1.02rem" }}>
+        <article style={{ background: "var(--pp-surface)", border: "1px solid var(--pp-border)", borderRadius: 14, padding: "32px 28px", lineHeight: 1.7, fontSize: "1.02rem" }}>
 
           <h2 style={h2}>Who we are</h2>
           <p>
@@ -105,7 +105,7 @@ export default function TermsPage() {
 
         </article>
 
-        <p style={{ textAlign: "center", marginTop: 28, fontSize: ".85rem", fontFamily: "var(--font-body)", color: "var(--color-gray-500, #6B7280)" }}>
+        <p style={{ textAlign: "center", marginTop: 28, fontSize: ".85rem", fontFamily: "var(--font-body)", color: "var(--color-gray-500, var(--pp-muted))" }}>
           See also: <Link href="/privacy" style={link}>Privacy Policy</Link>
         </p>
       </section>
@@ -120,11 +120,11 @@ const h2: React.CSSProperties = {
   fontWeight: 700,
   marginTop: 28,
   marginBottom: 8,
-  color: "#1F3D2B",
+  color: "var(--pp-ink)",
   letterSpacing: "-0.01em",
 };
 
 const link: React.CSSProperties = {
-  color: "#2E7D32",
+  color: "var(--pp-signal)",
   textDecoration: "underline",
 };

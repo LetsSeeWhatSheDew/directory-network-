@@ -49,14 +49,14 @@ export default function IllinoisCannabisTaxPage() {
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:var(--font-ui, system-ui, sans-serif);background:var(--pp-paper);color:#1F3D2B;min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #DCDED2;position:sticky;top:0;z-index:100}
+        body{font-family:var(--font-ui, system-ui, sans-serif);background:var(--pp-paper);color:var(--pp-ink);min-height:100vh}
+        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-surface);border-bottom:1px solid var(--pp-border);position:sticky;top:0;z-index:100}
         .logo-link{display:flex;align-items:center}
         .nav-links{display:flex;gap:18px;align-items:center}
-        .nav-link{font-size:.88rem;color:#6b7280;text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif);font-weight:500}
-        .nav-link:hover{color:#1F3D2B}
-        .nav-cta{background:#1F3D2B;color:#fff;padding:8px 14px;border-radius:8px;font-size:.85rem;font-weight:700;text-decoration:none}
-        .nav-cta:hover{background:#2A4F38}
+        .nav-link{font-size:.88rem;color:var(--pp-muted);text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif);font-weight:500}
+        .nav-link:hover{color:var(--pp-ink)}
+        .nav-cta{background:var(--pp-canopy);color:var(--pp-on-dark);padding:8px 14px;border-radius:8px;font-size:.85rem;font-weight:700;text-decoration:none}
+        .nav-cta:hover{background:var(--pp-canopy)}
         .desktop-only-nav{display:flex}
         @media(max-width:768px){.desktop-only-nav{display:none !important}}
 
@@ -66,26 +66,26 @@ export default function IllinoisCannabisTaxPage() {
         .eyebrow{
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:.74rem;font-weight:700;letter-spacing:.14em;
-          text-transform:uppercase;color:#2E7D32;margin-bottom:14px;
+          text-transform:uppercase;color:var(--pp-signal);margin-bottom:14px;
         }
         h1{
           font-family:var(--font-display, var(--font-geist-sans));
           font-size:clamp(2rem, 4.5vw, 2.85rem);
           font-weight:700;letter-spacing:-.04em;line-height:1.1;
-          color:#1F3D2B;margin-bottom:32px;
+          color:var(--pp-ink);margin-bottom:32px;
         }
         h2{
           font-family:var(--font-display, var(--font-geist-sans));
           font-size:clamp(1.4rem, 2.5vw, 1.75rem);
           font-weight:600;letter-spacing:-.02em;
-          color:#1F3D2B;margin:36px 0 14px;
+          color:var(--pp-ink);margin:36px 0 14px;
         }
         p, .article-list{
           font-family:var(--font-display), system-ui, sans-serif;
-          font-size:1.0625rem;line-height:1.7;color:#374151;
+          font-size:1.0625rem;line-height:1.7;color:var(--pp-body);
           margin-bottom:18px;
         }
-        p strong, .article-list strong{font-weight:700;color:#1F3D2B}
+        p strong, .article-list strong{font-weight:700;color:var(--pp-ink)}
         .article-list{padding-left:1.4rem;list-style:disc}
         .article-list li{margin-bottom:8px}
 
@@ -95,28 +95,28 @@ export default function IllinoisCannabisTaxPage() {
           font-size:.95rem;
         }
         table.worked th, table.worked td{
-          padding:10px 12px;border-bottom:1px dashed #DCDED2;
-          text-align:left;color:#374151;
+          padding:10px 12px;border-bottom:1px dashed var(--pp-border);
+          text-align:left;color:var(--pp-body);
         }
         table.worked thead th{
           background:var(--pp-paper);
           font-size:.78rem;font-weight:700;letter-spacing:.06em;
-          text-transform:uppercase;color:#6b7280;
+          text-transform:uppercase;color:var(--pp-muted);
         }
         table.worked td.num{
           text-align:right;font-variant-numeric:tabular-nums;
           font-family:var(--font-display, var(--font-geist-sans));
-          font-weight:600;color:#1F3D2B;
+          font-weight:600;color:var(--pp-ink);
         }
         table.worked tr.total td{
-          border-top:1.5px solid #1F3D2B;border-bottom:none;
+          border-top:1.5px solid var(--pp-canopy);border-bottom:none;
           padding-top:14px;font-weight:700;
         }
-        table.worked tr.total td.num{font-size:1.05rem;color:#2E7D32}
+        table.worked tr.total td.num{font-size:1.05rem;color:var(--pp-signal)}
 
         .calculator-cta{
           margin:36px 0 24px;
-          background:#1F3D2B;color:#fff;
+          background:var(--pp-canopy);color:var(--pp-on-dark);
           border-radius:14px;padding:24px;
           display:flex;flex-direction:column;gap:12px;
         }
@@ -125,11 +125,11 @@ export default function IllinoisCannabisTaxPage() {
         }
         .calculator-cta-text{
           font-family:var(--font-ui, system-ui, sans-serif);
-          font-size:1rem;color:#fafaf7;line-height:1.5;
+          font-size:1rem;color:var(--pp-on-dark);line-height:1.5;
         }
-        .calculator-cta-text strong{color:#93CB5C;font-weight:700}
+        .calculator-cta-text strong{color:var(--pp-canopy-eyebrow);font-weight:700}
         .calculator-cta-button{
-          background:#2E7D32;color:#fff;
+          background:var(--pp-signal-fill);color:var(--pp-on-dark);
           padding:12px 22px;border-radius:10px;
           text-decoration:none;
           font-family:var(--font-ui, system-ui, sans-serif);
@@ -137,27 +137,27 @@ export default function IllinoisCannabisTaxPage() {
           white-space:nowrap;
           transition:background 150ms ease;
         }
-        .calculator-cta-button:hover{background:#6BA63B}
+        .calculator-cta-button:hover{background:var(--pp-signal-fill)}
 
         .source-note{
           margin-top:32px;padding-top:24px;
           font-family:var(--font-ui, system-ui, sans-serif);
-          font-size:.82rem;color:#6b7280;line-height:1.6;
-          border-top:1px solid #DCDED2;
+          font-size:.82rem;color:var(--pp-muted);line-height:1.6;
+          border-top:1px solid var(--pp-border);
           font-style:italic;
         }
-        .source-note a{color:#2E7D32;text-decoration:none;font-style:normal;font-weight:600}
+        .source-note a{color:var(--pp-signal);text-decoration:none;font-style:normal;font-weight:600}
         .source-note a:hover{text-decoration:underline}
 
         .footer{
-          background:#fff;border-top:1px solid #DCDED2;
+          background:var(--pp-surface);border-top:1px solid var(--pp-border);
           padding:24px 28px;
           display:flex;justify-content:space-between;align-items:center;
           flex-wrap:wrap;gap:12px;
         }
-        .footer-link{font-size:.78rem;color:#6b7280;text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif)}
-        .footer-link:hover{color:#1F3D2B}
-        .footer-copy{font-size:.74rem;color:#9ca3af;font-family:var(--font-ui, system-ui, sans-serif)}
+        .footer-link{font-size:.78rem;color:var(--pp-muted);text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif)}
+        .footer-link:hover{color:var(--pp-ink)}
+        .footer-copy{font-size:.74rem;color:var(--pp-muted);font-family:var(--font-ui, system-ui, sans-serif)}
       `}</style>
 
       <Nav variant="light" />
@@ -356,6 +356,7 @@ export default function IllinoisCannabisTaxPage() {
           <Link href="/dispensaries" className="footer-link">For dispensaries</Link>
         </div>
       </footer>
+      <Footer />
     </>
   );
 }

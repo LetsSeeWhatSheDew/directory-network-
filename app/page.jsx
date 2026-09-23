@@ -549,9 +549,9 @@ export default async function HomePage() {
         /* NAV */
         .nav{
           display:flex;justify-content:space-between;align-items:center;
-          padding:14px 28px;background:#fff;
+          padding:14px 28px;background:var(--pp-surface);
           position:sticky;top:0;z-index:100;
-          border-bottom:1px solid #DCDED2;
+          border-bottom:1px solid var(--pp-border);
         }
         .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
         /* Logo sizing — desktop 60px tall, mobile 46px tall.
@@ -561,28 +561,28 @@ export default async function HomePage() {
         @media(max-width:768px){.nav .logo img{height:46px!important}}
         .footer .footer-logo img{width:auto!important;height:40px!important}
         .logo-mark{position:relative;width:28px;height:28px;display:inline-block;flex-shrink:0}
-        .logo-mark-dot{position:absolute;top:-2px;right:-2px;width:10px;height:10px;border-radius:50%;background:#2E7D32;border:2px solid #fff;animation:pulse 2.5s infinite}
-        .logo-dot{width:8px;height:8px;border-radius:50%;background:#2E7D32;animation:pulse 2.5s infinite}
+        .logo-mark-dot{position:absolute;top:-2px;right:-2px;width:10px;height:10px;border-radius:50%;background:var(--pp-signal-fill);border:2px solid var(--pp-border);animation:pulse 2.5s infinite}
+        .logo-dot{width:8px;height:8px;border-radius:50%;background:var(--pp-signal-fill);animation:pulse 2.5s infinite}
         @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.9)}}
-        .logo-text{font-size:1.15rem;font-weight:700;color:#1C3A22;letter-spacing:-.02em}
-        .logo-text span{color:#2E7D32}
+        .logo-text{font-size:1.15rem;font-weight:700;color:var(--pp-ink);letter-spacing:-.02em}
+        .logo-text span{color:var(--pp-signal)}
         .nav-links{display:flex;align-items:center;gap:20px}
-        .nav-link{font-size:.82rem;color:#545B52;text-decoration:none;font-family:var(--font-body)}
-        .nav-link:hover{color:#1C3A22}
+        .nav-link{font-size:.82rem;color:var(--pp-body);text-decoration:none;font-family:var(--font-body)}
+        .nav-link:hover{color:var(--pp-ink)}
         .nav-cta{
           font-size:.82rem;font-family:var(--font-body);font-weight:600;
-          color:#fff;background:#2E7D32;padding:6px 14px;border-radius:6px;
+          color:var(--pp-on-dark);background:var(--pp-signal-fill);padding:6px 14px;border-radius:6px;
           text-decoration:none;
         }
-        .nav-cta:hover{background:#2E5320}
+        .nav-cta:hover{background:var(--pp-canopy)}
 
         /* 4/20 PROMO BANNER */
-        .promo-banner{background:#2E5320;color:#fff}
+        .promo-banner{background:var(--pp-canopy);color:var(--pp-on-dark)}
         .promo-inner{max-width:1100px;margin:0 auto;padding:8px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
         .promo-left{display:flex;align-items:center;gap:10px;font-family:var(--font-body);font-size:.82rem;font-weight:600}
-        .promo-dot{width:7px;height:7px;border-radius:50%;background:#9DBE7E;animation:pulse 2s infinite;flex-shrink:0}
+        .promo-dot{width:7px;height:7px;border-radius:50%;background:var(--pp-canopy-eyebrow);animation:pulse 2s infinite;flex-shrink:0}
         .promo-text{line-height:1.3}
-        .promo-cta{color:#fff;text-decoration:none;font-family:var(--font-body);font-size:.82rem;font-weight:600;white-space:nowrap}
+        .promo-cta{color:var(--pp-on-dark);text-decoration:none;font-family:var(--font-body);font-size:.82rem;font-weight:600;white-space:nowrap}
         .promo-cta:hover{text-decoration:underline}
         @media(max-width:520px){.promo-inner{padding:8px 14px}.promo-text{font-size:.75rem}}
 
@@ -594,7 +594,7 @@ export default async function HomePage() {
           padding:36px 28px 56px;
           position:relative;
           overflow:hidden;
-          border-bottom:1px solid #DCDED2;
+          border-bottom:1px solid var(--pp-border);
           isolation:isolate;
         }
         .hero-photo{position:absolute;inset:0;z-index:0;pointer-events:none}
@@ -643,7 +643,7 @@ export default async function HomePage() {
 
         /* LOCATION LINE */
         .hero-loc-line{
-          font-size:.8rem;color:#2E7D32;font-family:var(--font-body);
+          font-size:.8rem;color:var(--pp-signal);font-family:var(--font-body);
           font-weight:500;margin-bottom:2px;
         }
 
@@ -651,23 +651,23 @@ export default async function HomePage() {
           /* Spec 2.3 hero: 56-72px Geist Display 700, tight tracking. */
           font-family:var(--font-display, var(--font-geist-sans));
           font-size:clamp(2.5rem, 6vw + 1rem, 4.25rem);
-          font-weight:700;color:#1C3A22;
+          font-weight:700;color:var(--pp-ink);
           letter-spacing:-.04em;line-height:1.02;
           margin-bottom:10px;
         }
-        .hero h1 em{color:#2E7D32;font-style:normal}
+        .hero h1 em{color:var(--pp-signal);font-style:normal}
         .hero-sub{
           font-family:var(--font-ui, system-ui, sans-serif);
-          font-size:1.05rem;color:#4B5563;
+          font-size:1.05rem;color:var(--pp-body);
           line-height:1.55;margin-bottom:22px;
           max-width:520px;
         }
 
         /* HERO DEAL CARD — THE hero element */
         .hero-deal-card{
-          background:#fff;
-          border:1px solid #DCDED2;
-          border-left:4px solid #2E7D32;
+          background:var(--pp-surface);
+          border:1px solid var(--pp-border);
+          border-left:4px solid var(--pp-signal-fill);
           border-radius:14px;
           padding:22px 22px 18px;
           box-shadow:0 4px 16px rgba(15,31,61,.06);
@@ -675,27 +675,27 @@ export default async function HomePage() {
           max-width:560px;
         }
         .hero-deal-label{
-          font-size:.7rem;color:#545B52;
+          font-size:.7rem;color:var(--pp-body);
           font-family:var(--font-body);
           font-weight:500;letter-spacing:.02em;
           margin-bottom:4px;
         }
         .hero-deal-savings{
           font-size:clamp(2.4rem,9vw,3.4rem);
-          font-weight:700;color:#2E7D32;
+          font-weight:700;color:var(--pp-signal);
           letter-spacing:-.04em;line-height:1;
         }
         .hero-deal-vs{
-          font-size:.72rem;color:#5A6260;
+          font-size:.72rem;color:var(--pp-muted);
           font-family:var(--font-body);
           margin-top:2px;margin-bottom:16px;
         }
         .hero-deal-name{
           font-size:1.1rem;font-weight:700;
-          color:#1C3A22;line-height:1.2;
+          color:var(--pp-ink);line-height:1.2;
         }
         .hero-deal-title{
-          font-size:.9rem;color:#374151;
+          font-size:.9rem;color:var(--pp-body);
           font-family:var(--font-body);
           margin-top:2px;margin-bottom:18px;
           line-height:1.4;
@@ -707,12 +707,12 @@ export default async function HomePage() {
         }
         .hero-deal-meta{
           display:flex;gap:12px;flex-wrap:wrap;
-          font-size:.8rem;color:#545B52;
+          font-size:.8rem;color:var(--pp-body);
           font-family:var(--font-body);font-weight:500;
         }
         .hero-deal-urgent{color:#991b1b;font-weight:700}
         .hero-deal-cta{
-          background:#2E7D32;color:#fff;
+          background:var(--pp-signal-fill);color:var(--pp-on-dark);
           padding:12px 22px;border-radius:10px;
           text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif);
           font-weight:700;font-size:.92rem;letter-spacing:.02em;
@@ -720,21 +720,21 @@ export default async function HomePage() {
           white-space:nowrap;
           min-height:44px;display:inline-flex;align-items:center;
         }
-        .hero-deal-cta:hover{background:#2E5320;transform:translateY(-1px)}
+        .hero-deal-cta:hover{background:var(--pp-canopy);transform:translateY(-1px)}
         .hero-deal-more{
           margin-top:14px;align-self:flex-start;
-          font-size:.82rem;color:#545B52;
+          font-size:.82rem;color:var(--pp-body);
           font-family:var(--font-body);
           text-decoration:none;
         }
-        .hero-deal-more:hover{color:#2E7D32}
+        .hero-deal-more:hover{color:var(--pp-signal)}
         .skeleton{pointer-events:none}
 
         /* HERO RIGHT — desktop category stack */
         .hero-right{display:flex;flex-direction:column;gap:10px}
         .hero-right-label{
           font-size:.68rem;font-weight:700;letter-spacing:.14em;
-          text-transform:uppercase;color:#5A6260;
+          text-transform:uppercase;color:var(--pp-muted);
           font-family:var(--font-body);margin-bottom:2px;
         }
         @media(max-width:899px){
@@ -744,21 +744,21 @@ export default async function HomePage() {
         /* CATEGORY BUTTONS (used by desktop right column) */
         .cat-btn{
           display:flex;align-items:center;justify-content:center;gap:8px;
-          background:#fff;
-          border:1px solid #DCDED2;
+          background:var(--pp-surface);
+          border:1px solid var(--pp-border);
           border-radius:10px;padding:11px 14px;
           font-size:.85rem;font-family:var(--font-body);font-weight:500;
-          color:#1C3A22;cursor:pointer;text-decoration:none;
+          color:var(--pp-ink);cursor:pointer;text-decoration:none;
           transition:all .15s;
         }
-        .cat-btn:hover{background:#E8F0DF;border-color:#2E7D32;color:#1C3A22}
+        .cat-btn:hover{background:var(--pp-best-tint);border-color:var(--pp-signal-fill);color:var(--pp-ink)}
         .cat-btn svg{flex-shrink:0;width:24px;height:24px}
 
         /* STATS STRIP — minimal credibility line */
-        .stats{background:#F4F5EF;padding:22px 28px;text-align:center}
+        .stats{background:var(--pp-paper);padding:22px 28px;text-align:center}
         .stats-inner{max-width:900px;margin:0 auto}
-        .stats-line{font-size:.85rem;color:#545B52;font-family:var(--font-body);letter-spacing:.01em}
-        .stats-line strong{color:#2E7D32;font-weight:700}
+        .stats-line{font-size:.85rem;color:var(--pp-body);font-family:var(--font-body);letter-spacing:.01em}
+        .stats-line strong{color:var(--pp-signal);font-weight:700}
         @media(max-width:520px){.stats-line{font-size:.78rem}}
 
         /* DEALS SECTION */
@@ -766,33 +766,33 @@ export default async function HomePage() {
 
         .section-eyebrow{
           font-size:.7rem;font-weight:700;letter-spacing:.14em;
-          text-transform:uppercase;color:#2E7D32;
+          text-transform:uppercase;color:var(--pp-signal);
           font-family:var(--font-body);margin-bottom:6px;
         }
         .section-title{
           font-size:clamp(1.4rem,3vw,1.8rem);font-weight:700;
-          color:#1C3A22;letter-spacing:-.03em;margin-bottom:4px;
+          color:var(--pp-ink);letter-spacing:-.03em;margin-bottom:4px;
         }
         .section-sub{
-          font-size:.875rem;color:#545B52;
+          font-size:.875rem;color:var(--pp-body);
           font-family:var(--font-body);margin-bottom:28px;
         }
 
         /* DEAL CARDS */
         .deal-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
         .deal-card{
-          background:#fff;border:1px solid #DCDED2;border-radius:14px;
+          background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:14px;
           padding:18px;position:relative;
           transition:border-color .15s;
         }
-        .deal-card:hover{border-color:#2E7D32}
+        .deal-card:hover{border-color:var(--pp-signal-fill)}
         .deal-card.top-pick{
-          border:1px solid #CBE0B4;
-          background:#E8F0DF;
+          border:1px solid var(--pp-best-border);
+          background:var(--pp-best-tint);
         }
         .top-pick-badge{
           position:absolute;top:-10px;left:16px;
-          background:#2E7D32;color:#fff;
+          background:var(--pp-signal-fill);color:var(--pp-on-dark);
           font-size:.68rem;font-family:var(--font-body);
           font-weight:700;letter-spacing:.08em;text-transform:uppercase;
           padding:3px 10px;border-radius:100px;
@@ -806,65 +806,65 @@ export default async function HomePage() {
           letter-spacing:-.01em;
         }
         .deal-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
-        .deal-name{font-size:.95rem;font-weight:700;color:#1C3A22}
-        .deal-city{font-size:.75rem;color:#5A6260;font-family:var(--font-body);margin-top:2px}
+        .deal-name{font-size:.95rem;font-weight:700;color:var(--pp-ink)}
+        .deal-city{font-size:.75rem;color:var(--pp-muted);font-family:var(--font-body);margin-top:2px}
         .open-badge{
           font-size:.68rem;font-weight:600;
           padding:2px 8px;border-radius:100px;
           font-family:var(--font-body);
           white-space:nowrap;
         }
-        .open-badge.open{color:#2E5320;background:#dcfce7}
-        .open-badge.closed{color:#545B52;background:#f1f5f9}
+        .open-badge.open{color:var(--pp-signal-ink);background:var(--pp-best-tint)}
+        .open-badge.closed{color:var(--pp-body);background:#f1f5f9}
         .deal-highlight{
-          font-size:.95rem;font-weight:700;color:#2E7D32;
+          font-size:.95rem;font-weight:700;color:var(--pp-signal);
           margin-bottom:6px;
         }
         .deal-reason{
-          font-size:.78rem;color:#545B52;
+          font-size:.78rem;color:var(--pp-body);
           font-family:var(--font-body);margin-bottom:12px;
           line-height:1.5;
         }
         .deal-attrs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
         .deal-attr{
-          font-size:.68rem;color:#545B52;
-          background:#F4F5EF;border-radius:100px;
+          font-size:.68rem;color:var(--pp-body);
+          background:var(--pp-paper);border-radius:100px;
           padding:2px 9px;font-family:var(--font-body);
         }
         .deal-savings{
           display:flex;align-items:center;justify-content:space-between;
-          gap:10px;background:#E8F0DF;border:1px solid #CBE0B4;border-radius:10px;
+          gap:10px;background:var(--pp-best-tint);border:1px solid var(--pp-best-border);border-radius:10px;
           padding:14px 16px;margin-top:auto;
         }
         .savings-copy{display:flex;flex-direction:column}
-        .savings-label{font-size:.65rem;font-weight:700;color:#2E5320;font-family:var(--font-body);text-transform:uppercase;letter-spacing:.12em}
+        .savings-label{font-size:.65rem;font-weight:700;color:var(--pp-signal-ink);font-family:var(--font-body);text-transform:uppercase;letter-spacing:.12em}
         .savings-sub{font-size:.68rem;color:rgba(22,101,52,.7);font-family:var(--font-body);margin-top:2px}
-        .savings-num{font-size:2rem;font-weight:700;color:#2E7D32;letter-spacing:-.03em;line-height:1}
+        .savings-num{font-size:2rem;font-weight:700;color:var(--pp-signal);letter-spacing:-.03em;line-height:1}
 
         /* FOOTER */
         .footer{
-          background:#fff;border-top:1px solid #DCDED2;
+          background:var(--pp-surface);border-top:1px solid var(--pp-border);
           padding:20px 28px;
           display:flex;justify-content:space-between;align-items:center;
           flex-wrap:wrap;gap:12px;
         }
-        .footer-logo{font-size:.9rem;font-weight:700;color:#1C3A22}
-        .footer-logo span{color:#2E7D32}
+        .footer-logo{font-size:.9rem;font-weight:700;color:var(--pp-ink)}
+        .footer-logo span{color:var(--pp-signal)}
         .footer-links{display:flex;gap:18px}
-        .footer-link{font-size:.75rem;color:#545B52;font-family:var(--font-body);text-decoration:none}
-        .footer-link:hover{color:#1C3A22}
-        .footer-copy{font-size:.72rem;color:#5A6260;font-family:var(--font-body)}
+        .footer-link{font-size:.75rem;color:var(--pp-body);font-family:var(--font-body);text-decoration:none}
+        .footer-link:hover{color:var(--pp-ink)}
+        .footer-copy{font-size:.72rem;color:var(--pp-muted);font-family:var(--font-body)}
 
         /* TAX CALCULATOR CALLOUT — sits between deals and cities. Navy
            bg with a single CTA; the differentiator we lead with. */
-        .tax-callout{background:#1C3A22;color:#FCFCFA;padding:64px 28px}
+        .tax-callout{background:var(--pp-canopy);color:var(--pp-on-dark);padding:64px 28px}
         .tax-callout-inner{max-width:760px;margin:0 auto;text-align:center}
-        .tax-callout .pp-eyebrow{color:#9DBE7E}
+        .tax-callout .pp-eyebrow{color:var(--pp-canopy-eyebrow)}
         .tax-callout-h2{
           font-family:var(--font-display, var(--font-geist-sans));
           font-size:clamp(1.5rem, 3vw, 2rem);font-weight:600;
           letter-spacing:-.03em;line-height:1.2;
-          color:#FCFCFA;margin:8px 0 14px;
+          color:var(--pp-on-dark);margin:8px 0 14px;
         }
         .tax-callout-body{
           font-family:var(--font-ui, system-ui, sans-serif);
@@ -873,20 +873,20 @@ export default async function HomePage() {
         }
         .tax-callout-cta{
           display:inline-flex;align-items:center;
-          background:#2E7D32;color:#fff;
+          background:var(--pp-signal-fill);color:var(--pp-on-dark);
           padding:13px 26px;border-radius:10px;
           font-family:var(--font-ui, system-ui, sans-serif);
           font-weight:700;font-size:.95rem;
           text-decoration:none;min-height:44px;
           transition:background 150ms ease, transform 150ms ease;
         }
-        .tax-callout-cta:hover{background:#2E5320;transform:translateY(-1px)}
+        .tax-callout-cta:hover{background:var(--pp-canopy);transform:translateY(-1px)}
         @media(max-width:520px){
           .tax-callout{padding:52px 18px}
         }
 
         /* SECTION 3 — CITIES GRID (Phase 4 layout consolidation) */
-        .cities-section{background:#fff;border-top:1px solid #DCDED2;border-bottom:1px solid #DCDED2;padding:0 0 64px;position:relative}
+        .cities-section{background:var(--pp-surface);border-top:1px solid var(--pp-border);border-bottom:1px solid var(--pp-border);padding:0 0 64px;position:relative}
         /* Banner photo above the city grid — positions us geographically. */
         .cities-banner{
           position:relative;
@@ -899,7 +899,7 @@ export default async function HomePage() {
         .cities-banner-tint{
           position:absolute;inset:0;
           background:rgba(28,58,34,0.06);
-          border-bottom:1px solid #DCDED2;
+          border-bottom:1px solid var(--pp-border);
           pointer-events:none;
         }
         .cities-inner{max-width:1100px;margin:0 auto;padding:0 28px}
@@ -915,32 +915,33 @@ export default async function HomePage() {
         .city-card-name{
           font-family:var(--font-display, var(--font-geist-sans));
           font-weight:600;font-size:1.125rem;letter-spacing:-.01em;
-          color:#1C3A22;
+          color:var(--pp-ink);
         }
         .city-card-meta{display:flex;align-items:center;gap:8px;flex-shrink:0}
+        @media(max-width:719px){.city-card{flex-direction:column;align-items:flex-start;justify-content:center;gap:8px;padding:16px}.city-card-meta{flex-wrap:wrap}}
         .city-card-stores{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-size:.72rem;color:var(--pp-muted)}
         .city-card-count{
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:.78rem;font-weight:600;letter-spacing:.01em;
-          color:#2E7D32;background:#E8F0DF;
+          color:var(--pp-signal);background:var(--pp-best-tint);
           padding:4px 10px;border-radius:100px;
           font-variant-numeric:tabular-nums;
         }
         .city-card-count-quiet{
-          color:#5A6260;background:transparent;border:1px solid #DCDED2;
+          color:var(--pp-muted);background:transparent;border:1px solid var(--pp-border);
         }
         .cities-foot{margin-top:28px;text-align:center}
         .cities-all-link{
           font-family:var(--font-ui, system-ui, sans-serif);
-          font-size:.92rem;font-weight:600;color:#2E7D32;
+          font-size:.92rem;font-weight:600;color:var(--pp-signal);
           text-decoration:none;
         }
         .cities-all-link:hover{text-decoration:underline}
 
         /* SECTION 4 — TRUST + BRAND */
         .trust-section{
-          background:#F4F5EF;
-          border-top:1px solid #DCDED2;
+          background:var(--pp-paper);
+          border-top:1px solid var(--pp-border);
           padding:72px 28px;
         }
         .trust-grid{
@@ -956,7 +957,7 @@ export default async function HomePage() {
           aspect-ratio:4/3;
           border-radius:14px;
           overflow:hidden;
-          border:1px solid #DCDED2;
+          border:1px solid var(--pp-border);
         }
         .trust-photo img{object-fit:cover}
         .trust-inner{max-width:560px;margin:0 auto;text-align:left}
@@ -968,25 +969,25 @@ export default async function HomePage() {
         .trust-body{
           font-family:var(--font-display), system-ui, sans-serif;
           font-size:clamp(1.05rem, 1.5vw + .8rem, 1.2rem);
-          line-height:1.7;color:#374151;
+          line-height:1.7;color:var(--pp-body);
           max-width:560px;margin:0 auto 24px;
         }
         .trust-cta-row{display:flex;gap:18px;justify-content:center;align-items:center;flex-wrap:wrap}
         .trust-cta{
           font-family:var(--font-ui, system-ui, sans-serif);
-          font-size:.92rem;font-weight:700;color:#fff;background:#2E7D32;
+          font-size:.92rem;font-weight:700;color:var(--pp-on-dark);background:var(--pp-signal-fill);
           text-decoration:none;padding:11px 22px;border-radius:10px;
           min-height:44px;display:inline-flex;align-items:center;
           transition:background 150ms ease, transform 150ms ease;
         }
-        .trust-cta:hover{background:#2E5320;transform:translateY(-1px)}
+        .trust-cta:hover{background:var(--pp-canopy);transform:translateY(-1px)}
         .trust-cta-muted{
           font-family:var(--font-ui, system-ui, sans-serif);
-          font-size:.92rem;font-weight:600;color:#374151;
+          font-size:.92rem;font-weight:600;color:var(--pp-body);
           text-decoration:none;padding:11px 4px;
           min-height:44px;display:inline-flex;align-items:center;
         }
-        .trust-cta-muted:hover{color:#1C3A22}
+        .trust-cta-muted:hover{color:var(--pp-ink)}
 
         /* RESPONSIVE */
         @media(max-width:768px){
@@ -1037,7 +1038,7 @@ export default async function HomePage() {
           max-width: 1280px;
           margin: 0 auto;
           padding: clamp(1.75rem, 4vw, 3rem) clamp(1rem, 4vw, 2rem) 0;
-          color: var(--color-cream, #F4F5EF);
+          color:var(--pp-canopy-text);
         }
         .pp-home-hero-grid {
           display: grid;
@@ -1083,7 +1084,7 @@ export default async function HomePage() {
               rgba(31, 61, 43, 0.30));
         }
         .pp-home-hero-eyebrow {
-          color: var(--pp-canopy-eyebrow, #9DBE7E);
+          color:var(--pp-canopy-eyebrow, var(--pp-canopy-eyebrow));
           font-family: var(--font-mono, ui-monospace, monospace);
           font-weight: 500;
           font-size: 0.75rem;
@@ -1097,11 +1098,11 @@ export default async function HomePage() {
           font-size: clamp(2.25rem, 4vw + 1rem, 3.75rem);
           line-height: 1.04;
           letter-spacing: -0.035em;
-          color: var(--pp-canopy-text, #F4F1E8);
+          color:var(--pp-canopy-text, #F4F1E8);
           max-width: 18ch;
           margin: 0;
         }
-        .pp-home-hero-dollar { color: var(--pp-signal, #2E7D32); }
+        .pp-home-hero-dollar { color:var(--pp-signal, var(--pp-signal)); }
         .pp-home-hero-h1-region {
           color: rgba(244, 241, 232, 0.62);
           font-weight: 500;
@@ -1144,7 +1145,7 @@ export default async function HomePage() {
           font-size: 0.6875rem;
           letter-spacing: 0.10em;
           text-transform: uppercase;
-          color: var(--pp-canopy-eyebrow, #9DBE7E);
+          color:var(--pp-canopy-eyebrow, var(--pp-canopy-eyebrow));
           margin: 0 0 0.625rem 0.25rem;
         }
         .pp-home-hero-cats-grid {
@@ -1160,9 +1161,9 @@ export default async function HomePage() {
           gap: 0.375rem;
           padding: 0.875rem 0.5rem;
           border-radius: 12px;
-          background: var(--color-cream-pure, #FCFCFA);
+          background:var(--color-cream-pure, var(--pp-surface));
           border: 1px solid transparent;
-          color: var(--pp-ink, #15231A);
+          color:var(--pp-ink, var(--pp-ink));
           text-decoration: none;
           font-family: var(--font-body, system-ui, sans-serif);
           font-weight: 500;
@@ -1172,7 +1173,7 @@ export default async function HomePage() {
           min-height: 78px;
         }
         .pp-home-hero-cat-tile:hover {
-          border-color: var(--pp-signal, #2E7D32);
+          border-color:var(--pp-signal, var(--pp-signal-fill));
         }
         .pp-home-hero-cat-icon { display: inline-flex; }
         .pp-home-hero-cat-count{display:block;font-family:var(--font-mono);font-size:.62rem;letter-spacing:.04em;color:var(--pp-muted);margin-top:2px}
@@ -1416,8 +1417,8 @@ export default async function HomePage() {
       <section
         aria-labelledby="faq-heading"
         style={{
-          background: "#fff",
-          borderTop: "1px solid #DCDED2",
+          background: "var(--pp-surface)",
+          borderTop: "1px solid var(--pp-border)",
           padding: "52px 28px 44px",
         }}
       >
@@ -1427,7 +1428,7 @@ export default async function HomePage() {
             style={{
               fontSize: "clamp(1.3rem,3vw,1.7rem)",
               fontWeight: 700,
-              color: "#1C3A22",
+              color: "var(--pp-ink)",
               letterSpacing: "-.03em",
               marginBottom: 24,
             }}
@@ -1439,8 +1440,8 @@ export default async function HomePage() {
               <div
                 key={i}
                 style={{
-                  background: "#F4F5EF",
-                  border: "1px solid #DCDED2",
+                  background: "var(--pp-paper)",
+                  border: "1px solid var(--pp-border)",
                   borderRadius: 12,
                   padding: "16px 18px",
                 }}
@@ -1449,7 +1450,7 @@ export default async function HomePage() {
                   style={{
                     fontSize: "1rem",
                     fontWeight: 700,
-                    color: "#1C3A22",
+                    color: "var(--pp-ink)",
                     fontFamily: "var(--font-body)",
                     marginBottom: 6,
                   }}
@@ -1459,7 +1460,7 @@ export default async function HomePage() {
                 <dd
                   style={{
                     fontSize: ".92rem",
-                    color: "#374151",
+                    color: "var(--pp-body)",
                     fontFamily: "var(--font-body)",
                     lineHeight: 1.55,
                   }}

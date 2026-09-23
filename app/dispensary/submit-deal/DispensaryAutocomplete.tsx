@@ -80,8 +80,8 @@ export default function DispensaryAutocomplete({
             right: 0,
             top: "100%",
             marginTop: 4,
-            background: "#fff",
-            border: "1px solid #DCDED2",
+            background: "var(--pp-surface)",
+            border: "1px solid var(--pp-border)",
             borderRadius: 10,
             boxShadow: "0 6px 18px rgba(15,31,61,.08)",
             zIndex: 10,
@@ -90,7 +90,7 @@ export default function DispensaryAutocomplete({
           }}
         >
           {loading && (
-            <div style={{ padding: "10px 14px", fontSize: ".8rem", color: "#9ca3af", fontFamily: "system-ui, sans-serif" }}>
+            <div style={{ padding: "10px 14px", fontSize: ".8rem", color: "var(--pp-muted)", fontFamily: "system-ui, sans-serif" }}>
               Searching…
             </div>
           )}
@@ -115,8 +115,8 @@ export default function DispensaryAutocomplete({
                 fontFamily: "system-ui, sans-serif",
               }}
             >
-              <div style={{ fontSize: ".9rem", fontWeight: 700, color: "#1F3D2B" }}>{m.name}</div>
-              <div style={{ fontSize: ".75rem", color: "#6b7280" }}>
+              <div style={{ fontSize: ".9rem", fontWeight: 700, color: "var(--pp-ink)" }}>{m.name}</div>
+              <div style={{ fontSize: ".75rem", color: "var(--pp-muted)" }}>
                 {m.city ? `${m.city}, IL · ${m.slug}` : m.slug}
               </div>
             </button>

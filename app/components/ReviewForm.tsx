@@ -56,12 +56,12 @@ export default function ReviewForm({ slug, name }: { slug: string; name: string 
         .rvf-open:hover{background:var(--pp-best-tint)}
         .rvf form{display:grid;gap:.75rem;max-width:520px;margin-top:.25rem}
         .rvf-stars{display:flex;gap:.15rem}
-        .rvf-star{font-size:1.9rem;line-height:1;min-width:44px;min-height:44px;background:none;border:none;cursor:pointer;color:var(--pp-border);padding:0}
+        .rvf-star{font-size:1.9rem;line-height:1;min-width:44px;min-height:44px;background:none;border:none;cursor:pointer;color:var(--pp-muted);padding:0}
         .rvf-star.on{color:var(--pp-signal)}
         .rvf label{display:grid;gap:.3rem;font-size:.8rem;color:var(--pp-muted)}
         .rvf textarea,.rvf input{font:inherit;font-size:.95rem;padding:.6rem .7rem;border:1px solid var(--pp-border);border-radius:8px;background:var(--pp-surface);color:var(--pp-ink)}
         .rvf textarea{min-height:110px;resize:vertical}
-        .rvf-submit{justify-self:start;font:inherit;font-weight:700;min-height:44px;padding:.6rem 1.2rem;border-radius:8px;border:none;background:var(--pp-signal);color:#fff;cursor:pointer}
+        .rvf-submit{justify-self:start;font:inherit;font-weight:700;min-height:44px;padding:.6rem 1.2rem;border-radius:8px;border:none;background:var(--pp-signal-fill);color:var(--pp-on-dark);cursor:pointer}
         .rvf-submit:disabled{opacity:.6}
         .rvf-msg{font-size:.82rem;color:var(--pp-high);margin:0}
         .rvf-fine{font-size:.74rem;color:var(--pp-muted);margin:0}

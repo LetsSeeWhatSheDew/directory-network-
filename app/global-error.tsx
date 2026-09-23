@@ -23,7 +23,7 @@ export default function GlobalError({
         style={{
           fontFamily: "-apple-system, BlinkMacSystemFont, system-ui, sans-serif",
           background: "var(--pp-paper)",
-          color: "#1F3D2B",
+          color: "var(--pp-ink)",
           minHeight: "100vh",
           display: "flex",
           alignItems: "center",
@@ -34,8 +34,8 @@ export default function GlobalError({
       >
         <div
           style={{
-            background: "#FAFAF7",
-            border: "1px solid #E8E2D5",
+            background: "var(--pp-surface)",
+            border: "1px solid var(--pp-border)",
             borderRadius: 14,
             padding: "32px 28px",
             maxWidth: 460,
@@ -43,10 +43,10 @@ export default function GlobalError({
             boxShadow: "0 4px 12px rgba(31, 61, 43, 0.08)",
           }}
         >
-          <h1 style={{ fontFamily: "inherit", fontSize: "1.5rem", fontWeight: 800, letterSpacing: "-0.025em", marginBottom: 12, color: "#1F3D2B" }}>
+          <h1 style={{ fontFamily: "inherit", fontSize: "1.5rem", fontWeight: 800, letterSpacing: "-0.025em", marginBottom: 12, color: "var(--pp-ink)" }}>
             Something broke
           </h1>
-          <p style={{ fontFamily: "inherit", fontSize: "0.9375rem", color: "#4B5563", lineHeight: 1.55, marginBottom: 20 }}>
+          <p style={{ fontFamily: "inherit", fontSize: "0.9375rem", color: "var(--pp-body)", lineHeight: 1.55, marginBottom: 20 }}>
             We hit an error we can&apos;t recover from. Reload the page or head back home.
           </p>
           <a
@@ -55,8 +55,8 @@ export default function GlobalError({
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
-              background: "#2E7D32",
-              color: "#fff",
+              background: "var(--pp-signal-fill)",
+              color: "var(--pp-on-dark)",
               padding: "12px 22px",
               borderRadius: 9999,
               fontFamily: "inherit",

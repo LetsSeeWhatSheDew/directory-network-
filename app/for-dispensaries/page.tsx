@@ -42,7 +42,7 @@ export default async function ForDispensariesPage() {
       <div className="gp-cta">
         <b>Something missing or wrong?</b>
         <span>Send us the page on your site that shows it — a new deal, a drive-thru, medical sales — and we&apos;ll verify and update the same day.</span>
-        <Link href="/claim" style={{ background: "var(--pp-paper)", color: "var(--pp-canopy)", fontWeight: 700, padding: "10px 16px", borderRadius: 10, textDecoration: "none", alignSelf: "flex-start" }}>Claim your listing</Link>
+        <Link href="/claim" style={{ background: "rgb(255 255 255)", color: "rgb(31 74 50)", fontWeight: 700, padding: "10px 16px", borderRadius: 10, textDecoration: "none", alignSelf: "flex-start" }}>Claim your listing</Link>
       </div>
     </GuideShell>
   );

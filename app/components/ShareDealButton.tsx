@@ -73,7 +73,7 @@ export default function ShareDealButton({
         style={{
           background: "transparent",
           border: "none",
-          color: copied ? "#2E7D32" : "#6b7280",
+          color: copied ? "var(--pp-signal)" : "var(--pp-muted)",
           cursor: "pointer",
           padding: "4px 8px",
           borderRadius: 6,
@@ -107,9 +107,9 @@ export default function ShareDealButton({
           width: "100%",
           minHeight: 44,
           padding: "12px 16px",
-          background: copied ? "#dcfce7" : "#fff",
-          color: copied ? "#14532d" : "#1C3A22",
-          border: `1px solid ${copied ? "#CBE0B4" : "#DCDED2"}`,
+          background: copied ? "var(--pp-best-tint)" : "var(--pp-surface)",
+          color: copied ? "var(--pp-signal-ink)" : "var(--pp-ink)",
+          border: `1px solid ${copied ? "var(--pp-best-border)" : "var(--pp-border)"}`,
           borderRadius: 10,
           fontFamily: "system-ui, sans-serif",
           fontWeight: 700,
@@ -132,9 +132,9 @@ export default function ShareDealButton({
       aria-label="Share this deal"
       title={copied ? "Link copied!" : "Share this deal"}
       style={{
-        background: copied ? "#dcfce7" : "rgba(255,255,255,.9)",
-        border: `1px solid ${copied ? "#CBE0B4" : "#DCDED2"}`,
-        color: copied ? "#14532d" : "#6b7280",
+        background: copied ? "var(--pp-best-tint)" : "var(--pp-surface)",
+        border: `1px solid ${copied ? "var(--pp-best-border)" : "var(--pp-border)"}`,
+        color: copied ? "var(--pp-signal-ink)" : "var(--pp-muted)",
         borderRadius: "50%",
         cursor: "pointer",
         width: 36,

@@ -120,18 +120,18 @@ export default function Nav({ variant = "light", sticky = true }: Props) {
         /* Light variant */
         .pp-nav-light {
           background: transparent;
-          color: var(--color-deep, #1C3A22);
+          color:var(--pp-ink);
         }
-        .pp-nav-light .pp-nav-link { color: var(--color-deep, #1C3A22); }
-        .pp-nav-light .pp-nav-link:hover { color: var(--color-sage-deep, #2E5320); }
+        .pp-nav-light .pp-nav-link { color:var(--pp-ink); }
+        .pp-nav-light .pp-nav-link:hover { color:var(--pp-signal-ink); }
 
         /* Deep variant */
         .pp-nav-deep {
           background: transparent;
-          color: var(--color-cream, #F4F5EF);
+          color:var(--pp-canopy-text);
         }
-        .pp-nav-deep .pp-nav-link { color: var(--color-cream, #F4F5EF); }
-        .pp-nav-deep .pp-nav-link:hover { color: var(--color-sage-vibrant, #9DBE7E); }
+        .pp-nav-deep .pp-nav-link { color:var(--pp-canopy-text); }
+        .pp-nav-deep .pp-nav-link:hover { color:var(--pp-signal); }
 
         /* Sticky behaviour */
         .pp-nav-sticky { position: sticky; top: 0; }
@@ -139,8 +139,8 @@ export default function Nav({ variant = "light", sticky = true }: Props) {
           background: rgba(247, 244, 237, 0.94);
           backdrop-filter: saturate(140%) blur(8px);
           -webkit-backdrop-filter: saturate(140%) blur(8px);
-          border-bottom: 1px solid var(--color-gray-200, #E8E2D5);
-          border-bottom: 1px solid var(--pp-border, #DCDED2);
+          border-bottom:1px solid var(--color-gray-200, var(--pp-border));
+          border-bottom:1px solid var(--pp-border, var(--pp-border));
         }
         .pp-nav-sticky.pp-nav-deep.pp-nav-scrolled {
           background: rgba(31, 61, 43, 0.94);

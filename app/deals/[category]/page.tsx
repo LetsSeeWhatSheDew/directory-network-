@@ -114,7 +114,7 @@ async function getDeals(category: string, city?: string | null) {
       order: "discount_value.desc",
       // Category is filtered in JS (effectiveCategory) because the scraper
       // leaves the column NULL on most rows — pull the full active set.
-      limit: city || category !== "all" ? "100" : "10",
+      limit: "200",
     });
     // Central IL scope — never surface non-CIL deals on the public page.
     viewParams.set("city", `in.${CIL_CITY_IN_LIST}`);
@@ -162,7 +162,7 @@ async function getDeals(category: string, city?: string | null) {
     project_tag: "eq.green",
     is_active: "eq.true",
     order: "discount_value.desc",
-    limit: "10",
+    limit: "200",
   });
 
   if (category !== "all") {
@@ -514,68 +514,68 @@ export default async function DealsPage({
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
         body{font-family:var(--font-body),system-ui,sans-serif;background:var(--pp-paper);color:var(--pp-body);min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;position:sticky;top:0;z-index:100;border-bottom:1px solid #DCDED2}
+        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-surface);position:sticky;top:0;z-index:100;border-bottom:1px solid var(--pp-border)}
         .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
-        .logo-dot{width:8px;height:8px;border-radius:50%;background:#2E7D32;animation:pulse 2.5s infinite}
+        .logo-dot{width:8px;height:8px;border-radius:50%;background:var(--pp-signal-fill);animation:pulse 2.5s infinite}
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-        .logo-text{font-size:1.1rem;font-weight:700;color:#1F3D2B}
-        .logo-text span{color:#2E7D32}
-        .back{font-size:.82rem;color:#6b7280;text-decoration:none;font-family:system-ui,sans-serif}
-        .back:hover{color:#1F3D2B}
+        .logo-text{font-size:1.1rem;font-weight:700;color:var(--pp-ink)}
+        .logo-text span{color:var(--pp-signal)}
+        .back{font-size:.82rem;color:var(--pp-muted);text-decoration:none;font-family:system-ui,sans-serif}
+        .back:hover{color:var(--pp-ink)}
         .page{max-width:800px;margin:0 auto;padding:40px 20px}
-        .cat-tag{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#2E7D32;font-family:system-ui,sans-serif;margin-bottom:8px}
-        .page-title{font-size:clamp(1.5rem,4vw,2.2rem);font-weight:700;color:#1F3D2B;letter-spacing:-.04em;line-height:1.1;margin-bottom:6px}
-        .page-sub{font-size:.88rem;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:24px}
-        .cat-switch{background:#fff;border:1px solid #DCDED2;border-radius:12px;padding:16px;margin-bottom:24px}
-        .cat-switch-label{font-size:.7rem;color:#9ca3af;font-family:system-ui,sans-serif;margin-bottom:10px}
+        .cat-tag{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--pp-signal);font-family:system-ui,sans-serif;margin-bottom:8px}
+        .page-title{font-size:clamp(1.5rem,4vw,2.2rem);font-weight:700;color:var(--pp-ink);letter-spacing:-.04em;line-height:1.1;margin-bottom:6px}
+        .page-sub{font-size:.88rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:24px}
+        .cat-switch{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:12px;padding:16px;margin-bottom:24px}
+        .cat-switch-label{font-size:.7rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:10px}
         .cat-pills{display:flex;gap:8px;flex-wrap:wrap}
-        .cat-pill{font-size:.8rem;font-family:system-ui,sans-serif;font-weight:500;padding:6px 14px;border-radius:100px;text-decoration:none;border:1px solid #DCDED2;color:#6b7280}
-        .cat-pill.active{background:#2E7D32;color:#fff;border-color:#2E7D32}
-        .cat-pill:hover:not(.active){border-color:#9ca3af;color:#374151}
-        .top-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#2E7D32;font-family:system-ui,sans-serif;margin-bottom:10px}
+        .cat-pill{font-size:.8rem;font-family:system-ui,sans-serif;font-weight:500;padding:6px 14px;border-radius:100px;text-decoration:none;border:1px solid var(--pp-border);color:var(--pp-muted)}
+        .cat-pill.active{background:var(--pp-signal-fill);color:var(--pp-on-dark);border-color:var(--pp-signal-fill)}
+        .cat-pill:hover:not(.active){border-color:var(--pp-muted);color:var(--pp-body)}
+        .top-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--pp-signal);font-family:system-ui,sans-serif;margin-bottom:10px}
 
         /* TOP DEAL CARD — savings dominates */
-        .top-card{background:#fff;border:1px solid #DCDED2;border-left:4px solid #2E7D32;border-radius:16px;padding:24px;position:relative;margin-bottom:24px}
+        .top-card{background:var(--pp-surface);border:1px solid var(--pp-border);border-left:4px solid var(--pp-signal-fill);border-radius:16px;padding:24px;position:relative;margin-bottom:24px}
         .deal-grade{position:absolute;top:12px;right:12px;min-width:28px;height:24px;padding:0 8px;display:inline-flex;align-items:center;justify-content:center;border-radius:100px;font-family:system-ui,sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.02em;opacity:.7}
-        .you-save-label{font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:2px}
-        .save-amount{font-size:clamp(2.2rem,8vw,3rem);font-weight:700;color:#2E7D32;letter-spacing:-.04em;line-height:1;margin-bottom:2px}
-        .save-context{font-size:.72rem;color:#9ca3af;font-family:system-ui,sans-serif;margin-bottom:18px}
-        .disp-name{font-size:1.1rem;font-weight:700;color:#1F3D2B;margin-top:4px}
-        .disp-detail{font-size:.8rem;color:#9ca3af;font-family:system-ui,sans-serif;margin-top:2px;margin-bottom:6px}
-        .deal-title-big{font-size:.92rem;font-weight:600;color:#374151;margin-bottom:14px;font-family:system-ui,sans-serif;line-height:1.4;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+        .you-save-label{font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:2px}
+        .save-amount{font-size:clamp(2.2rem,8vw,3rem);font-weight:700;color:var(--pp-signal);letter-spacing:-.04em;line-height:1;margin-bottom:2px}
+        .save-context{font-size:.72rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:18px}
+        .disp-name{font-size:1.1rem;font-weight:700;color:var(--pp-ink);margin-top:4px}
+        .disp-detail{font-size:.8rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-top:2px;margin-bottom:6px}
+        .deal-title-big{font-size:.92rem;font-weight:600;color:var(--pp-body);margin-bottom:14px;font-family:system-ui,sans-serif;line-height:1.4;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
         .attrs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:16px}
-        .attr{font-size:.66rem;color:#9ca3af;background:var(--pp-paper);border-radius:100px;padding:2px 8px;font-family:system-ui,sans-serif}
-        .deal-more-toggle{font-size:.78rem;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:16px;cursor:pointer;text-decoration:none;display:inline-block;list-style:none}
+        .attr{font-size:.66rem;color:var(--pp-muted);background:var(--pp-paper);border-radius:100px;padding:2px 8px;font-family:system-ui,sans-serif}
+        .deal-more-toggle{font-size:.78rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:16px;cursor:pointer;text-decoration:none;display:inline-block;list-style:none}
         .deal-more-toggle::-webkit-details-marker{display:none}
-        .deal-more-toggle:hover{color:#1F3D2B}
-        .card-cta{display:block;width:100%;text-align:center;background:#2E7D32;color:#fff;padding:14px;border-radius:10px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:800;font-size:.95rem;letter-spacing:.02em;transition:background .15s}
-        .card-cta:hover{background:#6BA63B}
+        .deal-more-toggle:hover{color:var(--pp-ink)}
+        .card-cta{display:block;width:100%;text-align:center;background:var(--pp-signal-fill);color:var(--pp-on-dark);padding:14px;border-radius:10px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:800;font-size:.95rem;letter-spacing:.02em;transition:background .15s}
+        .card-cta:hover{background:var(--pp-signal-fill)}
 
         /* ALTERNATIVES — same hierarchy pattern */
-        .alt-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#9ca3af;font-family:system-ui,sans-serif;margin-bottom:12px}
+        .alt-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:12px}
         .alt-cards{display:flex;flex-direction:column;gap:10px;margin-bottom:36px}
-        .alt-card{position:relative;background:#fff;border:1px solid #DCDED2;border-radius:12px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;text-decoration:none;transition:border-color .15s;gap:14px}
-        .alt-card:hover{border-color:#2E7D32}
-        .alt-grade{position:absolute;top:10px;right:12px;font-size:.62rem;color:#9ca3af;font-family:system-ui,sans-serif;font-weight:600;letter-spacing:.08em;opacity:.7}
+        .alt-card{position:relative;background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:12px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;text-decoration:none;transition:border-color .15s;gap:14px}
+        .alt-card:hover{border-color:var(--pp-signal-fill)}
+        .alt-grade{position:absolute;top:10px;right:12px;font-size:.62rem;color:var(--pp-muted);font-family:system-ui,sans-serif;font-weight:600;letter-spacing:.08em;opacity:.7}
         .alt-savings-block{min-width:92px;flex-shrink:0}
-        .alt-savings-label-top{font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:1px}
-        .alt-savings{font-size:1.5rem;font-weight:700;color:#2E7D32;letter-spacing:-.03em;line-height:1}
+        .alt-savings-label-top{font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:1px}
+        .alt-savings{font-size:1.5rem;font-weight:700;color:var(--pp-signal);letter-spacing:-.03em;line-height:1}
         .alt-body{flex:1;min-width:0}
-        .alt-name{font-size:.92rem;font-weight:700;color:#1F3D2B}
-        .alt-deal{font-size:.78rem;color:#374151;font-family:system-ui,sans-serif;margin-top:2px;line-height:1.4}
-        .alt-meta{font-size:.66rem;color:#9ca3af;font-family:system-ui,sans-serif;margin-top:4px}
-        .no-deals{text-align:center;padding:60px 20px;background:#fff;border-radius:16px;border:1px solid #DCDED2}
-        .no-deals-title{font-size:1.2rem;font-weight:700;color:#1F3D2B;margin-bottom:8px}
-        .no-deals-sub{font-size:.875rem;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:20px}
-        .no-deals-link{display:inline-block;background:#1F3D2B;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:700;font-size:.875rem}
-        .city-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#F2F8E9;border:1px solid #C7E5A8;border-radius:10px;padding:10px 14px;margin-bottom:18px;font-family:system-ui,sans-serif;font-size:.82rem;color:#3F6B1F;flex-wrap:wrap}
+        .alt-name{font-size:.92rem;font-weight:700;color:var(--pp-ink)}
+        .alt-deal{font-size:.78rem;color:var(--pp-body);font-family:system-ui,sans-serif;margin-top:2px;line-height:1.4}
+        .alt-meta{font-size:.66rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-top:4px}
+        .no-deals{text-align:center;padding:60px 20px;background:var(--pp-surface);border-radius:16px;border:1px solid var(--pp-border)}
+        .no-deals-title{font-size:1.2rem;font-weight:700;color:var(--pp-ink);margin-bottom:8px}
+        .no-deals-sub{font-size:.875rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:20px}
+        .no-deals-link{display:inline-block;background:var(--pp-canopy);color:var(--pp-on-dark);padding:10px 20px;border-radius:8px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:700;font-size:.875rem}
+        .city-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--pp-best-tint);border:1px solid var(--pp-best-border);border-radius:10px;padding:10px 14px;margin-bottom:18px;font-family:system-ui,sans-serif;font-size:.82rem;color:var(--pp-signal);flex-wrap:wrap}
         .city-banner-pin{font-weight:600}
-        .city-banner-clear{color:#2E7D32;text-decoration:none;font-weight:600;font-size:.78rem}
+        .city-banner-clear{color:var(--pp-signal);text-decoration:none;font-weight:600;font-size:.78rem}
         .city-banner-clear:hover{text-decoration:underline}
-        .statewide-fallback{background:#fff;border:1px solid #DCDED2;border-radius:12px;padding:16px 18px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-family:system-ui,sans-serif;font-size:.85rem;color:#374151}
-        .statewide-fallback-link{color:#2E7D32;text-decoration:none;font-weight:700;white-space:nowrap}
+        .statewide-fallback{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:12px;padding:16px 18px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-family:system-ui,sans-serif;font-size:.85rem;color:var(--pp-body)}
+        .statewide-fallback-link{color:var(--pp-signal);text-decoration:none;font-weight:700;white-space:nowrap}
         .statewide-fallback-link:hover{text-decoration:underline}
-        .source-note{font-size:.68rem;color:#d1cfc6;font-family:system-ui,sans-serif;text-align:center;margin-top:24px}
+        .source-note{font-size:.68rem;color:var(--pp-muted);font-family:system-ui,sans-serif;text-align:center;margin-top:24px}
         @media(max-width:600px){.page{padding:24px 14px}.nav{padding:12px 16px}}
         @media(max-width:480px){
           .page-title{font-size:1.35rem}
@@ -601,7 +601,7 @@ export default async function DealsPage({
         <p
           style={{
             fontSize: "1rem",
-            color: "#6b7280",
+            color: "var(--pp-muted)",
             fontFamily: "system-ui, sans-serif",
             textAlign: "left",
             marginBottom: "18px",
@@ -696,7 +696,7 @@ export default async function DealsPage({
 
               {(() => {
                 const t = trends[topDeal.slug || topDeal.listing_slug];
-                if (t === "better") return <div style={{ fontSize: ".78rem", fontFamily: "system-ui,sans-serif", color: "#2E7D32", fontWeight: 600, marginBottom: 10 }}>↓ Better deal than last week</div>;
+                if (t === "better") return <div style={{ fontSize: ".78rem", fontFamily: "system-ui,sans-serif", color: "var(--pp-signal)", fontWeight: 600, marginBottom: 10 }}>↓ Better deal than last week</div>;
                 if (t === "worse") return <div style={{ fontSize: ".78rem", fontFamily: "system-ui,sans-serif", color: "#f59e0b", fontWeight: 600, marginBottom: 10 }}>↑ Not as good as last week</div>;
                 return null;
               })()}
@@ -724,7 +724,7 @@ export default async function DealsPage({
               {(topDeal.deal_description || topDeal.description) && (
                 <details style={{ marginBottom: 16 }}>
                   <summary className="deal-more-toggle">Show more ▾</summary>
-                  <div style={{ fontSize: ".82rem", color: "#374151", fontFamily: "system-ui,sans-serif", marginTop: 8, lineHeight: 1.5 }}>
+                  <div style={{ fontSize: ".82rem", color: "var(--pp-body)", fontFamily: "system-ui,sans-serif", marginTop: 8, lineHeight: 1.5 }}>
                     {topDeal.deal_description || topDeal.description}
                   </div>
                 </details>
@@ -768,7 +768,7 @@ export default async function DealsPage({
                 {(topDeal.id || topDeal.deal_id) && (
                   <Link
                     href={`/deal/${topDeal.id || topDeal.deal_id}`}
-                    style={{ color: "#6b7280", textDecoration: "none" }}
+                    style={{ color: "var(--pp-muted)", textDecoration: "none" }}
                   >
                     Details →
                   </Link>
@@ -776,7 +776,7 @@ export default async function DealsPage({
                 {(topDeal.slug || topDeal.listing_slug) && (
                   <Link
                     href={`/dispensary/${topDeal.slug || topDeal.listing_slug}`}
-                    style={{ color: "#6b7280", textDecoration: "none" }}
+                    style={{ color: "var(--pp-muted)", textDecoration: "none" }}
                   >
                     {topDeal.name || "Dispensary"} profile →
                   </Link>
@@ -872,7 +872,7 @@ export default async function DealsPage({
                   href={`/deals/${category}`}
                   style={{
                     fontSize: ".9rem",
-                    color: "#2E7D32",
+                    color: "var(--pp-signal)",
                     fontFamily: "system-ui, sans-serif",
                     fontWeight: 600,
                     textDecoration: "none",
@@ -885,7 +885,7 @@ export default async function DealsPage({
 
             <p className="source-note">
               Data from direct dispensary sources ·{" "}
-              <Link href="/dispensary/submit-deal" style={{ color: "#2E7D32", textDecoration: "none" }}>
+              <Link href="/dispensary/submit-deal" style={{ color: "var(--pp-signal)", textDecoration: "none" }}>
                 Submit your deal →
               </Link>
             </p>
@@ -904,7 +904,7 @@ export default async function DealsPage({
             </p>
             {noLocalMatches ? (
               <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-                <Link href={`/deals/${category}`} className="no-deals-link" style={{ background: "#2E7D32" }}>
+                <Link href={`/deals/${category}`} className="no-deals-link" style={{ background: "var(--pp-signal-fill)" }}>
                   See all Central IL deals →
                 </Link>
                 <Link href="/alerts" className="no-deals-link">

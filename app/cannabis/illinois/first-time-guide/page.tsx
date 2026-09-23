@@ -79,50 +79,50 @@ export default function FirstTimeGuidePage() {
       <style>{`
         * { box-sizing: border-box; margin: 0; padding: 0; }
         .guide-root { min-height: 100vh; background: var(--pp-paper); font-family:var(--font-display), system-ui, sans-serif; }
-        .guide-nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 32px; background: #fff; border-bottom: 1px solid #e8e5de; position: sticky; top: 0; z-index: 50; }
+        .guide-nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 32px; background:var(--pp-surface); border-bottom:1px solid var(--pp-border); position: sticky; top: 0; z-index: 50; }
         .guide-nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-        .guide-nav-dot { width: 10px; height: 10px; border-radius: 50%; background: #2E7D32; display: inline-block; }
-        .guide-nav-name { font-size: 1.1rem; font-weight: 700; color: #1F3D2B; letter-spacing: -0.02em; }
-        .guide-nav-accent { color: #2E7D32; }
-        .guide-nav-back { font-size: 0.85rem; color: #6b7280; text-decoration: none; font-family: system-ui, sans-serif; }
-        .guide-breadcrumb { padding: 12px 32px; background: #fff; border-bottom: 1px solid #f0ede6; font-size: 0.8rem; font-family: system-ui, sans-serif; color: #6b7280; display: flex; gap: 8px; }
-        .guide-breadcrumb a { color: #6b7280; text-decoration: none; }
+        .guide-nav-dot { width: 10px; height: 10px; border-radius: 50%; background:var(--pp-signal-fill); display: inline-block; }
+        .guide-nav-name { font-size: 1.1rem; font-weight: 700; color:var(--pp-ink); letter-spacing: -0.02em; }
+        .guide-nav-accent { color:var(--pp-signal); }
+        .guide-nav-back { font-size: 0.85rem; color:var(--pp-muted); text-decoration: none; font-family: system-ui, sans-serif; }
+        .guide-breadcrumb { padding: 12px 32px; background:var(--pp-surface); border-bottom:1px solid var(--pp-border); font-size: 0.8rem; font-family: system-ui, sans-serif; color:var(--pp-muted); display: flex; gap: 8px; }
+        .guide-breadcrumb a { color:var(--pp-muted); text-decoration: none; }
         .guide-inner { max-width: 800px; margin: 0 auto; padding: 40px 24px 80px; }
-        .guide-label { font-size: 0.72rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #2E7D32; margin-bottom: 12px; }
-        .guide-h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; color: #1F3D2B; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 16px; }
-        .guide-intro { font-size: 1.05rem; color: #374151; font-family: system-ui, sans-serif; line-height: 1.75; margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid #e8e5de; }
-        .guide-toc { background: #fff; border-radius: 14px; border: 1px solid #e8e5de; padding: 24px; margin-bottom: 40px; }
-        .guide-toc-title { font-size: 0.75rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #9ca3af; margin-bottom: 12px; }
+        .guide-label { font-size: 0.72rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color:var(--pp-signal); margin-bottom: 12px; }
+        .guide-h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; color:var(--pp-ink); letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 16px; }
+        .guide-intro { font-size: 1.05rem; color:var(--pp-body); font-family: system-ui, sans-serif; line-height: 1.75; margin-bottom: 40px; padding-bottom: 32px; border-bottom:1px solid var(--pp-border); }
+        .guide-toc { background:var(--pp-surface); border-radius: 14px; border:1px solid var(--pp-border); padding: 24px; margin-bottom: 40px; }
+        .guide-toc-title { font-size: 0.75rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color:var(--pp-muted); margin-bottom: 12px; }
         .guide-toc-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-        .guide-toc-item a { font-size: 0.9rem; font-family: system-ui, sans-serif; color: #2E7D32; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .guide-toc-item a { font-size: 0.9rem; font-family: system-ui, sans-serif; color:var(--pp-signal); text-decoration: none; display: flex; align-items: center; gap: 8px; }
         .guide-toc-item a:hover { text-decoration: underline; }
         .guide-section { margin-bottom: 48px; }
-        .guide-h2 { font-size: 1.5rem; font-weight: 700; color: #1F3D2B; letter-spacing: -0.02em; margin-bottom: 16px; padding-top: 8px; }
-        .guide-p { font-size: 0.95rem; color: #374151; font-family: system-ui, sans-serif; line-height: 1.8; margin-bottom: 16px; }
-        .guide-callout { background: #F2F8E9; border-left: 4px solid #2E7D32; border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 20px; }
-        .guide-callout-title { font-size: 0.8rem; font-family: system-ui, sans-serif; font-weight: 700; color: #14532d; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
-        .guide-callout-text { font-size: 0.875rem; color: #3F6B1F; font-family: system-ui, sans-serif; line-height: 1.6; }
-        .guide-warning { background: #fffbeb; border-left: 4px solid #d97706; border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 20px; }
-        .guide-warning-title { font-size: 0.8rem; font-family: system-ui, sans-serif; font-weight: 700; color: #92400e; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
-        .guide-warning-text { font-size: 0.875rem; color: #92400e; font-family: system-ui, sans-serif; line-height: 1.6; }
+        .guide-h2 { font-size: 1.5rem; font-weight: 700; color:var(--pp-ink); letter-spacing: -0.02em; margin-bottom: 16px; padding-top: 8px; }
+        .guide-p { font-size: 0.95rem; color:var(--pp-body); font-family: system-ui, sans-serif; line-height: 1.8; margin-bottom: 16px; }
+        .guide-callout { background:var(--pp-best-tint); border-left:4px solid var(--pp-signal-fill); border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 20px; }
+        .guide-callout-title { font-size: 0.8rem; font-family: system-ui, sans-serif; font-weight: 700; color:var(--pp-signal-ink); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+        .guide-callout-text { font-size: 0.875rem; color:var(--pp-signal); font-family: system-ui, sans-serif; line-height: 1.6; }
+        .guide-warning { background:#fffbeb; border-left:4px solid #d97706; border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 20px; }
+        .guide-warning-title { font-size: 0.8rem; font-family: system-ui, sans-serif; font-weight: 700; color:#92400e; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+        .guide-warning-text { font-size: 0.875rem; color:#92400e; font-family: system-ui, sans-serif; line-height: 1.6; }
         .guide-list { list-style: none; margin: 0 0 20px; display: flex; flex-direction: column; gap: 10px; }
-        .guide-list-item { font-size: 0.95rem; color: #374151; font-family: system-ui, sans-serif; line-height: 1.6; padding-left: 20px; position: relative; }
-        .guide-list-item::before { content: "✓"; position: absolute; left: 0; color: #2E7D32; font-weight: 700; }
+        .guide-list-item { font-size: 0.95rem; color:var(--pp-body); font-family: system-ui, sans-serif; line-height: 1.6; padding-left: 20px; position: relative; }
+        .guide-list-item::before { content: "✓"; position: absolute; left: 0; color:var(--pp-signal); font-weight: 700; }
         .guide-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
-        .guide-table th { background: #1F3D2B; color: #fff; font-size: 0.8rem; font-family: system-ui, sans-serif; font-weight: 700; padding: 10px 14px; text-align: left; }
-        .guide-table td { font-size: 0.875rem; font-family: system-ui, sans-serif; color: #374151; padding: 10px 14px; border-bottom: 1px solid #f0ede6; }
+        .guide-table th { background:var(--pp-canopy); color:var(--pp-on-dark); font-size: 0.8rem; font-family: system-ui, sans-serif; font-weight: 700; padding: 10px 14px; text-align: left; }
+        .guide-table td { font-size: 0.875rem; font-family: system-ui, sans-serif; color:var(--pp-body); padding: 10px 14px; border-bottom:1px solid var(--pp-border); }
         .guide-table tr:nth-child(even) td { background: var(--pp-paper); }
         .guide-faq { margin-bottom: 48px; }
-        .guide-faq-item { border-bottom: 1px solid #e8e5de; padding: 20px 0; }
-        .guide-faq-q { font-size: 1rem; font-weight: 700; color: #1F3D2B; margin-bottom: 8px; line-height: 1.4; }
-        .guide-faq-a { font-size: 0.9rem; color: #374151; font-family: system-ui, sans-serif; line-height: 1.7; }
-        .guide-cta { background: #1F3D2B; border-radius: 16px; padding: 32px; text-align: center; margin-top: 48px; }
-        .guide-cta-title { font-size: 1.4rem; font-weight: 700; color: #fff; letter-spacing: -0.02em; margin-bottom: 10px; }
-        .guide-cta-sub { font-size: 0.9rem; color: #94a3b8; font-family: system-ui, sans-serif; margin-bottom: 20px; }
-        .guide-cta-btn { display: inline-block; background: #2E7D32; color: #fff; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 700; font-size: 0.9rem; }
-        .guide-footer { background: #1F3D2B; padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 80px; }
-        .guide-footer-brand { font-size: 1rem; font-weight: 700; color: #fff; font-family:var(--font-display), system-ui, sans-serif; }
-        .guide-footer-note { font-size: 0.78rem; color: #475569; font-family: system-ui, sans-serif; }
+        .guide-faq-item { border-bottom:1px solid var(--pp-border); padding: 20px 0; }
+        .guide-faq-q { font-size: 1rem; font-weight: 700; color:var(--pp-ink); margin-bottom: 8px; line-height: 1.4; }
+        .guide-faq-a { font-size: 0.9rem; color:var(--pp-body); font-family: system-ui, sans-serif; line-height: 1.7; }
+        .guide-cta { background:var(--pp-canopy); border-radius: 16px; padding: 32px; text-align: center; margin-top: 48px; }
+        .guide-cta-title { font-size: 1.4rem; font-weight: 700; color:var(--pp-on-dark); letter-spacing: -0.02em; margin-bottom: 10px; }
+        .guide-cta-sub { font-size: 0.9rem; color:var(--pp-canopy-eyebrow); font-family: system-ui, sans-serif; margin-bottom: 20px; }
+        .guide-cta-btn { display: inline-block; background:var(--pp-signal-fill); color:var(--pp-on-dark); padding: 12px 28px; border-radius: 8px; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 700; font-size: 0.9rem; }
+        .guide-footer { background:var(--pp-canopy); padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 80px; }
+        .guide-footer-brand { font-size: 1rem; font-weight: 700; color:var(--pp-on-dark); font-family:var(--font-display), system-ui, sans-serif; }
+        .guide-footer-note { font-size: 0.78rem; color:var(--pp-body); font-family: system-ui, sans-serif; }
         @media (max-width: 768px) {
           .guide-nav { padding: 14px 20px; }
           .guide-breadcrumb { padding: 10px 20px; }
@@ -140,7 +140,7 @@ export default function FirstTimeGuidePage() {
           <span>›</span>
           <Link href="/">Central IL</Link>
           <span>›</span>
-          <span style={{ color: "#374151" }}>First-Time Guide</span>
+          <span style={{ color: "var(--pp-body)" }}>First-Time Guide</span>
         </div>
 
         <div className="guide-inner">
@@ -355,14 +355,14 @@ export default function FirstTimeGuidePage() {
                   key={city.slug}
                   href={`/city/${city.slug}`}
                   style={{
-                    background: "#fff",
-                    border: "1px solid #e8e5de",
+                    background: "var(--pp-surface)",
+                    border: "1px solid var(--pp-border)",
                     borderRadius: "8px",
                     padding: "8px 16px",
                     textDecoration: "none",
                     fontFamily: "system-ui, sans-serif",
                     fontSize: "0.875rem",
-                    color: "#1F3D2B",
+                    color: "var(--pp-ink)",
                     fontWeight: 500,
                   }}
                 >

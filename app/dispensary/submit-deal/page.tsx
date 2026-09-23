@@ -11,6 +11,8 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import DispensaryAutocomplete from "./DispensaryAutocomplete";
+import Footer from "../../components/Footer";
+import Nav from "../../components/Nav";
 
 type FormState = {
   dispensary_name: string;
@@ -124,16 +126,12 @@ export default function SubmitDealPage() {
   }
 
   return (
-    <div style={{ fontFamily: "var(--font-display), system-ui, sans-serif", background: "var(--pp-paper)", minHeight: "100vh", color: "#1F3D2B" }}>
-      <nav style={{ padding: "14px 28px", background: "#1F3D2B" }}>
-        <Link href="/" style={{ color: "#fff", textDecoration: "none", fontWeight: 700 }}>
-          puff<span style={{ color: "#93CB5C" }}>price</span>
-        </Link>
-      </nav>
+    <div style={{ fontFamily: "var(--font-display), system-ui, sans-serif", background: "var(--pp-paper)", minHeight: "100vh", color: "var(--pp-ink)" }}>
+      <Nav variant="light" />
 
       <div style={{ maxWidth: 680, margin: "0 auto", padding: "48px 24px" }}>
         <h1 style={{ fontSize: "2rem", marginBottom: 8, letterSpacing: "-0.02em" }}>Submit your deal</h1>
-        <p style={{ color: "#6b7280", fontFamily: "system-ui, sans-serif", marginBottom: 28 }}>
+        <p style={{ color: "var(--pp-muted)", fontFamily: "system-ui, sans-serif", marginBottom: 28 }}>
           Free to submit. We verify within 24 hours. Your deal goes live to
           PuffPrice users across Central Illinois.
         </p>
@@ -176,7 +174,7 @@ export default function SubmitDealPage() {
             />
           </Field>
 
-          <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 16 }}>
             <Field label="PuffPrice listing slug">
               <input value={form.listing_slug} onChange={(e) => update("listing_slug", e.target.value)} style={input} placeholder="auto-filled when you pick above" />
             </Field>
@@ -197,7 +195,7 @@ export default function SubmitDealPage() {
             <textarea value={form.deal_description} onChange={(e) => update("deal_description", e.target.value)} style={{ ...input, height: 90, resize: "vertical" }} placeholder="Details, restrictions, which brands, etc." />
           </Field>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 16 }}>
             <Field label="Category *" error={fieldErrors.category}>
               <select required value={form.category} onChange={(e) => update("category", e.target.value)} style={input}>
                 {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
@@ -210,7 +208,7 @@ export default function SubmitDealPage() {
             </Field>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(96px, 1fr))", gap: 12 }}>
             <Field label="Discount value *" error={fieldErrors.discount_value}>
               <input value={form.discount_value} onChange={(e) => update("discount_value", e.target.value)} style={input} placeholder="30" />
             </Field>
@@ -243,43 +241,43 @@ export default function SubmitDealPage() {
           </Field>
 
           {/* LIVE PREVIEW */}
-          <div style={{ marginTop: 8, padding: "18px", background: "#fff", border: "1px solid #DCDED2", borderRadius: 14, position: "relative" }}>
-            <div style={{ fontSize: ".68rem", fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: "#2E7D32", fontFamily: "system-ui,sans-serif", marginBottom: 10 }}>
+          <div style={{ marginTop: 8, padding: "18px", background: "var(--pp-surface)", border: "1px solid var(--pp-border)", borderRadius: 14, position: "relative" }}>
+            <div style={{ fontSize: ".68rem", fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--pp-signal)", fontFamily: "system-ui,sans-serif", marginBottom: 10 }}>
               Preview — this is how it will appear
             </div>
-            <div style={{ background: "linear-gradient(135deg,#F2F8E9 0%,#fff 60%)", border: "2px solid #2E7D32", borderRadius: 12, padding: 18 }}>
+            <div style={{ background: "linear-gradient(135deg,var(--pp-best-tint) 0%,var(--pp-surface) 60%)", border: "2px solid var(--pp-signal-fill)", borderRadius: 12, padding: 18 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10, marginBottom: 8 }}>
                 <div>
-                  <div style={{ fontSize: "1rem", fontWeight: 700, color: "#1F3D2B" }}>
+                  <div style={{ fontSize: "1rem", fontWeight: 700, color: "var(--pp-ink)" }}>
                     {form.dispensary_name || "Your dispensary"}
                   </div>
-                  <div style={{ fontSize: ".78rem", color: "#9ca3af", fontFamily: "system-ui,sans-serif" }}>
+                  <div style={{ fontSize: ".78rem", color: "var(--pp-muted)", fontFamily: "system-ui,sans-serif" }}>
                     {form.city ? `${form.city}, IL` : "Your city, IL"}
                   </div>
                 </div>
-                <span style={{ fontSize: ".66rem", background: "#dcfce7", color: "#3F6B1F", padding: "2px 8px", borderRadius: 100, fontFamily: "system-ui,sans-serif", fontWeight: 600 }}>
+                <span style={{ fontSize: ".66rem", background: "var(--pp-best-tint)", color: "var(--pp-signal)", padding: "2px 8px", borderRadius: 100, fontFamily: "system-ui,sans-serif", fontWeight: 600 }}>
                   Likely open
                 </span>
               </div>
-              <div style={{ fontSize: "1.02rem", fontWeight: 700, color: "#2E7D32", marginBottom: 6 }}>
+              <div style={{ fontSize: "1.02rem", fontWeight: 700, color: "var(--pp-signal)", marginBottom: 6 }}>
                 {form.deal_title || "Your deal headline"}
               </div>
               {form.deal_description && (
-                <div style={{ fontSize: ".8rem", color: "#374151", fontFamily: "system-ui,sans-serif", lineHeight: 1.5, marginBottom: 10 }}>
+                <div style={{ fontSize: ".8rem", color: "var(--pp-body)", fontFamily: "system-ui,sans-serif", lineHeight: 1.5, marginBottom: 10 }}>
                   {form.deal_description}
                 </div>
               )}
               <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10 }}>
-                {form.category && <span style={{ fontSize: ".68rem", color: "#6b7280", background: "var(--pp-paper)", borderRadius: 100, padding: "2px 9px", fontFamily: "system-ui,sans-serif" }}>{form.category}</span>}
-                {form.is_recurring && <span style={{ fontSize: ".68rem", color: "#6b7280", background: "var(--pp-paper)", borderRadius: 100, padding: "2px 9px", fontFamily: "system-ui,sans-serif" }}>Recurring</span>}
-                {form.expires_at && <span style={{ fontSize: ".68rem", color: "#6b7280", background: "var(--pp-paper)", borderRadius: 100, padding: "2px 9px", fontFamily: "system-ui,sans-serif" }}>Expires {new Date(form.expires_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>}
+                {form.category && <span style={{ fontSize: ".68rem", color: "var(--pp-muted)", background: "var(--pp-paper)", borderRadius: 100, padding: "2px 9px", fontFamily: "system-ui,sans-serif" }}>{form.category}</span>}
+                {form.is_recurring && <span style={{ fontSize: ".68rem", color: "var(--pp-muted)", background: "var(--pp-paper)", borderRadius: 100, padding: "2px 9px", fontFamily: "system-ui,sans-serif" }}>Recurring</span>}
+                {form.expires_at && <span style={{ fontSize: ".68rem", color: "var(--pp-muted)", background: "var(--pp-paper)", borderRadius: 100, padding: "2px 9px", fontFamily: "system-ui,sans-serif" }}>Expires {new Date(form.expires_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>}
               </div>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#F2F8E9", border: "1px solid #C7E5A8", borderRadius: 10, padding: "12px 14px" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "var(--pp-best-tint)", border: "1px solid var(--pp-best-border)", borderRadius: 10, padding: "12px 14px" }}>
                 <div>
-                  <div style={{ fontSize: ".65rem", fontWeight: 700, color: "#3F6B1F", fontFamily: "system-ui,sans-serif", textTransform: "uppercase", letterSpacing: ".12em" }}>You save</div>
-                  <div style={{ fontSize: ".68rem", color: "rgba(22,101,52,.7)", fontFamily: "system-ui,sans-serif", marginTop: 2 }}>vs. Illinois average</div>
+                  <div style={{ fontSize: ".65rem", fontWeight: 700, color: "var(--pp-signal)", fontFamily: "system-ui,sans-serif", textTransform: "uppercase", letterSpacing: ".12em" }}>You save</div>
+                  <div style={{ fontSize: ".68rem", color: "var(--pp-signal-ink)", fontFamily: "system-ui,sans-serif", marginTop: 2 }}>vs. Illinois average</div>
                 </div>
-                <div style={{ fontSize: "1.7rem", fontWeight: 700, color: "#2E7D32", letterSpacing: "-.02em", lineHeight: 1, fontFamily: "var(--font-display), system-ui, sans-serif" }}>
+                <div style={{ fontSize: "1.7rem", fontWeight: 700, color: "var(--pp-signal)", letterSpacing: "-.02em", lineHeight: 1, fontFamily: "var(--font-display), system-ui, sans-serif" }}>
                   {previewSavings || "—"}
                 </div>
               </div>
@@ -287,7 +285,7 @@ export default function SubmitDealPage() {
           </div>
 
           <button type="submit" disabled={submitting} style={{
-            background: "#2E7D32", color: "#fff", border: "none",
+            background: "var(--pp-signal-fill)", color: "var(--pp-on-dark)", border: "none",
             padding: "14px 24px", borderRadius: 10, fontSize: "1rem",
             fontFamily: "system-ui, sans-serif", fontWeight: 700,
             cursor: submitting ? "not-allowed" : "pointer",
@@ -296,11 +294,12 @@ export default function SubmitDealPage() {
             {submitting ? "Submitting…" : "Submit deal"}
           </button>
 
-          <p style={{ fontSize: ".8rem", color: "#9ca3af", fontFamily: "system-ui, sans-serif", textAlign: "center" }}>
+          <p style={{ fontSize: ".8rem", color: "var(--pp-muted)", fontFamily: "system-ui, sans-serif", textAlign: "center" }}>
             Free to submit. We verify within 24 hours before your deal goes live.
           </p>
         </form>
       </div>
+      <Footer />
     </div>
   );
 }
@@ -315,7 +314,7 @@ function Field({
   error?: string;
 }) {
   return (
-    <label style={{ display: "flex", flexDirection: "column", gap: 6, fontFamily: "system-ui, sans-serif", fontSize: ".85rem", color: "#1F3D2B", fontWeight: 600 }}>
+    <label style={{ display: "flex", flexDirection: "column", minWidth: 0, gap: 6, fontFamily: "system-ui, sans-serif", fontSize: ".85rem", color: "var(--pp-ink)", fontWeight: 600 }}>
       {label}
       {children}
       {error && (
@@ -327,11 +326,11 @@ function Field({
 
 const input: React.CSSProperties = {
   padding: "10px 12px",
-  border: "1px solid #d1cfc6",
+  border: "1px solid var(--pp-border)",
   borderRadius: 8,
   fontSize: "1rem",
   fontFamily: "system-ui, sans-serif",
-  color: "#1F3D2B",
-  background: "#fff",
+  color: "var(--pp-ink)",
+  background: "var(--pp-surface)",
   fontWeight: 400,
 };

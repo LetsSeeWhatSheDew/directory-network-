@@ -31,11 +31,11 @@ export default function AboutPage() {
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:var(--font-ui, system-ui, sans-serif);background:var(--pp-paper);color:#1F3D2B;min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #DCDED2;position:sticky;top:0;z-index:100}
+        body{font-family:var(--font-ui, system-ui, sans-serif);background:var(--pp-paper);color:var(--pp-ink);min-height:100vh}
+        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-surface);border-bottom:1px solid var(--pp-border);position:sticky;top:0;z-index:100}
         .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none}
-        .back{font-size:.82rem;color:#6b7280;text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif)}
-        .back:hover{color:#1F3D2B}
+        .back{font-size:.82rem;color:var(--pp-muted);text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif)}
+        .back:hover{color:var(--pp-ink)}
         .about-photo{
           position:relative;
           width:100%;
@@ -59,28 +59,28 @@ export default function AboutPage() {
           text-shadow:0 1px 2px rgba(0,0,0,0.4);
         }
         .wrap{max-width:680px;margin:0 auto;padding:48px 28px 64px}
-        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#2E7D32;font-family:var(--font-ui, system-ui, sans-serif);margin-bottom:14px}
+        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);font-family:var(--font-ui, system-ui, sans-serif);margin-bottom:14px}
         h1{
           font-family:var(--font-display, var(--font-geist-sans));
           font-size:clamp(2rem,4.5vw,3rem);font-weight:700;
-          letter-spacing:-.04em;line-height:1.1;margin-bottom:32px;color:#1F3D2B
+          letter-spacing:-.04em;line-height:1.1;margin-bottom:32px;color:var(--pp-ink)
         }
         p{
           font-family:var(--font-display), system-ui, sans-serif;
-          font-size:1.0625rem;line-height:1.7;margin-bottom:22px;color:#374151
+          font-size:1.0625rem;line-height:1.7;margin-bottom:22px;color:var(--pp-body)
         }
         p:last-of-type{margin-bottom:32px}
         .contact{
-          margin-top:48px;padding-top:24px;border-top:1px solid #DCDED2;
+          margin-top:48px;padding-top:24px;border-top:1px solid var(--pp-border);
           font-family:var(--font-ui, system-ui, sans-serif);
-          font-size:.92rem;color:#6b7280
+          font-size:.92rem;color:var(--pp-muted)
         }
-        .contact a{color:#2E7D32;text-decoration:none;font-weight:600}
+        .contact a{color:var(--pp-signal);text-decoration:none;font-weight:600}
         .contact a:hover{text-decoration:underline}
         .built{
           margin-top:48px;
           font-family:var(--font-ui, system-ui, sans-serif);
-          font-size:.85rem;color:#9ca3af;text-align:center
+          font-size:.85rem;color:var(--pp-muted);text-align:center
         }
         @media(max-width:600px){.wrap{padding:48px 20px 40px}.nav{padding:12px 16px}}
       `}</style>

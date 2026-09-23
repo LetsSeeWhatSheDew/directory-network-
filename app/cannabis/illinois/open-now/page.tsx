@@ -124,48 +124,48 @@ export default async function OpenNowPage() {
       <style>{`
         * { box-sizing: border-box; margin: 0; padding: 0; }
         .on-root { min-height: 100vh; background: var(--pp-paper); font-family:var(--font-display), system-ui, sans-serif; }
-        .on-nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 32px; background: #fff; border-bottom: 1px solid #e8e5de; position: sticky; top: 0; z-index: 50; }
+        .on-nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 32px; background:var(--pp-surface); border-bottom:1px solid var(--pp-border); position: sticky; top: 0; z-index: 50; }
         .on-nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-        .on-nav-dot { width: 10px; height: 10px; border-radius: 50%; background: #2E7D32; display: inline-block; animation: pulse 2s infinite; }
+        .on-nav-dot { width: 10px; height: 10px; border-radius: 50%; background:var(--pp-signal-fill); display: inline-block; animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-        .on-nav-name { font-size: 1.1rem; font-weight: 700; color: #1F3D2B; letter-spacing: -0.02em; }
-        .on-nav-accent { color: #2E7D32; }
-        .on-nav-back { font-size: 0.85rem; color: #6b7280; text-decoration: none; font-family: system-ui, sans-serif; }
-        .on-breadcrumb { padding: 12px 32px; background: #fff; border-bottom: 1px solid #f0ede6; font-size: 0.8rem; font-family: system-ui, sans-serif; color: #6b7280; display: flex; gap: 8px; }
-        .on-breadcrumb a { color: #6b7280; text-decoration: none; }
+        .on-nav-name { font-size: 1.1rem; font-weight: 700; color:var(--pp-ink); letter-spacing: -0.02em; }
+        .on-nav-accent { color:var(--pp-signal); }
+        .on-nav-back { font-size: 0.85rem; color:var(--pp-muted); text-decoration: none; font-family: system-ui, sans-serif; }
+        .on-breadcrumb { padding: 12px 32px; background:var(--pp-surface); border-bottom:1px solid var(--pp-border); font-size: 0.8rem; font-family: system-ui, sans-serif; color:var(--pp-muted); display: flex; gap: 8px; }
+        .on-breadcrumb a { color:var(--pp-muted); text-decoration: none; }
         .on-inner { max-width: 900px; margin: 0 auto; padding: 32px 24px 64px; }
         .on-hero { margin-bottom: 32px; }
-        .on-live-badge { display: inline-flex; align-items: center; gap: 6px; background: #dcfce7; border: 1px solid #C7E5A8; border-radius: 100px; padding: 4px 14px; font-size: 0.75rem; font-family: system-ui, sans-serif; color: #14532d; font-weight: 700; margin-bottom: 12px; }
-        .on-live-dot { width: 6px; height: 6px; border-radius: 50%; background: #2E7D32; animation: pulse 2s infinite; }
-        .on-h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700; color: #1F3D2B; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 10px; }
-        .on-sub { font-size: 0.95rem; color: #6b7280; font-family: system-ui, sans-serif; }
+        .on-live-badge { display: inline-flex; align-items: center; gap: 6px; background:var(--pp-best-tint); border:1px solid var(--pp-best-border); border-radius: 100px; padding: 4px 14px; font-size: 0.75rem; font-family: system-ui, sans-serif; color:var(--pp-signal-ink); font-weight: 700; margin-bottom: 12px; }
+        .on-live-dot { width: 6px; height: 6px; border-radius: 50%; background:var(--pp-signal-fill); animation: pulse 2s infinite; }
+        .on-h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700; color:var(--pp-ink); letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 10px; }
+        .on-sub { font-size: 0.95rem; color:var(--pp-muted); font-family: system-ui, sans-serif; }
         .on-stats { display: flex; gap: 20px; flex-wrap: wrap; margin: 24px 0; }
         .on-stat { display: flex; flex-direction: column; gap: 2px; }
-        .on-stat-num { font-size: 2rem; font-weight: 700; color: #2E7D32; letter-spacing: -0.03em; }
-        .on-stat-num-closed { color: #9ca3af; }
-        .on-stat-label { font-size: 0.75rem; color: #6b7280; font-family: system-ui, sans-serif; }
-        .on-section-title { font-size: 0.7rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #9ca3af; margin-bottom: 12px; margin-top: 32px; }
-        .on-city-title { font-size: 1rem; font-weight: 700; color: #1F3D2B; letter-spacing: -0.01em; margin-bottom: 10px; margin-top: 24px; padding-bottom: 8px; border-bottom: 1px solid #e8e5de; }
-        .on-card { background: #fff; border-radius: 12px; border: 1px solid #e8e5de; padding: 16px 20px; display: flex; gap: 14px; align-items: center; text-decoration: none; margin-bottom: 10px; }
-        .on-card:hover { border-color: #2E7D32; }
+        .on-stat-num { font-size: 2rem; font-weight: 700; color:var(--pp-signal); letter-spacing: -0.03em; }
+        .on-stat-num-closed { color:var(--pp-muted); }
+        .on-stat-label { font-size: 0.75rem; color:var(--pp-muted); font-family: system-ui, sans-serif; }
+        .on-section-title { font-size: 0.7rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color:var(--pp-muted); margin-bottom: 12px; margin-top: 32px; }
+        .on-city-title { font-size: 1rem; font-weight: 700; color:var(--pp-ink); letter-spacing: -0.01em; margin-bottom: 10px; margin-top: 24px; padding-bottom: 8px; border-bottom:1px solid var(--pp-border); }
+        .on-card { background:var(--pp-surface); border-radius: 12px; border:1px solid var(--pp-border); padding: 16px 20px; display: flex; gap: 14px; align-items: center; text-decoration: none; margin-bottom: 10px; }
+        .on-card:hover { border-color:var(--pp-signal-fill); }
         .on-card-closed { opacity: 0.5; }
-        .on-logo { width: 44px; height: 44px; border-radius: 8px; border: 1px solid #e8e5de; background: var(--pp-paper); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; font-size: 1.2rem; font-weight: 700; color: #2E7D32; font-family:var(--font-display), system-ui, sans-serif; }
+        .on-logo { width: 44px; height: 44px; border-radius: 8px; border:1px solid var(--pp-border); background: var(--pp-paper); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; font-size: 1.2rem; font-weight: 700; color:var(--pp-signal); font-family:var(--font-display), system-ui, sans-serif; }
         .on-logo-img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
         .on-info { flex: 1; min-width: 0; }
-        .on-name { font-size: 0.95rem; font-weight: 700; color: #1F3D2B; font-family: system-ui, sans-serif; margin-bottom: 2px; }
-        .on-address { font-size: 0.8rem; color: #6b7280; font-family: system-ui, sans-serif; }
+        .on-name { font-size: 0.95rem; font-weight: 700; color:var(--pp-ink); font-family: system-ui, sans-serif; margin-bottom: 2px; }
+        .on-address { font-size: 0.8rem; color:var(--pp-muted); font-family: system-ui, sans-serif; }
         .on-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
-        .on-open-badge { font-size: 0.72rem; font-family: system-ui, sans-serif; font-weight: 700; color: #14532d; background: #dcfce7; padding: 3px 10px; border-radius: 100px; }
-        .on-closes { font-size: 0.72rem; color: #6b7280; font-family: system-ui, sans-serif; }
+        .on-open-badge { font-size: 0.72rem; font-family: system-ui, sans-serif; font-weight: 700; color:var(--pp-signal-ink); background:var(--pp-best-tint); padding: 3px 10px; border-radius: 100px; }
+        .on-closes { font-size: 0.72rem; color:var(--pp-muted); font-family: system-ui, sans-serif; }
         .on-tags { display: flex; gap: 6px; margin-top: 4px; }
-        .on-tag { font-size: 0.68rem; font-family: system-ui, sans-serif; color: #374151; background: var(--pp-paper); border: 1px solid #e8e5de; padding: 2px 8px; border-radius: 100px; }
-        .on-cta { background: #1F3D2B; border-radius: 14px; padding: 24px; margin-top: 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
-        .on-cta-text { font-size: 0.95rem; font-weight: 700; color: #fff; }
-        .on-cta-sub { font-size: 0.8rem; color: #94a3b8; font-family: system-ui, sans-serif; margin-top: 4px; }
-        .on-cta-btn { background: #2E7D32; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 700; font-size: 0.85rem; white-space: nowrap; }
-        .on-footer { background: #1F3D2B; padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-        .on-footer-brand { font-size: 1rem; font-weight: 700; color: #fff; font-family:var(--font-display), system-ui, sans-serif; }
-        .on-footer-note { font-size: 0.78rem; color: #475569; font-family: system-ui, sans-serif; }
+        .on-tag { font-size: 0.68rem; font-family: system-ui, sans-serif; color:var(--pp-body); background: var(--pp-paper); border:1px solid var(--pp-border); padding: 2px 8px; border-radius: 100px; }
+        .on-cta { background:var(--pp-canopy); border-radius: 14px; padding: 24px; margin-top: 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+        .on-cta-text { font-size: 0.95rem; font-weight: 700; color:var(--pp-on-dark); }
+        .on-cta-sub { font-size: 0.8rem; color:var(--pp-canopy-eyebrow); font-family: system-ui, sans-serif; margin-top: 4px; }
+        .on-cta-btn { background:var(--pp-signal-fill); color:var(--pp-on-dark); padding: 10px 20px; border-radius: 8px; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 700; font-size: 0.85rem; white-space: nowrap; }
+        .on-footer { background:var(--pp-canopy); padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .on-footer-brand { font-size: 1rem; font-weight: 700; color:var(--pp-on-dark); font-family:var(--font-display), system-ui, sans-serif; }
+        .on-footer-note { font-size: 0.78rem; color:var(--pp-body); font-family: system-ui, sans-serif; }
         @media (max-width: 768px) {
           .on-nav { padding: 14px 20px; }
           .on-breadcrumb { padding: 10px 20px; }
@@ -184,7 +184,7 @@ export default async function OpenNowPage() {
           <span>›</span>
           <Link href="/">Central IL</Link>
           <span>›</span>
-          <span style={{ color: "#374151" }}>Open now</span>
+          <span style={{ color: "var(--pp-body)" }}>Open now</span>
         </div>
 
         <div className="on-inner">
@@ -208,9 +208,9 @@ export default async function OpenNowPage() {
           </div>
 
           {openNow.length === 0 ? (
-            <div style={{ background: "#fff", borderRadius: "12px", border: "1px solid #e8e5de", padding: "32px", textAlign: "center" }}>
-              <p style={{ fontSize: "1rem", fontWeight: 700, color: "#1F3D2B", marginBottom: "8px" }}>No dispensaries open right now</p>
-              <p style={{ fontSize: "0.875rem", color: "#6b7280", fontFamily: "system-ui, sans-serif" }}>Check back during business hours — most Central IL dispensaries open between 9–10 AM CT.</p>
+            <div style={{ background: "var(--pp-surface)", borderRadius: "12px", border: "1px solid var(--pp-border)", padding: "32px", textAlign: "center" }}>
+              <p style={{ fontSize: "1rem", fontWeight: 700, color: "var(--pp-ink)", marginBottom: "8px" }}>No dispensaries open right now</p>
+              <p style={{ fontSize: "0.875rem", color: "var(--pp-muted)", fontFamily: "system-ui, sans-serif" }}>Check back during business hours — most Central IL dispensaries open between 9–10 AM CT.</p>
             </div>
           ) : (
             <>
@@ -225,7 +225,7 @@ export default async function OpenNowPage() {
                 return a.localeCompare(b);
               }).map(([city, dispensaries]) => (
                 <div key={city}>
-                  <p className="on-city-title">{city} <span style={{ fontWeight: 400, color: "#6b7280", fontSize: "0.85rem" }}>({dispensaries.length} open)</span></p>
+                  <p className="on-city-title">{city} <span style={{ fontWeight: 400, color: "var(--pp-muted)", fontSize: "0.85rem" }}>({dispensaries.length} open)</span></p>
                   {dispensaries.map(l => {
                     const initial = (l.name ?? "?").charAt(0).toUpperCase();
                     return (

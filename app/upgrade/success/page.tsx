@@ -2,6 +2,8 @@
 // Thank-you page after a successful Stripe Checkout. Single-tier Pro model.
 
 import Link from "next/link";
+import Nav from "../../components/Nav";
+import Footer from "../../components/Footer";
 
 export const metadata = {
   title: "You're Pro — welcome",
@@ -16,12 +18,8 @@ export default async function UpgradeSuccessPage({
   await searchParams;
 
   return (
-    <div style={{ fontFamily: "var(--font-display), system-ui, sans-serif", background: "#1F3D2B", minHeight: "100vh", color: "#fff", display: "flex", flexDirection: "column" }}>
-      <nav style={{ padding: "14px 28px" }}>
-        <Link href="/" style={{ color: "#fff", textDecoration: "none", fontWeight: 700, fontSize: "1.15rem" }}>
-          puff<span style={{ color: "#93CB5C" }}>price</span>
-        </Link>
-      </nav>
+    <div style={{ fontFamily: "var(--font-display), system-ui, sans-serif", background: "var(--pp-paper)", minHeight: "100vh", color: "var(--pp-ink)", display: "flex", flexDirection: "column" }}>
+      <Nav variant="light" />
 
       <main style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 24px" }}>
         <div style={{ maxWidth: 560, textAlign: "center" }}>
@@ -40,33 +38,33 @@ export default async function UpgradeSuccessPage({
             You&apos;re Pro.
           </h1>
 
-          <p style={{ fontSize: "1.1rem", color: "rgba(255,255,255,0.7)", fontFamily: "system-ui, sans-serif", lineHeight: 1.6, marginBottom: 32 }}>
+          <p style={{ fontSize: "1.1rem", color: "var(--pp-muted)", fontFamily: "system-ui, sans-serif", lineHeight: 1.6, marginBottom: 32 }}>
             You&apos;ll get instant email alerts when dispensaries near you post
             a deal worth knowing about.
           </p>
 
           <div style={{
-            background: "rgba(255,255,255,0.05)",
-            border: "1px solid rgba(255,255,255,0.1)",
+            background: "var(--pp-surface)",
+            border: "1px solid var(--pp-border)",
             borderRadius: 14,
             padding: 24,
             marginBottom: 32,
             textAlign: "left",
             fontFamily: "system-ui, sans-serif",
           }}>
-            <h2 style={{ fontSize: ".8rem", textTransform: "uppercase", letterSpacing: ".12em", color: "#93CB5C", marginBottom: 12, fontWeight: 700 }}>
+            <h2 style={{ fontSize: ".8rem", textTransform: "uppercase", letterSpacing: ".12em", color: "var(--pp-signal)", marginBottom: 12, fontWeight: 700 }}>
               What happens next
             </h2>
-            <ol style={{ paddingLeft: 20, margin: 0, display: "flex", flexDirection: "column", gap: 10, color: "rgba(255,255,255,0.85)", fontSize: ".9rem" }}>
-              <li>Watch for a confirmation text to the phone number you gave us.</li>
-              <li>Reply with your ZIP code to set your deal-alert radius.</li>
-              <li>Alerts start within 24 hours — usually 2&ndash;5 per week, never more than one per day.</li>
+            <ol style={{ paddingLeft: 20, margin: 0, display: "flex", flexDirection: "column", gap: 10, color: "var(--pp-muted)", fontSize: ".9rem" }}>
+              <li>Watch your inbox for a confirmation email from PuffPrice.</li>
+              <li>Set your city, radius and categories on your <a href="/alerts/preferences" style={{ color: "var(--pp-signal)" }}>alert preferences</a>.</li>
+              <li>Alerts come by email and browser notification — never by text. Usually 2&ndash;5 a week, never more than one a day.</li>
             </ol>
           </div>
 
           <Link href="/" style={{
             display: "inline-block",
-            background: "#2E7D32", color: "#fff",
+            background: "var(--pp-signal-fill)", color: "var(--pp-on-dark)",
             padding: "12px 30px", borderRadius: 10,
             textDecoration: "none", fontFamily: "system-ui, sans-serif",
             fontWeight: 700, fontSize: "1rem",
@@ -74,11 +72,12 @@ export default async function UpgradeSuccessPage({
             Back to home
           </Link>
 
-          <p style={{ marginTop: 28, fontSize: ".75rem", color: "rgba(255,255,255,0.4)", fontFamily: "system-ui, sans-serif" }}>
+          <p style={{ marginTop: 28, fontSize: ".75rem", color: "var(--pp-muted)", fontFamily: "system-ui, sans-serif" }}>
             Questions? Email matthew@jacarandapeoria.com
           </p>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

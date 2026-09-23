@@ -85,13 +85,13 @@ export default function EndingSoonRow({ deals }: { deals: EndingSoonDeal[] }) {
             href={href}
             style={{
               flexShrink: 0,
-              background: "#fff",
+              background: "var(--pp-surface)",
               border: "1px solid #fde68a",
               borderLeft: "4px solid #f59e0b",
               borderRadius: 12,
               padding: "12px 14px",
               textDecoration: "none",
-              color: "#1C3A22",
+              color: "var(--pp-ink)",
               fontFamily: "system-ui, sans-serif",
               minWidth: 220,
               maxWidth: 280,
@@ -126,7 +126,7 @@ export default function EndingSoonRow({ deals }: { deals: EndingSoonDeal[] }) {
             <div
               style={{
                 fontSize: ".78rem",
-                color: "#374151",
+                color: "var(--pp-body)",
                 marginTop: 2,
                 lineHeight: 1.4,
                 overflow: "hidden",
@@ -141,7 +141,7 @@ export default function EndingSoonRow({ deals }: { deals: EndingSoonDeal[] }) {
               <div
                 style={{
                   fontSize: ".7rem",
-                  color: "#9ca3af",
+                  color: "var(--pp-muted)",
                   marginTop: 4,
                 }}
               >

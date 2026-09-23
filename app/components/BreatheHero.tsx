@@ -54,7 +54,7 @@ const CSS = `
 .bh-deal .n{font-family:var(--font-breath);font-size:1.2rem;line-height:1.2}
 .bh-deal .s{font-size:.82rem;color:var(--pp-muted);margin-top:2px}
 .bh-pill{flex:0 0 auto;font-family:var(--font-mono);font-weight:700;font-size:1.05rem;color:var(--pp-signal);background:#fff;border-radius:999px;padding:7px 13px;box-shadow:0 6px 20px rgba(47,107,69,.12)}
-.bh-cats{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 6px}
+.bh-cats{display:flex;gap:8px;overflow-x:auto;max-width:100%;min-width:0;align-self:stretch;scrollbar-width:none;padding:2px 2px 6px}
 .bh-cats::-webkit-scrollbar{display:none}
 .bh-cat{flex:0 0 auto;display:inline-flex;gap:6px;align-items:baseline;padding:9px 14px;border-radius:999px;background:rgba(255,255,255,.7);border:1px solid var(--pp-border);color:var(--pp-ink);text-decoration:none;font-size:.9rem}
 .bh-cat small{font-family:var(--font-mono);font-size:.72rem;color:var(--pp-muted)}
@@ -64,6 +64,7 @@ html[data-daypart="night"] .bh h1.bh-h1{color:#EEF4EE}
 html[data-daypart="night"] .bh-h1 i{color:#9FE0B0}
 html[data-daypart="night"] .bh-sub,html[data-daypart="night"] .bh-core span,html[data-daypart="night"] .bh-cue,html[data-daypart="night"] .bh-deal .s,html[data-daypart="night"] .bh-cat small{color:#A8BBAD}
 html[data-daypart="night"] .bh-sub b{color:#EEF4EE}
+html[data-daypart="night"] .bh-loc{background:rgba(21,36,28,.85);box-shadow:none}
 html[data-daypart="night"] .bh-core b{color:#9FE0B0}
 html[data-daypart="night"] .bh-orb{background:radial-gradient(circle at 50% 45%,rgba(214,245,222,.55) 0%,rgba(120,200,150,.28) 40%,rgba(120,200,150,0) 70%)}
 html[data-daypart="night"] .bh-ring{border-color:rgba(159,224,176,.22)}

@@ -105,9 +105,9 @@ export default async function PuffPriceIndexCard() {
       </h2>
       <style>{`
         .ppi-card{
-          background:#fff;
-          border:1px solid #DCDED2;
-          border-left:4px solid #2E7D32;
+          background:var(--pp-surface);
+          border:1px solid var(--pp-border);
+          border-left:4px solid var(--pp-signal-fill);
           border-radius:14px;
           padding:28px 28px 24px;
 
@@ -132,12 +132,12 @@ export default async function PuffPriceIndexCard() {
         .ppi-eyebrow{
           font-family:system-ui,sans-serif;
           font-size:.7rem;font-weight:700;letter-spacing:.14em;
-          text-transform:uppercase;color:#2E7D32;
+          text-transform:uppercase;color:var(--pp-signal);
           margin-bottom:8px;
         }
         .ppi-price-line,.ppi-teaser-price{
           font-family:var(--font-display), system-ui, sans-serif;
-          color:#1C3A22;
+          color:var(--pp-ink);
           letter-spacing:-.04em;
           line-height:1;
           display:flex;align-items:baseline;gap:0;
@@ -146,7 +146,7 @@ export default async function PuffPriceIndexCard() {
         .ppi-currency{
           font-size:clamp(1.6rem,3.4vw,2.1rem);
           font-weight:700;
-          color:#2E7D32;
+          color:var(--pp-signal);
           margin-right:2px;
         }
         .ppi-dollars{
@@ -156,31 +156,31 @@ export default async function PuffPriceIndexCard() {
         .ppi-cents{
           font-size:clamp(1.8rem,4.2vw,2.6rem);
           font-weight:700;
-          color:#374151;
+          color:var(--pp-body);
         }
         .ppi-teaser-price .ppi-dollars,
         .ppi-teaser-price .ppi-cents{
-          color:#d1d5db;
+          color:var(--pp-muted);
         }
         .ppi-unit{
           font-family:system-ui,sans-serif;
           font-size:clamp(.95rem,1.8vw,1.15rem);
           font-weight:500;
-          color:#6b7280;
+          color:var(--pp-muted);
           margin-left:6px;
           letter-spacing:0;
         }
         .ppi-subhead{
           font-family:var(--font-display), system-ui, sans-serif;
           font-size:clamp(.95rem,1.7vw,1.05rem);
-          color:#374151;
+          color:var(--pp-body);
           margin-bottom:14px;
           line-height:1.4;
           max-width:46ch;
         }
         .ppi-progress{
           height:6px;
-          background:#F4F5EF;
+          background:var(--pp-paper);
           border-radius:100px;
           overflow:hidden;
           margin:4px 0 12px;
@@ -188,17 +188,17 @@ export default async function PuffPriceIndexCard() {
         }
         .ppi-progress-fill{
           height:100%;
-          background:#2E7D32;
+          background:var(--pp-signal-fill);
           border-radius:100px;
           transition:width .4s ease-out;
         }
         .ppi-meta{
           font-family:system-ui,sans-serif;
           font-size:.8rem;
-          color:#6b7280;
+          color:var(--pp-muted);
         }
         .ppi-link{
-          color:#2E7D32;
+          color:var(--pp-signal);
           text-decoration:none;
           font-weight:600;
         }

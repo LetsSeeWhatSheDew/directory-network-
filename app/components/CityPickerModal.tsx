@@ -254,10 +254,10 @@ export default function CityPickerModal({ open, onClose, onPicked }: Props) {
           position: relative;
           width: 100%;
           max-width: 460px;
-          background: var(--color-cream-pure, #FCFCFA);
-          border: 1px solid var(--color-gray-200, #E8E2D5);
+          background:var(--color-cream-pure, var(--pp-surface));
+          border:1px solid var(--color-gray-200, var(--pp-border));
           border-radius: 18px;
-          border: 1px solid var(--pp-border, #DCDED2);
+          border:1px solid var(--pp-border, var(--pp-border));
           padding: 1.75rem 1.5rem 1.5rem;
           animation: pp-citypicker-pop 280ms cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -271,18 +271,18 @@ export default function CityPickerModal({ open, onClose, onPicked }: Props) {
           right: 0.875rem;
           background: transparent;
           border: none;
-          color: var(--color-gray-500, #6B7280);
+          color:var(--color-gray-500, var(--pp-muted));
           cursor: pointer;
           padding: 6px;
           border-radius: 8px;
         }
         .pp-citypicker-close:hover {
-          background: var(--color-gray-100, #F1EEE7);
-          color: var(--color-deep, #1C3A22);
+          background:var(--color-gray-100, var(--pp-paper));
+          color:var(--pp-ink);
         }
         .pp-citypicker-headline {
           display: flex; align-items: center; gap: 0.5rem;
-          color: var(--color-sage, #2E7D32);
+          color:var(--pp-signal);
           margin-bottom: 0.5rem;
         }
         .pp-citypicker-headline h2 {
@@ -290,13 +290,13 @@ export default function CityPickerModal({ open, onClose, onPicked }: Props) {
           font-weight: 800;
           font-size: 1.4rem;
           letter-spacing: -0.025em;
-          color: var(--color-deep, #1C3A22);
+          color:var(--pp-ink);
           margin: 0;
         }
         .pp-citypicker-sub {
           font-family: var(--font-body);
           font-size: 0.92rem;
-          color: var(--color-gray-600, #4B5563);
+          color:var(--color-gray-600, var(--pp-body));
           margin: 0 0 1.25rem;
           line-height: 1.45;
         }
@@ -307,9 +307,9 @@ export default function CityPickerModal({ open, onClose, onPicked }: Props) {
           margin-bottom: 1rem;
         }
         .pp-citypicker-primary {
-          background: var(--color-sage, #2E7D32);
-          color: var(--color-deep, #1C3A22);
-          border: 1px solid var(--color-sage, #2E7D32);
+          background:var(--pp-signal-fill);
+          color:rgb(255 255 255);
+          border:1px solid var(--pp-signal-fill);
           border-radius: 12px;
           padding: 0.875rem 1rem;
           font-family: var(--font-body);
@@ -320,27 +320,27 @@ export default function CityPickerModal({ open, onClose, onPicked }: Props) {
           transition: background-color 160ms ease, transform 160ms ease;
         }
         .pp-citypicker-primary:hover {
-          background: var(--color-sage-vibrant, #9DBE7E);
-          border-color: var(--color-sage-vibrant, #9DBE7E);
+          background:var(--pp-signal-fill);
+          border-color:var(--pp-signal-fill);
         }
         .pp-citypicker-primary:active { transform: translateY(1px); }
         .pp-citypicker-toggle {
           display: block;
           width: 100%;
           background: transparent;
-          border: 1px solid var(--color-gray-200, #E8E2D5);
+          border:1px solid var(--color-gray-200, var(--pp-border));
           border-radius: 12px;
           padding: 0.625rem 1rem;
           font-family: var(--font-body);
           font-weight: 600;
           font-size: 0.875rem;
-          color: var(--color-gray-700, #374151);
+          color:var(--color-gray-700, var(--pp-body));
           cursor: pointer;
           margin-bottom: 0.5rem;
         }
         .pp-citypicker-toggle:hover {
-          border-color: var(--color-gray-300, #D1CABB);
-          color: var(--color-deep, #1C3A22);
+          border-color:var(--color-gray-300, #D1CABB);
+          color:var(--pp-ink);
         }
         .pp-citypicker-grid {
           display: grid;
@@ -350,8 +350,8 @@ export default function CityPickerModal({ open, onClose, onPicked }: Props) {
         }
         .pp-citypicker-grid-item {
           background: transparent;
-          color: var(--color-gray-700, #374151);
-          border: 1px solid var(--color-gray-200, #E8E2D5);
+          color:var(--color-gray-700, var(--pp-body));
+          border:1px solid var(--color-gray-200, var(--pp-border));
           border-radius: 10px;
           padding: 0.625rem 0.75rem;
           font-family: var(--font-body);
@@ -362,12 +362,12 @@ export default function CityPickerModal({ open, onClose, onPicked }: Props) {
           min-height: 40px;
         }
         .pp-citypicker-grid-item:hover {
-          border-color: var(--color-sage, #2E7D32);
-          color: var(--color-deep, #1C3A22);
+          border-color:var(--pp-signal-fill);
+          color:var(--pp-ink);
         }
         .pp-citypicker-divider {
           height: 1px;
-          background: var(--color-gray-200, #E8E2D5);
+          background:var(--color-gray-200, var(--pp-paper));
           margin: 0.875rem 0 0.75rem;
         }
         .pp-citypicker-gps {
@@ -376,19 +376,19 @@ export default function CityPickerModal({ open, onClose, onPicked }: Props) {
           gap: 0.5rem;
           background: transparent;
           border: none;
-          color: var(--color-sage-deep, #2E5320);
+          color:var(--pp-signal-ink);
           font-family: var(--font-body);
           font-weight: 600;
           font-size: 0.875rem;
           padding: 0.5rem 0.25rem;
           cursor: pointer;
         }
-        .pp-citypicker-gps:hover { color: var(--color-deep, #1C3A22); }
-        .pp-citypicker-gps:disabled { color: var(--color-gray-400, #9CA3AF); cursor: wait; }
+        .pp-citypicker-gps:hover { color:var(--pp-ink); }
+        .pp-citypicker-gps:disabled { color:var(--color-gray-400, var(--pp-muted)); cursor: wait; }
         .pp-citypicker-error {
           font-family: var(--font-body);
           font-size: 0.82rem;
-          color: #B91C1C;
+          color:#B91C1C;
           margin: 0.5rem 0 0;
         }
       `}</style>

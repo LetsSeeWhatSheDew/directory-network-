@@ -26,9 +26,9 @@ export default function EarlyAccessPage() {
   return (
     <div style={{
       fontFamily: "var(--font-display), system-ui, sans-serif",
-      background: "linear-gradient(180deg, #1F3D2B 0%, #142847 100%)",
+      background: "linear-gradient(180deg, var(--pp-canopy) 0%, #142847 100%)",
       minHeight: "100vh",
-      color: "#fff",
+      color: "var(--pp-on-dark)",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
@@ -39,7 +39,7 @@ export default function EarlyAccessPage() {
 
         {/* Logo (small, no nav) */}
         <Link href="/" style={{
-          color: "#fff",
+          color: "var(--pp-on-dark)",
           textDecoration: "none",
           fontWeight: 700,
           fontSize: "1rem",
@@ -47,7 +47,7 @@ export default function EarlyAccessPage() {
           marginBottom: 32,
           display: "inline-block",
         }}>
-          puff<span style={{ color: "#93CB5C" }}>price</span>
+          puff<span style={{ color: "var(--pp-canopy-eyebrow)" }}>price</span>
         </Link>
 
         {/* Personal headline */}
@@ -58,7 +58,7 @@ export default function EarlyAccessPage() {
           marginBottom: 16,
         }}>
           You&apos;re early.<br />
-          <em style={{ color: "#93CB5C", fontStyle: "normal" }}>That&apos;s a good thing.</em>
+          <em style={{ color: "var(--pp-canopy-eyebrow)", fontStyle: "normal" }}>That&apos;s a good thing.</em>
         </h1>
 
         <p style={{
@@ -108,7 +108,7 @@ export default function EarlyAccessPage() {
                 borderRadius: 10,
                 border: "1px solid rgba(255,255,255,0.15)",
                 background: "rgba(255,255,255,0.08)",
-                color: "#fff",
+                color: "var(--pp-on-dark)",
                 fontSize: "1rem",
                 fontFamily: "system-ui, sans-serif",
               }}
@@ -130,7 +130,7 @@ export default function EarlyAccessPage() {
                 borderRadius: 10,
                 border: "1px solid rgba(255,255,255,0.15)",
                 background: "rgba(255,255,255,0.08)",
-                color: "#fff",
+                color: "var(--pp-on-dark)",
                 fontSize: "1rem",
                 fontFamily: "system-ui, sans-serif",
               }}
@@ -140,8 +140,8 @@ export default function EarlyAccessPage() {
           <button
             type="submit"
             style={{
-              background: "#2E7D32",
-              color: "#fff",
+              background: "var(--pp-signal-fill)",
+              color: "var(--pp-on-dark)",
               border: "none",
               padding: "14px 22px",
               borderRadius: 10,
@@ -175,7 +175,7 @@ export default function EarlyAccessPage() {
         }}>
           Built by <strong style={{ color: "rgba(255,255,255,0.8)" }}>Matthew Burns</strong> in Peoria, IL.
           <br />
-          Questions? <a href="mailto:matthew@jacarandapeoria.com" style={{ color: "#93CB5C", textDecoration: "none" }}>matthew@jacarandapeoria.com</a>
+          Questions? <a href="mailto:matthew@jacarandapeoria.com" style={{ color: "var(--pp-canopy-eyebrow)", textDecoration: "none" }}>matthew@jacarandapeoria.com</a>
         </p>
       </div>
     </div>

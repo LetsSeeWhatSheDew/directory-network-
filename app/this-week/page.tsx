@@ -63,7 +63,7 @@ export default async function ThisWeekPage() {
         .tw-lede{color:var(--pp-muted);max-width:60ch;margin:0 0 20px}
         .tw-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--pp-border);border:1px solid var(--pp-border);border-radius:14px;overflow:hidden;margin:0 0 28px}
         .tw-stat{background:var(--pp-surface);padding:16px}
-        .tw-stat b{display:block;font-family:var(--font-mono);font-size:1.7rem;font-weight:700;color:var(--pp-canopy);line-height:1}
+        .tw-stat b{display:block;font-family:var(--font-mono);font-size:1.7rem;font-weight:700;color:var(--pp-signal-ink);line-height:1}
         .tw-stat span{display:block;margin-top:6px;font-size:.8rem;color:var(--pp-muted)}
         @media(max-width:640px){.tw-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
         .tw-h2{font-family:var(--font-display);font-size:1.2rem;margin:28px 0 10px}
@@ -81,7 +81,7 @@ export default async function ThisWeekPage() {
         .tw-city span{display:block;font-size:.82rem;color:var(--pp-muted);margin-top:2px}
         .tw-note{font-size:.82rem;color:var(--pp-muted);margin-top:22px}
         .tw-cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-top:28px;padding:18px;border-radius:14px;background:var(--pp-canopy);color:var(--pp-canopy-text)}
-        .tw-cta a{background:var(--pp-paper);color:var(--pp-canopy);font-weight:700;padding:10px 16px;border-radius:10px;text-decoration:none}
+        .tw-cta a{background:var(--pp-paper);color:var(--pp-signal-ink);font-weight:700;padding:10px 16px;border-radius:10px;text-decoration:none}
       `}</style>
       <main className="tw-wrap">
         <div className="tw-eyebrow">Weekly report · {range || "Central Illinois"}</div>

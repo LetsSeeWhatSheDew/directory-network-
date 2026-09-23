@@ -244,12 +244,12 @@ export default function HomeDealCards({
         <div className="deal-cards">
           {[0, 1, 2].map((i) => (
             <div key={`skel-${i}`} className="deal-card" style={{ padding: 18, minHeight: 220 }} aria-hidden="true">
-              <div style={{ height: 14, width: "55%", borderRadius: 6, background: "#DCDED2", marginBottom: 8 }} />
-              <div style={{ height: 10, width: "35%", borderRadius: 5, background: "#f0ece3", marginBottom: 18 }} />
-              <div style={{ height: 16, width: "75%", borderRadius: 6, background: "#DCDED2", marginBottom: 10 }} />
-              <div style={{ height: 10, width: "92%", borderRadius: 5, background: "#f0ece3", marginBottom: 6 }} />
-              <div style={{ height: 10, width: "68%", borderRadius: 5, background: "#f0ece3", marginBottom: 18 }} />
-              <div style={{ height: 42, width: "100%", borderRadius: 10, background: "#E8F0DF", border: "1px solid #CBE0B4" }} />
+              <div style={{ height: 14, width: "55%", borderRadius: 6, background: "var(--pp-border)", marginBottom: 8 }} />
+              <div style={{ height: 10, width: "35%", borderRadius: 5, background: "var(--pp-paper)", marginBottom: 18 }} />
+              <div style={{ height: 16, width: "75%", borderRadius: 6, background: "var(--pp-border)", marginBottom: 10 }} />
+              <div style={{ height: 10, width: "92%", borderRadius: 5, background: "var(--pp-paper)", marginBottom: 6 }} />
+              <div style={{ height: 10, width: "68%", borderRadius: 5, background: "var(--pp-paper)", marginBottom: 18 }} />
+              <div style={{ height: 42, width: "100%", borderRadius: 10, background: "var(--pp-best-tint)", border: "1px solid var(--pp-best-border)" }} />
             </div>
           ))}
         </div>
@@ -258,26 +258,26 @@ export default function HomeDealCards({
     return (
       <div
         style={{
-          background: "#fff",
-          border: "1px solid #DCDED2",
+          background: "var(--pp-surface)",
+          border: "1px solid var(--pp-border)",
           borderRadius: 14,
           padding: "28px 24px",
           textAlign: "center",
           fontFamily: "system-ui, sans-serif",
         }}
       >
-        <div style={{ fontFamily: "var(--font-display), system-ui, sans-serif", fontSize: "1.1rem", fontWeight: 700, color: "#1C3A22", marginBottom: 6 }}>
+        <div style={{ fontFamily: "var(--font-display), system-ui, sans-serif", fontSize: "1.1rem", fontWeight: 700, color: "var(--pp-ink)", marginBottom: 6 }}>
           We're refreshing Central IL deals — check back soon.
         </div>
-        <p style={{ fontSize: ".9rem", color: "#545B52", margin: "0 auto 14px", maxWidth: 420, lineHeight: 1.5 }}>
+        <p style={{ fontSize: ".9rem", color: "var(--pp-body)", margin: "0 auto 14px", maxWidth: 420, lineHeight: 1.5 }}>
           Or get an alert the moment a new deal drops near you.
         </p>
         <Link
           href="/alerts"
           style={{
             display: "inline-block",
-            background: "#2E7D32",
-            color: "#fff",
+            background: "var(--pp-signal-fill)",
+            color: "var(--pp-on-dark)",
             padding: "10px 20px",
             borderRadius: 10,
             fontWeight: 700,
@@ -320,7 +320,7 @@ export default function HomeDealCards({
                 display: "inline-flex",
                 gap: 6,
                 padding: 4,
-                background: "#f0ece3",
+                background: "var(--pp-paper)",
                 borderRadius: 100,
                 marginTop: 12,
                 fontFamily: "system-ui, sans-serif",
@@ -332,8 +332,8 @@ export default function HomeDealCards({
                 aria-selected={mode === "near"}
                 onClick={() => setMode("near")}
                 style={{
-                  background: mode === "near" ? "#2E7D32" : "transparent",
-                  color: mode === "near" ? "#fff" : "#545B52",
+                  background: mode === "near" ? "var(--pp-signal-fill)" : "transparent",
+                  color: mode === "near" ? "var(--pp-on-dark)" : "var(--pp-body)",
                   border: "none",
                   borderRadius: 100,
                   padding: "6px 14px",
@@ -351,8 +351,8 @@ export default function HomeDealCards({
                 aria-selected={mode === "all"}
                 onClick={() => setMode("all")}
                 style={{
-                  background: mode === "all" ? "#2E7D32" : "transparent",
-                  color: mode === "all" ? "#fff" : "#545B52",
+                  background: mode === "all" ? "var(--pp-signal-fill)" : "transparent",
+                  color: mode === "all" ? "var(--pp-on-dark)" : "var(--pp-body)",
                   border: "none",
                   borderRadius: 100,
                   padding: "6px 14px",
@@ -372,7 +372,7 @@ export default function HomeDealCards({
             href="/deals/all"
             style={{
               fontSize: ".85rem",
-              color: "#2E7D32",
+              color: "var(--pp-signal)",
               fontFamily: "system-ui, sans-serif",
               fontWeight: 600,
               textDecoration: "none",
@@ -448,7 +448,7 @@ export default function HomeDealCards({
               {(() => {
                 const n = confirmed?.[(d.deal_id || d.id) as string] || 0;
                 return n > 0 ? (
-                  <div className="pp-confirmed-line" style={{ fontSize: ".78rem", fontWeight: 600, color: "var(--pp-canopy)", margin: "2px 0 6px" }}>
+                  <div className="pp-confirmed-line" style={{ fontSize: ".78rem", fontWeight: 600, color: "var(--pp-signal-ink)", margin: "2px 0 6px" }}>
                     ✓ {n} {n === 1 ? "person" : "people"} confirmed this today
                   </div>
                 ) : null;
@@ -519,10 +519,10 @@ export default function HomeDealCards({
           font-family: var(--font-body);
           font-weight: 700;
           font-size: 0.82rem;
-          color: var(--color-sage-deep, #2E5320);
+          color:var(--pp-signal-ink);
           letter-spacing: -0.005em;
         }
-        .pp-deal-card:hover .pp-deal-card-cta { color: var(--color-deep, #1C3A22); }
+        .pp-deal-card:hover .pp-deal-card-cta { color:var(--pp-ink); }
 
         /* "Open today" pill — primary trust signal on every card. Solid
            sage, white text, padded for confidence. Replaces the older
@@ -542,18 +542,18 @@ export default function HomeDealCards({
 
         }
         .pp-open-pill.is-open {
-          background: var(--color-sage, #2E7D32);
-          color: #fff;
+          background:var(--pp-signal-fill);
+          color:var(--pp-on-dark);
         }
         .pp-open-pill.is-open::before {
           content: "";
           width: 6px; height: 6px; border-radius: 50%;
-          background: #fff;
+          background:var(--pp-surface);
           display: inline-block;
         }
         .pp-open-pill.is-closed {
-          background: var(--color-gray-100, #F1EEE7);
-          color: var(--color-gray-600, #4B5563);
+          background:var(--color-gray-100, var(--pp-paper));
+          color:var(--color-gray-600, var(--pp-body));
           box-shadow: none;
         }
       `}</style>

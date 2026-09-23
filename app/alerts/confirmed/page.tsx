@@ -13,8 +13,8 @@ export const metadata = {
 
 export default function AlertsConfirmedPage() {
   return (
-    <div className="pp-surface-deep pp-leaf pp-leaf-04" style={{ fontFamily: "var(--font-body)", minHeight: "100vh", color: "var(--color-cream, #F7F4ED)", display: "flex", flexDirection: "column" }}>
-      <Nav variant="deep" />
+    <div style={{ fontFamily: "var(--font-body)", minHeight: "100vh", color: "var(--pp-ink)", display: "flex", flexDirection: "column" }}>
+      <Nav variant="light" />
 
       <main style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 24px" }}>
         <div style={{ maxWidth: 560, textAlign: "center" }}>
@@ -33,36 +33,36 @@ export default function AlertsConfirmedPage() {
             You&apos;re in.
           </h1>
 
-          <p style={{ fontSize: "1.05rem", color: "rgba(255,255,255,0.7)", fontFamily: "system-ui, sans-serif", lineHeight: 1.6, marginBottom: 32 }}>
-            We&apos;ll text you when dispensaries near you post a deal worth knowing about.
+          <p style={{ fontSize: "1.05rem", color: "var(--pp-body)", fontFamily: "system-ui, sans-serif", lineHeight: 1.6, marginBottom: 32 }}>
+            We&apos;ll email you when dispensaries near you post a deal worth knowing about.
             No spam, no daily blast — just the stuff you&apos;d want to know.
           </p>
 
           <div style={{
-            background: "rgba(255,255,255,0.05)",
-            border: "1px solid rgba(255,255,255,0.1)",
+            background: "var(--pp-surface)",
+            border: "1px solid var(--pp-border)",
             borderRadius: 14,
             padding: 24,
             marginBottom: 32,
             textAlign: "left",
             fontFamily: "system-ui, sans-serif",
           }}>
-            <h2 style={{ fontSize: ".8rem", textTransform: "uppercase", letterSpacing: ".12em", color: "#93CB5C", marginBottom: 12, fontWeight: 700 }}>
+            <h2 style={{ fontSize: ".8rem", textTransform: "uppercase", letterSpacing: ".12em", color: "var(--pp-muted)", marginBottom: 12, fontWeight: 700 }}>
               While you wait
             </h2>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
               <li>
-                <Link href="/cannabis/illinois/open-now" style={{ color: "#fff", textDecoration: "none", borderBottom: "1px solid rgba(255,255,255,0.15)", paddingBottom: 10, display: "block", fontSize: ".9rem" }}>
+                <Link href="/cannabis/illinois/open-now" style={{ color: "var(--pp-signal)", textDecoration: "none", borderBottom: "1px solid var(--pp-border)", paddingBottom: 10, display: "block", fontSize: ".9rem" }}>
                   → See dispensaries open right now
                 </Link>
               </li>
               <li>
-                <Link href="/deals/all" style={{ color: "#fff", textDecoration: "none", borderBottom: "1px solid rgba(255,255,255,0.15)", paddingBottom: 10, display: "block", fontSize: ".9rem" }}>
+                <Link href="/deals/all" style={{ color: "var(--pp-signal)", textDecoration: "none", borderBottom: "1px solid var(--pp-border)", paddingBottom: 10, display: "block", fontSize: ".9rem" }}>
                   → Browse today&apos;s deals
                 </Link>
               </li>
               <li>
-                <Link href="/cannabis/illinois/first-time-guide" style={{ color: "#fff", textDecoration: "none", paddingBottom: 0, display: "block", fontSize: ".9rem" }}>
+                <Link href="/cannabis/illinois/first-time-guide" style={{ color: "var(--pp-signal)", textDecoration: "none", paddingBottom: 0, display: "block", fontSize: ".9rem" }}>
                   → First-time buyer guide
                 </Link>
               </li>
@@ -71,7 +71,7 @@ export default function AlertsConfirmedPage() {
 
           <Link href="/" style={{
             display: "inline-block",
-            background: "#2E7D32", color: "#fff",
+            background: "var(--pp-signal-fill)", color: "var(--pp-on-dark)",
             padding: "12px 28px", borderRadius: 10,
             textDecoration: "none", fontFamily: "system-ui, sans-serif",
             fontWeight: 700, fontSize: ".95rem",
@@ -79,11 +79,12 @@ export default function AlertsConfirmedPage() {
             Back to home
           </Link>
 
-          <p style={{ marginTop: 28, fontSize: ".75rem", color: "rgba(255,255,255,0.4)", fontFamily: "system-ui, sans-serif" }}>
+          <p style={{ marginTop: 28, fontSize: ".75rem", color: "var(--pp-muted)", fontFamily: "system-ui, sans-serif" }}>
             Built by Matthew Burns in Peoria, IL.
           </p>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

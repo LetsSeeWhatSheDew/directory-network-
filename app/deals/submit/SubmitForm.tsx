@@ -163,9 +163,9 @@ export default function SubmitForm({ listings }: Props) {
     return (
       <div
         style={{
-          background: "#F2F8E9",
-          border: "1px solid #C7E5A8",
-          borderLeft: "4px solid #2E7D32",
+          background: "var(--pp-best-tint)",
+          border: "1px solid var(--pp-best-border)",
+          borderLeft: "4px solid var(--pp-signal-fill)",
           borderRadius: 12,
           padding: "22px 22px 20px",
           fontFamily: "system-ui, sans-serif",
@@ -173,10 +173,10 @@ export default function SubmitForm({ listings }: Props) {
         role="status"
         aria-live="polite"
       >
-        <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "#14532d", marginBottom: 8 }}>
+        <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--pp-signal-ink)", marginBottom: 8 }}>
           Thanks — we got your deal submission.
         </div>
-        <p style={{ fontSize: ".95rem", color: "#3F6B1F", lineHeight: 1.55, marginBottom: 14 }}>
+        <p style={{ fontSize: ".95rem", color: "var(--pp-signal)", lineHeight: 1.55, marginBottom: 14 }}>
           We&apos;ll review and publish it within 24 hours. If there&apos;s anything we need
           to double-check, we&apos;ll email you at <strong>{form.submitter_email}</strong>.
         </p>
@@ -184,8 +184,8 @@ export default function SubmitForm({ listings }: Props) {
           type="button"
           onClick={reset}
           style={{
-            background: "#2E7D32",
-            color: "#fff",
+            background: "var(--pp-signal-fill)",
+            color: "var(--pp-on-dark)",
             border: "none",
             padding: "10px 18px",
             borderRadius: 8,
@@ -502,7 +502,7 @@ export default function SubmitForm({ listings }: Props) {
       )}
 
       <Section title="Timing">
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 10 }}>
           <Field id="start_date" label="Start date">
             <input
               id="start_date"
@@ -522,7 +522,7 @@ export default function SubmitForm({ listings }: Props) {
             />
           </Field>
         </div>
-        <label style={{ display: "flex", alignItems: "center", gap: 10, fontSize: ".95rem", color: "#1F3D2B", fontFamily: "system-ui, sans-serif" }}>
+        <label style={{ display: "flex", alignItems: "center", gap: 10, fontSize: ".95rem", color: "var(--pp-ink)", fontFamily: "system-ui, sans-serif" }}>
           <input
             type="checkbox"
             checked={!!form.is_recurring}
@@ -640,9 +640,10 @@ const styles: Record<string, React.CSSProperties> = {
     overflow: "hidden",
   },
   section: {
-    background: "#fff",
-    border: "1px solid #DCDED2",
-    borderLeft: "4px solid #2E7D32",
+    minWidth: 0,
+    background: "var(--pp-surface)",
+    border: "1px solid var(--pp-border)",
+    borderLeft: "4px solid var(--pp-signal-fill)",
     borderRadius: 12,
     padding: "18px 18px 16px",
     display: "flex",
@@ -654,39 +655,39 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: 700,
     letterSpacing: ".14em",
     textTransform: "uppercase",
-    color: "#2E7D32",
+    color: "var(--pp-signal)",
     padding: "0 6px",
   },
   field: { display: "flex", flexDirection: "column", gap: 6 },
-  label: { fontSize: ".85rem", fontWeight: 600, color: "#1F3D2B" },
+  label: { fontSize: ".85rem", fontWeight: 600, color: "var(--pp-ink)" },
   input: {
-    border: "1px solid #d1cfc6",
+    border: "1px solid var(--pp-border)",
     borderRadius: 8,
     padding: "10px 12px",
     fontSize: ".95rem",
-    background: "#fff",
-    color: "#1F3D2B",
+    background: "var(--pp-surface)",
+    color: "var(--pp-ink)",
     fontFamily: "inherit",
     minHeight: 44,
     width: "100%",
   },
-  hint: { fontSize: ".75rem", color: "#9ca3af", textAlign: "right" },
+  hint: { fontSize: ".75rem", color: "var(--pp-muted)", textAlign: "right" },
   fieldError: { fontSize: ".82rem", color: "#b91c1c", fontWeight: 500 },
   radioRow: { display: "flex", flexWrap: "wrap", gap: 12 },
-  radio: { display: "flex", alignItems: "center", gap: 6, fontSize: ".92rem", color: "#374151" },
+  radio: { display: "flex", alignItems: "center", gap: 6, fontSize: ".92rem", color: "var(--pp-body)" },
   previewBox: {
-    background: "#F2F8E9",
-    border: "1px solid #C7E5A8",
+    background: "var(--pp-best-tint)",
+    border: "1px solid var(--pp-best-border)",
     borderRadius: 10,
     padding: "10px 14px",
     fontSize: ".9rem",
-    color: "#3F6B1F",
+    color: "var(--pp-signal)",
     fontWeight: 600,
   },
   link: {
     background: "none",
     border: "none",
-    color: "#2E7D32",
+    color: "var(--pp-signal)",
     fontSize: ".85rem",
     textAlign: "left",
     padding: "4px 0",
@@ -704,8 +705,8 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: ".92rem",
   },
   cta: {
-    background: "#2E7D32",
-    color: "#fff",
+    background: "var(--pp-signal-fill)",
+    color: "var(--pp-on-dark)",
     border: "none",
     padding: "14px 20px",
     borderRadius: 12,
@@ -715,17 +716,17 @@ const styles: Record<string, React.CSSProperties> = {
     minHeight: 52,
     letterSpacing: ".02em",
   },
-  ctaDisabled: { background: "#9ca3af", cursor: "not-allowed" },
+  ctaDisabled: { background: "var(--pp-border)", color: "var(--pp-body)", cursor: "not-allowed" },
   dayRow: { display: "flex", flexWrap: "wrap", gap: 6 },
   dayChip: {
-    border: "1px solid #d1cfc6",
+    border: "1px solid var(--pp-border)",
     borderRadius: 100,
     padding: "6px 14px",
     fontSize: ".8rem",
-    color: "#6b7280",
+    color: "var(--pp-muted)",
     cursor: "pointer",
     userSelect: "none",
-    background: "#fff",
+    background: "var(--pp-surface)",
   },
-  dayChipOn: { background: "#2E7D32", color: "#fff", borderColor: "#2E7D32", fontWeight: 700 },
+  dayChipOn: { background: "var(--pp-signal-fill)", color: "var(--pp-on-dark)", borderColor: "var(--pp-signal-fill)", fontWeight: 700 },
 };

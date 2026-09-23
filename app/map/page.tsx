@@ -109,14 +109,14 @@ export default async function MapPage() {
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
         html,body{height:100%;font-family:var(--font-display), system-ui, sans-serif;background:var(--pp-paper)}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #DCDED2}
-        .logo{color:#1F3D2B;text-decoration:none;font-weight:700;letter-spacing:-.02em}
-        .logo span{color:#2E7D32}
-        .back{font-size:.82rem;color:#6b7280;text-decoration:none;font-family:system-ui,sans-serif}
-        .back:hover{color:#1F3D2B}
-        .map-shell{position:relative;width:100%;height:calc(100vh - 60px);min-height:520px;background:#DCDED2}
-        .map-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#DCDED2;font-family:system-ui,sans-serif;color:#6b7280;z-index:1;pointer-events:none}
-        .map-loading-spinner{width:36px;height:36px;border:3px solid #d1cfc6;border-top-color:#2E7D32;border-radius:50%;animation:mapspin 1s linear infinite}
+        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-surface);border-bottom:1px solid var(--pp-border)}
+        .logo{color:var(--pp-ink);text-decoration:none;font-weight:700;letter-spacing:-.02em}
+        .logo span{color:var(--pp-signal)}
+        .back{font-size:.82rem;color:var(--pp-muted);text-decoration:none;font-family:system-ui,sans-serif}
+        .back:hover{color:var(--pp-ink)}
+        .map-shell{position:relative;width:100%;height:calc(100vh - 60px);min-height:520px;background:var(--pp-border)}
+        .map-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:var(--pp-border);font-family:system-ui,sans-serif;color:var(--pp-body);z-index:1;pointer-events:none}
+        .map-loading-spinner{width:36px;height:36px;border:3px solid var(--pp-border);border-top-color:var(--pp-signal-fill);border-radius:50%;animation:mapspin 1s linear infinite}
         @keyframes mapspin{to{transform:rotate(360deg)}}
       `}</style>
 
@@ -132,14 +132,14 @@ export default async function MapPage() {
             padding: "64px 28px",
             textAlign: "center",
             fontFamily: "system-ui, sans-serif",
-            background: "#fff",
-            borderTop: "1px solid #DCDED2",
+            background: "var(--pp-surface)",
+            borderTop: "1px solid var(--pp-border)",
           }}
         >
           <h2
             style={{
               fontSize: "1.5rem",
-              color: "#1F3D2B",
+              color: "var(--pp-ink)",
               fontFamily: "var(--font-display), system-ui, sans-serif",
               marginBottom: 10,
               letterSpacing: "-0.02em",
@@ -147,15 +147,15 @@ export default async function MapPage() {
           >
             Map view coming soon
           </h2>
-          <p style={{ color: "#6b7280", marginBottom: 22, maxWidth: 480, margin: "0 auto 22px", lineHeight: 1.5 }}>
+          <p style={{ color: "var(--pp-muted)", marginBottom: 22, maxWidth: 480, margin: "0 auto 22px", lineHeight: 1.5 }}>
             We&apos;re adding map pins for every Central Illinois dispensary. Browse the full list below while we finish geocoding.
           </p>
           <Link
             href="/dispensaries"
             style={{
               display: "inline-block",
-              background: "#2E7D32",
-              color: "#fff",
+              background: "var(--pp-signal-fill)",
+              color: "var(--pp-on-dark)",
               padding: "12px 28px",
               borderRadius: 10,
               textDecoration: "none",

@@ -19,7 +19,7 @@ export default function MobileNavMenu({ variant = "light" }: Props) {
     return () => document.removeEventListener("keydown", onKey);
   }, [open]);
 
-  const stroke = variant === "deep" ? "#F4F5EF" : "#1C3A22";
+  const stroke = variant === "deep" ? "#F4F5EF" : "var(--pp-ink)";
 
   return (
     <>
@@ -83,9 +83,9 @@ export default function MobileNavMenu({ variant = "light" }: Props) {
         }
         .mobile-menu-panel{
           position:absolute;top:100%;left:0;right:0;
-          background:var(--color-cream-pure, #FCFCFA);
-          border-bottom:1px solid var(--color-gray-200, #E8E2D5);
-          border:1px solid var(--pp-border,#DCDED2);
+          background:var(--color-cream-pure, var(--pp-surface));
+          border-bottom:1px solid var(--color-gray-200, var(--pp-border));
+          border:1px solid var(--pp-border,var(--pp-border));
           display:flex;flex-direction:column;
           z-index:99;
         }
@@ -94,16 +94,16 @@ export default function MobileNavMenu({ variant = "light" }: Props) {
           font-family:var(--font-body);
           font-weight:500;
           font-size:1rem;
-          color:var(--color-deep, #1C3A22);
+          color:var(--pp-ink);
           text-decoration:none;
-          border-bottom:1px solid var(--color-gray-100, #F1EEE7);
+          border-bottom:1px solid var(--color-gray-100, var(--pp-border));
           min-height:48px;
           display:flex;align-items:center;
           transition: background-color 160ms ease;
         }
-        .mobile-menu-link:hover{background:var(--color-gray-100, #F1EEE7)}
-        .mobile-menu-link.highlight{color:var(--color-sage-deep, #2E5320);font-weight:700}
-        .mobile-menu-link.muted{color:var(--color-gray-500, #6B7280); font-size:.875rem;}
+        .mobile-menu-link:hover{background:var(--color-gray-100, var(--pp-paper))}
+        .mobile-menu-link.highlight{color:var(--pp-signal-ink);font-weight:700}
+        .mobile-menu-link.muted{color:var(--color-gray-500, var(--pp-muted)); font-size:.875rem;}
         .mobile-menu-link:last-of-type{border-bottom:none}
         @media(max-width:880px){
           .mobile-hamburger{display:inline-flex}

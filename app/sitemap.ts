@@ -79,7 +79,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const base: MetadataRoute.Sitemap = [
     { url: `${brand.url}`, lastModified: new Date(), changeFrequency: "daily", priority: 1.0 },
-    { url: `${brand.url}/cannabis`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${brand.url}/alerts`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: `${brand.url}/dispensaries`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: `${brand.url}/about`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
@@ -96,7 +95,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${brand.url}/illinois-cannabis-tax-calculator`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.85 },
     { url: `${brand.url}/illinois-cannabis-tax`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     { url: `${brand.url}/get-listed`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${brand.url}/early-access`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.6 },
     { url: `${brand.url}/upgrade`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     { url: `${brand.url}/claim`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${brand.url}/start`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },

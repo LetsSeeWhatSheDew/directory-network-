@@ -60,17 +60,17 @@ export default function GenericClaimForm() {
         role="status"
         aria-live="polite"
         style={{
-          background: "#F2F8E9",
-          border: "1px solid #C7E5A8",
+          background: "var(--pp-best-tint)",
+          border: "1px solid var(--pp-best-border)",
           borderRadius: 14,
           padding: "22px 24px",
           fontFamily: "system-ui, sans-serif",
         }}
       >
-        <div style={{ fontSize: "1rem", fontWeight: 700, color: "#14532d", marginBottom: 4 }}>
+        <div style={{ fontSize: "1rem", fontWeight: 700, color: "var(--pp-signal-ink)", marginBottom: 4 }}>
           Got it — we&apos;ll be in touch.
         </div>
-        <div style={{ fontSize: ".88rem", color: "#3F6B1F", lineHeight: 1.55 }}>
+        <div style={{ fontSize: ".88rem", color: "var(--pp-signal)", lineHeight: 1.55 }}>
           We&apos;ll verify and reach out via{" "}
           <strong>{email}</strong> within 24 hours. In the meantime, keep selling.
         </div>
@@ -82,8 +82,8 @@ export default function GenericClaimForm() {
     <form
       onSubmit={onSubmit}
       style={{
-        background: "#fff",
-        border: "1px solid #DCDED2",
+        background: "var(--pp-surface)",
+        border: "1px solid var(--pp-border)",
         borderRadius: 14,
         padding: "22px 24px",
         display: "flex",
@@ -157,8 +157,8 @@ export default function GenericClaimForm() {
         type="submit"
         disabled={busy}
         style={{
-          background: "#2E7D32",
-          color: "#fff",
+          background: "var(--pp-signal-fill)",
+          color: "var(--pp-on-dark)",
           border: "none",
           borderRadius: 10,
           padding: "14px 20px",
@@ -180,18 +180,18 @@ const labelStyle: React.CSSProperties = {
   flexDirection: "column",
   gap: 6,
   fontSize: ".8rem",
-  color: "#374151",
+  color: "var(--pp-body)",
   fontWeight: 600,
 };
 
 const inputStyle: React.CSSProperties = {
-  border: "1px solid #DCDED2",
+  border: "1px solid var(--pp-border)",
   borderRadius: 10,
   padding: "12px 14px",
   fontFamily: "system-ui, sans-serif",
   fontSize: ".95rem",
-  color: "#1F3D2B",
+  color: "var(--pp-ink)",
   outline: "none",
   minHeight: 44,
-  background: "#fff",
+  background: "var(--pp-surface)",
 };

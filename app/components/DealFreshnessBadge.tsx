@@ -58,7 +58,7 @@ export default function DealFreshnessBadge({
     (statusReason === "imported_not_verified" && (days ?? 9999) > 7)
   ) {
     return (
-      <span style={{ ...baseStyle, color: "#9ca3af", background: "transparent" }}>
+      <span style={{ ...baseStyle, color: "var(--pp-muted)", background: "transparent" }}>
         Verification pending
       </span>
     );
@@ -85,7 +85,7 @@ export default function DealFreshnessBadge({
 
   if (days >= 7) {
     return (
-      <span style={{ ...baseStyle, color: "#6b7280" }}>
+      <span style={{ ...baseStyle, color: "var(--pp-muted)" }}>
         Last checked {date}
       </span>
     );
@@ -93,7 +93,7 @@ export default function DealFreshnessBadge({
 
   // Fresh: < 7 days
   return (
-    <span style={{ ...baseStyle, color: "#9ca3af" }}>
+    <span style={{ ...baseStyle, color: "var(--pp-muted)" }}>
       Verified {date}
     </span>
   );

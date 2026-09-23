@@ -205,8 +205,8 @@ export default function Calculator({ defaultCitySlug = "peoria" }: { defaultCity
 
       <style>{`
         .calc{
-          background:#fff;
-          border:1px solid #DCDED2;
+          background:var(--pp-surface);
+          border:1px solid var(--pp-border);
           border-radius:14px;
           padding:24px;
           box-shadow:0 1px 3px rgba(15,31,61,0.04), 0 8px 24px rgba(15,31,61,0.06);
@@ -228,38 +228,38 @@ export default function Calculator({ defaultCitySlug = "peoria" }: { defaultCity
         .calc-label{
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:.78rem;font-weight:700;letter-spacing:.06em;
-          text-transform:uppercase;color:#6b7280;
+          text-transform:uppercase;color:var(--pp-muted);
         }
         .calc-input-wrap{
           display:flex;align-items:center;
-          background:var(--pp-paper);border:1px solid #DCDED2;border-radius:10px;
+          background:var(--pp-paper);border:1px solid var(--pp-border);border-radius:10px;
           padding:0 14px;height:52px;
         }
         .calc-input-wrap:focus-within{
-          background:#fff;border-color:#2E7D32;
+          background:var(--pp-surface);border-color:var(--pp-signal-fill);
           box-shadow:0 0 0 3px rgba(22,163,74,.12);
         }
         .calc-input-prefix{
-          color:#6b7280;font-family:var(--font-display, var(--font-geist-sans));
+          color:var(--pp-muted);font-family:var(--font-display, var(--font-geist-sans));
           font-weight:700;font-size:1.1rem;margin-right:6px;
         }
         .calc-input{
           flex:1;border:none;background:transparent;outline:none;
           font-family:var(--font-display, var(--font-geist-sans));
-          font-size:1.15rem;font-weight:600;color:#1F3D2B;
+          font-size:1.15rem;font-weight:600;color:var(--pp-ink);
           font-variant-numeric:tabular-nums;
         }
         .calc-select{
           height:52px;padding:0 14px;
-          background:var(--pp-paper);border:1px solid #DCDED2;border-radius:10px;
+          background:var(--pp-paper);border:1px solid var(--pp-border);border-radius:10px;
           font-family:var(--font-ui, system-ui, sans-serif);
-          font-size:1rem;font-weight:600;color:#1F3D2B;
+          font-size:1rem;font-weight:600;color:var(--pp-ink);
           appearance:none;
           background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'><path d='M3 5l4 4 4-4' stroke='%236b7280' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
           background-position:right 14px center;background-repeat:no-repeat;
           padding-right:36px;cursor:pointer;
         }
-        .calc-select:focus{outline:none;border-color:#2E7D32;box-shadow:0 0 0 3px rgba(22,163,74,.12);background-color:#fff}
+        .calc-select:focus{outline:none;border-color:var(--pp-signal-fill);box-shadow:0 0 0 3px rgba(22,163,74,.12);background-color:var(--pp-surface)}
 
         .calc-tier-row{
           display:grid;grid-template-columns:1fr;gap:8px;
@@ -269,29 +269,29 @@ export default function Calculator({ defaultCitySlug = "peoria" }: { defaultCity
         }
         .calc-tier{
           display:flex;flex-direction:column;gap:2px;
-          padding:12px 14px;border:1px solid #DCDED2;border-radius:10px;
+          padding:12px 14px;border:1px solid var(--pp-border);border-radius:10px;
           cursor:pointer;background:var(--pp-paper);
           transition:all 150ms ease;
           min-height:60px;
         }
-        .calc-tier:hover{background:#fff}
+        .calc-tier:hover{background:var(--pp-surface)}
         .calc-tier.is-active{
-          background:#fff;border-color:#2E7D32;
+          background:var(--pp-surface);border-color:var(--pp-signal-fill);
           box-shadow:0 0 0 2px rgba(22,163,74,0.15);
         }
         .calc-tier-input{position:absolute;opacity:0;pointer-events:none}
         .calc-tier-title{
           font-family:var(--font-ui, system-ui, sans-serif);
-          font-size:.92rem;font-weight:700;color:#1F3D2B;
+          font-size:.92rem;font-weight:700;color:var(--pp-ink);
         }
         .calc-tier-sub{
           font-family:var(--font-ui, system-ui, sans-serif);
-          font-size:.74rem;color:#6b7280;
+          font-size:.74rem;color:var(--pp-muted);
           font-variant-numeric:tabular-nums;
         }
 
         .calc-output{
-          background:var(--pp-paper);border:1px solid #DCDED2;border-radius:12px;
+          background:var(--pp-paper);border:1px solid var(--pp-border);border-radius:12px;
           padding:24px;
         }
         @media(min-width:720px){.calc-output{padding:28px}}
@@ -301,14 +301,14 @@ export default function Calculator({ defaultCitySlug = "peoria" }: { defaultCity
         }
         .calc-output-empty{
           font-family:var(--font-ui, system-ui, sans-serif);
-          font-size:.95rem;color:#6b7280;
+          font-size:.95rem;color:var(--pp-muted);
           margin:0;
         }
 
         .calc-output-hero{
           display:grid;grid-template-columns:1fr;gap:4px;
           padding-bottom:18px;margin-bottom:18px;
-          border-bottom:1px solid #DCDED2;
+          border-bottom:1px solid var(--pp-border);
           align-items:baseline;
         }
         @media(min-width:560px){
@@ -319,12 +319,12 @@ export default function Calculator({ defaultCitySlug = "peoria" }: { defaultCity
         .calc-output-label{
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:.74rem;font-weight:700;letter-spacing:.1em;
-          text-transform:uppercase;color:#6b7280;
+          text-transform:uppercase;color:var(--pp-muted);
         }
         .calc-output-amount{
           font-family:var(--font-display, var(--font-geist-sans));
           font-size:clamp(1.8rem, 5vw, 2.5rem);
-          font-weight:700;color:#1F3D2B;
+          font-weight:700;color:var(--pp-ink);
           letter-spacing:-.03em;
           font-variant-numeric:tabular-nums;
           line-height:1;
@@ -332,7 +332,7 @@ export default function Calculator({ defaultCitySlug = "peoria" }: { defaultCity
         .calc-output-effective{
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:.78rem;font-weight:600;
-          color:#2E7D32;background:#F2F8E9;
+          color:var(--pp-signal);background:var(--pp-best-tint);
           padding:4px 10px;border-radius:100px;
           justify-self:start;
         }
@@ -342,32 +342,32 @@ export default function Calculator({ defaultCitySlug = "peoria" }: { defaultCity
         .calc-row-line{
           display:flex;justify-content:space-between;align-items:baseline;
           padding:8px 0;
-          border-bottom:1px dashed #DCDED2;
+          border-bottom:1px dashed var(--pp-border);
         }
         .calc-row-line:last-child{border-bottom:none}
         .calc-row-line dt{
           font-family:var(--font-ui, system-ui, sans-serif);
-          font-size:.92rem;color:#374151;
+          font-size:.92rem;color:var(--pp-body);
         }
         .calc-pct{
-          font-size:.78rem;color:#9ca3af;
+          font-size:.78rem;color:var(--pp-muted);
           font-variant-numeric:tabular-nums;
           margin-left:4px;
         }
         .calc-row-line dd.num{
           font-family:var(--font-display, var(--font-geist-sans));
-          font-weight:600;font-size:.95rem;color:#1F3D2B;
+          font-weight:600;font-size:.95rem;color:var(--pp-ink);
           font-variant-numeric:tabular-nums;
           margin:0;
         }
-        .calc-row-total{padding-top:14px;margin-top:6px;border-top:1px solid #DCDED2}
-        .calc-row-total dt{font-weight:700;color:#1F3D2B}
+        .calc-row-total{padding-top:14px;margin-top:6px;border-top:1px solid var(--pp-border)}
+        .calc-row-total dt{font-weight:700;color:var(--pp-ink)}
         .calc-row-total dd.num{font-size:1.1rem;font-weight:700}
 
         .calc-fresh{
           margin-top:18px;
           font-family:var(--font-ui, system-ui, sans-serif);
-          font-size:.78rem;color:#9ca3af;
+          font-size:.78rem;color:var(--pp-muted);
           font-style:italic;
           text-align:center;
         }

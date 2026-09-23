@@ -12,7 +12,7 @@ export default function WeeklySignup({ tone = "dark" }: { tone?: "dark" | "light
   const fg = tone === "dark" ? "var(--pp-canopy-text)" : "var(--pp-ink)";
   const field: React.CSSProperties = {
     padding: "11px 12px", borderRadius: 10, border: "1px solid var(--pp-border)", fontSize: 15,
-    background: "#fff", color: "var(--pp-ink)", minWidth: 0,
+    background: "var(--pp-surface)", color: "var(--pp-ink)", minWidth: 0,
   };
   if (state === "done") {
     return <p style={{ color: fg, fontWeight: 600, margin: 0 }}>✓ You&apos;re in. First report lands Monday.</p>;
@@ -40,7 +40,7 @@ export default function WeeklySignup({ tone = "dark" }: { tone?: "dark" | "light
         {CITIES.map((c) => <option key={c}>{c}</option>)}
       </select>
       <input tabIndex={-1} autoComplete="off" value={hp} onChange={(e) => setHp(e.target.value)} aria-hidden="true" style={{ position: "absolute", left: -9999, width: 1, height: 1 }} name="website" />
-      <button type="submit" disabled={state === "busy"} style={{ padding: "11px 16px", borderRadius: 10, border: "none", fontWeight: 700, fontSize: 15, cursor: "pointer", background: tone === "dark" ? "var(--pp-paper)" : "var(--pp-canopy)", color: tone === "dark" ? "var(--pp-canopy)" : "var(--pp-canopy-text)", flex: "1 1 auto" }}>
+      <button type="submit" disabled={state === "busy"} style={{ padding: "11px 16px", borderRadius: 10, border: "none", fontWeight: 700, fontSize: 15, cursor: "pointer", background: tone === "dark" ? "rgb(255 255 255)" : "var(--pp-signal-fill)", color: tone === "dark" ? "rgb(31 74 50)" : "var(--pp-on-dark)", flex: "1 1 auto" }}>
         {state === "busy" ? "Saving…" : "Send me Mondays"}
       </button>
       {state === "err" && <span style={{ color: fg, fontSize: 13, width: "100%" }}>That didn&apos;t save — check the email and try again.</span>}

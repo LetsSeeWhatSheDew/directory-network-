@@ -31,7 +31,7 @@ export default function RecentlyViewedRow() {
           fontWeight: 700,
           letterSpacing: "0.14em",
           textTransform: "uppercase",
-          color: "#2E7D32",
+          color: "var(--pp-signal)",
           fontFamily: "system-ui, sans-serif",
           marginBottom: 10,
         }}
@@ -53,12 +53,12 @@ export default function RecentlyViewedRow() {
             href={`/dispensary/${it.slug}`}
             style={{
               flexShrink: 0,
-              background: "#fff",
-              border: "1px solid #DCDED2",
+              background: "var(--pp-surface)",
+              border: "1px solid var(--pp-border)",
               borderRadius: 10,
               padding: "10px 14px",
               textDecoration: "none",
-              color: "#1C3A22",
+              color: "var(--pp-ink)",
               fontFamily: "system-ui, sans-serif",
               minWidth: 160,
               maxWidth: 240,
@@ -79,7 +79,7 @@ export default function RecentlyViewedRow() {
             <div
               style={{
                 fontSize: "0.72rem",
-                color: "#6b7280",
+                color: "var(--pp-muted)",
                 marginTop: 2,
               }}
             >

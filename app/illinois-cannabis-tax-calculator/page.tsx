@@ -54,14 +54,14 @@ export default function TaxCalculatorPage() {
       />
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:var(--font-ui, system-ui, sans-serif);background:var(--pp-paper);color:#1F3D2B;min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #DCDED2;position:sticky;top:0;z-index:100}
+        body{font-family:var(--font-ui, system-ui, sans-serif);background:var(--pp-paper);color:var(--pp-ink);min-height:100vh}
+        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-surface);border-bottom:1px solid var(--pp-border);position:sticky;top:0;z-index:100}
         .logo-link{display:flex;align-items:center}
         .nav-links{display:flex;gap:18px;align-items:center}
-        .nav-link{font-size:.88rem;color:#6b7280;text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif);font-weight:500}
-        .nav-link:hover{color:#1F3D2B}
-        .nav-cta{background:#1F3D2B;color:#fff;padding:8px 14px;border-radius:8px;font-size:.85rem;font-weight:700;text-decoration:none}
-        .nav-cta:hover{background:#2A4F38}
+        .nav-link{font-size:.88rem;color:var(--pp-muted);text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif);font-weight:500}
+        .nav-link:hover{color:var(--pp-ink)}
+        .nav-cta{background:var(--pp-canopy);color:var(--pp-on-dark);padding:8px 14px;border-radius:8px;font-size:.85rem;font-weight:700;text-decoration:none}
+        .nav-cta:hover{background:var(--pp-canopy)}
         .desktop-only-nav{display:flex}
         @media(max-width:768px){.desktop-only-nav{display:none !important}}
 
@@ -71,61 +71,61 @@ export default function TaxCalculatorPage() {
         .eyebrow{
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:.74rem;font-weight:700;letter-spacing:.14em;
-          text-transform:uppercase;color:#2E7D32;margin-bottom:14px;
+          text-transform:uppercase;color:var(--pp-signal);margin-bottom:14px;
         }
         h1{
           font-family:var(--font-display, var(--font-geist-sans));
           font-size:clamp(1.9rem, 4.5vw, 2.75rem);
           font-weight:700;letter-spacing:-.04em;line-height:1.1;
-          color:#1F3D2B;margin-bottom:18px;
+          color:var(--pp-ink);margin-bottom:18px;
         }
         .lede{
           font-family:var(--font-ui, system-ui, sans-serif);
-          font-size:1.05rem;color:#374151;line-height:1.6;
+          font-size:1.05rem;color:var(--pp-body);line-height:1.6;
           margin-bottom:32px;
         }
 
         .medical-banner{
-          background:#fff;border:1px solid #2563eb;border-left:4px solid #2563eb;
+          background:var(--pp-surface);border:1px solid #2563eb;border-left:4px solid #2563eb;
           border-radius:10px;padding:14px 18px;margin-bottom:24px;
           font-family:var(--font-ui, system-ui, sans-serif);
-          font-size:.88rem;color:#2A4F38;line-height:1.55;
+          font-size:.88rem;color:var(--pp-signal-ink);line-height:1.55;
         }
         .medical-banner strong{font-weight:700}
 
         .article-link{
           margin-top:24px;
-          background:#fff;border:1px solid #DCDED2;border-radius:10px;
+          background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:10px;
           padding:14px 18px;
           font-family:var(--font-ui, system-ui, sans-serif);
-          font-size:.88rem;color:#374151;line-height:1.5;
+          font-size:.88rem;color:var(--pp-body);line-height:1.5;
           display:flex;flex-direction:column;gap:4px;
         }
         @media(min-width:560px){
           .article-link{flex-direction:row;justify-content:space-between;align-items:center;gap:18px}
         }
-        .article-link a{color:#2E7D32;font-weight:700;text-decoration:none;white-space:nowrap}
+        .article-link a{color:var(--pp-signal);font-weight:700;text-decoration:none;white-space:nowrap}
         .article-link a:hover{text-decoration:underline}
 
         .source-note{
           margin-top:32px;padding:18px;
           font-family:var(--font-ui, system-ui, sans-serif);
-          font-size:.82rem;color:#6b7280;line-height:1.6;
-          border-top:1px solid #DCDED2;
+          font-size:.82rem;color:var(--pp-muted);line-height:1.6;
+          border-top:1px solid var(--pp-border);
         }
-        .source-note strong{color:#374151;font-weight:700}
-        .source-note a{color:#2E7D32;text-decoration:none}
+        .source-note strong{color:var(--pp-body);font-weight:700}
+        .source-note a{color:var(--pp-signal);text-decoration:none}
         .source-note a:hover{text-decoration:underline}
 
         .footer{
-          background:#fff;border-top:1px solid #DCDED2;
+          background:var(--pp-surface);border-top:1px solid var(--pp-border);
           padding:24px 28px;
           display:flex;justify-content:space-between;align-items:center;
           flex-wrap:wrap;gap:12px;
         }
-        .footer-link{font-size:.78rem;color:#6b7280;text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif)}
-        .footer-link:hover{color:#1F3D2B}
-        .footer-copy{font-size:.74rem;color:#9ca3af;font-family:var(--font-ui, system-ui, sans-serif)}
+        .footer-link{font-size:.78rem;color:var(--pp-muted);text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif)}
+        .footer-link:hover{color:var(--pp-ink)}
+        .footer-copy{font-size:.74rem;color:var(--pp-muted);font-family:var(--font-ui, system-ui, sans-serif)}
       `}</style>
 
       <Nav variant="light" />
@@ -179,6 +179,7 @@ export default function TaxCalculatorPage() {
           <Link href="/dispensaries" className="footer-link">For dispensaries</Link>
         </div>
       </footer>
+      <Footer />
     </>
   );
 }

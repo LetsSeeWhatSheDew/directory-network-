@@ -32,42 +32,42 @@ export default function AboutIndexPage() {
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
         body{font-family:var(--font-body),system-ui,sans-serif;background:var(--pp-paper);color:var(--pp-body);min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#1F3D2B;position:sticky;top:0;z-index:100}
+        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-canopy);position:sticky;top:0;z-index:100}
         .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
-        .logo-text{font-size:1.1rem;font-weight:700;color:#fff;letter-spacing:-.02em}
-        .logo-text span{color:#93CB5C}
+        .logo-text{font-size:1.1rem;font-weight:700;color:var(--pp-on-dark);letter-spacing:-.02em}
+        .logo-text span{color:var(--pp-canopy-eyebrow)}
         .back{font-size:.82rem;color:rgba(255,255,255,.55);text-decoration:none;font-family:system-ui,sans-serif}
-        .back:hover{color:#fff}
+        .back:hover{color:var(--pp-on-dark)}
         .wrap{max-width:720px;margin:0 auto;padding:56px 28px 80px}
         .eyebrow{
           font-family:system-ui,sans-serif;font-size:.72rem;font-weight:700;
-          letter-spacing:.14em;text-transform:uppercase;color:#2E7D32;margin-bottom:14px;
+          letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);margin-bottom:14px;
         }
         h1{
-          font-size:clamp(2rem,5vw,2.8rem);font-weight:700;color:#1F3D2B;
+          font-size:clamp(2rem,5vw,2.8rem);font-weight:700;color:var(--pp-ink);
           letter-spacing:-.04em;line-height:1.08;margin-bottom:18px;
         }
-        h1 em{color:#2E7D32;font-style:normal}
+        h1 em{color:var(--pp-signal);font-style:normal}
         .lede{
-          font-size:1.1rem;color:#374151;line-height:1.55;
+          font-size:1.1rem;color:var(--pp-body);line-height:1.55;
           margin-bottom:32px;max-width:60ch;
         }
         h2{
-          font-size:1.3rem;font-weight:700;color:#1F3D2B;
+          font-size:1.3rem;font-weight:700;color:var(--pp-ink);
           letter-spacing:-.02em;margin:28px 0 12px;
         }
         p,li{
-          font-size:1rem;color:#374151;line-height:1.65;
+          font-size:1rem;color:var(--pp-body);line-height:1.65;
           max-width:65ch;margin-bottom:14px;
         }
         ul{padding-left:20px;margin-bottom:20px}
         code{
           font-family:ui-monospace,Menlo,monospace;font-size:.92em;
-          background:#fff;border:1px solid #DCDED2;padding:1px 6px;border-radius:4px;
+          background:var(--pp-surface);border:1px solid var(--pp-border);padding:1px 6px;border-radius:4px;
         }
         .promise{
           margin-top:40px;padding:22px 24px;
-          background:#fff;border:1px solid #DCDED2;border-left:4px solid #2E7D32;
+          background:var(--pp-surface);border:1px solid var(--pp-border);border-left:4px solid var(--pp-signal-fill);
           border-radius:12px;box-shadow:0 4px 16px rgba(15,31,61,.04);
         }
         .promise h2{margin:0 0 8px;font-size:1.1rem}
@@ -75,7 +75,7 @@ export default function AboutIndexPage() {
         .back-link{
           display:inline-block;margin-top:36px;
           font-family:system-ui,sans-serif;font-size:.88rem;font-weight:600;
-          color:#2E7D32;text-decoration:none;
+          color:var(--pp-signal);text-decoration:none;
         }
         .back-link:hover{text-decoration:underline}
       `}</style>
@@ -133,12 +133,13 @@ export default function AboutIndexPage() {
             We will never round up a sample size. We will never publish an
             Index from fewer than 10 deals. If we can't calculate it
             honestly, we won't publish it — that's why you see a progress
-            bar instead of a placeholder number. <Link href="/about" style={{color:"#2E7D32",fontWeight:600,textDecoration:"none"}}>More about how we work →</Link>
+            bar instead of a placeholder number. <Link href="/about" style={{color: "var(--pp-signal)",fontWeight:600,textDecoration:"none"}}>More about how we work →</Link>
           </p>
         </div>
 
         <Link href="/" className="back-link">← See today&apos;s deals</Link>
       </div>
+      <Footer />
     </>
   );
 }

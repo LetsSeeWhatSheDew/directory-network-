@@ -23,8 +23,8 @@ export default function FourTwentyBanner() {
       role="region"
       aria-label="4/20 deals banner"
       style={{
-        background: "#2E7D32",
-        color: "#fff",
+        background: "var(--pp-signal-fill)",
+        color: "var(--pp-on-dark)",
       }}
     >
       <div
@@ -40,7 +40,7 @@ export default function FourTwentyBanner() {
         }}
       >
         <span style={{ display: "flex", alignItems: "center", gap: 10, fontSize: ".85rem", fontWeight: 700, flex: "1 1 auto", minWidth: 0 }}>
-          <span aria-hidden="true" style={{ width: 8, height: 8, borderRadius: "50%", background: "#fff", flexShrink: 0 }} />
+          <span aria-hidden="true" style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--pp-surface)", flexShrink: 0 }} />
           <span style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
             4/20 Deals — Live Now. Find the best 4/20 offers near you before they&rsquo;re gone.
           </span>
@@ -48,7 +48,7 @@ export default function FourTwentyBanner() {
         <Link
           href="/deals/all"
           style={{
-            color: "#fff",
+            color: "var(--pp-on-dark)",
             textDecoration: "underline",
             fontSize: ".85rem",
             fontWeight: 700,
@@ -67,7 +67,7 @@ export default function FourTwentyBanner() {
           style={{
             background: "transparent",
             border: "none",
-            color: "#fff",
+            color: "var(--pp-on-dark)",
             fontSize: "1.1rem",
             lineHeight: 1,
             cursor: "pointer",

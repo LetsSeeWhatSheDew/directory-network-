@@ -27,12 +27,12 @@ export default function MedicalFriendlyToggle({
         gap: 8,
         padding: "6px 12px",
         borderRadius: 100,
-        border: "1px solid #e8e5de",
-        background: disabled ? "#F4F5EF" : "#fff",
+        border: "1px solid var(--pp-border)",
+        background: disabled ? "var(--pp-paper)" : "var(--pp-surface)",
         opacity: disabled ? 0.55 : 1,
         cursor: disabled ? "not-allowed" : "pointer",
         fontSize: ".82rem",
-        color: "#374151",
+        color: "var(--pp-body)",
         fontFamily: "system-ui, sans-serif",
       }}
       title={disabled ? "Coming soon — we're verifying which IL dispensaries honor the medical tax rate." : undefined}
@@ -42,11 +42,11 @@ export default function MedicalFriendlyToggle({
         checked={checked}
         disabled={disabled}
         onChange={(e) => onChange?.(e.target.checked)}
-        style={{ accentColor: "#2E7D32" }}
+        style={{ accentColor: "var(--pp-signal)" }}
       />
       Medical tax rate
       {disabled && (
-        <span style={{ fontSize: ".7rem", color: "#9ca3af" }}>(coming soon)</span>
+        <span style={{ fontSize: ".7rem", color: "var(--pp-muted)" }}>(coming soon)</span>
       )}
     </label>
   );

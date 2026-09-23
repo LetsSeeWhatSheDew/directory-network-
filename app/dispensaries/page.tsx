@@ -124,17 +124,17 @@ export default async function DispensariesIndexPage() {
   const cities = Array.from(byCity.keys()).sort();
 
   return (
-    <div style={{ fontFamily: "var(--font-display), system-ui, sans-serif", background: "var(--pp-paper)", minHeight: "100vh", color: "#1F3D2B" }}>
-      <div className="pp-surface-deep pp-leaf pp-leaf-04">
-        <Nav variant="deep" />
-        <header style={{ color: "var(--color-cream, #F7F4ED)", padding: "clamp(2.5rem, 6vw, 5rem) clamp(1rem, 4vw, 2rem) clamp(2rem, 4vw, 4rem)", textAlign: "center", position: "relative", zIndex: 2 }}>
-          <p className="pp-eyebrow" style={{ color: "var(--color-sage-vibrant, #93CB5C)", marginBottom: 10 }}>
+    <div style={{ fontFamily: "var(--font-display), system-ui, sans-serif", background: "var(--pp-paper)", minHeight: "100vh", color: "var(--pp-ink)" }}>
+      <div>
+        <Nav variant="light" />
+        <header style={{ color: "var(--pp-ink)", padding: "clamp(2.5rem, 6vw, 5rem) clamp(1rem, 4vw, 2rem) clamp(2rem, 4vw, 4rem)", textAlign: "center", position: "relative", zIndex: 2 }}>
+          <p className="pp-eyebrow" style={{ color: "var(--pp-muted)", marginBottom: 10 }}>
             Central Illinois directory
           </p>
-          <h1 style={{ fontFamily: "var(--font-body)", fontWeight: 800, fontSize: "clamp(2rem, 5vw, 3.25rem)", letterSpacing: "-0.035em", lineHeight: 1.1, color: "var(--color-cream, #F7F4ED)", marginBottom: 12 }}>
+          <h1 style={{ fontFamily: "var(--font-body)", fontWeight: 800, fontSize: "clamp(2rem, 5vw, 3.25rem)", letterSpacing: "-0.035em", lineHeight: 1.1, color: "var(--pp-ink)", marginBottom: 12 }}>
             Every licensed Central Illinois dispensary
           </h1>
-          <p style={{ color: "rgba(247, 244, 237, 0.72)", fontFamily: "var(--font-body)", fontWeight: 500, maxWidth: 580, margin: "0 auto", lineHeight: 1.6 }}>
+          <p style={{ color: "var(--pp-muted)", fontFamily: "var(--font-body)", fontWeight: 500, maxWidth: 580, margin: "0 auto", lineHeight: 1.6 }}>
             {listings.length} dispensaries across {cities.length} cities. Click a city to see deals
             and hours, or jump to a specific store.
           </p>
@@ -143,7 +143,7 @@ export default async function DispensariesIndexPage() {
 
       <section style={{ maxWidth: 1100, margin: "0 auto", padding: "44px 28px" }}>
         {cities.length === 0 ? (
-          <p style={{ textAlign: "center", color: "#6b7280", fontFamily: "system-ui, sans-serif" }}>
+          <p style={{ textAlign: "center", color: "var(--pp-muted)", fontFamily: "system-ui, sans-serif" }}>
             No listings loaded yet. Try refreshing.
           </p>
         ) : (
@@ -153,11 +153,11 @@ export default async function DispensariesIndexPage() {
               const items = byCity.get(city)!;
               return (
                 <div key={city}>
-                  <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", borderBottom: "1px solid #DCDED2", paddingBottom: 8, marginBottom: 14 }}>
+                  <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", borderBottom: "1px solid var(--pp-border)", paddingBottom: 8, marginBottom: 14 }}>
                     <h2 style={{ fontSize: "1.3rem", fontWeight: 700, letterSpacing: "-0.02em" }}>
                       {city}
                     </h2>
-                    <Link href={`/city/${slug}`} style={{ fontSize: ".8rem", color: "#2E7D32", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontWeight: 600 }}>
+                    <Link href={`/city/${slug}`} style={{ fontSize: ".8rem", color: "var(--pp-signal)", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontWeight: 600 }}>
                       Deals in {city} →
                     </Link>
                   </div>
@@ -178,30 +178,30 @@ export default async function DispensariesIndexPage() {
                           key={l.slug}
                           href={`/dispensary/${l.slug}`}
                           style={{
-                            background: "#fff",
+                            background: "var(--pp-surface)",
                             border: l.plan === "featured" ? "2px solid #2E7D32" : "1px solid #DCDED2",
                             borderRadius: 10,
                             padding: 14,
                             textDecoration: "none",
-                            color: "#1F3D2B",
+                            color: "var(--pp-ink)",
                             display: "block",
                           }}
                         >
                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
                             <div style={{ fontSize: ".95rem", fontWeight: 700 }}>{display}</div>
                             {l.plan === "featured" && (
-                              <span style={{ fontSize: ".62rem", background: "#2E7D32", color: "#fff", padding: "2px 7px", borderRadius: 100, fontFamily: "system-ui, sans-serif", fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase" }}>
+                              <span style={{ fontSize: ".62rem", background: "var(--pp-signal-fill)", color: "var(--pp-on-dark)", padding: "2px 7px", borderRadius: 100, fontFamily: "system-ui, sans-serif", fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase" }}>
                                 Featured
                               </span>
                             )}
                           </div>
-                          <div style={{ marginTop: 6, fontSize: ".78rem", color: "#6b7280", fontFamily: "system-ui, sans-serif" }}>
+                          <div style={{ marginTop: 6, fontSize: ".78rem", color: "var(--pp-muted)", fontFamily: "system-ui, sans-serif" }}>
                             {l.google_rating ? `${l.google_rating.toFixed(1)} ★` : "No rating yet"}
                             {attrs.length > 0 ? ` · ${attrs.join(" · ")}` : ""}
                           </div>
                           {count > 0 && (
-                            <div style={{ marginTop: 10, display: "inline-flex", alignItems: "center", gap: 6, fontSize: ".7rem", fontFamily: "system-ui, sans-serif", fontWeight: 700, color: "#3F6B1F", background: "#F2F8E9", border: "1px solid #C7E5A8", padding: "3px 9px", borderRadius: 100 }}>
-                              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#2E7D32" }} />
+                            <div style={{ marginTop: 10, display: "inline-flex", alignItems: "center", gap: 6, fontSize: ".7rem", fontFamily: "system-ui, sans-serif", fontWeight: 700, color: "var(--pp-signal)", background: "var(--pp-best-tint)", border: "1px solid var(--pp-best-border)", padding: "3px 9px", borderRadius: 100 }}>
+                              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--pp-signal-fill)" }} />
                               {count} active deal{count === 1 ? "" : "s"}
                             </div>
                           )}

@@ -70,7 +70,7 @@ const CHECKOUT_URL =
 
 export default function UpgradePage() {
   return (
-    <main className="min-h-screen text-gray-900" style={{ background: "var(--color-cream, #F7F4ED)" }}>
+    <main className="min-h-screen text-gray-900" style={{ background: "var(--pp-paper)" }}>
       <Nav variant="light" />
 
       <section className="max-w-2xl mx-auto px-6 pt-8 pb-16 text-center">
@@ -80,21 +80,21 @@ export default function UpgradePage() {
         <h1 className="font-serif text-5xl md:text-6xl leading-[1.05] mb-5">
           Low Prices.
           <br />
-          <em className="italic text-green-700 font-serif">High Times.</em>
+          <em className="italic text-[color:var(--pp-signal-ink)] font-serif">High Times.</em>
         </h1>
         <p className="text-lg text-gray-700 mb-10 max-w-xl mx-auto leading-relaxed">
-          Get texted the instant a deal drops near you.
-          <br className="hidden md:inline" />
+          Get an email the instant a deal drops near you.
+          {" "}<br className="hidden md:inline" />
           $0.99 a month. Cancel any time.
         </p>
 
         <div className="bg-white border border-gray-200 rounded-2xl p-8 md:p-10 shadow-sm text-left">
           <div className="flex items-start justify-between mb-6 gap-4">
             <div>
-              <p className="text-xs tracking-[0.15em] uppercase text-green-700 font-semibold mb-1">
+              <p className="text-xs tracking-[0.15em] uppercase text-[color:var(--pp-signal-ink)] font-semibold mb-1">
                 Pro
               </p>
-              <p className="font-serif text-5xl leading-none">
+              <p className="font-serif text-5xl leading-none whitespace-nowrap">
                 $0.99
                 <span className="text-base text-gray-500 font-sans font-normal">
                   {" "}
@@ -102,7 +102,7 @@ export default function UpgradePage() {
                 </span>
               </p>
             </div>
-            <span className="shrink-0 text-xs bg-green-50 text-green-800 border border-green-200 rounded-full px-3 py-1 font-medium">
+            <span className="shrink-0 text-xs bg-[color:var(--pp-best-tint)] text-[color:var(--pp-signal-ink)] border border-[color:var(--pp-best-border)] rounded-full px-3 py-1 font-medium">
               Cancel anytime
             </span>
           </div>
@@ -150,7 +150,7 @@ export default function UpgradePage() {
         </p>
         <Link
           href="/get-listed"
-          className="inline-block text-green-700 hover:text-green-900 font-medium underline underline-offset-4"
+          className="inline-block text-[color:var(--pp-signal-ink)] hover:text-[color:var(--pp-ink)] font-medium underline underline-offset-4"
         >
           Claim your free listing →
         </Link>

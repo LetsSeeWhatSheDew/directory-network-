@@ -272,10 +272,10 @@ export default async function DealPage({
   const expiry = computeExpiry(deal.expires_at);
   const expiryStyle: Record<ExpiryBadge["tone"], React.CSSProperties> = {
     none:     { display: "none" },
-    ongoing:  { color: "#2E5320", background: "#dcfce7" },
-    soft:     { color: "#475569", background: "#f1f5f9" },
+    ongoing:  { color: "var(--pp-signal-ink)", background: "var(--pp-best-tint)" },
+    soft:     { color: "var(--pp-body)", background: "#f1f5f9" },
     warning:  { color: "#92400e", background: "#fef3c7" },
-    urgent:   { color: "#fff",    background: "#dc2626" },
+    urgent:   { color: "var(--pp-on-dark)",    background: "#dc2626" },
   };
   const disp = displayDispensaryName({ name: listing?.name, slug: deal.listing_slug, listing_slug: deal.listing_slug });
   const rawCity = listing?.city && listing.city !== "Illinois" ? listing.city : null;
@@ -344,36 +344,36 @@ export default async function DealPage({
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
         /* Design v2: body styling from globals.css (Inter on warm paper). */ body{min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;position:sticky;top:0;z-index:100;border-bottom:1px solid #DCDED2}
+        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-surface);position:sticky;top:0;z-index:100;border-bottom:1px solid var(--pp-border)}
         .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
-        .logo-dot{width:8px;height:8px;border-radius:50%;background:#2E7D32;animation:pulse 2.5s infinite}
+        .logo-dot{width:8px;height:8px;border-radius:50%;background:var(--pp-signal-fill);animation:pulse 2.5s infinite}
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-        .logo-text{font-size:1.1rem;font-weight:700;color:#1C3A22}
-        .logo-text span{color:#2E7D32}
-        .back{font-size:.82rem;color:#6b7280;text-decoration:none;font-family:system-ui,sans-serif}
+        .logo-text{font-size:1.1rem;font-weight:700;color:var(--pp-ink)}
+        .logo-text span{color:var(--pp-signal)}
+        .back{font-size:.82rem;color:var(--pp-muted);text-decoration:none;font-family:system-ui,sans-serif}
         .wrap{max-width:680px;margin:0 auto;padding:40px 20px 64px}
-        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#2E7D32;font-family:system-ui,sans-serif;margin-bottom:10px}
+        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);font-family:system-ui,sans-serif;margin-bottom:10px}
         h1{font-size:clamp(1.8rem,4.5vw,2.6rem);font-weight:700;letter-spacing:-.03em;line-height:1.12;margin-bottom:10px}
-        .disp{font-size:1rem;color:#374151;font-family:system-ui,sans-serif;margin-bottom:4px}
-        .disp a{color:#2E7D32;font-weight:700;text-decoration:none}
+        .disp{font-size:1rem;color:var(--pp-body);font-family:system-ui,sans-serif;margin-bottom:4px}
+        .disp a{color:var(--pp-signal);font-weight:700;text-decoration:none}
         .disp a:hover{text-decoration:underline}
-        .city{font-size:.85rem;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:22px}
-        .city a{color:#2E7D32;text-decoration:none}
-        .savings-block{background:#fff;border:1px solid #DCDED2;border-left:4px solid #2E7D32;border-radius:14px;padding:24px;margin-bottom:18px}
-        .sv-label{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:2px}
-        .sv-amt{font-size:clamp(2.4rem,9vw,3.4rem);font-weight:700;color:#2E7D32;letter-spacing:-.04em;line-height:1;margin-bottom:4px}
-        .sv-vs{font-size:.78rem;color:#9ca3af;font-family:system-ui,sans-serif;margin-bottom:14px}
+        .city{font-size:.85rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:22px}
+        .city a{color:var(--pp-signal);text-decoration:none}
+        .savings-block{background:var(--pp-surface);border:1px solid var(--pp-border);border-left:4px solid var(--pp-signal-fill);border-radius:14px;padding:24px;margin-bottom:18px}
+        .sv-label{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:2px}
+        .sv-amt{font-size:clamp(2.4rem,9vw,3.4rem);font-weight:700;color:var(--pp-signal);letter-spacing:-.04em;line-height:1;margin-bottom:4px}
+        .sv-vs{font-size:.78rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:14px}
         .expires{display:inline-block;font-size:.74rem;color:#92400e;background:#fef3c7;padding:3px 10px;border-radius:100px;font-family:system-ui,sans-serif;font-weight:700;margin-bottom:14px}
-        .expires.ongoing{color:#2E5320;background:#dcfce7}
-        .desc{font-size:.98rem;color:#374151;font-family:system-ui,sans-serif;line-height:1.6;margin-bottom:16px}
-        .code-box{background:#1C3A22;color:#fff;border-radius:10px;padding:14px 18px;margin-bottom:18px;font-family:system-ui,sans-serif;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-        .code-label{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:#9DBE7E;font-weight:700}
+        .expires.ongoing{color:var(--pp-signal-ink);background:var(--pp-best-tint)}
+        .desc{font-size:.98rem;color:var(--pp-body);font-family:system-ui,sans-serif;line-height:1.6;margin-bottom:16px}
+        .code-box{background:var(--pp-canopy);color:var(--pp-on-dark);border-radius:10px;padding:14px 18px;margin-bottom:18px;font-family:system-ui,sans-serif;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+        .code-label{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--pp-canopy-eyebrow);font-weight:700}
         .code-value{font-family:monospace;font-size:1.05rem;font-weight:700;background:rgba(255,255,255,.1);padding:6px 14px;border-radius:8px;letter-spacing:.06em}
-        .how-to{font-size:.88rem;color:#374151;font-family:system-ui,sans-serif;line-height:1.5;margin-bottom:18px;padding:12px 14px;background:#E8F0DF;border:1px solid #CBE0B4;border-radius:10px;color:#14532d}
-        .cta{display:block;width:100%;text-align:center;background:#2E7D32;color:#fff;padding:16px;border-radius:12px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:800;font-size:1rem;letter-spacing:.02em;min-height:52px;transition:background .15s}
-        .cta:hover{background:#2E5320}
-        .secondary{display:block;text-align:center;margin-top:12px;color:#6b7280;font-family:system-ui,sans-serif;font-size:.82rem;text-decoration:none}
-        .secondary:hover{color:#1C3A22;text-decoration:underline}
+        .how-to{font-size:.88rem;color:var(--pp-body);font-family:system-ui,sans-serif;line-height:1.5;margin-bottom:18px;padding:12px 14px;background:var(--pp-best-tint);border:1px solid var(--pp-best-border);border-radius:10px;color:var(--pp-signal-ink)}
+        .cta{display:block;width:100%;text-align:center;background:var(--pp-signal-fill);color:var(--pp-on-dark);padding:16px;border-radius:12px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:800;font-size:1rem;letter-spacing:.02em;min-height:52px;transition:background .15s}
+        .cta:hover{background:var(--pp-canopy)}
+        .secondary{display:block;text-align:center;margin-top:12px;color:var(--pp-muted);font-family:system-ui,sans-serif;font-size:.82rem;text-decoration:none}
+        .secondary:hover{color:var(--pp-ink);text-decoration:underline}
         @media(max-width:600px){.wrap{padding:24px 14px}.savings-block{padding:20px 18px}}
       `}</style>
 
@@ -381,7 +381,7 @@ export default async function DealPage({
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(1rem, 4vw, 2rem) 4px", fontSize: 13 }}>
         <Link
           href={city ? `/city/${encodeURIComponent(city.toLowerCase())}` : "/deals/all"}
-          style={{ color: "var(--color-gray-500, #6B7280)", textDecoration: "none", fontFamily: "var(--font-body)", fontWeight: 500 }}
+          style={{ color: "var(--color-gray-500, var(--pp-muted))", textDecoration: "none", fontFamily: "var(--font-body)", fontWeight: 500 }}
         >
           ← {city ? `${city} deals` : "All deals"}
         </Link>
@@ -473,7 +473,7 @@ export default async function DealPage({
                 marginBottom: 8,
                 fontFamily: "var(--font-body)",
                 fontSize: "0.78rem",
-                color: "var(--pp-muted, #6B7268)",
+                color: "var(--pp-muted, var(--pp-muted))",
                 textDecoration: "none",
               }}
             >
@@ -522,7 +522,7 @@ export default async function DealPage({
             style={{
               marginTop: 14,
               paddingTop: 12,
-              borderTop: "1px solid var(--pp-border, #DCDED2)",
+              borderTop: "1px solid var(--pp-border, var(--pp-border))",
             }}
           >
             {confirmedToday > 0 && (
@@ -539,6 +539,7 @@ export default async function DealPage({
           </div>
         </div>
       </main>
+      <Footer />
     </>
   );
 }

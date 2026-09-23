@@ -67,7 +67,7 @@ export default function AlertsCalculator() {
       {result ? (
         <div style={resultCard} aria-live="polite">
           <div style={resultBig}>
-            You&apos;re probably overpaying <span style={{ color: "#93CB5C" }}>~${result.weekly}/week</span>
+            You&apos;re probably overpaying <span style={{ color: "var(--pp-canopy-eyebrow)" }}>~${result.weekly}/week</span>
           </div>
           <div style={resultSmall}>
             That&apos;s <strong>${result.annual}/year</strong>
@@ -89,7 +89,7 @@ export default function AlertsCalculator() {
           </button>
         </div>
       ) : (
-        <div style={{ fontSize: ".82rem", color: "#9ca3af", fontFamily: "system-ui,sans-serif" }}>
+        <div style={{ fontSize: ".82rem", color: "var(--pp-muted)", fontFamily: "system-ui,sans-serif" }}>
           Pick all three to see your number.
         </div>
       )}
@@ -131,8 +131,8 @@ function Row<T extends string>({
 }
 
 const wrap: React.CSSProperties = {
-  background: "#fff",
-  border: "1px solid #DCDED2",
+  background: "var(--pp-surface)",
+  border: "1px solid var(--pp-border)",
   borderRadius: 16,
   padding: 24,
   marginTop: 12,
@@ -142,7 +142,7 @@ const eyebrow: React.CSSProperties = {
   fontWeight: 700,
   letterSpacing: ".14em",
   textTransform: "uppercase",
-  color: "#2E7D32",
+  color: "var(--pp-signal)",
   fontFamily: "system-ui, sans-serif",
   marginBottom: 6,
 };
@@ -156,17 +156,17 @@ const h3: React.CSSProperties = {
 const rowLabel: React.CSSProperties = {
   fontSize: ".88rem",
   fontWeight: 700,
-  color: "#1F3D2B",
+  color: "var(--pp-ink)",
   fontFamily: "var(--font-display), system-ui, sans-serif",
   marginBottom: 8,
 };
 const pillRow: React.CSSProperties = { display: "flex", gap: 8, flexWrap: "wrap" };
 const pill: React.CSSProperties = {
   padding: "9px 16px",
-  border: "1px solid #d1cfc6",
+  border: "1px solid var(--pp-border)",
   borderRadius: 100,
-  background: "#fff",
-  color: "#374151",
+  background: "var(--pp-surface)",
+  color: "var(--pp-body)",
   cursor: "pointer",
   fontFamily: "system-ui, sans-serif",
   fontSize: ".86rem",
@@ -174,22 +174,22 @@ const pill: React.CSSProperties = {
   transition: "all .15s",
 };
 const pillActive: React.CSSProperties = {
-  background: "#2E7D32",
-  borderColor: "#2E7D32",
-  color: "#fff",
+  background: "var(--pp-signal-fill)",
+  borderColor: "var(--pp-signal-fill)",
+  color: "var(--pp-on-dark)",
   fontWeight: 700,
 };
 const resultCard: React.CSSProperties = {
   marginTop: 12,
   padding: "22px",
-  background: "#1F3D2B",
+  background: "var(--pp-canopy)",
   borderRadius: 12,
   textAlign: "center",
 };
 const resultBig: React.CSSProperties = {
   fontSize: "1.4rem",
   fontWeight: 700,
-  color: "#fff",
+  color: "var(--pp-on-dark)",
   fontFamily: "var(--font-display), system-ui, sans-serif",
   letterSpacing: "-.02em",
   marginBottom: 8,
@@ -203,8 +203,8 @@ const resultSmall: React.CSSProperties = {
   lineHeight: 1.5,
 };
 const cta: React.CSSProperties = {
-  background: "#2E7D32",
-  color: "#fff",
+  background: "var(--pp-signal-fill)",
+  color: "var(--pp-on-dark)",
   border: "none",
   borderRadius: 10,
   padding: "11px 20px",

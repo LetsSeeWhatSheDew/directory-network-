@@ -52,15 +52,15 @@ export default async function ClaimPage({ params }: { params: Promise<{ slug: st
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
         body{font-family:var(--font-body),system-ui,sans-serif;background:var(--pp-paper);color:var(--pp-body);min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#1F3D2B;position:sticky;top:0;z-index:100}
-        .logo{color:#fff;text-decoration:none;font-weight:700}
-        .logo span{color:#93CB5C}
+        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-canopy);position:sticky;top:0;z-index:100}
+        .logo{color:var(--pp-on-dark);text-decoration:none;font-weight:700}
+        .logo span{color:var(--pp-canopy-eyebrow)}
         .back{font-size:.82rem;color:rgba(255,255,255,.55);text-decoration:none;font-family:system-ui,sans-serif}
-        .back:hover{color:#fff}
+        .back:hover{color:var(--pp-on-dark)}
         .wrap{max-width:600px;margin:0 auto;padding:40px 20px}
-        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#2E7D32;font-family:system-ui,sans-serif;margin-bottom:10px}
+        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);font-family:system-ui,sans-serif;margin-bottom:10px}
         h1{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:6px}
-        .city{font-size:.88rem;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:24px}
+        .city{font-size:.88rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:24px}
       `}</style>
 
       <Nav variant="light" />
@@ -71,6 +71,7 @@ export default async function ClaimPage({ params }: { params: Promise<{ slug: st
         <div className="city">{city ? `${city}, IL` : "Illinois"}</div>
         <ClaimForm slug={slug} />
       </div>
+      <Footer />
     </>
   );
 }

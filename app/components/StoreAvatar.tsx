@@ -18,7 +18,7 @@ export default function StoreAvatar({ src, name, size = 44 }: { src: string | nu
   };
   if (!src || failed) {
     return (
-      <span aria-hidden="true" style={{ ...box, color: "var(--pp-paper)", fontFamily: "var(--font-display)", fontWeight: 700, fontSize: size * 0.36 }}>
+      <span aria-hidden="true" style={{ ...box, color: "rgb(255 255 255)", fontFamily: "var(--font-display)", fontWeight: 700, fontSize: size * 0.36 }}>
         {initials}
       </span>
     );

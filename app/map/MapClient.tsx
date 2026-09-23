@@ -80,16 +80,16 @@ export default function MapClient({ points }: { points: Point[] }) {
   function popupHtml(p: Point) {
     const display = /^[a-z0-9-]+$/.test(p.name) ? humanize(p.slug) : p.name;
     const dealHtml = p.deal
-      ? `<div style="margin-top:6px;font-size:.82rem;color:#2E7D32;font-weight:600;">
+      ? `<div style="margin-top:6px;font-size:.82rem;color:var(--pp-signal);font-weight:600;">
            ${escapeHtml(p.deal.deal_title)}
          </div>`
       : "";
     return `
       <div style="font-family:system-ui,sans-serif;min-width:180px">
-        <div style="font-weight:700;font-size:.95rem;color:#1F3D2B;">${escapeHtml(display)}</div>
-        <div style="font-size:.75rem;color:#6b7280;margin-top:2px;">${escapeHtml(p.city)}, IL</div>
+        <div style="font-weight:700;font-size:.95rem;color:var(--pp-ink);">${escapeHtml(display)}</div>
+        <div style="font-size:.75rem;color:var(--pp-muted);margin-top:2px;">${escapeHtml(p.city)}, IL</div>
         ${dealHtml}
-        <a href="/dispensary/${encodeURIComponent(p.slug)}" style="display:inline-block;margin-top:10px;background:#1F3D2B;color:#fff;padding:6px 12px;border-radius:6px;font-size:.78rem;text-decoration:none;font-weight:600;">View dispensary →</a>
+        <a href="/dispensary/${encodeURIComponent(p.slug)}" style="display:inline-block;margin-top:10px;background:var(--pp-canopy);color:var(--pp-on-dark);padding:6px 12px;border-radius:6px;font-size:.78rem;text-decoration:none;font-weight:600;">View dispensary →</a>
       </div>`;
   }
 
@@ -114,14 +114,14 @@ export default function MapClient({ points }: { points: Point[] }) {
 
     const greenIcon = L.divIcon({
       className: "cl-pin cl-pin-deal",
-      html: `<div style="background:#2E7D32;color:#fff;width:28px;height:28px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;font-family:system-ui,sans-serif;font-weight:800;box-shadow:0 2px 6px rgba(0,0,0,.25);border:2px solid #fff;"><span style="transform:rotate(45deg);font-size:.8rem;">$</span></div>`,
+      html: `<div style="background:var(--pp-signal-fill);color:var(--pp-on-dark);width:28px;height:28px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;font-family:system-ui,sans-serif;font-weight:800;box-shadow:0 2px 6px rgba(0,0,0,.25);border:2px solid var(--pp-border);"><span style="transform:rotate(45deg);font-size:.8rem;">$</span></div>`,
       iconSize: [28, 28],
       iconAnchor: [14, 28],
       popupAnchor: [0, -28],
     });
     const grayIcon = L.divIcon({
       className: "cl-pin cl-pin-plain",
-      html: `<div style="background:#94a3b8;width:16px;height:16px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25);"></div>`,
+      html: `<div style="background:var(--pp-muted);width:16px;height:16px;border-radius:50%;border:2px solid var(--pp-border);box-shadow:0 1px 4px rgba(0,0,0,.25);"></div>`,
       iconSize: [16, 16],
       iconAnchor: [8, 8],
       popupAnchor: [0, -10],
@@ -164,17 +164,17 @@ export default function MapClient({ points }: { points: Point[] }) {
           fontFamily: "system-ui, sans-serif",
           textAlign: "center",
         }}>
-          <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "#1F3D2B" }}>
+          <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--pp-ink)" }}>
             Map couldn&apos;t load
           </div>
-          <div style={{ fontSize: ".9rem", color: "#6b7280", maxWidth: 360 }}>
+          <div style={{ fontSize: ".9rem", color: "var(--pp-muted)", maxWidth: 360 }}>
             We couldn&apos;t initialize the map. You can still browse every Central IL dispensary in a list.
           </div>
           <Link
             href="/dispensaries"
             style={{
-              background: "#2E7D32",
-              color: "#fff",
+              background: "var(--pp-signal-fill)",
+              color: "var(--pp-on-dark)",
               padding: "10px 20px",
               borderRadius: 10,
               textDecoration: "none",
@@ -192,7 +192,7 @@ export default function MapClient({ points }: { points: Point[] }) {
           position: "absolute",
           top: 14,
           right: 14,
-          background: "#fff",
+          background: "var(--pp-surface)",
           borderRadius: 10,
           boxShadow: "0 4px 12px rgba(0,0,0,.18)",
           padding: 6,
@@ -229,8 +229,8 @@ function pillStyle(active: boolean): React.CSSProperties {
     border: "none",
     cursor: "pointer",
     fontWeight: 600,
-    background: active ? "#1F3D2B" : "transparent",
-    color: active ? "#fff" : "#6b7280",
+    background: active ? "var(--pp-signal-fill)" : "transparent",
+    color: active ? "rgb(255 255 255)" : "var(--pp-body)",
   };
 }
 

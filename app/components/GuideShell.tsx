@@ -31,7 +31,7 @@ a.gp-row:hover{background:var(--pp-paper)}
 a.gp-card:hover{border-color:var(--pp-canopy)}
 .gp-card b{font-family:var(--font-display);font-size:1.1rem}
 .gp-card span{font-size:.88rem;color:var(--pp-muted);line-height:1.45}
-.gp-card .gp-big{font-family:var(--font-mono);font-size:1.6rem;font-weight:700;color:var(--pp-canopy)}
+.gp-card .gp-big{font-family:var(--font-mono);font-size:1.6rem;font-weight:700;color:var(--pp-signal-ink)}
 .gp-hero-card{background:var(--pp-canopy);color:var(--pp-canopy-text);border-color:var(--pp-canopy)}
 .gp-hero-card span{color:var(--pp-canopy-text);opacity:.85}
 .gp-hero-card b{color:var(--pp-canopy-text)}

@@ -73,7 +73,7 @@ const calloutStyles = (
       line-height:1.5;
       max-width:560px;
     }
-    .savings-callout strong{color:var(--color-cream, #F4F5EF);font-weight:600}
-    .savings-callout .savings-amt{color:var(--color-sage-vibrant, #9DBE7E);font-weight:700}
+    .savings-callout strong{color:var(--pp-canopy-text);font-weight:600}
+    .savings-callout .savings-amt{color:var(--pp-signal);font-weight:700}
   `}</style>
 );

@@ -114,11 +114,11 @@ export default function ProCheckoutButton() {
           gap: 6,
         }}
       >
-        <div style={{ fontSize: ".95rem", fontWeight: 700, color: "#fff" }}>
+        <div style={{ fontSize: ".95rem", fontWeight: 700, color: "var(--pp-on-dark)" }}>
           ✓ You&rsquo;re on the list
         </div>
         <div style={{ fontSize: ".82rem", color: "rgba(255,255,255,.75)", lineHeight: 1.5 }}>
-          Pro isn&rsquo;t live yet. We&rsquo;ll email <strong style={{ color: "#93CB5C" }}>{email}</strong>{" "}
+          Pro isn&rsquo;t live yet. We&rsquo;ll email <strong style={{ color: "var(--pp-canopy-eyebrow)" }}>{email}</strong>{" "}
           the moment it launches — usually within a few days.
         </div>
       </div>
@@ -142,7 +142,7 @@ export default function ProCheckoutButton() {
           border: "1px solid rgba(255,255,255,.18)",
           borderRadius: 10,
           padding: "12px 12px",
-          color: "#fff",
+          color: "var(--pp-on-dark)",
           fontFamily: "system-ui, sans-serif",
           fontSize: ".95rem",
           outline: "none",
