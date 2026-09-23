@@ -39,6 +39,7 @@ const FOOTER_COLUMNS: { heading: string; links: { href: string; label: string }[
     links: [
       { href: "/about", label: "About" },
       { href: "/about/index", label: "PuffPrice Index" },
+      { href: "/how-we-rank", label: "How we rank" },
       { href: "/illinois-cannabis-tax-calculator", label: "Tax calculator" },
       { href: "/cannabis/illinois/first-time-guide", label: "First-time guide" },
       { href: "/cannabis/illinois/laws", label: "Illinois cannabis laws" },

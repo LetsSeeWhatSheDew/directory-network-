@@ -1,6 +1,16 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { isCentralILCity } from "../../lib/constants/regions";
+
+// Only Central IL cities count as a "location" for PuffPrice. An IP lookup
+// that lands on an ISP hub (Chicago, San Francisco…) or a GPS fix outside
+// the region must NOT relabel the page "deals near <somewhere we don't
+// cover>" — that was the #1 complaint pattern in Weedmaps reviews.
+function inRegion(city: string | null | undefined): boolean {
+  if (!city) return false;
+  return isCentralILCity(city.trim().toLowerCase().replace(/\s+/g, "-"));
+}
 
 type Source = "gps" | "manual" | "ip";
 
@@ -141,8 +151,22 @@ function requestGps(): Promise<GeolocationPosition | null> {
 export default function LocationAware() {
   const [loc, setLoc] = useState<Loc | null>(null);
   const [busy, setBusy] = useState(false);
+  const [outside, setOutside] = useState<string | null>(null);
 
   const commit = useCallback((next: Loc, lat?: number, lng?: number) => {
+    if (!inRegion(next.city)) {
+      // Out of region: remember nothing, keep the page on "Central Illinois".
+      try {
+        sessionStorage.removeItem(CITY_KEY);
+      } catch {}
+      setOutside(next.city);
+      setLoc(null);
+      try {
+        window.dispatchEvent(new CustomEvent("cl:location-resolved", { detail: null }));
+      } catch {}
+      return;
+    }
+    setOutside(null);
     save(next, lat, lng);
     setLoc(next);
     applyPlaceholder(next.city);
@@ -194,7 +218,13 @@ export default function LocationAware() {
     let cancelled = false;
 
     (async () => {
-      const cached = readCached();
+      const cachedRaw = readCached();
+      const cached = cachedRaw && inRegion(cachedRaw.city) ? cachedRaw : null;
+      if (cachedRaw && !cached) {
+        try {
+          sessionStorage.removeItem(CITY_KEY);
+        } catch {}
+      }
       if (cached) {
         if (!cancelled) {
           setLoc(cached);
@@ -306,6 +336,19 @@ export default function LocationAware() {
       window.dispatchEvent(new CustomEvent("cl:open-city-picker"));
     } catch {}
   };
+
+  if (outside && !loc && !busy) {
+    return (
+      <div aria-live="polite" style={wrapperStyle}>
+        <span>
+          📍 Looks like you&apos;re outside Central Illinois — showing the whole region ·{" "}
+          <button type="button" onClick={openPicker} style={linkBtn}>
+            pick a city
+          </button>
+        </span>
+      </div>
+    );
+  }
 
   if (!loc && !busy) {
     // No location resolved AND no detection in flight — show a minimal

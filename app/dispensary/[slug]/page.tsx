@@ -12,6 +12,7 @@ import AmenityRow from "../../components/AmenityRow";
 import DealFreshnessBadge from "../../components/DealFreshnessBadge";
 import ReportIssueLink from "../../components/ReportIssueLink";
 import ReviewsSection from "../../components/ReviewsSection";
+import TrustLine from "../../components/TrustLine";
 import { dealContextTag } from "../../../lib/dealContext";
 import { getListingDealHistory, historyIsMeaningful } from "../../../lib/dealHistory";
 import { getApprovedReviews, getReviewStats, reviewsEnabled } from "../../../lib/reviews";
@@ -468,6 +469,7 @@ export default async function DispensaryProfilePage({
           <div className="section-h">
             Active deals · {deals.length} {deals.length === 1 ? "offer" : "offers"}
           </div>
+          {deals.length > 0 && <TrustLine />}
           {dealHistory && (
             <div className="track">
               <span>

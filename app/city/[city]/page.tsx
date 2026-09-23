@@ -546,6 +546,8 @@ export default async function CityPage({
               {month.avgDiscountPct != null ? `, avg ${month.avgDiscountPct}% off` : ""}
             </>
           )}
+          {" "}· No store pays to rank ·{" "}
+          <Link href="/how-we-rank" style={{ color: "var(--pp-signal-ink)", fontWeight: 600 }}>How we rank</Link>
         </p>
 
         {livePriceBoard && (

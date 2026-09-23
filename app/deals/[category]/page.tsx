@@ -4,6 +4,7 @@
 import Link from "next/link";
 import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
+import TrustLine from "../../components/TrustLine";
 import { redirect } from "next/navigation";
 import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
 import DealBadge from "../../components/DealBadge";
@@ -617,6 +618,7 @@ export default async function DealsPage({
             ? `No active ${categoryLabel.toLowerCase()} deals within 15 miles of ${city} right now`
             : "No active deals right now — check back soon"}
         </p>
+        <TrustLine />
 
         {city && (
           <div className="city-banner">

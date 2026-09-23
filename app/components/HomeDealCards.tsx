@@ -11,6 +11,8 @@ import DealBadge from "./DealBadge";
 import { isFreshnessHidden, isFreshnessStale } from "./DealFreshnessBadge";
 import VerifiedRow from "./VerifiedRow";
 import { dealContextTag } from "../../lib/dealContext";
+import { isCentralILCity } from "../../lib/constants/regions";
+import TrustLine from "./TrustLine";
 
 type Deal = {
   deal_id?: string;
@@ -200,6 +202,7 @@ export default function HomeDealCards({
     try {
       c = sessionStorage.getItem("cl_city");
     } catch {}
+    if (c && !isCentralILCity(c.trim().toLowerCase().replace(/\s+/g, "-"))) c = null;
     if (c) refetchFor(c);
 
     const handler = (e: Event) => {
@@ -302,6 +305,7 @@ export default function HomeDealCards({
             {updated && typeof dealCount === "number" && dealCount > 0 && ` · ${dealCount} active deals`}
             {loading && " · Refreshing…"}
           </p>
+          <TrustLine />
           {city && (
             <div
               role="tablist"
