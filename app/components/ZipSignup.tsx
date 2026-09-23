@@ -2,7 +2,7 @@
 // ZIP (+ optional email) → /api/waitlist. Used on /illinois-cannabis-delivery and /drive-thru.
 import { useState } from "react";
 
-export default function ZipSignup({ source, cta }: { source: "delivery" | "drive_thru"; cta: string }) {
+export default function ZipSignup({ source, cta, channel }: { source: "delivery" | "drive_thru"; cta: string; channel?: string }) {
   const [zip, setZip] = useState("");
   const [email, setEmail] = useState("");
   const [hp, setHp] = useState("");
@@ -15,7 +15,7 @@ export default function ZipSignup({ source, cta }: { source: "delivery" | "drive
       onSubmit={async (e) => {
         e.preventDefault();
         setState("busy");
-        const r = await fetch("/api/waitlist", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ zip, email, source, website: hp }) }).catch(() => null);
+        const r = await fetch("/api/waitlist", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ zip, email, source, channel, website: hp }) }).catch(() => null);
         if (r?.ok) setState("done");
         else { setState("err"); setMsg((await r?.json().catch(() => null))?.error || "That didn't save — try again."); }
       }}

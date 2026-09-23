@@ -15,7 +15,10 @@ export async function POST(req: NextRequest) {
   if (b.website) return NextResponse.json({ ok: true });
   const zip = typeof b.zip === "string" ? b.zip.trim() : "";
   const email = typeof b.email === "string" ? b.email.trim().toLowerCase() : "";
-  const source = b.source === "drive_thru" ? "drive_thru" : "delivery";
+  const kind = b.source === "drive_thru" ? "drive_thru" : "delivery";
+  // Where the signup came from (utm_source / ref), e.g. "drive_thru:reddit".
+  const channel = typeof b.channel === "string" ? b.channel.toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, 32) : "";
+  const source = channel ? `${kind}:${channel}` : kind;
   if (!/^\d{5}$/.test(zip)) return NextResponse.json({ error: "Enter a 5-digit ZIP." }, { status: 400 });
   if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return NextResponse.json({ error: "That email doesn't look right." }, { status: 400 });
