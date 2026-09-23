@@ -41,3 +41,6 @@ yarn-error.log*
 # artifacts (PDFs, CSVs) before parsing. Nothing in here should ship.
 /tmp/
 .claude/scheduled_tasks.lock
+
+# rendered scraper run output
+scrape-output/

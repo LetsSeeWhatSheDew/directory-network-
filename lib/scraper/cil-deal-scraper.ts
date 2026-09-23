@@ -292,6 +292,41 @@ export function normalizeTitle(t: string): string {
   return t.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 }
 
+// Rendered menus list one promo per product ("50% off 4+ Cresco Blue Dream
+// flower", "… Bob Hope flower", …). Three or more titles that differ only
+// in the product name collapse into one store-level deal:
+// "50% off 4+ Cresco flower (select strains)".
+export function collapseVariantDeals(deals: ScrapedDeal[]): ScrapedDeal[] {
+  const re = /^(.*?\d{1,2}% off (?:\d\+ )?)([A-Z][\w&'.-]*)\s+(.+?)\s+(flower|vapes?|carts?|cartridges|edibles|gummies|pre-?rolls?|concentrates?)$/i;
+  const groups = new Map<string, ScrapedDeal[]>();
+  const rest: ScrapedDeal[] = [];
+  for (const d of deals) {
+    const m = d.title.match(re);
+    if (!m) { rest.push(d); continue; }
+    const k = `${m[1].toLowerCase()}|${m[2]}|${m[4].toLowerCase()}`;
+    const g = groups.get(k) || [];
+    g.push(d);
+    groups.set(k, g);
+  }
+  // Tiered "N% off Select products" (buy-more-save-more ladders) → one deal.
+  const tier = /^(\d{1,2})% off select products$/i;
+  const tiers = rest.filter((d) => tier.test(d.title));
+  let out = rest;
+  if (tiers.length >= 3) {
+    const top = tiers.reduce((a, b) => (Number(b.title.match(tier)![1]) > Number(a.title.match(tier)![1]) ? b : a));
+    const max = Number(top.title.match(tier)![1]);
+    out = rest.filter((d) => !tier.test(d.title));
+    out.push({ ...top, title: `Up to ${max}% off select products`, discount_value: max, discount_unit: "percent" });
+  } else out = [...rest];
+  for (const [, g] of groups) {
+    if (g.length >= 3) {
+      const m = g[0].title.match(re)!;
+      out.push({ ...g[0], title: `${m[1]}${m[2]} ${m[4].toLowerCase()} (select strains)` });
+    } else out.push(...g);
+  }
+  return out;
+}
+
 export function extractDealsFromHtml(html: string, sourceUrl: string, listingSlug: string): ScrapedDeal[] {
   const found: ScrapedDeal[] = [];
   const seen = new Set<string>();
@@ -399,7 +434,17 @@ export function candidateUrls(baseUrl: URL): string[] {
   return DEAL_PATH_CANDIDATES.map((p) => `${origin}${p}`);
 }
 
-async function scrapeListing(listing: Listing): Promise<{ deals: ScrapedDeal[]; error?: string; skipped?: string }> {
+// Renders a URL in a real browser and returns the main document HTML plus
+// every iframe's HTML (Dutchie/Jane/Sweed menus live in iframes or are
+// client-rendered). Supplied by scripts/scrape-rendered-deals.ts; the
+// Vercel cron never sets it.
+export type HtmlFetcher = (url: string) => Promise<string[] | null>;
+
+async function scrapeListing(
+  listing: Listing,
+  fetcher?: HtmlFetcher,
+  urlOverrides?: Record<string, string[]>
+): Promise<{ deals: ScrapedDeal[]; error?: string; skipped?: string }> {
   if (!listing.website) return { deals: [], skipped: "no_website" };
 
   let baseUrl: URL;
@@ -416,20 +461,28 @@ async function scrapeListing(listing: Listing): Promise<{ deals: ScrapedDeal[]; 
   const combined: ScrapedDeal[] = [];
   const seenKeys = new Set<string>();
 
-  for (const candidateUrl of candidateUrls(baseUrl)) {
+  const urls = urlOverrides?.[listing.slug] ?? candidateUrls(baseUrl);
+  for (const candidateUrl of urls) {
     const path = new URL(candidateUrl).pathname;
     const allowed = await isAllowedByRobots(candidateUrl);
     if (!allowed) continue;
 
     try {
-      const res = await fetchWithTimeout(candidateUrl);
-      if (res.status === 429) {
-        hostCooldown[baseUrl.host] = Date.now() + 60 * 60 * 1000;
-        return { deals: combined, error: "rate_limited_429" };
+      let htmls: string[];
+      if (fetcher) {
+        const got = await fetcher(candidateUrl);
+        if (!got) continue;
+        htmls = got;
+      } else {
+        const res = await fetchWithTimeout(candidateUrl);
+        if (res.status === 429) {
+          hostCooldown[baseUrl.host] = Date.now() + 60 * 60 * 1000;
+          return { deals: combined, error: "rate_limited_429" };
+        }
+        if (!res.ok) continue;
+        htmls = [await res.text()];
       }
-      if (!res.ok) continue;
-      const html = await res.text();
-      const deals = extractDealsFromHtml(html, candidateUrl, listing.slug);
+      const deals = collapseVariantDeals(htmls.flatMap((h) => extractDealsFromHtml(h, candidateUrl, listing.slug)));
       for (const d of deals) {
         const key = normalizeTitle(d.title);
         if (!seenKeys.has(key)) {
@@ -470,6 +523,10 @@ export interface RunConfig {
   mode: "dry" | "live";
   apply: boolean;
   maxListings: number;
+  // Rendered (real-browser) mode — see HtmlFetcher.
+  fetcher?: HtmlFetcher;
+  onlySlugs?: string[];
+  urlOverrides?: Record<string, string[]>;
 }
 
 async function supaGet<T>(supabaseUrl: string, key: string, path: string): Promise<T> {
@@ -553,8 +610,10 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
       }
       return true;
     })
+    .filter((l) => !cfg.onlySlugs || cfg.onlySlugs.includes(l.slug))
     .slice(0, cfg.maxListings);
 
+  const SOURCE = cfg.fetcher ? "website_rendered" : "website";
   const slugsIn = cilListings.map((l) => `"${l.slug}"`).join(",");
   const existing = slugsIn
     ? await supaGet<ExistingDeal[]>(
@@ -568,7 +627,7 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
   for (const l of cilListings) {
     summary.listings_processed += 1;
     try {
-      const r = await scrapeListing(l);
+      const r = await scrapeListing(l, cfg.fetcher, cfg.urlOverrides);
       if (r.skipped) {
         summary.fetch_errors.push({ slug: l.slug, error: `skipped:${r.skipped}` });
         continue;
@@ -603,11 +662,20 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
   }
 
   const scrapedKeys = new Set(upsertPlan.map((u) => `${u.scraped.listing_slug}|${normalizeTitle(u.scraped.title)}`));
+  // Each mode only retires its own deals: the static cron must not age out
+  // what the rendered run found (it can't see JS menus), and the rendered
+  // run only retires deals for stores it actually loaded this run.
+  const loadedOk = new Set(
+    cilListings.map((l) => l.slug).filter((slug) => !summary.fetch_errors.some((f) => f.slug === slug))
+  );
   const agedOut = existing.filter(
     (e) =>
       e.is_active &&
       e.source !== "leafly" &&
       e.source !== "weedmaps" &&
+      (SOURCE === "website_rendered"
+        ? e.source === "website_rendered" && loadedOk.has(e.listing_slug)
+        : e.source !== "website_rendered") &&
       e.status_reason !== "not_seen_last_scrape" &&
       !scrapedKeys.has(`${e.listing_slug}|${normalizeTitle(e.title)}`)
   );
@@ -665,7 +733,7 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
                 ? "dollar"
                 : null,
           discount_type: u.scraped.discount_unit === "percent" ? "percentage" : "other",
-          source: "website",
+          source: SOURCE,
           source_url: u.scraped.source_url,
           is_active: true,
           status_reason: "scraped_direct_source",
