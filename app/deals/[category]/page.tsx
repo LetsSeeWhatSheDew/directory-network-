@@ -137,13 +137,13 @@ async function getDeals(category: string, city?: string | null) {
           category === "all"
             ? data
             : data.filter((d: any) => effectiveCategory(d) === category);
-        if (!city) return { deals: inCat.slice(0, 10), source: "view" };
+        if (!city) return { deals: inCat, source: "view" };
 
         const metroFiltered = inCat.filter((d: any) =>
           isInMetro(d.city, d.slug || d.listing_slug, city)
         );
         if (metroFiltered.length > 0) {
-          return { deals: metroFiltered.slice(0, 10), source: "view" };
+          return { deals: metroFiltered, source: "view" };
         }
         // City filter matched nothing — don't fall through to the
         // direct-table path (it can't filter by city at all).
