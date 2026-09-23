@@ -127,12 +127,34 @@ const DISCOUNT_PATTERNS: Array<{
   },
   {
     pattern:
-      /(\d{2})\s?%\s+off[^.\n]{0,40}?(flower|vapes?|cartridges?|carts?|concentrates?|edibles?|pre[-\s]rolls?|drinks?|beverages?|gummies?|infused)/gi,
+      /(\d{2})\s?%\s+off\s+([^.\n%!]{0,40}?)(flower|vapes?|cartridges?|carts?|concentrates?|edibles?|pre[-\s]rolls?|drinks?|beverages?|gummies?|infused)/gi,
+    // Keep the words between "off" and the category ("40% Off Elevate
+    // Vapes" is a brand deal, not 40% off every vape). '%' and '!' can't
+    // appear in the gap, so one deal's text never bleeds into the next.
     label: (m) => ({
-      title: `${m[1]}% off ${m[2].toLowerCase()}`,
+      title: `${m[1]}% off ${m[2].trim() ? m[2].trim() + " " : ""}${m[3].toLowerCase()}`,
       discount_value: Number(m[1]),
       discount_unit: "percent" as const,
     }),
+  },
+  // Shop-card brand deals: "25% OFF KANHA  Order NOW!" (Cookies sites).
+  // Uppercase brand immediately followed by a shop CTA, so random prose
+  // can't match. Vague labels ("SPECIAL", "DEALS") are dropped in label().
+  {
+    pattern: /(\d{2})\s?%\s+OFF\s+([A-Z][A-Z0-9&'.]*(?:\s+[A-Z][A-Z0-9&'.]*){0,3})\s+(?:Order|Shop)\s+Now/g,
+    label: (m) => {
+      const brand = m[2]
+        .toLowerCase()
+        .replace(/\b([a-z])/g, (c) => c.toUpperCase());
+      if (/^(Special|Specials|Deal|Deals|Sale|Everything)$/i.test(brand)) {
+        return { title: "", discount_value: null, discount_unit: "other" as const };
+      }
+      return {
+        title: `${m[1]}% off ${brand}`,
+        discount_value: Number(m[1]),
+        discount_unit: "percent" as const,
+      };
+    },
   },
   // Storewide: "25% Off the Entire Store!" / "20% off everything"
   {
