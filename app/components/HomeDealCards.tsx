@@ -257,7 +257,7 @@ export default function HomeDealCards({
           fontFamily: "system-ui, sans-serif",
         }}
       >
-        <div style={{ fontFamily: "Georgia, serif", fontSize: "1.1rem", fontWeight: 700, color: "#1C3A22", marginBottom: 6 }}>
+        <div style={{ fontFamily: "var(--font-display), system-ui, sans-serif", fontSize: "1.1rem", fontWeight: 700, color: "#1C3A22", marginBottom: 6 }}>
           We're refreshing Central IL deals — check back soon.
         </div>
         <p style={{ fontSize: ".9rem", color: "#545B52", margin: "0 auto 14px", maxWidth: 420, lineHeight: 1.5 }}>

@@ -232,7 +232,7 @@ export default function Calculator({ defaultCitySlug = "peoria" }: { defaultCity
         }
         .calc-input-wrap{
           display:flex;align-items:center;
-          background:#F7F4ED;border:1px solid #DCDED2;border-radius:10px;
+          background:var(--pp-paper);border:1px solid #DCDED2;border-radius:10px;
           padding:0 14px;height:52px;
         }
         .calc-input-wrap:focus-within{
@@ -251,7 +251,7 @@ export default function Calculator({ defaultCitySlug = "peoria" }: { defaultCity
         }
         .calc-select{
           height:52px;padding:0 14px;
-          background:#F7F4ED;border:1px solid #DCDED2;border-radius:10px;
+          background:var(--pp-paper);border:1px solid #DCDED2;border-radius:10px;
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:1rem;font-weight:600;color:#1F3D2B;
           appearance:none;
@@ -270,7 +270,7 @@ export default function Calculator({ defaultCitySlug = "peoria" }: { defaultCity
         .calc-tier{
           display:flex;flex-direction:column;gap:2px;
           padding:12px 14px;border:1px solid #DCDED2;border-radius:10px;
-          cursor:pointer;background:#F7F4ED;
+          cursor:pointer;background:var(--pp-paper);
           transition:all 150ms ease;
           min-height:60px;
         }
@@ -291,7 +291,7 @@ export default function Calculator({ defaultCitySlug = "peoria" }: { defaultCity
         }
 
         .calc-output{
-          background:#F7F4ED;border:1px solid #DCDED2;border-radius:12px;
+          background:var(--pp-paper);border:1px solid #DCDED2;border-radius:12px;
           padding:24px;
         }
         @media(min-width:720px){.calc-output{padding:28px}}

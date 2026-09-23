@@ -22,7 +22,7 @@ export default function GlobalError({
       <body
         style={{
           fontFamily: "-apple-system, BlinkMacSystemFont, system-ui, sans-serif",
-          background: "#F7F4ED",
+          background: "var(--pp-paper)",
           color: "#1F3D2B",
           minHeight: "100vh",
           display: "flex",

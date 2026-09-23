@@ -49,7 +49,7 @@ export default function IllinoisCannabisTaxPage() {
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:var(--font-ui, system-ui, sans-serif);background:#F7F4ED;color:#1F3D2B;min-height:100vh}
+        body{font-family:var(--font-ui, system-ui, sans-serif);background:var(--pp-paper);color:#1F3D2B;min-height:100vh}
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #DCDED2;position:sticky;top:0;z-index:100}
         .logo-link{display:flex;align-items:center}
         .nav-links{display:flex;gap:18px;align-items:center}
@@ -81,7 +81,7 @@ export default function IllinoisCannabisTaxPage() {
           color:#1F3D2B;margin:36px 0 14px;
         }
         p, .article-list{
-          font-family:var(--font-serif, Georgia, serif);
+          font-family:var(--font-display), system-ui, sans-serif;
           font-size:1.0625rem;line-height:1.7;color:#374151;
           margin-bottom:18px;
         }
@@ -99,7 +99,7 @@ export default function IllinoisCannabisTaxPage() {
           text-align:left;color:#374151;
         }
         table.worked thead th{
-          background:#F7F4ED;
+          background:var(--pp-paper);
           font-size:.78rem;font-weight:700;letter-spacing:.06em;
           text-transform:uppercase;color:#6b7280;
         }

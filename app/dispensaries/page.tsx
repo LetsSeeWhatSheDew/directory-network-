@@ -124,7 +124,7 @@ export default async function DispensariesIndexPage() {
   const cities = Array.from(byCity.keys()).sort();
 
   return (
-    <div style={{ fontFamily: "Georgia, serif", background: "#F7F4ED", minHeight: "100vh", color: "#1F3D2B" }}>
+    <div style={{ fontFamily: "var(--font-display), system-ui, sans-serif", background: "var(--pp-paper)", minHeight: "100vh", color: "#1F3D2B" }}>
       <div className="pp-surface-deep pp-leaf pp-leaf-04">
         <Nav variant="deep" />
         <header style={{ color: "var(--color-cream, #F7F4ED)", padding: "clamp(2.5rem, 6vw, 5rem) clamp(1rem, 4vw, 2rem) clamp(2rem, 4vw, 4rem)", textAlign: "center", position: "relative", zIndex: 2 }}>

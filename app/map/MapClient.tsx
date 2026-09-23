@@ -159,7 +159,7 @@ export default function MapClient({ points }: { points: Point[] }) {
           alignItems: "center",
           justifyContent: "center",
           gap: 14,
-          background: "#F7F4ED",
+          background: "var(--pp-paper)",
           padding: "20px",
           fontFamily: "system-ui, sans-serif",
           textAlign: "center",

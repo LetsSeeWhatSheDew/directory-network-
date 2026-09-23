@@ -122,7 +122,7 @@ export default async function OpenNowPage() {
     <>
       <style>{`
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        .on-root { min-height: 100vh; background: #f7f6f2; font-family: Georgia, serif; }
+        .on-root { min-height: 100vh; background: var(--pp-paper); font-family:var(--font-display), system-ui, sans-serif; }
         .on-nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 32px; background: #fff; border-bottom: 1px solid #e8e5de; position: sticky; top: 0; z-index: 50; }
         .on-nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
         .on-nav-dot { width: 10px; height: 10px; border-radius: 50%; background: #2E7D32; display: inline-block; animation: pulse 2s infinite; }
@@ -148,7 +148,7 @@ export default async function OpenNowPage() {
         .on-card { background: #fff; border-radius: 12px; border: 1px solid #e8e5de; padding: 16px 20px; display: flex; gap: 14px; align-items: center; text-decoration: none; margin-bottom: 10px; }
         .on-card:hover { border-color: #2E7D32; }
         .on-card-closed { opacity: 0.5; }
-        .on-logo { width: 44px; height: 44px; border-radius: 8px; border: 1px solid #e8e5de; background: #f7f6f2; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; font-size: 1.2rem; font-weight: 700; color: #2E7D32; font-family: Georgia, serif; }
+        .on-logo { width: 44px; height: 44px; border-radius: 8px; border: 1px solid #e8e5de; background: var(--pp-paper); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; font-size: 1.2rem; font-weight: 700; color: #2E7D32; font-family:var(--font-display), system-ui, sans-serif; }
         .on-logo-img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
         .on-info { flex: 1; min-width: 0; }
         .on-name { font-size: 0.95rem; font-weight: 700; color: #1F3D2B; font-family: system-ui, sans-serif; margin-bottom: 2px; }
@@ -157,13 +157,13 @@ export default async function OpenNowPage() {
         .on-open-badge { font-size: 0.72rem; font-family: system-ui, sans-serif; font-weight: 700; color: #14532d; background: #dcfce7; padding: 3px 10px; border-radius: 100px; }
         .on-closes { font-size: 0.72rem; color: #6b7280; font-family: system-ui, sans-serif; }
         .on-tags { display: flex; gap: 6px; margin-top: 4px; }
-        .on-tag { font-size: 0.68rem; font-family: system-ui, sans-serif; color: #374151; background: #f7f6f2; border: 1px solid #e8e5de; padding: 2px 8px; border-radius: 100px; }
+        .on-tag { font-size: 0.68rem; font-family: system-ui, sans-serif; color: #374151; background: var(--pp-paper); border: 1px solid #e8e5de; padding: 2px 8px; border-radius: 100px; }
         .on-cta { background: #1F3D2B; border-radius: 14px; padding: 24px; margin-top: 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
         .on-cta-text { font-size: 0.95rem; font-weight: 700; color: #fff; }
         .on-cta-sub { font-size: 0.8rem; color: #94a3b8; font-family: system-ui, sans-serif; margin-top: 4px; }
         .on-cta-btn { background: #2E7D32; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 700; font-size: 0.85rem; white-space: nowrap; }
         .on-footer { background: #1F3D2B; padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-        .on-footer-brand { font-size: 1rem; font-weight: 700; color: #fff; font-family: Georgia, serif; }
+        .on-footer-brand { font-size: 1rem; font-weight: 700; color: #fff; font-family:var(--font-display), system-ui, sans-serif; }
         .on-footer-note { font-size: 0.78rem; color: #475569; font-family: system-ui, sans-serif; }
         @media (max-width: 768px) {
           .on-nav { padding: 14px 20px; }

@@ -33,7 +33,7 @@ export default async function BrandIndex() {
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:Georgia,serif;background:#F7F4ED;color:#1F3D2B;min-height:100vh}
+        body{font-family:var(--font-body),system-ui,sans-serif;background:var(--pp-paper);color:var(--pp-body);min-height:100vh}
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;border-bottom:1px solid #DCDED2}
         .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
         .logo-text{font-size:1.1rem;font-weight:700;color:#1F3D2B}
@@ -44,7 +44,7 @@ export default async function BrandIndex() {
         h1{font-size:clamp(2rem,5vw,2.8rem);font-weight:700;letter-spacing:-.04em;line-height:1.08;margin-bottom:18px}
         .lede{font-family:system-ui,sans-serif;font-size:1.05rem;color:#374151;line-height:1.55;margin-bottom:28px;max-width:58ch}
         .stub-card{background:#fff;border:1px solid #DCDED2;border-left:4px solid #2E7D32;border-radius:14px;padding:28px 28px 24px;box-shadow:0 4px 16px rgba(15,31,61,.06)}
-        .stub-title{font-family:Georgia,serif;font-size:1.2rem;font-weight:700;color:#1F3D2B;margin-bottom:8px}
+        .stub-title{font-family:var(--font-display), system-ui, sans-serif;font-size:1.2rem;font-weight:700;color:#1F3D2B;margin-bottom:8px}
         .stub-body{font-family:system-ui,sans-serif;font-size:.95rem;color:#374151;line-height:1.6;max-width:52ch}
         .stub-foot{margin-top:18px;font-family:system-ui,sans-serif;font-size:.85rem}
         .stub-foot a{color:#2E7D32;text-decoration:none;font-weight:600}

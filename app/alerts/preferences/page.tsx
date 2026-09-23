@@ -61,14 +61,14 @@ export default function AlertPreferencesPage() {
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:Georgia,serif;background:#F7F4ED;color:#1F3D2B;min-height:100vh}
+        body{font-family:var(--font-body),system-ui,sans-serif;background:var(--pp-paper);color:var(--pp-body);min-height:100vh}
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#1F3D2B;position:sticky;top:0;z-index:100}
         .logo{display:flex;align-items:center;gap:8px;color:#fff;text-decoration:none;font-weight:700}
         .logo span{color:#93CB5C}
         .back{font-size:.82rem;color:rgba(255,255,255,.55);text-decoration:none;font-family:system-ui,sans-serif}
         .back:hover{color:#fff}
         .wrap{max-width:600px;margin:0 auto;padding:40px 20px}
-        h1{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:700;letter-spacing:-.03em;margin-bottom:8px;font-family:Georgia,serif}
+        h1{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:700;letter-spacing:-.03em;margin-bottom:8px;font-family:var(--font-display), system-ui, sans-serif}
         .sub{font-size:.9rem;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:28px}
         form{background:#fff;border:1px solid #DCDED2;border-radius:14px;padding:24px}
         .field{margin-bottom:20px}

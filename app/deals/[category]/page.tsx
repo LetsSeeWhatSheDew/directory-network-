@@ -509,7 +509,7 @@ export default async function DealsPage({
       ))}
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:Georgia,serif;background:#F7F4ED;color:#1F3D2B;min-height:100vh}
+        body{font-family:var(--font-body),system-ui,sans-serif;background:var(--pp-paper);color:var(--pp-body);min-height:100vh}
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#fff;position:sticky;top:0;z-index:100;border-bottom:1px solid #DCDED2}
         .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
         .logo-dot{width:8px;height:8px;border-radius:50%;background:#2E7D32;animation:pulse 2.5s infinite}
@@ -540,7 +540,7 @@ export default async function DealsPage({
         .disp-detail{font-size:.8rem;color:#9ca3af;font-family:system-ui,sans-serif;margin-top:2px;margin-bottom:6px}
         .deal-title-big{font-size:.92rem;font-weight:600;color:#374151;margin-bottom:14px;font-family:system-ui,sans-serif;line-height:1.4;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
         .attrs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:16px}
-        .attr{font-size:.66rem;color:#9ca3af;background:#F7F4ED;border-radius:100px;padding:2px 8px;font-family:system-ui,sans-serif}
+        .attr{font-size:.66rem;color:#9ca3af;background:var(--pp-paper);border-radius:100px;padding:2px 8px;font-family:system-ui,sans-serif}
         .deal-more-toggle{font-size:.78rem;color:#6b7280;font-family:system-ui,sans-serif;margin-bottom:16px;cursor:pointer;text-decoration:none;display:inline-block;list-style:none}
         .deal-more-toggle::-webkit-details-marker{display:none}
         .deal-more-toggle:hover{color:#1F3D2B}
@@ -914,6 +914,7 @@ export default async function DealsPage({
           </div>
         )}
       </div>
+      <Footer />
     </>
   );
 }

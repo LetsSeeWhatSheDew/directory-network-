@@ -67,7 +67,7 @@ export default function SavingsDashboard() {
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:Georgia,serif;background:#F7F4ED;color:#1F3D2B;min-height:100vh}
+        body{font-family:var(--font-body),system-ui,sans-serif;background:var(--pp-paper);color:var(--pp-body);min-height:100vh}
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:#1F3D2B;position:sticky;top:0;z-index:100}
         .logo{color:#fff;text-decoration:none;font-weight:700}
         .logo span{color:#93CB5C}
@@ -82,7 +82,7 @@ export default function SavingsDashboard() {
         .stat.primary{background:#1F3D2B;color:#fff;border-color:#1F3D2B}
         .stat-label{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#9ca3af;font-family:system-ui,sans-serif;margin-bottom:6px}
         .stat.primary .stat-label{color:#93CB5C}
-        .stat-num{font-size:1.9rem;font-weight:700;letter-spacing:-.02em;line-height:1;font-family:Georgia,serif}
+        .stat-num{font-size:1.9rem;font-weight:700;letter-spacing:-.02em;line-height:1;font-family:var(--font-display), system-ui, sans-serif}
         .stat.primary .stat-num{color:#fff}
         .stat.primary .stat-num span{color:#93CB5C}
         .row-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}

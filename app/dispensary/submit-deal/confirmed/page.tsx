@@ -20,7 +20,7 @@ export default async function ConfirmedPage({
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:Georgia,serif;background:#F7F4ED;color:#1F3D2B;min-height:100vh}
+        body{font-family:var(--font-body),system-ui,sans-serif;background:var(--pp-paper);color:var(--pp-body);min-height:100vh}
         .nav{padding:14px 28px;background:#1F3D2B;display:flex;justify-content:space-between;align-items:center}
         .logo{color:#fff;text-decoration:none;font-weight:700;letter-spacing:-.02em}
         .logo span{color:#93CB5C}

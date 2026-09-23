@@ -944,7 +944,7 @@ export default async function HomePage() {
         }
         .trust-h2{margin:8px 0 18px;letter-spacing:-.03em}
         .trust-body{
-          font-family:var(--font-serif, Georgia, serif);
+          font-family:var(--font-display), system-ui, sans-serif;
           font-size:clamp(1.05rem, 1.5vw + .8rem, 1.2rem);
           line-height:1.7;color:#374151;
           max-width:560px;margin:0 auto 24px;
