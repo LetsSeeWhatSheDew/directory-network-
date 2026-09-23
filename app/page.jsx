@@ -1028,7 +1028,7 @@ export default async function HomePage() {
         }
         .pp-home-hero-grid {
           display: grid;
-          grid-template-columns: 1fr;
+          grid-template-columns: minmax(0, 1fr);
           gap: clamp(1.5rem, 3vw, 2.5rem);
           align-items: start;
         }
@@ -1178,7 +1178,8 @@ export default async function HomePage() {
         @media (max-width: 640px) {
           /* Phone: categories collapse to one swipeable chip row so the
              first deal shows up a screen sooner. */
-          .pp-home-hero-cats-shell { padding: 12px !important; }
+          .pp-home-hero-right, .pp-home-hero-cats-shell { min-width: 0; max-width: 100%; }
+          .pp-home-hero-cats-shell { padding: 12px !important; overflow: hidden; }
           .pp-home-hero-cats-label { display: none; }
           .pp-home-hero-cats-grid { display: flex !important; gap: 8px; overflow-x: auto; scrollbar-width: none; }
           .pp-home-hero-cats-grid::-webkit-scrollbar { display: none; }
