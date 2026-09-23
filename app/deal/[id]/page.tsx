@@ -430,6 +430,7 @@ export default async function DealPage({
             <>
               <div className="sv-label">You save</div>
               <div className="sv-amt">${dollars}</div>
+              <div className="sv-vs" style={{ fontFamily: "var(--font-breath)", fontSize: "1.15rem", marginTop: 4 }}>Breathe out.</div>
               </>
           ) : (
             savingsFormatted !== "Deal active" && (

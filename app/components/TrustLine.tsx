@@ -26,6 +26,7 @@ export default function TrustLine({
         lineHeight: 1.6,
       }}
     >
+      <span className="pp-breathe-dot" aria-hidden="true" style={{ width: 7, height: 7, marginRight: 7, verticalAlign: "1px" }} />
       Checked on each store&apos;s own site · No store pays to rank
       {updatedLabel ? ` · ${updatedLabel}` : ""} ·{" "}
       <Link href="/how-we-rank" style={{ color: link, fontWeight: 600, textDecoration: "underline", textUnderlineOffset: 2 }}>

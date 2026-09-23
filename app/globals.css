@@ -760,3 +760,56 @@ h4, .pp-h4 {
   .pb-otd { font-size: 1.0625rem; }
   .pb-title { font-size: 1.0625rem; }
 }
+
+/* ============================================================
+ * BREATHE (v3, 2026-09-23) — the site breathes.
+ * Mist + leaf palette, serif headlines, hard mono numbers. Motion is a
+ * slow 10-second breath (in, hold, out) — ambient only, never holding
+ * content back. No smoke imagery anywhere. Motion is off for anyone
+ * with "reduce motion" on. After dark (19:00–06:00 local) the homepage
+ * hero shifts to a night sky via html[data-daypart="night"].
+ * Overrides the v2 tokens above; token names are unchanged so every
+ * page inherits the new palette.
+ * ============================================================ */
+:root {
+  --pp-ink: #18261D;
+  --pp-body: #26352B;
+  --pp-paper: #EEF2EC;          /* mist */
+  --pp-surface: #FBFCF9;
+  --pp-canopy: #1F4A32;         /* deep leaf — dark CTA blocks, keeps white text AA */
+  --pp-canopy-text: #F1F5EE;
+  --pp-canopy-eyebrow: #A9D6B3;
+  --pp-signal: #2F6B45;         /* leaf — the earned accent */
+  --pp-signal-ink: #24563A;
+  --pp-best-tint: #DDEBDD;
+  --pp-best-border: #BFD9C2;
+  --pp-muted: #5B6B5F;
+  --pp-border: #D6E0D4;
+  --pp-glow: #BFE3C4;
+  --color-sage-vibrant: #37805A;
+  --font-breath: var(--font-breath-loaded), "Instrument Serif", Georgia, serif;
+  --breath: 10s;
+}
+body { background: var(--pp-paper); }
+
+/* Headlines breathe in serif; numbers stay hard mono. */
+/* Instrument Serif ships one weight (400) — force it so no page renders a
+   fake-bold serif from an old font-weight:700 rule. */
+h1:not([data-keep-font]) { font-family: var(--font-breath) !important; font-weight: 400 !important; letter-spacing: -0.01em !important; }
+
+@keyframes pp-breath { 0%,100% { transform: scale(.86); opacity: .75 } 45%,55% { transform: scale(1.06); opacity: 1 } }
+@keyframes pp-exhale { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes pp-cue { 0%,5% { opacity: 0 } 15%,40% { opacity: 1 } 50%,100% { opacity: 0 } }
+
+.pp-breathe-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--pp-signal); animation: pp-breath var(--breath) ease-in-out infinite; }
+
+/* New content eases in like an exhale. */
+.deal-card, .gp-row, .tw-row, .gp-card { animation: pp-exhale .9s ease-out both; }
+.deal-card:nth-child(2), .gp-row:nth-child(2), .tw-row:nth-child(2), .gp-card:nth-child(2) { animation-delay: .12s; }
+.deal-card:nth-child(3), .gp-row:nth-child(3), .tw-row:nth-child(3), .gp-card:nth-child(3) { animation-delay: .24s; }
+.deal-card:nth-child(4), .gp-row:nth-child(4), .tw-row:nth-child(4), .gp-card:nth-child(4) { animation-delay: .36s; }
+.deal-card:nth-child(n+5), .gp-row:nth-child(n+5), .tw-row:nth-child(n+5), .gp-card:nth-child(n+5) { animation-delay: .45s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pp-breathe-dot, .deal-card, .gp-row, .tw-row, .gp-card, .bh-orb, .bh-ring, .bh-cue em, .bh-deal { animation: none !important; opacity: 1 !important; transform: none !important; }
+}

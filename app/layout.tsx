@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
+import { Space_Grotesk, Inter, JetBrains_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import UtmCapture from "./components/UtmCapture";
 import CityPickerHost from "./components/CityPickerHost";
@@ -40,6 +40,15 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono-loaded",
   subsets: ["latin"],
   weight: ["400", "500", "700"],
+  display: "swap",
+});
+
+// Breathe (2026-09-23): serif for headlines.
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-breath-loaded",
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -92,9 +101,17 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}
+      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} ${instrumentSerif.variable}`}
+      suppressHydrationWarning
     >
       <body className="antialiased">
+        {/* Daypart for the Breathe night sky (19:00–06:00 local). Runs before
+            paint so there's no flash. ?daypart=night|day forces it for testing. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var q=new URLSearchParams(location.search).get('daypart');var h=new Date().getHours();document.documentElement.setAttribute('data-daypart',q==='night'||q==='day'?q:(h>=19||h<6?'night':'day'));}catch(e){}})();`,
+          }}
+        />
         {/* Hoisted to <head> by React 19 — warms the Supabase connection. */}
         <link rel="preconnect" href={SUPABASE_ORIGIN} crossOrigin="anonymous" />
         <link rel="dns-prefetch" href={SUPABASE_ORIGIN} />

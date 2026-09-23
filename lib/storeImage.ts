@@ -15,7 +15,10 @@ export function storeImageUrl(
   slug: string | null | undefined
 ): string | null {
   if (!logoUrl) return null;
-  if (isPlacesPhoto(logoUrl)) return slug ? `/api/store-photo/${encodeURIComponent(slug)}` : null;
+  // Places photos need Google Cloud billing (off as of 2026-09-23). Until
+  // NEXT_PUBLIC_PLACES_PHOTOS=1 is set, skip the request and show the
+  // monogram instead of a guaranteed 404.
+  if (isPlacesPhoto(logoUrl)) return slug && process.env.NEXT_PUBLIC_PLACES_PHOTOS === "1" ? `/api/store-photo/${encodeURIComponent(slug)}` : null;
   if (/^https:\/\//.test(logoUrl) && !/[?&]key=/.test(logoUrl)) return logoUrl;
   return null;
 }

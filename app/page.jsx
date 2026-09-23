@@ -6,7 +6,7 @@ import Footer from "./components/Footer";
 import LocationAware from "./components/LocationAware";
 import TrackedLink from "./components/TrackedLink";
 import HomeDealCards from "./components/HomeDealCards";
-import HeroDealCard from "./components/HeroDealCard";
+import BreatheHero from "./components/BreatheHero";
 import { getConfirmationsToday } from "../lib/confirmations";
 import { getFeatureRows } from "../lib/waysToBuy";
 import PriceBoard from "./components/PriceBoard";
@@ -1212,94 +1212,22 @@ export default async function HomePage() {
           RIGHT: featured deal card stacked above the category grid
           Both columns must fit in a 1366×768 viewport without scrolling.
           Brand spec § 6.1, asset manifest § 1 + § 2. */}
-      <div className="pp-home-hero pp-surface-deep pp-leaf pp-leaf-04">
-        <Nav variant="deep" />
-
-        {/* 4/20 DEALS WEEK BANNER — only renders Apr 17–20, 2026 */}
-        <FourTwentyBanner />
-
-        {/* Design v2: flat canopy hero — the bud-photo edge + gradient
-            scrim were removed (zero gradients, substance over polish). */}
-        {/* No pp-fade-up on this wrapper: it holds the LCP element (the hero
-            H1). An opacity entrance animation on the LCP node defers its
-            "contentful" paint (LCP measured 3.9s while Speed Index was 1.9s).
-            Rendering the hero at full opacity immediately pulls LCP down to
-            ~FCP. Below-the-fold sections keep their fade-ins. */}
-        <div className="pp-home-hero-inner">
-          <div className="pp-home-hero-grid">
-            {/* LEFT — copy + CTAs */}
-            <div className="pp-home-hero-left">
-              <div className="pp-home-hero-eyebrow"><LocationAware /></div>
-
-              <h1 className="pp-home-hero-h1">
-                Best Bud For Your Buck<span className="pp-home-hero-dollar">$</span>
-                <br />
-                <span className="pp-home-hero-h1-region">in Central Illinois</span>
-              </h1>
-
-              <p className="pp-home-hero-sub">
-                Live verified deals &middot; Peoria &middot; Bloomington &middot; Champaign
-              </p>
-
-              <div className="pp-home-hero-cta-row">
-                <Link href="/cannabis/illinois/open-now" className="pp-btn pp-btn-lg pp-btn-primary">
-                  <MapPin size={18} strokeWidth={2.25} aria-hidden="true" />
-                  Find Deals Near Me
-                </Link>
-                <Link href="/dispensaries" className="pp-btn pp-btn-lg pp-btn-outline-cream">
-                  Browse all dispensaries
-                </Link>
-              </div>
-            </div>
-
-            {/* RIGHT — the signature PriceBoard (live "who's cheapest right
-                now" ranking). Renders ONLY when the menu-baseline pipeline
-                has real per-store prices for a comparable SKU (getLivePriceBoard
-                returns null otherwise — no invented prices ever reach prod).
-                The canopy tag personalizes to the user's metro when known. */}
-            <div className="pp-home-hero-right">
-              {/* Signature slot: the PriceBoard only while its prices are
-                  fresh ("… · LIVE"). When the menu captures are stale the
-                  first thing a visitor sees must not be old prices — show
-                  today's best verified deal instead. */}
-              {livePriceBoard && /· LIVE$/.test(livePriceBoard.locationTag || "") ? (
-                <div className="pp-home-hero-featured">
-                  <PriceBoard {...livePriceBoard} />
-                </div>
-              ) : localizedTopDeals && localizedTopDeals[0] ? (
-                <div className="pp-home-hero-featured">
-                  <HeroDealCard initial={localizedTopDeals[0]} totalDealCount={dealCount} />
-                </div>
-              ) : null}
-
-              <div className="pp-home-hero-cats-shell">
-                <p className="pp-home-hero-cats-label">Browse by category</p>
-                <div className="pp-home-hero-cats-grid">
-                  {CATEGORIES.map((cat) => (
-                    <TrackedLink
-                      key={cat.slug}
-                      href={`/deals/${cat.slug}`}
-                      className="pp-home-hero-cat-tile"
-                      event="category_click"
-                      params={{ category: cat.slug }}
-                    >
-                      <span className="pp-home-hero-cat-icon">
-                        <CategoryIcon slug={cat.slug} size={28} tone="light" />
-                      </span>
-                      <span className="pp-home-hero-cat-label">{cat.label}</span>
-                      <span className="pp-home-hero-cat-count">
-                        {catCounts[cat.slug]
-                          ? `${catCounts[cat.slug]} deal${catCounts[cat.slug] === 1 ? "" : "s"}`
-                          : "none today"}
-                      </span>
-                    </TrackedLink>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+      <Nav variant="light" />
+      <FourTwentyBanner />
+      {/* BREATHE (2026-09-23) — the homepage opens on a slow breath. The
+          signature PriceBoard returns here once menu prices are live. */}
+      <BreatheHero
+        dealCount={dealCount}
+        deals={[...(localizedTopDeals || []), ...(localizedDealPool || [])]}
+        categories={CATEGORIES}
+        catCounts={catCounts}
+        location={<LocationAware />}
+      />
+      {livePriceBoard && /· LIVE$/.test(livePriceBoard.locationTag || "") && (
+        <div style={{ maxWidth: 560, margin: "0 auto", padding: "16px 1rem 0" }}>
+          <PriceBoard {...livePriceBoard} />
         </div>
-      </div>
+      )}
 
       {/* PUFFPRICE INDEX — price-per-gram benchmark card.
           Live when sample threshold crosses (migration pending);

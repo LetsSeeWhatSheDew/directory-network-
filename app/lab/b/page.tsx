@@ -52,7 +52,7 @@ export default async function DirectionB() {
       <style>{CSS}</style>
       <div className="tb-wrap">
         <header className="tb-mast">
-          <h1>The PuffPrice Daily</h1>
+          <h1 data-keep-font>The PuffPrice Daily</h1>
         </header>
         <div className="tb-dateline"><span>{d.dateLabel}</span><span>Central Illinois edition</span><span>{d.dealCount} deals · {d.storeCount} stores</span></div>
 
