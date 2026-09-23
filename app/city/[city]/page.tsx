@@ -18,6 +18,7 @@ import PriceBoard from "../../components/PriceBoard";
 import { getLivePriceBoard } from "../../../lib/priceBoard";
 import ReportIssueLink from "../../components/ReportIssueLink";
 import { getCityProfile, nearbyCities } from "../../../lib/cityProfiles";
+import { getCityMonth } from "../../../lib/dealHistory";
 import {
   nowInCT,
   isOpen,
@@ -289,7 +290,10 @@ export default async function CityPage({
     getLivePriceBoard({ locationTag: `${city.toUpperCase()} AREA`, nearCity: citySlug(city) }).catch(() => null),
   ]);
   const deals = dealsInCity(allDeals, city);
-  const hours = await getHoursFor(listings.map((l) => l.id));
+  const [hours, month] = await Promise.all([
+    getHoursFor(listings.map((l) => l.id)),
+    getCityMonth(city),
+  ]);
 
   const ct = nowInCT();
   const asOf = new Date().toLocaleTimeString("en-US", {
@@ -536,6 +540,12 @@ export default async function CityPage({
         <p className="cp-asof">
           <span className="dot" aria-hidden="true" />
           As of {asOf} CT · deals checked daily on each dispensary&apos;s own site
+          {month && month.trackedDays >= 7 && (
+            <>
+              {" "}· last 30 days: deals on {month.daysWithDeals} day{month.daysWithDeals === 1 ? "" : "s"}
+              {month.avgDiscountPct != null ? `, avg ${month.avgDiscountPct}% off` : ""}
+            </>
+          )}
         </p>
 
         {livePriceBoard && (

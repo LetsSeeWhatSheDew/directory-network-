@@ -13,6 +13,7 @@ import DealFreshnessBadge from "../../components/DealFreshnessBadge";
 import ReportIssueLink from "../../components/ReportIssueLink";
 import ReviewsSection from "../../components/ReviewsSection";
 import { dealContextTag } from "../../../lib/dealContext";
+import { getListingDealHistory, historyIsMeaningful } from "../../../lib/dealHistory";
 import { getApprovedReviews, getReviewStats, reviewsEnabled } from "../../../lib/reviews";
 import { MapPin, Phone, Menu as MenuIcon } from "lucide-react";
 import { notFound } from "next/navigation";
@@ -226,13 +227,15 @@ export default async function DispensaryProfilePage({
   // Central IL scope gate — non-CIL listings are hidden publicly.
   if (!isInCentralIL(listing.city)) notFound();
 
-  const [hours, deals, reviews, reviewStats, reviewsOn] = await Promise.all([
+  const [hours, deals, reviews, reviewStats, reviewsOn, dealHistoryRaw] = await Promise.all([
     getHours(listing.id),
     getDeals(slug),
     getApprovedReviews(slug),
     getReviewStats(slug),
     reviewsEnabled(),
+    getListingDealHistory(slug),
   ]);
+  const dealHistory = historyIsMeaningful(dealHistoryRaw) ? dealHistoryRaw : null;
 
   const ct = nowInCT();
   const status = todayOpenStatus(hours, ct);
@@ -363,6 +366,10 @@ export default async function DispensaryProfilePage({
         .deal-savings-label{font-size:.68rem;color:#6b7280;font-family:system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
         .deal-expires{font-size:.74rem;color:#92400e;background:#fef3c7;padding:2px 8px;border-radius:100px;font-family:system-ui,sans-serif;font-weight:600}
         .deal-desc{font-size:.88rem;color:#374151;font-family:system-ui,sans-serif;line-height:1.5;margin-bottom:12px}
+        .track{display:flex;flex-wrap:wrap;gap:6px 16px;margin:-4px 0 14px;font-size:.8rem;color:var(--pp-muted,#6B7268)}
+        .track b{color:var(--pp-ink,#15231A);font-weight:600}
+        .mono{font-family:var(--font-mono,ui-monospace),monospace;font-variant-numeric:tabular-nums}
+        .best-seen{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.02em;color:var(--pp-signal-ink,#2E5320);background:var(--pp-best-tint,#E8F0DF);border:1px solid var(--pp-best-border,#CBE0B4);border-radius:999px;padding:2px 9px;margin-bottom:6px}
         /* Lighter per-deal CTA: outline, so a stack of 3 deals doesn't read as 3 slabs. */
         .deal-cta{display:block;width:100%;text-align:center;background:var(--pp-surface,#FCFCFA);color:var(--pp-signal-ink,#2E5320);border:1.5px solid var(--pp-signal,#2E7D32);padding:12px;border-radius:10px;text-decoration:none;font-family:var(--font-body,system-ui),sans-serif;font-weight:700;font-size:.9rem;min-height:44px}
         .deal-cta:hover{background:var(--pp-best-tint,#E8F0DF)}
@@ -461,6 +468,23 @@ export default async function DispensaryProfilePage({
           <div className="section-h">
             Active deals · {deals.length} {deals.length === 1 ? "offer" : "offers"}
           </div>
+          {dealHistory && (
+            <div className="track">
+              <span>
+                <b className="mono">{dealHistory.deal_days_30d}</b> of the last 30 days with a deal
+              </span>
+              {dealHistory.typical_discount_pct != null && (
+                <span>
+                  Typical <b className="mono">{dealHistory.typical_discount_pct}%</b> off
+                </span>
+              )}
+              {dealHistory.best_discount_pct != null && (
+                <span>
+                  Best seen <b className="mono">{dealHistory.best_discount_pct}%</b>
+                </span>
+              )}
+            </div>
+          )}
           {deals.length === 0 ? (
             <div className="no-deals">
               <div className="no-deals-t">No active deals right now</div>
@@ -479,6 +503,14 @@ export default async function DispensaryProfilePage({
               return (
                 <div className="deal-card" key={d.id}>
                   <div className="deal-title">{(dollars == null && savingsLabel !== "Deal active" ? dealContextTag(formatDealTitle(d)) : null) || formatDealTitle(d)}</div>
+                  {dealHistory &&
+                    dealHistory.best_discount_pct != null &&
+                    dealHistory.deals_seen_90d >= 3 &&
+                    d.discount_unit === "percent" &&
+                    d.discount_value != null &&
+                    Math.round(d.discount_value) >= dealHistory.best_discount_pct && (
+                      <div className="best-seen">Best discount we&apos;ve seen here</div>
+                    )}
                   <div className="deal-meta">
                     {dollars != null ? (
                       <>

@@ -36,6 +36,6 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
     }
   );
   if (!res.ok) return NextResponse.json({ error: await res.text() }, { status: 502 });
-  revalidateTag("reviews");
+  revalidateTag("reviews", "max");
   return NextResponse.json({ ok: true, status });
 }
