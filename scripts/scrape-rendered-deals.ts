@@ -52,6 +52,7 @@ async function targets(): Promise<string[]> {
 // listed fall back to the static scraper's candidate URLs.
 export const RENDERED_URLS: Record<string, string[]> = {
   "aroma-hill-peoria": ["https://shop.aromahillcannabis.com/peoria/menu/discounts?promo=deals"],
+  "maribis-springfield": ["https://maribisllc.com/springfield/"],
 };
 
 function makeFetcher(ctx: BrowserContext): HtmlFetcher {
@@ -86,6 +87,18 @@ function makeFetcher(ctx: BrowserContext): HtmlFetcher {
             })
           );
           promos.push(...names);
+        } catch {}
+      }
+      // Bundle deals written as lines on the store's own page:
+      // "One Gram Joints – 3 for $27", "2 for $60 – One Gram Cured Concentrate".
+      for (const f of page.frames()) {
+        if (/doubleclick|googletagmanager|google-analytics|facebook|hotjar|mathtag|sitescout/.test(f.url())) continue;
+        try {
+          const text: string = await f.evaluate(() => document.body?.innerText || "");
+          for (const raw of text.split("\n")) {
+            const line = raw.replace(/\s*[–-]\s*Shop Now\s*$/i, "").replace(/\s+/g, " ").trim();
+            if (line.length >= 8 && line.length <= 80 && /\b\d+\s+for\s+\$\d{1,4}\b/i.test(line) && !/\?|sign up|subscribe/i.test(line)) promos.push(line);
+          }
         } catch {}
       }
       const clean = [...new Set(promos.map((t) => t.replace(/\s+/g, " ").trim()).filter((t) => t.length > 4 && t.length < 90 && /\d|bogo|free/i.test(t)))];
