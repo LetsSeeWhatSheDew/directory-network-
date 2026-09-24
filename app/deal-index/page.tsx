@@ -51,7 +51,7 @@ export default async function DealIndexPage() {
       {today ? (
         <>
           <div className="gp-grid" style={{ marginTop: 22 }}>
-            <div className="gp-card"><span>Deals live</span><span className="gp-big">{today.deals}</span></div>
+            <div className="gp-card"><span>Deals seen this morning</span><span className="gp-big">{today.deals}</span></div>
             <div className="gp-card"><span>Stores discounting</span><span className="gp-big">{today.stores}</span></div>
             <div className="gp-card"><span>Average discount</span><span className="gp-big">{today.avgPct != null ? `${today.avgPct}%` : "—"}</span></div>
           </div>
