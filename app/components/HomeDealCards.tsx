@@ -112,8 +112,8 @@ function getExpiryUrgency(expiresAt?: string | null) {
   const expiry = new Date(expiresAt).getTime();
   if (!Number.isFinite(expiry) || expiry < now) return null;
   const hoursLeft = (expiry - now) / (1000 * 60 * 60);
-  if (hoursLeft < 24) return { key: "today", text: "⚡ Expires today", bg: "#fee2e2", fg: "#991b1b" };
-  if (hoursLeft < 48) return { key: "soon", text: "⏱ Expires soon", bg: "#fef3c7", fg: "#92400e" };
+  if (hoursLeft < 24) return { key: "today", text: "Expires today", bg: "var(--pp-stop-bg)", fg: "var(--pp-stop-fg)" };
+  if (hoursLeft < 48) return { key: "soon", text: "Expires soon", bg: "var(--pp-note-bg)", fg: "var(--pp-note-fg)" };
   if (hoursLeft < 168) {
     const weekday = new Date(expiresAt).toLocaleDateString("en-US", { weekday: "short" });
     return { key: "week", text: `Expires ${weekday}`, bg: "#f1f5f9", fg: "#475569" };

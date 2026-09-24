@@ -612,7 +612,7 @@ function Field({
     <div style={styles.field}>
       <label htmlFor={id} style={styles.label}>
         {label}
-        {required ? <span style={{ color: "#dc2626" }}> *</span> : null}
+        {required ? <span style={{ color: "var(--pp-stop-edge)" }}> *</span> : null}
       </label>
       {children}
       {error && (
@@ -696,10 +696,10 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: 600,
   },
   errorBanner: {
-    background: "#fef2f2",
-    border: "1px solid #fecaca",
-    borderLeft: "4px solid #dc2626",
-    color: "#991b1b",
+    background: "var(--pp-stop-bg)",
+    border: "1px solid var(--pp-stop-edge)",
+    borderLeft: "4px solid var(--pp-stop-edge)",
+    color: "var(--pp-stop-fg)",
     padding: "12px 14px",
     borderRadius: 10,
     fontSize: ".92rem",

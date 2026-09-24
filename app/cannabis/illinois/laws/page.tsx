@@ -5,7 +5,7 @@ import Footer from "../../../components/Footer";
 
 export const metadata: Metadata = {
   title: "Illinois Cannabis Laws 2026 — What's Legal Now",
-  description: "Complete guide to Illinois cannabis laws. Legal age, possession limits, where you can smoke, driving rules, and what happens if you break the law. Updated for 2026: doubled possession limits, drive-thru and medical changes.",
+  description: "Illinois cannabis laws for 2026: legal age, the new doubled possession limits, where you can smoke, driving rules, drive-thru and medical changes.",
   alternates: { canonical: "https://www.puffprice.com/cannabis/illinois/laws" },
   openGraph: {
     title: "Illinois Cannabis Laws 2026 — Complete Guide",
@@ -68,18 +68,18 @@ export default function IllinoisLawsPage() {
         .laws-h2 { font-size: 1.5rem; font-weight: 700; color:var(--pp-ink); letter-spacing: -0.02em; margin-bottom: 16px; }
         .laws-p { font-size: 0.95rem; color:var(--pp-body); font-family: var(--font-body); line-height: 1.8; margin-bottom: 16px; }
         .laws-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; border-radius: 12px; overflow: hidden; }
-        .laws-table th { background:var(--pp-canopy); color:var(--pp-on-dark); font-size: 0.8rem; font-family: var(--font-body); font-weight: 700; padding: 12px 16px; text-align: left; }
+        .laws-table th { background:var(--pp-best-tint); color:var(--pp-ink); font-size: 0.8rem; font-family: var(--font-body); font-weight: 700; padding: 12px 16px; text-align: left; }
         .laws-table td { font-size: 0.875rem; font-family: var(--font-body); color:var(--pp-body); padding: 12px 16px; border-bottom:1px solid var(--pp-border); }
         .laws-table tr:nth-child(even) td { background: var(--pp-paper); }
         .laws-ok { background:var(--pp-best-tint); border-left:4px solid var(--pp-signal-fill); border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 16px; }
         .laws-ok-title { font-size: 0.8rem; font-family: var(--font-body); font-weight: 700; color:var(--pp-signal-ink); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
         .laws-ok-text { font-size: 0.875rem; color:var(--pp-signal); font-family: var(--font-body); line-height: 1.6; }
-        .laws-no { background:#fef2f2; border-left:4px solid #dc2626; border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 16px; }
-        .laws-no-title { font-size: 0.8rem; font-family: var(--font-body); font-weight: 700; color:#991b1b; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
-        .laws-no-text { font-size: 0.875rem; color:#991b1b; font-family: var(--font-body); line-height: 1.6; }
-        .laws-warn { background:#fffbeb; border-left:4px solid #d97706; border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 16px; }
-        .laws-warn-title { font-size: 0.8rem; font-family: var(--font-body); font-weight: 700; color:#92400e; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
-        .laws-warn-text { font-size: 0.875rem; color:#92400e; font-family: var(--font-body); line-height: 1.6; }
+        .laws-no { background:var(--pp-stop-bg); border-left:4px solid var(--pp-stop-edge); border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 16px; }
+        .laws-no-title { font-size: 0.8rem; font-family: var(--font-body); font-weight: 700; color:var(--pp-stop-fg); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+        .laws-no-text { font-size: 0.875rem; color:var(--pp-stop-fg); font-family: var(--font-body); line-height: 1.6; }
+        .laws-warn { background:var(--pp-note-bg); border-left:4px solid var(--pp-note-edge); border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 16px; }
+        .laws-warn-title { font-size: 0.8rem; font-family: var(--font-body); font-weight: 700; color:var(--pp-note-fg); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+        .laws-warn-text { font-size: 0.875rem; color:var(--pp-note-fg); font-family: var(--font-body); line-height: 1.6; }
         .laws-faq-item { border-bottom:1px solid var(--pp-border); padding: 20px 0; }
         .laws-faq-q { font-size: 1rem; font-weight: 700; color:var(--pp-ink); margin-bottom: 8px; line-height: 1.4; }
         .laws-faq-a { font-size: 0.9rem; color:var(--pp-body); font-family: var(--font-body); line-height: 1.7; }

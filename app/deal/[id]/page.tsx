@@ -275,8 +275,8 @@ export default async function DealPage({
     none:     { display: "none" },
     ongoing:  { color: "var(--pp-signal-ink)", background: "var(--pp-best-tint)" },
     soft:     { color: "var(--pp-body)", background: "#f1f5f9" },
-    warning:  { color: "#92400e", background: "#fef3c7" },
-    urgent:   { color: "var(--pp-on-dark)",    background: "#dc2626" },
+    warning:  { color: "var(--pp-note-fg)", background: "var(--pp-note-bg)" },
+    urgent:   { color: "var(--pp-stop-fg)", background: "var(--pp-stop-bg)" },
   };
   const disp = displayDispensaryName({ name: listing?.name, slug: deal.listing_slug, listing_slug: deal.listing_slug });
   const rawCity = listing?.city && listing.city !== "Illinois" ? listing.city : null;
@@ -364,7 +364,7 @@ export default async function DealPage({
         .sv-label{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:2px}
         .sv-amt{font-size:clamp(2.4rem,9vw,3.4rem);font-weight:700;color:var(--pp-signal);letter-spacing:-.04em;line-height:1;margin-bottom:4px}
         .sv-vs{font-size:.78rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:14px}
-        .expires{display:inline-block;font-size:.74rem;color:#92400e;background:#fef3c7;padding:3px 10px;border-radius:100px;font-family:var(--font-body);font-weight:700;margin-bottom:14px}
+        .expires{display:inline-block;font-size:.74rem;color:var(--pp-note-fg);background:var(--pp-note-bg);padding:3px 10px;border-radius:100px;font-family:var(--font-body);font-weight:700;margin-bottom:14px}
         .expires.ongoing{color:var(--pp-signal-ink);background:var(--pp-best-tint)}
         .desc{font-size:.98rem;color:var(--pp-body);font-family:var(--font-body);line-height:1.6;margin-bottom:16px}
         .code-box{background:var(--pp-canopy);color:var(--pp-on-dark);border-radius:10px;padding:14px 18px;margin-bottom:18px;font-family:var(--font-body);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
@@ -410,14 +410,14 @@ export default async function DealPage({
             <div
               role="status"
               style={{
-                background: "#fef3c7",
+                background: "var(--pp-note-bg)",
                 border: "1px solid #f5d27a",
                 borderRadius: 10,
                 padding: "10px 14px",
                 marginBottom: 14,
                 fontFamily: "var(--font-body)",
                 fontSize: ".88rem",
-                color: "#92400e",
+                color: "var(--pp-note-fg)",
                 lineHeight: 1.5,
               }}
             >

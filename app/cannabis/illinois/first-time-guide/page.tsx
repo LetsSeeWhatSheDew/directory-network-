@@ -102,14 +102,14 @@ export default function FirstTimeGuidePage() {
         .guide-callout { background:var(--pp-best-tint); border-left:4px solid var(--pp-signal-fill); border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 20px; }
         .guide-callout-title { font-size: 0.8rem; font-family: var(--font-body); font-weight: 700; color:var(--pp-signal-ink); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
         .guide-callout-text { font-size: 0.875rem; color:var(--pp-signal); font-family: var(--font-body); line-height: 1.6; }
-        .guide-warning { background:#fffbeb; border-left:4px solid #d97706; border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 20px; }
-        .guide-warning-title { font-size: 0.8rem; font-family: var(--font-body); font-weight: 700; color:#92400e; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
-        .guide-warning-text { font-size: 0.875rem; color:#92400e; font-family: var(--font-body); line-height: 1.6; }
+        .guide-warning { background:var(--pp-note-bg); border-left:4px solid var(--pp-note-edge); border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 20px; }
+        .guide-warning-title { font-size: 0.8rem; font-family: var(--font-body); font-weight: 700; color:var(--pp-note-fg); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+        .guide-warning-text { font-size: 0.875rem; color:var(--pp-note-fg); font-family: var(--font-body); line-height: 1.6; }
         .guide-list { list-style: none; margin: 0 0 20px; display: flex; flex-direction: column; gap: 10px; }
         .guide-list-item { font-size: 0.95rem; color:var(--pp-body); font-family: var(--font-body); line-height: 1.6; padding-left: 20px; position: relative; }
         .guide-list-item::before { content: "✓"; position: absolute; left: 0; color:var(--pp-signal); font-weight: 700; }
         .guide-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
-        .guide-table th { background:var(--pp-canopy); color:var(--pp-on-dark); font-size: 0.8rem; font-family: var(--font-body); font-weight: 700; padding: 10px 14px; text-align: left; }
+        .guide-table th { background:var(--pp-best-tint); color:var(--pp-ink); font-size: 0.8rem; font-family: var(--font-body); font-weight: 700; padding: 10px 14px; text-align: left; }
         .guide-table td { font-size: 0.875rem; font-family: var(--font-body); color:var(--pp-body); padding: 10px 14px; border-bottom:1px solid var(--pp-border); }
         .guide-table tr:nth-child(even) td { background: var(--pp-paper); }
         .guide-faq { margin-bottom: 48px; }

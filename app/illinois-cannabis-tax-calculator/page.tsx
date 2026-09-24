@@ -171,14 +171,6 @@ export default function TaxCalculatorPage() {
         </p>
       </main>
 
-      <footer className="footer">
-        <span className="footer-copy">© {new Date().getFullYear()} PuffPrice · Photography via Unsplash</span>
-        <div style={{ display: "flex", gap: 18 }}>
-          <Link href="/about" className="footer-link">About</Link>
-          <Link href="/illinois-cannabis-tax" className="footer-link">Tax explainer</Link>
-          <Link href="/dispensaries" className="footer-link">For dispensaries</Link>
-        </div>
-      </footer>
       <Footer />
     </>
   );

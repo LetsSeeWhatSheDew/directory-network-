@@ -151,7 +151,7 @@ export default function GenericClaimForm() {
         />
       </label>
       {error && (
-        <div style={{ fontSize: ".8rem", color: "#dc2626", fontWeight: 600 }}>{error}</div>
+        <div style={{ fontSize: ".8rem", color: "var(--pp-stop-edge)", fontWeight: 600 }}>{error}</div>
       )}
       <button
         type="submit"

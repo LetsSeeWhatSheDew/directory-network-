@@ -132,8 +132,8 @@ export async function generateMetadata({
   const { q = "" } = await searchParams;
   const query = q.trim();
   const title = query
-    ? `Search results for "${query}" | PuffPrice`
-    : "Search | PuffPrice";
+    ? `Search results for "${query}"`
+    : "Search";
   const description = query
     ? `Central Illinois cannabis dispensaries matching "${query}".`
     : "Search Central Illinois cannabis dispensaries.";

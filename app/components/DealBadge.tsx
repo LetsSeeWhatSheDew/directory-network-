@@ -43,9 +43,9 @@ export default function DealBadge({ dealId }: { dealId: string | number | undefi
         display: "inline-flex",
         alignItems: "center",
         gap: 4,
-        background: "#fff7ed",
-        color: "#c2410c",
-        border: "1px solid #fdba74",
+        background: "var(--pp-note-bg)",
+        color: "var(--pp-note-fg)",
+        border: "1px solid var(--pp-note-edge)",
         borderRadius: 100,
         padding: "2px 10px",
         fontSize: ".72rem",
@@ -54,7 +54,7 @@ export default function DealBadge({ dealId }: { dealId: string | number | undefi
         letterSpacing: ".02em",
       }}
     >
-      🔥 Top 5%
+      Top 5%
     </span>
   );
 }

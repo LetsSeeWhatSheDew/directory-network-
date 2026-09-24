@@ -276,14 +276,14 @@ export default function HeroDealCard({
       <div className="hero-deal-title">{deal.deal_title || "Active deal"}</div>
       <div className="hero-deal-row">
         <div className="hero-deal-meta">
-          <span>📍 {displayCity(deal)}{miles != null && miles < 500 ? ` · ${miles.toFixed(1)} mi from you` : ""}</span>
+          <span>{displayCity(deal)}{miles != null && miles < 500 ? ` · ${miles.toFixed(1)} mi from you` : ""}</span>
           {openStatus?.isOpen === true && (
             <span className="hero-deal-open">● {openStatus.label}</span>
           )}
           {openStatus?.isOpen === false && (
             <span className="hero-deal-closed">{openStatus.label}</span>
           )}
-          {expiresToday && <span className="hero-deal-urgent">⚡ Ends today</span>}
+          {expiresToday && <span className="hero-deal-urgent">Ends today</span>}
         </div>
         {goHref && (
           <TrackedLink

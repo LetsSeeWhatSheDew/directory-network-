@@ -10,7 +10,7 @@ import { getRegionStores } from "../../lib/waysToBuy";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "For Dispensaries — Free Deal Report | PuffPrice",
+  title: "For Dispensaries — Free Deal Report",
   description:
     "Central Illinois dispensaries: see how your deals compare with your city, what shoppers can confirm about your store, and how to get your deals listed accurately. Free. No store pays to rank.",
   alternates: { canonical: `${brand.url}/for-dispensaries` },

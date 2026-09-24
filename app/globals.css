@@ -936,3 +936,64 @@ html[data-daypart="night"] .bg-green-600, html[data-daypart="night"] .bg-green-7
 .text-green-500, .text-green-600, .text-green-700 { color: var(--pp-mark) !important; }
 .text-blue-600, .text-blue-700 { color: var(--pp-mark) !important; }
 .border-blue-500, .border-blue-600 { border-color: var(--pp-border-2) !important; }
+
+/* ============================================================
+ * BREATHE — everywhere (Sep 23 late). One system for the pieces the
+ * homepage didn't cover: haze panels instead of solid green slabs,
+ * warm note / stop states that work at night, night buttons on the
+ * mint spec, serif section titles, and a dimmed map after dark.
+ * ============================================================ */
+:root {
+  --pp-haze: linear-gradient(135deg, #FBE9DC 0%, #F9EFE4 42%, #E9EFE1 100%);
+  --pp-haze-border: #ECDFD0;
+  --pp-note-bg: #FBEEDF;  --pp-note-fg: #7A4520;  --pp-note-edge: #D4845A;
+  --pp-stop-bg: #F8E4DC;  --pp-stop-fg: #8A2E1B;  --pp-stop-edge: #C24A1E;
+  --pp-border-2: #E3D6C7;
+}
+html[data-daypart="night"] {
+  --pp-haze: radial-gradient(120% 160% at 0% 0%, rgba(168,230,191,.10), rgba(168,230,191,0) 55%), radial-gradient(90% 120% at 100% 100%, rgba(238,243,176,.06), rgba(238,243,176,0) 60%), #12211A;
+  --pp-haze-border: rgba(168,230,191,.14);
+  --pp-note-bg: rgba(243,195,160,.08);  --pp-note-fg: #F3C3A0;  --pp-note-edge: #D4845A;
+  --pp-stop-bg: rgba(240,138,100,.10);  --pp-stop-fg: #F5B097;  --pp-stop-edge: #F08A64;
+  --pp-border-2: rgba(168,230,191,.18);
+  /* Night buttons: mint glass (spec), not a bright green block. */
+  --pp-signal-fill: #1D3B2C;
+  --pp-on-dark: #D4F3DF;
+}
+html[data-daypart="night"] .pp-btn-primary,
+html[data-daypart="night"] .bg-green-600, html[data-daypart="night"] .bg-green-700, html[data-daypart="night"] .bg-green-800 { box-shadow: inset 0 0 0 1px rgba(168,230,191,.35); }
+
+/* Haze panels — the calm replacement for the old dark-green CTA slabs. */
+.gp-cta, .tw-cta, .calculator-cta, .guide-cta, .laws-cta, .tax-callout, .pp-haze {
+  background: var(--pp-haze) !important; color: var(--pp-ink) !important;
+  border: 1px solid var(--pp-haze-border);
+}
+.tax-callout { border-width: 1px 0; }
+.tax-callout .pp-eyebrow, .guide-cta-sub, .laws-cta-sub, .calculator-cta-text strong { color: var(--pp-muted) !important; }
+.tax-callout-h2, .guide-cta-title, .laws-cta-title, .gp-cta b, .tw-cta b {
+  font-family: var(--font-breath) !important; font-weight: 400 !important; letter-spacing: -.01em !important;
+  color: var(--pp-ink) !important; font-size: clamp(1.35rem, 2.6vw, 1.9rem) !important; line-height: 1.12 !important;
+}
+.tax-callout-body, .calculator-cta-text { color: var(--pp-body) !important; }
+.tax-callout-cta, .guide-cta-btn, .laws-cta-btn, .calculator-cta-button, .tw-cta a, .trust-cta,
+.gp-cta button[type="submit"], .tw-cta button[type="submit"] {
+  background: var(--pp-btn) !important; color: var(--pp-btn-fg) !important;
+  border: 1px solid var(--pp-btn-border) !important; border-radius: 14px !important;
+  font-weight: 600 !important; box-shadow: none !important;
+}
+.tax-callout-cta:hover, .guide-cta-btn:hover, .laws-cta-btn:hover, .calculator-cta-button:hover, .tw-cta a:hover, .trust-cta:hover { filter: brightness(.97); transform: none !important; }
+.gp-cta span, .tw-cta span, .gp-cta p, .tw-cta p { color: var(--pp-body) !important; }
+
+/* Section titles breathe in serif, like the homepage. Card-level h3/h4 stay sans. */
+h2:not([data-keep-font]):not(.pp-footer-heading) {
+  font-family: var(--font-breath) !important; font-weight: 400 !important; letter-spacing: -.01em !important;
+}
+
+/* Map after dark: dim the tiles instead of a white slab. */
+html[data-daypart="night"] .leaflet-tile-pane { filter: brightness(.62) saturate(.7) hue-rotate(-8deg) contrast(1.05); }
+html[data-daypart="night"] .leaflet-container { background: var(--pp-paper); }
+.leaflet-container, .leaflet-container a, .leaflet-control-attribution { font-family: var(--font-body) !important; }
+.leaflet-control-attribution a { color: var(--pp-muted) !important; }
+
+/* Wide tables scroll sideways on phones instead of cutting off. */
+.pp-table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }

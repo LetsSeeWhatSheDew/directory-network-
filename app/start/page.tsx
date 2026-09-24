@@ -176,7 +176,7 @@ export default function StartPage() {
           </p>
           <ul>
             <li>Every deal card links straight to directions, hours, and the dispensary&rsquo;s menu.</li>
-            <li>We flag genuinely extraordinary deals with a 🔥 badge. No letter grades, no padding.</li>
+            <li>We flag genuinely extraordinary deals with a “Top 5%” badge. No letter grades, no padding.</li>
             <li>It&rsquo;s free and no account is needed.</li>
             <li>
               Optional <strong>Pro alerts ($0.99/month)</strong> email you the moment a new

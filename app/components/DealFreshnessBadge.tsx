@@ -72,8 +72,8 @@ export default function DealFreshnessBadge({
       <span
         style={{
           ...baseStyle,
-          color: "#92400e",
-          background: "#fef3c7",
+          color: "var(--pp-note-fg)",
+          background: "var(--pp-note-bg)",
           fontWeight: 600,
         }}
         title="Consider double-checking with the dispensary"

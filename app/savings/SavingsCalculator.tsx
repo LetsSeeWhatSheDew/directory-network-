@@ -99,7 +99,7 @@ export default function SavingsCalculator() {
           <div style={resultEyebrow}>Your result</div>
           <div style={resultBig}>
             You&apos;re probably overpaying by{" "}
-            <span style={{ color: "#dc2626" }}>${result.overpaying}</span> per year.
+            <span style={{ color: "var(--pp-stop-edge)" }}>${result.overpaying}</span> per year.
           </div>
           <p style={resultBody}>
             At a typical {Math.round(AVG_DISCOUNT_RATE * 100)}% discount on tracked deals, your

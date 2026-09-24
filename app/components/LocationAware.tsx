@@ -341,7 +341,7 @@ export default function LocationAware() {
     return (
       <div aria-live="polite" style={wrapperStyle}>
         <span>
-          📍 Looks like you&apos;re outside Central Illinois — showing the whole region ·{" "}
+          Looks like you&apos;re outside Central Illinois — showing the whole region ·{" "}
           <button type="button" onClick={openPicker} style={linkBtn}>
             pick a city
           </button>
@@ -356,13 +356,13 @@ export default function LocationAware() {
     // disappears.
     return (
       <button type="button" onClick={openPicker} style={linkBtn}>
-        📍 Set your city
+        Set your city
       </button>
     );
   }
 
   if (busy && !loc) {
-    return <div style={detectingStyle}>📍 Detecting location…</div>;
+    return <div style={detectingStyle}>Detecting location…</div>;
   }
 
   if (!loc) return null;
@@ -372,7 +372,7 @@ export default function LocationAware() {
   return (
     <div aria-live="polite" style={wrapperStyle}>
       <span>
-        {approximate ? "📍 Location approximate —" : "📍 Showing deals near"}{" "}
+        {approximate ? "Location approximate —" : "Showing deals near"}{" "}
         <span style={{ color: "var(--pp-signal)", fontWeight: 600 }}>{loc.city}</span>
         {approximate && (
           <>

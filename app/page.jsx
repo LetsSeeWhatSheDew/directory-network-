@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { MapPin } from "lucide-react";
 import Nav from "./components/Nav";
@@ -713,7 +712,7 @@ export default async function HomePage() {
           font-size:.8rem;color:var(--pp-body);
           font-family:var(--font-body);font-weight:500;
         }
-        .hero-deal-urgent{color:#991b1b;font-weight:700}
+        .hero-deal-urgent{color:var(--pp-stop-fg);font-weight:700}
         .hero-deal-cta{
           background:var(--pp-signal-fill);color:var(--pp-on-dark);
           padding:12px 22px;border-radius:10px;
@@ -889,7 +888,7 @@ export default async function HomePage() {
         }
 
         /* SECTION 3 — CITIES GRID (Phase 4 layout consolidation) */
-        .cities-section{background:var(--pp-surface);border-top:1px solid var(--pp-border);border-bottom:1px solid var(--pp-border);padding:0 0 64px;position:relative}
+        .cities-section{background:var(--pp-surface);border-top:1px solid var(--pp-border);border-bottom:1px solid var(--pp-border);padding:64px 0;position:relative}
         /* Banner photo above the city grid — positions us geographically. */
         .cities-banner{
           position:relative;
@@ -953,7 +952,7 @@ export default async function HomePage() {
           align-items:center;
         }
         @media(min-width:900px){
-          .trust-grid{grid-template-columns:1.1fr 1fr;gap:56px}
+          .trust-grid{grid-template-columns:1fr;gap:0}
         }
         .trust-photo{
           position:relative;
@@ -963,7 +962,7 @@ export default async function HomePage() {
           border:1px solid var(--pp-border);
         }
         .trust-photo img{object-fit:cover}
-        .trust-inner{max-width:560px;margin:0 auto;text-align:left}
+        .trust-inner{max-width:620px;margin:0 auto;text-align:center}
         @media(max-width:900px){
           .trust-inner{text-align:center;margin:0 auto}
           .trust-photo{order:-1;max-width:560px;margin:0 auto}
@@ -975,7 +974,7 @@ export default async function HomePage() {
           line-height:1.7;color:var(--pp-body);
           max-width:560px;margin:0 auto 24px;
         }
-        .trust-cta-row{display:flex;gap:18px;justify-content:flex-start;align-items:center;flex-wrap:wrap}
+        .trust-cta-row{display:flex;gap:18px;justify-content:center;align-items:center;flex-wrap:wrap}
         @media(max-width:900px){.trust-cta-row{justify-content:center}}
         .trust-cta{
           font-family:var(--font-ui, system-ui, sans-serif);
@@ -1307,20 +1306,6 @@ export default async function HomePage() {
        * opening in a hidden city brings its slug back automatically.
        * ============================================================ */}
       <section className="cities-section" aria-labelledby="cities-heading">
-        {/* Banner — University of Illinois South Farms in Urbana
-            (James Baltz, Unsplash). The Central IL patchwork from
-            above; positions us geographically without leaning on a
-            state outline. */}
-        <div className="cities-banner pp-fade-in">
-          <Image
-            src="/photography/cities-il-farmland.jpg"
-            alt="Central Illinois farmland under a wide sunset sky"
-            fill
-            sizes="100vw"
-            loading="lazy"
-          />
-          <div className="cities-banner-tint" aria-hidden="true" />
-        </div>
         <div className="cities-inner">
           <p className="pp-eyebrow">Central Illinois · Coverage</p>
           <h2 id="cities-heading" className="cities-h2">Browse deals by city</h2>
@@ -1386,18 +1371,6 @@ export default async function HomePage() {
               <Link href="/about" className="trust-cta">Read the about page →</Link>
               <Link href="/alerts" className="trust-cta-muted">Get free deal alerts</Link>
             </div>
-          </div>
-          {/* Algonquin-Minonk windfarm at sunset, Illinois (Laura Ockel,
-              Unsplash). The "Tuesday afternoon, not a rave" mood the
-              brand spec asks for. */}
-          <div className="trust-photo pp-fade-up">
-            <Image
-              src="/photography/trust-il-windfarm-sunset.jpg"
-              alt="Wind turbines on an Illinois farm at sunset"
-              fill
-              sizes="(max-width: 900px) 100vw, 45vw"
-              loading="lazy"
-            />
           </div>
         </div>
       </section>

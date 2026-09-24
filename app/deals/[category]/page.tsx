@@ -209,8 +209,8 @@ function getExpiryUrgency(expiresAt?: string | null) {
   const dayMs = 24 * 60 * 60 * 1000;
   const daysLeft = Math.floor(diffMs / dayMs);
 
-  if (daysLeft === 0) return { key: "today", text: "⚡ Expires today", bg: "#fee2e2", fg: "#991b1b" };
-  if (daysLeft === 1) return { key: "tomorrow", text: "⏱ Expires tomorrow", bg: "#fef3c7", fg: "#92400e" };
+  if (daysLeft === 0) return { key: "today", text: "Expires today", bg: "var(--pp-stop-bg)", fg: "var(--pp-stop-fg)" };
+  if (daysLeft === 1) return { key: "tomorrow", text: "Expires tomorrow", bg: "var(--pp-note-bg)", fg: "var(--pp-note-fg)" };
   if (daysLeft < 7) {
     const weekday = expiry.toLocaleDateString("en-US", { weekday: "long" });
     return { key: "weekday", text: `Expires ${weekday}`, bg: "#f1f5f9", fg: "#475569" };
@@ -308,10 +308,10 @@ export async function generateMetadata({
   const label = CATEGORY_LABELS[category] || "Cannabis deals";
   const ogImage = `${brand.url}/og-image.png`;
   const title = city
-    ? `${city} Dispensary Deals Today | PuffPrice`
+    ? `${city} Dispensary Deals Today`
     : category === "all"
-      ? "Every Cannabis Deal in Central Illinois Today | PuffPrice"
-      : `${label} Deals in Central Illinois Today | PuffPrice`;
+      ? "Every Cannabis Deal in Central Illinois Today"
+      : `${label} Deals in Central Illinois Today`;
   const description = city
     ? `Browse today's best dispensary deals in ${city}, Illinois. Save money on cannabis with live offers.`
     : category === "all"
@@ -632,7 +632,7 @@ export default async function DealsPage({
 
         {city && (
           <div className="city-banner">
-            <span className="city-banner-pin">📍 Showing deals within 15 miles of {city}, IL</span>
+            <span className="city-banner-pin">Showing deals within 15 miles of {city}, IL</span>
           </div>
         )}
 

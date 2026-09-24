@@ -91,7 +91,7 @@ export default function AlertPreferencesPage() {
         .save:hover{background:var(--pp-signal-fill)}
         .save:disabled{opacity:.6;cursor:not-allowed}
         .msg{margin-top:14px;padding:10px 14px;border-radius:8px;font-family:var(--font-body);font-size:.85rem}
-        .msg.err{background:#fee2e2;color:#991b1b;border:1px solid #fecaca}
+        .msg.err{background:var(--pp-stop-bg);color:var(--pp-stop-fg);border:1px solid var(--pp-stop-edge)}
         .msg.ok{background:var(--pp-best-tint);color:var(--pp-signal);border:1px solid var(--pp-best-border)}
       `}</style>
 

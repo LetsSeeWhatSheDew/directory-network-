@@ -115,7 +115,7 @@ function Field({
 }) {
   return (
     <div style={styles.field}>
-      <label style={styles.label}>{label}{required && <span style={{ color: "#dc2626" }}> *</span>}</label>
+      <label style={styles.label}>{label}{required && <span style={{ color: "var(--pp-stop-edge)" }}> *</span>}</label>
       <input
         type={type}
         value={value}
@@ -197,9 +197,9 @@ const styles: Record<string, React.CSSProperties> = {
   err: {
     marginTop: 12,
     padding: "10px 14px",
-    background: "#fee2e2",
-    color: "#991b1b",
-    border: "1px solid #fecaca",
+    background: "var(--pp-stop-bg)",
+    color: "var(--pp-stop-fg)",
+    border: "1px solid var(--pp-stop-edge)",
     borderRadius: 8,
     fontFamily: "var(--font-body)",
     fontSize: ".85rem",

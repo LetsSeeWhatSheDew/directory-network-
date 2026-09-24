@@ -498,10 +498,10 @@ export default async function ListingPage({
         .dn-nav-name { font-size: 1.1rem; font-weight: 700; color:var(--pp-ink); letter-spacing: -0.02em; }
         .dn-nav-accent { color:var(--pp-signal); }
         .dn-nav-back { font-size: 0.85rem; color:var(--pp-muted); text-decoration: none; font-family: var(--font-body); }
-        .dn-banner { background:#fffbeb; border-bottom:1px solid #fde68a; padding: 10px 32px; display: flex; align-items: center; gap: 10px; }
-        .dn-banner-dot { width: 8px; height: 8px; border-radius: 50%; background:#d97706; flex-shrink: 0; }
-        .dn-banner-text { font-size: 0.85rem; color:#92400e; font-family: var(--font-body); }
-        .dn-banner-link { color:#d97706; font-weight: 600; text-decoration: none; }
+        .dn-banner { background:var(--pp-note-bg); border-bottom:1px solid var(--pp-note-edge); padding: 10px 32px; display: flex; align-items: center; gap: 10px; }
+        .dn-banner-dot { width: 8px; height: 8px; border-radius: 50%; background:var(--pp-note-edge); flex-shrink: 0; }
+        .dn-banner-text { font-size: 0.85rem; color:var(--pp-note-fg); font-family: var(--font-body); }
+        .dn-banner-link { color:var(--pp-note-edge); font-weight: 600; text-decoration: none; }
         .dn-noindex-banner { background:var(--pp-best-tint); border-bottom:1px solid var(--pp-best-border); padding: 8px 32px; text-align: center; font-size: 0.78rem; color:var(--pp-signal-ink); font-family: var(--font-body); }
         .dn-inner { max-width: 1100px; margin: 0 auto; padding: 32px 24px 64px; }
         .dn-hero { background:var(--pp-surface); border-radius: 16px; border:1px solid var(--pp-border); padding: 32px; margin-bottom: 24px; }
@@ -521,8 +521,8 @@ export default async function ListingPage({
         .dn-status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
         .dn-status-open { background:var(--pp-best-tint); color:var(--pp-signal-ink); }
         .dn-status-dot-open { background:var(--pp-signal-fill); }
-        .dn-status-closed { background:#fee2e2; color:#991b1b; }
-        .dn-status-dot-closed { background:#dc2626; }
+        .dn-status-closed { background:var(--pp-stop-bg); color:var(--pp-stop-fg); }
+        .dn-status-dot-closed { background:var(--pp-stop-edge); }
         .dn-phone { font-size: 0.9rem; color:var(--pp-ink); text-decoration: none; font-family: var(--font-body); font-weight: 600; }
         .dn-website { font-size: 0.85rem; color:var(--pp-signal); text-decoration: none; font-family: var(--font-body); font-weight: 600; }
         .dn-amenities { margin-top: 24px; padding-top: 20px; border-top:1px solid var(--pp-border); display: flex; flex-wrap: wrap; gap: 8px; }
@@ -683,14 +683,14 @@ export default async function ListingPage({
                         fontSize: ".68rem",
                         fontFamily: "var(--font-body)",
                         fontWeight: 700,
-                        color: "#92400e",
-                        background: "#fef3c7",
+                        color: "var(--pp-note-fg)",
+                        background: "var(--pp-note-bg)",
                         padding: "2px 9px",
                         borderRadius: 100,
                         whiteSpace: "nowrap",
                       }}
                     >
-                      ⚡ Expires in {hoursLeft}h
+                      Expires in {hoursLeft}h
                     </span>
                   );
                 })()}
@@ -1027,7 +1027,7 @@ export default async function ListingPage({
                     <div className="dn-claim-trust">
                       <span className="dn-claim-trust-item">🔒 Secure</span>
                       <span className="dn-claim-trust-item">✓ Free forever</span>
-                      <span className="dn-claim-trust-item">⚡ Live in 72hrs</span>
+                      <span className="dn-claim-trust-item">Live in 72hrs</span>
                     </div>
                     <p style={{ marginTop: 12, fontSize: ".8rem", fontFamily: "var(--font-body)", color: "rgba(226,232,240,.6)" }}>
                       Need more options?{" "}

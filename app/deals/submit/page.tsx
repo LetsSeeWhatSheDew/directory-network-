@@ -15,7 +15,7 @@ import SubmitForm from "./SubmitForm";
 import { brand } from "../../../lib/brand";
 
 export const metadata: Metadata = {
-  title: "Submit a dispensary deal — PuffPrice",
+  title: "Submit a dispensary deal",
   description:
     "Own an Illinois dispensary? Submit a deal to PuffPrice in under 2 minutes. Free forever, no account required.",
   alternates: { canonical: `${brand.url}/deals/submit` },

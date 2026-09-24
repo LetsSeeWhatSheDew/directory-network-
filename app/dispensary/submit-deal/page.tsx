@@ -137,7 +137,7 @@ export default function SubmitDealPage() {
         </p>
 
         {status === "err" && (
-          <div style={{ background: "#fee2e2", border: "1px solid #ef4444", color: "#991b1b", padding: 16, borderRadius: 10, marginBottom: 24, fontFamily: "var(--font-body)" }}>
+          <div style={{ background: "var(--pp-stop-bg)", border: "1px solid var(--pp-stop-edge)", color: "var(--pp-stop-fg)", padding: 16, borderRadius: 10, marginBottom: 24, fontFamily: "var(--font-body)" }}>
             {msg}
           </div>
         )}
@@ -318,7 +318,7 @@ function Field({
       {label}
       {children}
       {error && (
-        <span style={{ fontSize: ".78rem", color: "#dc2626", fontWeight: 500 }}>{error}</span>
+        <span style={{ fontSize: ".78rem", color: "var(--pp-stop-edge)", fontWeight: 500 }}>{error}</span>
       )}
     </label>
   );
