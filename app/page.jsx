@@ -921,7 +921,7 @@ export default async function HomePage() {
           color:var(--pp-ink);
         }
         .city-card-meta{display:flex;align-items:center;gap:8px;flex-shrink:0}
-        @media(max-width:719px){.city-card{flex-direction:column;align-items:flex-start;justify-content:center;gap:8px;padding:16px}.city-card-meta{flex-wrap:wrap}}
+        @media(max-width:719px){.city-card{flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:8px;padding:16px}.city-card-meta{flex-wrap:wrap}}
         .city-card-stores{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-size:.72rem;color:var(--pp-muted)}
         .city-card-count{
           font-family:var(--font-ui, system-ui, sans-serif);
@@ -975,7 +975,8 @@ export default async function HomePage() {
           line-height:1.7;color:var(--pp-body);
           max-width:560px;margin:0 auto 24px;
         }
-        .trust-cta-row{display:flex;gap:18px;justify-content:center;align-items:center;flex-wrap:wrap}
+        .trust-cta-row{display:flex;gap:18px;justify-content:flex-start;align-items:center;flex-wrap:wrap}
+        @media(max-width:900px){.trust-cta-row{justify-content:center}}
         .trust-cta{
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:.92rem;font-weight:700;color:var(--pp-on-dark);background:var(--pp-signal-fill);
