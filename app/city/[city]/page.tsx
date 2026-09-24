@@ -534,7 +534,7 @@ export default async function CityPage({
             .filter((d) => (d.discount_unit === "percent" || !d.discount_unit) && Number(d.discount_value) > 0 && Number(d.discount_value) <= 100 && !isConditional({ ...d, deal_title: d.deal_title || d.title }))
             .sort((a, b) => Number(b.discount_value) - Number(a.discount_value));
           const top = pctDeals[0];
-          const storeName = (d: DealRow) => stores.find((x) => x.l.slug === d.listing_slug)?.l.name || d.name || d.listing_slug;
+          const storeName = (d: DealRow) => String(stores.find((x) => x.l.slug === d.listing_slug)?.l.name || d.name || d.listing_slug || "").replace(/^nuera\b/i, "nuEra");
           const withDeals = new Set(deals.map((d) => d.listing_slug)).size;
           return (
             <p className="cp-intro" style={{ background: "var(--pp-surface)", border: "1px solid var(--pp-border)", borderRadius: 12, padding: "12px 14px" }}>
@@ -544,8 +544,8 @@ export default async function CityPage({
                 : deals.length > 0
                   ? <>{city} deals right now are bundles and set prices, not straight discounts. </>
                   : <>no {city} store has a deal posted on its own site right now. </>}
-              {deals.length > 0 && <>{deals.length} {deals.length === 1 ? "deal is" : "deals are"} live at {withDeals} of {stores.length} {city} dispensaries. </>}
-              {lateNight?.today?.closes_at && <>{lateNight.l.name} closes latest tonight, at {formatTime(lateNight.today.closes_at)}.</>}
+              {deals.length > 0 && <>{deals.length} {deals.length === 1 ? "deal is" : "deals are"} live {stores.length === 1 ? <>at {city}&apos;s one dispensary</> : <>at {withDeals} of {stores.length} {city} dispensaries</>}. </>}
+              {lateNight?.today?.closes_at && <>{String(lateNight.l.name || "").replace(/^nuera\b/i, "nuEra")} closes latest tonight, at {formatTime(lateNight.today.closes_at)}.</>}
             </p>
           );
         })()}
@@ -554,7 +554,7 @@ export default async function CityPage({
         <div className="cp-ticker" role="group" aria-label={`${city} right now`}>
           <div className="cp-tick">
             <div className="cp-tick-n">{stores.length}</div>
-            <div className="cp-tick-l">Dispensaries</div>
+            <div className="cp-tick-l">{stores.length === 1 ? "Dispensary" : "Dispensaries"}</div>
           </div>
           <div className="cp-tick">
             <div className={`cp-tick-n${openCount > 0 ? " sig" : ""}`}>
