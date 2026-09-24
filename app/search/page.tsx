@@ -176,7 +176,9 @@ export default async function SearchPage({
   const directSlugs = new Set(directListings.map((l) => l.slug));
   const extraSlugs = productSlugs.filter((s) => !directSlugs.has(s));
   const extraListings = await fetchListingsBySlug(extraSlugs);
-  const listings: Listing[] = [...directListings, ...extraListings];
+  // Central Illinois scope lock: only the region's public cities.
+  const REGION = ["peoria", "east peoria", "peoria heights", "pekin", "bloomington", "normal", "champaign", "urbana", "springfield"];
+  const listings: Listing[] = [...directListings, ...extraListings].filter((l) => REGION.includes(String(l.city || "").trim().toLowerCase()));
   const dealMap = await dealsForSlugs(listings.map((l) => l.slug));
 
   return (
@@ -192,11 +194,16 @@ export default async function SearchPage({
         .wrap{max-width:800px;margin:0 auto;padding:40px 20px}
         h1{font-size:clamp(1.4rem,3vw,1.9rem);font-weight:700;letter-spacing:-.03em;margin-bottom:6px}
         .sub{font-size:.88rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:24px}
-        form{display:flex;gap:8px;background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:10px;padding:6px;margin-bottom:24px}
+        form{display:flex;gap:8px;background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:16px;padding:6px;margin-bottom:24px}
         input[type=search]{flex:1;border:none;outline:none;background:transparent;padding:10px 12px;font-family:var(--font-body);font-size:.95rem;color:var(--pp-ink);min-width:0}
         input[type=search]::placeholder{color:var(--pp-muted)}
-        .sbtn{background:var(--pp-canopy);color:var(--pp-on-dark);border:none;border-radius:7px;padding:0 18px;font-family:var(--font-body);font-weight:600;font-size:.9rem;cursor:pointer}
-        .sbtn:hover{background:var(--pp-canopy)}
+        .sbtn{background:var(--pp-btn);color:var(--pp-btn-fg);border:1px solid var(--pp-btn-border);border-radius:12px;padding:0 18px;font-family:var(--font-body);font-weight:600;font-size:.9rem;cursor:pointer}
+        .sbtn:hover{filter:brightness(.97)}
+        .quick{margin-top:6px}
+        .quick h2{font-size:1.35rem;margin:22px 0 10px;color:var(--pp-ink)}
+        .chips{display:flex;flex-wrap:wrap;gap:8px}
+        .chip{display:inline-flex;align-items:center;padding:9px 14px;border-radius:999px;border:1px solid var(--pp-border);background:var(--pp-surface);color:var(--pp-ink);text-decoration:none;font-size:.9rem;font-weight:500}
+        .chip:hover{border-color:var(--pp-border-2)}
         .cards{display:flex;flex-direction:column;gap:10px}
         .card{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:12px;padding:16px;text-decoration:none;color:inherit;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;transition:border-color .15s}
         .card:hover{border-color:var(--pp-signal-fill)}
@@ -230,7 +237,28 @@ export default async function SearchPage({
         {query && listings.length === 0 && (
           <div className="empty">
             <div className="empty-title">No dispensaries found for &ldquo;{query}&rdquo;</div>
-            <div className="empty-sub">Try a city name like &ldquo;Peoria&rdquo; or &ldquo;Chicago&rdquo;.</div>
+            <div className="empty-sub">We cover Central Illinois. Try a city like &ldquo;Peoria&rdquo; or &ldquo;Normal&rdquo;, a store name, or a product like &ldquo;vapes&rdquo;.</div>
+          </div>
+        )}
+
+        {!query && (
+          <div className="quick">
+            <h2>Cities</h2>
+            <div className="chips">
+              {["Peoria", "East Peoria", "Peoria Heights", "Pekin", "Bloomington", "Normal", "Champaign", "Urbana", "Springfield"].map((c) => (
+                <Link key={c} className="chip" href={`/city/${c.toLowerCase().replace(/\s+/g, "-")}`}>{c}</Link>
+              ))}
+            </div>
+            <h2>What you&apos;re after</h2>
+            <div className="chips">
+              <Link className="chip" href="/deals/flower">Flower deals</Link>
+              <Link className="chip" href="/deals/vapes">Vape deals</Link>
+              <Link className="chip" href="/deals/edibles">Edible deals</Link>
+              <Link className="chip" href="/deals/concentrate">Concentrates</Link>
+              <Link className="chip" href="/out-the-door">Prices with tax included</Link>
+              <Link className="chip" href="/open-late">Open late tonight</Link>
+              <Link className="chip" href="/ways-to-buy">Drive-thru, medical &amp; more</Link>
+            </div>
           </div>
         )}
 
