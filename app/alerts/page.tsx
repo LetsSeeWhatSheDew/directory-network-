@@ -111,27 +111,27 @@ export default async function AlertsPage() {
         .tiers{max-width:960px;margin:0 auto;padding:48px 20px 24px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
         @media(max-width:720px){.tiers{grid-template-columns:1fr}}
         .tier{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:16px;padding:28px 26px;display:flex;flex-direction:column;gap:14px;position:relative}
-        .tier.pro{background:var(--pp-canopy);color:var(--pp-on-dark);border-color:rgba(157,190,126,.35)}
+        .tier.pro{background:var(--pp-haze);color:var(--pp-ink);border-color:var(--pp-haze-border)}
         .tier-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);font-family:var(--font-body)}
-        .tier.pro .tier-eyebrow{color:var(--pp-canopy-eyebrow)}
+        .tier.pro .tier-eyebrow{color:var(--pp-mark)}
         .tier-name{font-size:1.35rem;font-weight:700;letter-spacing:-.02em;font-family:var(--font-display), system-ui, sans-serif;line-height:1.1}
-        .tier.pro .tier-name{color:var(--pp-on-dark)}
+        .tier.pro .tier-name{color:var(--pp-ink)}
         .tier-price{display:flex;align-items:baseline;gap:6px}
         .tier-price-big{font-size:2.4rem;font-weight:700;color:var(--pp-signal-ink);letter-spacing:-.03em;line-height:1;font-family:var(--font-display), system-ui, sans-serif}
-        .tier.pro .tier-price-big{color:var(--pp-on-dark)}
+        .tier.pro .tier-price-big{color:var(--pp-big)}
         .tier-price-period{font-size:.85rem;color:var(--pp-muted);font-family:var(--font-body)}
-        .tier.pro .tier-price-period{color:rgba(255,255,255,.8)}
+        .tier.pro .tier-price-period{color:var(--pp-muted)}
         .tier-anchor{font-size:.82rem;color:var(--pp-muted);font-family:var(--font-body);line-height:1.5}
-        .tier.pro .tier-anchor{color:rgba(255,255,255,.7)}
+        .tier.pro .tier-anchor{color:var(--pp-muted)}
         .tier-anchor strong{color:var(--pp-signal);font-weight:700}
-        .tier.pro .tier-anchor strong{color:var(--pp-canopy-eyebrow)}
+        .tier.pro .tier-anchor strong{color:var(--pp-mark)}
         .tier-headline{font-size:.95rem;font-weight:600;color:var(--pp-body);font-family:var(--font-body);line-height:1.5}
-        .tier.pro .tier-headline{color:rgba(255,255,255,.8)}
+        .tier.pro .tier-headline{color:var(--pp-body)}
         ul.tier-features{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:7px}
         ul.tier-features li{display:flex;gap:8px;align-items:flex-start;font-size:.86rem;color:var(--pp-body);font-family:var(--font-body);line-height:1.5}
-        .tier.pro ul.tier-features li{color:rgba(255,255,255,.82)}
+        .tier.pro ul.tier-features li{color:var(--pp-body)}
         .check{color:var(--pp-signal);font-weight:700;flex-shrink:0}
-        .tier.pro .check{color:var(--pp-canopy-eyebrow)}
+        .tier.pro .check{color:var(--pp-mark)}
         .testimonial{background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.22);border-radius:10px;padding:14px 16px;margin-top:6px}
         .tier:not(.pro) .testimonial{background:var(--pp-best-tint);border-color:var(--pp-best-border)}
         .testimonial blockquote{font-family:var(--font-display), system-ui, sans-serif;font-style:italic;font-size:.92rem;line-height:1.5;color:inherit;margin:0;opacity:.88}
@@ -140,8 +140,8 @@ export default async function AlertsPage() {
         .tier.pro .testimonial figcaption strong{color:var(--pp-on-dark)}
 
         .cta{display:inline-block;padding:13px 22px;border-radius:10px;font-family:var(--font-body);font-weight:700;font-size:.95rem;text-decoration:none;text-align:center;transition:all .15s;cursor:pointer;border:none;width:100%}
-        .cta-free{background:var(--pp-canopy);color:var(--pp-on-dark)}
-        .cta-free:hover{background:var(--pp-canopy)}
+        .cta-free{background:var(--pp-btn);color:var(--pp-btn-fg);box-shadow:inset 0 0 0 1px var(--pp-btn-border)}
+        .cta-free:hover{filter:brightness(.97)}
         .cta-pro{background:var(--pp-signal-fill);color:var(--pp-on-dark)}
         .cta-pro:hover{background:var(--pp-signal-fill)}
         .cta-pro:disabled{opacity:.7;cursor:not-allowed}

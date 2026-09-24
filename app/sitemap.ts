@@ -92,6 +92,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${brand.url}/for-dispensaries`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
     { url: `${brand.url}/this-week`, lastModified: new Date(), changeFrequency: "daily", priority: 0.8 },
     { url: `${brand.url}/how-we-rank`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+    { url: `${brand.url}/green-wednesday`, lastModified: new Date(), changeFrequency: "daily", priority: 0.8 },
     { url: `${brand.url}/out-the-door`, lastModified: new Date(), changeFrequency: "daily", priority: 0.85 },
     { url: `${brand.url}/illinois-cannabis-tax-calculator`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.85 },
     { url: `${brand.url}/illinois-cannabis-tax`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },

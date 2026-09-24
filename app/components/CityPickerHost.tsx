@@ -36,7 +36,12 @@ export default function CityPickerHost() {
   useEffect(() => {
     let timer: number | null = null;
 
+    // Breathe: only nudge where the city changes what you see (home, deals,
+    // open now, map). Reading pages (about, guides, laws, legal) never pop a modal.
+    const path = window.location.pathname;
+    const wantsCity = path === "/" || path.startsWith("/deals") || path.startsWith("/cannabis/illinois/open-now") || path === "/map";
     const maybeOpen = () => {
+      if (!wantsCity) return;
       let seen = "0";
       let declined = "0";
       let city = "";

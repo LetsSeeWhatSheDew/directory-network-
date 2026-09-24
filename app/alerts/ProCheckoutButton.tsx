@@ -104,8 +104,8 @@ export default function ProCheckoutButton() {
         role="status"
         aria-live="polite"
         style={{
-          background: "rgba(74,222,128,.12)",
-          border: "1px solid rgba(74,222,128,.4)",
+          background: "var(--pp-best-tint)",
+          border: "1px solid var(--pp-best-border)",
           borderRadius: 10,
           padding: "14px 16px",
           fontFamily: "var(--font-body)",
@@ -114,11 +114,11 @@ export default function ProCheckoutButton() {
           gap: 6,
         }}
       >
-        <div style={{ fontSize: ".95rem", fontWeight: 700, color: "var(--pp-on-dark)" }}>
+        <div style={{ fontSize: ".95rem", fontWeight: 700, color: "var(--pp-ink)" }}>
           ✓ You&rsquo;re on the list
         </div>
-        <div style={{ fontSize: ".82rem", color: "rgba(255,255,255,.75)", lineHeight: 1.5 }}>
-          Pro isn&rsquo;t live yet. We&rsquo;ll email <strong style={{ color: "var(--pp-canopy-eyebrow)" }}>{email}</strong>{" "}
+        <div style={{ fontSize: ".82rem", color: "var(--pp-body)", lineHeight: 1.5 }}>
+          Pro isn&rsquo;t live yet. We&rsquo;ll email <strong style={{ color: "var(--pp-ink)" }}>{email}</strong>{" "}
           the moment it launches — usually within a few days.
         </div>
       </div>
@@ -138,11 +138,11 @@ export default function ProCheckoutButton() {
         onChange={(e) => setEmail(e.target.value)}
         autoComplete="email"
         style={{
-          background: "rgba(255,255,255,.08)",
-          border: "1px solid rgba(255,255,255,.18)",
+          background: "var(--pp-surface)",
+          border: "1px solid var(--pp-border)",
           borderRadius: 10,
           padding: "12px 12px",
-          color: "var(--pp-on-dark)",
+          color: "var(--pp-ink)",
           fontFamily: "var(--font-body)",
           fontSize: ".95rem",
           outline: "none",
@@ -156,7 +156,7 @@ export default function ProCheckoutButton() {
         {busy ? "One sec…" : "Get Pro for $0.99/month →"}
       </button>
       {errMsg && (
-        <div style={{ fontSize: ".78rem", color: "#fca5a5", fontFamily: "var(--font-body)" }}>
+        <div style={{ fontSize: ".78rem", color: "var(--pp-stop-fg)", fontFamily: "var(--font-body)" }}>
           {errMsg}
         </div>
       )}

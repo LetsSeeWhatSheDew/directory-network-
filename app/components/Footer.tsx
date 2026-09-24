@@ -49,6 +49,7 @@ const FOOTER_COLUMNS: { heading: string; links: { href: string; label: string }[
       { href: "/about", label: "About" },
       { href: "/about/index", label: "PuffPrice Index" },
       { href: "/this-week", label: "This week's deals" },
+      { href: "/green-wednesday", label: "Green Wednesday" },
       { href: "/deal-index", label: "Deal Index" },
       { href: "/how-we-rank", label: "How we rank" },
       { href: "/out-the-door", label: "Out-the-door prices" },
