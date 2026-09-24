@@ -54,6 +54,11 @@ export function isConditional(d: ExDeal): boolean {
   );
 }
 
+/** Strip scraper leftovers ("Shop Now ⭢ …") from a stored deal title. */
+export function cleanDealTitle(t: string | null | undefined): string {
+  return String(t || "").replace(/\s+Shop Now\b.*$/i, "").trim();
+}
+
 /** The product part of a deal title, without the leading "30% off". */
 export function productOf(d: ExDeal): string {
   const t = (d?.deal_title || "").trim();

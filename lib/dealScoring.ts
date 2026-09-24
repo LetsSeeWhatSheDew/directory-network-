@@ -104,7 +104,8 @@ export function formatSavingsDollars(d: Deal): string {
   const unit = (d?.discount_unit || "").toLowerCase();
   if (Number.isFinite(value) && value > 0) {
     if (unit === "percent" || (!unit && value <= 100)) {
-      return `${Math.round(value)}% OFF`;
+      const t = String((d as any)?.title || (d as any)?.deal_title || "");
+      return `${/\bup to\b/i.test(t) ? "UP TO " : ""}${Math.round(value)}% OFF`;
     }
     if (unit === "dollars" && d?.discount_type !== "fixed_price") {
       return `$${Math.round(value)} off`;

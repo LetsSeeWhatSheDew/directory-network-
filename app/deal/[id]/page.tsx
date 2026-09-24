@@ -20,6 +20,7 @@ import ReportIssueLink from "../../components/ReportIssueLink";
 import { getConfirmationsToday } from "../../../lib/confirmations";
 import { isInCentralIL } from "../../../lib/visibility";
 import { isDealActiveNow, describeActiveDays } from "../../../lib/dealActiveFilter";
+import { cleanDealTitle } from "../../../lib/exhale";
 
 export const revalidate = 60;
 
@@ -129,7 +130,7 @@ function extractPromoCode(text: string | null | undefined): string | null {
 }
 
 function formatDealHeadline(d: Deal): string {
-  if (d.title && d.title.length > 0) return d.title;
+  if (d.title && d.title.length > 0) return cleanDealTitle(d.title);
   if (d.discount_unit === "percent" && d.discount_value) {
     return `${Math.round(d.discount_value)}% off${d.category ? " " + d.category : ""}`;
   }

@@ -2,7 +2,7 @@
 // Fixed v2: force no-cache + correct Supabase query format
 
 import Link from "next/link";
-import { amountOf, isConditional, saveLabel } from "../../../lib/exhale";
+import { amountOf, isConditional, saveLabel, cleanDealTitle } from "../../../lib/exhale";
 import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
 import TrustLine from "../../components/TrustLine";
@@ -832,7 +832,7 @@ export default async function DealsPage({
                       <div className="alt-body">
                         <div className="alt-name">{displayDispensaryName(deal)}</div>
                         <div className="alt-deal">
-                          {deal.deal_title || deal.title || `${deal.discount_value}% off`}
+                          {cleanDealTitle(deal.deal_title || deal.title) || `${deal.discount_value}% off`}
                         </div>
                         {(() => {
                           const u = getExpiryUrgency(deal.expires_at);

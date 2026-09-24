@@ -5,7 +5,7 @@
 // all three via internal linking.
 
 import Link from "next/link";
-import { saveLabel, isConditional } from "@/lib/exhale";
+import { saveLabel, isConditional, cleanDealTitle } from "@/lib/exhale";
 import { getFeatureRows, featuresBySlug } from "@/lib/waysToBuy";
 import StoreAvatar from "@/app/components/StoreAvatar";
 import { storeImageUrl } from "@/lib/storeImage";
@@ -609,7 +609,7 @@ export default async function CityPage({
             const dslug = d.slug || d.listing_slug;
             const dollars = estimateSavings(d);
             const name = d.name || dslug;
-            const title = d.deal_title || d.title || "Active deal";
+            const title = cleanDealTitle(d.deal_title || d.title) || "Active deal";
             return (
               <Link key={d.id} href={`/dispensary/${dslug}?city=${encodeURIComponent(city)}`} className="deal-row">
                 <div className="deal-body">

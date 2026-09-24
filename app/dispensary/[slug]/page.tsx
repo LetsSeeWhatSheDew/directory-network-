@@ -25,7 +25,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
-import { saveLabel } from "../../../lib/exhale";
+import { saveLabel, cleanDealTitle } from "../../../lib/exhale";
 import { nowInCT, isOpen, formatTime as formatHourTime } from "../../../lib/hours";
 import { visitDispensaryHref } from "../../../lib/links";
 import { cityFromSlug } from "../../../lib/cityNormalize";
@@ -156,7 +156,7 @@ function mapsHref(parts: Array<string | null | undefined>): string {
 }
 
 function formatDealTitle(d: Deal): string {
-  if (d.title) return d.title;
+  if (d.title) return cleanDealTitle(d.title);
   if (d.discount_unit === "percent" && d.discount_value) {
     return `${Math.round(d.discount_value)}% off${d.category ? " " + d.category : ""}`;
   }
