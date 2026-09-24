@@ -10,6 +10,7 @@ import { CITY_TAX_RATES, calculateOutTheDoor, STATE_EXCISE_RATES, type ThcTier, 
 export type PriceParse = { price: number; qty: number; each: number | null; kind: "flower" | "vape" | "concentrate" | "edible" | "preroll" | null; label: string };
 
 const KIND: Array<[RegExp, PriceParse["kind"]]> = [
+  [/\b(infused|diamond|caviar|moon ?rocks?)\b[^$]*\b(pre-?rolls?|joints?|blunts?)\b|\b(pre-?rolls?|joints?)\b[^$]*\b(infused|diamond|caviar)\b/i, "concentrate"], // >35% THC → 25%
   [/\b(pre-?rolls?|joints?|blunts?)\b/i, "preroll"],
   [/\b(vapes?|carts?|cartridges?|pods?|tanks?|disposables?|all[- ]in[- ]ones?)\b/i, "vape"],
   [/\b(concentrates?|rosin|resin|wax|shatter|badder|budder|dabs?|diamonds?|rso|sauce)\b/i, "concentrate"],
@@ -23,9 +24,12 @@ export function parsePrice(title: string, category?: string | null): PriceParse 
   const t = String(title || "").replace(/\s+Shop Now\b.*$/i, "").trim();
   if (/\bor less\b|\bunder\b|\bstarting at\b|\bfrom \$/i.test(t)) return null; // a ceiling, not a price
   if (/%/.test(t)) return null; // percent deals have no shelf price
+  // Dollar-off, spend thresholds and BOGO aren't a shelf price either.
+  if (/\$\s*\d+(\.\d+)?\s*off\b|\b(save|spend|up to|orders? (of|over)|bogo|b\d+g\d+|get \w+ free)\b|\$\s*\d+(\.\d+)?\s*\+/i.test(t)) return null;
   // "2 for $60", "Two 14g Flower for $120", "3 for $27"
-  let m = t.match(/\b(\d+|one|two|three|four|five)\s+for\s*\$\s*(\d+(?:\.\d{1,2})?)/i)
-    || t.match(/\b(\d+|one|two|three|four|five)\b[^$]{0,40}?\bfor\s*\$\s*(\d+(?:\.\d{1,2})?)/i);
+  // The count can't be a weight or a decimal ("3.5g for $25", "7 grams for $50").
+  let m = t.match(/\b(?<![\d.])(\d+|one|two|three|four|five)(?!\.\d|\s*(?:g|grams?|mg|oz)\b)\s+for\s*\$\s*(\d+(?:\.\d{1,2})?)/i)
+    || t.match(/\b(?<![\d.])(\d+|one|two|three|four|five)(?!\.\d|\s*(?:g|grams?|mg|oz)\b)\b[^$]{0,40}?\bfor\s*\$\s*(\d+(?:\.\d{1,2})?)/i);
   let qty = 1, price: number | null = null;
   if (m) {
     qty = Number(m[1]) || WORDNUM[m[1].toLowerCase()] || 1;
@@ -73,11 +77,12 @@ export type Otd = {
   excise: number;
 };
 
-type DealLike = { deal_title?: string | null; title?: string | null; category?: string | null; city?: string | null; discount_unit?: string | null };
+type DealLike = { deal_title?: string | null; title?: string | null; category?: string | null; city?: string | null; discount_unit?: string | null; discount_type?: string | null };
 
 /** Out-the-door price for a deal with a stated price, in the store's city. */
 export function otdFor(d: DealLike, cityOverride?: string | null): Otd | null {
   const title = d?.deal_title || d?.title || "";
+  if (String(d?.discount_unit || "").toLowerCase() === "dollars" && d?.discount_type !== "fixed_price") return null; // "$10 off"
   const p = parsePrice(title, d?.category);
   if (!p || !p.kind) return null;
   const tier = tierOf(p.kind);
@@ -117,7 +122,8 @@ export const KIND_LABEL: Record<NonNullable<PriceParse["kind"]>, string> = {
 };
 
 /** "$120" / "2 for $60" — the stated price, for a card that has no Save pill. */
-export function priceChip(d: { deal_title?: string | null; title?: string | null; category?: string | null }): string | null {
+export function priceChip(d: { deal_title?: string | null; title?: string | null; category?: string | null; discount_unit?: string | null; discount_type?: string | null }): string | null {
+  if (String(d?.discount_unit || "").toLowerCase() === "dollars" && d?.discount_type !== "fixed_price") return null;
   const p = parsePrice(d?.deal_title || d?.title || "", d?.category);
   if (!p) return null;
   return p.qty > 1 ? `${p.qty} for ${usd(p.price)}` : usd(p.price);

@@ -26,7 +26,10 @@ export async function loadFonts() {
     f("./fonts/InstrumentSerif-Italic.ttf"),
     f("./fonts/IBMPlexMono-Medium.ttf"),
   ]);
-  const [sans5, sans6, sans7, serif, serifI, mono] = await fontCache;
+  const [sans5, sans6, sans7, serif, serifI, mono] = await fontCache.catch((e) => {
+    fontCache = null; // don't pin a failed read for the life of the function
+    throw e;
+  });
   return [
     { name: "Sans", data: sans5, weight: 500 as const, style: "normal" as const },
     { name: "Sans", data: sans6, weight: 600 as const, style: "normal" as const },
@@ -46,16 +49,18 @@ const ANON =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300";
 
-export async function liveDeals(): Promise<ExDeal[]> {
+/** Live deals, or null if the data couldn't be read (never a fake zero). */
+export async function liveDeals(): Promise<ExDeal[] | null> {
   try {
     const r = await fetch(
       `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_id,name,slug,listing_slug,city,deal_title,discount_value,discount_unit,discount_type,category&order=discount_value.desc.nullslast&limit=300`,
       { headers: { apikey: ANON, Authorization: `Bearer ${ANON}` }, next: { revalidate: 900 } }
     );
-    const rows: ExDeal[] = r.ok ? await r.json() : [];
+    if (!r.ok) return null;
+    const rows: ExDeal[] = await r.json();
     return rows.filter((d) => REGION.includes(String(d.city || "")));
   } catch {
-    return [];
+    return null;
   }
 }
 

@@ -13,10 +13,13 @@ const SIZES = { post: [1080, 1350], story: [1080, 1920], og: [1200, 630] } as co
 
 export async function GET(req: Request) {
   const u = new URL(req.url);
-  const size = (u.searchParams.get("size") as keyof typeof SIZES) || "post";
+  const want = u.searchParams.get("size") || "post";
+  const size = (Object.hasOwn(SIZES, want) ? want : "post") as keyof typeof SIZES;
   const night = u.searchParams.get("theme") === "night";
-  const [W, H] = SIZES[size] || SIZES.post;
-  const [fonts, deals] = await Promise.all([loadFonts(), liveDeals()]);
+  const [W, H] = SIZES[size];
+  const [fonts, got] = await Promise.all([loadFonts(), liveDeals()]);
+  const deals = got || [];
+  const unknown = got === null;
   const ex = exhaleOf(deals);
   const n = counts(deals);
   const ink = night ? C.nInk : C.ink, body = night ? C.nBody : C.body, muted = night ? C.nMuted : C.muted;
@@ -36,8 +39,12 @@ export async function GET(req: Request) {
     </div>
   ) : (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
-      <span style={{ fontFamily: "Mono", fontSize: 160, color: accent }}>{n.deals}</span>
-      <span style={{ fontSize: 30, color: body }}>deals checked this morning</span>
+      {unknown ? (
+        <span style={{ fontFamily: "Serif", fontSize: 72, color: accent }}>Checked every morning</span>
+      ) : (
+        <span style={{ fontFamily: "Mono", fontSize: 160, color: accent }}>{n.deals}</span>
+      )}
+      <span style={{ fontSize: 30, color: body }}>{unknown ? "on the stores' own sites" : "deals checked this morning"}</span>
     </div>
   );
 
@@ -53,7 +60,7 @@ export async function GET(req: Request) {
                 <span style={{ fontStyle: "italic", color: accent }}>We found the deal.</span>
               </div>
               <div style={{ fontSize: 26, color: body, marginTop: 24, lineHeight: 1.35 }}>
-                {`Best Bud For Your Buck$. ${n.deals} Central Illinois deals, checked on the stores' own sites every morning.`}
+                {unknown ? "Best Bud For Your Buck$. Central Illinois deals, checked on the stores' own sites every morning." : `Best Bud For Your Buck$. ${n.deals} Central Illinois deals, checked on the stores' own sites every morning.`}
               </div>
             </div>
             <div style={{ fontFamily: "Mono", fontSize: 22, color: muted }}>puffprice.com</div>
@@ -63,7 +70,7 @@ export async function GET(req: Request) {
           </div>
         </Backdrop>
       ),
-      { width: W, height: H, fonts, headers: IMG_HEADERS }
+      { width: W, height: H, fonts, headers: unknown ? { "Cache-Control": "public, max-age=0, s-maxage=60" } : IMG_HEADERS }
     );
   }
 
@@ -101,12 +108,12 @@ export async function GET(req: Request) {
           )}
           <div style={{ display: "flex", flex: 1 }} />
           <div style={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center", fontSize: 22, color: muted }}>
-            <span style={{ fontFamily: "Mono" }}>{n.deals} deals · {n.stores} stores · puffprice.com</span>
+            <span style={{ fontFamily: "Mono" }}>{unknown ? "puffprice.com" : `${n.deals} deals · ${n.stores} stores · puffprice.com`}</span>
             <span>Nobody pays us to rank. 21+.</span>
           </div>
         </div>
       </Backdrop>
     ),
-    { width: W, height: H, fonts, headers: IMG_HEADERS }
+    { width: W, height: H, fonts, headers: unknown ? { "Cache-Control": "public, max-age=0, s-maxage=60" } : IMG_HEADERS }
   );
 }

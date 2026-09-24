@@ -59,7 +59,7 @@ export function isConditional(d: ExDeal): boolean {
  *  they don't lead as the longest exhale: most people buy one thing. */
 export function needsQuantity(d: ExDeal): boolean {
   const t = `${d?.deal_title || ""} ${d?.title || ""}`;
-  return /(^|\s|\()\d+\s*\+|\bbuy\s+(\d+|two|three|four)\b|\b\d+\s*(or|and)\s*(more|up)\b|\bwhen you (buy|purchase)\b|\bmix\s*(&|and|n)\s*match\b|\bminimum\b|\bbulk\b/i.test(t);
+  return /(^|\s|\()\d+\s*\+|\bbuy\s+(\d+|two|three|four)\b|\b\d+\s*(or|and)\s*(more|up)\b|\bwhen you (buy|purchase)\b|\bmix\s*(&|and|n)\s*match\b|\bminimum\b|\bbulk\b|\bbogo\b|\bb\d+g\d+\b|\bbuy\s+one\b|\bget\s+(one|1)\s+(free|half)/i.test(t);
 }
 
 /** Strip scraper leftovers ("Shop Now ⭢ …") from a stored deal title. */

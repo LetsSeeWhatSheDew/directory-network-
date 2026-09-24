@@ -8,7 +8,9 @@ export const runtime = "nodejs";
 export async function GET(_req: Request, { params }: { params: Promise<{ city: string }> }) {
   const { city: slug } = await params;
   const city = CITY_SLUGS[slug.toLowerCase()] || "Central Illinois";
-  const [fonts, deals] = await Promise.all([loadFonts(), liveDeals()]);
+  const [fonts, got] = await Promise.all([loadFonts(), liveDeals()]);
+  const deals = got || [];
+  const unknown = got === null;
   const scoped = city === "Central Illinois" ? null : city;
   const ex = exhaleOf(deals, scoped);
   const n = counts(deals, scoped);
@@ -25,7 +27,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ city: s
               <span style={{ fontStyle: "italic", color: C.canopy }}>We found the deal.</span>
             </div>
             <div style={{ fontSize: 26, color: C.body, marginTop: 24, lineHeight: 1.35 }}>
-              {n.deals > 0
+              {!unknown && n.deals > 0
                 ? `${n.deals} deal${n.deals === 1 ? "" : "s"} at ${n.stores} ${city} store${n.stores === 1 ? "" : "s"}, checked on their own sites every morning.`
                 : `Every ${city} store, checked on its own site every morning.`}
             </div>
@@ -46,14 +48,14 @@ export async function GET(_req: Request, { params }: { params: Promise<{ city: s
               </div>
             ) : (
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
-                <span style={{ fontFamily: "Mono", fontSize: 110, color: C.canopy }}>{n.deals}</span>
-                <span style={{ fontSize: 22, color: C.body }}>deals checked this morning</span>
+                <span style={{ fontFamily: unknown ? "Serif" : "Mono", fontSize: unknown ? 54 : 110, color: C.canopy }}>{unknown ? "Checked daily" : String(n.deals)}</span>
+                <span style={{ fontSize: 22, color: C.body }}>{unknown ? "on each store's own site" : "deals checked this morning"}</span>
               </div>
             )}
           </Orb>
         </div>
       </Backdrop>
     ),
-    { width: W, height: H, fonts, headers: IMG_HEADERS }
+    { width: W, height: H, fonts, headers: unknown ? { "Cache-Control": "public, max-age=0, s-maxage=60" } : IMG_HEADERS }
   );
 }
