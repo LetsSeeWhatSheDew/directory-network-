@@ -10,7 +10,7 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmr
 export async function GET() {
   const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
   const r = await fetch(
-    `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&order=discount_value.desc&limit=300`,
+    `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&order=discount_value.desc.nullslast&limit=300`,
     { headers: { apikey: anon, Authorization: `Bearer ${anon}` }, next: { revalidate: 900 } }
   );
   const rows: Array<Record<string, unknown>> = r.ok ? await r.json() : [];

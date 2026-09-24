@@ -1,135 +1,114 @@
 // app/components/Logo.tsx
-// PuffPrice logo — pin-mark + wordmark lockup, inline SVG so the fill
-// inherits from token color and the asset never requires a network round
-// trip. The 2026-04-30 raster-PNG mark is retired in this rollout — the
-// brand spec § 1 (locked 2026-05-04) calls for a Manrope 800 wordmark
-// paired with a geometric pin-mark companion.
+// PuffPrice logo — Breathe final (2026-09-23), mark C: the P with a breath
+// dot in its bowl. In the wordmark the mark stands in for the "P", followed
+// by "uffPrice". Colors come from --pp-mark / --pp-mark-dot so day/night
+// switch with the rest of the site. Inline SVG, no network round trip.
 //
-// Variants:
-//   default ("sage") — sage wordmark on light surfaces (nav, content pages)
-//   inverse ("cream") — cream wordmark on the deep brand surface (hero, footer)
-//
-// Sizes: pass `size` as desired height in px. Lockup width is derived
-// from the SVG viewBox (3.5 : 1 aspect — pin + wordmark side by side).
+//   size      — lockup height in px (the wordmark's cap/x band scales from it)
+//   inverse   — light colors for a dark surface (footer band)
+//   glyphOnly — the mark by itself (icons, small contexts)
 
-import Link from "next/link";
+import { useId } from "react";
 
 type Props = {
-  /** Pixel height of the logo lockup. Width derived from aspect ratio. */
   size?: number;
-  /** Render in cream (for deep brand surfaces) instead of sage. */
   inverse?: boolean;
-  /** Optional href — wraps in a <Link>. Defaults to null. */
   href?: string | null;
-  /** Render only the pin-mark (no wordmark). Used at sub-32px contexts. */
   glyphOnly?: boolean;
+  /** Heavier small drawing for ≤40px glyphs. */
+  small?: boolean;
   className?: string;
   ariaLabel?: string;
   priority?: boolean;
 };
 
-const VIEWBOX_W = 432;       // 64 (pin) + 16 (gap) + 352 (wordmark) = 432
-const VIEWBOX_H = 72;
-const PIN_VIEWBOX = 64;
-const PIN_SIZE_RATIO = PIN_VIEWBOX / VIEWBOX_H;
-
-export default function Logo({
-  size = 40,
+export function MarkC({
+  size = 48,
+  small = false,
+  crop = false,
   inverse = false,
-  href = null,
-  glyphOnly = false,
-  className,
-  ariaLabel = "PuffPrice",
-  priority: _priority = false,
-}: Props) {
-  const stroke = inverse ? "#F4F5EF" : "var(--pp-signal)";
-  const wordmarkFill = inverse ? "#F4F5EF" : "var(--pp-signal)";
-  const pinFill = inverse ? "transparent" : "var(--pp-paper)";
-
-  const svg = glyphOnly ? (
+  label,
+}: {
+  size?: number;
+  small?: boolean;
+  crop?: boolean;
+  inverse?: boolean;
+  label?: string;
+}) {
+  const id = useId().replace(/[:]/g, "");
+  const stroke = inverse ? "#F6F1E8" : "var(--pp-mark, #1F4D33)";
+  const dot = inverse ? "#F3C3A0" : "var(--pp-mark-dot, #D4845A)";
+  const path = small ? "M11 43 V5 H24 A13 13 0 0 1 24 31 H11" : "M14 42 V8 H24 A10 10 0 0 1 24 28 H14";
+  const sw = small ? 5.5 : 5;
+  const r = small ? 5.4 : 4.6;
+  const halo = small ? 7.6 : 8.2;
+  const vb = crop ? (small ? "8 2 32 44" : "11 5 26 40") : "0 0 48 48";
+  const [, , vw, vh] = vb.split(" ").map(Number);
+  return (
     <svg
-      role="img"
-      aria-label={ariaLabel}
-      width={Math.round(size * (PIN_VIEWBOX / VIEWBOX_H) * (VIEWBOX_H / PIN_VIEWBOX))}
+      viewBox={vb}
       height={size}
-      viewBox="0 0 64 64"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      stroke={stroke}
-      strokeWidth="3"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      style={{ display: "inline-block", verticalAlign: "middle" }}
+      width={Math.round((size * vw) / vh * 10) / 10}
+      role={label ? "img" : undefined}
+      aria-label={label}
+      aria-hidden={label ? undefined : true}
+      style={{ overflow: "visible", display: "inline-block", flex: "0 0 auto" }}
     >
-      <path
-        d="M32 6 C20 6 11 15 11 27 C11 39 32 58 32 58 C32 58 53 39 53 27 C53 15 44 6 32 6 Z"
-        fill={pinFill}
-        stroke={stroke}
-      />
-      <g transform="translate(32 25)" strokeWidth="2">
-        <path d="M0 -10 L0 4" />
-        <path d="M0 -3 L7 -8" />
-        <path d="M0 -3 L-7 -8" />
-        <path d="M0 1 L9 -1" />
-        <path d="M0 1 L-9 -1" />
-        <path d="M0 4 L6 5" />
-        <path d="M0 4 L-6 5" />
-      </g>
-    </svg>
-  ) : (
-    <svg
-      role="img"
-      aria-label={ariaLabel}
-      width={Math.round((VIEWBOX_W / VIEWBOX_H) * size)}
-      height={size}
-      viewBox={`0 0 ${VIEWBOX_W} ${VIEWBOX_H}`}
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      style={{ display: "inline-block", verticalAlign: "middle" }}
-    >
-      {/* Pin-mark — 64x64 inscribed in 72-tall band, vertically centered */}
-      <g transform={`translate(0 ${(VIEWBOX_H - PIN_VIEWBOX) / 2})`}
-         fill="none"
-         stroke={stroke}
-         strokeWidth="3"
-         strokeLinecap="round"
-         strokeLinejoin="round">
-        <path
-          d="M32 6 C20 6 11 15 11 27 C11 39 32 58 32 58 C32 58 53 39 53 27 C53 15 44 6 32 6 Z"
-          fill={pinFill}
-          stroke={stroke}
-        />
-        <g transform="translate(32 25)" strokeWidth="2">
-          <path d="M0 -10 L0 4" />
-          <path d="M0 -3 L7 -8" />
-          <path d="M0 -3 L-7 -8" />
-          <path d="M0 1 L9 -1" />
-          <path d="M0 1 L-9 -1" />
-          <path d="M0 4 L6 5" />
-          <path d="M0 4 L-6 5" />
-        </g>
-      </g>
-      {/* Wordmark — Manrope 800, letter-spacing -0.025em (per spec § 1) */}
-      <text
-        x="80"
-        y="50"
-        fontFamily="Manrope, -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif"
-        fontWeight="800"
-        fontSize="48"
-        letterSpacing="-1.2"
-        fill={wordmarkFill}
-      >
-        PuffPrice
-      </text>
+      <defs>
+        <radialGradient id={`pb${id}`}>
+          <stop offset="0" style={{ stopColor: dot }} stopOpacity=".6" />
+          <stop offset=".55" style={{ stopColor: dot }} stopOpacity=".28" />
+          <stop offset="1" style={{ stopColor: dot }} stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      <circle cx="24" cy="18" r={halo} fill={`url(#pb${id})`} />
+      <path d={path} fill="none" style={{ stroke }} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="24" cy="18" r={r} style={{ fill: dot }} />
+      <circle cx="24" cy="18" r={halo} fill={`url(#pb${id})`} opacity=".5" />
     </svg>
   );
+}
 
-  return href ? (
-    <Link href={href} aria-label={ariaLabel} style={{ display: "inline-flex", alignItems: "center" }}>
-      {svg}
-    </Link>
-  ) : (
-    svg
+export default function Logo({
+  size = 36,
+  inverse = false,
+  glyphOnly = false,
+  small = false,
+  className,
+  ariaLabel = "PuffPrice",
+}: Props) {
+  if (glyphOnly) {
+    return (
+      <span className={className} style={{ display: "inline-flex" }}>
+        <MarkC size={size} small={small || size <= 40} inverse={inverse} label={ariaLabel} />
+      </span>
+    );
+  }
+  // Header spec: 22px wordmark with an 18.5px-tall mark. Scale from `size`.
+  const fontSize = Math.round(size * 0.61 * 10) / 10;
+  const markH = Math.round(fontSize * 0.84 * 10) / 10;
+  return (
+    <span
+      className={className}
+      role="img"
+      aria-label={ariaLabel}
+      style={{
+        display: "inline-flex",
+        alignItems: "baseline",
+        gap: Math.max(1, Math.round(fontSize * 0.04)),
+        fontFamily: "var(--font-body)",
+        fontWeight: 600,
+        fontSize,
+        letterSpacing: "-0.02em",
+        lineHeight: 1,
+        color: inverse ? "#F6F1E8" : "var(--pp-mark, #1F4D33)",
+        whiteSpace: "nowrap",
+      }}
+    >
+      <span aria-hidden="true" style={{ display: "inline-flex", alignSelf: "baseline", transform: `translateY(${Math.round(fontSize * 0.02)}px)` }}>
+        <MarkC size={markH} crop inverse={inverse} />
+      </span>
+      <span aria-hidden="true">uffPrice</span>
+    </span>
   );
 }

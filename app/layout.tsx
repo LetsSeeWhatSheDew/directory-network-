@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Space_Grotesk, Inter, JetBrains_Mono, Instrument_Serif } from "next/font/google";
+import { Instrument_Sans, IBM_Plex_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import UtmCapture from "./components/UtmCapture";
 import CityPickerHost from "./components/CityPickerHost";
@@ -24,22 +24,18 @@ const SUPABASE_ORIGIN = (
 // Exposed as --font-display / --font-body / --font-mono; globals.css aliases
 // the legacy --font-manrope-loaded / --font-display / --font-ui names onto
 // these so unmigrated components keep working through the transition.
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-display-loaded",
-  subsets: ["latin"],
-  weight: ["500", "700"],
-  display: "swap",
-});
-const inter = Inter({
+// Breathe final (2026-09-23): Instrument Sans for UI + display,
+// IBM Plex Mono for prices/counts, Instrument Serif for headlines.
+const instrumentSans = Instrument_Sans({
   variable: "--font-body-loaded",
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
-const jetbrainsMono = JetBrains_Mono({
+const plexMono = IBM_Plex_Mono({
   variable: "--font-mono-loaded",
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
+  weight: ["400", "500"],
   display: "swap",
 });
 
@@ -101,7 +97,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} ${instrumentSerif.variable}`}
+      className={`${instrumentSans.variable} ${plexMono.variable} ${instrumentSerif.variable}`}
       suppressHydrationWarning
     >
       <body className="antialiased">

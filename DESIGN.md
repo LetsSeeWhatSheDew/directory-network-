@@ -1,4 +1,22 @@
 # PuffPrice Design System
+> **CURRENT: Breathe final (2026-09-23).** Full spec: `docs/brand/2026-09-23-breathe-final-spec.md`.
+> Tokens live in `app/globals.css` (the "BREATHE" :root block + `html[data-daypart="night"]`). Everything below the line is history.
+
+## Breathe final — the short version
+- **Feel:** gentle, airy, warm paper by day; deep green with fireflies at night (19:00–06:00 local, `?daypart=night|day` to force).
+- **Palette (day):** paper #F6F1E8, surface #FFFAF3, ink #14231A, body #4F4A41, muted #5F5A50, border #ECDFD0, canopy/mark #1F4D33, peach #F3C3A0, breath dot #D4845A.
+- **Palette (night):** paper #0B1510, surface #12211A, ink #F3F7F4, body #B4C7BA, mint mark #A8E6BF, firefly #EEF3B0.
+- **Type:** Instrument Sans (UI), Instrument Serif (h1 + section titles), IBM Plex Mono (prices, counts).
+- **Logo:** mark C — the P with a breath dot (`app/components/Logo.tsx`, `MarkC`). The mark replaces the "P" in the wordmark. Primary app icon is the cream one (a green square read as a parking sign).
+- **One bold element per screen:** the savings number / `.pp-save` pill (dark by day, firefly yellow by night).
+- **Signature motion:** the orb breathes on an 8s cycle; tapping a deal is "the exhale" (orb breathes out, ring releases, warm wash, "You're saving X." slides up). Numbers never fade or scale. Reduce-motion turns it all off.
+- **Voice:** calm, warm, a little wry, never a pot pun. "Take a breath. We found the deal." · "Drop your shoulders. The comparing is done." Footer: "Independent. Nobody pays us to rank. 21+." No founder line.
+- **Honesty:** real amounts only (`lib/exhale.ts`); conditional deals (first-time, veterans, "up to") never lead.
+- **Don't:** smoke, leaves, botanical art, stoner humor, stock/AI photos, parallax, 3D, scroll-jacking.
+
+---
+
+# PuffPrice Design System
 > Drop this in project root. AI coding agents read it automatically.
 > **Design Direction v2 — "warm price-truth instrument" (2026-06-13).**
 > Source of truth is `app/globals.css` (`:root` tokens + `@theme inline` bridge).

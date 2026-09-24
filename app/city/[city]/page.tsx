@@ -5,6 +5,7 @@
 // all three via internal linking.
 
 import Link from "next/link";
+import { amountOf } from "@/lib/exhale";
 import { getFeatureRows, featuresBySlug } from "@/lib/waysToBuy";
 import StoreAvatar from "@/app/components/StoreAvatar";
 import { storeImageUrl } from "@/lib/storeImage";
@@ -107,7 +108,7 @@ function filterExpired<T extends { expires_at?: string | null }>(list: T[]): T[]
 async function getAllActiveDeals(): Promise<DealRow[]> {
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&order=discount_value.desc&limit=100`,
+      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&order=discount_value.desc.nullslast&limit=100`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,
@@ -614,13 +615,12 @@ export default async function CityPage({
                   <div className="deal-title">{title}</div>
                 </div>
                 <div className="deal-right">
-                  {dollars != null ? (
-                    <>
-                      <div className="deal-save-label">You save</div>
-                      <div className="deal-save-amt">${dollars}</div>
-                    </>
+                  {amountOf(d) ? (
+                    <span className="pp-save">Save {amountOf(d)!.big}</span>
+                  ) : dollars != null ? (
+                    <span className="pp-save">Save ${dollars}</span>
                   ) : (
-                    <div className="deal-save-amt" style={{ fontSize: "1rem" }}>Deal</div>
+                    <div className="deal-save-label" style={{ fontSize: ".8rem" }}>Deal</div>
                   )}
                 </div>
               </Link>

@@ -121,7 +121,7 @@ async function getHours(listingId: string): Promise<Hours[]> {
 
 async function getDeals(slug: string): Promise<Deal[]> {
   const rows = await sbFetch<Deal[]>(
-    `deals?listing_slug=eq.${encodeURIComponent(slug)}&is_active=eq.true&project_tag=eq.green&select=id,title,description,category,discount_value,discount_unit,discount_type,original_price,sale_price,expires_at,is_recurring,source_url,verified_at,status_reason&order=discount_value.desc&limit=10`
+    `deals?listing_slug=eq.${encodeURIComponent(slug)}&is_active=eq.true&project_tag=eq.green&select=id,title,description,category,discount_value,discount_unit,discount_type,original_price,sale_price,expires_at,is_recurring,source_url,verified_at,status_reason&order=discount_value.desc.nullslast&limit=10`
   );
   // Defensive: strip expired rows even if is_active wasn't flipped yet
   const now = Date.now();

@@ -12,7 +12,7 @@ export async function GET() {
   const u = brand.url;
   const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
   const [dealsRes, stores, features, index] = await Promise.all([
-    fetch(`${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&order=discount_value.desc&limit=300`, { headers: { apikey: anon, Authorization: `Bearer ${anon}` }, next: { revalidate: 3600 } }),
+    fetch(`${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&order=discount_value.desc.nullslast&limit=300`, { headers: { apikey: anon, Authorization: `Bearer ${anon}` }, next: { revalidate: 3600 } }),
     getRegionStores(),
     getFeatureRows(),
     getDealIndex(),

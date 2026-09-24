@@ -74,7 +74,7 @@ const FOOTER_COLUMNS: { heading: string; links: { href: string; label: string }[
 export default function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="pp-footer pp-surface-deep pp-leaf pp-leaf-06" aria-label="Site footer">
+    <footer className="pp-footer pp-surface-deep" aria-label="Site footer">
       <div className="pp-footer-inner">
         <div className="pp-footer-top">
           <div className="pp-footer-brand">
@@ -104,7 +104,7 @@ export default function Footer() {
 
         <div className="pp-footer-bottom">
           <p className="pp-footer-anchor">
-            Built in Peoria, Illinois <span aria-hidden="true">🌿</span>
+            Independent. Nobody pays us to rank. 21+.
           </p>
           <p className="pp-footer-meta">
             &copy; {year} PuffPrice &mdash; All rights reserved.{" "}

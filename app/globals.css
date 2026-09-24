@@ -86,9 +86,9 @@
   --color-border: var(--pp-border);
 
   /* --- Type — Space Grotesk (display) / Inter (body) / JetBrains Mono (numerals) --- */
-  --font-display: var(--font-display-loaded), "Space Grotesk", system-ui, sans-serif;
-  --font-body: var(--font-body-loaded), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-  --font-mono: var(--font-mono-loaded), "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --font-display: var(--font-body-loaded), "Instrument Sans", system-ui, sans-serif;
+  --font-body: var(--font-body-loaded), "Instrument Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-mono: var(--font-mono-loaded), "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   /* Legacy role aliases */
   --font-manrope: var(--font-body);
   --font-ui: var(--font-body);
@@ -174,12 +174,12 @@
   /* Type roles — reference the next/font-loaded families directly.
      (Must NOT self-reference: `--font-x: var(--font-x)` resolves to empty
      and silently drops the whole site to system fonts.) */
-  --font-display: var(--font-display-loaded), "Space Grotesk", system-ui, sans-serif;
-  --font-body: var(--font-body-loaded), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-  --font-ui: var(--font-body-loaded), "Inter", system-ui, sans-serif;
-  --font-serif: var(--font-body-loaded), "Inter", system-ui, sans-serif;
-  --font-mono: var(--font-mono-loaded), "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-  --font-sans: var(--font-body-loaded), "Inter", system-ui, sans-serif;
+  --font-display: var(--font-body-loaded), "Instrument Sans", system-ui, sans-serif;
+  --font-body: var(--font-body-loaded), "Instrument Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-ui: var(--font-body-loaded), "Instrument Sans", system-ui, sans-serif;
+  --font-serif: var(--font-body-loaded), "Instrument Sans", system-ui, sans-serif;
+  --font-mono: var(--font-mono-loaded), "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-sans: var(--font-body-loaded), "Instrument Sans", system-ui, sans-serif;
 }
 
 /* ============================================================
@@ -772,27 +772,43 @@ h4, .pp-h4 {
  * page inherits the new palette.
  * ============================================================ */
 :root {
-  --pp-ink: #18261D;
-  --pp-body: #26352B;
-  --pp-paper: #EEF2EC;          /* mist */
-  --pp-surface: #FBFCF9;
-  --pp-canopy: #1F4A32;         /* deep leaf — dark CTA blocks, keeps white text AA */
-  --pp-canopy-text: #F1F5EE;
-  --pp-canopy-eyebrow: #A9D6B3;
-  --pp-signal: #2F6B45;         /* leaf — the earned accent */
-  --pp-signal-ink: #24563A;
-  --pp-best-tint: #DDEBDD;
-  --pp-best-border: #BFD9C2;
-  --pp-muted: #5B6B5F;
-  --pp-border: #D6E0D4;
-  --pp-glow: #BFE3C4;
-  --color-sage-vibrant: #37805A;
-  --pp-signal-fill: #2F6B45;    /* fills behind white text (buttons, pills) */
-  --pp-on-dark: #FFFFFF;        /* text on canopy / signal-fill */
+  /* Breathe final (2026-09-23): warm paper by day, canopy green, peach breath. */
+  --pp-ink: #14231A;
+  --pp-body: #4F4A41;
+  --pp-paper: #F6F1E8;
+  --pp-paper-top: #FBE9DC;
+  --pp-surface: #FFFAF3;
+  --pp-canopy: #1F4D33;         /* deep leaf — dark CTA blocks, keeps white text AA */
+  --pp-canopy-text: #FBF6EE;
+  --pp-canopy-eyebrow: #BCD0B3;
+  --pp-signal: #1F4D33;         /* the earned accent (canopy) */
+  --pp-signal-ink: #1F4D33;
+  --pp-best-tint: #EEF1E6;
+  --pp-best-border: #D6E4D0;
+  --pp-muted: #5F5A50;
+  --pp-strike: #857E72;
+  --pp-border: #ECDFD0;
+  --pp-border-2: #E3D6C7;
+  --pp-glow: #BCD0B3;
+  --pp-peach: #F3C3A0;
+  --pp-peach-dot: #D4845A;
+  --pp-sage: #BCD0B3;
+  --pp-btn: #D6E4D0;
+  --pp-btn-border: #B9CDB2;
+  --pp-btn-fg: #14231A;
+  --pp-save-bg: #14231A;
+  --pp-save-fg: #FBF6EE;
+  --pp-big: #14231A;            /* the one bold number */
+  --pp-mark: #1F4D33;           /* logo stroke */
+  --pp-mark-dot: #D4845A;       /* logo breath dot */
+  --pp-warm: #F6DCC6;
+  --color-sage-vibrant: #2F6A47;
+  --pp-signal-fill: #1F4D33;    /* fills behind white text (buttons, pills) */
+  --pp-on-dark: #FFFFFF;
   --font-breath: var(--font-breath-loaded), "Instrument Serif", Georgia, serif;
-  --breath: 10s;
+  --breath: 8s;
 }
-body { background: var(--pp-paper); }
+body { background: linear-gradient(180deg, var(--pp-paper-top) 0, var(--pp-paper) 420px) no-repeat, var(--pp-paper); }
 
 /* Headlines breathe in serif; numbers stay hard mono. */
 /* Instrument Serif ships one weight (400) — force it so no page renders a
@@ -825,31 +841,42 @@ h1:not([data-keep-font]) { font-family: var(--font-breath) !important; font-weig
  * ============================================================ */
 html[data-daypart="night"] {
   color-scheme: dark;
-  --pp-paper: #0F1A14;
-  --pp-surface: #15241C;
-  --pp-ink: #E9F1EA;
-  --pp-body: #CFDBD2;
-  --pp-muted: #9AAD9F;
-  --pp-border: #2A3B30;
+  --pp-paper: #0B1510;
+  --pp-paper-top: #0E1B15;
+  --pp-surface: #12211A;
+  --pp-ink: #F3F7F4;
+  --pp-body: #B4C7BA;
+  --pp-muted: #9FB3A6;
+  --pp-border: #1E3128;
+  --pp-border-2: #2A3B32;
   --pp-canopy: #1C3A2A;
-  --pp-canopy-text: #EAF2EB;
-  --pp-canopy-eyebrow: #A9D6B3;
-  --pp-signal: #8FD4A2;
+  --pp-canopy-text: #EEF3EE;
+  --pp-canopy-eyebrow: #A8E6BF;
+  --pp-signal: #A8E6BF;
   --pp-signal-fill: #2E7A4B;
-  --pp-signal-ink: #A9E2B7;
-  --pp-best-tint: #1B3325;
-  --pp-best-border: #2E5039;
+  --pp-signal-ink: #A8E6BF;
+  --pp-best-tint: #16291F;
+  --pp-best-border: #2A4636;
   --pp-high: #F08A64;
   --pp-strike: #7F8C83;
   --pp-glow: #2B5A3E;
+  --pp-btn: rgba(168,230,191,.12);
+  --pp-btn-border: rgba(168,230,191,.35);
+  --pp-btn-fg: #D4F3DF;
+  --pp-save-bg: #EEF3B0;
+  --pp-save-fg: #0B1510;
+  --pp-big: #EEF3B0;
+  --pp-mark: #A8E6BF;
+  --pp-mark-dot: #EEF3B0;
+  --pp-warm: #24453A;
   --color-sage-vibrant: #36895A;
   --color-deep-ink: #24503A;
-  --color-gray-100: #1B2B22;
+  --color-gray-100: #16261D;
   --color-gray-300: #34473B;
   --color-gray-400: #7E9184;
   --color-gray-600: #B7C5BB;
 }
-html[data-daypart="night"] body { background: var(--pp-paper); color: var(--pp-body); }
+html[data-daypart="night"] body { background: radial-gradient(520px 420px at 100% 0, rgba(176,204,228,.10), rgba(176,204,228,0) 70%) no-repeat, var(--pp-paper); color: var(--pp-body); }
 /* Tailwind utility classes used on a few older pages/forms */
 html[data-daypart="night"] .bg-white { background-color: var(--pp-surface) !important; }
 html[data-daypart="night"] .bg-gray-50, html[data-daypart="night"] .bg-gray-100 { background-color: var(--pp-paper) !important; }
@@ -887,3 +914,20 @@ html[data-daypart="night"] .leaflet-control-zoom a { background: var(--pp-surfac
   h1 + p { animation-delay: 80ms; }
   .pp-footer h1, .pp-footer h2, .pp-footer p { animation: none; }
 }
+
+/* Breathe final: fine film grain over every page so it feels made, not generated.
+   A tiny tiled PNG (cheap) instead of a full-screen SVG filter. */
+body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 1000;
+  background-image: url(/grain.png); background-size: 160px 160px; opacity: .35; mix-blend-mode: multiply; }
+html[data-daypart="night"] body::after { opacity: .22; mix-blend-mode: screen; }
+@media print { body::after { display: none; } }
+
+/* Save pill — the one bold element on a deal. */
+.pp-save { display:inline-flex; align-items:center; font-family: var(--font-body); font-weight:700; font-size:15px; letter-spacing:-.01em; padding:7px 12px; border-radius:999px; background: var(--pp-save-bg); color: var(--pp-save-fg); white-space:nowrap; }
+
+/* Breathe final: pull stray Tailwind greens/blues onto the palette (day + night). */
+.bg-green-600, .bg-green-700, .bg-green-800, .hover\:bg-green-800:hover { background-color: var(--pp-canopy) !important; }
+html[data-daypart="night"] .bg-green-600, html[data-daypart="night"] .bg-green-700, html[data-daypart="night"] .bg-green-800 { background-color: var(--pp-signal-fill) !important; }
+.text-green-500, .text-green-600, .text-green-700 { color: var(--pp-mark) !important; }
+.text-blue-600, .text-blue-700 { color: var(--pp-mark) !important; }
+.border-blue-500, .border-blue-600 { border-color: var(--pp-border-2) !important; }

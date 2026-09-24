@@ -172,7 +172,7 @@ type ActiveDeal = {
 async function getTopActiveDeal(slug: string): Promise<ActiveDeal | null> {
   try {
     const rows = await fetchJson<ActiveDeal[]>(
-      `/deals?listing_slug=eq.${encodeURIComponent(slug)}&is_active=eq.true&project_tag=eq.green&select=id,title,description,category,discount_value,discount_unit,discount_type,original_price,sale_price,expires_at,is_recurring,verified_at,status_reason&order=discount_value.desc&limit=1`
+      `/deals?listing_slug=eq.${encodeURIComponent(slug)}&is_active=eq.true&project_tag=eq.green&select=id,title,description,category,discount_value,discount_unit,discount_type,original_price,sale_price,expires_at,is_recurring,verified_at,status_reason&order=discount_value.desc.nullslast&limit=1`
     );
     return rows?.[0] ?? null;
   } catch {
@@ -183,7 +183,7 @@ async function getTopActiveDeal(slug: string): Promise<ActiveDeal | null> {
 async function getAllActiveDeals(slug: string): Promise<ActiveDeal[]> {
   try {
     const rows = await fetchJson<ActiveDeal[]>(
-      `/deals?listing_slug=eq.${encodeURIComponent(slug)}&is_active=eq.true&project_tag=eq.green&select=id,title,description,category,discount_value,discount_unit,discount_type,original_price,sale_price,expires_at,is_recurring,verified_at,status_reason&order=discount_value.desc&limit=10`
+      `/deals?listing_slug=eq.${encodeURIComponent(slug)}&is_active=eq.true&project_tag=eq.green&select=id,title,description,category,discount_value,discount_unit,discount_type,original_price,sale_price,expires_at,is_recurring,verified_at,status_reason&order=discount_value.desc.nullslast&limit=10`
     );
     // Dedup by (title) just in case the DB dedupe migration hasn't run yet
     const seen = new Set<string>();

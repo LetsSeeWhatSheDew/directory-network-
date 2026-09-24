@@ -5,8 +5,8 @@ import Nav from "./components/Nav";
 import Footer from "./components/Footer";
 import LocationAware from "./components/LocationAware";
 import TrackedLink from "./components/TrackedLink";
-import HomeDealCards from "./components/HomeDealCards";
 import BreatheHero from "./components/BreatheHero";
+import { longestExhale, lowestList } from "../lib/exhale";
 import { getConfirmationsToday } from "../lib/confirmations";
 import { getFeatureRows } from "../lib/waysToBuy";
 import PriceBoard from "./components/PriceBoard";
@@ -14,7 +14,6 @@ import SearchTracker from "./components/SearchTracker";
 import FourTwentyBanner from "./components/FourTwentyBanner";
 import RecentlyViewedRow from "./components/RecentlyViewedRow";
 import EndingSoonRow from "./components/EndingSoonRow";
-import PuffPriceIndexCard from "./components/PuffPriceIndexCard";
 import StickyMobileCTA from "./components/StickyMobileCTA";
 import { CategoryIcon, HOME_HERO_CATEGORIES } from "../lib/categoryIcons";
 import { effectiveCategory } from "../lib/inferCategory";
@@ -152,7 +151,7 @@ async function getTopDeals() {
       // Pull a wider candidate pool (20) so the freshness re-rank below
       // has room to move a fresh-but-smaller-discount deal to the top
       // when an older-but-bigger deal would otherwise hero it.
-      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&city=in.${encodeURIComponent(CIL_CITY_IN_LIST)}&order=discount_value.desc&limit=20`,
+      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&city=in.${encodeURIComponent(CIL_CITY_IN_LIST)}&order=discount_value.desc.nullslast&limit=20`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,
@@ -244,7 +243,7 @@ async function getMostRecentDealTs() {
 async function getDealPool() {
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&city=in.${encodeURIComponent(CIL_CITY_IN_LIST)}&order=discount_value.desc&limit=20`,
+      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&city=in.${encodeURIComponent(CIL_CITY_IN_LIST)}&order=discount_value.desc.nullslast&limit=20`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,
@@ -523,6 +522,11 @@ export default async function HomePage() {
   const confirmedToday = await getConfirmationsToday(
     [...(topDeals || []), ...(dealPool || [])].map((d) => d.deal_id || d.id).filter(Boolean)
   );
+  // Breathe final: today's longest exhale (biggest everyday saving, local
+  // first) and the "Lowest this morning" list — one deal per store.
+  const exhalePool = [...(topDeals || []), ...(dealPool || [])];
+  const heroDeal = longestExhale(exhalePool, userCity);
+  const lowestCards = lowestList(exhalePool, 4, userCity, null);
   return (
     <>
       <script
@@ -1218,10 +1222,10 @@ export default async function HomePage() {
       {/* BREATHE (2026-09-23) — the homepage opens on a slow breath. The
           signature PriceBoard returns here once menu prices are live. */}
       <BreatheHero
+        hero={heroDeal}
+        cards={lowestCards}
         dealCount={dealCount}
-        deals={[...(localizedTopDeals || []), ...(localizedDealPool || [])]}
-        categories={CATEGORIES}
-        catCounts={catCounts}
+        storeCount={listingCount}
         location={<LocationAware />}
       />
       {livePriceBoard && /· LIVE$/.test(livePriceBoard.locationTag || "") && (
@@ -1237,7 +1241,6 @@ export default async function HomePage() {
           hero. When this scrolls out of view, the bottom CTA fades in. */}
       <div id="pp-hero-sentinel" aria-hidden="true" style={{ height: 1 }} />
 
-      <PuffPriceIndexCard />
 
       {/* ============================================================
        * SECTION 2 — Today's deals (stat strip + grid)
@@ -1247,18 +1250,6 @@ export default async function HomePage() {
        * ============================================================ */}
       <EndingSoonRow deals={endingSoon} />
       <RecentlyViewedRow />
-
-      <div className="stats">
-        <div className="stats-inner">
-          <span className="stats-line">
-            <strong>{dealCount !== null ? dealCount : "—"}</strong> active deals · <strong>{listingCount !== null ? listingCount : "—"}</strong> Central IL dispensaries · <strong>{cilCityCount > 0 ? cilCityCount : CENTRAL_IL_PUBLIC_CITIES.length}</strong> cities · <Link href="/this-week" style={{ color: "inherit", fontWeight: 700 }}>This week&apos;s report →</Link>
-          </span>
-        </div>
-      </div>
-
-      <div className="deals-section">
-        <HomeDealCards initial={localizedTopDeals} dealCount={dealCount} mostRecent={mostRecentTs} confirmed={confirmedToday} />
-      </div>
 
       {/* WAYS TO BUY — new in 2026: drive-thru, medical everywhere, 2 a.m.
           hours. Counts are verified facts from listing_features only. */}

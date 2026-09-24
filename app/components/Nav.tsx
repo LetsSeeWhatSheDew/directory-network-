@@ -136,7 +136,7 @@ export default function Nav({ variant = "light", sticky = true }: Props) {
         /* Sticky behaviour */
         .pp-nav-sticky { position: sticky; top: 0; }
         .pp-nav-sticky.pp-nav-light.pp-nav-scrolled {
-          background: rgba(247, 244, 237, 0.94);
+          background: color-mix(in srgb, var(--pp-paper) 92%, transparent);
           backdrop-filter: saturate(140%) blur(8px);
           -webkit-backdrop-filter: saturate(140%) blur(8px);
           border-bottom:1px solid var(--color-gray-200, var(--pp-border));

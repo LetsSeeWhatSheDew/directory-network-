@@ -10,7 +10,7 @@ export type LabDeal = { id: string; store: string; city: string; title: string; 
 export async function getLabData() {
   const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
   const [dRes, stores, features, index] = await Promise.all([
-    fetch(`${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&order=discount_value.desc&limit=300`, { headers: { apikey: anon, Authorization: `Bearer ${anon}` }, next: { revalidate: 900 } }),
+    fetch(`${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&order=discount_value.desc.nullslast&limit=300`, { headers: { apikey: anon, Authorization: `Bearer ${anon}` }, next: { revalidate: 900 } }),
     getRegionStores(),
     getFeatureRows(),
     getDealIndex(),

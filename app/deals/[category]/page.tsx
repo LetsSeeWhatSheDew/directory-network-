@@ -2,6 +2,7 @@
 // Fixed v2: force no-cache + correct Supabase query format
 
 import Link from "next/link";
+import { amountOf, isConditional } from "../../../lib/exhale";
 import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
 import TrustLine from "../../components/TrustLine";
@@ -111,7 +112,7 @@ async function getDeals(category: string, city?: string | null) {
     // single-column filter.
     const viewParams = new URLSearchParams({
       select: "*",
-      order: "discount_value.desc",
+      order: "discount_value.desc.nullslast",
       // Category is filtered in JS (effectiveCategory) because the scraper
       // leaves the column NULL on most rows — pull the full active set.
       limit: "200",
@@ -161,7 +162,7 @@ async function getDeals(category: string, city?: string | null) {
     select: "id,title,description,category,discount_type,discount_value,discount_unit,original_price,sale_price,unit,is_recurring,recurring_days,expires_at,source,listing_slug",
     project_tag: "eq.green",
     is_active: "eq.true",
-    order: "discount_value.desc",
+    order: "discount_value.desc.nullslast",
     limit: "200",
   });
 
@@ -458,8 +459,9 @@ export default async function DealsPage({
   const subtitle = city
     ? citySubtitle(category, city)
     : CATEGORY_SUBTITLES[category] || "Best deals near you";
-  const topDeal = deals[0] || null;
-  const alternatives = deals.slice(1, 4);
+  // Lead with the biggest everyday saving; bundles/conditional deals follow.
+  const topDeal = deals.find((d: any) => amountOf(d) && !isConditional(d)) || deals[0] || null;
+  const alternatives = deals.filter((d: any) => d !== topDeal).slice(0, 3);
 
   // The view doesn't include website/address1 — fetch them for the
   // primary CTA so the "Visit dispensary" / "Get directions" button
@@ -813,11 +815,11 @@ export default async function DealsPage({
                         const dollars = estimateSavings(deal);
                         const formatted = formatSavings(deal);
                         if (formatted === "Deal active") return null;
-                        if (dollars != null) {
+                        const a = amountOf(deal);
+                        if (a || dollars != null) {
                           return (
                             <div className="alt-savings-block">
-                              <div className="alt-savings-label-top">You save</div>
-                              <div className="alt-savings">${dollars}</div>
+                              <span className="pp-save">Save {a ? a.big : `$${dollars}`}</span>
                             </div>
                           );
                         }

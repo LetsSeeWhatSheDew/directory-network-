@@ -86,7 +86,7 @@ export default function TaxCalculatorPage() {
         }
 
         .medical-banner{
-          background:var(--pp-surface);border:1px solid #2563eb;border-left:4px solid #2563eb;
+          background:var(--pp-surface);border:1px solid var(--pp-border);border-left:4px solid var(--pp-mark);
           border-radius:10px;padding:14px 18px;margin-bottom:24px;
           font-family:var(--font-ui, system-ui, sans-serif);
           font-size:.88rem;color:var(--pp-signal-ink);line-height:1.55;

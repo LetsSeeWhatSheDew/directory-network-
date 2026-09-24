@@ -78,7 +78,7 @@ function rankingReason(d: Deal, category: string, city?: string): string {
 const CIL_CITY_IN_LIST = `("Peoria","East Peoria","Peoria Heights","Pekin","Bartonville","Morton","Washington","Bloomington","Normal","Champaign","Urbana","Springfield")`;
 
 async function fetchDeals(category: string): Promise<Deal[]> {
-  const params = new URLSearchParams({ select: "*", order: "discount_value.desc", limit: "50" });
+  const params = new URLSearchParams({ select: "*", order: "discount_value.desc.nullslast", limit: "50" });
   if (category !== "all") params.set("category", `eq.${category}`);
   params.set("city", `in.${CIL_CITY_IN_LIST}`);
   const res = await fetch(
