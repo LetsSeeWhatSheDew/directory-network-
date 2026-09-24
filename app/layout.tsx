@@ -4,6 +4,7 @@ import { Instrument_Sans, IBM_Plex_Mono, Instrument_Serif } from "next/font/goog
 import "./globals.css";
 import UtmCapture from "./components/UtmCapture";
 import CityPickerHost from "./components/CityPickerHost";
+import ExhaleLayer from "./components/ExhaleLayer";
 import { brand } from "../lib/brand";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-TML9Y6VMC2";
@@ -114,6 +115,7 @@ export default function RootLayout({
         {children}
         <UtmCapture />
         <CityPickerHost />
+        <ExhaleLayer />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
           strategy="lazyOnload"

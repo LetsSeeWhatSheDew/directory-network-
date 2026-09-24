@@ -20,7 +20,7 @@ import ReportIssueLink from "../../components/ReportIssueLink";
 import { getConfirmationsToday } from "../../../lib/confirmations";
 import { isInCentralIL } from "../../../lib/visibility";
 import { isDealActiveNow, describeActiveDays } from "../../../lib/dealActiveFilter";
-import { cleanDealTitle } from "../../../lib/exhale";
+import { cleanDealTitle, amountOf } from "../../../lib/exhale";
 
 export const revalidate = 60;
 
@@ -269,12 +269,17 @@ export default async function DealPage({
   const headline = formatDealHeadline(deal);
   const dollars = estimateSavings(deal);
   const savingsFormatted = formatSavingsDollars(deal);
+  // Real amounts only: "40%" for a percent deal, "$10" for a dollar deal.
+  // The dollar estimate is only a fallback when the deal has no stated amount.
+  const exAmt = amountOf({ ...deal, deal_title: deal.title } as any);
+  const exhaleBig = exAmt ? exAmt.big : dollars != null ? `$${dollars}` : null;
+  const exhaleUpTo = !!exAmt?.upTo;
   const code = extractPromoCode(deal.description) || extractPromoCode(deal.title);
   const expiry = computeExpiry(deal.expires_at);
   const expiryStyle: Record<ExpiryBadge["tone"], React.CSSProperties> = {
     none:     { display: "none" },
     ongoing:  { color: "var(--pp-signal-ink)", background: "var(--pp-best-tint)" },
-    soft:     { color: "var(--pp-body)", background: "#f1f5f9" },
+    soft:     { color: "var(--pp-body)", background: "var(--pp-best-tint)" },
     warning:  { color: "var(--pp-note-fg)", background: "var(--pp-note-bg)" },
     urgent:   { color: "var(--pp-stop-fg)", background: "var(--pp-stop-bg)" },
   };
@@ -360,16 +365,29 @@ export default async function DealPage({
         .disp a:hover{text-decoration:underline}
         .city{font-size:.85rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:22px}
         .city a{color:var(--pp-signal);text-decoration:none}
-        .savings-block{background:var(--pp-surface);border:1px solid var(--pp-border);border-left:4px solid var(--pp-signal-fill);border-radius:14px;padding:24px;margin-bottom:18px}
+        .savings-block{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:20px;padding:24px;margin-bottom:18px}
+        .sv-exhale{position:relative;margin:-24px -24px 18px;padding:28px 24px 22px;border-radius:20px 20px 0 0;background:var(--pp-haze);border-bottom:1px solid var(--pp-haze-border);overflow:hidden}
+        .sv-exhale .sv-label{font-size:11px;letter-spacing:.26em;color:var(--pp-body);font-weight:500}
+        .sv-exhale .sv-amt{display:flex;align-items:baseline;gap:8px;color:var(--pp-big);margin:6px 0 10px}
+        .sv-exhale .sv-amt b{font-family:var(--font-body);font-weight:700;font-size:clamp(64px,18vw,88px);line-height:.95;letter-spacing:-.055em}
+        .sv-exhale .sv-amt small{font-size:15px;font-weight:500;color:var(--pp-muted)}
+        html[data-daypart="night"] .sv-exhale .sv-amt b{text-shadow:0 0 28px rgba(238,243,176,.25)}
+        .sv-line{font-family:var(--font-breath);font-size:1.45rem;line-height:1.15;color:var(--pp-ink);margin:0 0 4px}
+        .sv-sub{font-size:.85rem;color:var(--pp-muted);margin:0}
+        @media (prefers-reduced-motion: no-preference){
+          .sv-line{animation:pp-land 1.2s .3s cubic-bezier(.2,.7,.2,1) both}
+          .sv-sub{animation:pp-land 1.2s .8s cubic-bezier(.2,.7,.2,1) both}
+        }
+        @keyframes pp-land{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
         .sv-label{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:2px}
         .sv-amt{font-size:clamp(2.4rem,9vw,3.4rem);font-weight:700;color:var(--pp-signal);letter-spacing:-.04em;line-height:1;margin-bottom:4px}
         .sv-vs{font-size:.78rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:14px}
         .expires{display:inline-block;font-size:.74rem;color:var(--pp-note-fg);background:var(--pp-note-bg);padding:3px 10px;border-radius:100px;font-family:var(--font-body);font-weight:700;margin-bottom:14px}
         .expires.ongoing{color:var(--pp-signal-ink);background:var(--pp-best-tint)}
         .desc{font-size:.98rem;color:var(--pp-body);font-family:var(--font-body);line-height:1.6;margin-bottom:16px}
-        .code-box{background:var(--pp-canopy);color:var(--pp-on-dark);border-radius:10px;padding:14px 18px;margin-bottom:18px;font-family:var(--font-body);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-        .code-label{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--pp-canopy-eyebrow);font-weight:700}
-        .code-value{font-family:monospace;font-size:1.05rem;font-weight:700;background:rgba(255,255,255,.1);padding:6px 14px;border-radius:8px;letter-spacing:.06em}
+        .code-box{background:var(--pp-haze);border:1px solid var(--pp-haze-border);color:var(--pp-ink);border-radius:10px;padding:14px 18px;margin-bottom:18px;font-family:var(--font-body);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+        .code-label{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--pp-muted);font-weight:700}
+        .code-value{font-family:var(--font-mono);font-size:1.05rem;font-weight:500;background:var(--pp-surface);border:1px dashed var(--pp-border-2);padding:6px 14px;border-radius:8px;letter-spacing:.06em}
         .how-to{font-size:.88rem;color:var(--pp-body);font-family:var(--font-body);line-height:1.5;margin-bottom:18px;padding:12px 14px;background:var(--pp-best-tint);border:1px solid var(--pp-best-border);border-radius:10px;color:var(--pp-signal-ink)}
         .cta{display:block;width:100%;text-align:center;background:var(--pp-signal-fill);color:var(--pp-on-dark);padding:16px;border-radius:12px;text-decoration:none;font-family:var(--font-body);font-weight:800;font-size:1rem;letter-spacing:.02em;min-height:52px;transition:background .15s}
         .cta:hover{background:var(--pp-canopy)}
@@ -381,7 +399,7 @@ export default async function DealPage({
       <Nav variant="light" />
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(1rem, 4vw, 2rem) 4px", fontSize: 13 }}>
         <Link
-          href={city ? `/city/${encodeURIComponent(city.toLowerCase())}` : "/deals/all"}
+          href={city ? `/city/${city.toLowerCase().trim().replace(/\s+/g, "-")}` : "/deals/all"}
           style={{ color: "var(--color-gray-500, var(--pp-muted))", textDecoration: "none", fontFamily: "var(--font-body)", fontWeight: 500 }}
         >
           ← {city ? `${city} deals` : "All deals"}
@@ -411,7 +429,7 @@ export default async function DealPage({
               role="status"
               style={{
                 background: "var(--pp-note-bg)",
-                border: "1px solid #f5d27a",
+                border: "1px solid var(--pp-note-edge)",
                 borderRadius: 10,
                 padding: "10px 14px",
                 marginBottom: 14,
@@ -427,12 +445,15 @@ export default async function DealPage({
                 : "This deal isn't valid right now."}
             </div>
           )}
-          {dollars != null ? (
-            <>
-              <div className="sv-label">You save</div>
-              <div className="sv-amt">${dollars}</div>
-              <div className="sv-vs" style={{ fontFamily: "var(--font-breath)", fontSize: "1.15rem", marginTop: 4 }}>Breathe out.</div>
-              </>
+          {exhaleBig ? (
+            <div className="sv-exhale">
+              <div className="sv-label">You&rsquo;re saving{exhaleUpTo ? " up to" : ""}</div>
+              <div className="sv-amt">
+                <b>{exhaleBig}</b>
+              </div>
+              <p className="sv-line">Drop your shoulders. The comparing is done.</p>
+              <p className="sv-sub">The counter always has the final word.</p>
+            </div>
           ) : (
             savingsFormatted !== "Deal active" && (
               <>

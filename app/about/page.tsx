@@ -1,9 +1,9 @@
-import Image from "next/image";
 import Nav from "../components/Nav";
+import HazeBand from "../components/HazeBand";
 import Footer from "../components/Footer";
 
 const OG_DESC =
-  "Cannabis deal finder for Central Illinois. Built by one person in Peoria because the existing tools cost too much and lie about coverage.";
+  "Cannabis deal finder for Central Illinois, checked on the stores' own sites every morning. Independent: nobody pays us to rank.";
 const OG_IMAGE = "https://www.puffprice.com/og-image.png";
 
 export const metadata = {
@@ -87,19 +87,7 @@ export default function AboutPage() {
 
       <Nav variant="light" />
 
-      {/* Downtown Peoria building with US flag, photographed through bare
-          branches (Darrien Staton, Unsplash). Place-rooted establishing
-          shot for "I'm Matthew. I live in Peoria." */}
-      <div className="about-photo">
-        <Image
-          src="/photography/about-peoria-flag.jpg"
-          alt="Downtown Peoria, Illinois building with American flag, viewed through bare tree branches"
-          fill
-          priority
-          sizes="100vw"
-        />
-        <div className="about-photo-tint" aria-hidden="true" />
-      </div>
+      <HazeBand height={180} />
 
       <main className="wrap">
         <div className="eyebrow">About</div>
@@ -120,7 +108,7 @@ export default function AboutPage() {
         </p>
 
         <p>
-          So I built a smaller thing that does one thing better. Direct from
+          So we built a smaller thing that does one thing better. Direct from
           the dispensary&apos;s own website. Verified daily. Honest about
           what we know and what we don&apos;t. No paid placement, no menu
           reselling, no national-aggregator inventory passed off as real
@@ -144,10 +132,8 @@ export default function AboutPage() {
         </p>
 
         <p>
-          I&apos;m Matthew. I live in Peoria. I built this on weekends because
-          I got tired of driving across town for a deal that turned out to be
-          expired or first-time-customer-only. If you&apos;ve got a tip, a
-          deal we missed, or a dispensary that should be listed, email me.
+          If you&apos;ve got a tip, a deal we missed, or a dispensary that
+          should be listed, write to us. A real person reads every one.
         </p>
 
         <div className="contact">

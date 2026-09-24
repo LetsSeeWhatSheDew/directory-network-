@@ -997,3 +997,52 @@ html[data-daypart="night"] .leaflet-container { background: var(--pp-paper); }
 
 /* Wide tables scroll sideways on phones instead of cutting off. */
 .pp-table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* HazeBand — the designed stand-in for photography (see HazeBand.tsx). */
+.pp-band { position: relative; overflow: hidden; width: 100%; }
+.pp-band > div, .pp-band > div > div { position: absolute; }
+.pp-band > div { inset: 0; }
+.pp-band-night { display: none; }
+html[data-daypart="night"] .pp-band-day { display: none; }
+html[data-daypart="night"] .pp-band-night { display: block; }
+.pp-band .hz-sky { inset: 0; background: linear-gradient(180deg,#F6F1E8 0%,#F8E5D5 20%,#F5DBC8 42%,#EFE2D3 60%,#E2E5D7 78%,#F6F1E8 100%); }
+.pp-band .hz-sun { left: 58%; top: 44%; width: 300px; height: 170px; margin: -85px 0 0 -150px; border-radius: 50%; background: radial-gradient(closest-side,rgba(255,240,222,1),rgba(255,210,172,.55) 45%,rgba(255,210,172,0)); }
+.pp-band .hz-river { left: -10%; right: -10%; top: 62%; height: 30px; filter: blur(7px); background: linear-gradient(180deg,rgba(178,190,170,0),rgba(178,190,170,.6),rgba(178,190,170,0)); }
+.pp-band .hz-w { border-radius: 50%; }
+.pp-band .hz-w1 { left: -12%; width: 80%; top: 48%; height: 20px; background: rgba(255,250,243,.75); filter: blur(10px); animation: pp-drift 16s ease-in-out infinite alternate; }
+.pp-band .hz-w2 { left: 30%; width: 86%; top: 66%; height: 26px; background: rgba(255,250,243,.7); filter: blur(12px); animation: pp-drift 20s ease-in-out infinite alternate-reverse; }
+.pp-band .hz-w3 { left: 4%; width: 60%; top: 34%; height: 14px; background: rgba(255,250,243,.55); filter: blur(9px); animation: pp-drift 24s ease-in-out infinite alternate; }
+.pp-band .dk-sky { inset: 0; background: linear-gradient(180deg,#0B1510 0%,#0E1B15 30%,#15291F 58%,#1D3527 70%,#0A130E 78%,#0B1510 100%); }
+.pp-band .dk-horizon { left: 50%; top: 68%; width: 420px; height: 120px; margin: -60px 0 0 -210px; border-radius: 50%; background: radial-gradient(closest-side,rgba(120,176,140,.3),rgba(120,176,140,0)); }
+.pp-band .dk-moon { right: 8%; top: 12%; width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(closest-side,rgba(206,220,232,.2),rgba(206,220,232,0)); }
+.pp-band .dk-ground { left: -10%; right: -10%; top: 72%; bottom: 0; background: #08110C; filter: blur(3px); }
+.pp-band .dk-mist { left: -10%; width: 90%; top: 62%; height: 18px; border-radius: 50%; background: rgba(168,210,184,.1); filter: blur(10px); animation: pp-drift 20s ease-in-out infinite alternate; }
+.pp-band .dk-fade { inset: 0; background: linear-gradient(180deg,#0B1510 0%,rgba(11,21,16,0) 24%,rgba(11,21,16,0) 76%,#0B1510 100%); }
+.pp-ff { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #EEF3B0; box-shadow: 0 0 9px 3px rgba(238,243,176,.5); }
+.pp-ff.f1 { animation: pp-fly1 9s ease-in-out infinite; }
+.pp-ff.f2 { animation: pp-fly2 11s ease-in-out infinite; }
+.pp-ff.f3 { animation: pp-fly1 13s ease-in-out infinite reverse; width: 2px; height: 2px; }
+@keyframes pp-drift { 0% { transform: translateX(-16px) } 100% { transform: translateX(16px) } }
+@keyframes pp-fly1 { 0%,100% { transform: translate(0,0); opacity: .25 } 25% { transform: translate(12px,-16px); opacity: 1 } 50% { transform: translate(-4px,-30px); opacity: .35 } 75% { transform: translate(-14px,-12px); opacity: .9 } }
+@keyframes pp-fly2 { 0%,100% { transform: translate(0,0); opacity: .9 } 30% { transform: translate(-16px,10px); opacity: .3 } 60% { transform: translate(-6px,24px); opacity: 1 } 80% { transform: translate(10px,8px); opacity: .4 } }
+@media (prefers-reduced-motion: reduce) { .pp-band *, .pp-ff { animation: none !important; } }
+
+/* The exhale, site-wide (ExhaleLayer.tsx): Save pills release one ring when
+   they come into view; tapping a deal washes the screen in warm light. */
+.pp-save { position: relative; isolation: isolate; }
+.pp-save::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; }
+@keyframes pp-ring-d { 0% { opacity: 1; box-shadow: 0 0 0 0 rgba(31,77,51,.32); } 100% { opacity: 1; box-shadow: 0 0 0 18px rgba(31,77,51,0); } }
+@keyframes pp-ring-n { 0% { opacity: 1; box-shadow: 0 0 0 0 rgba(238,243,176,.42); } 100% { opacity: 1; box-shadow: 0 0 0 18px rgba(238,243,176,0); } }
+@keyframes pp-wash-k { 0% { opacity: 0 } 30% { opacity: 1 } 100% { opacity: 0 } }
+.pp-wash { position: fixed; inset: 0; pointer-events: none; z-index: 900; opacity: 0;
+  background: radial-gradient(90% 45% at 50% 70%, rgba(243,195,160,.42), rgba(243,195,160,0) 70%); }
+html[data-daypart="night"] .pp-wash { background: radial-gradient(90% 45% at 50% 70%, rgba(238,243,176,.14), rgba(238,243,176,0) 70%); }
+@media (prefers-reduced-motion: no-preference) {
+  .pp-save.pp-in::after { animation: pp-ring-d 2.4s cubic-bezier(.2,.6,.3,1) var(--pp-in-delay, 0ms) both; }
+  html[data-daypart="night"] .pp-save.pp-in::after { animation-name: pp-ring-n; }
+  .pp-save.pp-tap::after { animation: pp-ring-d 1.6s cubic-bezier(.2,.6,.3,1) both !important; }
+  html[data-daypart="night"] .pp-save.pp-tap::after { animation-name: pp-ring-n !important; }
+  .pp-wash.on { animation: pp-wash-k 4s ease-out forwards; }
+}
+.pp-swipe-hint { display: none; font-size: .8rem; color: var(--pp-muted); margin: -4px 0 8px; }
+@media (max-width: 700px) { .pp-swipe-hint { display: block; } }

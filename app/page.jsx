@@ -1258,9 +1258,9 @@ export default async function HomePage() {
           Drive-thru, medical, open late — compared
         </h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 12 }}>
-          <Link href="/drive-thru" style={{ background: "var(--pp-canopy)", color: "var(--pp-canopy-text)", borderRadius: 14, padding: 18, textDecoration: "none", display: "flex", flexDirection: "column", gap: 6 }}>
+          <Link href="/drive-thru" style={{ background: "var(--pp-haze)", border: "1px solid var(--pp-haze-border)", color: "var(--pp-ink)", borderRadius: 14, padding: 18, textDecoration: "none", display: "flex", flexDirection: "column", gap: 6 }}>
             <b style={{ fontFamily: "var(--font-display)", fontSize: "1.15rem" }}>Drive-thru</b>
-            <span style={{ fontSize: ".9rem", opacity: .88 }}>Legal since June 12. We&apos;re tracking who opens first in Central IL →</span>
+            <span style={{ fontSize: ".9rem", color: "var(--pp-body)" }}>Legal since June 12. We&apos;re tracking who opens first in Central IL →</span>
           </Link>
           <Link href="/medical" style={{ background: "var(--pp-surface)", border: "1px solid var(--pp-border)", color: "var(--pp-ink)", borderRadius: 14, padding: 18, textDecoration: "none", display: "flex", flexDirection: "column", gap: 6 }}>
             <b style={{ fontFamily: "var(--font-display)", fontSize: "1.15rem" }}>Medical · {waysCounts.medical} stores</b>

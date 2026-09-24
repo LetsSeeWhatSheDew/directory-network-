@@ -173,9 +173,9 @@ export default function EarlyAccessPage() {
           fontFamily: "var(--font-body)",
           lineHeight: 1.6,
         }}>
-          Built by <strong style={{ color: "rgba(255,255,255,0.8)" }}>Matthew Burns</strong> in Peoria, IL.
+          Independent. Nobody pays us to rank.
           <br />
-          Questions? <a href="mailto:matthew@jacarandapeoria.com" style={{ color: "var(--pp-canopy-eyebrow)", textDecoration: "none" }}>matthew@jacarandapeoria.com</a>
+          Questions? <a href="mailto:hi@puffprice.com" style={{ color: "var(--pp-canopy-eyebrow)", textDecoration: "none" }}>hi@puffprice.com</a>
         </p>
       </div>
     </div>

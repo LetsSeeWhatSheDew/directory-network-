@@ -2,7 +2,7 @@
 // Fixed v2: force no-cache + correct Supabase query format
 
 import Link from "next/link";
-import { amountOf, isConditional, saveLabel, cleanDealTitle } from "../../../lib/exhale";
+import { amountOf, isConditional, needsQuantity, saveLabel, cleanDealTitle } from "../../../lib/exhale";
 import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
 import TrustLine from "../../components/TrustLine";
@@ -465,7 +465,7 @@ export default async function DealsPage({
     ? citySubtitle(category, city)
     : CATEGORY_SUBTITLES[category] || "Best deals near you";
   // Lead with the biggest everyday saving; bundles/conditional deals follow.
-  const topDeal = deals.find((d: any) => amountOf(d) && !isConditional(d)) || deals[0] || null;
+  const topDeal = deals.find((d: any) => amountOf(d) && !isConditional(d) && !needsQuantity(d)) || deals[0] || null;
   const alternatives = deals.filter((d: any) => d !== topDeal).slice(0, 3);
 
   // The view doesn't include website/address1 — fetch them for the

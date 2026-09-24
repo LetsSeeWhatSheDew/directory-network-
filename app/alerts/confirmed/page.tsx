@@ -80,7 +80,7 @@ export default function AlertsConfirmedPage() {
           </Link>
 
           <p style={{ marginTop: 28, fontSize: ".75rem", color: "var(--pp-muted)", fontFamily: "var(--font-body)" }}>
-            Built by Matthew Burns in Peoria, IL.
+            Independent. Nobody pays us to rank.
           </p>
         </div>
       </main>

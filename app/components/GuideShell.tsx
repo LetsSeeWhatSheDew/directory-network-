@@ -32,9 +32,9 @@ a.gp-card:hover{border-color:var(--pp-canopy)}
 .gp-card b{font-family:var(--font-display);font-size:1.1rem}
 .gp-card span{font-size:.88rem;color:var(--pp-muted);line-height:1.45}
 .gp-card .gp-big{font-family:var(--font-mono);font-size:1.6rem;font-weight:700;color:var(--pp-signal-ink)}
-.gp-hero-card{background:var(--pp-canopy);color:var(--pp-canopy-text);border-color:var(--pp-canopy)}
-.gp-hero-card span{color:var(--pp-canopy-text);opacity:.85}
-.gp-hero-card b{color:var(--pp-canopy-text)}
+.gp-hero-card{background:var(--pp-haze);color:var(--pp-ink);border-color:var(--pp-haze-border)}
+.gp-hero-card span{color:var(--pp-body)}
+.gp-hero-card b{color:var(--pp-ink)}
 .gp-cta{display:flex;flex-direction:column;gap:10px;margin-top:28px;padding:18px;border-radius:14px;background:var(--pp-canopy);color:var(--pp-canopy-text)}
 .gp-cta b{font-family:var(--font-display);font-size:1.1rem}
 .gp-timeline{border-left:2px solid var(--pp-border);margin:8px 0 0 6px;padding-left:16px;display:flex;flex-direction:column;gap:14px}

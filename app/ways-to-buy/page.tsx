@@ -63,6 +63,7 @@ export default async function WaysToBuyPage() {
       </div>
 
       <h2 className="gp-h2" id="compare">Compare every store</h2>
+      <p className="pp-swipe-hint">Swipe the table sideways to see every column →</p>
       <div style={{ overflowX: "auto", border: "1px solid var(--pp-border)", borderRadius: 14, background: "var(--pp-surface)" }}>
         <table className="gp-table" style={{ minWidth: 640 }}>
           <thead>

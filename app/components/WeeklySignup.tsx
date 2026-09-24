@@ -40,7 +40,7 @@ export default function WeeklySignup({ tone = "dark" }: { tone?: "dark" | "light
         {CITIES.map((c) => <option key={c}>{c}</option>)}
       </select>
       <input tabIndex={-1} autoComplete="off" value={hp} onChange={(e) => setHp(e.target.value)} aria-hidden="true" style={{ position: "absolute", left: -9999, width: 1, height: 1 }} name="website" />
-      <button type="submit" disabled={state === "busy"} style={{ padding: "11px 16px", borderRadius: 10, border: "none", fontWeight: 700, fontSize: 15, cursor: "pointer", background: tone === "dark" ? "rgb(255 255 255)" : "var(--pp-signal-fill)", color: tone === "dark" ? "rgb(31 74 50)" : "var(--pp-on-dark)", flex: "1 1 auto" }}>
+      <button type="submit" disabled={state === "busy"} style={{ padding: "11px 16px", borderRadius: 10, border: "none", fontWeight: 700, fontSize: 15, cursor: "pointer", background: "var(--pp-btn)", color: "var(--pp-btn-fg)", boxShadow: "inset 0 0 0 1px var(--pp-btn-border)", flex: "1 1 auto" }}>
         {state === "busy" ? "Saving…" : "Send me Mondays"}
       </button>
       {state === "err" && <span style={{ color: fg, fontSize: 13, width: "100%" }}>That didn&apos;t save — check the email and try again.</span>}

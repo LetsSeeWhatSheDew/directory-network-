@@ -411,7 +411,7 @@ export default async function DispensaryProfilePage({
       <Nav variant="light" />
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(1rem, 4vw, 2rem) 4px", fontSize: 13 }}>
         <Link
-          href={city ? `/city/${encodeURIComponent(city.toLowerCase())}` : "/deals/all"}
+          href={city ? `/city/${city.toLowerCase().trim().replace(/\s+/g, "-")}` : "/deals/all"}
           style={{ color: "var(--color-gray-500, var(--pp-muted))", textDecoration: "none", fontFamily: "var(--font-body)", fontWeight: 500 }}
         >
           {city ? `← ${city} deals` : "← All deals"}

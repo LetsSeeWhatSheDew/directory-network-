@@ -54,6 +54,14 @@ export function isConditional(d: ExDeal): boolean {
   );
 }
 
+/** Deals that only kick in when you buy several ("4+ Cresco flower", "buy 2",
+ *  "when you buy 3 or more", "mix & match"). Real and listed everywhere, but
+ *  they don't lead as the longest exhale: most people buy one thing. */
+export function needsQuantity(d: ExDeal): boolean {
+  const t = `${d?.deal_title || ""} ${d?.title || ""}`;
+  return /(^|\s|\()\d+\s*\+|\bbuy\s+(\d+|two|three|four)\b|\b\d+\s*(or|and)\s*(more|up)\b|\bwhen you (buy|purchase)\b|\bmix\s*(&|and|n)\s*match\b|\bminimum\b|\bbulk\b/i.test(t);
+}
+
 /** Strip scraper leftovers ("Shop Now ⭢ …") from a stored deal title. */
 export function cleanDealTitle(t: string | null | undefined): string {
   return String(t || "").replace(/\s+Shop Now\b.*$/i, "").trim();
@@ -102,7 +110,7 @@ export function directionsHref(d: ExDeal): string {
 
 /** Biggest everyday saving, preferring the visitor's city. */
 export function longestExhale(deals: ExDeal[], city?: string | null): ExDeal | null {
-  const eligible = deals.filter((d) => amountOf(d) && !isConditional(d));
+  const eligible = deals.filter((d) => amountOf(d) && !isConditional(d) && !needsQuantity(d));
   const rank = (a: ExDeal, b: ExDeal) => (amountOf(b)!.value - amountOf(a)!.value);
   if (city) {
     const local = eligible.filter((d) => (d.city || "").toLowerCase() === city.toLowerCase()).sort(rank);
