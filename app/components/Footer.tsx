@@ -29,6 +29,7 @@ const FOOTER_COLUMNS: { heading: string; links: { href: string; label: string }[
       { href: "/drive-thru", label: "Drive-thru" },
       { href: "/medical", label: "Medical" },
       { href: "/open-late", label: "Open latest tonight" },
+      { href: "/on-the-way", label: "Best deal on your route" },
       { href: "/illinois-cannabis-delivery", label: "Delivery (law tracker)" },
       { href: "/illinois-hemp-law", label: "Nov 12 hemp change" },
     ],

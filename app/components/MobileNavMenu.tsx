@@ -62,6 +62,7 @@ const GROUPS: { title: string; items: { href: string; label: string; hint: strin
       { href: "/drive-thru", label: "Drive-thru", hint: "Legal since June — which stores have one" },
       { href: "/medical", label: "Medical", hint: "Stores that serve patients" },
       { href: "/open-late", label: "Open late", hint: "Sorted by closing time tonight" },
+      { href: "/on-the-way", label: "On the way", hint: "Best deal on your drive between towns" },
     ],
   },
   {
