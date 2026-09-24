@@ -37,7 +37,16 @@ export default function ExhaleLayer() {
     );
     const scan = () => document.querySelectorAll(".pp-save:not(.pp-in)").forEach((el) => io.observe(el));
     scan();
-    const mo = new MutationObserver(() => scan());
+    // Coalesce DOM changes (the map re-renders constantly) into one scan per frame.
+    let queued = false;
+    const mo = new MutationObserver(() => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        scan();
+      });
+    });
     mo.observe(document.body, { childList: true, subtree: true });
     const reset = setTimeout(() => (n = 0), 1200);
     return () => {
