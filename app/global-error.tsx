@@ -5,7 +5,6 @@
 // the layout entirely, so it MUST render its own <html>/<body>.
 
 import { useEffect } from "react";
-import * as Sentry from "@sentry/nextjs";
 
 export default function GlobalError({
   error,
@@ -14,7 +13,7 @@ export default function GlobalError({
 }) {
   useEffect(() => {
     console.error("[global error]", error);
-    Sentry.captureException(error);
+    if (process.env.NEXT_PUBLIC_SENTRY_DSN) import("@sentry/nextjs").then((Sentry) => Sentry.captureException(error));
   }, [error]);
 
   return (
