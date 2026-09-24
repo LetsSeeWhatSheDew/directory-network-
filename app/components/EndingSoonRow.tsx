@@ -60,12 +60,12 @@ export default function EndingSoonRow({ deals }: { deals: EndingSoonDeal[] }) {
           fontWeight: 700,
           letterSpacing: ".14em",
           textTransform: "uppercase",
-          color: "#b45309",
+          color: "var(--pp-signal)",
           fontFamily: "var(--font-body)",
           marginBottom: 10,
         }}
       >
-        ⏱ Ending soon
+        Ending soon
       </div>
       <div
         style={{
@@ -86,8 +86,8 @@ export default function EndingSoonRow({ deals }: { deals: EndingSoonDeal[] }) {
             style={{
               flexShrink: 0,
               background: "var(--pp-surface)",
-              border: "1px solid #fde68a",
-              borderLeft: "4px solid #f59e0b",
+              border: "1px solid var(--pp-border)",
+              borderLeft: "4px solid var(--pp-signal)",
               borderRadius: 12,
               padding: "12px 14px",
               textDecoration: "none",
@@ -102,7 +102,7 @@ export default function EndingSoonRow({ deals }: { deals: EndingSoonDeal[] }) {
               style={{
                 fontSize: ".72rem",
                 fontWeight: 700,
-                color: "#b45309",
+                color: "var(--pp-signal)",
                 letterSpacing: ".08em",
                 textTransform: "uppercase",
                 marginBottom: 4,

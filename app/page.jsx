@@ -13,7 +13,6 @@ import PriceBoard from "./components/PriceBoard";
 import SearchTracker from "./components/SearchTracker";
 import FourTwentyBanner from "./components/FourTwentyBanner";
 import RecentlyViewedRow from "./components/RecentlyViewedRow";
-import EndingSoonRow from "./components/EndingSoonRow";
 import StickyMobileCTA from "./components/StickyMobileCTA";
 import { CategoryIcon, HOME_HERO_CATEGORIES } from "../lib/categoryIcons";
 import { effectiveCategory } from "../lib/inferCategory";
@@ -270,7 +269,7 @@ async function getEndingSoonDeals() {
   const cutoff = new Date(now.getTime() + 24 * 3600 * 1000);
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_id,id,listing_slug,slug,name,city,deal_title,title,expires_at&city=in.${encodeURIComponent(CIL_CITY_IN_LIST)}&expires_at=gt.${encodeURIComponent(now.toISOString())}&expires_at=lt.${encodeURIComponent(cutoff.toISOString())}&order=expires_at.asc&limit=5`,
+      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_id,listing_slug,slug,name,city,deal_title,expires_at&city=in.${encodeURIComponent(CIL_CITY_IN_LIST)}&expires_at=gt.${encodeURIComponent(now.toISOString())}&expires_at=lt.${encodeURIComponent(cutoff.toISOString())}&order=expires_at.asc&limit=5`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,
@@ -1248,7 +1247,7 @@ export default async function HomePage() {
        * (per Chrome's OpenTable benchmark). The stat line above it is
        * the trust signal — three numbers, no flair, no padding.
        * ============================================================ */}
-      <EndingSoonRow deals={endingSoon} />
+      {/* EndingSoonRow held off the Breathe homepage: its amber countdown fights "none of it needs you to hurry". Query fixed 2026-09-23; re-add here if wanted. */}
       <RecentlyViewedRow />
 
       {/* WAYS TO BUY — new in 2026: drive-thru, medical everywhere, 2 a.m.
