@@ -74,14 +74,12 @@ async function getDealsForBrand(b: Brand): Promise<DealRow[]> {
       .flatMap((kw) => {
         const escaped = kw.replace(/"/g, "");
         return [
-          `title.ilike.*${encodeURIComponent(escaped)}*`,
-          `description.ilike.*${encodeURIComponent(escaped)}*`,
           `deal_title.ilike.*${encodeURIComponent(escaped)}*`,
           `deal_description.ilike.*${encodeURIComponent(escaped)}*`,
         ];
       })
       .join(",");
-    const url = `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=id,deal_id,listing_slug,slug,name,city,title,deal_title,description,deal_description,category,discount_value,discount_unit,expires_at&or=(${orParts})&order=discount_value.desc.nullslast&limit=40`;
+    const url = `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_id,listing_slug,slug,name,city,deal_title,deal_description,category,discount_value,discount_unit,expires_at&or=(${orParts})&order=discount_value.desc.nullslast&limit=40`;
     const res = await fetch(url, {
       headers: {
         apikey: SUPABASE_ANON_KEY,

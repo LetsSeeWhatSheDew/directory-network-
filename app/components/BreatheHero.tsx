@@ -294,7 +294,7 @@ export default function BreatheHero({ hero, cards, dealCount, storeCount, locati
           {dealCount != null && dealCount > 0 && (
             <p className="bh-count">
               {hero ? "One of " : ""}
-              <b>{dealCount}</b> deals found at {storeCount ?? "every"} stores this morning.
+              <b>{dealCount}</b> deals found this morning{storeCount ? ` — we checked ${storeCount} stores` : ""}.
             </p>
           )}
         </div>

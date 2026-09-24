@@ -34,7 +34,7 @@ export default async function OpenLatePage() {
           <Link key={s.slug} href={`/dispensary/${s.slug}`} className="gp-row">
             <StoreAvatar src={storeImageUrl(s.logo_url, s.slug)} name={s.name} size={40} />
             <span className="gp-row-main"><span className="gp-row-title">{s.name}</span><span className="gp-row-sub">{s.city}{openNow ? " · open now" : ""}</span></span>
-            <span className="gp-row-right" style={{ color: openNow ? "var(--pp-canopy)" : "var(--pp-muted)" }}>{closesLabel.replace("Open until ", "")}</span>
+            <span className="gp-row-right" style={{ color: openNow ? "var(--pp-signal)" : "var(--pp-muted)" }}>{closesLabel.replace("Open until ", "")}</span>
           </Link>
         ))}
       </div>

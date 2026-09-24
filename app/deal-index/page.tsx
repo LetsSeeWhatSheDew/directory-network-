@@ -22,7 +22,7 @@ function Spark({ values }: { values: number[] }) {
   const pts = values.map((v, i) => `${(i / (values.length - 1)) * w},${h - (v / max) * (h - 8) - 4}`).join(" ");
   return (
     <svg viewBox={`0 0 ${w} ${h}`} width="100%" height={h} role="img" aria-label="Deals live per day">
-      <polyline points={pts} fill="none" stroke="var(--pp-canopy)" strokeWidth={3} strokeLinejoin="round" strokeLinecap="round" />
+      <polyline points={pts} fill="none" stroke="var(--pp-signal)" strokeWidth={3} strokeLinejoin="round" strokeLinecap="round" />
     </svg>
   );
 }
