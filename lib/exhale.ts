@@ -129,6 +129,10 @@ export function lowestList(deals: ExDeal[], n: number, city?: string | null, ski
       const la = city && (a.city || "").toLowerCase() === city.toLowerCase() ? 1 : 0;
       const lb = city && (b.city || "").toLowerCase() === city.toLowerCase() ? 1 : 0;
       if (la !== lb) return lb - la;
+      // Buy-several deals sit below everyday savings.
+      const qa = needsQuantity(a) ? 1 : 0;
+      const qb = needsQuantity(b) ? 1 : 0;
+      if (qa !== qb) return qa - qb;
       return amountOf(b)!.value - amountOf(a)!.value;
     });
   for (const d of pool) {

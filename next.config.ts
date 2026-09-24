@@ -4,6 +4,10 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  // Share-image fonts are read from disk by the /og routes (app/og/shared.tsx).
+  outputFileTracingIncludes: {
+    "/og/**": ["./app/og/fonts/**"],
+  },
   // Next 16 removed the `eslint` key from NextConfig — ESLint flat
   // config (eslint.config.mjs) drives linting now. Build does not
   // run eslint automatically, so no opt-out needed here.

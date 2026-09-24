@@ -250,7 +250,8 @@ export async function generateMetadata({
       ? `${deals.length} verified deal${deals.length === 1 ? "" : "s"} today across ${n} ${city}, IL dispensar${n === 1 ? "y" : "ies"} — plus hours, who's open now, and how to order ahead.`
       : `All ${n} licensed dispensar${n === 1 ? "y" : "ies"} in ${city}, IL — hours, who's open now, order-ahead options, and verified deals the moment they post.`;
   const url = `${brand.url}/city/${encodeURIComponent(raw.toLowerCase())}`;
-  const ogImage = `${brand.url}/og-image.png`;
+  // Live link preview: the city's longest exhale today (app/og/city/[city]).
+  const ogImage = `${brand.url}/og/city/${encodeURIComponent(raw.toLowerCase())}`;
   return {
     title,
     description,

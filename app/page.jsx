@@ -33,6 +33,16 @@ export const metadata = {
   description:
     "Live dispensary deals across Peoria, Bloomington-Normal, Champaign-Urbana, Springfield, and the rest of Central Illinois — updated continuously and always free to browse.",
   alternates: { canonical: brand.url },
+  // Live link preview: today's longest exhale (app/og/today), refreshed through the day.
+  openGraph: {
+    title: "Take a breath. We found the deal. | PuffPrice",
+    description: "Central Illinois dispensary deals, checked on the stores' own sites every morning.",
+    url: brand.url,
+    siteName: brand.name,
+    images: [{ url: `${brand.url}/og/today?size=og`, width: 1200, height: 630, alt: "Today's longest exhale on PuffPrice" }],
+    type: "website",
+  },
+  twitter: { card: "summary_large_image", images: [`${brand.url}/og/today?size=og`] },
 };
 
 // The homepage "Browse by city" section now renders all 9 public cities
