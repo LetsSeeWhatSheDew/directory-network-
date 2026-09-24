@@ -332,6 +332,9 @@ export function extractDealsFromHtml(html: string, sourceUrl: string, listingSlu
   const seen = new Set<string>();
 
   const push = (d: { title: string; discount_value: number | null; discount_unit: "percent" | "dollar" | "other" }) => {
+    // Shop-card CTAs ("Shop Now ⭢ 2/$30 GOODY BAG…") bleed into titles on some
+    // sites; everything from the CTA on belongs to the next card.
+    d = { ...d, title: d.title.replace(/\s+(?:Shop|Order)\s+Now\b.*$/i, "").trim() };
     const key = normalizeTitle(d.title);
     if (!key || seen.has(key)) return;
     seen.add(key);
