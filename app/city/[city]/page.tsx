@@ -541,9 +541,11 @@ export default async function CityPage({
               <b>Quick answer ({asOf} CT):</b>{" "}
               {top
                 ? <>the biggest everyday discount in {city} right now is <b>{top.deal_title || top.title}</b> at {storeName(top)}. </>
-                : <>no {city} store has a deal posted on its own site right now. </>}
+                : deals.length > 0
+                  ? <>{city} deals right now are bundles and set prices, not straight discounts. </>
+                  : <>no {city} store has a deal posted on its own site right now. </>}
               {deals.length > 0 && <>{deals.length} {deals.length === 1 ? "deal is" : "deals are"} live at {withDeals} of {stores.length} {city} dispensaries. </>}
-              {lateNight?.today?.closes_at && <>{lateNight.l.name} is open latest tonight, until {formatTime(lateNight.today.closes_at)}.</>}
+              {lateNight?.today?.closes_at && <>{lateNight.l.name} closes latest tonight, at {formatTime(lateNight.today.closes_at)}.</>}
             </p>
           );
         })()}
