@@ -10,6 +10,9 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Logo from "./Logo";
+import { longestExhale, productOf, storeWithCity, type ExDeal } from "../../lib/exhale";
+
+const toEx = (d: ApiDeal): ExDeal => ({ name: d.store, city: d.city, deal_title: d.title, discount_value: d.discount_value, discount_unit: d.discount_unit });
 
 type Variant = "light" | "deep";
 type Props = { variant?: Variant };
@@ -90,9 +93,10 @@ export default function MobileNavMenu({ variant = "light" }: Props) {
       .then((j) => {
         if (!alive || !j) return;
         const all: ApiDeal[] = Array.isArray(j.deals) ? j.deals : [];
-        const local = c ? all.filter((d) => (d.city || "").toLowerCase() === c.toLowerCase()) : [];
-        const pool = (local.length ? local : all).filter((d) => amount(d));
-        setBest(pool[0] || null);
+        // Same pick as the homepage orb: real everyday amounts only, no "up to" or conditional deals, local city first.
+        const ex = all.map(toEx);
+        const pick = longestExhale(ex, c);
+        setBest(pick ? all[ex.indexOf(pick)] : null);
         const n = typeof j.count === "number" ? j.count : all.length;
         setCount(n > 0 ? n : null);
       })
@@ -156,7 +160,7 @@ export default function MobileNavMenu({ variant = "light" }: Props) {
               {best ? (
                 <>
                   <span className="pm-exhale-amt">{amount(best)}</span>
-                  <span className="pm-exhale-where">{best.title ? `${best.title} · ` : ""}{best.store}{best.city ? `, ${best.city}` : ""}</span>
+                  <span className="pm-exhale-where">{`${productOf(toEx(best))} at ${storeWithCity(toEx(best))}`}</span>
                 </>
               ) : (
                 <span className="pm-exhale-where">See every deal checked this morning →</span>
@@ -217,7 +221,7 @@ export default function MobileNavMenu({ variant = "light" }: Props) {
         .pm-exhale{display:flex;flex-direction:column;gap:2px;padding:16px 18px;border-radius:18px;text-decoration:none;color:var(--pp-ink);background:var(--pp-surface);border:1px solid var(--pp-border);transition:transform .16s ease}
         .pm-exhale:active{transform:scale(.985)}
         .pm-exhale-label{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--pp-muted)}
-        .pm-exhale-amt{font-family:var(--font-mono);font-weight:700;font-size:2rem;line-height:1.1;color:var(--pp-ink)}
+        .pm-exhale-amt{font-family:var(--font-body);font-weight:700;font-size:2.25rem;letter-spacing:-.04em;line-height:1.1;color:var(--pp-ink)}
         .pm-exhale-where{font-size:.95rem;color:var(--pp-body)}
         .pm-exhale-count{font-size:.82rem;color:var(--pp-muted);margin-top:4px}
         .pm-group{display:flex;flex-direction:column}
