@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { amountOf, isConditional, needsQuantity, saveLabel, cleanDealTitle } from "../../../lib/exhale";
+import OtdLine from "../../components/OtdLine";
 import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
 import TrustLine from "../../components/TrustLine";
@@ -542,7 +543,7 @@ export default async function DealsPage({
         .top-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--pp-signal);font-family:var(--font-body);margin-bottom:10px}
 
         /* TOP DEAL CARD — savings dominates */
-        .top-card{background:var(--pp-surface);border:1px solid var(--pp-border);border-left:4px solid var(--pp-signal-fill);border-radius:16px;padding:24px;position:relative;margin-bottom:24px}
+        .top-card{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:20px;padding:24px;position:relative;margin-bottom:24px}
         .deal-grade{position:absolute;top:12px;right:12px;min-width:28px;height:24px;padding:0 8px;display:inline-flex;align-items:center;justify-content:center;border-radius:100px;font-family:var(--font-body);font-weight:700;font-size:.68rem;letter-spacing:.02em;opacity:.7}
         .you-save-label{font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:2px}
         .save-amount{font-size:clamp(2.2rem,8vw,3rem);font-weight:700;color:var(--pp-signal);letter-spacing:-.04em;line-height:1;margin-bottom:2px}
@@ -839,6 +840,7 @@ export default async function DealsPage({
                         <div className="alt-deal">
                           {cleanDealTitle(deal.deal_title || deal.title) || `${deal.discount_value}% off`}
                         </div>
+                        <OtdLine deal={deal} />
                         {(() => {
                           const u = getExpiryUrgency(deal.expires_at);
                           if (!u) return null;

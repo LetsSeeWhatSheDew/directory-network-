@@ -164,7 +164,7 @@ export default async function BrandPage({
         .prose{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:14px;padding:22px 22px;font-family:var(--font-body);font-size:1rem;line-height:1.65;color:var(--pp-body);margin-bottom:32px;max-width:64ch}
         h2{font-size:1.2rem;font-weight:700;color:var(--pp-ink);margin-bottom:14px;font-family:var(--font-display), system-ui, sans-serif;letter-spacing:-.01em}
         .deal-list{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:28px}
-        .deal-card{background:var(--pp-surface);border:1px solid var(--pp-border);border-left:4px solid var(--pp-signal-fill);border-radius:12px;padding:16px 18px;text-decoration:none;color:inherit;transition:border-color .15s, box-shadow .15s}
+        .deal-card{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:20px;padding:16px 18px;text-decoration:none;color:inherit;transition:border-color .15s, box-shadow .15s}
         .deal-card:hover{border-color:var(--pp-signal-fill);box-shadow:0 2px 8px rgba(22,163,74,.12)}
         .deal-head{font-family:var(--font-body);font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);margin-bottom:4px}
         .deal-title{font-size:1.02rem;font-weight:700;color:var(--pp-ink);line-height:1.25;margin-bottom:4px}

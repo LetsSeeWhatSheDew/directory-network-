@@ -1046,3 +1046,7 @@ html[data-daypart="night"] .pp-wash { background: radial-gradient(90% 45% at 50%
 }
 .pp-swipe-hint { display: none; font-size: .8rem; color: var(--pp-muted); margin: -4px 0 8px; }
 @media (max-width: 700px) { .pp-swipe-hint { display: block; } }
+
+/* Out-the-door line (OtdLine.tsx): tax included, in the price font. */
+.pp-otd { display: inline-block; font-size: 12.5px; line-height: 1.4; color: var(--pp-muted); margin-top: 3px; }
+.pp-otd b { font-family: var(--font-mono); font-weight: 500; color: var(--pp-ink); letter-spacing: -.02em; }

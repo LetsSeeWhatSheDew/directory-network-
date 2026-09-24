@@ -6,6 +6,8 @@
 
 import Link from "next/link";
 import { saveLabel, isConditional, cleanDealTitle } from "@/lib/exhale";
+import OtdLine from "../../components/OtdLine";
+import { priceChip, cityTaxRates } from "@/lib/otd";
 import { getFeatureRows, featuresBySlug } from "@/lib/waysToBuy";
 import StoreAvatar from "@/app/components/StoreAvatar";
 import { storeImageUrl } from "@/lib/storeImage";
@@ -448,6 +450,10 @@ export default async function CityPage({
         .cp-crumb a:hover{color:var(--pp-signal-ink)}
         .cp h1{font-family:var(--font-display);font-size:clamp(2rem,5vw,3rem);line-height:1.02;letter-spacing:-.035em;color:var(--pp-ink);font-weight:700;margin:0 0 .9rem}
         .cp-intro{font-size:1rem;line-height:1.6;max-width:640px;margin:0 0 1.5rem;color:var(--pp-body)}
+        .cp-tax{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;font-size:.86rem;color:var(--pp-body);margin:-.4rem 0 1.6rem;padding:10px 14px;border:1px solid var(--pp-haze-border);border-radius:14px;background:var(--pp-haze)}
+        .cp-tax-l{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--pp-muted);width:100%}
+        .cp-tax b{font-family:var(--font-mono);font-weight:500;color:var(--pp-ink)}
+        .cp-tax a{margin-left:auto;color:var(--pp-mark);font-weight:600;text-decoration:none}
 
         .cp-ticker{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--pp-border);border-radius:12px;background:var(--pp-surface);margin:0 0 .5rem;overflow:hidden}
         .cp-tick{padding:.9rem 1rem;border-right:1px solid var(--pp-border)}
@@ -470,8 +476,8 @@ export default async function CityPage({
         .cp-alert{display:inline-block;margin-top:.9rem;font-weight:700;font-size:.88rem;color:var(--pp-signal-ink);text-decoration:none}
         .cp-alert:hover{text-decoration:underline}
 
-        .deal-row{background:var(--pp-surface);border:1px solid var(--pp-border);border-left:3px solid var(--pp-signal);border-radius:12px;padding:.9rem 1.1rem;margin-bottom:.6rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;text-decoration:none;color:inherit}
-        .deal-row:hover{border-color:var(--pp-best-border);border-left-color:var(--pp-signal)}
+        .deal-row{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:20px;padding:.9rem 1.1rem;margin-bottom:.6rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;text-decoration:none;color:inherit}
+        .deal-row:hover{border-color:var(--pp-best-border)}
         .deal-body{flex:1;min-width:0}
         .deal-name{font-family:var(--font-display);font-size:.95rem;font-weight:700;color:var(--pp-ink);margin-bottom:2px}
         .deal-title{font-size:.84rem;line-height:1.4}
@@ -581,6 +587,21 @@ export default async function CityPage({
           <Link href="/how-we-rank" style={{ color: "var(--pp-signal-ink)", fontWeight: 600 }}>How we rank</Link>
         </p>
 
+        {(() => {
+          const t = cityTaxRates(city);
+          if (!t) return null;
+          const p = (n: number) => `${(n * 100).toFixed(1).replace(/\.0$/, "")}%`;
+          return (
+            <p className="cp-tax">
+              <span className="cp-tax-l">Tax at the register in {city}</span>
+              <span>Flower <b>+{p(t.flower)}</b></span>
+              <span>Vapes <b>+{p(t.concentrate)}</b></span>
+              <span>Edibles <b>+{p(t.edible)}</b></span>
+              <Link href="/out-the-door">Deals with tax included →</Link>
+            </p>
+          );
+        })()}
+
         {livePriceBoard && /· LIVE$/.test(livePriceBoard.locationTag || "") && (
           <div style={{ margin: "0 0 2rem", maxWidth: 560 }}>
             <PriceBoard {...livePriceBoard} />
@@ -616,12 +637,13 @@ export default async function CityPage({
                 <div className="deal-body">
                   <div className="deal-name">{name}</div>
                   <div className="deal-title">{title}</div>
+                  <OtdLine deal={{ ...d, deal_title: title }} city={d.city || city} />
                 </div>
                 <div className="deal-right">
                   {saveLabel({ ...d, deal_title: title }, dollars) ? (
                     <span className="pp-save">{saveLabel({ ...d, deal_title: title }, dollars)}</span>
                   ) : (
-                    <div className="deal-save-label" style={{ fontSize: ".8rem" }}>Deal</div>
+                    <div className="deal-save-label" style={{ fontSize: ".8rem" }}>{priceChip({ ...d, deal_title: title }) || "Deal"}</div>
                   )}
                 </div>
               </Link>

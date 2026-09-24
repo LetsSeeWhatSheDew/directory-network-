@@ -67,6 +67,7 @@ const GROUPS: { title: string; items: { href: string; label: string; hint: strin
   {
     title: "Before you go",
     items: [
+      { href: "/out-the-door", label: "Out-the-door prices", hint: "Today's deals with tax already added" },
       { href: "/illinois-cannabis-tax-calculator", label: "Tax calculator", hint: "What you'll really pay at the counter" },
       { href: "/how-we-rank", label: "How we rank", hint: "Nobody pays us to be on top" },
       { href: "/dispensaries", label: "All dispensaries", hint: "Every Central Illinois store" },

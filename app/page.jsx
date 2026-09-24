@@ -1302,9 +1302,12 @@ export default async function HomePage() {
             product type and city. Our calculator shows you the real out-the-door
             price for any Central Illinois dispensary.
           </p>
-          <Link href="/illinois-cannabis-tax-calculator" className="tax-callout-cta">
-            See out-the-door prices for your city →
+          <Link href="/out-the-door" className="tax-callout-cta">
+            See today&apos;s deals with tax included →
           </Link>
+          <p style={{ marginTop: 14, fontSize: ".9rem" }}>
+            <Link href="/illinois-cannabis-tax-calculator" style={{ color: "var(--pp-mark)", fontWeight: 600 }}>Or try any price in the calculator</Link>
+          </p>
         </div>
       </section>
 

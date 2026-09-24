@@ -26,6 +26,7 @@ import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
 import { saveLabel, cleanDealTitle } from "../../../lib/exhale";
+import OtdLine from "../../components/OtdLine";
 import { nowInCT, isOpen, formatTime as formatHourTime } from "../../../lib/hours";
 import { visitDispensaryHref } from "../../../lib/links";
 import { cityFromSlug } from "../../../lib/cityNormalize";
@@ -368,7 +369,7 @@ export default async function DispensaryProfilePage({
         .section{margin-bottom:32px}
         .section-h{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:14px}
 
-        .deal-card{background:var(--pp-surface);border:1px solid var(--pp-border);border-left:4px solid var(--pp-signal-fill);border-radius:14px;padding:18px 20px;margin-bottom:10px}
+        .deal-card{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:20px;padding:18px 20px;margin-bottom:10px}
         .deal-title{font-size:1.05rem;font-weight:700;color:var(--pp-ink);margin-bottom:4px}
         .deal-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
         .deal-savings{font-size:1.4rem;font-weight:700;color:var(--pp-signal);letter-spacing:-.02em}
@@ -543,6 +544,7 @@ export default async function DispensaryProfilePage({
               return (
                 <div className="deal-card" key={d.id}>
                   <div className="deal-title">{(dollars == null && savingsLabel !== "Deal active" ? dealContextTag(formatDealTitle(d)) : null) || formatDealTitle(d)}</div>
+                  <OtdLine deal={{ ...d, deal_title: d.title }} city={city} />
                   {dealHistory &&
                     dealHistory.best_discount_pct != null &&
                     dealHistory.deals_seen_90d >= 3 &&

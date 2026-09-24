@@ -51,6 +51,7 @@ const FOOTER_COLUMNS: { heading: string; links: { href: string; label: string }[
       { href: "/this-week", label: "This week's deals" },
       { href: "/deal-index", label: "Deal Index" },
       { href: "/how-we-rank", label: "How we rank" },
+      { href: "/out-the-door", label: "Out-the-door prices" },
       { href: "/illinois-cannabis-tax-calculator", label: "Tax calculator" },
       { href: "/cannabis/illinois/first-time-guide", label: "First-time guide" },
       { href: "/cannabis/illinois/laws", label: "Illinois cannabis laws" },

@@ -21,6 +21,7 @@ import { getConfirmationsToday } from "../../../lib/confirmations";
 import { isInCentralIL } from "../../../lib/visibility";
 import { isDealActiveNow, describeActiveDays } from "../../../lib/dealActiveFilter";
 import { cleanDealTitle, amountOf } from "../../../lib/exhale";
+import { otdFor, usd } from "../../../lib/otd";
 
 export const revalidate = 60;
 
@@ -286,6 +287,8 @@ export default async function DealPage({
   const disp = displayDispensaryName({ name: listing?.name, slug: deal.listing_slug, listing_slug: deal.listing_slug });
   const rawCity = listing?.city && listing.city !== "Illinois" ? listing.city : null;
   const city = rawCity; // null when we don't have a real city — avoid "Illinois" sentinel
+  // Out-the-door price when the deal states a real price ("$120 OZ", "2 for $60").
+  const otd = otdFor({ title: deal.title, category: deal.category }, rawCity);
   const cityLabel = rawCity ? `${rawCity}, IL` : "IL";
 
   // SpecialAnnouncement schema — Zone 4 Phase 1 "fresh & live" signal
@@ -379,6 +382,12 @@ export default async function DealPage({
           .sv-sub{animation:pp-land 1.2s .8s cubic-bezier(.2,.7,.2,1) both}
         }
         @keyframes pp-land{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+        .otd-box{border:1px solid var(--pp-border);border-radius:14px;padding:12px 14px;margin:0 0 16px;background:var(--pp-paper);font-family:var(--font-body)}
+        .otd-row{display:flex;justify-content:space-between;gap:12px;font-size:.88rem;color:var(--pp-body);padding:5px 0}
+        .otd-row b{font-family:var(--font-mono);font-weight:500;color:var(--pp-ink);white-space:nowrap}
+        .otd-row.total{border-top:1px solid var(--pp-border);margin-top:4px;padding-top:9px;color:var(--pp-ink);font-weight:600}
+        .otd-note{font-size:.78rem;color:var(--pp-muted);margin:8px 0 0;line-height:1.5}
+        .otd-note a{color:var(--pp-mark)}
         .sv-label{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:2px}
         .sv-amt{font-size:clamp(2.4rem,9vw,3.4rem);font-weight:700;color:var(--pp-signal);letter-spacing:-.04em;line-height:1;margin-bottom:4px}
         .sv-vs{font-size:.78rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:14px}
@@ -393,7 +402,7 @@ export default async function DealPage({
         .cta:hover{background:var(--pp-canopy)}
         .secondary{display:block;text-align:center;margin-top:12px;color:var(--pp-muted);font-family:var(--font-body);font-size:.82rem;text-decoration:none}
         .secondary:hover{color:var(--pp-ink);text-decoration:underline}
-        @media(max-width:600px){.wrap{padding:24px 14px}.savings-block{padding:20px 18px}}
+        @media(max-width:600px){.wrap{padding:24px 14px}.savings-block{padding:20px 18px}.sv-exhale{margin:-20px -18px 18px;padding:24px 18px 20px}}
       `}</style>
 
       <Nav variant="light" />
@@ -454,6 +463,19 @@ export default async function DealPage({
               <p className="sv-line">Drop your shoulders. The comparing is done.</p>
               <p className="sv-sub">The counter always has the final word.</p>
             </div>
+          ) : otd ? (
+            <div className="sv-exhale">
+              <div className="sv-label">Out the door in {otd.city}</div>
+              <div className="sv-amt">
+                <b>{usd(otd.total)}</b>
+              </div>
+              <p className="sv-line">
+                {otd.each ? `That's ${usd(otd.each)} each, tax included.` : "Tax included. No surprise at the counter."}
+              </p>
+              <p className="sv-sub">
+                {usd(otd.shelf)} on the shelf + {usd(otd.tax)} Illinois and {otd.city} tax. The counter always has the final word.
+              </p>
+            </div>
           ) : (
             savingsFormatted !== "Deal active" && (
               <>
@@ -461,6 +483,18 @@ export default async function DealPage({
                 <div className="sv-vs">on this deal</div>
               </>
             )
+          )}
+          {otd && (
+            <div className="otd-box">
+              <div className="otd-row"><span>Shelf price</span><b>{usd(otd.shelf)}</b></div>
+              <div className="otd-row"><span>Cannabis excise ({Math.round((otd.excise / otd.shelf) * 100)}%, {otd.tier === "flower" ? "flower and pre-rolls" : otd.tier === "edible" ? "edibles" : "vapes and concentrates"})</span><b>{usd(otd.excise)}</b></div>
+              <div className="otd-row"><span>Sales and local cannabis taxes, {otd.city}</span><b>{usd(Math.round((otd.tax - otd.excise) * 100) / 100)}</b></div>
+              <div className="otd-row total"><span>Out the door</span><b>{usd(otd.total)}</b></div>
+              <p className="otd-note">
+                Figured from the deal&apos;s own price and {otd.city}&apos;s tax rates. Flower above 35% THC is taxed at 25%; medical patients pay 1%.{" "}
+                <Link href="/illinois-cannabis-tax">How Illinois cannabis tax works →</Link>
+              </p>
+            </div>
           )}
           <span
             className="expires"
