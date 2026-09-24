@@ -813,6 +813,11 @@ body { background: linear-gradient(180deg, var(--pp-paper-top) 0, var(--pp-paper
 /* Headlines breathe in serif; numbers stay hard mono. */
 /* Instrument Serif ships one weight (400) — force it so no page renders a
    fake-bold serif from an old font-weight:700 rule. */
+/* Italic fallback matched to Instrument Serif italic, so the "We found the deal."
+ * line doesn't jump when the web font lands on a slow phone (was CLS 0.13).
+ * Same overrides next/font generates for the upright face, on Times italic. */
+@font-face { font-family: "PP Serif Italic Fallback"; font-style: italic; src: local("Times New Roman Italic"), local("TimesNewRomanPS-ItalicMT"); ascent-override: 117.94%; descent-override: 36.93%; line-gap-override: 0%; size-adjust: 83.94%; }
+h1 em, .bh-h1 em { font-family: "Instrument Serif", "PP Serif Italic Fallback", "Instrument Serif Fallback", Georgia, serif; }
 h1:not([data-keep-font]) { font-family: var(--font-breath) !important; font-weight: 400 !important; letter-spacing: -0.01em !important; }
 
 @keyframes pp-breath { 0%,100% { transform: scale(.86); opacity: .75 } 45%,55% { transform: scale(1.06); opacity: 1 } }
