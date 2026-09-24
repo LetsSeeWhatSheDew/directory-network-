@@ -176,6 +176,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     }));
 
+  void dealDetailUrls; // kept for reference; not emitted (see note in the list below)
   return [
     ...base,
     ...dealUrls,
@@ -183,6 +184,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...dispensaryProfileUrls,
     ...cityLandingUrls,
     ...brandDetailUrls,
-    ...dealDetailUrls,
+    // /deal/[id] URLs left out: each one canonicals to its dispensary page
+    // (see app/deal/[id]/page.tsx), and a sitemap should list canonical URLs only.
   ];
 }

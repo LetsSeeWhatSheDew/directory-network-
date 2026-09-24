@@ -22,7 +22,11 @@ export function displayDispensaryName(row: {
   const name = row?.name?.trim();
   const slug = row?.slug || row?.listing_slug || "";
   if (!name || name === slug || /^[a-z0-9-]+$/.test(name)) {
-    return slugToName(slug || name || "Illinois dispensary");
+    return slugToName(slug || name || "Illinois dispensary").replace(/^nuera\b/i, "nuEra");
   }
-  return name;
+  // A bare chain name ("NuEra") with a more specific slug ("nuera-pekin")
+  // borrows the location from the slug so titles read "nuEra Pekin".
+  const fromSlug = slug ? slugToName(slug) : "";
+  const out = fromSlug.toLowerCase().startsWith(name.toLowerCase() + " ") ? fromSlug : name;
+  return out.replace(/^nuera\b/i, "nuEra");
 }

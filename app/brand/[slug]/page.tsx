@@ -41,7 +41,7 @@ export async function generateMetadata({
   }
   const title = `${data.name} — Central IL dispensary deals`;
   const description =
-    data.description?.slice(0, 180) ||
+    (data.description ? (data.description.length > 158 ? data.description.slice(0, 155).replace(/\s+\S*$/, "") + "…" : data.description) : "") ||
     `${data.name} deals at Central Illinois dispensaries, all in one place on PuffPrice.`;
   const url = `${site.url}/brand/${data.slug}`;
   const ogImage = `${site.url}/og-image.png`;

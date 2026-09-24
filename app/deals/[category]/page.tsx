@@ -309,16 +309,21 @@ export async function generateMetadata({
   const ogImage = `${brand.url}/og-image.png`;
   const title = city
     ? `${city} Dispensary Deals Today | PuffPrice`
-    : `${label} Deals Central Illinois | PuffPrice`;
+    : category === "all"
+      ? "Every Cannabis Deal in Central Illinois Today | PuffPrice"
+      : `${label} Deals in Central Illinois Today | PuffPrice`;
   const description = city
     ? `Browse today's best dispensary deals in ${city}, Illinois. Save money on cannabis with live offers.`
-    : `Find the cheapest ${label.toLowerCase()} deals at Central Illinois dispensaries right now. Real prices, real savings.`;
+    : category === "all"
+      ? "Every active dispensary deal in Central Illinois, biggest everyday savings first. Checked on each store's own site every morning."
+      : `Find the cheapest ${label.toLowerCase()} deals at Central Illinois dispensaries right now. Real prices, real savings.`;
   const url = city
     ? `${brand.url}/deals/${category}?city=${encodeURIComponent(city)}`
     : `${brand.url}/deals/${category}`;
   return {
     title,
     description,
+    alternates: { canonical: url },
     openGraph: {
       title,
       description,
