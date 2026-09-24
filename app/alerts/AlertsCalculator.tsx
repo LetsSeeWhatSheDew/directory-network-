@@ -89,7 +89,7 @@ export default function AlertsCalculator() {
           </button>
         </div>
       ) : (
-        <div style={{ fontSize: ".82rem", color: "var(--pp-muted)", fontFamily: "system-ui,sans-serif" }}>
+        <div style={{ fontSize: ".82rem", color: "var(--pp-muted)", fontFamily: "var(--font-body)" }}>
           Pick all three to see your number.
         </div>
       )}
@@ -143,7 +143,7 @@ const eyebrow: React.CSSProperties = {
   letterSpacing: ".14em",
   textTransform: "uppercase",
   color: "var(--pp-signal)",
-  fontFamily: "system-ui, sans-serif",
+  fontFamily: "var(--font-body)",
   marginBottom: 6,
 };
 const h3: React.CSSProperties = {
@@ -168,7 +168,7 @@ const pill: React.CSSProperties = {
   background: "var(--pp-surface)",
   color: "var(--pp-body)",
   cursor: "pointer",
-  fontFamily: "system-ui, sans-serif",
+  fontFamily: "var(--font-body)",
   fontSize: ".86rem",
   fontWeight: 500,
   transition: "all .15s",
@@ -198,7 +198,7 @@ const resultBig: React.CSSProperties = {
 const resultSmall: React.CSSProperties = {
   fontSize: ".95rem",
   color: "rgba(255,255,255,.75)",
-  fontFamily: "system-ui, sans-serif",
+  fontFamily: "var(--font-body)",
   marginBottom: 16,
   lineHeight: 1.5,
 };
@@ -208,7 +208,7 @@ const cta: React.CSSProperties = {
   border: "none",
   borderRadius: 10,
   padding: "11px 20px",
-  fontFamily: "system-ui, sans-serif",
+  fontFamily: "var(--font-body)",
   fontWeight: 700,
   fontSize: ".92rem",
   cursor: "pointer",

@@ -38,15 +38,15 @@ export default async function BrandIndex() {
         .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
         .logo-text{font-size:1.1rem;font-weight:700;color:var(--pp-ink)}
         .logo-text span{color:var(--pp-signal)}
-        .back{font-size:.82rem;color:var(--pp-muted);text-decoration:none;font-family:system-ui,sans-serif}
+        .back{font-size:.82rem;color:var(--pp-muted);text-decoration:none;font-family:var(--font-body)}
         .wrap{max-width:720px;margin:0 auto;padding:56px 28px 80px}
-        .eyebrow{font-family:system-ui,sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);margin-bottom:14px}
+        .eyebrow{font-family:var(--font-body);font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);margin-bottom:14px}
         h1{font-size:clamp(2rem,5vw,2.8rem);font-weight:700;letter-spacing:-.04em;line-height:1.08;margin-bottom:18px}
-        .lede{font-family:system-ui,sans-serif;font-size:1.05rem;color:var(--pp-body);line-height:1.55;margin-bottom:28px;max-width:58ch}
+        .lede{font-family:var(--font-body);font-size:1.05rem;color:var(--pp-body);line-height:1.55;margin-bottom:28px;max-width:58ch}
         .stub-card{background:var(--pp-surface);border:1px solid var(--pp-border);border-left:4px solid var(--pp-signal-fill);border-radius:14px;padding:28px 28px 24px;box-shadow:0 4px 16px rgba(15,31,61,.06)}
         .stub-title{font-family:var(--font-display), system-ui, sans-serif;font-size:1.2rem;font-weight:700;color:var(--pp-ink);margin-bottom:8px}
-        .stub-body{font-family:system-ui,sans-serif;font-size:.95rem;color:var(--pp-body);line-height:1.6;max-width:52ch}
-        .stub-foot{margin-top:18px;font-family:system-ui,sans-serif;font-size:.85rem}
+        .stub-body{font-family:var(--font-body);font-size:.95rem;color:var(--pp-body);line-height:1.6;max-width:52ch}
+        .stub-foot{margin-top:18px;font-family:var(--font-body);font-size:.85rem}
         .stub-foot a{color:var(--pp-signal);text-decoration:none;font-weight:600}
         .stub-foot a:hover{text-decoration:underline}
       `}</style>
@@ -79,7 +79,7 @@ export default async function BrandIndex() {
           <ul style={{ listStyle: "none", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 12 }}>
             {brands.map((b) => (
               <li key={b.slug}>
-                <Link href={`/brand/${b.slug}`} style={{ display: "block", padding: 14, background: "var(--pp-surface)", border: "1px solid var(--pp-border)", borderRadius: 10, textDecoration: "none", color: "var(--pp-ink)", fontFamily: "system-ui, sans-serif", fontWeight: 600 }}>
+                <Link href={`/brand/${b.slug}`} style={{ display: "block", padding: 14, background: "var(--pp-surface)", border: "1px solid var(--pp-border)", borderRadius: 10, textDecoration: "none", color: "var(--pp-ink)", fontFamily: "var(--font-body)", fontWeight: 600 }}>
                   {b.name}
                 </Link>
               </li>

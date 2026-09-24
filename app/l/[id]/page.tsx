@@ -12,6 +12,7 @@ import RecentlyViewedTracker from "../../components/RecentlyViewedTracker";
 import ShareDealButton from "../../components/ShareDealButton";
 import AmenityRow from "../../components/AmenityRow";
 import { estimateSavings } from "../../../lib/dealScoring";
+import { saveLabel } from "../../../lib/exhale";
 import DealFreshnessBadge from "../../components/DealFreshnessBadge";
 import { nowInCT, isOpen, formatTime as formatHourTime } from "../../../lib/hours";
 import { isInCentralIL } from "../../../lib/visibility";
@@ -496,12 +497,12 @@ export default async function ListingPage({
         .dn-nav-dot { width: 10px; height: 10px; border-radius: 50%; background:var(--pp-signal-fill); display: inline-block; flex-shrink: 0; }
         .dn-nav-name { font-size: 1.1rem; font-weight: 700; color:var(--pp-ink); letter-spacing: -0.02em; }
         .dn-nav-accent { color:var(--pp-signal); }
-        .dn-nav-back { font-size: 0.85rem; color:var(--pp-muted); text-decoration: none; font-family: system-ui, sans-serif; }
+        .dn-nav-back { font-size: 0.85rem; color:var(--pp-muted); text-decoration: none; font-family: var(--font-body); }
         .dn-banner { background:#fffbeb; border-bottom:1px solid #fde68a; padding: 10px 32px; display: flex; align-items: center; gap: 10px; }
         .dn-banner-dot { width: 8px; height: 8px; border-radius: 50%; background:#d97706; flex-shrink: 0; }
-        .dn-banner-text { font-size: 0.85rem; color:#92400e; font-family: system-ui, sans-serif; }
+        .dn-banner-text { font-size: 0.85rem; color:#92400e; font-family: var(--font-body); }
         .dn-banner-link { color:#d97706; font-weight: 600; text-decoration: none; }
-        .dn-noindex-banner { background:var(--pp-best-tint); border-bottom:1px solid var(--pp-best-border); padding: 8px 32px; text-align: center; font-size: 0.78rem; color:var(--pp-signal-ink); font-family: system-ui, sans-serif; }
+        .dn-noindex-banner { background:var(--pp-best-tint); border-bottom:1px solid var(--pp-best-border); padding: 8px 32px; text-align: center; font-size: 0.78rem; color:var(--pp-signal-ink); font-family: var(--font-body); }
         .dn-inner { max-width: 1100px; margin: 0 auto; padding: 32px 24px 64px; }
         .dn-hero { background:var(--pp-surface); border-radius: 16px; border:1px solid var(--pp-border); padding: 32px; margin-bottom: 24px; }
         .dn-hero-top { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
@@ -510,84 +511,84 @@ export default async function ListingPage({
         .dn-logo-fallback { font-size: 2rem; font-weight: 700; color:var(--pp-signal); font-family: var(--font-display, system-ui, sans-serif); }
         .dn-hero-info { flex: 1; min-width: 200px; }
         .dn-hero-meta { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
-        .dn-badge-type { font-size: 0.7rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color:var(--pp-signal); background:var(--pp-best-tint); padding: 3px 10px; border-radius: 100px; }
-        .dn-badge-featured { font-size: 0.7rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color:#854d0e; background:#fef9c3; padding: 3px 10px; border-radius: 100px; }
+        .dn-badge-type { font-size: 0.7rem; font-family: var(--font-body); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color:var(--pp-signal); background:var(--pp-best-tint); padding: 3px 10px; border-radius: 100px; }
+        .dn-badge-featured { font-size: 0.7rem; font-family: var(--font-body); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color:#854d0e; background:#fef9c3; padding: 3px 10px; border-radius: 100px; }
         .dn-hero-name { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 700; letter-spacing: -0.03em; color:var(--pp-ink); margin-bottom: 6px; line-height: 1.1; }
-        .dn-hero-location { font-size: 0.9rem; color:var(--pp-muted); font-family: system-ui, sans-serif; margin-bottom: 8px; }
-        .dn-hero-tagline { font-size: 0.95rem; color:var(--pp-body); font-family: system-ui, sans-serif; line-height: 1.6; max-width: 480px; }
+        .dn-hero-location { font-size: 0.9rem; color:var(--pp-muted); font-family: var(--font-body); margin-bottom: 8px; }
+        .dn-hero-tagline { font-size: 0.95rem; color:var(--pp-body); font-family: var(--font-body); line-height: 1.6; max-width: 480px; }
         .dn-hero-actions { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; min-width: 180px; }
-        .dn-status { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 100px; font-size: 0.8rem; font-family: system-ui, sans-serif; font-weight: 600; }
+        .dn-status { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 100px; font-size: 0.8rem; font-family: var(--font-body); font-weight: 600; }
         .dn-status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
         .dn-status-open { background:var(--pp-best-tint); color:var(--pp-signal-ink); }
         .dn-status-dot-open { background:var(--pp-signal-fill); }
         .dn-status-closed { background:#fee2e2; color:#991b1b; }
         .dn-status-dot-closed { background:#dc2626; }
-        .dn-phone { font-size: 0.9rem; color:var(--pp-ink); text-decoration: none; font-family: system-ui, sans-serif; font-weight: 600; }
-        .dn-website { font-size: 0.85rem; color:var(--pp-signal); text-decoration: none; font-family: system-ui, sans-serif; font-weight: 600; }
+        .dn-phone { font-size: 0.9rem; color:var(--pp-ink); text-decoration: none; font-family: var(--font-body); font-weight: 600; }
+        .dn-website { font-size: 0.85rem; color:var(--pp-signal); text-decoration: none; font-family: var(--font-body); font-weight: 600; }
         .dn-amenities { margin-top: 24px; padding-top: 20px; border-top:1px solid var(--pp-border); display: flex; flex-wrap: wrap; gap: 8px; }
-        .dn-amenity { font-size: 0.78rem; font-family: system-ui, sans-serif; color:var(--pp-body); background:var(--pp-paper); border:1px solid var(--pp-border); padding: 4px 12px; border-radius: 100px; }
+        .dn-amenity { font-size: 0.78rem; font-family: var(--font-body); color:var(--pp-body); background:var(--pp-paper); border:1px solid var(--pp-border); padding: 4px 12px; border-radius: 100px; }
         .dn-grid { display: grid; grid-template-columns: 1fr 360px; gap: 20px; align-items: start; }
         .dn-col { display: flex; flex-direction: column; gap: 20px; }
         .dn-card { background:var(--pp-surface); border-radius: 16px; border:1px solid var(--pp-border); padding: 24px; }
-        .dn-card-title { font-size: 0.7rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color:var(--pp-muted); margin-bottom: 16px; }
-        .dn-empty { font-size: 0.875rem; color:var(--pp-muted); font-family: system-ui, sans-serif; }
+        .dn-card-title { font-size: 0.7rem; font-family: var(--font-body); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color:var(--pp-muted); margin-bottom: 16px; }
+        .dn-empty { font-size: 0.875rem; color:var(--pp-muted); font-family: var(--font-body); }
         .dn-hours-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; }
         .dn-hours-row-today { background:var(--pp-best-tint); border-radius: 8px; padding: 6px 10px; margin: 0 -10px; }
-        .dn-hours-day { font-size: 0.875rem; font-family: system-ui, sans-serif; font-weight: 500; color:var(--pp-body); display: flex; align-items: center; gap: 6px; }
+        .dn-hours-day { font-size: 0.875rem; font-family: var(--font-body); font-weight: 500; color:var(--pp-body); display: flex; align-items: center; gap: 6px; }
         .dn-hours-day-today { font-weight: 700; color:var(--pp-signal-ink); }
         .dn-today-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background:var(--pp-signal-fill); }
-        .dn-hours-time { font-size: 0.875rem; font-family: system-ui, sans-serif; color:var(--pp-body); }
+        .dn-hours-time { font-size: 0.875rem; font-family: var(--font-body); color:var(--pp-body); }
         .dn-hours-time-today { color:var(--pp-signal-ink); font-weight: 600; }
         .dn-hours-closed { color:var(--pp-muted); }
         .dn-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-        .dn-tag { font-size: 0.8rem; font-family: system-ui, sans-serif; font-weight: 500; color:var(--pp-ink); background:var(--pp-best-tint); border:1px solid var(--pp-best-border); padding: 5px 14px; border-radius: 100px; text-transform: capitalize; }
+        .dn-tag { font-size: 0.8rem; font-family: var(--font-body); font-weight: 500; color:var(--pp-ink); background:var(--pp-best-tint); border:1px solid var(--pp-best-border); padding: 5px 14px; border-radius: 100px; text-transform: capitalize; }
         .dn-product-cat { margin-bottom: 16px; }
-        .dn-product-cat-label { font-size: 0.7rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color:var(--pp-muted); margin-bottom: 8px; }
+        .dn-product-cat-label { font-size: 0.7rem; font-family: var(--font-body); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color:var(--pp-muted); margin-bottom: 8px; }
         .dn-product-items { display: flex; flex-wrap: wrap; gap: 6px; }
-        .dn-product-item { font-size: 0.8rem; font-family: system-ui, sans-serif; color:var(--pp-body); background:var(--pp-paper); border:1px solid var(--pp-border); padding: 4px 12px; border-radius: 6px; }
-        .dn-about { font-size: 0.925rem; line-height: 1.75; color:var(--pp-body); font-family: system-ui, sans-serif; }
+        .dn-product-item { font-size: 0.8rem; font-family: var(--font-body); color:var(--pp-body); background:var(--pp-paper); border:1px solid var(--pp-border); padding: 4px 12px; border-radius: 6px; }
+        .dn-about { font-size: 0.925rem; line-height: 1.75; color:var(--pp-body); font-family: var(--font-body); }
         .dn-claim-card { background:var(--pp-canopy); border-radius: 16px; padding: 28px; border:1px solid var(--pp-signal-ink); }
         .dn-claim-header { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 16px; }
         .dn-claim-icon { width: 40px; height: 40px; border-radius: 10px; background:var(--pp-best-tint); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.1rem; }
         .dn-claim-title { font-size: 1rem; font-weight: 700; color:var(--pp-on-dark); margin-bottom: 2px; letter-spacing: -0.01em; }
-        .dn-claim-sub { font-size: 0.78rem; color:#a3e635; font-family: system-ui, sans-serif; font-weight: 600; }
-        .dn-claim-body { font-size: 0.875rem; color:var(--pp-muted); font-family: system-ui, sans-serif; line-height: 1.65; margin-bottom: 20px; }
+        .dn-claim-sub { font-size: 0.78rem; color:#a3e635; font-family: var(--font-body); font-weight: 600; }
+        .dn-claim-body { font-size: 0.875rem; color:var(--pp-muted); font-family: var(--font-body); line-height: 1.65; margin-bottom: 20px; }
         .dn-claim-trust { display: flex; gap: 16px; margin-top: 16px; padding-top: 16px; border-top:1px solid var(--pp-signal-ink); flex-wrap: wrap; }
-        .dn-claim-trust-item { font-size: 0.75rem; color:var(--pp-muted); font-family: system-ui, sans-serif; }
+        .dn-claim-trust-item { font-size: 0.75rem; color:var(--pp-muted); font-family: var(--font-body); }
         .dn-trust-card { background:var(--pp-best-tint); border-radius: 16px; padding: 20px 24px; border:1px solid var(--pp-best-border); }
-        .dn-trust-title { font-size: 0.7rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color:var(--pp-signal-ink); margin-bottom: 12px; }
+        .dn-trust-title { font-size: 0.7rem; font-family: var(--font-body); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color:var(--pp-signal-ink); margin-bottom: 12px; }
         .dn-trust-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-        .dn-trust-item { font-size: 0.825rem; color:var(--pp-signal-ink); font-family: system-ui, sans-serif; line-height: 1.4; }
+        .dn-trust-item { font-size: 0.825rem; color:var(--pp-signal-ink); font-family: var(--font-body); line-height: 1.4; }
         .dn-related { margin-top: 0; }
         .dn-related-grid { display: flex; flex-direction: column; gap: 12px; }
         .dn-related-card { display: flex; align-items: center; gap: 12px; padding: 12px; background:var(--pp-paper); border-radius: 10px; border:1px solid var(--pp-border); text-decoration: none; }
         .dn-related-card:hover { border-color:var(--pp-signal-fill); background:var(--pp-best-tint); }
         .dn-related-logo { width: 36px; height: 36px; border-radius: 8px; background:var(--pp-surface); border:1px solid var(--pp-border); display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 700; color:var(--pp-signal); flex-shrink: 0; }
         .dn-related-img { width: 100%; height: 100%; object-fit: contain; padding: 4px; border-radius: 6px; }
-        .dn-related-name { font-size: 0.875rem; font-weight: 600; color:var(--pp-ink); font-family: system-ui, sans-serif; }
-        .dn-related-city { font-size: 0.75rem; color:var(--pp-muted); font-family: system-ui, sans-serif; }
+        .dn-related-name { font-size: 0.875rem; font-weight: 600; color:var(--pp-ink); font-family: var(--font-body); }
+        .dn-related-city { font-size: 0.75rem; color:var(--pp-muted); font-family: var(--font-body); }
         .dn-footer-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding-top: 24px; border-top:1px solid var(--pp-border); flex-wrap: wrap; gap: 12px; }
-        .dn-footer-back { font-size: 0.85rem; color:var(--pp-muted); text-decoration: none; font-family: system-ui, sans-serif; }
-        .dn-footer-fwd { font-size: 0.85rem; color:var(--pp-signal); text-decoration: none; font-family: system-ui, sans-serif; font-weight: 600; }
+        .dn-footer-back { font-size: 0.85rem; color:var(--pp-muted); text-decoration: none; font-family: var(--font-body); }
+        .dn-footer-fwd { font-size: 0.85rem; color:var(--pp-signal); text-decoration: none; font-family: var(--font-body); font-weight: 600; }
         .dn-footer { background:var(--pp-canopy); padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
         .dn-footer-brand { font-size: 1rem; font-weight: 700; color:var(--pp-on-dark); letter-spacing: -0.02em; font-family: var(--font-display, system-ui, sans-serif); }
-        .dn-footer-note { font-size: 0.78rem; color:var(--pp-body); font-family: system-ui, sans-serif; }
+        .dn-footer-note { font-size: 0.78rem; color:var(--pp-body); font-family: var(--font-body); }
         /* DEAL HISTORY STAT STRIP — matches homepage stats treatment */
         .dn-stats-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 4px; }
         .dn-stat-cell { padding: 4px 0; }
         .dn-stat-num { font-family: var(--font-mono, ui-monospace, monospace); font-variant-numeric: tabular-nums; font-size: clamp(1.8rem, 4vw, 2.3rem); font-weight: 700; color:var(--pp-ink); letter-spacing: -0.03em; line-height: 1; }
         .dn-stat-num-accent { color:var(--pp-signal); }
-        .dn-stat-label { font-family: system-ui, sans-serif; font-size: 0.78rem; color:var(--pp-muted); margin-top: 6px; letter-spacing: 0.01em; }
-        .dn-stat-foot { font-family: system-ui, sans-serif; font-size: 0.74rem; color:var(--pp-muted); margin-top: 14px; }
+        .dn-stat-label { font-family: var(--font-body); font-size: 0.78rem; color:var(--pp-muted); margin-top: 6px; letter-spacing: 0.01em; }
+        .dn-stat-foot { font-family: var(--font-body); font-size: 0.74rem; color:var(--pp-muted); margin-top: 14px; }
 
         /* ABOUT (structured description) — serif prose, proper measure */
         .dn-about-prose { font-family: var(--font-body, system-ui, sans-serif); font-size: 1rem; line-height: 1.65; color:#1f2937; max-width: 65ch; }
         .dn-about-prose p + p { margin-top: 12px; }
-        .dn-about-foot { font-family: system-ui, sans-serif; font-size: 0.76rem; color:var(--pp-muted); margin-top: 16px; padding-top: 12px; border-top:1px solid var(--pp-border); }
+        .dn-about-foot { font-family: var(--font-body); font-size: 0.76rem; color:var(--pp-muted); margin-top: 16px; padding-top: 12px; border-top:1px solid var(--pp-border); }
 
         /* REPORT OUTDATED — footer-style, subtle */
         .dn-report-row { margin-top: 8px; padding: 12px 0 0; text-align: center; }
-        .dn-report-text { font-family: system-ui, sans-serif; font-size: 0.76rem; color:var(--pp-muted); }
+        .dn-report-text { font-family: var(--font-body); font-size: 0.76rem; color:var(--pp-muted); }
         .dn-report-link { color:var(--pp-muted); text-decoration: underline; text-decoration-color:var(--pp-canopy-text); text-underline-offset: 3px; font-weight: 500; border-radius: 2px; }
         .dn-report-link:hover { color:var(--pp-signal); text-decoration-color:var(--pp-signal); }
         .dn-report-link:focus-visible { outline:2px solid var(--pp-signal-fill); outline-offset: 3px; color:var(--pp-signal); }
@@ -634,7 +635,7 @@ export default async function ListingPage({
             maxWidth: 900,
             margin: "20px auto 0",
             padding: "0 20px",
-            fontFamily: "system-ui, sans-serif",
+            fontFamily: "var(--font-body)",
           }}>
             <div style={{
               background: "var(--pp-surface)",
@@ -642,7 +643,7 @@ export default async function ListingPage({
               borderLeft: "4px solid var(--pp-signal-fill)",
               borderRadius: 14,
               padding: "22px 22px 18px",
-              boxShadow: "0 4px 16px rgba(15,31,61,.06)",
+              boxShadow: "0 4px 16px rgba(20,35,26,.06)",
             }}>
               <div style={{
                 fontSize: ".68rem",
@@ -666,6 +667,9 @@ export default async function ListingPage({
                 flexWrap: "wrap",
               }}>
                 <span>{activeDeal!.title}</span>
+                {saveLabel(activeDeal as any, estimateSavings(activeDeal)) && (
+                  <span className="pp-save">{saveLabel(activeDeal as any, estimateSavings(activeDeal))}</span>
+                )}
                 {(() => {
                   const exp = activeDeal!.expires_at;
                   if (!exp) return null;
@@ -677,7 +681,7 @@ export default async function ListingPage({
                     <span
                       style={{
                         fontSize: ".68rem",
-                        fontFamily: "system-ui,sans-serif",
+                        fontFamily: "var(--font-body)",
                         fontWeight: 700,
                         color: "#92400e",
                         background: "#fef3c7",
@@ -732,7 +736,12 @@ export default async function ListingPage({
                   <ul style={{ listStyle: "none", marginTop: 10, display: "flex", flexDirection: "column", gap: 10 }}>
                     {activeDeals.slice(1).map((d) => (
                       <li key={d.id || d.title} style={{ padding: "10px 12px", background: "var(--pp-paper)", borderRadius: 8 }}>
-                        <div style={{ fontWeight: 600, color: "var(--pp-ink)", fontSize: ".9rem" }}>{d.title}</div>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
+                          <div style={{ fontWeight: 600, color: "var(--pp-ink)", fontSize: ".9rem" }}>{d.title}</div>
+                          {saveLabel(d as any, estimateSavings(d)) && (
+                            <span className="pp-save" style={{ fontSize: 13, padding: "5px 10px" }}>{saveLabel(d as any, estimateSavings(d))}</span>
+                          )}
+                        </div>
                         {d.description && (
                           <div style={{ fontSize: ".78rem", color: "var(--pp-muted)", marginTop: 2 }}>{d.description}</div>
                         )}
@@ -951,7 +960,7 @@ export default async function ListingPage({
                   <div className="dn-card dn-map-card">
                     <div className="dn-map-header">
                       <p className="dn-card-title" style={{ marginBottom: 4 }}>Find it on the map</p>
-                      <p style={{ fontFamily: "system-ui, sans-serif", fontSize: ".82rem", color: "var(--pp-muted)" }}>
+                      <p style={{ fontFamily: "var(--font-body)", fontSize: ".82rem", color: "var(--pp-muted)" }}>
                         {[listing.address1, listing.city, listing.state].filter(Boolean).join(", ")}
                       </p>
                     </div>
@@ -1020,7 +1029,7 @@ export default async function ListingPage({
                       <span className="dn-claim-trust-item">✓ Free forever</span>
                       <span className="dn-claim-trust-item">⚡ Live in 72hrs</span>
                     </div>
-                    <p style={{ marginTop: 12, fontSize: ".8rem", fontFamily: "system-ui, sans-serif", color: "rgba(226,232,240,.6)" }}>
+                    <p style={{ marginTop: 12, fontSize: ".8rem", fontFamily: "var(--font-body)", color: "rgba(226,232,240,.6)" }}>
                       Need more options?{" "}
                       <Link href={`/claim/${listing.slug}`} style={{ color: "var(--pp-canopy-eyebrow)", textDecoration: "none" }}>
                         Use the full claim form →

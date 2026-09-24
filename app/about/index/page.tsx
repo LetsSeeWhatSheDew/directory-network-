@@ -36,11 +36,11 @@ export default function AboutIndexPage() {
         .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
         .logo-text{font-size:1.1rem;font-weight:700;color:var(--pp-on-dark);letter-spacing:-.02em}
         .logo-text span{color:var(--pp-canopy-eyebrow)}
-        .back{font-size:.82rem;color:rgba(255,255,255,.55);text-decoration:none;font-family:system-ui,sans-serif}
+        .back{font-size:.82rem;color:rgba(255,255,255,.55);text-decoration:none;font-family:var(--font-body)}
         .back:hover{color:var(--pp-on-dark)}
         .wrap{max-width:720px;margin:0 auto;padding:56px 28px 80px}
         .eyebrow{
-          font-family:system-ui,sans-serif;font-size:.72rem;font-weight:700;
+          font-family:var(--font-body);font-size:.72rem;font-weight:700;
           letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);margin-bottom:14px;
         }
         h1{
@@ -74,7 +74,7 @@ export default function AboutIndexPage() {
         .promise p{margin-bottom:0;font-size:.95rem}
         .back-link{
           display:inline-block;margin-top:36px;
-          font-family:system-ui,sans-serif;font-size:.88rem;font-weight:600;
+          font-family:var(--font-body);font-size:.88rem;font-weight:600;
           color:var(--pp-signal);text-decoration:none;
         }
         .back-link:hover{text-decoration:underline}

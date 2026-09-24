@@ -5,7 +5,7 @@
 // all three via internal linking.
 
 import Link from "next/link";
-import { amountOf } from "@/lib/exhale";
+import { saveLabel, isConditional } from "@/lib/exhale";
 import { getFeatureRows, featuresBySlug } from "@/lib/waysToBuy";
 import StoreAvatar from "@/app/components/StoreAvatar";
 import { storeImageUrl } from "@/lib/storeImage";
@@ -531,7 +531,7 @@ export default async function CityPage({
             the best deal, how many are live, who's open latest. Real data only. */}
         {(() => {
           const pctDeals = deals
-            .filter((d) => (d.discount_unit === "percent" || !d.discount_unit) && Number(d.discount_value) > 0 && Number(d.discount_value) <= 100)
+            .filter((d) => (d.discount_unit === "percent" || !d.discount_unit) && Number(d.discount_value) > 0 && Number(d.discount_value) <= 100 && !isConditional({ ...d, deal_title: d.deal_title || d.title }))
             .sort((a, b) => Number(b.discount_value) - Number(a.discount_value));
           const top = pctDeals[0];
           const storeName = (d: DealRow) => stores.find((x) => x.l.slug === d.listing_slug)?.l.name || d.name || d.listing_slug;
@@ -540,7 +540,7 @@ export default async function CityPage({
             <p className="cp-intro" style={{ background: "var(--pp-surface)", border: "1px solid var(--pp-border)", borderRadius: 12, padding: "12px 14px" }}>
               <b>Quick answer ({asOf} CT):</b>{" "}
               {top
-                ? <>the biggest discount in {city} right now is <b>{top.deal_title || top.title}</b> at {storeName(top)}. </>
+                ? <>the biggest everyday discount in {city} right now is <b>{top.deal_title || top.title}</b> at {storeName(top)}. </>
                 : <>no {city} store has a deal posted on its own site right now. </>}
               {deals.length > 0 && <>{deals.length} {deals.length === 1 ? "deal is" : "deals are"} live at {withDeals} of {stores.length} {city} dispensaries. </>}
               {lateNight?.today?.closes_at && <>{lateNight.l.name} is open latest tonight, until {formatTime(lateNight.today.closes_at)}.</>}
@@ -615,10 +615,8 @@ export default async function CityPage({
                   <div className="deal-title">{title}</div>
                 </div>
                 <div className="deal-right">
-                  {amountOf(d) ? (
-                    <span className="pp-save">Save {amountOf(d)!.big}</span>
-                  ) : dollars != null ? (
-                    <span className="pp-save">Save ${dollars}</span>
+                  {saveLabel({ ...d, deal_title: title }, dollars) ? (
+                    <span className="pp-save">{saveLabel({ ...d, deal_title: title }, dollars)}</span>
                   ) : (
                     <div className="deal-save-label" style={{ fontSize: ".8rem" }}>Deal</div>
                   )}

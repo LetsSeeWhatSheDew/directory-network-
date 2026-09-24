@@ -71,35 +71,35 @@ export default function SavingsDashboard() {
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-canopy);position:sticky;top:0;z-index:100}
         .logo{color:var(--pp-on-dark);text-decoration:none;font-weight:700}
         .logo span{color:var(--pp-canopy-eyebrow)}
-        .back{font-size:.82rem;color:rgba(255,255,255,.55);text-decoration:none;font-family:system-ui,sans-serif}
+        .back{font-size:.82rem;color:rgba(255,255,255,.55);text-decoration:none;font-family:var(--font-body)}
         .back:hover{color:var(--pp-on-dark)}
         .wrap{max-width:720px;margin:0 auto;padding:40px 20px 64px}
-        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);font-family:system-ui,sans-serif;margin-bottom:10px}
+        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);font-family:var(--font-body);margin-bottom:10px}
         h1{font-size:clamp(1.8rem,4.5vw,2.4rem);font-weight:700;letter-spacing:-.03em;line-height:1.15;margin-bottom:22px}
         .stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:22px}
         @media(max-width:520px){.stat-row{grid-template-columns:1fr;gap:10px}}
         .stat{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:14px;padding:18px}
         .stat.primary{background:var(--pp-canopy);color:var(--pp-on-dark);border-color:var(--pp-canopy)}
-        .stat-label{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:6px}
+        .stat-label{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:6px}
         .stat.primary .stat-label{color:var(--pp-canopy-eyebrow)}
         .stat-num{font-size:1.9rem;font-weight:700;letter-spacing:-.02em;line-height:1;font-family:var(--font-display), system-ui, sans-serif}
         .stat.primary .stat-num{color:var(--pp-on-dark)}
         .stat.primary .stat-num span{color:var(--pp-canopy-eyebrow)}
         .row-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
         .row-head h2{font-size:1.1rem;font-weight:700;letter-spacing:-.02em}
-        .share{background:var(--pp-signal-fill);color:var(--pp-on-dark);border:none;border-radius:10px;padding:9px 16px;font-family:system-ui,sans-serif;font-weight:700;font-size:.82rem;cursor:pointer}
+        .share{background:var(--pp-signal-fill);color:var(--pp-on-dark);border:none;border-radius:10px;padding:9px 16px;font-family:var(--font-body);font-weight:700;font-size:.82rem;cursor:pointer}
         .share:hover{background:var(--pp-signal-fill)}
         .share.copied{background:var(--pp-signal-fill)}
         .list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
         .rec{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:10px;padding:12px 14px;display:flex;justify-content:space-between;gap:10px}
         .rec-name{font-size:.92rem;font-weight:700;color:var(--pp-ink)}
-        .rec-title{font-size:.78rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-top:2px}
-        .rec-date{font-size:.72rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-top:2px}
+        .rec-title{font-size:.78rem;color:var(--pp-muted);font-family:var(--font-body);margin-top:2px}
+        .rec-date{font-size:.72rem;color:var(--pp-muted);font-family:var(--font-body);margin-top:2px}
         .rec-save{font-size:1rem;font-weight:700;color:var(--pp-signal);white-space:nowrap}
         .empty{background:var(--pp-surface);border:1px dashed var(--pp-border);border-radius:12px;padding:32px 20px;text-align:center}
         .empty-title{font-size:1rem;font-weight:700;margin-bottom:8px}
-        .empty-sub{font-size:.85rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:18px;line-height:1.5}
-        .cta{display:inline-block;background:var(--pp-canopy);color:var(--pp-on-dark);padding:10px 18px;border-radius:10px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:700;font-size:.88rem}
+        .empty-sub{font-size:.85rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:18px;line-height:1.5}
+        .cta{display:inline-block;background:var(--pp-canopy);color:var(--pp-on-dark);padding:10px 18px;border-radius:10px;text-decoration:none;font-family:var(--font-body);font-weight:700;font-size:.88rem}
         .cta:hover{background:var(--pp-canopy)}
       `}</style>
 
@@ -147,7 +147,7 @@ export default function SavingsDashboard() {
                 {copied ? "Copied!" : "Share savings"}
               </button>
             </div>
-            <p style={{ fontSize: ".78rem", color: "var(--pp-muted)", fontFamily: "system-ui,sans-serif" }}>
+            <p style={{ fontSize: ".78rem", color: "var(--pp-muted)", fontFamily: "var(--font-body)" }}>
               {month} savings: <strong style={{ color: "var(--pp-signal)" }}>${monthly}</strong> · Tap to
               share.
             </p>

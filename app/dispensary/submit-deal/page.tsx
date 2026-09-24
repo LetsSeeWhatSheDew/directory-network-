@@ -131,13 +131,13 @@ export default function SubmitDealPage() {
 
       <div style={{ maxWidth: 680, margin: "0 auto", padding: "48px 24px" }}>
         <h1 style={{ fontSize: "2rem", marginBottom: 8, letterSpacing: "-0.02em" }}>Submit your deal</h1>
-        <p style={{ color: "var(--pp-muted)", fontFamily: "system-ui, sans-serif", marginBottom: 28 }}>
+        <p style={{ color: "var(--pp-muted)", fontFamily: "var(--font-body)", marginBottom: 28 }}>
           Free to submit. We verify within 24 hours. Your deal goes live to
           PuffPrice users across Central Illinois.
         </p>
 
         {status === "err" && (
-          <div style={{ background: "#fee2e2", border: "1px solid #ef4444", color: "#991b1b", padding: 16, borderRadius: 10, marginBottom: 24, fontFamily: "system-ui, sans-serif" }}>
+          <div style={{ background: "#fee2e2", border: "1px solid #ef4444", color: "#991b1b", padding: 16, borderRadius: 10, marginBottom: 24, fontFamily: "var(--font-body)" }}>
             {msg}
           </div>
         )}
@@ -225,7 +225,7 @@ export default function SubmitDealPage() {
           </Field>
 
           <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: 16, alignItems: "center" }}>
-            <label style={{ fontFamily: "system-ui, sans-serif", fontSize: ".9rem", display: "flex", alignItems: "center", gap: 8 }}>
+            <label style={{ fontFamily: "var(--font-body)", fontSize: ".9rem", display: "flex", alignItems: "center", gap: 8 }}>
               <input type="checkbox" checked={form.is_recurring} onChange={(e) => update("is_recurring", e.target.checked)} />
               Recurring
             </label>
@@ -242,7 +242,7 @@ export default function SubmitDealPage() {
 
           {/* LIVE PREVIEW */}
           <div style={{ marginTop: 8, padding: "18px", background: "var(--pp-surface)", border: "1px solid var(--pp-border)", borderRadius: 14, position: "relative" }}>
-            <div style={{ fontSize: ".68rem", fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--pp-signal)", fontFamily: "system-ui,sans-serif", marginBottom: 10 }}>
+            <div style={{ fontSize: ".68rem", fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--pp-signal)", fontFamily: "var(--font-body)", marginBottom: 10 }}>
               Preview — this is how it will appear
             </div>
             <div style={{ background: "linear-gradient(135deg,var(--pp-best-tint) 0%,var(--pp-surface) 60%)", border: "2px solid var(--pp-signal-fill)", borderRadius: 12, padding: 18 }}>
@@ -251,11 +251,11 @@ export default function SubmitDealPage() {
                   <div style={{ fontSize: "1rem", fontWeight: 700, color: "var(--pp-ink)" }}>
                     {form.dispensary_name || "Your dispensary"}
                   </div>
-                  <div style={{ fontSize: ".78rem", color: "var(--pp-muted)", fontFamily: "system-ui,sans-serif" }}>
+                  <div style={{ fontSize: ".78rem", color: "var(--pp-muted)", fontFamily: "var(--font-body)" }}>
                     {form.city ? `${form.city}, IL` : "Your city, IL"}
                   </div>
                 </div>
-                <span style={{ fontSize: ".66rem", background: "var(--pp-best-tint)", color: "var(--pp-signal)", padding: "2px 8px", borderRadius: 100, fontFamily: "system-ui,sans-serif", fontWeight: 600 }}>
+                <span style={{ fontSize: ".66rem", background: "var(--pp-best-tint)", color: "var(--pp-signal)", padding: "2px 8px", borderRadius: 100, fontFamily: "var(--font-body)", fontWeight: 600 }}>
                   Likely open
                 </span>
               </div>
@@ -263,19 +263,19 @@ export default function SubmitDealPage() {
                 {form.deal_title || "Your deal headline"}
               </div>
               {form.deal_description && (
-                <div style={{ fontSize: ".8rem", color: "var(--pp-body)", fontFamily: "system-ui,sans-serif", lineHeight: 1.5, marginBottom: 10 }}>
+                <div style={{ fontSize: ".8rem", color: "var(--pp-body)", fontFamily: "var(--font-body)", lineHeight: 1.5, marginBottom: 10 }}>
                   {form.deal_description}
                 </div>
               )}
               <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10 }}>
-                {form.category && <span style={{ fontSize: ".68rem", color: "var(--pp-muted)", background: "var(--pp-paper)", borderRadius: 100, padding: "2px 9px", fontFamily: "system-ui,sans-serif" }}>{form.category}</span>}
-                {form.is_recurring && <span style={{ fontSize: ".68rem", color: "var(--pp-muted)", background: "var(--pp-paper)", borderRadius: 100, padding: "2px 9px", fontFamily: "system-ui,sans-serif" }}>Recurring</span>}
-                {form.expires_at && <span style={{ fontSize: ".68rem", color: "var(--pp-muted)", background: "var(--pp-paper)", borderRadius: 100, padding: "2px 9px", fontFamily: "system-ui,sans-serif" }}>Expires {new Date(form.expires_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>}
+                {form.category && <span style={{ fontSize: ".68rem", color: "var(--pp-muted)", background: "var(--pp-paper)", borderRadius: 100, padding: "2px 9px", fontFamily: "var(--font-body)" }}>{form.category}</span>}
+                {form.is_recurring && <span style={{ fontSize: ".68rem", color: "var(--pp-muted)", background: "var(--pp-paper)", borderRadius: 100, padding: "2px 9px", fontFamily: "var(--font-body)" }}>Recurring</span>}
+                {form.expires_at && <span style={{ fontSize: ".68rem", color: "var(--pp-muted)", background: "var(--pp-paper)", borderRadius: 100, padding: "2px 9px", fontFamily: "var(--font-body)" }}>Expires {new Date(form.expires_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>}
               </div>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "var(--pp-best-tint)", border: "1px solid var(--pp-best-border)", borderRadius: 10, padding: "12px 14px" }}>
                 <div>
-                  <div style={{ fontSize: ".65rem", fontWeight: 700, color: "var(--pp-signal)", fontFamily: "system-ui,sans-serif", textTransform: "uppercase", letterSpacing: ".12em" }}>You save</div>
-                  <div style={{ fontSize: ".68rem", color: "var(--pp-signal-ink)", fontFamily: "system-ui,sans-serif", marginTop: 2 }}>vs. Illinois average</div>
+                  <div style={{ fontSize: ".65rem", fontWeight: 700, color: "var(--pp-signal)", fontFamily: "var(--font-body)", textTransform: "uppercase", letterSpacing: ".12em" }}>You save</div>
+                  <div style={{ fontSize: ".68rem", color: "var(--pp-signal-ink)", fontFamily: "var(--font-body)", marginTop: 2 }}>vs. Illinois average</div>
                 </div>
                 <div style={{ fontSize: "1.7rem", fontWeight: 700, color: "var(--pp-signal)", letterSpacing: "-.02em", lineHeight: 1, fontFamily: "var(--font-display), system-ui, sans-serif" }}>
                   {previewSavings || "—"}
@@ -287,14 +287,14 @@ export default function SubmitDealPage() {
           <button type="submit" disabled={submitting} style={{
             background: "var(--pp-signal-fill)", color: "var(--pp-on-dark)", border: "none",
             padding: "14px 24px", borderRadius: 10, fontSize: "1rem",
-            fontFamily: "system-ui, sans-serif", fontWeight: 700,
+            fontFamily: "var(--font-body)", fontWeight: 700,
             cursor: submitting ? "not-allowed" : "pointer",
             opacity: submitting ? 0.6 : 1,
           }}>
             {submitting ? "Submitting…" : "Submit deal"}
           </button>
 
-          <p style={{ fontSize: ".8rem", color: "var(--pp-muted)", fontFamily: "system-ui, sans-serif", textAlign: "center" }}>
+          <p style={{ fontSize: ".8rem", color: "var(--pp-muted)", fontFamily: "var(--font-body)", textAlign: "center" }}>
             Free to submit. We verify within 24 hours before your deal goes live.
           </p>
         </form>
@@ -314,7 +314,7 @@ function Field({
   error?: string;
 }) {
   return (
-    <label style={{ display: "flex", flexDirection: "column", minWidth: 0, gap: 6, fontFamily: "system-ui, sans-serif", fontSize: ".85rem", color: "var(--pp-ink)", fontWeight: 600 }}>
+    <label style={{ display: "flex", flexDirection: "column", minWidth: 0, gap: 6, fontFamily: "var(--font-body)", fontSize: ".85rem", color: "var(--pp-ink)", fontWeight: 600 }}>
       {label}
       {children}
       {error && (
@@ -329,7 +329,7 @@ const input: React.CSSProperties = {
   border: "1px solid var(--pp-border)",
   borderRadius: 8,
   fontSize: "1rem",
-  fontFamily: "system-ui, sans-serif",
+  fontFamily: "var(--font-body)",
   color: "var(--pp-ink)",
   background: "var(--pp-surface)",
   fontWeight: 400,

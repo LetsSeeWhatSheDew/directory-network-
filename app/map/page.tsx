@@ -112,10 +112,10 @@ export default async function MapPage() {
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-surface);border-bottom:1px solid var(--pp-border)}
         .logo{color:var(--pp-ink);text-decoration:none;font-weight:700;letter-spacing:-.02em}
         .logo span{color:var(--pp-signal)}
-        .back{font-size:.82rem;color:var(--pp-muted);text-decoration:none;font-family:system-ui,sans-serif}
+        .back{font-size:.82rem;color:var(--pp-muted);text-decoration:none;font-family:var(--font-body)}
         .back:hover{color:var(--pp-ink)}
         .map-shell{position:relative;width:100%;height:calc(100vh - 60px);min-height:520px;background:var(--pp-border)}
-        .map-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:var(--pp-border);font-family:system-ui,sans-serif;color:var(--pp-body);z-index:1;pointer-events:none}
+        .map-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:var(--pp-border);font-family:var(--font-body);color:var(--pp-body);z-index:1;pointer-events:none}
         .map-loading-spinner{width:36px;height:36px;border:3px solid var(--pp-border);border-top-color:var(--pp-signal-fill);border-radius:50%;animation:mapspin 1s linear infinite}
         @keyframes mapspin{to{transform:rotate(360deg)}}
       `}</style>
@@ -131,7 +131,7 @@ export default async function MapPage() {
           style={{
             padding: "64px 28px",
             textAlign: "center",
-            fontFamily: "system-ui, sans-serif",
+            fontFamily: "var(--font-body)",
             background: "var(--pp-surface)",
             borderTop: "1px solid var(--pp-border)",
           }}

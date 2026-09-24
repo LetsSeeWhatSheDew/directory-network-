@@ -50,7 +50,7 @@ export default function DealBadge({ dealId }: { dealId: string | number | undefi
         padding: "2px 10px",
         fontSize: ".72rem",
         fontWeight: 700,
-        fontFamily: "system-ui, sans-serif",
+        fontFamily: "var(--font-body)",
         letterSpacing: ".02em",
       }}
     >

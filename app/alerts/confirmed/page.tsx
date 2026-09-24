@@ -33,7 +33,7 @@ export default function AlertsConfirmedPage() {
             You&apos;re in.
           </h1>
 
-          <p style={{ fontSize: "1.05rem", color: "var(--pp-body)", fontFamily: "system-ui, sans-serif", lineHeight: 1.6, marginBottom: 32 }}>
+          <p style={{ fontSize: "1.05rem", color: "var(--pp-body)", fontFamily: "var(--font-body)", lineHeight: 1.6, marginBottom: 32 }}>
             We&apos;ll email you when dispensaries near you post a deal worth knowing about.
             No spam, no daily blast — just the stuff you&apos;d want to know.
           </p>
@@ -45,7 +45,7 @@ export default function AlertsConfirmedPage() {
             padding: 24,
             marginBottom: 32,
             textAlign: "left",
-            fontFamily: "system-ui, sans-serif",
+            fontFamily: "var(--font-body)",
           }}>
             <h2 style={{ fontSize: ".8rem", textTransform: "uppercase", letterSpacing: ".12em", color: "var(--pp-muted)", marginBottom: 12, fontWeight: 700 }}>
               While you wait
@@ -73,13 +73,13 @@ export default function AlertsConfirmedPage() {
             display: "inline-block",
             background: "var(--pp-signal-fill)", color: "var(--pp-on-dark)",
             padding: "12px 28px", borderRadius: 10,
-            textDecoration: "none", fontFamily: "system-ui, sans-serif",
+            textDecoration: "none", fontFamily: "var(--font-body)",
             fontWeight: 700, fontSize: ".95rem",
           }}>
             Back to home
           </Link>
 
-          <p style={{ marginTop: 28, fontSize: ".75rem", color: "var(--pp-muted)", fontFamily: "system-ui, sans-serif" }}>
+          <p style={{ marginTop: 28, fontSize: ".75rem", color: "var(--pp-muted)", fontFamily: "var(--font-body)" }}>
             Built by Matthew Burns in Peoria, IL.
           </p>
         </div>

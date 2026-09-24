@@ -61,7 +61,7 @@ export default function EndingSoonRow({ deals }: { deals: EndingSoonDeal[] }) {
           letterSpacing: ".14em",
           textTransform: "uppercase",
           color: "#b45309",
-          fontFamily: "system-ui, sans-serif",
+          fontFamily: "var(--font-body)",
           marginBottom: 10,
         }}
       >
@@ -92,7 +92,7 @@ export default function EndingSoonRow({ deals }: { deals: EndingSoonDeal[] }) {
               padding: "12px 14px",
               textDecoration: "none",
               color: "var(--pp-ink)",
-              fontFamily: "system-ui, sans-serif",
+              fontFamily: "var(--font-body)",
               minWidth: 220,
               maxWidth: 280,
               transition: "border-color .15s, transform .05s",

@@ -18,12 +18,12 @@ export default function SavingsPage() {
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-canopy);position:sticky;top:0;z-index:100}
         .logo{color:var(--pp-on-dark);text-decoration:none;font-weight:700;letter-spacing:-.02em}
         .logo span{color:var(--pp-canopy-eyebrow)}
-        .back{font-size:.82rem;color:rgba(255,255,255,.55);text-decoration:none;font-family:system-ui,sans-serif}
+        .back{font-size:.82rem;color:rgba(255,255,255,.55);text-decoration:none;font-family:var(--font-body)}
         .back:hover{color:var(--pp-on-dark)}
         .wrap{max-width:620px;margin:0 auto;padding:48px 20px 60px}
-        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);font-family:system-ui,sans-serif;margin-bottom:12px}
+        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);font-family:var(--font-body);margin-bottom:12px}
         h1{font-size:clamp(1.8rem,4.5vw,2.6rem);font-weight:700;letter-spacing:-.04em;line-height:1.1;margin-bottom:10px}
-        .sub{font-size:1rem;color:var(--pp-muted);font-family:system-ui,sans-serif;line-height:1.6;margin-bottom:28px;max-width:520px}
+        .sub{font-size:1rem;color:var(--pp-muted);font-family:var(--font-body);line-height:1.6;margin-bottom:28px;max-width:520px}
       `}</style>
 
       <Nav variant="light" />

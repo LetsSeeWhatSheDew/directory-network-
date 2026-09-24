@@ -36,7 +36,7 @@ export default function FourTwentyBanner() {
           alignItems: "center",
           gap: 12,
           flexWrap: "wrap",
-          fontFamily: "system-ui, sans-serif",
+          fontFamily: "var(--font-body)",
         }}
       >
         <span style={{ display: "flex", alignItems: "center", gap: 10, fontSize: ".85rem", fontWeight: 700, flex: "1 1 auto", minWidth: 0 }}>

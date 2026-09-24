@@ -350,29 +350,29 @@ export default async function DealPage({
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
         .logo-text{font-size:1.1rem;font-weight:700;color:var(--pp-ink)}
         .logo-text span{color:var(--pp-signal)}
-        .back{font-size:.82rem;color:var(--pp-muted);text-decoration:none;font-family:system-ui,sans-serif}
+        .back{font-size:.82rem;color:var(--pp-muted);text-decoration:none;font-family:var(--font-body)}
         .wrap{max-width:680px;margin:0 auto;padding:40px 20px 64px}
-        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);font-family:system-ui,sans-serif;margin-bottom:10px}
+        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);font-family:var(--font-body);margin-bottom:10px}
         h1{font-size:clamp(1.8rem,4.5vw,2.6rem);font-weight:700;letter-spacing:-.03em;line-height:1.12;margin-bottom:10px}
-        .disp{font-size:1rem;color:var(--pp-body);font-family:system-ui,sans-serif;margin-bottom:4px}
+        .disp{font-size:1rem;color:var(--pp-body);font-family:var(--font-body);margin-bottom:4px}
         .disp a{color:var(--pp-signal);font-weight:700;text-decoration:none}
         .disp a:hover{text-decoration:underline}
-        .city{font-size:.85rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:22px}
+        .city{font-size:.85rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:22px}
         .city a{color:var(--pp-signal);text-decoration:none}
         .savings-block{background:var(--pp-surface);border:1px solid var(--pp-border);border-left:4px solid var(--pp-signal-fill);border-radius:14px;padding:24px;margin-bottom:18px}
-        .sv-label{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:2px}
+        .sv-label{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:2px}
         .sv-amt{font-size:clamp(2.4rem,9vw,3.4rem);font-weight:700;color:var(--pp-signal);letter-spacing:-.04em;line-height:1;margin-bottom:4px}
-        .sv-vs{font-size:.78rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:14px}
-        .expires{display:inline-block;font-size:.74rem;color:#92400e;background:#fef3c7;padding:3px 10px;border-radius:100px;font-family:system-ui,sans-serif;font-weight:700;margin-bottom:14px}
+        .sv-vs{font-size:.78rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:14px}
+        .expires{display:inline-block;font-size:.74rem;color:#92400e;background:#fef3c7;padding:3px 10px;border-radius:100px;font-family:var(--font-body);font-weight:700;margin-bottom:14px}
         .expires.ongoing{color:var(--pp-signal-ink);background:var(--pp-best-tint)}
-        .desc{font-size:.98rem;color:var(--pp-body);font-family:system-ui,sans-serif;line-height:1.6;margin-bottom:16px}
-        .code-box{background:var(--pp-canopy);color:var(--pp-on-dark);border-radius:10px;padding:14px 18px;margin-bottom:18px;font-family:system-ui,sans-serif;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+        .desc{font-size:.98rem;color:var(--pp-body);font-family:var(--font-body);line-height:1.6;margin-bottom:16px}
+        .code-box{background:var(--pp-canopy);color:var(--pp-on-dark);border-radius:10px;padding:14px 18px;margin-bottom:18px;font-family:var(--font-body);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
         .code-label{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--pp-canopy-eyebrow);font-weight:700}
         .code-value{font-family:monospace;font-size:1.05rem;font-weight:700;background:rgba(255,255,255,.1);padding:6px 14px;border-radius:8px;letter-spacing:.06em}
-        .how-to{font-size:.88rem;color:var(--pp-body);font-family:system-ui,sans-serif;line-height:1.5;margin-bottom:18px;padding:12px 14px;background:var(--pp-best-tint);border:1px solid var(--pp-best-border);border-radius:10px;color:var(--pp-signal-ink)}
-        .cta{display:block;width:100%;text-align:center;background:var(--pp-signal-fill);color:var(--pp-on-dark);padding:16px;border-radius:12px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:800;font-size:1rem;letter-spacing:.02em;min-height:52px;transition:background .15s}
+        .how-to{font-size:.88rem;color:var(--pp-body);font-family:var(--font-body);line-height:1.5;margin-bottom:18px;padding:12px 14px;background:var(--pp-best-tint);border:1px solid var(--pp-best-border);border-radius:10px;color:var(--pp-signal-ink)}
+        .cta{display:block;width:100%;text-align:center;background:var(--pp-signal-fill);color:var(--pp-on-dark);padding:16px;border-radius:12px;text-decoration:none;font-family:var(--font-body);font-weight:800;font-size:1rem;letter-spacing:.02em;min-height:52px;transition:background .15s}
         .cta:hover{background:var(--pp-canopy)}
-        .secondary{display:block;text-align:center;margin-top:12px;color:var(--pp-muted);font-family:system-ui,sans-serif;font-size:.82rem;text-decoration:none}
+        .secondary{display:block;text-align:center;margin-top:12px;color:var(--pp-muted);font-family:var(--font-body);font-size:.82rem;text-decoration:none}
         .secondary:hover{color:var(--pp-ink);text-decoration:underline}
         @media(max-width:600px){.wrap{padding:24px 14px}.savings-block{padding:20px 18px}}
       `}</style>
@@ -414,7 +414,7 @@ export default async function DealPage({
                 borderRadius: 10,
                 padding: "10px 14px",
                 marginBottom: 14,
-                fontFamily: "system-ui,sans-serif",
+                fontFamily: "var(--font-body)",
                 fontSize: ".88rem",
                 color: "#92400e",
                 lineHeight: 1.5,

@@ -68,7 +68,7 @@ const calloutStyles = (
     .savings-callout{
       margin-top:14px;
       font-size:.82rem;
-      font-family:system-ui,sans-serif;
+      font-family:var(--font-body);
       color:rgba(247, 244, 237, 0.78);
       line-height:1.5;
       max-width:560px;

@@ -40,7 +40,7 @@ export default function DealFreshnessBadge({
 }: Props) {
   const baseStyle: React.CSSProperties = {
     display: "inline-block",
-    fontFamily: "system-ui, sans-serif",
+    fontFamily: "var(--font-body)",
     fontSize: variant === "detail" ? ".82rem" : ".7rem",
     letterSpacing: ".01em",
     padding: variant === "detail" ? "3px 10px" : "2px 8px",

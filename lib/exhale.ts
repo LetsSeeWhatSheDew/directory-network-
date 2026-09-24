@@ -11,6 +11,7 @@ export type ExDeal = {
   slug?: string | null;
   listing_slug?: string | null;
   deal_title?: string | null;
+  title?: string | null;
   discount_value?: number | null;
   discount_unit?: string | null;
   discount_type?: string | null;
@@ -26,13 +27,22 @@ export function amountOf(d: ExDeal): Amount | null {
   const v = Number(d?.discount_value);
   if (!Number.isFinite(v) || v <= 0) return null;
   const u = (d?.discount_unit || "").toLowerCase();
-  const upTo = /\bup to\b/i.test(d?.deal_title || "");
+  const upTo = /\bup to\b/i.test(d?.deal_title || d?.title || "");
   if (u === "dollars" && d?.discount_type !== "fixed_price") {
     return { big: `$${Math.round(v)}`, unit: "off", kind: "dollars", upTo, value: v };
   }
   if ((u === "percent" || !u) && v <= 100) {
     return { big: `${Math.round(v)}%`, unit: "off", kind: "percent", upTo, value: v };
   }
+  return null;
+}
+
+/** Text for the Save pill. "Up to" deals say so, so the pill never promises
+ *  more than the store does. Falls back to an estimated dollar saving. */
+export function saveLabel(d: ExDeal, estDollars?: number | null): string | null {
+  const a = amountOf(d);
+  if (a) return `Save ${a.upTo ? "up to " : ""}${a.big}`;
+  if (estDollars != null) return `Save $${estDollars}`;
   return null;
 }
 

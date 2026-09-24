@@ -2,7 +2,7 @@
 // Fixed v2: force no-cache + correct Supabase query format
 
 import Link from "next/link";
-import { amountOf, isConditional } from "../../../lib/exhale";
+import { amountOf, isConditional, saveLabel } from "../../../lib/exhale";
 import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
 import TrustLine from "../../components/TrustLine";
@@ -522,62 +522,62 @@ export default async function DealsPage({
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
         .logo-text{font-size:1.1rem;font-weight:700;color:var(--pp-ink)}
         .logo-text span{color:var(--pp-signal)}
-        .back{font-size:.82rem;color:var(--pp-muted);text-decoration:none;font-family:system-ui,sans-serif}
+        .back{font-size:.82rem;color:var(--pp-muted);text-decoration:none;font-family:var(--font-body)}
         .back:hover{color:var(--pp-ink)}
         .page{max-width:800px;margin:0 auto;padding:40px 20px}
-        .cat-tag{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--pp-signal);font-family:system-ui,sans-serif;margin-bottom:8px}
+        .cat-tag{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--pp-signal);font-family:var(--font-body);margin-bottom:8px}
         .page-title{font-size:clamp(1.5rem,4vw,2.2rem);font-weight:700;color:var(--pp-ink);letter-spacing:-.04em;line-height:1.1;margin-bottom:6px}
-        .page-sub{font-size:.88rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:24px}
+        .page-sub{font-size:.88rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:24px}
         .cat-switch{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:12px;padding:16px;margin-bottom:24px}
-        .cat-switch-label{font-size:.7rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:10px}
+        .cat-switch-label{font-size:.7rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:10px}
         .cat-pills{display:flex;gap:8px;flex-wrap:wrap}
-        .cat-pill{font-size:.8rem;font-family:system-ui,sans-serif;font-weight:500;padding:6px 14px;border-radius:100px;text-decoration:none;border:1px solid var(--pp-border);color:var(--pp-muted)}
+        .cat-pill{font-size:.8rem;font-family:var(--font-body);font-weight:500;padding:6px 14px;border-radius:100px;text-decoration:none;border:1px solid var(--pp-border);color:var(--pp-muted)}
         .cat-pill.active{background:var(--pp-signal-fill);color:var(--pp-on-dark);border-color:var(--pp-signal-fill)}
         .cat-pill:hover:not(.active){border-color:var(--pp-muted);color:var(--pp-body)}
-        .top-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--pp-signal);font-family:system-ui,sans-serif;margin-bottom:10px}
+        .top-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--pp-signal);font-family:var(--font-body);margin-bottom:10px}
 
         /* TOP DEAL CARD — savings dominates */
         .top-card{background:var(--pp-surface);border:1px solid var(--pp-border);border-left:4px solid var(--pp-signal-fill);border-radius:16px;padding:24px;position:relative;margin-bottom:24px}
-        .deal-grade{position:absolute;top:12px;right:12px;min-width:28px;height:24px;padding:0 8px;display:inline-flex;align-items:center;justify-content:center;border-radius:100px;font-family:system-ui,sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.02em;opacity:.7}
-        .you-save-label{font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:2px}
+        .deal-grade{position:absolute;top:12px;right:12px;min-width:28px;height:24px;padding:0 8px;display:inline-flex;align-items:center;justify-content:center;border-radius:100px;font-family:var(--font-body);font-weight:700;font-size:.68rem;letter-spacing:.02em;opacity:.7}
+        .you-save-label{font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:2px}
         .save-amount{font-size:clamp(2.2rem,8vw,3rem);font-weight:700;color:var(--pp-signal);letter-spacing:-.04em;line-height:1;margin-bottom:2px}
-        .save-context{font-size:.72rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:18px}
+        .save-context{font-size:.72rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:18px}
         .disp-name{font-size:1.1rem;font-weight:700;color:var(--pp-ink);margin-top:4px}
-        .disp-detail{font-size:.8rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-top:2px;margin-bottom:6px}
-        .deal-title-big{font-size:.92rem;font-weight:600;color:var(--pp-body);margin-bottom:14px;font-family:system-ui,sans-serif;line-height:1.4;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+        .disp-detail{font-size:.8rem;color:var(--pp-muted);font-family:var(--font-body);margin-top:2px;margin-bottom:6px}
+        .deal-title-big{font-size:.92rem;font-weight:600;color:var(--pp-body);margin-bottom:14px;font-family:var(--font-body);line-height:1.4;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
         .attrs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:16px}
-        .attr{font-size:.66rem;color:var(--pp-muted);background:var(--pp-paper);border-radius:100px;padding:2px 8px;font-family:system-ui,sans-serif}
-        .deal-more-toggle{font-size:.78rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:16px;cursor:pointer;text-decoration:none;display:inline-block;list-style:none}
+        .attr{font-size:.66rem;color:var(--pp-muted);background:var(--pp-paper);border-radius:100px;padding:2px 8px;font-family:var(--font-body)}
+        .deal-more-toggle{font-size:.78rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:16px;cursor:pointer;text-decoration:none;display:inline-block;list-style:none}
         .deal-more-toggle::-webkit-details-marker{display:none}
         .deal-more-toggle:hover{color:var(--pp-ink)}
-        .card-cta{display:block;width:100%;text-align:center;background:var(--pp-signal-fill);color:var(--pp-on-dark);padding:14px;border-radius:10px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:800;font-size:.95rem;letter-spacing:.02em;transition:background .15s}
+        .card-cta{display:block;width:100%;text-align:center;background:var(--pp-signal-fill);color:var(--pp-on-dark);padding:14px;border-radius:10px;text-decoration:none;font-family:var(--font-body);font-weight:800;font-size:.95rem;letter-spacing:.02em;transition:background .15s}
         .card-cta:hover{background:var(--pp-signal-fill)}
 
         /* ALTERNATIVES — same hierarchy pattern */
-        .alt-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:12px}
+        .alt-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:12px}
         .alt-cards{display:flex;flex-direction:column;gap:10px;margin-bottom:36px}
         .alt-card{position:relative;background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:12px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;text-decoration:none;transition:border-color .15s;gap:14px}
         .alt-card:hover{border-color:var(--pp-signal-fill)}
-        .alt-grade{position:absolute;top:10px;right:12px;font-size:.62rem;color:var(--pp-muted);font-family:system-ui,sans-serif;font-weight:600;letter-spacing:.08em;opacity:.7}
+        .alt-grade{position:absolute;top:10px;right:12px;font-size:.62rem;color:var(--pp-muted);font-family:var(--font-body);font-weight:600;letter-spacing:.08em;opacity:.7}
         .alt-savings-block{min-width:92px;flex-shrink:0}
-        .alt-savings-label-top{font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:1px}
+        .alt-savings-label-top{font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:1px}
         .alt-savings{font-size:1.5rem;font-weight:700;color:var(--pp-signal);letter-spacing:-.03em;line-height:1}
         .alt-body{flex:1;min-width:0}
         .alt-name{font-size:.92rem;font-weight:700;color:var(--pp-ink)}
-        .alt-deal{font-size:.78rem;color:var(--pp-body);font-family:system-ui,sans-serif;margin-top:2px;line-height:1.4}
-        .alt-meta{font-size:.66rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-top:4px}
+        .alt-deal{font-size:.78rem;color:var(--pp-body);font-family:var(--font-body);margin-top:2px;line-height:1.4}
+        .alt-meta{font-size:.66rem;color:var(--pp-muted);font-family:var(--font-body);margin-top:4px}
         .no-deals{text-align:center;padding:60px 20px;background:var(--pp-surface);border-radius:16px;border:1px solid var(--pp-border)}
         .no-deals-title{font-size:1.2rem;font-weight:700;color:var(--pp-ink);margin-bottom:8px}
-        .no-deals-sub{font-size:.875rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:20px}
-        .no-deals-link{display:inline-block;background:var(--pp-canopy);color:var(--pp-on-dark);padding:10px 20px;border-radius:8px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:700;font-size:.875rem}
-        .city-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--pp-best-tint);border:1px solid var(--pp-best-border);border-radius:10px;padding:10px 14px;margin-bottom:18px;font-family:system-ui,sans-serif;font-size:.82rem;color:var(--pp-signal);flex-wrap:wrap}
+        .no-deals-sub{font-size:.875rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:20px}
+        .no-deals-link{display:inline-block;background:var(--pp-canopy);color:var(--pp-on-dark);padding:10px 20px;border-radius:8px;text-decoration:none;font-family:var(--font-body);font-weight:700;font-size:.875rem}
+        .city-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--pp-best-tint);border:1px solid var(--pp-best-border);border-radius:10px;padding:10px 14px;margin-bottom:18px;font-family:var(--font-body);font-size:.82rem;color:var(--pp-signal);flex-wrap:wrap}
         .city-banner-pin{font-weight:600}
         .city-banner-clear{color:var(--pp-signal);text-decoration:none;font-weight:600;font-size:.78rem}
         .city-banner-clear:hover{text-decoration:underline}
-        .statewide-fallback{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:12px;padding:16px 18px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-family:system-ui,sans-serif;font-size:.85rem;color:var(--pp-body)}
+        .statewide-fallback{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:12px;padding:16px 18px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-family:var(--font-body);font-size:.85rem;color:var(--pp-body)}
         .statewide-fallback-link{color:var(--pp-signal);text-decoration:none;font-weight:700;white-space:nowrap}
         .statewide-fallback-link:hover{text-decoration:underline}
-        .source-note{font-size:.68rem;color:var(--pp-muted);font-family:system-ui,sans-serif;text-align:center;margin-top:24px}
+        .source-note{font-size:.68rem;color:var(--pp-muted);font-family:var(--font-body);text-align:center;margin-top:24px}
         @media(max-width:600px){.page{padding:24px 14px}.nav{padding:12px 16px}}
         @media(max-width:480px){
           .page-title{font-size:1.35rem}
@@ -604,7 +604,7 @@ export default async function DealsPage({
           style={{
             fontSize: "1rem",
             color: "var(--pp-muted)",
-            fontFamily: "system-ui, sans-serif",
+            fontFamily: "var(--font-body)",
             textAlign: "left",
             marginBottom: "18px",
             lineHeight: 1.5,
@@ -689,7 +689,7 @@ export default async function DealsPage({
                   const u = getExpiryUrgency(topDeal.expires_at);
                   if (!u) return null;
                   return (
-                    <span style={{ fontSize: ".68rem", fontFamily: "system-ui,sans-serif", fontWeight: 700, color: u.fg, background: u.bg, padding: "2px 9px", borderRadius: 100, whiteSpace: "nowrap" }}>
+                    <span style={{ fontSize: ".68rem", fontFamily: "var(--font-body)", fontWeight: 700, color: u.fg, background: u.bg, padding: "2px 9px", borderRadius: 100, whiteSpace: "nowrap" }}>
                       {u.text}
                     </span>
                   );
@@ -698,8 +698,8 @@ export default async function DealsPage({
 
               {(() => {
                 const t = trends[topDeal.slug || topDeal.listing_slug];
-                if (t === "better") return <div style={{ fontSize: ".78rem", fontFamily: "system-ui,sans-serif", color: "var(--pp-signal)", fontWeight: 600, marginBottom: 10 }}>↓ Better deal than last week</div>;
-                if (t === "worse") return <div style={{ fontSize: ".78rem", fontFamily: "system-ui,sans-serif", color: "#f59e0b", fontWeight: 600, marginBottom: 10 }}>↑ Not as good as last week</div>;
+                if (t === "better") return <div style={{ fontSize: ".78rem", fontFamily: "var(--font-body)", color: "var(--pp-signal)", fontWeight: 600, marginBottom: 10 }}>↓ Better deal than last week</div>;
+                if (t === "worse") return <div style={{ fontSize: ".78rem", fontFamily: "var(--font-body)", color: "#f59e0b", fontWeight: 600, marginBottom: 10 }}>↑ Not as good as last week</div>;
                 return null;
               })()}
 
@@ -726,7 +726,7 @@ export default async function DealsPage({
               {(topDeal.deal_description || topDeal.description) && (
                 <details style={{ marginBottom: 16 }}>
                   <summary className="deal-more-toggle">Show more ▾</summary>
-                  <div style={{ fontSize: ".82rem", color: "var(--pp-body)", fontFamily: "system-ui,sans-serif", marginTop: 8, lineHeight: 1.5 }}>
+                  <div style={{ fontSize: ".82rem", color: "var(--pp-body)", fontFamily: "var(--font-body)", marginTop: 8, lineHeight: 1.5 }}>
                     {topDeal.deal_description || topDeal.description}
                   </div>
                 </details>
@@ -763,7 +763,7 @@ export default async function DealsPage({
                   justifyContent: "center",
                   marginTop: 10,
                   fontSize: ".78rem",
-                  fontFamily: "system-ui,sans-serif",
+                  fontFamily: "var(--font-body)",
                   flexWrap: "wrap",
                 }}
               >
@@ -819,7 +819,7 @@ export default async function DealsPage({
                         if (a || dollars != null) {
                           return (
                             <div className="alt-savings-block">
-                              <span className="pp-save">Save {a ? a.big : `$${dollars}`}</span>
+                              <span className="pp-save">{saveLabel(deal, dollars) || `Save ${a ? a.big : `$${dollars}`}`}</span>
                             </div>
                           );
                         }
@@ -838,7 +838,7 @@ export default async function DealsPage({
                           const u = getExpiryUrgency(deal.expires_at);
                           if (!u) return null;
                           return (
-                            <div style={{ marginTop: 4, display: "inline-block", fontSize: ".64rem", fontFamily: "system-ui,sans-serif", fontWeight: 700, color: u.fg, background: u.bg, padding: "2px 8px", borderRadius: 100 }}>
+                            <div style={{ marginTop: 4, display: "inline-block", fontSize: ".64rem", fontFamily: "var(--font-body)", fontWeight: 700, color: u.fg, background: u.bg, padding: "2px 8px", borderRadius: 100 }}>
                               {u.text}
                             </div>
                           );
@@ -875,7 +875,7 @@ export default async function DealsPage({
                   style={{
                     fontSize: ".9rem",
                     color: "var(--pp-signal)",
-                    fontFamily: "system-ui, sans-serif",
+                    fontFamily: "var(--font-body)",
                     fontWeight: 600,
                     textDecoration: "none",
                   }}

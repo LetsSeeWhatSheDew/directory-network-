@@ -87,7 +87,7 @@ export default function TopDealsRow({
           letterSpacing: ".14em",
           textTransform: "uppercase",
           color: "var(--pp-signal)",
-          fontFamily: "system-ui, sans-serif",
+          fontFamily: "var(--font-body)",
           marginBottom: 10,
         }}
       >
@@ -118,7 +118,7 @@ export default function TopDealsRow({
                 padding: "14px 16px",
                 textDecoration: "none",
                 color: "var(--pp-ink)",
-                fontFamily: "system-ui, sans-serif",
+                fontFamily: "var(--font-body)",
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",

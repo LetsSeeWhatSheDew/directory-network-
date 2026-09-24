@@ -64,7 +64,7 @@ export default function EarlyAccessPage() {
         <p style={{
           fontSize: "1.05rem",
           color: "rgba(255,255,255,0.75)",
-          fontFamily: "system-ui, sans-serif",
+          fontFamily: "var(--font-body)",
           lineHeight: 1.65,
           marginBottom: 36,
         }}>
@@ -85,7 +85,7 @@ export default function EarlyAccessPage() {
             flexDirection: "column",
             gap: 12,
             textAlign: "left",
-            fontFamily: "system-ui, sans-serif",
+            fontFamily: "var(--font-body)",
           }}
         >
           {/* Hidden field — tells signup endpoint where to redirect */}
@@ -110,7 +110,7 @@ export default function EarlyAccessPage() {
                 background: "rgba(255,255,255,0.08)",
                 color: "var(--pp-on-dark)",
                 fontSize: "1rem",
-                fontFamily: "system-ui, sans-serif",
+                fontFamily: "var(--font-body)",
               }}
             />
           </label>
@@ -132,7 +132,7 @@ export default function EarlyAccessPage() {
                 background: "rgba(255,255,255,0.08)",
                 color: "var(--pp-on-dark)",
                 fontSize: "1rem",
-                fontFamily: "system-ui, sans-serif",
+                fontFamily: "var(--font-body)",
               }}
             />
           </label>
@@ -146,7 +146,7 @@ export default function EarlyAccessPage() {
               padding: "14px 22px",
               borderRadius: 10,
               fontSize: "1rem",
-              fontFamily: "system-ui, sans-serif",
+              fontFamily: "var(--font-body)",
               fontWeight: 700,
               cursor: "pointer",
               marginTop: 8,
@@ -170,7 +170,7 @@ export default function EarlyAccessPage() {
           marginTop: 36,
           fontSize: ".85rem",
           color: "rgba(255,255,255,0.5)",
-          fontFamily: "system-ui, sans-serif",
+          fontFamily: "var(--font-body)",
           lineHeight: 1.6,
         }}>
           Built by <strong style={{ color: "rgba(255,255,255,0.8)" }}>Matthew Burns</strong> in Peoria, IL.

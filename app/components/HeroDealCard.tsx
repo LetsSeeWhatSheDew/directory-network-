@@ -234,7 +234,7 @@ export default function HeroDealCard({
         </Link>
         <style>{`
           .hero-deal-empty-headline{font-family:var(--font-display), system-ui, sans-serif;font-size:1.6rem;font-weight:700;color:var(--pp-ink);letter-spacing:-.02em;margin:8px 0 6px}
-          .hero-deal-empty-sub{font-size:.92rem;color:var(--pp-muted);font-family:system-ui,sans-serif;line-height:1.55;margin:0 0 18px;max-width:520px}
+          .hero-deal-empty-sub{font-size:.92rem;color:var(--pp-muted);font-family:var(--font-body);line-height:1.55;margin:0 0 18px;max-width:520px}
           .hero-deal-empty-cta{display:inline-block;text-align:center;text-decoration:none}
         `}</style>
       </div>
@@ -310,11 +310,11 @@ export default function HeroDealCard({
         {city ? `More deals near ${city} →` : "See more Central Illinois deals →"}
       </Link>
       <style>{`
-        .hero-deal-price{font-size:.9rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin:-4px 0 8px}
+        .hero-deal-price{font-size:.9rem;color:var(--pp-muted);font-family:var(--font-body);margin:-4px 0 8px}
         .hero-deal-price .strike{text-decoration:line-through}
         .hero-deal-price strong{color:var(--pp-signal);font-weight:700}
         .hero-deal-open{color:var(--pp-signal);font-size:.75rem;font-weight:600;background:var(--pp-best-tint);padding:2px 8px;border-radius:100px}
-        .hero-deal-closed{color:var(--pp-muted);font-size:.72rem;font-family:system-ui,sans-serif}
+        .hero-deal-closed{color:var(--pp-muted);font-size:.72rem;font-family:var(--font-body)}
       `}</style>
     </div>
   );

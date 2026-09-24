@@ -33,7 +33,7 @@ export default function MedicalFriendlyToggle({
         cursor: disabled ? "not-allowed" : "pointer",
         fontSize: ".82rem",
         color: "var(--pp-body)",
-        fontFamily: "system-ui, sans-serif",
+        fontFamily: "var(--font-body)",
       }}
       title={disabled ? "Coming soon — we're verifying which IL dispensaries honor the medical tax rate." : undefined}
     >

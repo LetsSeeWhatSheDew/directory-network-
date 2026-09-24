@@ -263,7 +263,7 @@ export default function HomeDealCards({
           borderRadius: 14,
           padding: "28px 24px",
           textAlign: "center",
-          fontFamily: "system-ui, sans-serif",
+          fontFamily: "var(--font-body)",
         }}
       >
         <div style={{ fontFamily: "var(--font-display), system-ui, sans-serif", fontSize: "1.1rem", fontWeight: 700, color: "var(--pp-ink)", marginBottom: 6 }}>
@@ -323,7 +323,7 @@ export default function HomeDealCards({
                 background: "var(--pp-paper)",
                 borderRadius: 100,
                 marginTop: 12,
-                fontFamily: "system-ui, sans-serif",
+                fontFamily: "var(--font-body)",
               }}
             >
               <button
@@ -373,7 +373,7 @@ export default function HomeDealCards({
             style={{
               fontSize: ".85rem",
               color: "var(--pp-signal)",
-              fontFamily: "system-ui, sans-serif",
+              fontFamily: "var(--font-body)",
               fontWeight: 600,
               textDecoration: "none",
               whiteSpace: "nowrap",
@@ -454,7 +454,7 @@ export default function HomeDealCards({
                 ) : null;
               })()}
               {urgency && (
-                <div style={{ display: "inline-block", marginTop: 4, marginBottom: 6, fontSize: ".7rem", fontFamily: "system-ui,sans-serif", fontWeight: 700, color: urgency.fg, background: urgency.bg, padding: "2px 9px", borderRadius: 100 }}>
+                <div style={{ display: "inline-block", marginTop: 4, marginBottom: 6, fontSize: ".7rem", fontFamily: "var(--font-body)", fontWeight: 700, color: urgency.fg, background: urgency.bg, padding: "2px 9px", borderRadius: 100 }}>
                   {urgency.text}
                 </div>
               )}

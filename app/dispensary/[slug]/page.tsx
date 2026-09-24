@@ -25,6 +25,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
+import { saveLabel } from "../../../lib/exhale";
 import { nowInCT, isOpen, formatTime as formatHourTime } from "../../../lib/hours";
 import { visitDispensaryHref } from "../../../lib/links";
 import { cityFromSlug } from "../../../lib/cityNormalize";
@@ -335,15 +336,15 @@ export default async function DispensaryProfilePage({
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
         .logo-text{font-size:1.1rem;font-weight:700;color:var(--pp-ink)}
         .logo-text span{color:var(--pp-signal)}
-        .back{font-size:.82rem;color:var(--pp-muted);text-decoration:none;font-family:system-ui,sans-serif}
+        .back{font-size:.82rem;color:var(--pp-muted);text-decoration:none;font-family:var(--font-body)}
 
         .wrap{max-width:900px;margin:0 auto;padding:40px 20px 64px}
-        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);font-family:system-ui,sans-serif;margin-bottom:10px}
+        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);font-family:var(--font-body);margin-bottom:10px}
         h1{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:8px}
-        .city-line{font-size:.95rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:18px}
+        .city-line{font-size:.95rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:18px}
 
         .status-row{display:flex;gap:10px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
-        .status{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:100px;font-size:.82rem;font-family:system-ui,sans-serif;font-weight:600}
+        .status{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:100px;font-size:.82rem;font-family:var(--font-body);font-weight:600}
         .status-open{background:var(--pp-best-tint);color:var(--pp-signal-ink)}
         .status-closed{background:#fee2e2;color:#991b1b}
         .status-dot{width:7px;height:7px;border-radius:50%}
@@ -356,7 +357,7 @@ export default async function DispensaryProfilePage({
           display:flex;align-items:center;gap:10px;
           background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:12px;
           padding:12px 16px;text-decoration:none;color:var(--pp-ink);
-          font-family:system-ui,sans-serif;font-size:.92rem;font-weight:600;
+          font-family:var(--font-body);font-size:.92rem;font-weight:600;
           transition:border-color .15s,transform .05s;
         }
         .contact-btn:hover{border-color:var(--pp-signal-fill)}
@@ -365,15 +366,15 @@ export default async function DispensaryProfilePage({
         .contact-btn .sub{display:block;font-size:.72rem;color:var(--pp-muted);font-weight:500;margin-top:2px}
 
         .section{margin-bottom:32px}
-        .section-h{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:14px}
+        .section-h{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:14px}
 
         .deal-card{background:var(--pp-surface);border:1px solid var(--pp-border);border-left:4px solid var(--pp-signal-fill);border-radius:14px;padding:18px 20px;margin-bottom:10px}
         .deal-title{font-size:1.05rem;font-weight:700;color:var(--pp-ink);margin-bottom:4px}
-        .deal-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:baseline;margin-bottom:8px}
+        .deal-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
         .deal-savings{font-size:1.4rem;font-weight:700;color:var(--pp-signal);letter-spacing:-.02em}
-        .deal-savings-label{font-size:.68rem;color:var(--pp-muted);font-family:system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
-        .deal-expires{font-size:.74rem;color:#92400e;background:#fef3c7;padding:2px 8px;border-radius:100px;font-family:system-ui,sans-serif;font-weight:600}
-        .deal-desc{font-size:.88rem;color:var(--pp-body);font-family:system-ui,sans-serif;line-height:1.5;margin-bottom:12px}
+        .deal-savings-label{font-size:.68rem;color:var(--pp-muted);font-family:var(--font-body);letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+        .deal-expires{font-size:.74rem;color:#92400e;background:#fef3c7;padding:2px 8px;border-radius:100px;font-family:var(--font-body);font-weight:600}
+        .deal-desc{font-size:.88rem;color:var(--pp-body);font-family:var(--font-body);line-height:1.5;margin-bottom:12px}
         .track{display:flex;flex-wrap:wrap;gap:6px 16px;margin:-4px 0 14px;font-size:.8rem;color:var(--pp-muted,var(--pp-muted))}
         .track b{color:var(--pp-ink,var(--pp-ink));font-weight:600}
         .mono{font-family:var(--font-mono,ui-monospace),monospace;font-variant-numeric:tabular-nums}
@@ -382,25 +383,25 @@ export default async function DispensaryProfilePage({
         /* Lighter per-deal CTA: outline, so a stack of 3 deals doesn't read as 3 slabs. */
         .deal-cta{display:block;width:100%;text-align:center;background:var(--pp-surface,var(--pp-surface));color:var(--pp-signal-ink,var(--pp-signal-ink));border:1.5px solid var(--pp-signal,var(--pp-signal-fill));padding:12px;border-radius:10px;text-decoration:none;font-family:var(--font-body,system-ui),sans-serif;font-weight:700;font-size:.9rem;min-height:44px}
         .deal-cta:hover{background:var(--pp-best-tint,var(--pp-best-tint))}
-        .deal-details{font-size:.76rem;color:var(--pp-signal);text-decoration:none;display:inline-block;margin-top:8px;font-family:system-ui,sans-serif;font-weight:600}
+        .deal-details{font-size:.76rem;color:var(--pp-signal);text-decoration:none;display:inline-block;margin-top:8px;font-family:var(--font-body);font-weight:600}
         .deal-details:hover{text-decoration:underline}
 
         .no-deals{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:14px;padding:28px 24px;text-align:center}
         .no-deals-t{font-size:.98rem;font-weight:700;color:var(--pp-ink)}
-        .no-deals-s{font-size:.82rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-top:4px}
+        .no-deals-s{font-size:.82rem;color:var(--pp-muted);font-family:var(--font-body);margin-top:4px}
 
         .hours{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:14px;padding:18px 22px}
-        .hr{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-family:system-ui,sans-serif;font-size:.9rem;color:var(--pp-body)}
+        .hr{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-family:var(--font-body);font-size:.9rem;color:var(--pp-body)}
         .hr-today{background:var(--pp-best-tint);margin:0 -10px;padding:8px 10px;border-radius:8px}
         .hr-today-day,.hr-today-t{color:var(--pp-signal-ink);font-weight:700}
         .hr-closed{color:var(--pp-muted)}
 
         .amenities{display:flex;flex-wrap:wrap;gap:8px}
-        .amenity{font-size:.78rem;font-family:system-ui,sans-serif;color:var(--pp-body);background:var(--pp-surface);border:1px solid var(--pp-border);padding:4px 12px;border-radius:100px}
+        .amenity{font-size:.78rem;font-family:var(--font-body);color:var(--pp-body);background:var(--pp-surface);border:1px solid var(--pp-border);padding:4px 12px;border-radius:100px}
 
-        .about{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:14px;padding:18px 22px;font-size:.925rem;color:var(--pp-body);line-height:1.7;font-family:system-ui,sans-serif}
+        .about{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:14px;padding:18px 22px;font-size:.925rem;color:var(--pp-body);line-height:1.7;font-family:var(--font-body)}
 
-        .claim-cta{margin-top:32px;padding:18px;background:var(--pp-surface);border:1px dashed var(--pp-border);border-radius:12px;text-align:center;font-family:system-ui,sans-serif;font-size:.82rem;color:var(--pp-muted)}
+        .claim-cta{margin-top:32px;padding:18px;background:var(--pp-surface);border:1px dashed var(--pp-border);border-radius:12px;text-align:center;font-family:var(--font-body);font-size:.82rem;color:var(--pp-muted)}
         .claim-cta a{color:var(--pp-signal);font-weight:700;text-decoration:none}
         .claim-cta a:hover{text-decoration:underline}
 
@@ -551,11 +552,8 @@ export default async function DispensaryProfilePage({
                       <div className="best-seen">Best discount we&apos;ve seen here</div>
                     )}
                   <div className="deal-meta">
-                    {dollars != null ? (
-                      <>
-                        <span className="deal-savings-label">You save</span>
-                        <span className="deal-savings">${dollars}</span>
-                      </>
+                    {saveLabel(d, dollars) ? (
+                      <span className="pp-save">{saveLabel(d, dollars)}</span>
                     ) : (
                       savingsLabel !== "Deal active" && <span className="deal-savings">{savingsLabel}</span>
                     )}

@@ -121,7 +121,7 @@ export default function SavingsCalculator() {
       )}
 
       {!result && (
-        <p style={{ fontFamily: "system-ui, sans-serif", fontSize: ".85rem", color: "var(--pp-muted)", textAlign: "center", marginTop: 6 }}>
+        <p style={{ fontFamily: "var(--font-body)", fontSize: ".85rem", color: "var(--pp-muted)", textAlign: "center", marginTop: 6 }}>
           Answer all three to see your result.
         </p>
       )}
@@ -179,7 +179,7 @@ const questionNum: React.CSSProperties = {
   fontSize: ".75rem",
   fontWeight: 700,
   color: "var(--pp-signal)",
-  fontFamily: "system-ui, sans-serif",
+  fontFamily: "var(--font-body)",
   letterSpacing: ".08em",
 };
 const questionLabel: React.CSSProperties = {
@@ -197,7 +197,7 @@ const pillStyle: React.CSSProperties = {
   background: "var(--pp-surface)",
   color: "var(--pp-body)",
   cursor: "pointer",
-  fontFamily: "system-ui, sans-serif",
+  fontFamily: "var(--font-body)",
   fontSize: ".88rem",
   fontWeight: 500,
   transition: "all .15s",
@@ -222,7 +222,7 @@ const resultEyebrow: React.CSSProperties = {
   fontWeight: 700,
   letterSpacing: ".14em",
   color: "var(--pp-canopy-eyebrow)",
-  fontFamily: "system-ui, sans-serif",
+  fontFamily: "var(--font-body)",
   textTransform: "uppercase",
   marginBottom: 14,
 };
@@ -237,14 +237,14 @@ const resultBig: React.CSSProperties = {
 const resultBody: React.CSSProperties = {
   fontSize: "1rem",
   color: "rgba(255,255,255,.85)",
-  fontFamily: "system-ui, sans-serif",
+  fontFamily: "var(--font-body)",
   lineHeight: 1.55,
   marginBottom: 6,
 };
 const resultSub: React.CSSProperties = {
   fontSize: ".95rem",
   color: "rgba(255,255,255,.72)",
-  fontFamily: "system-ui, sans-serif",
+  fontFamily: "var(--font-body)",
   marginBottom: 18,
 };
 const cta: React.CSSProperties = {
@@ -254,7 +254,7 @@ const cta: React.CSSProperties = {
   padding: "12px 22px",
   borderRadius: 10,
   textDecoration: "none",
-  fontFamily: "system-ui, sans-serif",
+  fontFamily: "var(--font-body)",
   fontWeight: 700,
   fontSize: ".92rem",
   marginBottom: 14,
@@ -262,7 +262,7 @@ const cta: React.CSSProperties = {
 const resultFineprint: React.CSSProperties = {
   fontSize: ".7rem",
   color: "rgba(255,255,255,.45)",
-  fontFamily: "system-ui, sans-serif",
+  fontFamily: "var(--font-body)",
   lineHeight: 1.5,
   marginTop: 2,
 };

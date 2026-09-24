@@ -143,7 +143,7 @@ export default async function DispensariesIndexPage() {
 
       <section style={{ maxWidth: 1100, margin: "0 auto", padding: "44px 28px" }}>
         {cities.length === 0 ? (
-          <p style={{ textAlign: "center", color: "var(--pp-muted)", fontFamily: "system-ui, sans-serif" }}>
+          <p style={{ textAlign: "center", color: "var(--pp-muted)", fontFamily: "var(--font-body)" }}>
             No listings loaded yet. Try refreshing.
           </p>
         ) : (
@@ -157,7 +157,7 @@ export default async function DispensariesIndexPage() {
                     <h2 style={{ fontSize: "1.3rem", fontWeight: 700, letterSpacing: "-0.02em" }}>
                       {city}
                     </h2>
-                    <Link href={`/city/${slug}`} style={{ fontSize: ".8rem", color: "var(--pp-signal)", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontWeight: 600 }}>
+                    <Link href={`/city/${slug}`} style={{ fontSize: ".8rem", color: "var(--pp-signal)", textDecoration: "none", fontFamily: "var(--font-body)", fontWeight: 600 }}>
                       Deals in {city} →
                     </Link>
                   </div>
@@ -190,17 +190,17 @@ export default async function DispensariesIndexPage() {
                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
                             <div style={{ fontSize: ".95rem", fontWeight: 700 }}>{display}</div>
                             {l.plan === "featured" && (
-                              <span style={{ fontSize: ".62rem", background: "var(--pp-signal-fill)", color: "var(--pp-on-dark)", padding: "2px 7px", borderRadius: 100, fontFamily: "system-ui, sans-serif", fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase" }}>
+                              <span style={{ fontSize: ".62rem", background: "var(--pp-signal-fill)", color: "var(--pp-on-dark)", padding: "2px 7px", borderRadius: 100, fontFamily: "var(--font-body)", fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase" }}>
                                 Featured
                               </span>
                             )}
                           </div>
-                          <div style={{ marginTop: 6, fontSize: ".78rem", color: "var(--pp-muted)", fontFamily: "system-ui, sans-serif" }}>
+                          <div style={{ marginTop: 6, fontSize: ".78rem", color: "var(--pp-muted)", fontFamily: "var(--font-body)" }}>
                             {l.google_rating ? `${l.google_rating.toFixed(1)} ★` : "No rating yet"}
                             {attrs.length > 0 ? ` · ${attrs.join(" · ")}` : ""}
                           </div>
                           {count > 0 && (
-                            <div style={{ marginTop: 10, display: "inline-flex", alignItems: "center", gap: 6, fontSize: ".7rem", fontFamily: "system-ui, sans-serif", fontWeight: 700, color: "var(--pp-signal)", background: "var(--pp-best-tint)", border: "1px solid var(--pp-best-border)", padding: "3px 9px", borderRadius: 100 }}>
+                            <div style={{ marginTop: 10, display: "inline-flex", alignItems: "center", gap: 6, fontSize: ".7rem", fontFamily: "var(--font-body)", fontWeight: 700, color: "var(--pp-signal)", background: "var(--pp-best-tint)", border: "1px solid var(--pp-best-border)", padding: "3px 9px", borderRadius: 100 }}>
                               <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--pp-signal-fill)" }} />
                               {count} active deal{count === 1 ? "" : "s"}
                             </div>

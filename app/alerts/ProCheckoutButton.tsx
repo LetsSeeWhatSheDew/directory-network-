@@ -108,7 +108,7 @@ export default function ProCheckoutButton() {
           border: "1px solid rgba(74,222,128,.4)",
           borderRadius: 10,
           padding: "14px 16px",
-          fontFamily: "system-ui, sans-serif",
+          fontFamily: "var(--font-body)",
           display: "flex",
           flexDirection: "column",
           gap: 6,
@@ -143,7 +143,7 @@ export default function ProCheckoutButton() {
           borderRadius: 10,
           padding: "12px 12px",
           color: "var(--pp-on-dark)",
-          fontFamily: "system-ui, sans-serif",
+          fontFamily: "var(--font-body)",
           fontSize: ".95rem",
           outline: "none",
           minHeight: 44,
@@ -156,7 +156,7 @@ export default function ProCheckoutButton() {
         {busy ? "One sec…" : "Get Pro for $0.99/month →"}
       </button>
       {errMsg && (
-        <div style={{ fontSize: ".78rem", color: "#fca5a5", fontFamily: "system-ui, sans-serif" }}>
+        <div style={{ fontSize: ".78rem", color: "#fca5a5", fontFamily: "var(--font-body)" }}>
           {errMsg}
         </div>
       )}

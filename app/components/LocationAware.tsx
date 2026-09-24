@@ -408,7 +408,7 @@ export default function LocationAware() {
 const wrapperStyle: React.CSSProperties = {
   margin: 0,
   fontSize: ".8rem",
-  fontFamily: "system-ui, sans-serif",
+  fontFamily: "var(--font-body)",
   color: "var(--pp-signal)",
   fontWeight: 500,
   letterSpacing: ".01em",
@@ -422,7 +422,7 @@ const wrapperStyle: React.CSSProperties = {
 const detectingStyle: React.CSSProperties = {
   margin: 0,
   fontSize: ".8rem",
-  fontFamily: "system-ui, sans-serif",
+  fontFamily: "var(--font-body)",
   color: "var(--pp-muted)",
   fontWeight: 500,
   letterSpacing: ".01em",
@@ -439,7 +439,7 @@ const linkBtn: React.CSSProperties = {
   textDecoration: "underline",
   cursor: "pointer",
   padding: 0,
-  fontFamily: "system-ui, sans-serif",
+  fontFamily: "var(--font-body)",
   fontSize: ".75rem",
 };
 

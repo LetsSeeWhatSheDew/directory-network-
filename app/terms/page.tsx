@@ -115,7 +115,7 @@ export default function TermsPage() {
 }
 
 const h2: React.CSSProperties = {
-  fontFamily: "system-ui, sans-serif",
+  fontFamily: "var(--font-body)",
   fontSize: "1.05rem",
   fontWeight: 700,
   marginTop: 28,

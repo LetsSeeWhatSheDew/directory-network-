@@ -64,7 +64,7 @@ export default function GenericClaimForm() {
           border: "1px solid var(--pp-best-border)",
           borderRadius: 14,
           padding: "22px 24px",
-          fontFamily: "system-ui, sans-serif",
+          fontFamily: "var(--font-body)",
         }}
       >
         <div style={{ fontSize: "1rem", fontWeight: 700, color: "var(--pp-signal-ink)", marginBottom: 4 }}>
@@ -89,7 +89,7 @@ export default function GenericClaimForm() {
         display: "flex",
         flexDirection: "column",
         gap: 12,
-        fontFamily: "system-ui, sans-serif",
+        fontFamily: "var(--font-body)",
       }}
     >
       <label style={labelStyle}>
@@ -188,7 +188,7 @@ const inputStyle: React.CSSProperties = {
   border: "1px solid var(--pp-border)",
   borderRadius: 10,
   padding: "12px 14px",
-  fontFamily: "system-ui, sans-serif",
+  fontFamily: "var(--font-body)",
   fontSize: ".95rem",
   color: "var(--pp-ink)",
   outline: "none",

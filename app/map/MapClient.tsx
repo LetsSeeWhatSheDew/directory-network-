@@ -85,7 +85,7 @@ export default function MapClient({ points }: { points: Point[] }) {
          </div>`
       : "";
     return `
-      <div style="font-family:system-ui,sans-serif;min-width:180px">
+      <div style="font-family:var(--font-body);min-width:180px">
         <div style="font-weight:700;font-size:.95rem;color:var(--pp-ink);">${escapeHtml(display)}</div>
         <div style="font-size:.75rem;color:var(--pp-muted);margin-top:2px;">${escapeHtml(p.city)}, IL</div>
         ${dealHtml}
@@ -114,7 +114,7 @@ export default function MapClient({ points }: { points: Point[] }) {
 
     const greenIcon = L.divIcon({
       className: "cl-pin cl-pin-deal",
-      html: `<div style="background:var(--pp-signal-fill);color:var(--pp-on-dark);width:28px;height:28px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;font-family:system-ui,sans-serif;font-weight:800;box-shadow:0 2px 6px rgba(0,0,0,.25);border:2px solid var(--pp-border);"><span style="transform:rotate(45deg);font-size:.8rem;">$</span></div>`,
+      html: `<div style="background:var(--pp-signal-fill);color:var(--pp-on-dark);width:28px;height:28px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-weight:800;box-shadow:0 2px 6px rgba(0,0,0,.25);border:2px solid var(--pp-border);"><span style="transform:rotate(45deg);font-size:.8rem;">$</span></div>`,
       iconSize: [28, 28],
       iconAnchor: [14, 28],
       popupAnchor: [0, -28],
@@ -161,7 +161,7 @@ export default function MapClient({ points }: { points: Point[] }) {
           gap: 14,
           background: "var(--pp-paper)",
           padding: "20px",
-          fontFamily: "system-ui, sans-serif",
+          fontFamily: "var(--font-body)",
           textAlign: "center",
         }}>
           <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--pp-ink)" }}>
@@ -198,7 +198,7 @@ export default function MapClient({ points }: { points: Point[] }) {
           padding: 6,
           display: "flex",
           gap: 4,
-          fontFamily: "system-ui, sans-serif",
+          fontFamily: "var(--font-body)",
           fontSize: ".78rem",
           zIndex: 500,
         }}

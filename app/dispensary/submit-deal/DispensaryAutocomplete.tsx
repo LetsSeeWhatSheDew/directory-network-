@@ -90,7 +90,7 @@ export default function DispensaryAutocomplete({
           }}
         >
           {loading && (
-            <div style={{ padding: "10px 14px", fontSize: ".8rem", color: "var(--pp-muted)", fontFamily: "system-ui, sans-serif" }}>
+            <div style={{ padding: "10px 14px", fontSize: ".8rem", color: "var(--pp-muted)", fontFamily: "var(--font-body)" }}>
               Searching…
             </div>
           )}
@@ -112,7 +112,7 @@ export default function DispensaryAutocomplete({
                 borderBottom: "1px solid #f1ede3",
                 background: "transparent",
                 cursor: "pointer",
-                fontFamily: "system-ui, sans-serif",
+                fontFamily: "var(--font-body)",
               }}
             >
               <div style={{ fontSize: ".9rem", fontWeight: 700, color: "var(--pp-ink)" }}>{m.name}</div>

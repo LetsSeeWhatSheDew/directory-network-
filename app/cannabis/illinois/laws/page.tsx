@@ -56,40 +56,40 @@ export default function IllinoisLawsPage() {
         .laws-nav-dot { width: 10px; height: 10px; border-radius: 50%; background:var(--pp-signal-fill); display: inline-block; }
         .laws-nav-name { font-size: 1.1rem; font-weight: 700; color:var(--pp-ink); letter-spacing: -0.02em; }
         .laws-nav-accent { color:var(--pp-signal); }
-        .laws-nav-back { font-size: 0.85rem; color:var(--pp-muted); text-decoration: none; font-family: system-ui, sans-serif; }
-        .laws-breadcrumb { padding: 12px 32px; background:var(--pp-surface); border-bottom:1px solid var(--pp-border); font-size: 0.8rem; font-family: system-ui, sans-serif; color:var(--pp-muted); display: flex; gap: 8px; }
+        .laws-nav-back { font-size: 0.85rem; color:var(--pp-muted); text-decoration: none; font-family: var(--font-body); }
+        .laws-breadcrumb { padding: 12px 32px; background:var(--pp-surface); border-bottom:1px solid var(--pp-border); font-size: 0.8rem; font-family: var(--font-body); color:var(--pp-muted); display: flex; gap: 8px; }
         .laws-breadcrumb a { color:var(--pp-muted); text-decoration: none; }
         .laws-inner { max-width: 800px; margin: 0 auto; padding: 40px 24px 80px; }
-        .laws-label { font-size: 0.72rem; font-family: system-ui, sans-serif; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color:var(--pp-signal); margin-bottom: 12px; }
+        .laws-label { font-size: 0.72rem; font-family: var(--font-body); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color:var(--pp-signal); margin-bottom: 12px; }
         .laws-h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; color:var(--pp-ink); letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 16px; }
-        .laws-intro { font-size: 1.05rem; color:var(--pp-body); font-family: system-ui, sans-serif; line-height: 1.75; margin-bottom: 40px; padding-bottom: 32px; border-bottom:1px solid var(--pp-border); }
-        .laws-updated { display: inline-flex; align-items: center; gap: 6px; background:var(--pp-best-tint); border:1px solid var(--pp-best-border); border-radius: 100px; padding: 4px 12px; font-size: 0.75rem; font-family: system-ui, sans-serif; color:var(--pp-signal-ink); font-weight: 600; margin-bottom: 20px; }
+        .laws-intro { font-size: 1.05rem; color:var(--pp-body); font-family: var(--font-body); line-height: 1.75; margin-bottom: 40px; padding-bottom: 32px; border-bottom:1px solid var(--pp-border); }
+        .laws-updated { display: inline-flex; align-items: center; gap: 6px; background:var(--pp-best-tint); border:1px solid var(--pp-best-border); border-radius: 100px; padding: 4px 12px; font-size: 0.75rem; font-family: var(--font-body); color:var(--pp-signal-ink); font-weight: 600; margin-bottom: 20px; }
         .laws-section { margin-bottom: 48px; }
         .laws-h2 { font-size: 1.5rem; font-weight: 700; color:var(--pp-ink); letter-spacing: -0.02em; margin-bottom: 16px; }
-        .laws-p { font-size: 0.95rem; color:var(--pp-body); font-family: system-ui, sans-serif; line-height: 1.8; margin-bottom: 16px; }
+        .laws-p { font-size: 0.95rem; color:var(--pp-body); font-family: var(--font-body); line-height: 1.8; margin-bottom: 16px; }
         .laws-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; border-radius: 12px; overflow: hidden; }
-        .laws-table th { background:var(--pp-canopy); color:var(--pp-on-dark); font-size: 0.8rem; font-family: system-ui, sans-serif; font-weight: 700; padding: 12px 16px; text-align: left; }
-        .laws-table td { font-size: 0.875rem; font-family: system-ui, sans-serif; color:var(--pp-body); padding: 12px 16px; border-bottom:1px solid var(--pp-border); }
+        .laws-table th { background:var(--pp-canopy); color:var(--pp-on-dark); font-size: 0.8rem; font-family: var(--font-body); font-weight: 700; padding: 12px 16px; text-align: left; }
+        .laws-table td { font-size: 0.875rem; font-family: var(--font-body); color:var(--pp-body); padding: 12px 16px; border-bottom:1px solid var(--pp-border); }
         .laws-table tr:nth-child(even) td { background: var(--pp-paper); }
         .laws-ok { background:var(--pp-best-tint); border-left:4px solid var(--pp-signal-fill); border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 16px; }
-        .laws-ok-title { font-size: 0.8rem; font-family: system-ui, sans-serif; font-weight: 700; color:var(--pp-signal-ink); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
-        .laws-ok-text { font-size: 0.875rem; color:var(--pp-signal); font-family: system-ui, sans-serif; line-height: 1.6; }
+        .laws-ok-title { font-size: 0.8rem; font-family: var(--font-body); font-weight: 700; color:var(--pp-signal-ink); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+        .laws-ok-text { font-size: 0.875rem; color:var(--pp-signal); font-family: var(--font-body); line-height: 1.6; }
         .laws-no { background:#fef2f2; border-left:4px solid #dc2626; border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 16px; }
-        .laws-no-title { font-size: 0.8rem; font-family: system-ui, sans-serif; font-weight: 700; color:#991b1b; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
-        .laws-no-text { font-size: 0.875rem; color:#991b1b; font-family: system-ui, sans-serif; line-height: 1.6; }
+        .laws-no-title { font-size: 0.8rem; font-family: var(--font-body); font-weight: 700; color:#991b1b; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+        .laws-no-text { font-size: 0.875rem; color:#991b1b; font-family: var(--font-body); line-height: 1.6; }
         .laws-warn { background:#fffbeb; border-left:4px solid #d97706; border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 16px; }
-        .laws-warn-title { font-size: 0.8rem; font-family: system-ui, sans-serif; font-weight: 700; color:#92400e; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
-        .laws-warn-text { font-size: 0.875rem; color:#92400e; font-family: system-ui, sans-serif; line-height: 1.6; }
+        .laws-warn-title { font-size: 0.8rem; font-family: var(--font-body); font-weight: 700; color:#92400e; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+        .laws-warn-text { font-size: 0.875rem; color:#92400e; font-family: var(--font-body); line-height: 1.6; }
         .laws-faq-item { border-bottom:1px solid var(--pp-border); padding: 20px 0; }
         .laws-faq-q { font-size: 1rem; font-weight: 700; color:var(--pp-ink); margin-bottom: 8px; line-height: 1.4; }
-        .laws-faq-a { font-size: 0.9rem; color:var(--pp-body); font-family: system-ui, sans-serif; line-height: 1.7; }
+        .laws-faq-a { font-size: 0.9rem; color:var(--pp-body); font-family: var(--font-body); line-height: 1.7; }
         .laws-cta { background:var(--pp-canopy); border-radius: 16px; padding: 32px; text-align: center; margin-top: 48px; }
         .laws-cta-title { font-size: 1.3rem; font-weight: 700; color:var(--pp-on-dark); margin-bottom: 10px; }
-        .laws-cta-sub { font-size: 0.875rem; color:var(--pp-canopy-eyebrow); font-family: system-ui, sans-serif; margin-bottom: 20px; }
-        .laws-cta-btn { display: inline-block; background:var(--pp-signal-fill); color:var(--pp-on-dark); padding: 12px 28px; border-radius: 8px; text-decoration: none; font-family: system-ui, sans-serif; font-weight: 700; font-size: 0.9rem; }
+        .laws-cta-sub { font-size: 0.875rem; color:var(--pp-canopy-eyebrow); font-family: var(--font-body); margin-bottom: 20px; }
+        .laws-cta-btn { display: inline-block; background:var(--pp-signal-fill); color:var(--pp-on-dark); padding: 12px 28px; border-radius: 8px; text-decoration: none; font-family: var(--font-body); font-weight: 700; font-size: 0.9rem; }
         .laws-footer { background:var(--pp-canopy); padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 80px; }
         .laws-footer-brand { font-size: 1rem; font-weight: 700; color:var(--pp-on-dark); font-family:var(--font-display), system-ui, sans-serif; }
-        .laws-footer-note { font-size: 0.78rem; color:var(--pp-body); font-family: system-ui, sans-serif; }
+        .laws-footer-note { font-size: 0.78rem; color:var(--pp-body); font-family: var(--font-body); }
         @media (max-width: 768px) { .laws-nav { padding: 14px 20px; } .laws-breadcrumb { padding: 10px 20px; } .laws-inner { padding: 24px 16px 60px; } }
       `}</style>
       <div className="laws-root">

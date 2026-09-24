@@ -87,12 +87,12 @@ export default async function SubmitDealPage() {
         .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
         .logo-text{font-size:1.1rem;font-weight:700;color:var(--pp-ink)}
         .logo-text span{color:var(--pp-signal)}
-        .back{font-size:.82rem;color:var(--pp-muted);text-decoration:none;font-family:system-ui,sans-serif}
+        .back{font-size:.82rem;color:var(--pp-muted);text-decoration:none;font-family:var(--font-body)}
         .wrap{max-width:680px;margin:0 auto;padding:44px 24px 72px}
-        .eyebrow{font-family:system-ui,sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);margin-bottom:12px}
+        .eyebrow{font-family:var(--font-body);font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);margin-bottom:12px}
         h1{font-size:clamp(1.9rem,5vw,2.6rem);font-weight:700;letter-spacing:-.04em;line-height:1.08;margin-bottom:10px}
-        .lede{font-family:system-ui,sans-serif;font-size:1.02rem;color:var(--pp-body);line-height:1.55;max-width:56ch;margin-bottom:8px}
-        .trust{font-family:system-ui,sans-serif;font-size:.85rem;color:var(--pp-muted);max-width:56ch;margin-bottom:28px;line-height:1.5}
+        .lede{font-family:var(--font-body);font-size:1.02rem;color:var(--pp-body);line-height:1.55;max-width:56ch;margin-bottom:8px}
+        .trust{font-family:var(--font-body);font-size:.85rem;color:var(--pp-muted);max-width:56ch;margin-bottom:28px;line-height:1.5}
         .trust strong{color:var(--pp-ink)}
       `}</style>
 

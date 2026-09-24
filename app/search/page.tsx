@@ -187,27 +187,27 @@ export default async function SearchPage({
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-canopy);position:sticky;top:0;z-index:100}
         .logo{display:flex;align-items:center;gap:8px;color:var(--pp-on-dark);text-decoration:none;font-weight:700}
         .logo span{color:var(--pp-canopy-eyebrow)}
-        .back{font-size:.82rem;color:rgba(255,255,255,.55);text-decoration:none;font-family:system-ui,sans-serif}
+        .back{font-size:.82rem;color:rgba(255,255,255,.55);text-decoration:none;font-family:var(--font-body)}
         .back:hover{color:var(--pp-on-dark)}
         .wrap{max-width:800px;margin:0 auto;padding:40px 20px}
         h1{font-size:clamp(1.4rem,3vw,1.9rem);font-weight:700;letter-spacing:-.03em;margin-bottom:6px}
-        .sub{font-size:.88rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-bottom:24px}
+        .sub{font-size:.88rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:24px}
         form{display:flex;gap:8px;background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:10px;padding:6px;margin-bottom:24px}
-        input[type=search]{flex:1;border:none;outline:none;background:transparent;padding:10px 12px;font-family:system-ui,sans-serif;font-size:.95rem;color:var(--pp-ink);min-width:0}
+        input[type=search]{flex:1;border:none;outline:none;background:transparent;padding:10px 12px;font-family:var(--font-body);font-size:.95rem;color:var(--pp-ink);min-width:0}
         input[type=search]::placeholder{color:var(--pp-muted)}
-        .sbtn{background:var(--pp-canopy);color:var(--pp-on-dark);border:none;border-radius:7px;padding:0 18px;font-family:system-ui,sans-serif;font-weight:600;font-size:.9rem;cursor:pointer}
+        .sbtn{background:var(--pp-canopy);color:var(--pp-on-dark);border:none;border-radius:7px;padding:0 18px;font-family:var(--font-body);font-weight:600;font-size:.9rem;cursor:pointer}
         .sbtn:hover{background:var(--pp-canopy)}
         .cards{display:flex;flex-direction:column;gap:10px}
         .card{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:12px;padding:16px;text-decoration:none;color:inherit;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;transition:border-color .15s}
         .card:hover{border-color:var(--pp-signal-fill)}
         .cname{font-size:1rem;font-weight:700;color:var(--pp-ink)}
-        .ccity{font-size:.78rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-top:2px}
-        .cdesc{font-size:.82rem;color:var(--pp-muted);font-family:system-ui,sans-serif;margin-top:6px;line-height:1.5}
+        .ccity{font-size:.78rem;color:var(--pp-muted);font-family:var(--font-body);margin-top:2px}
+        .cdesc{font-size:.82rem;color:var(--pp-muted);font-family:var(--font-body);margin-top:6px;line-height:1.5}
         .cdeals{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-        .cdeal{font-size:.72rem;color:var(--pp-signal);background:var(--pp-best-tint);border:1px solid var(--pp-best-border);border-radius:100px;padding:2px 9px;font-family:system-ui,sans-serif}
+        .cdeal{font-size:.72rem;color:var(--pp-signal);background:var(--pp-best-tint);border:1px solid var(--pp-best-border);border-radius:100px;padding:2px 9px;font-family:var(--font-body)}
         .empty{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:12px;padding:32px 20px;text-align:center}
         .empty-title{font-size:1rem;font-weight:700;margin-bottom:6px}
-        .empty-sub{font-size:.85rem;color:var(--pp-muted);font-family:system-ui,sans-serif}
+        .empty-sub{font-size:.85rem;color:var(--pp-muted);font-family:var(--font-body)}
       `}</style>
 
       <Nav variant="light" />
@@ -253,7 +253,7 @@ export default async function SearchPage({
                       </div>
                     )}
                   </div>
-                  <span style={{ color: "var(--pp-muted)", fontFamily: "system-ui, sans-serif", fontSize: ".85rem" }}>→</span>
+                  <span style={{ color: "var(--pp-muted)", fontFamily: "var(--font-body)", fontSize: ".85rem" }}>→</span>
                 </Link>
               );
             })}

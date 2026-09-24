@@ -168,7 +168,7 @@ export default function SubmitForm({ listings }: Props) {
           borderLeft: "4px solid var(--pp-signal-fill)",
           borderRadius: 12,
           padding: "22px 22px 20px",
-          fontFamily: "system-ui, sans-serif",
+          fontFamily: "var(--font-body)",
         }}
         role="status"
         aria-live="polite"
@@ -522,7 +522,7 @@ export default function SubmitForm({ listings }: Props) {
             />
           </Field>
         </div>
-        <label style={{ display: "flex", alignItems: "center", gap: 10, fontSize: ".95rem", color: "var(--pp-ink)", fontFamily: "system-ui, sans-serif" }}>
+        <label style={{ display: "flex", alignItems: "center", gap: 10, fontSize: ".95rem", color: "var(--pp-ink)", fontFamily: "var(--font-body)" }}>
           <input
             type="checkbox"
             checked={!!form.is_recurring}
@@ -629,7 +629,7 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex",
     flexDirection: "column",
     gap: 20,
-    fontFamily: "system-ui, sans-serif",
+    fontFamily: "var(--font-body)",
   },
   honeypot: {
     position: "absolute",

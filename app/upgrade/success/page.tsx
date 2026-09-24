@@ -38,7 +38,7 @@ export default async function UpgradeSuccessPage({
             You&apos;re Pro.
           </h1>
 
-          <p style={{ fontSize: "1.1rem", color: "var(--pp-muted)", fontFamily: "system-ui, sans-serif", lineHeight: 1.6, marginBottom: 32 }}>
+          <p style={{ fontSize: "1.1rem", color: "var(--pp-muted)", fontFamily: "var(--font-body)", lineHeight: 1.6, marginBottom: 32 }}>
             You&apos;ll get instant email alerts when dispensaries near you post
             a deal worth knowing about.
           </p>
@@ -50,7 +50,7 @@ export default async function UpgradeSuccessPage({
             padding: 24,
             marginBottom: 32,
             textAlign: "left",
-            fontFamily: "system-ui, sans-serif",
+            fontFamily: "var(--font-body)",
           }}>
             <h2 style={{ fontSize: ".8rem", textTransform: "uppercase", letterSpacing: ".12em", color: "var(--pp-signal)", marginBottom: 12, fontWeight: 700 }}>
               What happens next
@@ -66,13 +66,13 @@ export default async function UpgradeSuccessPage({
             display: "inline-block",
             background: "var(--pp-signal-fill)", color: "var(--pp-on-dark)",
             padding: "12px 30px", borderRadius: 10,
-            textDecoration: "none", fontFamily: "system-ui, sans-serif",
+            textDecoration: "none", fontFamily: "var(--font-body)",
             fontWeight: 700, fontSize: "1rem",
           }}>
             Back to home
           </Link>
 
-          <p style={{ marginTop: 28, fontSize: ".75rem", color: "var(--pp-muted)", fontFamily: "system-ui, sans-serif" }}>
+          <p style={{ marginTop: 28, fontSize: ".75rem", color: "var(--pp-muted)", fontFamily: "var(--font-body)" }}>
             Questions? Email matthew@jacarandapeoria.com
           </p>
         </div>
