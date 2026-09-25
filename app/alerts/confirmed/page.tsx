@@ -11,7 +11,13 @@ export const metadata = {
   description: "You're signed up for Illinois dispensary deal alerts.",
 };
 
-export default function AlertsConfirmedPage() {
+export default async function AlertsConfirmedPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ watch?: string }>;
+}) {
+  const sp = (await searchParams) || {};
+  const watch = sp.watch === "store" || sp.watch === "city" ? sp.watch : null;
   return (
     <div style={{ fontFamily: "var(--font-body)", minHeight: "100vh", color: "var(--pp-ink)", display: "flex", flexDirection: "column" }}>
       <Nav variant="light" />
@@ -34,8 +40,10 @@ export default function AlertsConfirmedPage() {
           </h1>
 
           <p style={{ fontSize: "1.05rem", color: "var(--pp-body)", fontFamily: "var(--font-body)", lineHeight: 1.6, marginBottom: 32 }}>
-            We&apos;ll email you when dispensaries near you post a deal worth knowing about.
-            No spam, no daily blast — just the stuff you&apos;d want to know.
+            {watch
+              ? <>Confirmed. We&apos;ll send one short email on mornings when there&apos;s a new deal {watch === "store" ? "at that store" : "in that city"}. Quiet days, no email. Every email has a one-tap way out.</>
+              : <>We&apos;ll email you when dispensaries near you post a deal worth knowing about.
+            No spam, no daily blast — just the stuff you&apos;d want to know.</>}
           </p>
 
           <div style={{
