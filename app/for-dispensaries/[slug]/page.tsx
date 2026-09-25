@@ -46,7 +46,7 @@ export default async function StoreReport({ params }: { params: Promise<{ slug: 
       crumbs={[{ href: "/for-dispensaries", label: "For dispensaries" }]}
       eyebrow={`Store report · ${store.city}`}
       title={store.name}
-      lede={<>What PuffPrice shoppers see for your store, from our daily checks of your own site. <Link href={`/dispensary/${slug}`}>See your public page →</Link></>}
+      lede={<>What PuffPrice shoppers see for your store, from our daily checks of your own site. <Link href={`/dispensary/${slug}`}>See your public page →</Link> · <Link href={`/for-dispensaries/${slug}/card`}>Print counter card →</Link></>}
     >
       <div className="gp-grid" style={{ marginTop: 22 }}>
         <div className="gp-card"><span>Deals live now</span><span className="gp-big">{live.length}</span><span>{cityRow ? `${store.city} total: ${cityRow.deals_live} across ${cityRow.stores_with_deals} stores` : ""}</span></div>
@@ -64,6 +64,10 @@ export default async function StoreReport({ params }: { params: Promise<{ slug: 
       ) : (
         <p className="gp-p">None right now. If you&apos;re running deals, they may be inside a menu we can&apos;t read yet — send us the link and we&apos;ll add it.</p>
       )}
+
+      <h2 className="gp-h2">Counter card</h2>
+      <p className="gp-p">A free 4×6 card for your register: &ldquo;Compare today&apos;s deals in {store.city}&rdquo; with a code that opens your PuffPrice page. Prints two to a letter sheet.</p>
+      <p className="gp-p"><Link href={`/for-dispensaries/${slug}/card`} style={{ fontWeight: 700, color: "var(--pp-signal-ink)" }}>Print counter card →</Link></p>
 
       <h2 className="gp-h2">Ways to buy we confirmed</h2>
       {mine.length ? (

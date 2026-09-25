@@ -949,6 +949,9 @@ html[data-daypart="night"] .bg-green-600, html[data-daypart="night"] .bg-green-7
   --pp-note-bg: #FBEEDF;  --pp-note-fg: #7A4520;  --pp-note-edge: #D4845A;
   --pp-stop-bg: #F8E4DC;  --pp-stop-fg: #8A2E1B;  --pp-stop-edge: #C24A1E;
   --pp-border-2: #E3D6C7;
+  /* Printed pieces (counter cards): always ink on white, day or night,
+     so a card printed at 9 p.m. still comes out as paper. */
+  --pp-print-ink: #14231A;  --pp-print-paper: #FFFFFF;  --pp-print-muted: #5F5A50;  --pp-print-rule: #B9B2A6;
 }
 html[data-daypart="night"] {
   --pp-haze: radial-gradient(120% 160% at 0% 0%, rgba(168,230,191,.10), rgba(168,230,191,0) 55%), radial-gradient(90% 120% at 100% 100%, rgba(238,243,176,.06), rgba(238,243,176,0) 60%), #12211A;
