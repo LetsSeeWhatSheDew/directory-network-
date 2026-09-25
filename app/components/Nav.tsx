@@ -22,6 +22,7 @@ type Props = {
 
 const PRIMARY_LINKS = [
   { href: "/ways-to-buy", label: "Ways to buy" },
+  { href: "/guides", label: "Guides" },
   { href: "/cannabis/illinois/open-now", label: "Open now" },
   { href: "/dispensaries", label: "Dispensaries" },
   { href: "/map", label: "Map" },

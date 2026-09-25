@@ -3,6 +3,7 @@ import { brand } from "../lib/brand";
 import { getAllBrands } from "../lib/brands";
 import { isInCentralIL } from "../lib/visibility";
 import { CENTRAL_IL_PUBLIC_CITIES } from "../lib/constants/regions";
+import { GUIDES } from "../lib/guides";
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -110,6 +111,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${brand.url}/about/index`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
   ];
 
+  // /guides hub + answer pages
+  const guideUrls: MetadataRoute.Sitemap = [
+    { url: `${brand.url}/guides`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.8 },
+    ...GUIDES.map((g) => ({
+      url: `${brand.url}/guides/${g.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "daily" as const,
+      priority: 0.8,
+    })),
+  ];
+
   // Deal engine category pages
   const dealUrls: MetadataRoute.Sitemap = DEAL_CATEGORIES.map((c) => ({
     url: `${brand.url}/deals/${c}`,
@@ -183,6 +195,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   void dealDetailUrls; // kept for reference; not emitted (see note in the list below)
   return [
     ...base,
+    ...guideUrls,
     ...dealUrls,
     ...staticPages,
     ...dispensaryProfileUrls,
