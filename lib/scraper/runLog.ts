@@ -20,6 +20,10 @@ export type DispensaryResult = {
 };
 
 
+// Every scraper_runs call is bounded: a stalled request must never be the
+// reason a run row stays 'running' forever.
+const RUNLOG_TIMEOUT_MS = 15000;
+
 export async function insertScraperRun(
   supabaseUrl: string,
   key: string,
@@ -39,6 +43,7 @@ export async function insertScraperRun(
         trigger,
         dispensary_results: [],
       }),
+      signal: AbortSignal.timeout(RUNLOG_TIMEOUT_MS),
     });
     if (!res.ok) {
       console.error(`scraper_runs insert failed: ${res.status} ${await res.text()}`);
@@ -68,6 +73,7 @@ export async function patchScraperRun(
         Prefer: "return=minimal",
       },
       body: JSON.stringify(body),
+      signal: AbortSignal.timeout(RUNLOG_TIMEOUT_MS),
     });
     if (!res.ok) {
       console.error(`scraper_runs update failed: ${res.status} ${await res.text()}`);
@@ -164,4 +170,72 @@ export async function finishScraperRun(
     total_deals_deactivated: totals.deactivated,
     error_summary: errorSummary ? errorSummary.slice(0, 2000) : null,
   });
+}
+
+/**
+ * Close out a run that could not finish normally (hard deadline, signal,
+ * crash). scraper_runs.status only allows running|success|partial|failed:
+ * 'partial' when some stores completed, otherwise 'failed'.
+ */
+export async function abortScraperRun(
+  supabaseUrl: string,
+  key: string,
+  runId: string,
+  startMs: number,
+  reason: string,
+  partialSummary?: ScraperSummary | null
+): Promise<void> {
+  const results = partialSummary ? buildDispensaryResults(partialSummary) : [];
+  const anyDone = results.some((r) => r.status === "success");
+  await patchScraperRun(supabaseUrl, key, runId, {
+    status: anyDone ? "partial" : "failed",
+    finished_at: new Date().toISOString(),
+    duration_ms: Date.now() - startMs,
+    dispensary_results: results,
+    error_summary: reason.slice(0, 2000),
+  });
+}
+
+/**
+ * Mark 'running' rows that have been open longer than maxAgeMs as failed.
+ * Every scraper budget is minutes, so a row still 'running' after an hour
+ * belongs to a process that died or hung. Only rows with the given trigger
+ * are touched (the rendered scrape logs as 'manual').
+ */
+export async function markAbandonedRuns(
+  supabaseUrl: string,
+  key: string,
+  trigger: Trigger,
+  maxAgeMs = 60 * 60 * 1000
+): Promise<number> {
+  const cutoff = new Date(Date.now() - maxAgeMs).toISOString();
+  try {
+    const res = await fetch(
+      `${supabaseUrl}/rest/v1/scraper_runs?status=eq.running&trigger=eq.${trigger}&finished_at=is.null&started_at=lt.${encodeURIComponent(cutoff)}`,
+      {
+        method: "PATCH",
+        headers: {
+          apikey: key,
+          Authorization: `Bearer ${key}`,
+          "Content-Type": "application/json",
+          Prefer: "return=representation",
+        },
+        body: JSON.stringify({
+          status: "failed",
+          finished_at: new Date().toISOString(),
+          error_summary: "abandoned — process never finished",
+        }),
+        signal: AbortSignal.timeout(RUNLOG_TIMEOUT_MS),
+      }
+    );
+    if (!res.ok) {
+      console.error(`scraper_runs abandon sweep failed: ${res.status} ${await res.text()}`);
+      return 0;
+    }
+    const rows = (await res.json()) as unknown[];
+    return rows.length;
+  } catch (err) {
+    console.error(`scraper_runs abandon sweep error: ${(err as Error).message}`);
+    return 0;
+  }
 }

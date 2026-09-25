@@ -54,6 +54,9 @@ const USER_AGENT =
 
 const REQUEST_DELAY_MS = 2000;
 const REQUEST_TIMEOUT_MS = 15000;
+// Every Supabase REST call is bounded so a stalled connection can never hang
+// a run (the rendered scrape once sat in status='running' for 11+ hours).
+const SUPABASE_TIMEOUT_MS = 20000;
 
 const DEAL_PATH_CANDIDATES = [
   "/",
@@ -85,7 +88,8 @@ const DISCOUNT_PATTERNS: Array<{
     }),
   },
   {
-    pattern: /(\d{1,2})\s?%[^.\n]{0,20}?off[^.\n]{0,30}?(first[-\s]?time|first\s+visit)/gi,
+    // "42.0% Off First Purchase!" counts too.
+    pattern: /(\d{1,2})(?:\.0+)?\s?%[^.\n]{0,20}?off[^.\n]{0,30}?(first[-\s]?time|first\s+(?:visit|purchase|order))/gi,
     label: (m) => ({
       title: `First-time ${m[1]}% off`,
       discount_value: Number(m[1]),
@@ -178,6 +182,15 @@ const DISCOUNT_PATTERNS: Array<{
   },
 ];
 
+// Audience discounts written number-first: "10% off Veterans", "10% Off – Seniors".
+const AUDIENCE_WORDS = "veterans?|military|seniors?";
+const AUDIENCE_NUMBER_FIRST = /(\d{1,2})\s?%\s*off\s*[:–—-]?\s*(veterans?|military|seniors?)\b/gi;
+// The loose group-first first-time/veteran/senior patterns above; skipped when the page
+// is laid out number-first (see extractDealsFromHtml).
+const AUDIENCE_GROUP_FIRST_SOURCES = new Set(
+  DISCOUNT_PATTERNS.filter(({ pattern }) => /^\((?:veteran|senior|first)/.test(pattern.source)).map(({ pattern }) => pattern.source)
+);
+
 export type Listing = {
   id: string;
   slug: string;
@@ -243,17 +256,39 @@ function sleep(ms: number) {
   return new Promise((res) => setTimeout(res, ms));
 }
 
-function stripTags(html: string): string {
+// Like stripTags, but block-level boundaries become line breaks. The text
+// patterns never match across a line ("[^.\n]"), so one card's or list
+// item's number can no longer be glued to the next item's label (a flattened
+// page is how "THIRSTY THURSDAYS  Shop Now  SECRET MENU 30% OFF" became
+// "Thirsty Thursday — 30% off").
+function stripTagsKeepLines(html: string): string {
   return html
     .replace(/<script[\s\S]*?<\/script>/gi, " ")
     .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/?(?:p|div|li|ul|ol|h[1-6]|tr|table|section|article|header|footer|nav|aside|main|blockquote|dt|dd|figure|figcaption)\b[^>]*>/gi, "\n")
     .replace(/<[^>]+>/g, " ")
     .replace(/&nbsp;/g, " ")
     .replace(/&amp;/g, "&")
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
-    .replace(/\s+/g, " ")
-    .trim();
+    .replace(/[ \t\f\r\v]+/g, " ")
+    .replace(/ ?\n[\s]*/g, "\n")
+    .trim()
+    .split("\n")
+    // Card layouts put the label and the value in separate blocks
+    // ("Veterans" / "30% Off Every Day!", "Senior Discount (Age 62+):" /
+    // "10% Off…"). Re-join a short label line that states no offer of its
+    // own (no % or $) with the value line that follows it — once.
+    .reduce<string[]>((acc, line) => {
+      const prev = acc[acc.length - 1];
+      if (prev !== undefined && /^[$\d]/.test(line) && prev.length <= 60 && !/[%$]/.test(prev) && !prev.endsWith("\u0000")) {
+        acc[acc.length - 1] = `${prev} ${line}\u0000`;
+      } else acc.push(line);
+      return acc;
+    }, [])
+    .map((l) => l.replace(/\u0000$/, ""))
+    .join("\n");
 }
 
 function extractJsonLdOffers(html: string): Array<{ title: string; value: number | null }> {
@@ -352,14 +387,52 @@ export function extractDealsFromHtml(html: string, sourceUrl: string, listingSlu
   }
 
   const meta = extractMetaDescription(html);
-  const text = stripTags(html);
+  const text = stripTagsKeepLines(html);
   const haystacks = [meta ? meta : "", text].filter(Boolean);
 
   for (const hay of haystacks) {
+    // Audience discounts can be written group-first ("Veterans: 20% off")
+    // or number-first ("10% off Veterans discount", "10% Off – Seniors").
+    // When several sit on one line, the loose group-first patterns pair each
+    // group with the NEXT item's number ("Senior discount (55+) (not
+    // stackable) 30% off Medical…" → "Senior 30% off" — false). Decide the
+    // layout per line from tight, adjacent matches; on a number-first line
+    // use only number-first matches.
+    const numberFirstLines = new Set<number>();
+    const lineStarts: number[] = [0];
+    for (let i = 0; i < hay.length; i++) if (hay[i] === "\n") lineStarts.push(i + 1);
+    const lineOf = (idx: number) => {
+      let lo = 0, hi = lineStarts.length - 1;
+      while (lo < hi) {
+        const mid = (lo + hi + 1) >> 1;
+        if (lineStarts[mid] <= idx) lo = mid; else hi = mid - 1;
+      }
+      return lo;
+    };
+    const tightGroupFirstRe = new RegExp(`\\b(?:${AUDIENCE_WORDS})\\b[ \\t]*(?:discount)?[ \\t]*[:–—-]?[ \\t]*\\d{1,2}\\s?%[ \\t]*off`, "gi");
+    const gfCount = new Map<number, number>();
+    for (const m of hay.matchAll(tightGroupFirstRe)) gfCount.set(lineOf(m.index!), (gfCount.get(lineOf(m.index!)) || 0) + 1);
+    const nfByLine = new Map<number, RegExpMatchArray[]>();
+    for (const m of hay.matchAll(AUDIENCE_NUMBER_FIRST)) {
+      const ln = lineOf(m.index!);
+      nfByLine.set(ln, [...(nfByLine.get(ln) || []), m]);
+    }
+    for (const [ln, ms] of nfByLine) {
+      if (ms.length <= (gfCount.get(ln) || 0)) continue;
+      numberFirstLines.add(ln);
+      for (const m of ms) {
+        const group = m[2].toLowerCase().startsWith("senior")
+          ? "Senior"
+          : `${m[2][0].toUpperCase()}${m[2].slice(1).toLowerCase()}`;
+        push({ title: `${group} ${m[1]}% off`, discount_value: Number(m[1]), discount_unit: "percent" });
+      }
+    }
     for (const { pattern, label } of DISCOUNT_PATTERNS) {
+      const audienceGroupFirst = AUDIENCE_GROUP_FIRST_SOURCES.has(pattern.source);
       const re = new RegExp(pattern.source, pattern.flags.replace(/g/, "") + "g");
       let m: RegExpExecArray | null;
       while ((m = re.exec(hay)) !== null) {
+        if (audienceGroupFirst && numberFirstLines.has(lineOf(m.index))) continue;
         // BOGO guard: "Buy one, get one 50% off: Select vape" is a BOGO deal,
         // not a flat 50% off vape deal. Skip any match whose 40-char prefix
         // contains BOGO signals — the dedicated BOGO pattern covers this case.
@@ -446,13 +519,18 @@ export type HtmlFetcher = (url: string) => Promise<string[] | null>;
 async function scrapeListing(
   listing: Listing,
   fetcher?: HtmlFetcher,
-  urlOverrides?: Record<string, string[]>
+  urlOverrides?: Record<string, string[]>,
+  deadlineMs: number = Number.POSITIVE_INFINITY
 ): Promise<{ deals: ScrapedDeal[]; error?: string; skipped?: string }> {
-  if (!listing.website) return { deals: [], skipped: "no_website" };
+  const override = urlOverrides?.[listing.slug];
+  // A store with a known deals page (urlOverrides) is scraped from that page
+  // even if master_listings.website is still blank or stale.
+  const websiteOrOverride = listing.website || override?.[0];
+  if (!websiteOrOverride) return { deals: [], skipped: "no_website" };
 
   let baseUrl: URL;
   try {
-    baseUrl = new URL(listing.website);
+    baseUrl = new URL(websiteOrOverride);
   } catch {
     return { deals: [], skipped: "invalid_url" };
   }
@@ -464,8 +542,22 @@ async function scrapeListing(
   const combined: ScrapedDeal[] = [];
   const seenKeys = new Set<string>();
 
-  const urls = urlOverrides?.[listing.slug] ?? candidateUrls(baseUrl);
+  const urls = override ?? candidateUrls(baseUrl);
+  // An explicit empty override means "this store has no deals page of its
+  // own" (e.g. its website field points at a different store) — never fall
+  // back to guessing.
+  if (urls.length === 0) return { deals: [], skipped: "no_store_deals_page" };
   for (const candidateUrl of urls) {
+    if (Date.now() > deadlineMs) {
+      return { deals: combined, error: combined.length ? undefined : "store_time_budget_exceeded" };
+    }
+    let candidateHost: string;
+    try {
+      candidateHost = new URL(candidateUrl).host;
+    } catch {
+      continue;
+    }
+    if (AGGREGATOR_HOSTS.has(candidateHost)) continue;
     const path = new URL(candidateUrl).pathname;
     const allowed = await isAllowedByRobots(candidateUrl);
     if (!allowed) continue;
@@ -530,11 +622,20 @@ export interface RunConfig {
   fetcher?: HtmlFetcher;
   onlySlugs?: string[];
   urlOverrides?: Record<string, string[]>;
+  // Hang protection (rendered runs). A store that takes longer than
+  // perListingTimeoutMs is abandoned with a fetch_error; once deadlineAt
+  // (epoch ms) passes, no further stores are started and the rest are
+  // reported as "run_deadline_reached" so the run finishes as 'partial'.
+  perListingTimeoutMs?: number;
+  deadlineAt?: number;
+  // Called after each store so a caller can checkpoint progress.
+  onListingDone?: (summary: ScraperSummary) => void;
 }
 
 async function supaGet<T>(supabaseUrl: string, key: string, path: string): Promise<T> {
   const res = await fetch(`${supabaseUrl}/rest/v1${path}`, {
     headers: { apikey: key, Authorization: `Bearer ${key}` },
+    signal: AbortSignal.timeout(SUPABASE_TIMEOUT_MS),
   });
   if (!res.ok) throw new Error(`supaGet failed ${res.status}: ${await res.text()}`);
   return res.json();
@@ -550,6 +651,7 @@ async function supaPatch(supabaseUrl: string, key: string, path: string, body: u
       Prefer: "return=minimal",
     },
     body: JSON.stringify(body),
+    signal: AbortSignal.timeout(SUPABASE_TIMEOUT_MS),
   });
   if (!res.ok) throw new Error(`supaPatch failed ${res.status}: ${await res.text()}`);
 }
@@ -564,6 +666,7 @@ async function supaInsert(supabaseUrl: string, key: string, path: string, body: 
       Prefer: "return=minimal",
     },
     body: JSON.stringify(body),
+    signal: AbortSignal.timeout(SUPABASE_TIMEOUT_MS),
   });
   if (!res.ok) throw new Error(`supaInsert failed ${res.status}: ${await res.text()}`);
 }
@@ -598,6 +701,7 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
   const cilListings = allListings
     .filter((l) => l.city && CENTRAL_IL_CITIES.has(l.city.toLowerCase()))
     .filter((l) => {
+      if (!l.website && cfg.urlOverrides?.[l.slug]?.length) return true;
       if (!l.website) {
         summary.listings_skipped_no_website += 1;
         return false;
@@ -628,9 +732,26 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
 
   const allScraped: ScrapedDeal[] = [];
   for (const l of cilListings) {
+    if (cfg.deadlineAt && Date.now() > cfg.deadlineAt) {
+      summary.fetch_errors.push({ slug: l.slug, error: "run_deadline_reached" });
+      continue;
+    }
     summary.listings_processed += 1;
     try {
-      const r = await scrapeListing(l, cfg.fetcher, cfg.urlOverrides);
+      const budget = cfg.perListingTimeoutMs;
+      const storeDeadline = budget ? Date.now() + budget : Number.POSITIVE_INFINITY;
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      const r = budget
+        ? await Promise.race([
+            scrapeListing(l, cfg.fetcher, cfg.urlOverrides, storeDeadline),
+            new Promise<{ deals: ScrapedDeal[]; error?: string; skipped?: string }>((resolve) => {
+              timer = setTimeout(
+                () => resolve({ deals: [], error: `timeout: store exceeded ${Math.round(budget / 1000)}s budget` }),
+                budget
+              );
+            }),
+          ]).finally(() => clearTimeout(timer))
+        : await scrapeListing(l, cfg.fetcher, cfg.urlOverrides);
       if (r.skipped) {
         summary.fetch_errors.push({ slug: l.slug, error: `skipped:${r.skipped}` });
         continue;
@@ -651,6 +772,7 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
     } catch (err) {
       summary.fetch_errors.push({ slug: l.slug, error: String((err as Error).message) });
     }
+    cfg.onListingDone?.(summary);
   }
 
   const upsertPlan: Array<{ op: "insert" | "update"; scraped: ScrapedDeal; existingId?: string }> = [];
