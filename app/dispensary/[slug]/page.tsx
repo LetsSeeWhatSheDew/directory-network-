@@ -27,6 +27,7 @@ import { brand } from "../../../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
 import { saveLabel, cleanDealTitle } from "../../../lib/exhale";
 import OtdLine from "../../components/OtdLine";
+import WatchControl from "../../components/WatchControl";
 import { nowInCT, isOpen, formatTime as formatHourTime } from "../../../lib/hours";
 import { visitDispensaryHref } from "../../../lib/links";
 import { cityFromSlug } from "../../../lib/cityNormalize";
@@ -538,10 +539,7 @@ export default async function DispensaryProfilePage({
             <div className="no-deals">
               <div className="no-deals-t">No active deals right now</div>
               <div className="no-deals-s">
-                We check daily. Get an alert when a new deal drops here →{" "}
-                <Link href="/alerts" style={{ color: "var(--pp-signal)", fontWeight: 700, textDecoration: "none" }}>
-                  Get alerts
-                </Link>
+                We check daily. Watch this store and we&apos;ll email you when a new deal posts.
               </div>
             </div>
           ) : (
@@ -623,6 +621,7 @@ export default async function DispensaryProfilePage({
               );
             })
           )}
+          <WatchControl kind="store" slug={slug} storeName={name} />
         </section>
 
         {/* Hours */}

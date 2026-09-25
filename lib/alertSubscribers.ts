@@ -7,6 +7,10 @@ import { createHmac } from "crypto";
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
 
+// Watch rows (lib/dealWatch.ts) share this table but are their own
+// subscriptions; the weekly-report row must never match or merge with them.
+const NOT_WATCH = `or=${encodeURIComponent("(alert_type.is.null,alert_type.not.in.(city_watch,store_watch))")}`;
+
 function svc() {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
   if (!key) return null;
@@ -37,7 +41,7 @@ export async function upsertAlert(row: AlertRow): Promise<boolean> {
     return r.ok;
   }
   const found = await fetch(
-    `${SUPABASE_URL}/rest/v1/deal_alerts?select=id&email=ilike.${encodeURIComponent(email)}&limit=1`,
+    `${SUPABASE_URL}/rest/v1/deal_alerts?select=id&email=ilike.${encodeURIComponent(email)}&${NOT_WATCH}&limit=1`,
     { headers: H, cache: "no-store" }
   );
   const rows: Array<{ id: string }> = found.ok ? await found.json() : [];
@@ -59,7 +63,7 @@ export async function listWeeklySubscribers(): Promise<Array<{ email: string; ci
   const H = svc();
   if (!H) return [];
   const r = await fetch(
-    `${SUPABASE_URL}/rest/v1/deal_alerts?select=email,city&is_active=eq.true&limit=5000`,
+    `${SUPABASE_URL}/rest/v1/deal_alerts?select=email,city&is_active=eq.true&${NOT_WATCH}&limit=5000`,
     { headers: H, cache: "no-store" }
   );
   if (!r.ok) return [];

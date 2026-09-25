@@ -7,6 +7,7 @@
 import Link from "next/link";
 import { saveLabel, isConditional, cleanDealTitle } from "@/lib/exhale";
 import OtdLine from "../../components/OtdLine";
+import WatchControl from "../../components/WatchControl";
 import { priceChip, cityTaxRates } from "@/lib/otd";
 import { getFeatureRows, featuresBySlug } from "@/lib/waysToBuy";
 import StoreAvatar from "@/app/components/StoreAvatar";
@@ -694,6 +695,7 @@ export default async function CityPage({
             </Link>
           </div>
         )}
+        <WatchControl kind="city" city={city} />
 
         {stores.length > 0 && (
           <>

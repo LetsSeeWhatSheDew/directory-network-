@@ -2,7 +2,9 @@
 // store, when we last saw a deal on its own site, how we read it, and what's
 // live now. The banner tells the truth about freshness: if the morning check
 // didn't run, this page says so. Data: master_listings, the live deals view,
-// and deal_observations (the daily log). No invented timestamps.
+// deal_observations (the daily log) and scraper_runs (every check, read
+// server-side with the service key; the section hides if that key is
+// missing). No invented timestamps, no raw error text.
 import type { Metadata } from "next";
 import Link from "next/link";
 import GuideShell from "../components/GuideShell";
@@ -10,6 +12,17 @@ import StoreAvatar from "../components/StoreAvatar";
 import { brand } from "../../lib/brand";
 import { storeImageUrl } from "../../lib/storeImage";
 import { getRegionStores } from "../../lib/waysToBuy";
+import {
+  getScraperRuns,
+  checkerName,
+  runStatusWords,
+  publicPhrase,
+  durationWords,
+  storeOk,
+  lastGoodCheckBySlug,
+  latestGoodRun,
+  type ScraperRun,
+} from "../../lib/scraperRuns";
 
 export const revalidate = 600;
 
@@ -38,6 +51,9 @@ async function j<T>(path: string): Promise<T | null> {
 const fmt = (iso: string) =>
   new Intl.DateTimeFormat("en-US", { timeZone: "America/Chicago", weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }).format(new Date(iso));
 
+const hoursSince = (iso: string) => (Date.now() - new Date(iso).getTime()) / 3600000;
+const withinDays = (iso: string, days: number) => Date.now() - new Date(iso).getTime() <= days * 86400000;
+
 function ago(iso: string): string {
   const h = (Date.now() - new Date(iso).getTime()) / 3600000;
   if (h < 1) return "under an hour ago";
@@ -47,12 +63,13 @@ function ago(iso: string): string {
 }
 
 export default async function StatusPage() {
-  const [stores, live, obs] = await Promise.all([
+  const [stores, live, obs, runs] = await Promise.all([
     getRegionStores(),
     j<{ slug: string | null; listing_slug: string | null; source: string | null; verified_at: string | null }[]>(
       "active_deals_with_listings?select=slug,listing_slug,source,verified_at&limit=1000"
     ),
     j<{ listing_slug: string; observed_at: string }[]>("deal_observations?select=listing_slug,observed_at&project_tag=eq.green&order=observed_at.desc&limit=2000"),
+    getScraperRuns(30),
   ]);
 
   const lastSeen = new Map<string, string>();
@@ -68,9 +85,24 @@ export default async function StatusPage() {
     liveBy.set(k, cur);
   }
 
-  const latest = [...(obs || []).map((o) => o.observed_at), ...(live || []).map((d) => d.verified_at || "")].filter(Boolean).sort().pop() || null;
-  const hours = latest ? (Date.now() - new Date(latest).getTime()) / 3600000 : null;
+  const latestDeal = [...(obs || []).map((o) => o.observed_at), ...(live || []).map((d) => d.verified_at || "")].filter(Boolean).sort().pop() || null;
+  // The check log (scraper_runs) is the better clock: a check that ran and
+  // found nothing new still counts as a check.
+  const goodRun = runs ? latestGoodRun(runs) : null;
+  const lastCheck = goodRun?.finished_at || null;
+  const latest = [latestDeal, lastCheck].filter((x): x is string => !!x).sort((a, b) => +new Date(a) - +new Date(b)).pop() || null;
+  const latestIsCheck = !!lastCheck && latest === lastCheck;
+  const hours = latest ? hoursSince(latest) : null;
   const fresh = hours != null && hours <= 30;
+  // A newer check that stopped partway is worth saying out loud.
+  const newestRun = runs && runs[0] ? runs[0] : null;
+  const newerTrouble =
+    newestRun && goodRun && newestRun.id !== goodRun.id && +new Date(newestRun.started_at) > +new Date(goodRun.started_at) && runStatusWords(newestRun).tone === "stop";
+  const goodChecks = runs ? lastGoodCheckBySlug(runs) : null;
+  const nameBySlug = new Map(stores.map((s) => [s.slug, s.name] as const));
+  const storeLabel = (slug: string) =>
+    nameBySlug.get(slug) || slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  const weekRuns: ScraperRun[] = (runs || []).filter((r) => withinDays(r.started_at, 7));
   const liveCount = (live || []).length;
   const withDeals = stores.filter((s) => liveBy.has(s.slug)).length;
 
@@ -101,6 +133,12 @@ export default async function StatusPage() {
         .st-nums b{display:block;font-family:var(--font-mono);font-weight:500;font-size:1.6rem;color:var(--pp-ink)}
         .st-nums span{font-size:.78rem;color:var(--pp-muted)}
         .st-how{font-size:.78rem;color:var(--pp-muted)}
+        .st-run{align-items:flex-start}
+        .st-rdot{flex:0 0 auto;width:9px;height:9px;margin-top:7px;border-radius:50%;background:var(--pp-mark)}
+        .st-rdot.note{background:var(--pp-note-edge)}
+        .st-rdot.stop{background:var(--pp-stop-edge)}
+        .st-counts{font-family:var(--font-mono);font-size:.78rem;color:var(--pp-body)}
+        .st-miss{font-size:.78rem;color:var(--pp-note-fg)}
       `}</style>
 
       <div className="st-banner" role="status">
@@ -110,9 +148,14 @@ export default async function StatusPage() {
           <span>
             {latest == null
               ? "Try again in a minute. Deals on the site are still the ones we last confirmed."
+              : latestIsCheck
+              ? fresh
+                ? `Last check finished ${ago(latest)} (${fmt(latest)} CT)${goodRun?.dispensary_results?.length ? `, ${goodRun.dispensary_results.length} stores read` : ""}.`
+                : `The last check that finished was ${ago(latest)} (${fmt(latest)} CT). Deals may have changed since; the counter always has the final word.`
               : fresh
               ? `Last check found deals ${ago(latest)} (${fmt(latest)} CT).`
               : `The last check that found deals was ${ago(latest)} (${fmt(latest)} CT). Deals may have changed since; the counter always has the final word.`}
+            {newerTrouble ? " A later check stopped before finishing." : ""}
           </span>
         </div>
       </div>
@@ -132,6 +175,7 @@ export default async function StatusPage() {
               <span className="gp-row-title">{s.name}</span>
               <span className="gp-row-sub">
                 {s.city} · {seen ? `last deal seen ${ago(seen)}` : "no deal seen in our log yet"}
+                {goodChecks ? (goodChecks.get(s.slug) ? ` · last good check ${ago(goodChecks.get(s.slug) as string)}` : " · no good check in 30 days") : null}
               </span>
               <span className="st-how">
                 {l?.rendered ? "Read with a real browser (menu loads with JavaScript)" : l?.site ? "Read from the store's own site" : "Checked daily on the store's own site"}
@@ -143,6 +187,52 @@ export default async function StatusPage() {
           </Link>
         ))}
       </div>
+
+      {runs && (
+        <>
+          <h2 className="gp-h2">Every check, last 7 days</h2>
+          <p className="gp-note">
+            Every time a checker ran, including the ones that found nothing new. Times are Central.
+          </p>
+          {weekRuns.length === 0 ? (
+            <p className="gp-p">No checks ran in the last 7 days. That&apos;s on us; deals below are the last ones we confirmed.</p>
+          ) : (
+            <div className="gp-list">
+              {weekRuns.map((r) => {
+                const st = runStatusWords(r);
+                const results = r.dispensary_results || [];
+                const misses = results.filter((x) => x && !storeOk(x));
+                const added = r.total_deals_added || 0;
+                const updated = r.total_deals_updated || 0;
+                const retired = r.total_deals_deactivated || 0;
+                return (
+                  <div key={r.id} className="gp-row st-run">
+                    <span className={`st-rdot${st.tone === "ok" ? "" : ` ${st.tone}`}`} aria-hidden="true" />
+                    <span className="gp-row-main">
+                      <span className="gp-row-title">
+                        {fmt(r.started_at)} · {checkerName(r.trigger)}
+                      </span>
+                      <span className="gp-row-sub">
+                        {st.text}
+                        {results.length > 0 ? ` · ${results.length} ${results.length === 1 ? "store" : "stores"} checked` : " · no stores read"}
+                        {` · took ${durationWords(r.duration_ms, r)}`}
+                      </span>
+                      <span className="st-counts">
+                        {added} new · {updated} re-confirmed · {retired} retired
+                      </span>
+                      {misses.length > 0 && (
+                        <span className="st-miss">
+                          Didn&apos;t read: {misses.map((m) => `${storeLabel(m.slug)} (${publicPhrase(m.error_message || m.status)})`).join(", ")}
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </>
+      )}
 
       <h2 className="gp-h2">How the check works</h2>
       <p className="gp-p">
