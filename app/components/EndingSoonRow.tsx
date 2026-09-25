@@ -83,6 +83,11 @@ export default function EndingSoonRow({ deals }: { deals: EndingSoonDeal[] }) {
           <Link
             key={d.id}
             href={href}
+            data-track="deal_tap"
+            data-track-slug={d.listing_slug}
+            data-track-deal={d.id}
+            data-track-city={d.city}
+            data-track-from="ending_soon"
             style={{
               flexShrink: 0,
               background: "var(--pp-surface)",

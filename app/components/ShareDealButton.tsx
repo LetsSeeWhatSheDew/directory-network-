@@ -6,6 +6,7 @@
 // still works without triggering the outer navigation.
 
 import { useState } from "react";
+import { track } from "../../lib/track";
 
 type Variant = "icon" | "inline" | "block";
 
@@ -36,6 +37,7 @@ export default function ShareDealButton({
   async function onClick(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
+    track("share_tap", { dealId });
     try {
       const nav = typeof navigator !== "undefined" ? (navigator as any) : null;
       if (nav && typeof nav.share === "function") {

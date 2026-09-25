@@ -6,6 +6,8 @@ import GuideShell from "../../components/GuideShell";
 import { brand } from "../../../lib/brand";
 import { getRegionStores, getFeatureRows, FEATURE_LABEL, type Feature } from "../../../lib/waysToBuy";
 import { getDealIndex } from "../../../lib/dealIndex";
+import { getStoreTraffic } from "../../../lib/traffic";
+import { COUNTING_SINCE, COUNTING_SINCE_LABEL } from "../../../lib/analyticsDb";
 
 export const revalidate = 3600;
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -24,12 +26,17 @@ export default async function StoreReport({ params }: { params: Promise<{ slug: 
   if (!store) notFound();
   const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
   const since = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10);
-  const [obsRes, liveRes, features, index] = await Promise.all([
+  const [obsRes, liveRes, features, index, traffic] = await Promise.all([
     fetch(`${SUPABASE_URL}/rest/v1/deal_observations?select=deal_id,event,observed_day,title,discount_pct&project_tag=eq.green&listing_slug=eq.${slug}&observed_day=gte.${since}&limit=2000`, { headers: { apikey: anon, Authorization: `Bearer ${anon}` }, next: { revalidate: 3600 } }),
     fetch(`${SUPABASE_URL}/rest/v1/deals?select=id,title,discount_value,discount_unit,verified_at&project_tag=eq.green&is_active=eq.true&listing_slug=eq.${slug}`, { headers: { apikey: anon, Authorization: `Bearer ${anon}` }, next: { revalidate: 3600 } }),
     getFeatureRows(),
     getDealIndex(),
+    getStoreTraffic(slug, 30),
   ]);
+  const trafficTotal = traffic
+    ? traffic.views + traffic.dealViews + traffic.directions + traffic.calls + traffic.websiteOrOrder + traffic.qrScans
+    : 0;
+  const windowDays = Math.max(1, Math.min(30, Math.ceil((Date.now() - new Date(`${COUNTING_SINCE}T00:00:00-05:00`).getTime()) / 86400000)));
   const obs: Obs[] = obsRes.ok ? await obsRes.json() : [];
   const live: Array<{ id: string; title: string; discount_value: number | null; discount_unit: string | null; verified_at: string | null }> = liveRes.ok ? await liveRes.json() : [];
   const distinct = new Map<string, Obs>();
@@ -53,6 +60,28 @@ export default async function StoreReport({ params }: { params: Promise<{ slug: 
         <div className="gp-card"><span>Your avg. % off</span><span className="gp-big">{myAvg != null ? `${myAvg}%` : "—"}</span><span>{cityRow?.avg_discount_pct != null ? `${store.city} average: ${cityRow.avg_discount_pct}%` : ""}</span></div>
         <div className="gp-card"><span>Deals seen, last 30 days</span><span className="gp-big">{distinct.size}</span><span>from our daily log</span></div>
       </div>
+
+      <h2 className="gp-h2">Last 30 days on PuffPrice</h2>
+      {traffic && trafficTotal > 0 ? (
+        <>
+          <div className="gp-grid">
+            <div className="gp-card"><span>Store page views</span><span className="gp-big">{traffic.views.toLocaleString("en-US")}</span><span>{traffic.dealViews > 0 ? `plus ${traffic.dealViews.toLocaleString("en-US")} views of your deal pages` : ""}</span></div>
+            <div className="gp-card"><span>Unique visitors</span><span className="gp-big">{traffic.uniqueVisitors.toLocaleString("en-US")}</span><span>browsers that opened your page or a deal</span></div>
+            <div className="gp-card"><span>Directions taps</span><span className="gp-big">{traffic.directions.toLocaleString("en-US")}</span><span /></div>
+            <div className="gp-card"><span>Call taps</span><span className="gp-big">{traffic.calls.toLocaleString("en-US")}</span><span /></div>
+            <div className="gp-card"><span>Website and order taps</span><span className="gp-big">{traffic.websiteOrOrder.toLocaleString("en-US")}</span><span /></div>
+            <div className="gp-card"><span>Counter card scans</span><span className="gp-big">{traffic.qrScans.toLocaleString("en-US")}</span><span /></div>
+          </div>
+          <p className="gp-note">
+            {windowDays < 30 ? `We started counting on ${COUNTING_SINCE_LABEL}, so this covers ${windowDays} day${windowDays === 1 ? "" : "s"}, not 30. ` : ""}
+            Counted on our own server. Bots are filtered out, and shoppers with Do Not Track on aren&apos;t counted. Updated hourly.
+          </p>
+        </>
+      ) : (
+        <p className="gp-p">
+          We started counting on {COUNTING_SINCE_LABEL}. {traffic ? "No visits to your page have been counted yet." : "Numbers aren't available right now."} Page views, Directions taps, calls and counter card scans will show here as shoppers use your page.
+        </p>
+      )}
 
       <h2 className="gp-h2">Live deals we found on your site</h2>
       {live.length ? (

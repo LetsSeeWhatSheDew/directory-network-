@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Instrument_Sans, IBM_Plex_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import UtmCapture from "./components/UtmCapture";
+import TrackListener from "./components/TrackListener";
 import CityPickerHost from "./components/CityPickerHost";
 import ExhaleLayer from "./components/ExhaleLayer";
 import { brand } from "../lib/brand";
@@ -114,6 +115,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href={SUPABASE_ORIGIN} />
         {children}
         <UtmCapture />
+        <TrackListener />
         <CityPickerHost />
         <ExhaleLayer />
         <Script

@@ -22,6 +22,7 @@ import { isInCentralIL } from "../../../lib/visibility";
 import { isDealActiveNow, describeActiveDays } from "../../../lib/dealActiveFilter";
 import { cleanDealTitle, amountOf } from "../../../lib/exhale";
 import { otdFor, usd } from "../../../lib/otd";
+import TrackPage from "../../components/TrackPage";
 
 export const revalidate = 60;
 
@@ -406,6 +407,7 @@ export default async function DealPage({
       `}</style>
 
       <Nav variant="light" />
+      <TrackPage type="deal_view" slug={deal.listing_slug} dealId={id} city={city} />
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(1rem, 4vw, 2rem) 4px", fontSize: 13 }}>
         <Link
           href={city ? `/city/${city.toLowerCase().trim().replace(/\s+/g, "-")}` : "/deals/all"}
@@ -557,6 +559,10 @@ export default async function DealPage({
                 className="cta"
                 target="_blank"
                 rel="noopener noreferrer"
+                data-track={listing?.website ? "website_tap" : "directions_tap"}
+                data-track-slug={deal.listing_slug}
+                data-track-deal={id}
+                data-track-from="deal"
               >
                 {visit.label}
               </a>

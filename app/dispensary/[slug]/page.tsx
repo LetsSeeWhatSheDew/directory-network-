@@ -31,6 +31,7 @@ import { nowInCT, isOpen, formatTime as formatHourTime } from "../../../lib/hour
 import { visitDispensaryHref } from "../../../lib/links";
 import { cityFromSlug } from "../../../lib/cityNormalize";
 import { isInCentralIL } from "../../../lib/visibility";
+import TrackPage from "../../components/TrackPage";
 
 export const revalidate = 300;
 
@@ -410,6 +411,7 @@ export default async function DispensaryProfilePage({
       `}</style>
 
       <Nav variant="light" />
+      <TrackPage type="store_view" slug={slug} city={city} />
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(1rem, 4vw, 2rem) 4px", fontSize: 13 }}>
         <Link
           href={city ? `/city/${city.toLowerCase().trim().replace(/\s+/g, "-")}` : "/deals/all"}
@@ -467,6 +469,9 @@ export default async function DispensaryProfilePage({
               rel="noopener noreferrer"
               className="contact-btn"
               aria-label={`Directions to ${name}`}
+              data-track="directions_tap"
+              data-track-slug={slug}
+              data-track-from="store"
             >
               <span className="ico" aria-hidden="true"><MapPin size={20} strokeWidth={1.75} /></span>
               <span>
@@ -476,7 +481,7 @@ export default async function DispensaryProfilePage({
             </a>
           )}
           {listing.phone && (
-            <a href={`tel:${listing.phone}`} className="contact-btn" aria-label={`Call ${name}`}>
+            <a href={`tel:${listing.phone}`} className="contact-btn" aria-label={`Call ${name}`} data-track="call_tap" data-track-slug={slug} data-track-from="store">
               <span className="ico" aria-hidden="true"><Phone size={20} strokeWidth={1.75} /></span>
               <span>
                 {listing.phone}
@@ -491,6 +496,9 @@ export default async function DispensaryProfilePage({
               rel="noopener noreferrer"
               className="contact-btn"
               aria-label="Open full menu"
+              data-track={listing.menu_url ? "order_tap" : "website_tap"}
+              data-track-slug={slug}
+              data-track-from="store"
             >
               <span className="ico" aria-hidden="true"><MenuIcon size={20} strokeWidth={1.75} /></span>
               <span>
@@ -592,13 +600,17 @@ export default async function DispensaryProfilePage({
                         target="_blank"
                         rel="noopener noreferrer"
                         className="deal-cta"
+                        data-track={listing.website ? "website_tap" : "directions_tap"}
+                        data-track-slug={slug}
+                        data-track-deal={d.id}
+                        data-track-from="store_deal"
                       >
                         {visit.label}
                       </a>
                     );
                   })()}
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
-                    <Link href={`/deal/${d.id}`} className="deal-details">
+                    <Link href={`/deal/${d.id}`} className="deal-details" data-track="deal_tap" data-track-slug={slug} data-track-deal={d.id} data-track-from="store">
                       Deal details →
                     </Link>
                     <ReportIssueLink

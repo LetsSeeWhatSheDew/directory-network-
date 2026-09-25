@@ -12,6 +12,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { MapPin } from "lucide-react";
+import { track } from "../../lib/track";
 import {
   amountOf,
   productOf,
@@ -360,7 +361,7 @@ export default function BreatheHero({ hero, cards, dealCount, storeCount, locati
               return (
                 <div key={id} className={`bh-card ${isOpen ? "on" : ""}`}>
                   <span className="bh-pulse" aria-hidden="true" />
-                  <button type="button" className="bh-card-btn" aria-expanded={isOpen} onClick={() => onCard(id)}>
+                  <button type="button" className="bh-card-btn" aria-expanded={isOpen} onClick={() => { if (!isOpen) track("deal_tap", { slug: d.slug || d.listing_slug, dealId: d.deal_id || d.id, city: d.city, meta: { from: "home" } }); onCard(id); }}>
                     <span>
                       <span className="bh-store">
                         {storeName(d)}
@@ -384,7 +385,7 @@ export default function BreatheHero({ hero, cards, dealCount, storeCount, locati
                         <span className="bh-mask" style={{ display: "block" }}>
                           <span className="bh-acts land-3" style={{ display: "flex" }}>
                             <Link href={storeHref(d)} className="bh-act main">See the deal</Link>
-                            <a href={directionsHref(d)} className="bh-act" target="_blank" rel="noopener noreferrer">Directions</a>
+                            <a href={directionsHref(d)} className="bh-act" target="_blank" rel="noopener noreferrer" data-track="directions_tap" data-track-slug={d.slug || d.listing_slug || undefined} data-track-deal={d.deal_id || d.id || undefined} data-track-city={d.city || undefined} data-track-from="home">Directions</a>
                           </span>
                         </span>
                       </div>

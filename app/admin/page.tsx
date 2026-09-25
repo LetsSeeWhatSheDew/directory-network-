@@ -222,6 +222,12 @@ export default async function AdminDashboard() {
             >
               Reviews →
             </Link>
+            <Link
+              href="/admin/traffic"
+              className="text-[11px] uppercase tracking-widest text-[#8a9490] transition-colors hover:text-[#2E7D32]"
+            >
+              Traffic →
+            </Link>
             <div className="flex items-baseline gap-1.5">
               <span className="text-[#8a9490]">Project</span>
               <span className="font-semibold text-[#2E7D32]">Green</span>

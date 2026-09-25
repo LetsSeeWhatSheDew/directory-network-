@@ -26,7 +26,7 @@ export default function PrivacyPage() {
             Privacy Policy
           </h1>
           <p style={{ color: "var(--pp-muted)", fontFamily: "var(--font-body)", maxWidth: 520, margin: "0 auto", lineHeight: 1.6, fontSize: "1rem" }}>
-            Last updated: April 18, 2026. Short and specific.
+            Last updated: September 25, 2026. Short and specific.
           </p>
         </header>
       </div>
@@ -81,6 +81,9 @@ export default function PrivacyPage() {
           <h2 style={h2}>Cookies and analytics</h2>
           <p>
             We use <strong>Google Analytics 4</strong> to understand which pages and city queries are working. GA4 sets a few first-party cookies and may collect anonymous identifiers, approximate location (country/city level, not precise), and device information. You can opt out by installing the <a href="https://tools.google.com/dlpage/gaoptout" style={link}>Google Analytics opt-out browser add-on</a>.
+          </p>
+          <p>
+            We also keep our own simple counts, so we can tell a dispensary how many people looked at its page. When you open a store or deal page, or tap Directions, Call, Website, Order, Share, or a deal, or run a search, your browser sends us the event type, the store and deal it was for, the city, your search words (for searches only), the website you came from (just its name, like google.com), any campaign tag in the link (such as a counter card QR code), whether you&apos;re on a phone or a computer, and a random ID saved in your browser so we can count unique visitors. That ID isn&apos;t linked to your name, email, account, or anything else. We don&apos;t store your IP address or your full browser details with these counts. If your browser sends Do Not Track or Global Privacy Control, we don&apos;t count you at all, and clearing your site data resets the random ID.
           </p>
           <p>
             We do not use Facebook Pixel, TikTok Pixel, or any third-party advertising or retargeting tags.

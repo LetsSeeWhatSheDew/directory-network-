@@ -647,7 +647,7 @@ export default async function CityPage({
             const name = d.name || dslug;
             const title = cleanDealTitle(d.deal_title || d.title) || "Active deal";
             return (
-              <Link key={d.id} href={`/dispensary/${dslug}?city=${encodeURIComponent(city)}`} className="deal-row">
+              <Link key={d.id} href={`/dispensary/${dslug}?city=${encodeURIComponent(city)}`} className="deal-row" data-track="deal_tap" data-track-slug={dslug} data-track-deal={d.id} data-track-city={city} data-track-from="city">
                 <div className="deal-body">
                   <div className="deal-name">{name}</div>
                   <div className="deal-title">{title}</div>
@@ -746,9 +746,9 @@ export default async function CityPage({
                     <div className="st-actions">
                       <Link href={`/dispensary/${l.slug}`}>Details →</Link>
                       {maps && (
-                        <a href={maps} target="_blank" rel="noopener noreferrer">Directions</a>
+                        <a href={maps} target="_blank" rel="noopener noreferrer" data-track="directions_tap" data-track-slug={l.slug} data-track-city={city} data-track-from="city">Directions</a>
                       )}
-                      {l.phone && <a href={`tel:${l.phone.replace(/[^\d+]/g, "")}`}>{l.phone}</a>}
+                      {l.phone && <a href={`tel:${l.phone.replace(/[^\d+]/g, "")}`} data-track="call_tap" data-track-slug={l.slug} data-track-city={city} data-track-from="city">{l.phone}</a>}
                     </div>
                   </div>
                 );
