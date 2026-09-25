@@ -24,7 +24,7 @@ export const esc = (s: string) =>
   String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 export function alertsFrom(): string {
-  return process.env.ALERTS_FROM || `${brand.name} <alerts@send.puffprice.com>`;
+  return process.env.ALERTS_FROM || `${brand.name} <alerts@puffprice.com>`;
 }
 
 function shell(opts: { eyebrow: string; title: string; lede: string; body: string; footer: string }): string {
