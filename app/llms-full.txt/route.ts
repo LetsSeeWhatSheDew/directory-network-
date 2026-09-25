@@ -4,6 +4,7 @@
 import { brand } from "@/lib/brand";
 import { REGION_CITIES, getRegionStores, getFeatureRows, FEATURE_LABEL } from "@/lib/waysToBuy";
 import { getDealIndex } from "@/lib/dealIndex";
+import { GUIDES } from "@/lib/guides";
 
 export const revalidate = 3600;
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -56,6 +57,17 @@ export async function GET() {
     `- Every dispensary can add medical sales; IDFPR issued the first batch of licenses Sept 10, 2026. ${u}/medical`,
     `- Cannabis delivery is not legal in Illinois; HB2557 (delivery licenses) died in committee in 2026. ${u}/illinois-cannabis-delivery`,
     `- The Illinois Hemp Act takes effect Nov 12, 2026, capping hemp products at 0.4 mg total THC per container (delta-8 etc. leave gas stations). ${u}/illinois-hemp-law`,
+  );
+  lines.push(
+    "",
+    `## Guides (${u}/guides)`,
+    ...GUIDES.map((g) => `- ${g.question} ${u}/guides/${g.slug}`),
+    "",
+    "## Visitors, driving and medical (checked Sep 25, 2026)",
+    "- Non-residents 21+ may possess 30 g flower, 5 g concentrate and 500 mg THC in infused products (410 ILCS 705/10-10, as amended by Public Act 104-0463, effective June 12, 2026).",
+    "- In a vehicle, cannabis must be in a secured, sealed or resealable, odor-proof, child-resistant container that is inaccessible (625 ILCS 5/11-502.15); since June 12, 2026 the inaccessibility requirement does not apply to dispensary-bought cannabis in a sealed, odor-proof, child-resistant container in its original packaging (410 ILCS 705/15-85(e)). Using cannabis in any vehicle is prohibited.",
+    "- THC DUI threshold: 5 ng/mL delta-9-THC in whole blood or 10 ng/mL in other bodily substance within 2 hours of driving (625 ILCS 5/11-501(a)(7), 11-501.2).",
+    "- Medical cannabis: exempt from the Cannabis Purchaser Excise Tax and local cannabis taxes; taxed at the 1% state rate (IL Dept of Revenue). IDPH card fees: $50 / $100 / $125 for 1 / 2 / 3 years.",
   );
   return new Response(lines.join("\n") + "\n", { headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, s-maxage=3600" } });
 }

@@ -752,6 +752,22 @@ export default async function CityPage({
           </>
         )}
 
+        <div className="cp-h"><span>Common questions</span></div>
+        <div className="cp-near" style={{ marginTop: 0 }}>
+          {[
+            ...(["Normal", "Bloomington", "Champaign", "Urbana"].includes(city)
+              ? [{ href: "/guides/where-to-buy-near-isu-and-uiuc", label: city === "Normal" || city === "Bloomington" ? "Near ISU (21+)" : "Near UIUC (21+)" }]
+              : []),
+            { href: "/guides/best-day-for-dispensary-deals", label: "Best day for deals" },
+            { href: "/guides/dispensary-first-time-discounts-central-illinois", label: "First-time & veteran discounts" },
+            { href: "/guides/can-you-use-a-credit-card-at-illinois-dispensaries", label: "Paying: cash or debit?" },
+            { href: "/guides/buying-cannabis-in-illinois-as-an-out-of-state-visitor", label: "Visiting from out of state" },
+            { href: "/guides", label: "All guides" },
+          ].map((g) => (
+            <Link key={g.href} href={g.href}>{g.label}</Link>
+          ))}
+        </div>
+
         {faqs.length > 0 && (
           <>
             <div className="cp-h"><span>{city} questions</span></div>

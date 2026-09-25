@@ -1,5 +1,6 @@
 // /llms.txt — a plain map of PuffPrice for AI assistants and answer engines.
 import { brand } from "@/lib/brand";
+import { GUIDES } from "@/lib/guides";
 
 export const revalidate = 86400;
 
@@ -25,6 +26,10 @@ export function GET() {
 - [Is cannabis delivery legal in Illinois?](${u}/illinois-cannabis-delivery)
 - [Nov 12, 2026 hemp / delta-8 change](${u}/illinois-hemp-law)
 - [Illinois cannabis laws](${u}/cannabis/illinois/laws)
+
+## Guides (plain answers, sourced)
+- [All guides](${u}/guides)
+${GUIDES.map((g) => `- [${g.question}](${u}/guides/${g.slug}): ${g.blurb}`).join("\n")}
 
 ## Cities
 ${["peoria", "east-peoria", "peoria-heights", "pekin", "bloomington", "normal", "champaign", "urbana", "springfield"].map((c) => `- [${c.replace(/-/g, " ")}](${u}/city/${c})`).join("\n")}
