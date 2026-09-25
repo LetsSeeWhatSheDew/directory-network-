@@ -54,6 +54,7 @@ const FOOTER_COLUMNS: { heading: string; links: { href: string; label: string }[
       { href: "/deal-index", label: "Deal Index" },
       { href: "/how-we-rank", label: "How we rank" },
       { href: "/status", label: "Status: is this up to date?" },
+      { href: "/cheapest", label: "Cheapest eighth today" },
       { href: "/out-the-door", label: "Out-the-door prices" },
       { href: "/illinois-cannabis-tax-calculator", label: "Tax calculator" },
       { href: "/guides", label: "Guides: straight answers" },

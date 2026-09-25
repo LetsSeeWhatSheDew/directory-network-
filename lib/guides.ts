@@ -44,6 +44,7 @@ export const EXISTING_GUIDES: { href: string; title: string; blurb: string }[] =
   { href: "/cannabis/illinois/laws", title: "Illinois cannabis laws", blurb: "Age, possession limits, where you can use it, what changed in 2026." },
   { href: "/illinois-cannabis-tax", title: "Illinois cannabis tax explained", blurb: "Why the shelf price isn't the price." },
   { href: "/illinois-cannabis-tax-calculator", title: "Tax calculator", blurb: "Your out-the-door price by city and product." },
+  { href: "/cheapest", title: "Cheapest eighth, cart and gummies today", blurb: "Lowest menu price per store, tax included, from each store's own menu." },
   { href: "/out-the-door", title: "Out-the-door prices", blurb: "Today's deals with tax already added." },
   { href: "/ways-to-buy", title: "Ways to buy", blurb: "Order ahead, curbside, medical, closing times." },
   { href: "/drive-thru", title: "Drive-thru dispensaries", blurb: "Legal since June 2026. Who has one." },

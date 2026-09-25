@@ -15,6 +15,7 @@ export function GET() {
 - [Today's deals, JSON](${u}/api/public/deals): every live deal with store, city, discount and last-verified time
 - [This week's report](${u}/this-week): biggest discounts and new deals, last 7 days
 - [Deal Index](${u}/deal-index): daily deals live, stores discounting and average discount by city
+- [Cheapest eighth, cart and gummies today](${u}/cheapest): lowest out-the-door menu price per store for 3.5g flower, a 1g vape cartridge and 100mg gummies, read twice a day from each store's own online menu (same size, any brand; never an average). Per city: ${u}/cheapest/<city>
 
 ## Ways to buy
 - [Compare every store](${u}/ways-to-buy): drive-thru, medical, order ahead, curbside, closing time

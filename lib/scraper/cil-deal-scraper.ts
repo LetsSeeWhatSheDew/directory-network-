@@ -451,7 +451,7 @@ export function extractDealsFromHtml(html: string, sourceUrl: string, listingSlu
 const robotsCache: Record<string, { disallow: string[]; fetched_at: number }> = {};
 const hostCooldown: Record<string, number> = {};
 
-async function isAllowedByRobots(url: string): Promise<boolean> {
+export async function isAllowedByRobots(url: string): Promise<boolean> {
   const u = new URL(url);
   const host = u.host;
   if (hostCooldown[host] && Date.now() < hostCooldown[host]) return false;

@@ -15,6 +15,16 @@
 //   npx tsx scripts/scrape-rendered-deals.ts            # dry run, prints plan
 //   npx tsx scripts/scrape-rendered-deals.ts --apply    # writes + logs scraper_runs
 //   npx tsx scripts/scrape-rendered-deals.ts --slug=cloud-9
+//   npx tsx scripts/scrape-rendered-deals.ts --menus-only   # skip deals, menu prices only
+//   npx tsx scripts/scrape-rendered-deals.ts --no-menus     # deals only (old behaviour)
+//
+// MENU PRICES (2026-09-25): after the deals pass, the same browser reads
+// product-level shelf prices for an eighth, a 1g cart and 100mg gummies from
+// each store's own online menu (lib/scraper/menuCapture.ts MENU_SOURCES):
+// ONE page load per store plus the data calls that page itself makes when a
+// shopper taps a category. Each store gets STORE_BUDGET_MS; no store starts
+// after MENU_DEADLINE_MS. --apply writes menu_snapshots + menu_items (the
+// menu-baseline pipeline tables); a dry run prints a per-store summary.
 //
 // Dry runs only READ, so they work with the public anon key.
 // Optional env for non-Mac hosts: PW_EXECUTABLE_PATH (Chromium binary instead
@@ -36,6 +46,9 @@ import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { chromium, type Browser, type BrowserContext, type Frame, type Page } from "playwright-core";
 import { runCilScrape, type HtmlFetcher, type ScraperSummary } from "../lib/scraper/cil-deal-scraper";
 import { insertScraperRun, finishScraperRun, abortScraperRun, markAbandonedRuns } from "../lib/scraper/runLog";
+import { isAllowedByRobots } from "../lib/scraper/cil-deal-scraper";
+import { MENU_SOURCES, MENU_NOT_COVERED, captureStoreMenu, persistStoreMenu, otdPrice, type StoreMenuResult } from "../lib/scraper/menuCapture";
+import { REF_UNITS, REF_DEF } from "../lib/menuPrices";
 
 try {
   for (const line of readFileSync(new URL("../.env.local", import.meta.url), "utf8").split("\n")) {
@@ -63,6 +76,9 @@ const PAGE_BUDGET_MS = budget("PAGE_BUDGET_MS", 60_000);
 const STORE_BUDGET_MS = budget("STORE_BUDGET_MS", 90_000);
 const SOFT_DEADLINE_MS = budget("SOFT_DEADLINE_MS", 10 * 60_000);
 const HARD_DEADLINE_MS = budget("HARD_DEADLINE_MS", 12 * 60_000);
+const MENU_DEADLINE_MS = budget("MENU_DEADLINE_MS", 11 * 60_000);
+const MENUS_ONLY = process.argv.includes("--menus-only");
+const NO_MENUS = process.argv.includes("--no-menus");
 const TRIGGER = "manual" as const;
 
 const TRACKER_FRAME = /doubleclick|googletagmanager|google-analytics|facebook|hotjar|mathtag|sitescout|stackadapt|nytrng|challenges\.cloudflare/;
@@ -362,6 +378,87 @@ function makeFetcher(ctx: BrowserContext): HtmlFetcher {
 }
 
 // ---------------------------------------------------------------------------
+// Menu prices: one page per store, bounded, after the deals pass.
+// ---------------------------------------------------------------------------
+
+async function menuPhase(ctx: BrowserContext): Promise<void> {
+  const slugs = Object.keys(MENU_SOURCES).filter((s) => (SLUG ? s.includes(SLUG) : true));
+  if (!slugs.length) return;
+  const H = { apikey: READ_KEY!, Authorization: `Bearer ${READ_KEY}` };
+  const raw: Array<{ slug: string; name: string; city: string; address1: string | null }> = await (
+    await fetch(
+      `${SB}/rest/v1/master_listings?select=slug,name,city,address1&project_tag=eq.green&is_active=eq.true&slug=in.(${slugs.join(",")})`,
+      { headers: H, signal: AbortSignal.timeout(20_000) }
+    )
+  ).json();
+  if (!Array.isArray(raw)) throw new Error(`listings read failed: ${JSON.stringify(raw).slice(0, 160)}`);
+  const bySlug = new Map(raw.map((l) => [l.slug, { slug: l.slug, name: l.name, city: l.city, address: l.address1 }]));
+  console.log(`\nmenu prices: ${slugs.length} stores ${APPLY ? "(APPLY)" : "(dry run)"}`);
+  const results: StoreMenuResult[] = [];
+  for (const slug of slugs) {
+    const listing = bySlug.get(slug);
+    if (!listing) { console.log(`  ? ${slug}: not an active green listing — skipped`); continue; }
+    if (Date.now() - start > MENU_DEADLINE_MS) { console.log(`  ~ ${slug}: menu_deadline_reached — skipped this run`); continue; }
+    let page: Page | null = null;
+    let r: StoreMenuResult;
+    try {
+      page = await withTimeout(ctx.newPage(), ACTION_TIMEOUT_MS, "newPage");
+      page.setDefaultTimeout(ACTION_TIMEOUT_MS);
+      page.setDefaultNavigationTimeout(NAV_TIMEOUT_MS);
+      r = await withTimeout(
+        captureStoreMenu({
+          page, slug, source: MENU_SOURCES[slug], budgetMs: STORE_BUDGET_MS - 5000, navTimeoutMs: NAV_TIMEOUT_MS,
+          passAgeGate, isAllowed: isAllowedByRobots,
+        }),
+        STORE_BUDGET_MS,
+        `menu ${slug}`
+      );
+    } catch (e) {
+      r = { slug, platform: MENU_SOURCES[slug].platform, status: "error", items: [], dropped: [], error: (e as Error).message.slice(0, 160), pageLoads: 1, dataCalls: 0, durationMs: STORE_BUDGET_MS, sourceUrl: MENU_SOURCES[slug].url };
+    } finally {
+      if (page) await withTimeout(page.close(), 5000, "page.close").catch(() => {});
+    }
+    results.push(r);
+    printMenuResult(r, listing.city);
+    if (APPLY && SERVICE_KEY) {
+      try {
+        const w = await persistStoreMenu({ supabaseUrl: SB, serviceKey: SERVICE_KEY }, listing, MENU_SOURCES[slug], r);
+        console.log(`    wrote snapshot ${w.snapshotId} · ${w.inserted} menu_items`);
+      } catch (e) {
+        console.log(`    ! write failed: ${(e as Error).message.slice(0, 200)}`);
+      }
+    }
+  }
+  if (!SLUG) for (const [slug, why] of Object.entries(MENU_NOT_COVERED)) console.log(`  - ${slug}: no menu reader · ${why}`);
+  const ok = results.filter((r) => r.items.length).length;
+  console.log(`menu prices: ${ok}/${results.length} stores with prices · ${results.reduce((a, r) => a + r.items.length, 0)} items kept · ${results.reduce((a, r) => a + r.dropped.length, 0)} dropped`);
+  mkdirSync("scrape-output", { recursive: true });
+  writeFileSync(`scrape-output/menu-prices-${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(results, null, 2));
+}
+
+function printMenuResult(r: StoreMenuResult, city: string) {
+  const secs = (r.durationMs / 1000).toFixed(1);
+  console.log(`  ${r.status === "error" ? "!" : r.items.length ? "+" : "0"} ${r.slug} [${r.platform}] ${r.status} · ${r.items.length} items · ${r.dropped.length} dropped · ${r.pageLoads} page load, ${r.dataCalls} data calls · ${secs}s${r.error ? ` · ${r.error}` : ""}`);
+  for (const ref of REF_UNITS) {
+    const rows = r.items.filter((i) => i.ref === ref);
+    if (!rows.length) { console.log(`      ${REF_DEF[ref].short.padEnd(8)} none found`); continue; }
+    const best = rows.reduce((a, b) => ((b.sale ?? b.regular) < (a.sale ?? a.regular) ? b : a));
+    const pre = best.sale ?? best.regular;
+    const otd = otdPrice(pre, ref, city);
+    console.log(
+      `      ${REF_DEF[ref].short.padEnd(8)} ${String(rows.length).padStart(3)} found · cheapest $${pre.toFixed(2)}${best.sale != null ? ` (reg $${best.regular.toFixed(2)})` : ""} → $${otd != null ? otd.toFixed(2) : "?"} out the door · ${best.brand ? best.brand + " · " : ""}${best.name} [${best.weight}]`
+    );
+  }
+  const reasons = new Map<string, number>();
+  for (const d of r.dropped) {
+    const k = `${d.ref}: ${d.reason.replace(/\$[\d.]+/g, "$x")}`;
+    reasons.set(k, (reasons.get(k) || 0) + 1);
+  }
+  for (const [k, n] of reasons) console.log(`      dropped ${n} × ${k}`);
+  for (const d of r.dropped.filter((x) => /sanity band|implausible|not below/.test(x.reason)).slice(0, 8)) console.log(`        · ${d.ref} ${d.name}: ${d.reason}`);
+}
+
+// ---------------------------------------------------------------------------
 // Run with a guaranteed end.
 // ---------------------------------------------------------------------------
 
@@ -413,8 +510,8 @@ process.on("unhandledRejection", (e) => void bail(`unhandled rejection: ${(e as 
     const stale = await markAbandonedRuns(SB, SERVICE_KEY!, TRIGGER);
     if (stale) console.log(`marked ${stale} abandoned scraper_runs row(s) as failed`);
   }
-  const slugs = await targets();
-  console.log(`rendered scrape: ${slugs.length} stores ${APPLY ? "(APPLY)" : "(dry run)"}`);
+  const slugs = MENUS_ONLY ? [] : await targets();
+  if (!MENUS_ONLY) console.log(`rendered scrape: ${slugs.length} stores ${APPLY ? "(APPLY)" : "(dry run)"}`);
   const executablePath = process.env.PW_EXECUTABLE_PATH;
   browser = await withTimeout(
     chromium.launch({
@@ -428,8 +525,9 @@ process.on("unhandledRejection", (e) => void bail(`unhandled rejection: ${(e as 
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, locale: "en-US", timezoneId: "America/Chicago" });
   ctx.setDefaultTimeout(ACTION_TIMEOUT_MS);
   ctx.setDefaultNavigationTimeout(NAV_TIMEOUT_MS);
-  runId = APPLY ? await insertScraperRun(SB, SERVICE_KEY!, TRIGGER) : null;
+  runId = APPLY && !MENUS_ONLY ? await insertScraperRun(SB, SERVICE_KEY!, TRIGGER) : null;
   try {
+    if (!MENUS_ONLY) {
     const summary = await runCilScrape({
       supabaseUrl: SB,
       serviceKey: APPLY ? SERVICE_KEY : READ_KEY,
@@ -456,6 +554,16 @@ process.on("unhandledRejection", (e) => void bail(`unhandled rejection: ${(e as 
     for (const e of summary.fetch_errors) console.log(`  ! ${e.slug}: ${e.error}`);
     const seen = new Set(summary.deals_found.map((d) => d.listing_slug));
     for (const s of slugs) if (!seen.has(s) && !summary.fetch_errors.some((e) => e.slug === s)) console.log(`  0 ${s}: no deals found`);
+    }
+    // Menu prices ride on the same browser. A failure here never touches the
+    // deals result above (already finalized in scraper_runs).
+    if (!NO_MENUS && !finalizing) {
+      try {
+        await menuPhase(ctx);
+      } catch (e) {
+        console.log(`menu prices aborted: ${(e as Error).message.slice(0, 200)}`);
+      }
+    }
   } finally {
     if (!finalizing) await closeBrowser();
   }

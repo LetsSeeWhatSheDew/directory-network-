@@ -4,6 +4,7 @@ import { getAllBrands } from "../lib/brands";
 import { isInCentralIL } from "../lib/visibility";
 import { CENTRAL_IL_PUBLIC_CITIES } from "../lib/constants/regions";
 import { GUIDES } from "../lib/guides";
+import { getCheapestBoard, storesNearEachCity } from "../lib/menuPrices";
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -111,6 +112,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${brand.url}/about/index`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
   ];
 
+  // /cheapest (menu prices) — city pages only once 2+ nearby stores have
+  // fresh menu data (the same rule that keeps thin ones noindex).
+  const nearCounts = storesNearEachCity(await getCheapestBoard().catch(() => ({ byRef: { eighth: [], cart_1g: [], gummies_100mg: [] }, stores: 0, newest: null, oldest: null })));
+  const cheapestUrls: MetadataRoute.Sitemap = [
+    { url: `${brand.url}/cheapest`, lastModified: new Date(), changeFrequency: "daily" as const, priority: 0.85 },
+    ...Object.entries(nearCounts)
+      .filter(([, n]) => n >= 2)
+      .map(([slug]) => ({ url: `${brand.url}/cheapest/${slug}`, lastModified: new Date(), changeFrequency: "daily" as const, priority: 0.75 })),
+  ];
+
   // /guides hub + answer pages
   const guideUrls: MetadataRoute.Sitemap = [
     { url: `${brand.url}/guides`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.8 },
@@ -196,6 +207,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...base,
     ...guideUrls,
+    ...cheapestUrls,
     ...dealUrls,
     ...staticPages,
     ...dispensaryProfileUrls,

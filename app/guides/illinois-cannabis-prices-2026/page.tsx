@@ -83,6 +83,13 @@ export default async function PricesPage() {
         The more recent picture comes from Headset, a cannabis sales-data company: in {HEADSET.month} Illinois sales were {HEADSET.sales}, up {HEADSET.salesYoY} from a year earlier, with units up {HEADSET.unitsYoY}, and the average item sold for <b>{money(HEADSET.avgItem)}</b>. Units growing faster than sales is the same story: people are buying more, and paying a little less for each thing.
       </p>
 
+      <h2 className="gp-h2">Shelf prices on store menus today</h2>
+      <p className="gp-p">
+        For the plain question of what an eighth, a 1g vape cart or 100mg of gummies costs right now, see{" "}
+        <Link href="/cheapest">the cheapest eighth, cart and gummies today</Link>: the lowest price each store lists on its own online menu,
+        with tax added, one row per store. It compares the same size across brands; it is not an average.
+      </p>
+
       <h2 className="gp-h2">What Central Illinois deals look like today</h2>
       {latest.length > 0 && (
         <div className="gp-table-wrap" style={{ marginBottom: 12 }}>
@@ -136,7 +143,7 @@ export default async function PricesPage() {
           { href: "https://tax.illinois.gov/research/taxinformation/other/cannabis-taxes.html", label: "Illinois Department of Revenue — Cannabis Taxes" },
         ]}
       />
-      <RelatedGuides current={SLUG} extra={[{ href: "/about/index", label: "PuffPrice Index (flower price per gram)" }]} />
+      <RelatedGuides current={SLUG} extra={[{ href: "/cheapest", label: "Cheapest eighth, cart and gummies today" }, { href: "/about/index", label: "PuffPrice Index (flower price per gram)" }]} />
     </GuideShell>
   );
 }

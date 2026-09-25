@@ -1,0 +1,459 @@
+dry run started 2026-09-25T12:08:40Z — scripts/scrape-rendered-deals.ts (deals pass + menu-price pass), cloud container, anon key only (nothing written), PW_EXECUTABLE_PATH=chromium-1194
+rendered scrape: 17 stores (dry run)
+found 365 · insert 2 · update 363 · retire 7
+  + ascend-cannabis-horizon-drive: 30% Off Timeless Vapes
+  + ascend-cannabis-downtown-springfield: 30% Off Timeless Vapes
+  = high-profile-cannabis-springfield: 25% Off Featured Flora Brands
+  = high-profile-cannabis-springfield: 30% off 2+ Fernway 2g Disposables
+  = high-profile-cannabis-springfield: 20% Off Featured Verano Brands
+  = high-profile-cannabis-springfield: 30% Off Savvy Flower
+  = high-profile-cannabis-springfield: $50 Good Green & &Shine 14g Flower
+  = high-profile-cannabis-springfield: $90 Good Green & &Shine 28g Flower
+  = high-profile-cannabis-springfield: 25% Off The Botanist products
+  = high-profile-cannabis-springfield: 25% Off all Vapin Ape Disposables
+  = high-profile-cannabis-springfield: 30% Off Featured Ascend Brands
+  = high-profile-cannabis-springfield: 2 for $60 &Shine & High Supply 1g Vape Carts
+  = high-profile-cannabis-springfield: 25% off 2+ &Shine & Good Green 2g Disposables
+  = high-profile-cannabis-springfield: 35% Off Simply Herb & Ozone
+  = high-profile-cannabis-springfield: 30% Off Aeriz Brands!
+  = high-profile-cannabis-springfield: Flower | Buy 2 or More 7g Shake, Get 10% Off
+  = high-profile-cannabis-springfield: Flash Sale | 40% Off Featured Items
+  = high-profile-cannabis-springfield: Flash Sale | 30% Off Featured Items
+  = high-profile-cannabis-springfield: Flash Sale | 20% Off Featured Items
+  = high-profile-cannabis-springfield: Flash Sale | 10% Off Featured Items
+  = high-profile-cannabis-springfield: $30 Good Green & &Shine 7g Flower
+  = high-profile-cannabis-springfield: 20% Off GTI Brands
+  = high-profile-cannabis-springfield: Flower | Buy 2 or More 7g, Get 10% Off
+  = high-profile-cannabis-springfield: Flower | Buy 4 or More 3.5g, Get 20% Off
+  = high-profile-cannabis-springfield: Flower | Buy 2 or More 3.5g, Get 15% Off
+  = high-profile-cannabis-springfield: Pre-rolls | Buy 4 or More, Get 15% Off
+  = high-profile-cannabis-springfield: Infused Pre-rolls | Buy 3, Get 10% Off
+  = high-profile-cannabis-springfield: Vape Carts | Buy 5 or More, Get 20% Off
+  = high-profile-cannabis-springfield: Vape Carts | Buy 2 or More, Get 10% Off
+  = high-profile-cannabis-springfield: Disposable Vapes | Buy 2 or More, Get 10% Off
+  = high-profile-cannabis-springfield: Edibles | Buy 5 or More, Get 20% Off
+  = high-profile-cannabis-springfield: Edibles | Buy 2 or More, Get 10% Off
+  = high-profile-cannabis-springfield: Concentrates | Buy 2 or More, Get 10% Off
+  = high-profile-cannabis-springfield: Edibles | 25% Off Wyld Gummies
+  = high-profile-cannabis-springfield: 30% Off 2+ Rythm 0.5g Rosin Carts
+  = high-profile-cannabis-springfield: 15% Off 2+ Featured 100mg Gummies
+  = cloud-9-east-peoria: 40% off Cresco 2g concentrates
+  = trinity-on-glen: $90 ounces (select strains)
+  = share-springfield: $65 Half!
+  = share-springfield: Build an OZ Find. & Grassroots 14g Smalls for $85
+  = share-springfield: Cultivart Gummies Buy 2 Get 1 for $.01!
+  = share-springfield: Botanist BYO Ounce $125
+  = share-springfield: Botanist BOLD 40% Off
+  = share-springfield: Sol Canna BYO Zip 50% off
+  = share-springfield: Midweek Cart BOGO!
+  = share-springfield: Mix n Match Joints 4 for $25
+  = share-springfield: Pre-Ground Half $50
+  = share-springfield: Nez & Otherside Flower 20% Off!
+  = share-springfield: 2 for $40 1g Vapes!
+  = share-springfield: Eunoia BOGO 50%
+  = share-springfield: Legendary Lolli Palooza BOGO
+  = share-springfield: NEW Trippy Stix 30%
+  = share-springfield: ICC 2gs For $60
+  = share-springfield: ICC 1g $35
+  = share-springfield: Nature's Heritage Live Resin Vape BOGO
+  = share-springfield: Buy any Rove Disposable Get a 1g Ice Pack for $.01
+  = share-springfield: OhGeez! 20%
+  = share-springfield: Eunoia Sleep Gummies 20%
+  = share-springfield: Enliven Popcorn BoGo
+  = share-springfield: 45% Off Rythm 7g &14g!
+  = share-springfield: Find. $100 OZ!
+  = share-springfield: Build an OZ of Find and Grassroots Shake for $70!
+  = share-springfield: Rove x Share 30% Off
+  = share-springfield: Nomad Flower 25% Off
+  = share-springfield: Flora Rosin 20%
+  = share-springfield: Dogwalkin Discount .75g for $9
+  = share-springfield: Freshly Grön Edibles! 20%
+  = share-springfield: Hash House Rosin Carts 20%
+  = share-springfield: CultivArt Carts & Eddies 20%
+  = share-springfield: Fruit Stand Carts and Edibles 20%
+  = share-springfield: 93 Boyz 25%
+  = share-springfield: Generic Brand Vapes x Share 25% off
+  = share-springfield: 0.5g NEW HARDWARE SALE $20!
+  = share-springfield: Free battery with Nature's Heritage and InHouse Carts
+  = share-springfield: Incredibles Weekend Deals! 25%
+  = share-springfield: NuEra New New 20%
+  = share-springfield: 25% off Kaviar and Blaze
+  = share-springfield: Share Some OneDay 25%
+  = share-springfield: Blaze Burst BoGo!
+  = share-springfield: Arbor Joints 4 for $30
+  = share-springfield: Flora Arbor x Share 25%
+  = share-springfield: NOMAD x SHARE $55 Live AIO
+  = share-springfield: Fernway x Share 20% Welcome Sale
+  = share-springfield: Grassroots Infused Joints - 35% off
+  = share-springfield: Kanha Vapes 30%
+  = share-springfield: Cannect PreRolls 10%
+  = share-springfield: Edibles 20% off
+  = share-springfield: 4 for $32 Khalifa Joints
+  = share-springfield: Khalifa Joints $10
+  = share-springfield: Best Summer Deals 40% Off
+  = share-springfield: Best Summer Deals 30% Off
+  = share-springfield: Fair Share Fire Sale 40%
+  = share-springfield: Best Summer Deals 50% Off!
+  = share-springfield: Hash Holes, Hash Rolls, and Donuts 30%
+  = share-springfield: Fresh Botanist 8ths for $25
+  = share-springfield: Infused Rythm Remix Packs 30% Off!
+  = share-springfield: GTI x Share 25% OFF
+  = share-springfield: $120 Botanist OZ
+  = share-springfield: Bridge City Collective 30% Welcome Sale!
+  = share-springfield: Diamond Science 30%
+  = share-springfield: $11 Botanist Tinctures
+  = share-springfield: I C U C WE ALL C FOR IC 20%
+  = share-springfield: Best Deals 2026 - 35% Off
+  = share-springfield: Nature's Heritage Joints - 35%
+  = share-springfield: Journeyman Lemonades - 20% off
+  = share-springfield: Share (CQ + Keef) = 20% off!
+  = share-springfield: ELEVATE 25% OFF
+  = share-springfield: Enliven x SHARE 25% off
+  = share-springfield: InHouse Carts and Dispos 33% off
+  = share-springfield: Want Some Wana? 20% Off
+  = share-springfield: Bloom Vapes 20%
+  = share-springfield: Aeriz / Cookies / UpNorth 25% Restock Sale
+  = share-springfield: Trippy Sips & Sticky Greenz 20%
+  = share-springfield: Sol Canna x Share 30%!
+  = share-springfield: All Topicals 20% Off
+  = share-springfield: THE KHALIFA STORE IN SPRINGFIELD. 25% off!
+  = share-springfield: HIJNX Ratio Tincs - 15% off!
+  = share-springfield: 2/3/5pack Joints, 25% off!
+  = share-springfield: ReaLeaf Botanicals 30% Off!
+  = share-springfield: Redemption / Preferred / Dr Greenthumb - 30% restock sale
+  = share-springfield: Natures Heritage 30%
+  = share-springfield: Betty's Eddies 25% Off at SHARE.
+  = share-springfield: Grassroots 30% off ALWAYS!
+  = share-springfield: Superflux 25% off
+  = share-springfield: Pop on in for some Popcorn 20%
+  = share-springfield: Concentrate Harder! 20% sale
+  = share-springfield: Kanha Edibles 25% Off
+  = share-springfield: PREROLL SAVINGS 20%
+  = share-springfield: Solventless Savings 20%
+  = share-springfield: 30% off Botanist AND IN GROWN FARMS
+  = shangri-la-springfield: Veterans 10% off
+  = shangri-la-springfield: Senior 10% off
+  = shangri-la-springfield: First-time 50% off
+  = ascend-cannabis-horizon-drive: $99 Simply Herb 28g Popcorn
+  = ascend-cannabis-horizon-drive: 2 for $220 - Ozone 28g Popcorn
+  = ascend-cannabis-horizon-drive: 4 for $60 - Simply Herb 3.5g Flower
+  = ascend-cannabis-horizon-drive: Buy 2 or More Ozone Signature 3.5g Flower, Get 20% Off Those Items
+  = ascend-cannabis-horizon-drive: 2 for $200 - Simply Herb 28g Popcorn
+  = ascend-cannabis-horizon-drive: 5 for $30 - Simply Herb 1g Pre Rolls
+  = ascend-cannabis-horizon-drive: 5 for $40 - Ozone 1g Pre Rolls
+  = ascend-cannabis-horizon-drive: 2 for $100 - Simply Herb 14g Popcorn
+  = ascend-cannabis-horizon-drive: 10 for $100 - Ozone 100mg Gummy 10 Packs
+  = ascend-cannabis-horizon-drive: 2 for $90 - Ozone 2 Disposable Vapes
+  = ascend-cannabis-horizon-drive: 2 for $100 - Ozone Reserve Live Resin Disposable Vapes
+  = ascend-cannabis-horizon-drive: 5 for $50 - Ozone 100mg Gummy 10 Packs
+  = ascend-cannabis-horizon-drive: 10 for $130 - Effin 100mg Gummy 10 Packs
+  = ascend-cannabis-horizon-drive: 10 for $80 - Ozone 100mg Macrodose Gummies
+  = ascend-cannabis-horizon-drive: 2 for $50 - Joos 1g Vape Cartridges
+  = ascend-cannabis-horizon-drive: 5 for $40 - Ozone 100mg Macrodose Gummies
+  = ascend-cannabis-horizon-drive: 2 for $100 - Joos 2g Disposable Vapes
+  = ascend-cannabis-horizon-drive: 15% Off Select High Wired
+  = ascend-cannabis-horizon-drive: 20% Off Select Ascend Items
+  = ascend-cannabis-horizon-drive: 25% Off Select Ascend Items
+  = ascend-cannabis-horizon-drive: 30% Off Select Ascend Items
+  = ascend-cannabis-horizon-drive: Get $10 Off Your Order When You Mix and Match 10 Grams of Ozone Reserve…
+  = ascend-cannabis-horizon-drive: 33% Off Select Ascend Items
+  = ascend-cannabis-horizon-drive: 35% Off Select Ascend Items
+  = ascend-cannabis-horizon-drive: Get $20 Off Your Order When You Mix and Match 10 Grams of Ascend Brand…
+  = ascend-cannabis-horizon-drive: 40% Off Select Ozone, Effin', and Simply Herb Items
+  = ascend-cannabis-horizon-drive: 45% Off Select Ozone Items
+  = ascend-cannabis-horizon-drive: 25% Off Airo Vapes
+  = ascend-cannabis-horizon-drive: 25% Off Fernway
+  = ascend-cannabis-horizon-drive: 25% Off Grassroots
+  = ascend-cannabis-horizon-drive: 25% Off Journeyman Drinks
+  = ascend-cannabis-horizon-drive: 25% Off Nature's Grace and Wellness Catalog
+  = ascend-cannabis-horizon-drive: 30% Off 1906 and Lowell Farms
+  = ascend-cannabis-horizon-drive: 35% Off Select Green Growth Group Items
+  = ascend-cannabis-horizon-drive: 35% Off 28g Graffiti Mixed Buds
+  = ascend-cannabis-horizon-drive: 45% Off Select Green Growth Group Items
+  = ascend-cannabis-horizon-drive: 25%-45% Off Cresco Catalog
+  = ascend-cannabis-horizon-drive: 35% Off Select Inventory
+  = ascend-cannabis-horizon-drive: 25% Off Aeriz Brands
+  = ascend-cannabis-horizon-drive: 40% Off Select Inventory
+  = ascend-cannabis-horizon-drive: 45% Off Select Inventory
+  = ascend-cannabis-horizon-drive: 2 for $148 - Ozone 14g Popcorn
+  = ascend-cannabis-horizon-drive: 20% Off IESO Catalog
+  = ascend-cannabis-horizon-drive: 5 for $60 - Effin 100mg Gummy 10 Packs
+  = ascend-cannabis-horizon-drive: 30% Off Wyld and Good Tide Gummies
+  = sunnyside-champaign: 30% off Loud*r flower
+  = sunnyside-champaign: 1 for $99, 2 for $190: High Supply 28g popcorn (not stackable)
+  = sunnyside-champaign: Good News High Dose Gummies: 1 for $12, 3 for $30
+  = sunnyside-champaign: 3 for $10 Mix & Match OCB Papers, Cones, & Bic Lighters
+  = sunnyside-champaign: 1 for $55, 2 for $99 &Shine, Rythm, Ozone & More 2g Disposable Pen
+  = sunnyside-champaign: 1 for $99, 2 for $190 High Supply Popcorn 28g
+  = sunnyside-champaign: 1 for $49, 2 for $95 High Supply Disposable Pen 2g
+  = sunnyside-champaign: 30% off Select Good News, Mindy's & Wonder gummies
+  = maribis-springfield: Lula’s Tanks 2 for $40
+  = maribis-springfield: One Gram Joints – 3 for $27
+  = maribis-springfield: 2 for $60 – One Gram Cured Concentrate
+  = maribis-springfield: 2 for $95 – 7 Gram Mix N’ Match
+  = noxx-east-peoria: $20ea Camino Edibles
+  = noxx-east-peoria: $80ea Flash Sale - Select 28g Flower (FRIDAY TO SUNDAY)
+  = noxx-east-peoria: $10ea Good Green 1g Infused Multipacks
+  = noxx-east-peoria: $10ea Ozone 100mg Gummies
+  = noxx-east-peoria: $12ea Journeyman 100mg Beverages
+  = noxx-east-peoria: $20ea Select 3.5g Flower - Daze Off, Good Green, Hustlers Ambition, Seed…
+  = noxx-east-peoria: $25ea Good Green 1g Full Spectrum Oil
+  = noxx-east-peoria: $25ea Mozey 1g Concentrate
+  = noxx-east-peoria: $25ea Select 3.5g Flower - Candela, Rooted, Cresco & PTS
+  = noxx-east-peoria: $27ea High Supply and Good News 2.5g Infused Multipacks
+  = noxx-east-peoria: $32ea Rythm 1g Liquid Diamonds 1g All-In-One Vape
+  = noxx-east-peoria: $35ea Daze Off, Good Green, Hustlers Ambition, Triple Crown 7g Flower
+  = noxx-east-peoria: $40ea High Supply, Ripperz, Rythm, and Blaze 7g Flower
+  = noxx-east-peoria: $45ea High Wired 3.5g Infused Flower
+  = noxx-east-peoria: $45ea Rythm 1g Rosin Tier 1 Rosin
+  = noxx-east-peoria: 2/$50 1g Cartridges
+  = noxx-east-peoria: 20% Off Anthem Infused Products
+  = noxx-east-peoria: 25% Off All Shake
+  = noxx-east-peoria: 25% Off Kaviar Flower
+  = noxx-east-peoria: 3/$25 Blaze, Crops, Find, Paul Bunyan, Rooted and Simply Herb Preroll…
+  = noxx-east-peoria: 30% Off 100mg Vibations Drink Mix
+  = noxx-east-peoria: 30% Off Anthem, High Supply, and Simply Herb Multipacks
+  = noxx-east-peoria: 4/$20 Dogwalkers .75g and Tilt 1g Preroll
+  = noxx-east-peoria: 40% Off Ripperz & Triple Crown Multipacks
+  = noxx-east-peoria: 5/$35 Another State, High Supply, Old Pal, and Seed and Strain Preroll…
+  = noxx-east-peoria: $35ea Khalifa Kush 3.5g Flower
+  = noxx-east-peoria: 2/$48 Nature's Heritage 1g Live Resin Cartridges
+  = noxx-east-peoria: $39ea Candela 1g Live Resin All-In-One Vape
+  = noxx-east-peoria: $30ea Dogwalkers 2.25g Infused Multipack
+  = noxx-east-peoria: $10ea Grassroots 1g Preroll
+  = noxx-east-peoria: $10ea Triple Crowna nd LemonNade 100mg Edibles
+  = noxx-east-peoria: $130ea Ozone 28g Flower
+  = noxx-east-peoria: $13ea Good News 100mg Gummies
+  = noxx-east-peoria: $15ea Enliven 100mg Gummy Worms
+  = noxx-east-peoria: $18ea Dogwalker and SolCanna 1.75g Multipacks
+  = noxx-east-peoria: $18ea Legacy 100mg Hot Honey
+  = noxx-east-peoria: $25ea KSHN 100mg Pouches
+  = noxx-east-peoria: $25ea Nature's Heritage .5g Live Resin Cartridges
+  = noxx-east-peoria: $30ea High Supply 1g Concentrates
+  = noxx-east-peoria: $30ea Ripperz 3.5g Flower
+  = noxx-east-peoria: $30ea Rythm & SolCanna 3.5g Prepack
+  = noxx-east-peoria: $32ea Simply Herb 1g Cartridges
+  = noxx-east-peoria: $35ea Dragonfly & Elevate Mini Bar 1g All-In-One Vape
+  = noxx-east-peoria: $35ea Kaviar 1g Moonrock
+  = noxx-east-peoria: $40ea Dark Heart 3.5g Flower *NEW*
+  = noxx-east-peoria: $45ea Rythm & SolCanna 7g Flower
+  = noxx-east-peoria: $50ea Joos 2g Cartridge
+  = noxx-east-peoria: $50ea Ozone 2g All-In-One Vape
+  = noxx-east-peoria: $50ea Select 14g Flower Paul Bunyan, 28 Unsorted, Triple Crown
+  = noxx-east-peoria: $55ea Daze Off 2g All-In-One Vape
+  = noxx-east-peoria: $55ea Select 14g Flower Simply Herb, &Shine ,Good Green
+  = noxx-east-peoria: $55ea VapinApe 2g All-In-One Vape
+  = noxx-east-peoria: $60ea Select 14g Flower Rythm and MiSix
+  = noxx-east-peoria: $70ea VapinApe Pod Pack - 3 x 1g | Battery W/ Purchase
+  = noxx-east-peoria: $90ea Select 28g Flower
+  = noxx-east-peoria: $95ea Ounces - Everyday!
+  = noxx-east-peoria: $95ea Select 28g Flower - Triple Seven, Paul Bunyan. Galaxy Labs
+  = noxx-east-peoria: 10/$40 Legacy 50mg Edibles
+  = noxx-east-peoria: 15% Off Hash Holes - Legacy, Redemption Botanicals, IC Collective
+  = noxx-east-peoria: 2/$100 or $60ea High Supply, Good Green, Select, and Daze Off 2g…
+  = noxx-east-peoria: 2/$110 or $65 Rythm 2g All-In-One Vape
+  = noxx-east-peoria: 2/$25 Legacy & Cosmic Chews 100mg Edibles
+  = noxx-east-peoria: 2/$50 or $35ea Rythm & SolCanna 3.5g Prepack
+  = noxx-east-peoria: 2/$50 Rythm & SolCanna 3.5g Prepack
+  = noxx-east-peoria: 2/$70 Cookies 1g Cartridge
+  = noxx-east-peoria: 2/$80 or $45ea Redemption, Otherside 3.5g Flower
+  = noxx-east-peoria: 2/$90 or $55ea &Shine 2g All-In-One Vape
+  = noxx-east-peoria: 2/$90 or $55ea NEZ 3.5g Flower
+  = noxx-east-peoria: 25% Off High Wired Infused Products
+  = noxx-east-peoria: 3/$35 Rythm and High Supply 1g Infused Preroll Single
+  = noxx-east-peoria: 3/$48 Cheech and Chong, IC Collective, and Redemption Preroll Singles
+  = noxx-east-peoria: 30% Off Incredibles 100mg Chocolates
+  = noxx-east-peoria: 30% Off Infused Shake - High Supply, High Wired, &Shine
+  = noxx-east-peoria: 30% Off Sticky Greens & Trippy Sips
+  = noxx-east-peoria: 5/$25 Super Funny 50mg Edibles
+  = noxx-east-peoria: 5/$49 Legacy, Ozone, LemonNade, Goody Bag, In-House, Super Funnies and…
+  = noxx-east-peoria: $28ea Joos 1g Cartridges
+  = noxx-east-peoria: $5ea Keef 25mg Beverages
+  = noxx-east-peoria: 5/$35 Betty's Eddies 50mg Fruit Chews
+  = noxx-east-peoria: $50ea High Supply 2g Concentrates
+  = noxx-east-peoria: $50ea FloraCal 1g Rosin
+  = noxx-east-peoria: $30ea Rythm 1g Live Resin
+  = noxx-east-peoria: $40ea Dogwalker 4.2g Mulitpacks
+  = noxx-east-peoria: $40ea VapinApe All-In-One Vape
+  = noxx-east-peoria: $40ea Bloom 1g All-In-One Vape
+  = noxx-east-peoria: $8ea Good Green and Old Pal 1g Multipack Prerolls
+  = noxx-east-peoria: 30% off Aeriz 1g FSHO
+  = noxx-east-peoria: $18ea High Supply .5g Cartridges
+  = noxx-east-peoria: $45ea VapinApe .5g Rosin Pods | Free Battery with Purchase
+  = noxx-east-peoria: 20% Off Jeeter Products
+  = noxx-east-peoria: $10ea Dogwalkers, Find., High Supply, Blaze Prerolls
+  = noxx-east-peoria: $120ea Rythm 28g Flower
+  = noxx-east-peoria: $30ea Kushy Punch, Nuvata, Simply Herb 1g All-In-One Vape
+  = noxx-east-peoria: $45ea Good Vibes 2g Cartridge
+  = noxx-east-peoria: 25% Off Keef Beverages + Free Koozie With Purchase (While Supplies Last)
+  = noxx-east-peoria: 20% Off Rove Products
+  = noxx-east-peoria: $19ea High Supply 2.5g Multipacks
+  = noxx-east-peoria: 20% Off Cheech and Chong Vapes
+  = noxx-east-peoria: 20% Off Nez + Otherside Flower
+  = noxx-east-peoria: 30% Off Ripperz & Triple Crown Craft Flower
+  = noxx-east-peoria: 30% Off Rythm Remix 1g Infused Preroll
+  = noxx-east-peoria: 40% Off Mozey .5g Diamond Sauce Cartridges
+  = noxx-east-peoria: 20% Off Redbud Roots 1g Cartridges
+  = noxx-east-peoria: 30% Off Dr. Greenthumb 3.5g Flower
+  = noxx-east-peoria: 35% Off Cresco LLR Cartridges
+  = noxx-east-peoria: 40% Off Rythm 1g Live Resin Cartridges
+  = noxx-east-peoria: 30% Off Cookies 3.5g Flower
+  = noxx-east-peoria: 25% Off Fernway Vapes & Cartridges
+  = beyond-hello-bloomington: Veteran 10% off
+  = beyond-hello-bloomington: Senior 10% off
+  = beyond-hello-normal: Veteran 10% off
+  = beyond-hello-normal: Senior 10% off
+  = aroma-hill-peoria: 30% off Verano
+  = aroma-hill-peoria: 30% off Revolution
+  = aroma-hill-peoria: 30% off ReaLeaf Botanicals
+  = aroma-hill-peoria: 20% OFF Jeeters
+  = aroma-hill-peoria: 25% off Simply Herb
+  = aroma-hill-peoria: 30% off Wyld, Good Tide, Enliven
+  = aroma-hill-peoria: 30% off Flora, Zip, Khalifa Kush & Gasolina
+  = aroma-hill-peoria: $95 OZ
+  = aroma-hill-peoria: 20% off Fernway
+  = aroma-hill-peoria: $120 OZ
+  = aroma-hill-peoria: $6 Pre-Rolls
+  = aroma-hill-peoria: $10 or Less Edibles
+  = aroma-hill-peoria: Paul Bunyan BOGO
+  = aroma-hill-peoria: Get Two 14g Flower for $120
+  = aroma-hill-peoria: Get Two 1g Vapes for $45
+  = aroma-hill-peoria: Two 500mg Vapes for $25
+  = aroma-hill-peoria: 25% off HiJnx & Snackbar
+  = aroma-hill-peoria: Up to 55% off select products
+  = ascend-cannabis-downtown-springfield: $99 Simply Herb 28g Popcorn
+  = ascend-cannabis-downtown-springfield: 2 for $220 - Ozone 28g Popcorn
+  = ascend-cannabis-downtown-springfield: 4 for $60 - Simply Herb 3.5g Flower
+  = ascend-cannabis-downtown-springfield: Buy 2 or More Ozone Signature 3.5g Flower, Get 20% Off Those Items
+  = ascend-cannabis-downtown-springfield: 2 for $200 - Simply Herb 28g Popcorn
+  = ascend-cannabis-downtown-springfield: 5 for $30 - Simply Herb 1g Pre Rolls
+  = ascend-cannabis-downtown-springfield: 5 for $40 - Ozone 1g Pre Rolls
+  = ascend-cannabis-downtown-springfield: 2 for $100 - Simply Herb 14g Popcorn
+  = ascend-cannabis-downtown-springfield: 10 for $100 - Ozone 100mg Gummy 10 Packs
+  = ascend-cannabis-downtown-springfield: 2 for $90 - Ozone 2 Disposable Vapes
+  = ascend-cannabis-downtown-springfield: 2 for $100 - Ozone Reserve Live Resin Disposable Vapes
+  = ascend-cannabis-downtown-springfield: 5 for $50 - Ozone 100mg Gummy 10 Packs
+  = ascend-cannabis-downtown-springfield: 10 for $130 - Effin 100mg Gummy 10 Packs
+  = ascend-cannabis-downtown-springfield: 10 for $80 - Ozone 100mg Macrodose Gummies
+  = ascend-cannabis-downtown-springfield: 2 for $50 - Joos 1g Vape Cartridges
+  = ascend-cannabis-downtown-springfield: 5 for $40 - Ozone 100mg Macrodose Gummies
+  = ascend-cannabis-downtown-springfield: 2 for $100 - Joos 2g Disposable Vapes
+  = ascend-cannabis-downtown-springfield: 15% Off Select High Wired
+  = ascend-cannabis-downtown-springfield: 20% Off Select Ascend Items
+  = ascend-cannabis-downtown-springfield: 25% Off Select Ascend Items
+  = ascend-cannabis-downtown-springfield: 30% Off Select Ascend Items
+  = ascend-cannabis-downtown-springfield: Get $10 Off Your Order When You Mix and Match 10 Grams of Ozone Reserve…
+  = ascend-cannabis-downtown-springfield: 33% Off Select Ascend Items
+  = ascend-cannabis-downtown-springfield: 35% Off Select Ascend Items
+  = ascend-cannabis-downtown-springfield: Get $20 Off Your Order When You Mix and Match 10 Grams of Ascend Brand…
+  = ascend-cannabis-downtown-springfield: 40% Off Select Ozone, Effin', and Simply Herb Items
+  = ascend-cannabis-downtown-springfield: 45% Off Select Ozone Items
+  = ascend-cannabis-downtown-springfield: 25% Off Airo Vapes
+  = ascend-cannabis-downtown-springfield: 25% Off Fernway
+  = ascend-cannabis-downtown-springfield: 25% Off Grassroots
+  = ascend-cannabis-downtown-springfield: 25% Off Journeyman Drinks
+  = ascend-cannabis-downtown-springfield: 25% Off Nature's Grace and Wellness Catalog
+  = ascend-cannabis-downtown-springfield: 30% Off 1906 and Lowell Farms
+  = ascend-cannabis-downtown-springfield: 35% Off Select Green Growth Group Items
+  = ascend-cannabis-downtown-springfield: 35% Off 28g Graffiti Mixed Buds
+  = ascend-cannabis-downtown-springfield: 45% Off Select Green Growth Group Items
+  = ascend-cannabis-downtown-springfield: 25%-45% Off Cresco Catalog
+  = ascend-cannabis-downtown-springfield: 35% Off Select Inventory
+  = ascend-cannabis-downtown-springfield: 25% Off Aeriz Brands
+  = ascend-cannabis-downtown-springfield: 40% Off Select Inventory
+  = ascend-cannabis-downtown-springfield: 45% Off Select Inventory
+  = ascend-cannabis-downtown-springfield: 2 for $148 - Ozone 14g Popcorn
+  = ascend-cannabis-downtown-springfield: 20% Off IESO Catalog
+  = ascend-cannabis-downtown-springfield: 5 for $60 - Effin 100mg Gummy 10 Packs
+  = ascend-cannabis-downtown-springfield: 30% Off Wyld and Good Tide Gummies
+  - share-springfield: MJ Arsenal Pipes $15
+  - share-springfield: Puffco Link 20% off
+  - share-springfield: Lookah Here! $50 Seahorses
+  - share-springfield: PuffCo Hot Knife $50
+  - share-springfield: $25 Special
+  - share-springfield: Free Battery W Purchase
+  - share-springfield: Accessory Sale 20%
+  0 beyond-hello-peoria: no deals found
+  0 revolution-dispensary-normal: no deals found
+  0 trinity-on-university: no deals found
+  0 ayr-wellness-normal: no deals found
+
+menu prices: 9 stores (dry run)
+  + noxx-east-peoria [dutchie] ok · 203 items · 55 dropped · 1 page load, 4 data calls · 21.2s
+      eighth    75 found · cheapest $20.00 (reg $30.00) → $25.41 out the door · Daze Off · Daze Off Prepacks - Transposition [1/8oz]
+      cart      52 found · cheapest $28.00 (reg $35.00) → $40.42 out the door · Redbud Roots · Redbud Roots 100% Pure THC Cartridge [1g]
+      gummies   76 found · cheapest $10.00 → $13.86 out the door · Cookies · LemonNade 100mg Gummies - Lemon Beltz [100mg]
+      dropped 6 × eighth: THC above 35% (taxed at the 25% tier)
+      dropped 19 × eighth: infused / concentrate-coated flower
+      dropped 30 × gummies_100mg: CBD/ratio product
+  + ascend-cannabis-downtown-springfield [dutchie] ok · 188 items · 49 dropped · 1 page load, 4 data calls · 21.4s
+      eighth    79 found · cheapest $21.00 (reg $30.00) → $26.74 out the door · Simply Herb · Animal Mintz [3.5g]
+      cart      59 found · cheapest $30.00 (reg $40.00) → $43.41 out the door · Joos · Chicago Blue Dream Cartridge [1g]
+      gummies   50 found · cheapest $7.50 (reg $10.00) → $10.42 out the door · The Funnies · Pineapple Mango Mai Tai - Single [100mg]
+      dropped 8 × eighth: THC above 35% (taxed at the 25% tier)
+      dropped 4 × eighth: infused / concentrate-coated flower
+      dropped 37 × gummies_100mg: CBD/ratio product
+  + ascend-cannabis-horizon-drive [dutchie] ok · 193 items · 49 dropped · 1 page load, 4 data calls · 7.8s
+      eighth    83 found · cheapest $21.00 (reg $30.00) → $26.74 out the door · Simply Herb · Animal Mintz [3.5g]
+      cart      63 found · cheapest $24.00 (reg $40.00) → $34.73 out the door · Joos · Skywalker Cartridge [1g]
+      gummies   47 found · cheapest $7.50 (reg $10.00) → $10.42 out the door · The Funnies · Pineapple Mango Mai Tai - Single [100mg]
+      dropped 10 × eighth: THC above 35% (taxed at the 25% tier)
+      dropped 4 × eighth: infused / concentrate-coated flower
+      dropped 35 × gummies_100mg: CBD/ratio product
+  + high-profile-cannabis-springfield [dutchie] ok · 151 items · 31 dropped · 1 page load, 2 data calls · 21.7s
+      eighth    62 found · cheapest $17.50 (reg $25.00) → $22.28 out the door · Aeriz · Chem Berry | Pre-Pack | 3.5g [1/8oz]
+      cart      44 found · cheapest $26.25 (reg $35.00) → $37.98 out the door · Botanist · Mint | Bold Cart | 1g [1g]
+      gummies   45 found · cheapest $9.60 (reg $12.00) → $13.33 out the door · Guap · Blue Magic | Gummy | 100mg (1pk) [100mg]
+      dropped 1 × eighth: infused / concentrate-coated flower
+      dropped 30 × gummies_100mg: CBD/ratio product
+  + maribis-springfield [dutchie] ok · 115 items · 20 dropped · 1 page load, 3 data calls · 19.7s
+      eighth    72 found · cheapest $22.50 (reg $30.00) → $28.65 out the door · Good Green · Good Green | Flower | Durban Z [3.5g]
+      cart      18 found · cheapest $30.00 (reg $40.00) → $43.41 out the door · Sol Canna · Sol Canna | Cartridge | OG Kush [1g]
+      gummies   25 found · cheapest $9.38 (reg $12.50) → $13.03 out the door · Lula's · Lula's | Gummies | Citrus Twist | Jumbo Gem | 100mg | 1pk [100mg]
+      dropped 5 × eighth: infused / concentrate-coated flower
+      dropped 6 × eighth: THC above 35% (taxed at the 25% tier)
+      dropped 2 × cart_1g: disposable / pod, not a cartridge
+      dropped 7 × gummies_100mg: CBD/ratio product
+  + aroma-hill-peoria [sweed] ok · 136 items · 23 dropped · 1 page load, 7 data calls · 7.1s
+      eighth    30 found · cheapest $18.00 (reg $30.00) → $22.77 out the door · Good Green · Bananaconda [3.5g]
+      cart      60 found · cheapest $25.20 (reg $42.00) → $36.23 out the door · &Shine · Blue Dream [1g]
+      gummies   46 found · cheapest $7.20 (reg $12.00) → $9.94 out the door · The Funnies · Pineapple Mango Mai Tai [100mg 1pk]
+      dropped 2 × eighth: THC above 35% (taxed at the 25% tier)
+      dropped 2 × eighth: shake/trim, not bud
+      dropped 19 × gummies_100mg: CBD/ratio product
+  ! ivy-hall-dispensary [sweed] error · 0 items · 0 dropped · 1 page load, 0 data calls · 17.2s · robots.txt disallows the menu data path
+      eighth   none found
+      cart     none found
+      gummies  none found
+  + cookies-bloomington [joint] ok · 59 items · 4 dropped · 1 page load, 3 data calls · 11.5s
+      eighth    21 found · cheapest $30.40 (reg $38.00) → $38.71 out the door · STONER VILLAGE · STONER VILLIAGE - BLACK CHERRY GELATO - FLOWER - (3.5G) [3.5 g]
+      cart       5 found · cheapest $41.25 (reg $55.00) → $59.68 out the door · FERNWAY · ALPINE STRAWBERRY [1 g]
+      gummies   33 found · cheapest $15.00 → $20.84 out the door · BETTY'S EDDIES · CHERRY - FRUIT CHEW - SINGLE - (100MG) [100 mg]
+      dropped 1 × eighth: infused / concentrate-coated flower
+      dropped 3 × gummies_100mg: CBD/ratio product
+  + cookies-peoria-heights [joint] ok · 124 items · 14 dropped · 1 page load, 3 data calls · 13.9s
+      eighth    37 found · cheapest $30.00 (reg $40.00) → $38.20 out the door · CROPS · DANTE'S INFERNO [3.5 g]
+      cart      17 found · cheapest $35.00 → $50.64 out the door · REDBUD ROOTS · GRAPE (CART) [1 g]
+      gummies   70 found · cheapest $9.00 (reg $12.00) → $12.50 out the door · DAZE OFF · MOONDROP GRAPE HUNDO [100 mg]
+      dropped 2 × eighth: THC above 35% (taxed at the 25% tier)
+      dropped 12 × gummies_100mg: CBD/ratio product
+  - cloud-9-east-peoria: no menu reader · Cresco/Sunnyside storefront: its inventory call (api.crescolabs.com) returned 0 products for store 974 from the cloud; not parsed until a Mac run shows real rows
+  - sunnyside-champaign: no menu reader · Cresco/Sunnyside storefront: inventory call returned 0 products from the cloud (same as Cloud 9)
+  - shangri-la-springfield: no menu reader · Cresco/Sunnyside storefront: inventory call returned 0 products for store 970 from the cloud
+  - nuera-east-peoria: no menu reader · Jane headless menu (nueracannabis.com/shop): product data comes from iheartjane, which answered 403 from the cloud; no reader yet
+  - nuera-champaign: no menu reader · Jane headless menu, same as nuEra East Peoria
+  - nuera-pekin: no menu reader · Jane headless menu, same as nuEra East Peoria
+  - nuera-urbana: no menu reader · Jane headless menu, same as nuEra East Peoria
+  - high-haven-normal: no menu reader · Jane embed on highhavencannabis.com; no product data call seen from the cloud
+  - beyond-hello-bloomington: no menu reader · Jane (per the pipeline registry); the registry's menu URL is now a 404 — needs a new menu URL
+  - beyond-hello-normal: no menu reader · Jane (per the pipeline registry); menu URL not re-found
+  - beyond-hello-peoria: no menu reader · Bloom Wellness on risecannabis.com — Cloudflare Turnstile blocks the cloud
+  - ayr-wellness-normal: no menu reader · Bloom Wellness on risecannabis.com — Cloudflare Turnstile blocks the cloud
+  - revolution-dispensary-normal: no menu reader · Bloom Wellness on risecannabis.com — Cloudflare Turnstile blocks the cloud
+  - trinity-on-glen: no menu reader · Treez/GapCommerce Next.js storefront: prices are server-rendered HTML only, no reader yet
+  - trinity-on-university: no menu reader · Treez/GapCommerce Next.js storefront, same as Trinity on Glen
+  - share-springfield: no menu reader · LeafBridge (WordPress admin-ajax) menu, no reader yet
+  - the-dispensary-champaign: no menu reader · no store website of its own (see docs/ops/2026-09-25-scraper-coverage.md)
+menu prices: 8/9 stores with prices · 1169 items kept · 245 dropped
+exit 0
+dry run finished 2026-09-25T12:17:43Z

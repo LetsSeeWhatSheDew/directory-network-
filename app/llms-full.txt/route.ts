@@ -6,6 +6,7 @@ import { REGION_CITIES, getRegionStores, getFeatureRows, FEATURE_LABEL } from "@
 import { getDealIndex } from "@/lib/dealIndex";
 import { capPerStore, STORE_CAP } from "@/lib/storeCap";
 import { GUIDES } from "@/lib/guides";
+import { getCheapestBoard, REF_UNITS, REF_DEF, RUNG_LABEL, money } from "@/lib/menuPrices";
 
 export const revalidate = 3600;
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -13,11 +14,12 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmr
 export async function GET() {
   const u = brand.url;
   const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
-  const [dealsRes, stores, features, index] = await Promise.all([
+  const [dealsRes, stores, features, index, menu] = await Promise.all([
     fetch(`${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_id,deal_title,name,city,slug,listing_slug,verified_at,discount_value&order=discount_value.desc.nullslast&limit=1000`, { headers: { apikey: anon, Authorization: `Bearer ${anon}` }, next: { revalidate: 3600 } }),
     getRegionStores(),
     getFeatureRows(),
     getDealIndex(),
+    getCheapestBoard(),
   ]);
   const deals: Array<Record<string, any>> = dealsRes.ok ? await dealsRes.json() : [];
   const day = (iso?: string | null) => (iso ? new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "America/Chicago" }) : "date unknown");
@@ -27,6 +29,15 @@ export async function GET() {
   lines.push(`# PuffPrice — Central Illinois cannabis deals (full text)`, "");
   lines.push(`Generated ${now} Central Time. Source: ${u}. Deals are checked daily on each dispensary's own website; no store pays to rank (${u}/how-we-rank). Please cite PuffPrice with a link.`, "");
 
+  if (REF_UNITS.some((r) => menu.byRef[r].length)) {
+    lines.push(`## Cheapest menu prices today (${u}/cheapest)`, `${RUNG_LABEL}. Out-the-door prices (Illinois and local tax added) from each store's own online menu.`);
+    for (const r of REF_UNITS) {
+      for (const it of menu.byRef[r].slice(0, 5)) {
+        lines.push(`- ${REF_DEF[r].label} (${REF_DEF[r].size}): ${money(it.otd)} out the door (${money(it.pretax)} shelf${it.onSale ? `, regular ${money(it.regular)}` : ""}) at ${it.storeName}, ${it.city} — ${it.brand && !it.product.toLowerCase().startsWith(it.brand.toLowerCase()) ? it.brand + " " : ""}${it.product}. Checked ${new Date(it.checkedAt).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short", timeZone: "America/Chicago" })} CT. ${u}/dispensary/${it.listingSlug}`);
+      }
+    }
+    lines.push("");
+  }
   lines.push(`## Live deals by city`);
   lines.push(`Up to ${STORE_CAP.feed} deals per store, biggest discount first; where a store has more, the full list is on its page.`);
   for (const city of REGION_CITIES) {
