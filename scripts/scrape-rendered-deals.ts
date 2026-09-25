@@ -145,7 +145,24 @@ export const RENDERED_URLS: Record<string, string[]> = {
 function tidyPromoName(raw: string): string {
   let t = raw.replace(/\s+/g, " ").trim();
   if (t.length >= 72 && !/[.!?)\]]$/.test(t)) t = t.replace(/\s+\S*$/, "").replace(/[\s,&+\-–|]+$/, "") + "…";
+  t = t.replace(/([!?.])\1+/g, "$1"); // "BOGO!!!!!!" -> "BOGO!"
   return t.replace(/[\s\u200b,&+\-–—|]+$/, "").trim();
+}
+
+// Not a cannabis price: accessory-only promos (pipes, papers, lighters,
+// batteries on their own), promos named for a season that isn't now, and
+// names too vague to mean anything ("$25 Special").
+const CANNABIS_WORD = /\b(flower|bud|popcorn|smalls|shake|oz|ounce|half|eighth|quarter|zip|\d+(?:\.\d+)?\s?g|\d+\s?mg|cart|carts|cartridge|vape|vapes|disposable|dispos|aio|pod|gumm|edible|chew|chocolate|drink|beverage|lemonade|tincture|topical|pre-?roll|joint|concentrate|rosin|resin|badder|sauce|diamond|wax|hash|infused|capsule)/i;
+const ACCESSORY_WORD = /\b(pipes?|papers?|cones?|lighters?|hot knife|seahorses?|puffco|lookah|mj arsenal|grinders?|koozie|batter(?:y|ies)|accessor(?:y|ies)|ice pack|rolling)\b/i;
+function notACannabisDeal(name: string, now = new Date()): boolean {
+  if (ACCESSORY_WORD.test(name) && !CANNABIS_WORD.test(name.replace(ACCESSORY_WORD, ""))) return true;
+  const m = now.getMonth(); // 0 = Jan
+  if (/\bsummer\b/i.test(name) && (m < 4 || m > 8)) return true;
+  if (/\bwinter\b/i.test(name) && m >= 3 && m <= 9) return true;
+  if (/\b(4\/20|420)\b/.test(name) && m !== 3) return true;
+  if (/\b(black friday|green wednesday)\b/i.test(name) && m !== 10) return true;
+  if (/^\$\s?\d+\s+special!?$/i.test(name.trim())) return true;
+  return false;
 }
 
 // A promotion whose own name carries an explicit date that has passed
@@ -278,7 +295,7 @@ function makeFetcher(ctx: BrowserContext): HtmlFetcher {
       ...new Set(
         structured
           .map(tidyPromoName)
-          .filter((t) => t.length > 4 && t.length < 90 && DEAL_SIGNAL.test(t) && !namesPastDate(t))
+          .filter((t) => t.length > 4 && t.length < 90 && DEAL_SIGNAL.test(t) && !namesPastDate(t) && !notACannabisDeal(t))
       ),
     ];
     if (cleanStructured.length) return [offerCatalog(cleanStructured)];
