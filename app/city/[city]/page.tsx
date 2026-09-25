@@ -23,6 +23,8 @@ import EndingSoonRow, { type EndingSoonDeal } from "../../components/EndingSoonR
 import PriceBoard from "../../components/PriceBoard";
 import { getLivePriceBoard } from "../../../lib/priceBoard";
 import ReportIssueLink from "../../components/ReportIssueLink";
+import StoreOverflowLinks from "../../components/StoreOverflowLinks";
+import { capPerStore, overflowFor, STORE_CAP } from "../../../lib/storeCap";
 import { getCityProfile, nearbyCities } from "../../../lib/cityProfiles";
 import { getCityMonth, dayCountsReliable } from "../../../lib/dealHistory";
 import {
@@ -110,7 +112,10 @@ function filterExpired<T extends { expires_at?: string | null }>(list: T[]): T[]
 async function getAllActiveDeals(): Promise<DealRow[]> {
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&order=discount_value.desc.nullslast&limit=100`,
+      // Every active deal (not a top-N): a store adding 100 specials must not
+      // push other cities' deals past a row limit. Explicit columns keep the
+      // cached payload small. Per-store caps are applied at render.
+      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_id,deal_title,deal_description,category,discount_type,discount_value,discount_unit,original_price,sale_price,is_recurring,expires_at,listing_slug,slug,name,city,verified_at,status_reason&order=discount_value.desc.nullslast&limit=2000`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,
@@ -122,7 +127,8 @@ async function getAllActiveDeals(): Promise<DealRow[]> {
     if (!res.ok) return [];
     const all = await res.json();
     if (!Array.isArray(all)) return [];
-    return filterExpired(all as DealRow[]);
+    // The view's key is deal_id; the list below keys on id.
+    return filterExpired((all as Array<DealRow & { deal_id?: string }>).map((d) => ({ ...d, id: d.id || d.deal_id || "" })));
   } catch {
     return [];
   }
@@ -131,8 +137,14 @@ async function getAllActiveDeals(): Promise<DealRow[]> {
 function dealsInCity(all: DealRow[], city: string): DealRow[] {
   const target = city.toLowerCase();
   return all
-    .filter((d) => typeof d?.city === "string" && d.city.toLowerCase() === target)
-    .slice(0, 25);
+    .filter((d) => typeof d?.city === "string" && d.city.toLowerCase() === target);
+}
+
+/** The visible city list: at most STORE_CAP.cityList per store, 25 rows. */
+function visibleCityDeals(deals: DealRow[]) {
+  const { kept, totals } = capPerStore(deals, STORE_CAP.cityList);
+  const shown = kept.slice(0, 25);
+  return { shown, overflow: overflowFor(shown, totals) };
 }
 
 async function getCityDeals(city: string): Promise<DealRow[]> {
@@ -301,6 +313,7 @@ export default async function CityPage({
     getLivePriceBoard({ locationTag: `${city.toUpperCase()} AREA`, nearCity: citySlug(city) }).catch(() => null),
   ]);
   const deals = dealsInCity(allDeals, city);
+  const { shown: shownDeals, overflow: dealOverflow } = visibleCityDeals(deals);
   const [hours, month] = await Promise.all([
     getHoursFor(listings.map((l) => l.id)),
     getCityMonth(city),
@@ -609,7 +622,7 @@ export default async function CityPage({
         )}
 
         <EndingSoonRow
-          deals={endingWithin24h(deals)
+          deals={capPerStore(endingWithin24h(deals), STORE_CAP.highlight).kept
             .slice(0, 5)
             .map(
               (d): EndingSoonDeal => ({
@@ -627,7 +640,8 @@ export default async function CityPage({
           <span>Deals · best savings first</span>
         </div>
         {deals.length > 0 ? (
-          deals.map((d) => {
+          <>
+          {shownDeals.map((d) => {
             const dslug = d.slug || d.listing_slug;
             const dollars = estimateSavings(d);
             const name = d.name || dslug;
@@ -648,7 +662,14 @@ export default async function CityPage({
                 </div>
               </Link>
             );
-          })
+          })}
+          {shownDeals.length < deals.length && (
+            <p className="cp-asof" style={{ marginTop: 10 }}>
+              Showing {shownDeals.length} of {deals.length} {city} deals, up to {STORE_CAP.cityList} per store so every store gets seen.
+            </p>
+          )}
+          <StoreOverflowLinks stores={dealOverflow} city={city} note={false} />
+          </>
         ) : (
           <div className="cp-empty">
             <p className="cp-empty-t">No verified deals posted in {city} today.</p>

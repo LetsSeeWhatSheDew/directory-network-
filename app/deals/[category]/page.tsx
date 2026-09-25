@@ -1,6 +1,8 @@
 // app/deals/[category]/page.tsx
 // Fixed v2: force no-cache + correct Supabase query format
 
+import StoreOverflowLinks from "../../components/StoreOverflowLinks";
+import { capPerStore, overflowFor, STORE_CAP } from "../../../lib/storeCap";
 import Link from "next/link";
 import { amountOf, isConditional, needsQuantity, saveLabel, cleanDealTitle } from "../../../lib/exhale";
 import OtdLine from "../../components/OtdLine";
@@ -116,7 +118,7 @@ async function getDeals(category: string, city?: string | null) {
       order: "discount_value.desc.nullslast",
       // Category is filtered in JS (effectiveCategory) because the scraper
       // leaves the column NULL on most rows — pull the full active set.
-      limit: "200",
+      limit: "1000",
     });
     // Central IL scope — never surface non-CIL deals on the public page.
     viewParams.set("city", `in.${CIL_CITY_IN_LIST}`);
@@ -164,7 +166,7 @@ async function getDeals(category: string, city?: string | null) {
     project_tag: "eq.green",
     is_active: "eq.true",
     order: "discount_value.desc.nullslast",
-    limit: "200",
+    limit: "1000",
   });
 
   if (category !== "all") {
@@ -467,7 +469,14 @@ export default async function DealsPage({
     : CATEGORY_SUBTITLES[category] || "Best deals near you";
   // Lead with the biggest everyday saving; bundles/conditional deals follow.
   const topDeal = deals.find((d: any) => amountOf(d) && !isConditional(d) && !needsQuantity(d)) || deals[0] || null;
-  const alternatives = deals.filter((d: any) => d !== topDeal).slice(0, 3);
+  // Fairness: the four cards above the fold hold at most STORE_CAP.shortList
+  // from any one store (top deal included); the store page has the rest.
+  const ordered = topDeal ? [topDeal, ...deals.filter((d: any) => d !== topDeal)] : deals;
+  const capped = capPerStore(ordered, STORE_CAP.shortList);
+  const alternatives = capped.kept.filter((d: any) => d !== topDeal).slice(0, 3);
+  const visibleCards = topDeal ? [topDeal, ...alternatives] : alternatives;
+  const cardOverflow = overflowFor(visibleCards, capped.totals);
+  const schemaDeals = capPerStore(deals, STORE_CAP.highlight).kept;
 
   // The view doesn't include website/address1 — fetch them for the
   // primary CTA so the "Visit dispensary" / "Get directions" button
@@ -477,9 +486,9 @@ export default async function DealsPage({
     : null;
   const showStatewideFallback = !!city && deals.length > 0 && deals.length < 3;
   const noLocalMatches = !!city && deals.length === 0;
-  const itemListSchema = deals.length > 0 ? buildItemListSchema(deals, categoryLabel, category) : null;
+  const itemListSchema = deals.length > 0 ? buildItemListSchema(visibleCards, categoryLabel, category) : null;
   const breadcrumbSchema = buildBreadcrumbSchema(categoryLabel, category);
-  const specialAnnouncements = deals.length > 0 ? buildSpecialAnnouncements(deals) : [];
+  const specialAnnouncements = deals.length > 0 ? buildSpecialAnnouncements(schemaDeals) : [];
 
   // Zone 4 Phase 1: direct factual answer above the fold.
   // Count unique dispensaries from the current result set.
@@ -862,6 +871,8 @@ export default async function DealsPage({
                 </div>
               </>
             )}
+
+            <StoreOverflowLinks stores={cardOverflow} city={city} note={false} />
 
             {showStatewideFallback && (
               <div className="statewide-fallback">

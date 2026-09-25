@@ -8,6 +8,8 @@ import Link from "next/link";
 import GuideShell from "../components/GuideShell";
 import WeeklySignup from "../components/WeeklySignup";
 import OtdLine from "../components/OtdLine";
+import StoreOverflowLinks from "../components/StoreOverflowLinks";
+import { capPerStore, STORE_CAP } from "../../lib/storeCap";
 import { brand } from "../../lib/brand";
 import { amountOf, isConditional, needsQuantity, saveLabel, storeName, cleanDealTitle, type ExDeal } from "../../lib/exhale";
 
@@ -32,7 +34,7 @@ const REGION = ["Peoria", "East Peoria", "Peoria Heights", "Pekin", "Bloomington
 async function getDeals(): Promise<(ExDeal & { deal_id: string })[]> {
   try {
     const r = await fetch(
-      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_id,deal_title,deal_description,category,city,name,slug,listing_slug,discount_value,discount_unit,discount_type&order=discount_value.desc.nullslast&limit=400`,
+      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_id,deal_title,deal_description,category,city,name,slug,listing_slug,discount_value,discount_unit,discount_type&order=discount_value.desc.nullslast&limit=1000`,
       { headers: { apikey: ANON, Authorization: `Bearer ${ANON}` }, next: { revalidate: 900 } }
     );
     const rows = r.ok ? await r.json() : [];
@@ -57,8 +59,11 @@ export default async function GreenWednesdayPage() {
   const everyday = all
     .filter((d) => amountOf(d) && !isConditional(d))
     .sort((a, b) => (needsQuantity(a) ? 1 : 0) - (needsQuantity(b) ? 1 : 0) || amountOf(b)!.value - amountOf(a)!.value);
-  const list = isDay ? everyday : announced;
-  const preview = everyday.slice(0, 5);
+  // Fairness: a store can take at most STORE_CAP.cityList rows of the list
+  // and STORE_CAP.shortList of the 5-row preview; its store page has the rest.
+  const cappedList = capPerStore(isDay ? everyday : announced, STORE_CAP.cityList);
+  const list = cappedList.kept;
+  const preview = capPerStore(everyday, STORE_CAP.shortList).kept.slice(0, 5);
 
   const faq = [
     { q: "When is Green Wednesday 2026?", a: `${DAY_LABEL}, the day before Thanksgiving.` },
@@ -125,9 +130,10 @@ export default async function GreenWednesdayPage() {
 
       {list.length > 0 ? (
         <>
-          <h2 className="gp-h2">{isDay ? `Every deal today · ${list.length}` : "Announced early"}</h2>
+          <h2 className="gp-h2">{isDay ? `Every deal today · ${isDay ? everyday.length : list.length}` : "Announced early"}</h2>
           {!isDay && <p className="gp-note">Deals stores have already posted that mention Green Wednesday, Thanksgiving or Black Friday.</p>}
           <div className="gp-list">{list.map((d) => <Row key={d.deal_id} d={d} />)}</div>
+          <StoreOverflowLinks stores={cappedList.overflow} />
         </>
       ) : !isDay ? (
         <p className="gp-note" style={{ marginTop: 18 }}>No store has announced a Green Wednesday deal yet. The first one that does shows up here.</p>

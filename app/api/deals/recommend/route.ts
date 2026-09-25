@@ -4,6 +4,7 @@
 //
 // GET /api/deals/recommend?category=flower&city=peoria
 
+import { capPerStore, STORE_CAP } from "@/lib/storeCap";
 import { NextRequest, NextResponse } from "next/server";
 import { isInMetro } from "../../../../lib/cityNormalize";
 import { computeOpenStatus, type HoursRow } from "../../../../lib/hours";
@@ -78,7 +79,7 @@ function rankingReason(d: Deal, category: string, city?: string): string {
 const CIL_CITY_IN_LIST = `("Peoria","East Peoria","Peoria Heights","Pekin","Bartonville","Morton","Washington","Bloomington","Normal","Champaign","Urbana","Springfield")`;
 
 async function fetchDeals(category: string): Promise<Deal[]> {
-  const params = new URLSearchParams({ select: "*", order: "discount_value.desc.nullslast", limit: "50" });
+  const params = new URLSearchParams({ select: "*", order: "discount_value.desc.nullslast", limit: "1000" });
   if (category !== "all") params.set("category", `eq.${category}`);
   params.set("city", `in.${CIL_CITY_IN_LIST}`);
   const res = await fetch(
@@ -187,7 +188,8 @@ export async function GET(req: NextRequest) {
       .map((d) => ({ ...d, score: scoreDeal(d, openNow), scope: "statewide" as const }))
       .sort((a, b) => ((b.score as number) || 0) - ((a.score as number) || 0));
 
-    const combined = [...scoredLocal, ...scoredFill].slice(0, limit);
+    // Fairness: at most STORE_CAP.highlight per store in the response.
+    const combined = capPerStore([...scoredLocal, ...scoredFill], STORE_CAP.highlight).kept.slice(0, limit);
 
     if (combined.length === 0) {
       return NextResponse.json({ ...emptyResponse(category, city), deals: [] });

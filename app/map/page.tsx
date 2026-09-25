@@ -61,7 +61,7 @@ async function getListings(): Promise<Listing[]> {
 async function getDeals(): Promise<Deal[]> {
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/deals?select=listing_slug,title,category,discount_value,discount_unit&is_active=eq.true&project_tag=eq.green&limit=500`,
+      `${SUPABASE_URL}/rest/v1/deals?select=listing_slug,title,category,discount_value,discount_unit&is_active=eq.true&project_tag=eq.green&limit=1000`,
       {
         headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
         next: { revalidate: 600 },

@@ -3,6 +3,7 @@
 // grouped by city, ranked by savings. Used by the digest cron and
 // by /api/digest/preview for live preview.
 
+import { capPerStore, STORE_CAP } from "./storeCap";
 import { getSupabase } from "@/lib/supabase";
 
 export type DigestDeal = {
@@ -80,7 +81,8 @@ export async function buildWeeklyDigest(): Promise<DigestPayload> {
   const byCity: DigestSection[] = CITIES_TO_INCLUDE
     .map((c) => ({
       city: c,
-      deals: (cityBuckets.get(c) || []).slice(0, TOP_PER_CITY),
+      // At most STORE_CAP.shortList per store so one store can't take the city.
+      deals: capPerStore(cityBuckets.get(c) || [], STORE_CAP.shortList).kept.slice(0, TOP_PER_CITY),
     }))
     .filter((s) => s.deals.length > 0);
 

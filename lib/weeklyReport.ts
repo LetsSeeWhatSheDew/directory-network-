@@ -4,6 +4,7 @@
 // Used by /this-week and the weekly email. No estimates, no fill-ins:
 // if a number isn't in the log, it isn't in the report.
 
+import { capPerStore, STORE_CAP } from "./storeCap";
 import { DAILY_LOG_START } from "./dealHistory";
 import { inferCategory } from "./inferCategory";
 
@@ -179,6 +180,10 @@ export async function getWeeklyReport(now = new Date()): Promise<WeeklyReport | 
       return out;
     };
 
+    // Fairness: one store (or chain) takes at most STORE_CAP.shortList rows
+    // of an 8-row list, so a 100-deal specials page can't fill it.
+    const fair = (arr: ReportDeal[]) => capPerStore(arr, STORE_CAP.shortList, chain).kept;
+
     const cityAgg = new Map<string, { deals: number; stores: Set<string>; topPct: number | null }>();
     const catAgg = new Map<string, number>();
     for (const d of all) {
@@ -198,9 +203,9 @@ export async function getWeeklyReport(now = new Date()): Promise<WeeklyReport | 
       dealsSeen: all.length,
       storesWithDeals: new Set(all.map((d) => d.slug)).size,
       newCount: created.size,
-      newDeals: dedupe(all.filter((d) => d.stillLive && created.has(d.dealId)).sort(byPct)).slice(0, 8),
+      newDeals: fair(dedupe(all.filter((d) => d.stillLive && created.has(d.dealId)).sort(byPct))).slice(0, 8),
       endedCount: ended.size,
-      biggest: dedupe(all.filter((d) => d.stillLive && d.pct != null).sort(byPct)).slice(0, 8),
+      biggest: fair(dedupe(all.filter((d) => d.stillLive && d.pct != null).sort(byPct))).slice(0, 8),
       byCity: [...cityAgg.entries()]
         .map(([city, v]) => ({ city, deals: v.deals, stores: v.stores.size, topPct: v.topPct }))
         .sort((a, b) => b.deals - a.deals),

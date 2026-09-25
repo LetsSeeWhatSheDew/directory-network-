@@ -9,6 +9,8 @@ import { brand } from "../../lib/brand";
 import { otdFor, usd, cityTaxRates, KIND_LABEL, type Otd } from "../../lib/otd";
 import { CITY_TAX_RATES, calculateOutTheDoor, TAX_RATES_LAST_UPDATED } from "../../lib/taxRates";
 import { storeName, cleanDealTitle } from "../../lib/exhale";
+import { capPerStore, STORE_CAP } from "../../lib/storeCap";
+import StoreOverflowLinks from "../components/StoreOverflowLinks";
 
 export const revalidate = 900;
 
@@ -29,7 +31,7 @@ type Row = { deal_id: string; deal_title: string | null; category: string | null
 async function getDeals(): Promise<Row[]> {
   try {
     const r = await fetch(
-      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_id,deal_title,category,city,name,slug,listing_slug&limit=400`,
+      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_id,deal_title,category,city,name,slug,listing_slug&limit=1000`,
       { headers: { apikey: ANON, Authorization: `Bearer ${ANON}` }, next: { revalidate: 900 } }
     );
     return r.ok ? await r.json() : [];
@@ -49,7 +51,15 @@ export default async function OutTheDoorPage() {
     if (o) priced.push({ d, o });
   }
   const groups = (["flower", "preroll", "vape", "concentrate", "edible"] as const)
-    .map((k) => ({ k, rows: priced.filter((x) => x.o.kind === k).sort((a, b) => (a.o.each ?? a.o.total) - (b.o.each ?? b.o.total)) }))
+    .map((k) => {
+      const sorted = priced.filter((x) => x.o.kind === k).sort((a, b) => (a.o.each ?? a.o.total) - (b.o.each ?? b.o.total));
+      // Up to STORE_CAP.cityList per store per group so one long specials page can't fill it.
+      const capped = capPerStore(sorted, STORE_CAP.cityList, (x) => String(x.d.listing_slug || x.d.slug || "").toLowerCase());
+      return { k, rows: capped.kept, overflow: capped.overflow.map((o) => {
+        const first = sorted.find((x) => String(x.d.listing_slug || x.d.slug || "").toLowerCase() === o.key)!.d;
+        return { ...o, slug: String(first.slug || first.listing_slug), name: storeName(first), city: first.city };
+      }) };
+    })
     .filter((g) => g.rows.length);
   const eighth = CITY_TAX_RATES.map((r) => ({ city: r.city, slug: r.slug, f: calculateOutTheDoor(40, "flower", r).outTheDoor, c: calculateOutTheDoor(40, "concentrate", r).outTheDoor, e: calculateOutTheDoor(40, "edible", r).outTheDoor, rates: cityTaxRates(r.city)! }))
     .sort((a, b) => a.f - b.f);
@@ -125,6 +135,7 @@ export default async function OutTheDoorPage() {
                 </Link>
               ))}
             </div>
+            <StoreOverflowLinks stores={g.overflow} note={false} />
           </section>
         ))
       )}

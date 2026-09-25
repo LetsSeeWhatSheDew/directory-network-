@@ -39,7 +39,7 @@ type Deal = ExDeal & { deal_id: string };
 async function getDeals(): Promise<Deal[]> {
   try {
     const r = await fetch(
-      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_id,deal_title,category,city,name,slug,listing_slug,discount_value,discount_unit,discount_type,lat,lng&order=discount_value.desc.nullslast&limit=400`,
+      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_id,deal_title,category,city,name,slug,listing_slug,discount_value,discount_unit,discount_type,lat,lng&order=discount_value.desc.nullslast&limit=1000`,
       { headers: { apikey: ANON, Authorization: `Bearer ${ANON}` }, next: { revalidate: 900 } }
     );
     return r.ok ? await r.json() : [];

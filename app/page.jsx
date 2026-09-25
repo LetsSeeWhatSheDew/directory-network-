@@ -24,6 +24,7 @@ import {
 } from "../lib/constants/regions";
 import { filterActiveDeals as filterActive } from "../lib/dealActiveFilter";
 import { getLivePriceBoard } from "../lib/priceBoard";
+import { capPerStore, STORE_CAP } from "../lib/storeCap";
 
 // Metadata — Central IL framing. The full IL footprint stays discoverable
 // via the "Browse all Illinois" link below; out-of-scope city pages keep
@@ -149,6 +150,11 @@ function rankFreshDealFirst(d, now) {
   return discount * mult;
 }
 
+// Shared candidate pool for the home rows. Wide enough that a store with
+// 100 deals can't push everyone else past the cut; capped per store below.
+// Explicit columns keep the cached payload small as deal volume grows.
+const HOME_POOL_URL = `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_id,deal_title,deal_description,category,discount_type,discount_value,discount_unit,discount_pct,original_price,sale_price,unit,price_per_gram,is_recurring,recurring_days,expires_at,source,source_url,listing_slug,slug,verified_at,last_independent_verification,status_reason,name,city,lat,lng,google_rating,review_count,accepts_credit,drive_thru,delivery,plan,savings_amount,savings_percent&city=in.${encodeURIComponent(CIL_CITY_IN_LIST)}&order=discount_value.desc.nullslast&limit=1000`;
+
 async function getTopDeals() {
   // ISR: cache the Supabase response for 60s. Cold starts and repeat
   // visitors both read the cached payload instead of round-tripping
@@ -159,7 +165,7 @@ async function getTopDeals() {
       // Pull a wider candidate pool (20) so the freshness re-rank below
       // has room to move a fresh-but-smaller-discount deal to the top
       // when an older-but-bigger deal would otherwise hero it.
-      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&city=in.${encodeURIComponent(CIL_CITY_IN_LIST)}&order=discount_value.desc.nullslast&limit=20`,
+      `${HOME_POOL_URL}`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,
@@ -169,8 +175,10 @@ async function getTopDeals() {
       }
     );
     if (!res.ok) return [];
-    const data = await res.json();
-    if (!Array.isArray(data)) return [];
+    const raw = await res.json();
+    if (!Array.isArray(raw)) return [];
+    // Fairness: a store posting 100 specials can't fill the candidate pool.
+    const data = capPerStore(filterActive(filterExpired(raw)), STORE_CAP.highlight).kept.slice(0, 20);
     const now = Date.now();
     // The view applies active_days/active_until at the DB level, but Next.js
     // ISR can hold the response for up to 60s. Re-filter in JS so a deal
@@ -251,7 +259,7 @@ async function getMostRecentDealTs() {
 async function getDealPool() {
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=*&city=in.${encodeURIComponent(CIL_CITY_IN_LIST)}&order=discount_value.desc.nullslast&limit=20`,
+      `${HOME_POOL_URL}`,
       {
         headers: {
           apikey: SUPABASE_ANON_KEY,
@@ -262,7 +270,11 @@ async function getDealPool() {
     );
     if (!res.ok) return [];
     const data = await res.json();
-    return Array.isArray(data) ? filterActive(filterExpired(data)) : [];
+    // Cap each store before taking the top 20, so one store's long specials
+    // page can't crowd everyone else out of the home rows.
+    return Array.isArray(data)
+      ? capPerStore(filterActive(filterExpired(data)), STORE_CAP.highlight).kept.slice(0, 20)
+      : [];
   } catch {
     return [];
   }

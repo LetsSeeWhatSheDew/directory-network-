@@ -50,7 +50,7 @@ export default async function StatusPage() {
   const [stores, live, obs] = await Promise.all([
     getRegionStores(),
     j<{ slug: string | null; listing_slug: string | null; source: string | null; verified_at: string | null }[]>(
-      "active_deals_with_listings?select=slug,listing_slug,source,verified_at&limit=400"
+      "active_deals_with_listings?select=slug,listing_slug,source,verified_at&limit=1000"
     ),
     j<{ listing_slug: string; observed_at: string }[]>("deal_observations?select=listing_slug,observed_at&project_tag=eq.green&order=observed_at.desc&limit=2000"),
   ]);

@@ -53,7 +53,7 @@ const ANON =
 export async function liveDeals(): Promise<ExDeal[] | null> {
   try {
     const r = await fetch(
-      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_id,name,slug,listing_slug,city,deal_title,discount_value,discount_unit,discount_type,category&order=discount_value.desc.nullslast&limit=300`,
+      `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_id,name,slug,listing_slug,city,deal_title,discount_value,discount_unit,discount_type,category&order=discount_value.desc.nullslast&limit=1000`,
       { headers: { apikey: ANON, Authorization: `Bearer ${ANON}` }, next: { revalidate: 900 } }
     );
     if (!r.ok) return null;
