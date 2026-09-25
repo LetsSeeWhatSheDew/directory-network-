@@ -84,6 +84,7 @@ export default async function DealIndexPage() {
       )}
       <h2 className="gp-h2">How it&apos;s made</h2>
       <p className="gp-p">Deals only count if we saw them on the dispensary&apos;s own website that day — never from an aggregator, never submitted by a store. &ldquo;Average discount&rdquo; is across percentage-off deals only. The day-by-day log started Sept 22, 2026, so the trend line grows from there.</p>
+      <p className="gp-p"><b>Coverage note:</b> on Sept 25, 2026 we started reading seven more stores&apos; own specials pages (NOXX, both Ascend stores, High Profile, SHARE, Shangri-La and Trinity on Glen). The jump in live deals that day is more stores counted, not a sudden wave of sales. Compare days before and after Sept 25 with that in mind.</p>
       <p className="gp-note">Reporters and researchers: you&apos;re welcome to cite these numbers with a link to this page. <Link href="/this-week">This week&apos;s report</Link> · <Link href="/how-we-rank">How we check deals</Link></p>
     </GuideShell>
   );

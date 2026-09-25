@@ -40,5 +40,5 @@ pkill -f "scripts/scrape-rendered-deals.ts" 2>/dev/null && echo "killed a leftov
 
 run_with_timeout 120 git pull -q --ff-only origin main || echo "git pull failed or timed out (continuing with current checkout)"
 run_with_timeout 300 npm install --include=dev --no-audit --no-fund --silent || echo "npm install failed or timed out (continuing)"
-run_with_timeout 900 npx tsx scripts/scrape-rendered-deals.ts --apply
+run_with_timeout 1080 npx tsx scripts/scrape-rendered-deals.ts --apply
 echo "exit $?"
