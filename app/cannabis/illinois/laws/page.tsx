@@ -154,7 +154,7 @@ export default function IllinoisLawsPage() {
             <h2 className="laws-h2">Cannabis and Driving</h2>
             <div className="laws-no">
               <p className="laws-no-title">DUI laws apply to cannabis</p>
-              <p className="laws-no-text">Driving under the influence of cannabis is illegal. The legal limit is 5 nanograms of THC per milliliter of whole blood. Cannabis must be stored in a sealed container in the trunk when transported.</p>
+              <p className="laws-no-text">Driving under the influence of cannabis is illegal. The legal limit is 5 nanograms of THC per milliliter of whole blood. In a car, keep cannabis in a sealed, odor-proof container. The dispensary&apos;s sealed package counts. Once it&apos;s opened, keep it out of reach; the trunk is safest. More: <a href="/guides/cannabis-and-driving-illinois">cannabis and driving in Illinois</a>.</p>
             </div>
           </div>
           <div className="laws-section">

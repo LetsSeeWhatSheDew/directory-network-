@@ -50,8 +50,7 @@ function scoreDeal(d: Deal, openNow: boolean): number {
   if (d.drive_thru) s += 3;
   const rating = Number(d.google_rating) || 0;
   if (rating >= 4.5) s += (rating - 4) * 10;
-  if (d.plan === "featured") s += 15;
-  if (d.plan === "boost") s += 8;
+  // No paid boost: nobody pays to rank.
   // Open-now bonus: if current CT hour is within typical dispensary
   // hours, boost the score. This promotes reachable-right-now deals
   // to the top. Weighted at +25 per the spec so it outranks small
@@ -64,7 +63,6 @@ function rankingReason(d: Deal, category: string, city?: string): string {
   const cat = category === "all" ? "deals" : category;
   const where = city ? `in ${city[0].toUpperCase()}${city.slice(1)}` : "in Illinois";
   const rating = Number(d.google_rating) || 0;
-  if (d.plan === "featured") return `Featured partner · top ${cat} deal ${where} today`;
   if (d.is_recurring) return "Recurring deal — reliable savings week to week";
   if (rating >= 4.7) return `Best-rated dispensary (${rating}★) with an active deal`;
   const discount = Number(d.discount_value) || 0;

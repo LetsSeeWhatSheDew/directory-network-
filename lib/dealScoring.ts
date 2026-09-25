@@ -159,8 +159,8 @@ export interface GradeResult {
 //   google_rating is null  : 0 (don't penalize missing data)
 //   accepts_credit = true  : +5 (else 0)
 //   drive_thru = true      : +5
-//   plan = 'featured'      : +20
-//   plan = 'boost'         : +10
+//   plan = 'featured'      : +0 (no paid rank, ever)
+//   plan = 'boost'         : +0
 //
 // Grade thresholds:
 //   ≥ 70 → A (Excellent)
@@ -202,9 +202,7 @@ export function scoreDeal(d: Deal): number {
   if (d?.accepts_credit === true) s += 5;
   if (d?.drive_thru === true) s += 5;
 
-  const plan = (d?.plan || "").toLowerCase();
-  if (plan === "featured") s += 20;
-  else if (plan === "boost") s += 10;
+  // No paid boost of any kind: nobody pays to rank (featured/boost plans carry no score).
 
   return Math.max(0, Math.min(100, s));
 }
