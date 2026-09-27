@@ -56,3 +56,14 @@ section on `/guides`, and the URL patterns in `/llms.txt`.
 - Pre-existing: `tsc` fails on two `scripts/` files (Cowork lane; excluded in
   `tsconfig.typecheck.json` with a note). There are 97 ESLint errors across 40
   files (baselined; CI fails only on new ones).
+
+## Round 2 (same day)
+
+- **Accessibility:** `tests/e2e/a11y.spec.ts` runs axe (WCAG 2.1 AA) on every route: the day theme
+  at 390px and the night theme at 1440px, with reduced motion on.
+  - Fixed: the counter-card preview is now focusable, and `/developers` code blocks wrap.
+  - The rest are listed in `tests/e2e/a11y-known.ts` with owners, mostly #10's files.
+- **Performance:** `tests/perf/lighthouse-budget.mjs` runs in CI. Home scores 94 and `/city/peoria` 95.
+  LCP is about 3.0s, and 85% of that is render delay on a text element (motion area, #10).
+- **#8 coverage:** `/route/[pair]` samples are in place and `deal_reports` fixtures added. A trial
+  merge of #8 passes smoke and axe on all of its pages.
