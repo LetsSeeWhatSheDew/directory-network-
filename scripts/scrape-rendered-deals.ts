@@ -25,6 +25,10 @@
 // shopper taps a category. Each store gets STORE_BUDGET_MS; no store starts
 // after MENU_DEADLINE_MS. --apply writes menu_snapshots + menu_items (the
 // menu-baseline pipeline tables); a dry run prints a per-store summary.
+// 2026-09-27: + Jane/Algolia (nuEra x4, High Haven) and Treez HTML (Trinity
+// x2) readers; RISE's chain-wide IL deals page for the three Bloom stores.
+//   npx tsx scripts/scrape-rendered-deals.ts --menus-only --slug=nuera
+//   npx tsx scripts/scrape-rendered-deals.ts --no-menus --slug=beyond-hello-peoria
 //
 // Dry runs only READ, so they work with the public anon key.
 // Optional env for non-Mac hosts: PW_EXECUTABLE_PATH (Chromium binary instead
@@ -49,6 +53,10 @@ import { insertScraperRun, finishScraperRun, abortScraperRun, markAbandonedRuns 
 import { isAllowedByRobots } from "../lib/scraper/cil-deal-scraper";
 import { MENU_SOURCES, MENU_NOT_COVERED, captureStoreMenu, persistStoreMenu, otdPrice, type StoreMenuResult } from "../lib/scraper/menuCapture";
 import { REF_UNITS, REF_DEF } from "../lib/menuPrices";
+import {
+  tidyPromoName, notACannabisDeal, namesPastDate, DEAL_SIGNAL, offerCatalog,
+  RISE_IL_DEALS_URL, isRiseIlDealsUrl, pageSaysAllIllinois, parseRiseDealCards, BLOOM_IL_STORES, readDealCards,
+} from "../lib/scraper/renderedDeals";
 
 try {
   for (const line of readFileSync(new URL("../.env.local", import.meta.url), "utf8").split("\n")) {
@@ -143,69 +151,17 @@ export const RENDERED_URLS: Record<string, string[]> = {
   // Cresco/Sunnyside platform (store transitioned in 2026).
   "shangri-la-springfield": ["https://www.shangrila-springfield.shop/page/specials-shangri-la"],
   // Now Green Thumb "Bloom Wellness" stores on risecannabis.com (Cloudflare
-  // Turnstile — blocked from datacenter IPs; may load from the Mac).
-  "beyond-hello-peoria": ["https://risecannabis.com/dispensaries/illinois/bloom-wellness-peoria/"],
-  "ayr-wellness-normal": ["https://risecannabis.com/dispensaries/illinois/bloom-wellness-normal-bradford/"],
-  "revolution-dispensary-normal": ["https://risecannabis.com/dispensaries/illinois/bloom-wellness-normal-northbrook/"],
+  // Turnstile — blocked from datacenter IPs; may load from the Mac). RISE
+  // posts its IL promotions on one chain-wide page, not the store pages; the
+  // fetcher reads it once per run and keeps only the cards that name this
+  // store or say "all Illinois locations" (lib/scraper/renderedDeals.ts).
+  "beyond-hello-peoria": ["https://risecannabis.com/dispensaries/illinois/bloom-wellness-peoria/", RISE_IL_DEALS_URL],
+  "ayr-wellness-normal": ["https://risecannabis.com/dispensaries/illinois/bloom-wellness-normal-bradford/", RISE_IL_DEALS_URL],
+  "revolution-dispensary-normal": ["https://risecannabis.com/dispensaries/illinois/bloom-wellness-normal-northbrook/", RISE_IL_DEALS_URL],
   // Website on file is The Dispensary FULTON; the chain lists no Champaign
   // store and thedispensarychampaign.com redirects to the Fulton site.
   "the-dispensary-champaign": [],
 };
-
-// ---------------------------------------------------------------------------
-// Promo-name hygiene for structured specials lists.
-// ---------------------------------------------------------------------------
-
-// Dutchie clamps special names at ~75 characters ("…Ozone Reserve Con").
-// Cut a clamped name back to its last whole word and mark it.
-function tidyPromoName(raw: string): string {
-  let t = raw.replace(/\s+/g, " ").trim();
-  if (t.length >= 72 && !/[.!?)\]]$/.test(t)) t = t.replace(/\s+\S*$/, "").replace(/[\s,&+\-–|]+$/, "") + "…";
-  t = t.replace(/([!?.])\1+/g, "$1"); // "BOGO!!!!!!" -> "BOGO!"
-  return t.replace(/[\s\u200b,&+\-–—|]+$/, "").trim();
-}
-
-// Not a cannabis price: accessory-only promos (pipes, papers, lighters,
-// batteries on their own), promos named for a season that isn't now, and
-// names too vague to mean anything ("$25 Special").
-const CANNABIS_WORD = /\b(flower|bud|popcorn|smalls|shake|oz|ounce|half|eighth|quarter|zip|\d+(?:\.\d+)?\s?g|\d+\s?mg|cart|carts|cartridge|vape|vapes|disposable|dispos|aio|pod|gumm|edible|chew|chocolate|drink|beverage|lemonade|tincture|topical|pre-?roll|joint|concentrate|rosin|resin|badder|sauce|diamond|wax|hash|infused|capsule)/i;
-const ACCESSORY_WORD = /\b(pipes?|papers?|cones?|lighters?|hot knife|seahorses?|puffco|lookah|mj arsenal|grinders?|koozie|batter(?:y|ies)|accessor(?:y|ies)|ice pack|rolling)\b/i;
-function notACannabisDeal(name: string, now = new Date()): boolean {
-  if (ACCESSORY_WORD.test(name) && !CANNABIS_WORD.test(name.replace(ACCESSORY_WORD, ""))) return true;
-  const m = now.getMonth(); // 0 = Jan
-  if (/\bsummer\b/i.test(name) && (m < 4 || m > 8)) return true;
-  if (/\bwinter\b/i.test(name) && m >= 3 && m <= 9) return true;
-  if (/\b(4\/20|420)\b/.test(name) && m !== 3) return true;
-  if (/\b(black friday|green wednesday)\b/i.test(name) && m !== 10) return true;
-  if (/^\$\s?\d+\s+special!?$/i.test(name.trim())) return true;
-  return false;
-}
-
-// A promotion whose own name carries an explicit date that has passed
-// ("VIBATIONS 25% 6/15/26") is stale even if the POS still lists it.
-function namesPastDate(name: string, now = new Date()): boolean {
-  const m = name.match(/\b(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})\b/);
-  if (!m) return false;
-  const year = m[3].length === 2 ? 2000 + Number(m[3]) : Number(m[3]);
-  const d = new Date(year, Number(m[1]) - 1, Number(m[2]), 23, 59, 59);
-  return Number.isFinite(d.getTime()) && d.getTime() < now.getTime();
-}
-
-// A structured promo name must state an actual offer — a percentage, a
-// price, a bundle, BOGO or a freebie. Names like "Nomad 3.5g Smalls Fresh
-// Drop" or "BRIQ 2.0! New hardware, same price!" are announcements, not deals.
-const DEAL_SIGNAL = /\d\s?%|\$\s?\.?\d|\bbogo\b|\bb\dg\d\b|\bbuy\s+(?:\d|one|two|any)\b|\bfree\b/i;
-
-function offerCatalog(names: string[]): string {
-  const ld = {
-    "@type": "OfferCatalog",
-    offers: names.map((name) => {
-      const pct = name.match(/(\d{1,2})\s*%/);
-      return pct ? { name, discount: pct[1] } : { name };
-    }),
-  };
-  return `<script type="application/ld+json">${JSON.stringify(ld)}</script>`;
-}
 
 // Structured, store-published specials lists. When one of these is present
 // it is the complete promotion list for the store, so the page's product
@@ -279,7 +235,9 @@ async function passAgeGate(page: Page): Promise<boolean> {
 }
 
 function makeFetcher(ctx: BrowserContext): HtmlFetcher {
-  const fetchOnce = async (url: string, page: Page): Promise<string[] | null> => {
+  // Loads a page, clicks through an age gate and returns false on a bot
+  // challenge (skipped, never solved).
+  const openPage = async (url: string, page: Page): Promise<boolean> => {
     await page.goto(url, { waitUntil: "domcontentloaded", timeout: NAV_TIMEOUT_MS });
     // Age gate: click through a visible "Yes / I'm 21" control if present.
     if (await passAgeGate(page)) {
@@ -296,7 +254,11 @@ function makeFetcher(ctx: BrowserContext): HtmlFetcher {
     await page.waitForLoadState("networkidle", { timeout: 15000 }).catch(() => {});
     await page.waitForTimeout(2500);
     const title = (await withTimeout(page.title(), ACTION_TIMEOUT_MS, "title")).toLowerCase();
-    if (/just a moment|attention required|access denied|verify you are human/.test(title)) return null;
+    return !/just a moment|attention required|access denied|verify you are human/.test(title);
+  };
+
+  const fetchOnce = async (url: string, page: Page): Promise<string[] | null> => {
+    if (!(await openPage(url, page))) return null;
 
     // Structured specials lists (Dutchie embeds, LeafBridge) and store-named
     // uniform-price groups (Treez) — complete, store-published lists.
@@ -361,19 +323,50 @@ function makeFetcher(ctx: BrowserContext): HtmlFetcher {
     return out;
   };
 
-  return async (url) => {
+  const withPage = async <T,>(url: string, fn: (page: Page) => Promise<T | null>): Promise<T | null> => {
     let page: Page | null = null;
     try {
       page = await withTimeout(ctx.newPage(), ACTION_TIMEOUT_MS, "newPage");
       page.setDefaultTimeout(ACTION_TIMEOUT_MS);
       page.setDefaultNavigationTimeout(NAV_TIMEOUT_MS);
-      return await withTimeout(fetchOnce(url, page), PAGE_BUDGET_MS, `page ${url}`);
+      return await withTimeout(fn(page), PAGE_BUDGET_MS, `page ${url}`);
     } catch (err) {
       console.log(`  · ${url}: ${(err as Error).message.slice(0, 120)}`);
       return null;
     } finally {
       if (page) await withTimeout(page.close(), 5000, "page.close").catch(() => {});
     }
+  };
+
+  // RISE's chain-wide Illinois deals page: read ONCE per run and shared by the
+  // three Bloom stores. Each store gets only the cards that name it or say
+  // "all Illinois locations"; everything skipped is printed with its reason.
+  const chainPages = new Map<string, Promise<{ cards: string[][]; pageLines: string[] } | null>>();
+  const riseDealsFor = async (url: string, listingSlug?: string): Promise<string[] | null> => {
+    let pending = chainPages.get(url);
+    if (!pending) {
+      pending = withPage(url, async (page) => ((await openPage(url, page)) ? readDealCards(page, ACTION_TIMEOUT_MS) : null));
+      chainPages.set(url, pending);
+      const got = await pending;
+      if (!got) console.log(`  · ${url}: not read (bot challenge or load failure) — no Bloom deals this run`);
+      else {
+        const parsed = parseRiseDealCards(got.cards, { pageAllIllinois: pageSaysAllIllinois(got.pageLines) });
+        console.log(`  · RISE IL deals page: ${got.cards.length} cards → ${parsed.deals.length} deals mapped, ${parsed.skipped.length} skipped`);
+        for (const d of parsed.deals) console.log(`      ✓ ${d.title} → ${d.stores.map((s) => BLOOM_IL_STORES[s].label).join(", ")}`);
+        for (const k of parsed.skipped) console.log(`      ✗ ${k.card} — ${k.reason}`);
+      }
+    }
+    const got = await pending;
+    if (!got) return null;
+    if (!listingSlug || !BLOOM_IL_STORES[listingSlug]) return [];
+    const { deals } = parseRiseDealCards(got.cards, { pageAllIllinois: pageSaysAllIllinois(got.pageLines) });
+    const mine = deals.filter((d) => d.stores.includes(listingSlug)).map((d) => d.title);
+    return mine.length ? [offerCatalog(mine)] : [];
+  };
+
+  return async (url, listingSlug) => {
+    if (isRiseIlDealsUrl(url)) return riseDealsFor(url, listingSlug);
+    return withPage(url, (page) => fetchOnce(url, page));
   };
 }
 

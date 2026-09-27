@@ -1,0 +1,69 @@
+{
+ "_fixture": "SYNTHETIC \u2014 deal cards as the rendered-page card splitter returns them (one array of lines per card), shaped like a chain-wide IL deals page. risecannabis.com is behind Cloudflare and could not be loaded from the cloud on 2026-09-27; the Mac dry run prints the real cards. Card wording here is written to exercise each mapping rule, not copied from RISE.",
+ "cards": [
+  [
+   "30% off Verano and The Essence brands",
+   "Valid at Bloom Wellness Peoria",
+   "Shop Now"
+  ],
+  [
+   "35% off Rove, Cresco Brands, and Joos Disposables (1g|2g)",
+   "Available at all Illinois locations"
+  ],
+  [
+   "40% off Elevate vapes",
+   "Bloom Wellness Normal (Bradford)"
+  ],
+  [
+   "20% off RYTHM flower",
+   "Bloom Wellness Normal - Northbrook Dr."
+  ],
+  [
+   "25% off Good Green edibles",
+   "Bloom Wellness Normal"
+  ],
+  [
+   "BOGO 50% off Dogwalkers pre-rolls",
+   "RISE Niles, RISE Mundelein"
+  ],
+  [
+   "20% off all glass pipes and papers",
+   "All Illinois locations"
+  ],
+  [
+   "Up to 30% off",
+   "All Illinois locations"
+  ],
+  [
+   "15% off Incredibles gummies",
+   "Valid at all Illinois locations except Bloom Wellness Peoria"
+  ],
+  [
+   "Daily Deals",
+   "Check back soon"
+  ],
+  [
+   "10% off Aeriz 3.5g",
+   "Valid 6/15/26 only at Bloom Wellness Peoria"
+  ],
+  [
+   "25% off Cresco flower",
+   "Northbrook"
+  ],
+  [
+   "$25 eighths of Simply Herb",
+   "Bloom Wellness East Peoria"
+  ]
+ ],
+ "pageLines": [
+  "Illinois Dispensary Deals",
+  "Deals change daily."
+ ],
+ "pageLinesAllIl": [
+  "Illinois Dispensary Deals",
+  "All deals below are valid at all Illinois locations."
+ ],
+ "pageLinesAllIlUnless": [
+  "All deals valid at all Illinois locations unless noted."
+ ]
+}

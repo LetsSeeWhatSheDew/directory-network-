@@ -1,0 +1,168 @@
+{
+ "_fixture": "SYNTHETIC \u2014 rendered product-card text laid out like the one Trinity layout observed on 2026-09-25 (a price as \"$90\" / \"/\" / \"28g\" on separate lines, docs/ops/2026-09-25-scraper-coverage.md). The cloud could not load trinitydispensaries.com on 2026-09-27, so card wording beyond that pattern is assumed; the Mac dry run is the real check.",
+ "flower": [
+  {
+   "href": "/product/pastries-34-3-5g",
+   "name": "Pastries #34",
+   "lines": [
+    "Simply Herb",
+    "Pastries #34",
+    "Hybrid",
+    "THC 24.1%",
+    "$30",
+    "/",
+    "3.5g"
+   ]
+  },
+  {
+   "href": "/product/mayday",
+   "name": "Mayday",
+   "lines": [
+    "Bedford Grow",
+    "Mayday",
+    "THC 28%",
+    "$45",
+    "/",
+    "3.5g",
+    "$80",
+    "/",
+    "7g"
+   ]
+  },
+  {
+   "href": "/product/jokerz-sale",
+   "name": "Jokerz 31",
+   "lines": [
+    "Sale",
+    "Jokerz 31",
+    "$35",
+    "$50",
+    "/",
+    "3.5g"
+   ]
+  },
+  {
+   "href": "/product/flan-bundle",
+   "name": "Flan",
+   "lines": [
+    "2 for $70",
+    "Flan",
+    "$40",
+    "/",
+    "3.5g"
+   ]
+  },
+  {
+   "href": "/product/ounce",
+   "name": "Glen Hot 90",
+   "lines": [
+    "Glen Hot 90",
+    "$90",
+    "/",
+    "28g"
+   ]
+  },
+  {
+   "href": "/product/kief-coated",
+   "name": "Kief Coated Gelato",
+   "lines": [
+    "Kief Coated Gelato",
+    "$40",
+    "/",
+    "3.5g"
+   ]
+  },
+  {
+   "href": "/product/name-size",
+   "name": "Tallac | 3.5g | IC Collective",
+   "lines": [
+    "Tallac | 3.5g | IC Collective",
+    "$38"
+   ]
+  },
+  {
+   "href": "/product/two-prices-no-size",
+   "name": "The Glove",
+   "lines": [
+    "The Glove",
+    "$35",
+    "$60"
+   ]
+  },
+  {
+   "href": "/product/high-thc",
+   "name": "Gas Face",
+   "lines": [
+    "Gas Face",
+    "THC 36.2%",
+    "$45",
+    "/",
+    "3.5g"
+   ]
+  }
+ ],
+ "vape": [
+  {
+   "href": "/product/cart-1g",
+   "name": "Lemon OG Cart 1g",
+   "lines": [
+    "Aeriz",
+    "Lemon OG Cart 1g",
+    "$42",
+    "/",
+    "1g"
+   ]
+  },
+  {
+   "href": "/product/dispo",
+   "name": "Rove Disposable",
+   "lines": [
+    "Rove Disposable",
+    "$40",
+    "/",
+    "1g"
+   ]
+  },
+  {
+   "href": "/product/half-cart",
+   "name": "Half Cart",
+   "lines": [
+    "Half Cart",
+    "Cartridge",
+    "$25",
+    "/",
+    "0.5g"
+   ]
+  }
+ ],
+ "edible": [
+  {
+   "href": "/product/gummy",
+   "name": "Wyld Raspberry Gummies",
+   "lines": [
+    "Wyld Raspberry Gummies",
+    "$22",
+    "/",
+    "100mg"
+   ]
+  },
+  {
+   "href": "/product/choc",
+   "name": "Kiva Chocolate",
+   "lines": [
+    "Kiva Chocolate",
+    "$22",
+    "/",
+    "100mg"
+   ]
+  },
+  {
+   "href": "/product/gummy-10",
+   "name": "Camino 10mg Gummies 100mg",
+   "lines": [
+    "Camino 10mg Gummies 100mg",
+    "$20"
+   ]
+  }
+ ]
+}

@@ -513,8 +513,9 @@ export function candidateUrls(baseUrl: URL): string[] {
 // Renders a URL in a real browser and returns the main document HTML plus
 // every iframe's HTML (Dutchie/Jane/Sweed menus live in iframes or are
 // client-rendered). Supplied by scripts/scrape-rendered-deals.ts; the
-// Vercel cron never sets it.
-export type HtmlFetcher = (url: string) => Promise<string[] | null>;
+// Vercel cron never sets it. listingSlug lets a chain-wide page (RISE's
+// Illinois deals page) return only the deals that page assigns to that store.
+export type HtmlFetcher = (url: string, listingSlug?: string) => Promise<string[] | null>;
 
 async function scrapeListing(
   listing: Listing,
@@ -565,7 +566,7 @@ async function scrapeListing(
     try {
       let htmls: string[];
       if (fetcher) {
-        const got = await fetcher(candidateUrl);
+        const got = await fetcher(candidateUrl, listing.slug);
         if (!got) continue;
         htmls = got;
       } else {
