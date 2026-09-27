@@ -6,6 +6,7 @@ import OtdLine from "../components/OtdLine";
 import type { Faq } from "../guides/GuideParts";
 import { ROUTE_CITIES, COMMON_PAIRS, CORRIDOR_MILES, pairSlug, routeCity, viaHref, driveHref, type RoutePlan } from "../../lib/routeDeals";
 import { saveLabel, cleanDealTitle, storeName, amountOf, productOf } from "../../lib/exhale";
+import { checkedLabel } from "../../lib/dealOfTheDay";
 
 const CSS = `
 .rt-form{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:20px 0 6px;padding:14px;border-radius:20px;background:var(--pp-haze);border:1px solid var(--pp-haze-border)}
@@ -72,15 +73,15 @@ export function routeFaqs(plan: RoutePlan | null, fromName: string, toName: stri
       q: `Are there dispensaries between ${fromName} and ${toName}?`,
       a: plan
         ? plan.stops.length
-          ? `Yes. This morning ${plan.stops.length} store${plan.stops.length === 1 ? "" : "s"} within ${CORRIDOR_MILES} miles of the straight line from ${fromName} to ${toName} had a deal posted: ${plan.stops.slice(0, 6).map((s) => `${storeName(s.deals[0] || { slug: s.slug, name: s.name })} (${s.city})`).join(", ")}${plan.stops.length > 6 ? " and more" : ""}.`
-          : `None of the stores within ${CORRIDOR_MILES} miles of the straight line from ${fromName} to ${toName} had a deal posted this morning. Stores in both cities are on their city pages.`
+          ? `Yes. ${plan.stops.length} store${plan.stops.length === 1 ? "" : "s"} within ${CORRIDOR_MILES} miles of the straight line from ${fromName} to ${toName} ${plan.stops.length === 1 ? "has" : "have"} a live deal right now: ${plan.stops.slice(0, 6).map((s) => `${storeName(s.deals[0] || { slug: s.slug, name: s.name })} (${s.city})`).join(", ")}${plan.stops.length > 6 ? " and more" : ""}.`
+          : `We don't see a live deal at any store within ${CORRIDOR_MILES} miles of the straight line from ${fromName} to ${toName} right now. Every live deal in Central Illinois is on the deals page.`
         : "We couldn't read today's deals just now. Try again in a minute.",
     },
     {
       q: `What's the best dispensary deal on the drive from ${fromName} to ${toName}?`,
       a: best && bestA
-        ? `${bestA.big} off ${productOf({ ...best.deal, deal_title: cleanDealTitle(best.deal.deal_title) }).toLowerCase()} at ${storeName(best.deal)} in ${best.stop.city}, about ${Math.round(best.stop.along)} miles along the way (straight line). Checked on the store's own site this morning.`
-        : "No everyday percent- or dollars-off deal on this route this morning. Any priced or conditional deals are listed on the page.",
+        ? `${bestA.big} off ${productOf({ ...best.deal, deal_title: cleanDealTitle(best.deal.deal_title) }).toLowerCase()} at ${storeName(best.deal)} in ${best.stop.city}, about ${Math.round(best.stop.along)} miles along the way (straight line).${checkedLabel(best.deal.verified_at) ? ` Last checked on the store's own site ${checkedLabel(best.deal.verified_at)} Central.` : ""}`
+        : "No everyday percent- or dollars-off deal on this route right now. Any priced or conditional deals are listed on the page.",
     },
     {
       q: "How do you decide what's on the way?",
@@ -96,9 +97,9 @@ export function RouteStops({ plan }: { plan: RoutePlan }) {
       <div className="rt-sum">
         <p>
           About <b>{Math.round(plan.miles)} miles</b> in a straight line; the drive is longer. {plan.stops.length > 0 ? (
-            <><b>{plan.stops.length}</b> store{plan.stops.length === 1 ? "" : "s"} within {CORRIDOR_MILES} miles of the way {plan.stops.length === 1 ? "has" : "have"} a deal posted this morning.</>
+            <><b>{plan.stops.length}</b> store{plan.stops.length === 1 ? "" : "s"} within {CORRIDOR_MILES} miles of the way {plan.stops.length === 1 ? "has" : "have"} a live deal.</>
           ) : (
-            <>No store within {CORRIDOR_MILES} miles of the way has a deal posted this morning.</>
+            <>No store within {CORRIDOR_MILES} miles of the way has a live deal right now.</>
           )}
         </p>
         {plan.best && (
@@ -143,7 +144,7 @@ export function RouteStops({ plan }: { plan: RoutePlan }) {
         <div className="rt-end">{to.name}</div>
       </div>
       <p className="gp-note">
-        Miles are straight-line from city centers and each store&apos;s location, so they&apos;re a rough guide; &ldquo;Add as a stop&rdquo; opens the real route in Google Maps. Deals checked on each store&apos;s own site this morning. The counter always has the final word. Buy on the way, enjoy it at home.
+        Miles are straight-line from city centers and each store&apos;s location, so they&apos;re a rough guide; &ldquo;Add as a stop&rdquo; opens the real route in Google Maps. Deals come from each store&apos;s own site and are re-checked daily; each deal&apos;s page shows when it was last checked. The counter always has the final word. Buy on the way, enjoy it at home.
       </p>
     </>
   );

@@ -52,7 +52,7 @@ export async function GET() {
     for (const [a, b] of COMMON_PAIRS) {
       const plan = planRoute(routeCity(a)!, routeCity(b)!, live);
       lines.push(`### ${plan.from.name} to ${plan.to.name} (${u}/route/${pairSlug(a, b)})`);
-      if (!plan.stops.length) lines.push("- No store near the way has a deal posted this morning.");
+      if (!plan.stops.length) lines.push("- No store near the way has a live deal right now.");
       for (const st of plan.stops) {
         const d = st.deals[0];
         if (!d) continue;

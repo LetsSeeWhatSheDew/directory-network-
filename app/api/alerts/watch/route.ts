@@ -91,7 +91,8 @@ export async function POST(req: NextRequest) {
   } else if (b.kind === "event") {
     const ev = eventById(typeof b.event === "string" ? b.event : "");
     if (!ev) return NextResponse.json({ ok: false, error: "Pick a sale day." }, { status: 400 });
-    if (daysUntil(ev) < 0) return NextResponse.json({ ok: false, error: `${ev.name} has already passed.` }, { status: 400 });
+    // The sale-day email goes out that morning, so sign-ups close the day before.
+    if (daysUntil(ev) <= 0) return NextResponse.json({ ok: false, error: daysUntil(ev) === 0 ? `${ev.name} is today. Everything's on ${brand.url}${ev.path}.` : `${ev.name} has already passed.` }, { status: 400 });
     const cityIn = String(b.city || "").trim().toLowerCase().replace(/-/g, " ");
     const city = cityIn ? CENTRAL_IL_CITIES.find((c) => c.name.toLowerCase() === cityIn) || null : null;
     if (cityIn && !city) return NextResponse.json({ ok: false, error: "Pick a Central Illinois city." }, { status: 400 });

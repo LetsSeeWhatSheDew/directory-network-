@@ -79,7 +79,8 @@ export const storeSlugOf = (r: Pick<WatchRow, "categories">) =>
 const isMeta = (c: string) => c.startsWith("ok:") || c.startsWith("sent:");
 export const userCategories = (r: Pick<WatchRow, "categories">) =>
   (r.categories || []).filter((c) => !isMeta(c) && !c.startsWith("store:"));
-const confirmTag = (id: string, email: string) => `ok:${mac(`confirmed:${id}:${email.toLowerCase()}`, 24)}`;
+/** Exported for tests; the tag is only valid with the server secret. */
+export const confirmTag = (id: string, email: string) => `ok:${mac(`confirmed:${id}:${email.toLowerCase()}`, 24)}`;
 export function isConfirmed(r: WatchRow): boolean {
   const want = confirmTag(r.id, r.email);
   return (r.categories || []).some((c) => safeEq(c, want));

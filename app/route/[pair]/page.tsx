@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ pair: str
   if (!p) return { title: "Route not found", robots: { index: false, follow: false } };
   const common = isCommonPair(p.from.slug, p.to.slug);
   const title = `Dispensary Deals Between ${p.from.name} and ${p.to.name}, IL`;
-  const description = `Driving from ${p.from.name} to ${p.to.name}? Every dispensary within ${CORRIDOR_MILES} miles of the way with a deal posted this morning, in the order you reach it, with directions that add the stop. Checked on each store's own site; no store pays to rank.`;
+  const description = `Driving from ${p.from.name} to ${p.to.name}? Every dispensary within ${CORRIDOR_MILES} miles of the way with a live deal, in the order you reach it, with directions that add the stop. Checked on each store's own site; no store pays to rank.`;
   const url = `${brand.url}/route/${pairSlug(p.from.slug, p.to.slug)}`;
   return {
     title,
@@ -73,7 +73,7 @@ export default async function RoutePairPage({ params }: { params: Promise<{ pair
       crumbs={[{ href: "/route", label: "Best deal on your route" }]}
       eyebrow="Best deal on your route"
       title={`${from.name} to ${to.name}`}
-      lede={<>The dispensaries near the way with a deal posted this morning, in the order you reach them. Tap &ldquo;Add as a stop&rdquo; and Google Maps routes you through.</>}
+      lede={<>The dispensaries near the way with a live deal, in the order you reach them. Tap &ldquo;Add as a stop&rdquo; and Google Maps routes you through.</>}
       jsonLd={jsonLd}
     >
       <style>{GUIDE_EXTRA_CSS + ROUTE_CSS}</style>
@@ -81,7 +81,7 @@ export default async function RoutePairPage({ params }: { params: Promise<{ pair
       {plan ? (
         <RouteStops plan={plan} />
       ) : (
-        <p className="gp-note" role="status">We couldn&apos;t read this morning&apos;s deals just now. Give it a minute and refresh.</p>
+        <p className="gp-note" role="status">We couldn&apos;t read today&apos;s deals just now. Give it a minute and refresh.</p>
       )}
       <FaqBlock faqs={faqs} />
       <h2 className="gp-h2">Other common drives</h2>

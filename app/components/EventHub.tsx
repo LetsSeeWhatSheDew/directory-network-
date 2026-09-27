@@ -91,7 +91,7 @@ export default async function EventHub({ ev, extraFaqs = [] }: { ev: SaleEvent; 
         <>
           {ev.name} is <b>{ev.dateLabel}</b>. {ev.what}{" "}
           {isDay
-            ? "Here's every deal we found on the stores' own sites this morning, biggest saving first."
+            ? "Here's every live deal from the stores' own sites, biggest saving first. We re-check them every morning."
             : past
             ? "This year's has passed; next year's date goes up here once it's set."
             : "This page is ready and waiting. That morning it fills with every deal we find, so you won't have to open twenty tabs."}

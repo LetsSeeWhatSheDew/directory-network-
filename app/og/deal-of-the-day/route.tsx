@@ -44,7 +44,7 @@ export async function GET(req: Request) {
         {r.status === "unknown" ? "Checked every morning" : "No clear winner today"}
       </span>
       <span style={{ fontSize: og ? 20 : 28, color: body, marginTop: 12 }}>
-        {r.status === "none" ? `${r.live} deals live, none an everyday saving` : "on the stores' own sites"}
+        {r.status === "none" ? `${r.live} deals live; none cleared the bar today` : "on the stores' own sites"}
       </span>
     </div>
   );

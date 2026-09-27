@@ -21,12 +21,12 @@ scraper code.
 - **No migration.** `deal_alerts` was designed for "notify me when X drops below $30" and already stores watch bookkeeping as tags in `categories` (`lib/dealWatch.ts`). Price watches store `item:<slug>:<ref>`, `ref:<cents>`, optional `max:<cents>`; sale-day watches store `event:<id>`. The `max_price` column was not used because `sql/deals-schema.sql` might not match production. `lib/alertSubscribers.ts` now excludes all four watch types from the weekly report.
 - **Deal of the day** ranks percent-off by percent, and ranks dollars-off as a share of `AVG_SPEND_BY_CATEGORY` (ordering only, never displayed). Ties rotate daily by an FNV hash of day + store. Runners-up are one per store. The 7-day featured-slot freshness rule applies.
 - **Corridor**: 5 miles from the straight segment between city centers, measured on an equirectangular projection. Mile markers and detours are labeled as straight-line approximations. There are no paid map APIs: the Google Maps `dir` URLs need no key.
-- **Accuracy**: 80% people (Yes share over 90 days, deduped per deal/browser/CT day) + 20% freshness (live deals re-found within 48h). Needs 5 taps before a score is shown. Page-level reports (`wrong_info`, `other`) don't count.
+- **Accuracy**: 80% people (Yes share over 90 days, deduped per deal/user-agent/CT day, which can undercount but never overcounts) + 20% freshness (live deals re-found within 48h). Needs 5 taps before a score is shown. Page-level reports (`wrong_info`, `other`) don't count.
 - **Price drops**: email when the out-the-door price falls ≥ $1.00 below the reference price (and under the optional ceiling). A rise raises the reference. At most one email a day.
 - **Sale-day email** is one-shot. The watch is deactivated after sending, or quietly after the day passes.
 
 ## Verification
-- `npm run test:unit` (new; `node --test` via tsx): 28 pass.
+- `npm run test:unit` (new; `node --test` via tsx): 45 pass, including the daily price/sale-day sends and MCP tools with fetch and Resend stubbed.
 - `tsc --noEmit`: clean except the 4 pre-existing errors in `scripts/`.
 - `eslint .`: 97 errors / 42 warnings, identical to the baseline before this work; none come from new code.
 - `next build`: passes; the four common route pairs prerender.
@@ -36,3 +36,11 @@ scraper code.
 - The cron's price and event run was only exercised through unit tests and the API's validation and save path. A live `?dry=1` run after deploy would confirm it against real rows.
 - `/og/today` still uses `longestExhale` without the freshness gate or tie rotation, so on rare days it can lead with a different deal than `/deal-of-the-day`. It was left untouched to stay out of the share-image/motion lane.
 - Deal accuracy is shown on `/dispensary/[slug]` only (not `/l/`, which redirects there).
+
+## Follow-up pass (same day): self-review fixes
+- Route and sale-day pages said deals were "posted this morning", but they list every live deal, and a live deal can go up to 7 days between checks. They now say "live deal", and the best-deal FAQ shows the deal's own last-checked time.
+- The empty-route FAQ pointed to "city pages", which don't exist for Bartonville, Morton and Washington. It now points to the deals page.
+- The accuracy method text claimed "per browser" dedupe; it is per user-agent string, and the text now says it can undercount.
+- The deal-of-the-day image's "nothing qualified" line blamed "no everyday saving" even when the real reason was stale deals.
+- Sale-day sign-ups on the day itself are now refused. The email goes out that morning, so those watches would never have sent.
+- The /on-the-way redirect map moved to `lib/routeDeals.onTheWayTarget` so it can be tested.

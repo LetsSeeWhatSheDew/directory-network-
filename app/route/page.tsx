@@ -43,7 +43,7 @@ export default async function RoutePage({ searchParams }: { searchParams: Promis
       crumbs={[{ href: "/ways-to-buy", label: "Ways to buy" }]}
       eyebrow="Best deal on your route"
       title="Driving somewhere? Stop where it's cheapest."
-      lede={<>Pick where you&apos;re starting and where you&apos;re headed. We&apos;ll show the stores near the way with a deal posted this morning, in the order you reach them.</>}
+      lede={<>Pick where you&apos;re starting and where you&apos;re headed. We&apos;ll show the stores near the way with a live deal, in the order you reach them.</>}
       jsonLd={{ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: FAQS.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) }}
     >
       <style>{GUIDE_EXTRA_CSS + ROUTE_CSS}</style>

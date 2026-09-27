@@ -59,6 +59,15 @@ export function parsePair(s: string | null | undefined): { from: RouteCity; to: 
 
 export const isCommonPair = (from: string, to: string) => COMMON_PAIRS.some(([a, b]) => a === from && b === to);
 
+/** Where an old /on-the-way?from=&to= link lands. Its towns were
+ *  "bloomington-normal" and "champaign-urbana"; everything else matches. */
+export function onTheWayTarget(fromSlug: string | null | undefined, toSlug: string | null | undefined): string {
+  const OLD: Record<string, string> = { "bloomington-normal": "bloomington", "champaign-urbana": "champaign" };
+  const from = routeCity(OLD[fromSlug || ""] || fromSlug);
+  const to = routeCity(OLD[toSlug || ""] || toSlug);
+  return from && to && from.slug !== to.slug ? `/route/${pairSlug(from.slug, to.slug)}` : "/route";
+}
+
 // ── Geometry ─────────────────────────────────────────────────────────────
 
 const MI_PER_DEG_LAT = 69.0;

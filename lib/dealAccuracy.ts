@@ -7,8 +7,10 @@
 //            'confirmed'. No = 'price_changed', 'expired' or 'wrong_store'.
 //            Page-level reports ('wrong_info', 'other') don't count: they're
 //            about hours or details, not the deal. At most one Yes and one No
-//            per deal, per browser, per day counts, so one person tapping
-//            ten times is one tap.
+//            per deal, per user-agent string, per Central-Time day counts, so
+//            one person tapping ten times is one tap. (Different people on the
+//            same phone model can share a user-agent, so this can undercount,
+//            never overcount.)
 //   Checks   the share of the store's live deals our daily check re-found on
 //            the store's own site in the last FRESH_HOURS (deals.verified_at,
 //            written by the scraper).
