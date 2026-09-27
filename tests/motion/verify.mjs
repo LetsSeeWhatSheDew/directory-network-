@@ -48,7 +48,20 @@ const numberAnims = (NUM) =>
     })
     .map((a) => `${a.animationName} on ${a.effect.target.className || a.effect.target.tagName}`);
 
-const b = await chromium.launch({ executablePath: EXE });
+const browser = await chromium.launch({ executablePath: EXE });
+// Fresh context per page; the first-visit city picker isn't under test.
+const b = {
+  newPage: async (opts = {}) => {
+    const p = await browser.newPage(opts);
+    await p.addInitScript(() => {
+      try {
+        sessionStorage.setItem("cl_picker_seen", "1");
+      } catch {}
+    });
+    return p;
+  },
+  close: () => browser.close(),
+};
 for (const width of [390, 1440]) {
   for (const [name, path] of PAGES) {
     console.log(`\n${name} @${width}`);
