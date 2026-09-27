@@ -36,5 +36,5 @@ This sandbox can't reach Supabase. `tests/motion/mock-supabase.mjs` serves fixtu
 - Missouri pages and the /upgrade headline left as they are, per the owner.
 
 ## Follow-ups
-- Verify on a Vercel preview against live data (Chrome lane): the tap on a real device, and scroll-driven haze in Safari (it's a no-op there today).
+- Verify on a Vercel preview against live data (Chrome lane): the tap on a real device, and the Safari haze fallback on a real iPhone.
 - The CityPage links on the Missouri pages point to `/cannabis/illinois/*` (they stay live and noindexed, per the owner's standing rule).
