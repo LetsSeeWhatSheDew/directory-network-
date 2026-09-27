@@ -1,17 +1,10 @@
 // app/api/admin/reviews/[id]/route.ts — approve / reject a pending review.
 import { NextRequest, NextResponse } from "next/server";
 import { revalidateTag } from "next/cache";
-
-const COOKIE_NAME = "dn_admin_auth";
-
-function checkAuth(req: NextRequest): boolean {
-  const adminPassword = process.env.ADMIN_PASSWORD;
-  if (!adminPassword) return false;
-  return req.cookies.get(COOKIE_NAME)?.value === adminPassword;
-}
+import { isAdmin } from "@/lib/adminAuth";
 
 export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
-  if (!checkAuth(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+  if (!(await isAdmin(req))) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   const { id } = await ctx.params;
   const { action } = (await req.json().catch(() => ({}))) as { action?: string };
   const status = action === "approve" ? "approved" : action === "reject" ? "rejected" : null;

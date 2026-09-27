@@ -4,6 +4,8 @@
 // deal_reports is insert-only for anon, so this reads with the service key
 // on the server. Fail-soft: returns an empty map on any error.
 
+import "server-only";
+
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
 

@@ -5,6 +5,8 @@
 // Uses Stripe REST directly (no SDK dependency).
 
 import { NextRequest, NextResponse } from "next/server";
+import { rateLimited, clientKey } from "@/lib/rateLimit";
+import { readJsonBody, crossSiteRequest, normalizeEmail } from "@/lib/validation";
 
 type Tier = "pro_consumer";
 
@@ -18,15 +20,24 @@ function priceIdForTier(tier: Tier): string | undefined {
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    if (crossSiteRequest(req.headers)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+    // Each call creates a Stripe Checkout session; cap it per client.
+    if (rateLimited(`checkout:${clientKey(req.headers)}`, 5, 10 * 60_000)) {
+      return NextResponse.json({ error: "Too many tries. Give it a few minutes." }, { status: 429 });
+    }
+    const parsed = await readJsonBody(req, 2048);
+    if (!parsed.ok) return NextResponse.json({ error: parsed.error }, { status: parsed.status });
+    const body = parsed.body;
     const tier = body.tier as Tier;
-    const email = (body.email as string | undefined)?.trim();
+    const email = normalizeEmail(body.email);
 
     if (tier !== "pro_consumer") {
       return NextResponse.json({ error: "Invalid tier." }, { status: 400 });
     }
     if (!email) {
-      return NextResponse.json({ error: "Email required." }, { status: 400 });
+      return NextResponse.json({ error: "Enter a valid email." }, { status: 400 });
     }
 
     const secret = process.env.STRIPE_SECRET_KEY;
@@ -64,13 +75,14 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: params.toString(),
+      signal: AbortSignal.timeout(10_000),
     });
 
     const data = await res.json();
     if (!res.ok) {
-      console.error("[stripe/create-checkout] stripe error:", data);
+      console.error("[stripe/create-checkout] stripe error:", data?.error?.type, data?.error?.code);
       return NextResponse.json(
-        { error: data?.error?.message || "Stripe checkout failed." },
+        { error: "Checkout isn't available right now. Try again in a minute." },
         { status: 500 }
       );
     }

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { isAdmin } from "@/lib/adminAuth";
 
 export async function POST(request: Request) {
-  if (!isAdmin(request)) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  if (!(await isAdmin(request))) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   const SUPABASE_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
   const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
 

@@ -4,7 +4,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { deactivateAlert, unsubscribeToken } from "@/lib/alertSubscribers";
 import { stopWatch, watchStopToken, safeEq } from "@/lib/dealWatch";
-import { timingSafeEqual } from "crypto";
 
 async function handle(req: NextRequest) {
   const e = (req.nextUrl.searchParams.get("e") || "").trim().toLowerCase();
@@ -14,8 +13,8 @@ async function handle(req: NextRequest) {
   if (w) {
     ok = safeEq(t, watchStopToken(w)) ? await stopWatch(w) : false;
   } else {
-    const expected = e ? unsubscribeToken(e) : "";
-    const valid = !!e && t.length === expected.length && timingSafeEqual(Buffer.from(t), Buffer.from(expected));
+    // safeEq refuses empty tokens, so a missing secret can never validate.
+    const valid = !!e && e.length <= 254 && safeEq(t, unsubscribeToken(e));
     ok = valid ? await deactivateAlert(e) : false;
   }
   if (req.method === "POST") return NextResponse.json({ ok });

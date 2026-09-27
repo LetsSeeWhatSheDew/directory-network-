@@ -240,3 +240,62 @@ export function pricePerMg(mg: number | null | undefined, sale: number | null | 
   if (!Number.isFinite(m) || !Number.isFinite(s) || m <= 0 || s <= 0) return null;
   return Math.round((s / m) * 10000) / 10000;
 }
+
+// ---------- server-side coercion ----------
+// The API route receives arbitrary JSON. Coerce it into a SubmissionInput
+// with every string trimmed and length-capped, enums checked, numbers
+// bounded and arrays filtered, so validateSubmission / toInsertPayload never
+// see a non-string where they call .trim(), and nothing oversized reaches
+// the database. Unknown enum values become "" so validation rejects them.
+const CATEGORY_SET = new Set<Category>(["flower", "pre-roll", "vape", "concentrate", "edibles", "topicals", "accessories", "all"]);
+const ROLE_SET = new Set<SubmitterRole>(["owner", "manager", "budtender", "marketing", "other"]);
+const DAY_SET = new Set(["mon", "tue", "wed", "thu", "fri", "sat", "sun", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]);
+
+function s(v: unknown, max: number): string | null {
+  if (typeof v !== "string") return null;
+  const t = v.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "").trim();
+  return t ? t.slice(0, max) : null;
+}
+function n(v: unknown, max: number): number | null {
+  if (v == null || v === "") return null;
+  const x = typeof v === "number" ? v : typeof v === "string" ? Number(v) : NaN;
+  return Number.isFinite(x) && x >= 0 && x <= max ? x : null;
+}
+function d(v: unknown): string | null {
+  const t = s(v, 40);
+  return t && /^\d{4}-\d{2}-\d{2}/.test(t) && Number.isFinite(Date.parse(t)) ? t : null;
+}
+
+export function coerceSubmission(raw: Record<string, unknown>): SubmissionInput {
+  const category = typeof raw.category === "string" && CATEGORY_SET.has(raw.category as Category) ? (raw.category as Category) : ("" as Category);
+  const role = typeof raw.submitter_role === "string" && ROLE_SET.has(raw.submitter_role as SubmitterRole) ? (raw.submitter_role as SubmitterRole) : ("" as SubmitterRole);
+  const slug = s(raw.dispensary_slug, 120);
+  // Over-length titles/descriptions are kept long enough to trip the
+  // validator's own "must be N characters or fewer" message.
+  return {
+    dispensary_slug: slug && /^[a-z0-9-]+$/.test(slug) ? slug : null,
+    dispensary_name_freetext: s(raw.dispensary_name_freetext, 120),
+    dispensary_city_freetext: s(raw.dispensary_city_freetext, 60),
+    submitter_email: s(raw.submitter_email, 254) || "",
+    submitter_role: role,
+    deal_title: s(raw.deal_title, 121) || "",
+    deal_description: s(raw.deal_description, 501),
+    category,
+    strain_or_product: s(raw.strain_or_product, 120),
+    brand: s(raw.brand, 80),
+    weight_grams: n(raw.weight_grams, 1000),
+    mg_thc: n(raw.mg_thc, 100000),
+    count: n(raw.count, 1000),
+    regular_price_usd: n(raw.regular_price_usd, 10000),
+    sale_price_usd: n(raw.sale_price_usd, 10000),
+    start_date: d(raw.start_date),
+    end_date: d(raw.end_date),
+    is_recurring: raw.is_recurring === true,
+    recurring_days: Array.isArray(raw.recurring_days)
+      ? raw.recurring_days.filter((x): x is string => typeof x === "string" && DAY_SET.has(x.toLowerCase())).slice(0, 7)
+      : null,
+    source_url: s(raw.source_url, 500),
+    notes: s(raw.notes, 1000),
+    website: typeof raw.website === "string" ? raw.website.slice(0, 200) : null,
+  };
+}

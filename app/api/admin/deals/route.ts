@@ -6,8 +6,7 @@
 // app/api/admin/submissions/[id]/approve/route.ts.
 
 import { NextRequest, NextResponse } from "next/server";
-
-const COOKIE_NAME = "dn_admin_auth";
+import { isAdmin } from "@/lib/adminAuth";
 
 const VALID_DAYS = new Set([
   "mon",
@@ -18,13 +17,6 @@ const VALID_DAYS = new Set([
   "sat",
   "sun",
 ]);
-
-function checkAuth(req: NextRequest): boolean {
-  const adminPassword = process.env.ADMIN_PASSWORD;
-  if (!adminPassword) return false;
-  const cookie = req.cookies.get(COOKIE_NAME);
-  return cookie?.value === adminPassword;
-}
 
 function supabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
@@ -45,7 +37,7 @@ type Payload = {
 };
 
 export async function POST(req: NextRequest) {
-  if (!checkAuth(req)) {
+  if (!(await isAdmin(req))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
 
