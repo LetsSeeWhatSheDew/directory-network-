@@ -64,9 +64,10 @@ export function GetListedForm() {
   return (
     <div className="space-y-4">
       <div className="space-y-1">
-        <h1 className="text-xl font-semibold tracking-tight text-[color:var(--pp-ink)] md:text-2xl">
-          Get listed in the PuffPrice
-        </h1>
+        {/* The page owns the h1 ("List your dispensary"); this is the form's section title. */}
+        <h2 data-keep-font className="text-xl font-semibold tracking-tight text-[color:var(--pp-ink)] md:text-2xl">
+          Get listed on PuffPrice
+        </h2>
         <p className="text-sm text-[color:var(--pp-body)]">
           Tell us about your business and which directory you belong in. We&apos;ll
           review and follow up with next steps within 1–2 business days.

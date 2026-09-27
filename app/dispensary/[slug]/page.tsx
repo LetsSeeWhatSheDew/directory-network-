@@ -670,6 +670,7 @@ export default async function DispensaryProfilePage({
                       reportContext={`${formatDealTitle(d)} at ${listing.name || slug}`}
                     />
                   }
+                  otdDeal={{ ...d, deal_title: d.title, city }}
                   directionsHref={mapsHref([listing.address1, listing.city, listing.state])}
                   line={EXHALE_LINES[i % EXHALE_LINES.length]}
                 />

@@ -7,6 +7,8 @@ import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
 
 export const metadata = {
+  // Post-action confirmation: useful to the person, not to search.
+  robots: { index: false, follow: true },
   title: "You're in — PuffPrice deal alerts",
   description: "You're signed up for Illinois dispensary deal alerts.",
 };

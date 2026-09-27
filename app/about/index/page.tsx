@@ -2,11 +2,13 @@ import Link from "next/link";
 import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
 
+import { brand } from "@/lib/brand";
 const OG_DESC =
   "How the PuffPrice Index is calculated — our weekly Illinois flower price-per-gram benchmark.";
 const OG_IMAGE = "https://www.puffprice.com/og-image.png";
 
 export const metadata = {
+  alternates: { canonical: `${brand.url}/about/index` },
   title: "The PuffPrice Index — Illinois flower price benchmark",
   description: OG_DESC,
   openGraph: {

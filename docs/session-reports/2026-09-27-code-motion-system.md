@@ -26,8 +26,15 @@ Branch `claude/relaxed-faraday-xu17bp`. Spec: "PuffPrice Motion Study" (approved
 ## Local testing note
 This sandbox can't reach Supabase. `tests/motion/mock-supabase.mjs` serves fixture rows (clearly "Sample" stores and deals) for local builds and screenshots. The screenshots in `docs/screenshots/motion/` use that fixture data, not live prices.
 
+## Follow-up round (same PR)
+- Safari fallback for the scroll-thinning haze.
+- `/get-listed` now has one h1.
+- Removed the dead `app/admin/page.jsx`; the built output shows `page.tsx` is the one served.
+- Canonical tags on /about, /about/index, /alerts, /get-listed, /map and /savings.
+- noindex on /alerts/confirmed, /upgrade/success, /savings/dashboard and /dispensary/submit-deal (via layouts, since the latter two are client pages).
+- The out-the-door estimate shows in opened deal cards.
+- Missouri pages and the /upgrade headline left as they are, per the owner.
+
 ## Follow-ups
 - Verify on a Vercel preview against live data (Chrome lane): the tap on a real device, and scroll-driven haze in Safari (it's a no-op there today).
-- `app/admin/page.jsx` and `app/admin/page.tsx` both exist for `/admin`. Pick one.
-- The `/cannabis/missouri/*` pages are noindexed but still live, and CityPage links point to `/cannabis/illinois/*`. Keep them or redirect them? That's a scope call.
-- `/get-listed` renders two h1s.
+- The CityPage links on the Missouri pages point to `/cannabis/illinois/*` (they stay live and noindexed, per the owner's standing rule).

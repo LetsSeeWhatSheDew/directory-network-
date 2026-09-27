@@ -4,8 +4,8 @@
 //   BASE=http://localhost:3100 node tests/motion/screens.mjs
 //
 // 390px + 1440px × day + night × reduced motion off + on, for: home, a city
-// page, /deals/all, a store page, /alerts, an empty state, and an opened deal
-// card. Written as JPEGs to docs/screenshots/motion/. Motion-on shots are
+// page, /deals/all, a store page, /alerts, an empty state, an opened deal card,
+// and an opened card with an out-the-door estimate. Written as JPEGs to docs/screenshots/motion/. Motion-on shots are
 // taken after the load inhale (2.5s) so they show the settled page.
 
 import { chromium } from "playwright-core";
@@ -24,6 +24,7 @@ const SHOTS = [
   ["alerts", "/alerts"],
   ["empty", "/city/urbana", ".pp-held"],
   ["opened", "/", ".bh-cards .pp-dc:nth-child(2)", true],
+  ["opened-otd", "/dispensary/sample-leaf-peoria", ".sd-deals .pp-dc:nth-child(2)", true],
 ];
 
 const browser = await chromium.launch({ executablePath: EXE });

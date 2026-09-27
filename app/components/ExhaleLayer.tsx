@@ -9,6 +9,7 @@
 //    (lib/motion.ts); older link cards holding a Save pill get it from the
 //    click listener below. The plume's size follows the deal (exhaleSize).
 //  • A warm wash carries across the page change when a tap navigates.
+//  • Haze thinning on scroll for browsers without CSS scroll-driven animations.
 //  • The ambient clock: haze drift and fireflies settle and stop after ~30s
 //    of visible time (html.pp-still), and pause while the tab is hidden
 //    (html.pp-away). Background motion never runs forever.
@@ -96,6 +97,36 @@ export default function ExhaleLayer() {
     return () => {
       if (t) clearTimeout(t);
       document.removeEventListener("visibilitychange", onVis);
+    };
+  }, [pathname]);
+
+  // Haze thins as you scroll. CSS scroll-driven animations do it where supported
+  // (globals.css, .pp-band / .bh-band); Safari and older browsers get this
+  // fallback: one passive scroll listener, one rAF write per frame, opacity
+  // only. Follows the scroll, never drives it. Same curve: 1 → .5 over 90vh.
+  useEffect(() => {
+    if (typeof CSS !== "undefined" && CSS.supports?.("animation-timeline: scroll()")) return;
+    if (reducedMotion()) return;
+    const bands = Array.from(document.querySelectorAll<HTMLElement>(".pp-band, .bh-band"));
+    if (!bands.length) return;
+    let raf = 0;
+    const apply = () => {
+      raf = 0;
+      const t = Math.min(1, Math.max(0, window.scrollY / (window.innerHeight * 0.9)));
+      const o = String(1 - 0.5 * t);
+      for (const b of bands) b.style.opacity = o;
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(apply);
+    };
+    apply();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+      for (const b of bands) b.style.opacity = "";
     };
   }, [pathname]);
 

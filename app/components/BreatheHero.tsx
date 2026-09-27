@@ -350,6 +350,7 @@ export default function BreatheHero({ hero, cards, dealCount, storeCount, locati
                   }
                   aside={<span className="pp-save">Save {a.big}</span>}
                   line={EXHALE_LINES[i % EXHALE_LINES.length]}
+                  otdDeal={d}
                   directionsHref={directionsHref(d)}
                   seeHref={storeHref(d)}
                   onOpen={exhale}

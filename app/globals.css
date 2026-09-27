@@ -1121,6 +1121,9 @@ html[data-daypart="night"] .pp-dc-surface { border-color: rgba(168,230,191,.12);
 .pp-dc-panel { padding: 0 16px 16px; }
 .pp-dc-keep { display: block; margin: 0; font-size: 21px; line-height: 1.3; color: var(--pp-ink); }
 .pp-dc-keep b { font-weight: 700; color: var(--pp-big); }
+.pp-dc-otd { display: block; margin: 4px 0 0; font-size: 15px; line-height: 1.4; color: var(--pp-body); }
+.pp-dc-otd b { font-family: var(--font-mono); font-weight: 500; color: var(--pp-ink); letter-spacing: -.02em; }
+.pp-dc-otd small { display: block; font-size: 12.5px; color: var(--pp-muted); }
 .pp-dc-line { display: block; margin: 2px 0 0; font-size: 14px; color: var(--pp-body); }
 .pp-dc-acts { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
 .pp-dc-act { flex: 1 1 140px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 48px; padding: 0 14px; border-radius: 14px; font-size: 15px; font-weight: 500; text-decoration: none; border: 1px solid var(--pp-border-2); color: var(--pp-ink); background: transparent; }

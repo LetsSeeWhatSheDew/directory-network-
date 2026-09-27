@@ -21,7 +21,7 @@ import { chromium } from "playwright-core";
 const BASE = (process.env.BASE || "http://localhost:3000").replace(/\/$/, "");
 const QUICK = process.argv.includes("--quick");
 const EXE = process.env.CHROME || "/opt/pw-browsers/chromium-1194/chrome-linux/chrome";
-const NUM = ".pp-save, .bh-num, .sv-amt, .save-amount, .pp-dc-keep b, .pp-otd b, .cp-tick-n, .bh-count b";
+const NUM = ".pp-save, .bh-num, .sv-amt, .save-amount, .pp-dc-keep b, .pp-dc-otd, .pp-otd b, .cp-tick-n, .bh-count b";
 
 const PAGES = [
   ["home", "/"],

@@ -4,6 +4,7 @@ import Nav from "../components/Nav";
 import MapClient from "./MapClient";
 import { cityFromSlug } from "@/lib/cityNormalize";
 
+import { brand } from "@/lib/brand";
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL ||
   "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -14,6 +15,7 @@ const SUPABASE_ANON_KEY =
 export const revalidate = 600;
 
 export const metadata = {
+  alternates: { canonical: `${brand.url}/map` },
   title: "Central Illinois cannabis map — every dispensary + live deals",
   description:
     "Every Central Illinois cannabis dispensary on one map. Green pins mark live deals. Click any pin to see the best deal today.",

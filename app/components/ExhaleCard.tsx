@@ -15,6 +15,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { track } from "../../lib/track";
 import { EASE, MOTION, dur, exhaleSize, reducedMotion, releaseExhale } from "../../lib/motion";
+import { otdFor, usd } from "../../lib/otd";
 
 export type ExhaleCardDeal = {
   id: string;
@@ -38,6 +39,9 @@ type Props = {
   seeHref?: string | null;
   seeLabel?: string;
   line?: string;
+  /** The deal as the out-the-door logic reads it (lib/otd.ts, same as /out-the-door).
+   *  When it states a real price, the opened card shows the estimated total with tax. */
+  otdDeal?: { deal_title?: string | null; title?: string | null; category?: string | null; city?: string | null; discount_unit?: string | null; discount_type?: string | null } | null;
   /** Always-visible content under the face (may hold links; store pages). */
   after?: React.ReactNode;
   /** Extra things in the opened card (website link, details, report). */
@@ -80,6 +84,7 @@ export default function ExhaleCard({
   seeHref,
   seeLabel = "See the deal",
   line = "Go on, let your shoulders drop.",
+  otdDeal = null,
   after,
   children,
   index = 0,
@@ -93,6 +98,8 @@ export default function ExhaleCard({
   const panelId = `pp-dc-${deal.id}`;
 
   const size = exhaleSize({ dollars, percent });
+  // Only deals that state a shelf price get a number; percent deals never get a guess.
+  const otd = otdDeal ? otdFor(otdDeal, otdDeal.city || deal.city) : null;
 
   const toggle = useCallback(
     (next: boolean) => {
@@ -186,6 +193,14 @@ export default function ExhaleCard({
               </p>
             ) : (
               <p className="pp-dc-keep">Here&rsquo;s the way there.</p>
+            )}
+            {otd && (
+              // Static like every number: outside the fading .pp-dc-line.
+              <p className="pp-dc-otd">
+                Estimated out the door: <b>{usd(otd.total)}</b>
+                {otd.each ? <> · {usd(otd.each)} each</> : null}
+                <small> tax included, {otd.city} rates. The register has the final word.</small>
+              </p>
             )}
             <p className="pp-dc-line">{line}</p>
             <div className="pp-dc-acts">

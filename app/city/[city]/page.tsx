@@ -684,6 +684,7 @@ export default async function CityPage({
                     <OtdLine deal={{ ...d, deal_title: title }} city={d.city || city} />
                   </span>
                 }
+                otdDeal={{ ...d, deal_title: title, city: d.city || city }}
                 directionsHref={directionsHref({ name: store?.name || name, slug: dslug, city, lat: store?.lat ?? null, lng: store?.lng ?? null })}
                 seeHref={`/dispensary/${dslug}?city=${encodeURIComponent(city)}`}
                 seeLabel="See the store"

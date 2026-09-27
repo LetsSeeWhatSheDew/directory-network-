@@ -99,6 +99,8 @@ const deals = [
   D("11111111-0000-4000-8000-000000000007", "sample-bloom", "20% off sample edibles", 20, "percent", { category: "edibles" }),
   D("11111111-0000-4000-8000-000000000008", "sample-bloom", "10% off sample carts", 10, "percent", { category: "vapes", expires_at: iso(now + 10 * 3600e3) }),
   D("11111111-0000-4000-8000-000000000009", "sample-uptown-normal", "35% off sample flower", 35, "percent", { category: "flower" }),
+  D("11111111-0000-4000-8000-000000000011", "sample-grove-peoria", "2 for $60 sample pre-rolls", 60, "dollars", { category: "flower", discount_type: "fixed_price" }),
+  D("11111111-0000-4000-8000-000000000012", "sample-leaf-peoria", "$25 sample eighths", 25, "dollars", { category: "flower", discount_type: "fixed_price" }),
   D("11111111-0000-4000-8000-000000000010", "sample-quad-champaign", "$10 off sample vapes", 10, "dollars", { category: "vapes" }),
 ];
 

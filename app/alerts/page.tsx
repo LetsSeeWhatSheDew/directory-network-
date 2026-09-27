@@ -11,6 +11,7 @@ import ProCheckoutButton from "./ProCheckoutButton";
 import WeeklySignup from "../components/WeeklySignup";
 import HazeBand from "../components/HazeBand";
 
+import { brand } from "@/lib/brand";
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL ||
   "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -53,6 +54,7 @@ const OG_DESC =
   "Central Illinois cannabis deal alerts. Free forever, no account needed. Pro is $0.99/month. Deal alerts within minutes.";
 
 export const metadata = {
+  alternates: { canonical: `${brand.url}/alerts` },
   title: "Get Deal Alerts",
   description: OG_DESC,
   openGraph: {

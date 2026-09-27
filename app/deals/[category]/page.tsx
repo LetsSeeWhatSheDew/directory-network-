@@ -870,6 +870,7 @@ export default async function DealsPage({
                           </span>
                         </span>
                       }
+                      otdDeal={deal}
                       directionsHref={directionsHref(deal)}
                       seeHref={altHref}
                       seeLabel="See the store"

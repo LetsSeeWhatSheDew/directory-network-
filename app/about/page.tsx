@@ -2,11 +2,13 @@ import Nav from "../components/Nav";
 import HazeBand from "../components/HazeBand";
 import Footer from "../components/Footer";
 
+import { brand } from "@/lib/brand";
 const OG_DESC =
   "Cannabis deal finder for Central Illinois, checked on the stores' own sites every morning. Independent: nobody pays us to rank.";
 const OG_IMAGE = "https://www.puffprice.com/og-image.png";
 
 export const metadata = {
+  alternates: { canonical: `${brand.url}/about` },
   title: "About PuffPrice — Built in Peoria, Illinois",
   description: OG_DESC,
   openGraph: {
