@@ -36,20 +36,6 @@ noindex**.
 Third-party requests (Google Analytics, map tiles, embeds) are answered locally with
 an empty body. Tests stay offline, and fixture traffic never reaches analytics.
 
-## Accessibility suite (`tests/e2e/a11y.spec.ts`)
-
-axe-core with the WCAG 2.0/2.1 A + AA rules, on every URL the smoke suite visits. The **day** theme is
-checked at 390px and the **night** theme at 1440px (`?daypart=` forces it). Reduced motion is on, so
-contrast is never measured mid-fade. Violations listed in `tests/e2e/a11y-known.ts` (each with an
-owner and a reason) are tolerated. An entry that stops matching fails the test until you delete it.
-
-## Performance budget (`tests/perf/lighthouse-budget.mjs`)
-
-Lighthouse 12, performance category, 390px phone, simulated slow 4G and 4× CPU slowdown, median of
-3 runs. It fails when the home page or `/city/peoria` goes over `BUDGET` (score, FCP, LCP, TBT, CLS,
-JS KB, total KB). The script starts the mock and `next start` itself, or uses `BASE_URL`. It prints a
-table and appends it to the GitHub job summary. `PERF_RUNS=5` gives steadier numbers.
-
 ### Known issues ratchet
 
 `KNOWN_ISSUES` in `tests/e2e/routes.ts` lists problems on pages other work streams
@@ -80,6 +66,20 @@ BASE_URL=https://<preview>.vercel.app npm run test:e2e   # against a deployment
 ```
 
 With `BASE_URL`, nothing is started locally and fixture-only samples are skipped.
+
+## Accessibility suite (`tests/e2e/a11y.spec.ts`)
+
+axe-core with the WCAG 2.0/2.1 A + AA rules, on every URL the smoke suite visits. The **day** theme is
+checked at 390px and the **night** theme at 1440px (`?daypart=` forces it). Reduced motion is on, so
+contrast is never measured mid-fade. Violations listed in `tests/e2e/a11y-known.ts` (each with an
+owner and a reason) are tolerated. An entry that stops matching fails the test until you delete it.
+
+## Performance budget (`tests/perf/lighthouse-budget.mjs`)
+
+Lighthouse 12, performance category, 390px phone, simulated slow 4G and 4× CPU slowdown, median of
+3 runs. It fails when the home page or `/city/peoria` goes over `BUDGET` (score, FCP, LCP, TBT, CLS,
+JS KB, total KB). The script starts the mock and `next start` itself, or uses `BASE_URL`. It prints a
+table and appends it to the GitHub job summary. `PERF_RUNS=5` gives steadier numbers.
 
 ## CI secrets
 
