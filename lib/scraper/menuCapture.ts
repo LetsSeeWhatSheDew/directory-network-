@@ -139,6 +139,42 @@ export const MENU_NOT_COVERED: Record<string, string> = {
   "the-dispensary-champaign": "no store website of its own (see docs/ops/2026-09-25-scraper-coverage.md)",
 };
 
+// ---------------------------------------------------------------------------
+// Run order. The menu phase stops starting stores at MENU_DEADLINE_MS, so a
+// fixed order would starve whichever stores sit at the end whenever the deals
+// pass runs long. Instead: least recently ATTEMPTED first. A store is marked
+// attempted only when it actually ran (any outcome, error included) — a store
+// skipped by the deadline keeps its old time and leads the next run. Stores
+// never attempted come first; ties keep MENU_SOURCES order.
+// ---------------------------------------------------------------------------
+
+export type MenuOrderState = Record<string, string>; // slug → ISO time of last attempt
+
+export function orderMenuStores(slugs: string[], lastAttempt: MenuOrderState): string[] {
+  const t = (slug: string) => {
+    const ms = Date.parse(lastAttempt[slug] ?? "");
+    return Number.isFinite(ms) ? ms : Number.NEGATIVE_INFINITY;
+  };
+  return slugs
+    .map((slug, i) => ({ slug, i, at: t(slug) }))
+    .sort((a, b) => (a.at === b.at ? a.i - b.i : a.at - b.at))
+    .map((x) => x.slug);
+}
+
+/** Tolerant read of the saved order state: anything unreadable → {} (MENU_SOURCES order). */
+export function parseMenuOrderState(text: string | null | undefined): MenuOrderState {
+  if (!text) return {};
+  try {
+    const j = JSON.parse(text);
+    if (!j || typeof j !== "object" || Array.isArray(j)) return {};
+    const out: MenuOrderState = {};
+    for (const [k, v] of Object.entries(j)) if (typeof v === "string" && Number.isFinite(Date.parse(v))) out[k] = v;
+    return out;
+  } catch {
+    return {};
+  }
+}
+
 export const ADAPTER_VERSION: Record<MenuPlatform, string> = {
   dutchie: "rendered-dutchie@1.0.0",
   sweed: "rendered-sweed@1.0.0",

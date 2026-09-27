@@ -46,12 +46,15 @@
 //   * on startup, this script's own 'running' rows older than 1 hour are
 //     marked failed ("abandoned — process never finished").
 // =============================================================================
-import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
+import { readFileSync, mkdirSync, writeFileSync, renameSync } from "node:fs";
 import { chromium, type Browser, type BrowserContext, type Frame, type Page } from "playwright-core";
 import { runCilScrape, type HtmlFetcher, type ScraperSummary } from "../lib/scraper/cil-deal-scraper";
 import { insertScraperRun, finishScraperRun, abortScraperRun, markAbandonedRuns } from "../lib/scraper/runLog";
 import { isAllowedByRobots } from "../lib/scraper/cil-deal-scraper";
-import { MENU_SOURCES, MENU_NOT_COVERED, captureStoreMenu, persistStoreMenu, otdPrice, type StoreMenuResult } from "../lib/scraper/menuCapture";
+import {
+  MENU_SOURCES, MENU_NOT_COVERED, captureStoreMenu, persistStoreMenu, otdPrice, orderMenuStores, parseMenuOrderState,
+  type StoreMenuResult, type MenuOrderState,
+} from "../lib/scraper/menuCapture";
 import { REF_UNITS, REF_DEF } from "../lib/menuPrices";
 import {
   tidyPromoName, notACannabisDeal, namesPastDate, DEAL_SIGNAL, offerCatalog,
@@ -374,8 +377,34 @@ function makeFetcher(ctx: BrowserContext): HtmlFetcher {
 // Menu prices: one page per store, bounded, after the deals pass.
 // ---------------------------------------------------------------------------
 
+// Least-recently-attempted-first order for the menu phase (see
+// orderMenuStores). Kept next to the run output; scrape-output/ is
+// gitignored, so it survives the launchd clone's git pull.
+const MENU_ORDER_STATE = "scrape-output/menu-order-state.json";
+
+function readMenuOrderState(): MenuOrderState {
+  try {
+    return parseMenuOrderState(readFileSync(MENU_ORDER_STATE, "utf8"));
+  } catch {
+    return {};
+  }
+}
+
+function markMenuAttempted(state: MenuOrderState, slug: string): void {
+  state[slug] = new Date().toISOString();
+  try {
+    mkdirSync("scrape-output", { recursive: true });
+    // Write-then-rename, after every store, so a hard-deadline exit keeps it.
+    writeFileSync(`${MENU_ORDER_STATE}.tmp`, JSON.stringify(state, null, 2));
+    renameSync(`${MENU_ORDER_STATE}.tmp`, MENU_ORDER_STATE);
+  } catch (e) {
+    console.log(`    (could not save menu order state: ${(e as Error).message.slice(0, 80)})`);
+  }
+}
+
 async function menuPhase(ctx: BrowserContext): Promise<void> {
-  const slugs = Object.keys(MENU_SOURCES).filter((s) => (SLUG ? s.includes(SLUG) : true));
+  const orderState = readMenuOrderState();
+  const slugs = orderMenuStores(Object.keys(MENU_SOURCES).filter((s) => (SLUG ? s.includes(SLUG) : true)), orderState);
   if (!slugs.length) return;
   const H = { apikey: READ_KEY!, Authorization: `Bearer ${READ_KEY}` };
   const raw: Array<{ slug: string; name: string; city: string; address1: string | null }> = await (
@@ -386,12 +415,12 @@ async function menuPhase(ctx: BrowserContext): Promise<void> {
   ).json();
   if (!Array.isArray(raw)) throw new Error(`listings read failed: ${JSON.stringify(raw).slice(0, 160)}`);
   const bySlug = new Map(raw.map((l) => [l.slug, { slug: l.slug, name: l.name, city: l.city, address: l.address1 }]));
-  console.log(`\nmenu prices: ${slugs.length} stores ${APPLY ? "(APPLY)" : "(dry run)"}`);
+  console.log(`\nmenu prices: ${slugs.length} stores ${APPLY ? "(APPLY)" : "(dry run)"} · order (least recently attempted first): ${slugs.join(", ")}`);
   const results: StoreMenuResult[] = [];
   for (const slug of slugs) {
     const listing = bySlug.get(slug);
     if (!listing) { console.log(`  ? ${slug}: not an active green listing — skipped`); continue; }
-    if (Date.now() - start > MENU_DEADLINE_MS) { console.log(`  ~ ${slug}: menu_deadline_reached — skipped this run`); continue; }
+    if (Date.now() - start > MENU_DEADLINE_MS) { console.log(`  ~ ${slug}: menu_deadline_reached — skipped this run (goes first next run)`); continue; }
     let page: Page | null = null;
     let r: StoreMenuResult;
     try {
@@ -412,6 +441,7 @@ async function menuPhase(ctx: BrowserContext): Promise<void> {
       if (page) await withTimeout(page.close(), 5000, "page.close").catch(() => {});
     }
     results.push(r);
+    markMenuAttempted(orderState, slug);
     printMenuResult(r, listing.city);
     if (APPLY && SERVICE_KEY) {
       try {

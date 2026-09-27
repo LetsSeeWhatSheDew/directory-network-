@@ -77,12 +77,22 @@ reason, and save `scrape-output/menu-prices-<date>.json`. The Bloom runs print
 every RISE card, with ✓ and the stores it was mapped to, or ✗ and why it was
 skipped.
 
-## Known gaps / follow-ups
+## Run-level fixes (second commit, same day)
 
-- A store whose every page fails to load (e.g. a Cloudflare challenge) still
-  counts as "loaded", so its `website_rendered` deals are retired that run.
-  This is existing behaviour and unchanged here. Once Bloom has deals, a
-  flapping challenge will make them come and go.
-- The 7 new menu stores come last in `MENU_SOURCES`. If the deals pass runs
-  long, `MENU_DEADLINE_MS` (11 min, unchanged) can skip them for that run. Look
-  for `menu_deadline_reached` in the log.
+- **Failed reads no longer retire deals, for every store and in both runs.**
+  If not one of a store's pages can be read (bot challenge, timeout, HTTP
+  error, robots.txt), `scrapeListing` returns
+  `failed_read: 0 of N pages loaded (<page> <why>; …)`. That store shows as
+  `failed` in `scraper_runs.dispensary_results`, and the run rolls up as
+  `partial`. `planRetirements` only retires deals for stores read cleanly this
+  run. This applies to the rendered Mac run and the static Vercel cron alike.
+  A page that loads but shows no deals still counts as a read. The
+  `mark-stale-deals` cron (7+ days unverified) is still the backstop.
+- **Menu stores rotate.** The menu phase now runs stores least recently
+  *attempted* first (`orderMenuStores`). The state lives in
+  `scrape-output/menu-order-state.json`, which is gitignored and so survives
+  the launchd clone's `git pull`. It is written after each store. A store
+  skipped by `MENU_DEADLINE_MS` is not marked, so it goes first next run. The
+  deadline itself is unchanged (11 min). The log prints the order at the
+  start of the menu phase. If the file is missing or unreadable, the stores
+  run in `MENU_SOURCES` order.

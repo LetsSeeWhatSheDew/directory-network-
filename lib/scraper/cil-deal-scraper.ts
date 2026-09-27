@@ -517,11 +517,19 @@ export function candidateUrls(baseUrl: URL): string[] {
 // Illinois deals page) return only the deals that page assigns to that store.
 export type HtmlFetcher = (url: string, listingSlug?: string) => Promise<string[] | null>;
 
+// Prefix of the fetch_error recorded when NOT ONE of a store's pages could be
+// read (bot challenge, timeout, HTTP error, robots.txt). Such a store is
+// logged as failed in scraper_runs and its existing deals are left alone:
+// "we couldn't look" is not "the deal is gone". The mark-stale-deals cron
+// still retires anything unverified for 7+ days.
+export const FAILED_READ = "failed_read";
+
 async function scrapeListing(
   listing: Listing,
   fetcher?: HtmlFetcher,
   urlOverrides?: Record<string, string[]>,
-  deadlineMs: number = Number.POSITIVE_INFINITY
+  deadlineMs: number = Number.POSITIVE_INFINITY,
+  requestDelayMs: number = REQUEST_DELAY_MS
 ): Promise<{ deals: ScrapedDeal[]; error?: string; skipped?: string }> {
   const override = urlOverrides?.[listing.slug];
   // A store with a known deals page (urlOverrides) is scraped from that page
@@ -548,6 +556,14 @@ async function scrapeListing(
   // own" (e.g. its website field points at a different store) — never fall
   // back to guessing.
   if (urls.length === 0) return { deals: [], skipped: "no_store_deals_page" };
+  // Pages actually read (fetched AND parsed), and why the others weren't.
+  let pagesRead = 0;
+  const notRead: string[] = [];
+  const miss = (url: string, why: string) => {
+    let p = url;
+    try { p = new URL(url).pathname; } catch {}
+    notRead.push(`${p} ${why}`);
+  };
   for (const candidateUrl of urls) {
     if (Date.now() > deadlineMs) {
       return { deals: combined, error: combined.length ? undefined : "store_time_budget_exceeded" };
@@ -556,18 +572,19 @@ async function scrapeListing(
     try {
       candidateHost = new URL(candidateUrl).host;
     } catch {
+      miss(candidateUrl, "invalid url");
       continue;
     }
-    if (AGGREGATOR_HOSTS.has(candidateHost)) continue;
+    if (AGGREGATOR_HOSTS.has(candidateHost)) { miss(candidateUrl, "aggregator host"); continue; }
     const path = new URL(candidateUrl).pathname;
     const allowed = await isAllowedByRobots(candidateUrl);
-    if (!allowed) continue;
+    if (!allowed) { miss(candidateUrl, "robots.txt"); continue; }
 
     try {
       let htmls: string[];
       if (fetcher) {
         const got = await fetcher(candidateUrl, listing.slug);
-        if (!got) continue;
+        if (!got) { miss(candidateUrl, "not loaded (challenge/timeout/error)"); continue; }
         htmls = got;
       } else {
         const res = await fetchWithTimeout(candidateUrl);
@@ -575,7 +592,7 @@ async function scrapeListing(
           hostCooldown[baseUrl.host] = Date.now() + 60 * 60 * 1000;
           return { deals: combined, error: "rate_limited_429" };
         }
-        if (!res.ok) continue;
+        if (!res.ok) { miss(candidateUrl, `HTTP ${res.status}`); continue; }
         htmls = [await res.text()];
       }
       const deals = collapseVariantDeals(htmls.flatMap((h) => extractDealsFromHtml(h, candidateUrl, listing.slug)));
@@ -586,15 +603,20 @@ async function scrapeListing(
           combined.push(d);
         }
       }
-    } catch {
-      /* continue */
+      pagesRead += 1;
+    } catch (err) {
+      miss(candidateUrl, (err as Error)?.name === "AbortError" ? "timeout" : "error");
     }
 
-    await sleep(REQUEST_DELAY_MS);
+    if (requestDelayMs > 0) await sleep(requestDelayMs);
 
     if (combined.length > 0 && path === "/") continue;
   }
 
+  // Not one page could be read: a failed read, not "no deals".
+  if (pagesRead === 0) {
+    return { deals: [], error: `${FAILED_READ}: 0 of ${urls.length} pages loaded (${notRead.join("; ")})`.slice(0, 300) };
+  }
   return { deals: combined };
 }
 
@@ -610,6 +632,32 @@ function pickMatchingExisting(
       (scraped.discount_value == null ||
         e.discount_value == null ||
         e.discount_value === scraped.discount_value)
+  );
+}
+
+/**
+ * Which existing deals to retire after a run. Each mode only retires its own
+ * deals: the static cron must not age out what the rendered run found (it
+ * can't see JS menus), and vice versa. In BOTH modes only stores that were
+ * read cleanly this run (no fetch_error: not a failed read, timeout, rate
+ * limit or skip) can lose deals — a Cloudflare challenge or a dead page never
+ * retires anything.
+ */
+export function planRetirements(
+  existing: ExistingDeal[],
+  scrapedKeys: Set<string>,
+  loadedOk: Set<string>,
+  source: "website" | "website_rendered"
+): ExistingDeal[] {
+  return existing.filter(
+    (e) =>
+      e.is_active &&
+      e.source !== "leafly" &&
+      e.source !== "weedmaps" &&
+      loadedOk.has(e.listing_slug) &&
+      (source === "website_rendered" ? e.source === "website_rendered" : e.source !== "website_rendered") &&
+      e.status_reason !== "not_seen_last_scrape" &&
+      !scrapedKeys.has(`${e.listing_slug}|${normalizeTitle(e.title)}`)
   );
 }
 
@@ -631,6 +679,8 @@ export interface RunConfig {
   deadlineAt?: number;
   // Called after each store so a caller can checkpoint progress.
   onListingDone?: (summary: ScraperSummary) => void;
+  // Politeness pause between page requests to one store (default 2s).
+  requestDelayMs?: number;
 }
 
 async function supaGet<T>(supabaseUrl: string, key: string, path: string): Promise<T> {
@@ -744,7 +794,7 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
       let timer: ReturnType<typeof setTimeout> | undefined;
       const r = budget
         ? await Promise.race([
-            scrapeListing(l, cfg.fetcher, cfg.urlOverrides, storeDeadline),
+            scrapeListing(l, cfg.fetcher, cfg.urlOverrides, storeDeadline, cfg.requestDelayMs),
             new Promise<{ deals: ScrapedDeal[]; error?: string; skipped?: string }>((resolve) => {
               timer = setTimeout(
                 () => resolve({ deals: [], error: `timeout: store exceeded ${Math.round(budget / 1000)}s budget` }),
@@ -752,7 +802,7 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
               );
             }),
           ]).finally(() => clearTimeout(timer))
-        : await scrapeListing(l, cfg.fetcher, cfg.urlOverrides);
+        : await scrapeListing(l, cfg.fetcher, cfg.urlOverrides, undefined, cfg.requestDelayMs);
       if (r.skipped) {
         summary.fetch_errors.push({ slug: l.slug, error: `skipped:${r.skipped}` });
         continue;
@@ -788,23 +838,10 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
   }
 
   const scrapedKeys = new Set(upsertPlan.map((u) => `${u.scraped.listing_slug}|${normalizeTitle(u.scraped.title)}`));
-  // Each mode only retires its own deals: the static cron must not age out
-  // what the rendered run found (it can't see JS menus), and the rendered
-  // run only retires deals for stores it actually loaded this run.
   const loadedOk = new Set(
     cilListings.map((l) => l.slug).filter((slug) => !summary.fetch_errors.some((f) => f.slug === slug))
   );
-  const agedOut = existing.filter(
-    (e) =>
-      e.is_active &&
-      e.source !== "leafly" &&
-      e.source !== "weedmaps" &&
-      (SOURCE === "website_rendered"
-        ? e.source === "website_rendered" && loadedOk.has(e.listing_slug)
-        : e.source !== "website_rendered") &&
-      e.status_reason !== "not_seen_last_scrape" &&
-      !scrapedKeys.has(`${e.listing_slug}|${normalizeTitle(e.title)}`)
-  );
+  const agedOut = planRetirements(existing, scrapedKeys, loadedOk, SOURCE);
 
   if (cfg.mode === "live" && cfg.apply && cfg.serviceKey) {
     // last_independent_verification is what the daily-verification sweep
