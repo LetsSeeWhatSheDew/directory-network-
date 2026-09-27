@@ -49,3 +49,4 @@ scrape-output/
 /test-results/
 /playwright-report/
 /blob-report/
+/perf-report.md

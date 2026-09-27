@@ -53,8 +53,10 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: next build against the mock Supabase
         run: npm run build:fixtures
-      - name: Smoke suite (every route, 390px + 1440px)
+      - name: Smoke + accessibility suites (every route, 390px + 1440px)
         run: npm run test:e2e
+      - name: Performance budget (home + city page at 390px, Lighthouse)
+        run: npm run test:perf
       - name: Upload report
         if: failure()
         uses: actions/upload-artifact@v4

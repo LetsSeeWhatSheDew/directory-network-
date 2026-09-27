@@ -299,7 +299,14 @@ export function buildTables(nowMs = Date.now()) {
     .filter((d) => d.discount_value != null)
     .flatMap((d) => [0, 2, 4].map((k) => ({ listing_slug: d.listing_slug, discount_value: d.discount_value, recorded_at: ago(24 * k + 1), project_tag: "green" })));
 
+  // Shopper reports on deals (PR #8's accuracy score reads these).
+  const deal_reports = deals.slice(0, 6).flatMap((d, i) => [
+    { id: id(9500 + i * 2), deal_id: d.id, listing_slug: d.listing_slug, reason: "confirmed", created_at: ago(20 + i), project_tag: "green" },
+    ...(i === 2 ? [{ id: id(9501 + i * 2), deal_id: d.id, listing_slug: d.listing_slug, reason: "expired", created_at: ago(30), project_tag: "green" }] : []),
+  ]);
+
   return {
+    deal_reports,
     master_listings: listings,
     listing_hours: hours,
     deals,

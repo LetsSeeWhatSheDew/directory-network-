@@ -13,6 +13,7 @@
     "test:unit": "tsx --test tests/unit/*.test.ts",
     "build:fixtures": "node tests/fixtures/with-mock.mjs next build",
     "test:e2e": "playwright test",
+    "test:perf": "node tests/perf/lighthouse-budget.mjs",
     "smoke": "node tests/smoke.mjs",
     "scrape:cil": "tsx scripts/scrape-cil-deals.ts",
     "scrape:cil:dry": "tsx scripts/scrape-cil-deals.ts --dry-run",
@@ -32,6 +33,7 @@
     "stripe": "^22.0.2"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
     "@playwright/test": "1.56.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
@@ -40,6 +42,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.0.7",
+    "lighthouse": "12.8.2",
     "playwright-core": "1.56",
     "tailwindcss": "^4",
     "tsx": "^4.19.2",

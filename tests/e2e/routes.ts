@@ -45,6 +45,10 @@ export const DYNAMIC_SAMPLES: Record<string, string[]> = {
   "/open-late/[city]": ["/open-late/peoria", "/open-late/normal", "/open-late/washington"],
   "/medical/[city]": ["/medical/peoria-heights", "/medical/urbana", "/medical/bartonville"],
   "/drive-thru/[city]": ["/drive-thru/pekin", "/drive-thru/springfield"],
+  // PR #8. A common (pre-rendered, indexed) pair and an on-demand one (noindex).
+  // Its static pages — /deal-of-the-day, /route, /green-wednesday, /420, /710,
+  // /price-watch — are picked up by discoverRoutes() automatically.
+  "/route/[pair]": ["/route/peoria-to-bloomington", "/route/east-peoria-to-champaign"],
 };
 
 /** Sample URLs that only exist in the fixture data (skipped with BASE_URL). */
