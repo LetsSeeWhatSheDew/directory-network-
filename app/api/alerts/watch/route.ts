@@ -1,8 +1,12 @@
-// POST /api/alerts/watch — "Email me new deals" for one store or one city.
-// Saves an inactive watch row (lib/dealWatch.ts) and sends a confirm email.
-// Nothing is ever sent to the address until the confirm link is clicked.
+// POST /api/alerts/watch — "Email me new deals" for one store or one city,
+// "email me when it drops" for one menu item at one store, or "email me the
+// morning of" a sale day. Saves an inactive watch row (lib/dealWatch.ts) and
+// sends a confirm email. Nothing is ever sent to the address until the
+// confirm link is clicked.
 //
-// Body (JSON): { email, kind: "store"|"city", slug?, city?, categories?, min_discount?, website? (honeypot) }
+// Body (JSON): { email, kind: "store"|"city"|"price"|"event", slug?, city?, categories?, min_discount?,
+//                item? (price: eighth|cart_1g|gummies_100mg), max_price? (price, dollars), event? (event id),
+//                website? (honeypot) }
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { brand } from "@/lib/brand";
@@ -11,6 +15,10 @@ import { CENTRAL_IL_PUBLIC_CITIES } from "@/lib/constants/regions";
 import { isInCentralIL } from "@/lib/visibility";
 import { saveWatch, confirmUrl, WATCH_CATEGORIES } from "@/lib/dealWatch";
 import { renderConfirmEmail, alertsFrom } from "@/lib/dealAlertEmail";
+import { getCheapestBoard } from "@/lib/menuPrices";
+import { isRefUnit, itemWords, parseCeiling, toCents, fromCents } from "@/lib/priceWatch";
+import { eventById, daysUntil } from "@/lib/events";
+import { CENTRAL_IL_CITIES } from "@/lib/constants/regions";
 
 export const dynamic = "force-dynamic";
 
@@ -46,6 +54,8 @@ export async function POST(req: NextRequest) {
   }
 
   let what = "";
+  let ask: string | undefined;
+  let after: string | undefined;
   let saved;
   if (b.kind === "store") {
     const store = await findStore(String(b.slug || ""));
@@ -63,6 +73,32 @@ export async function POST(req: NextRequest) {
     const catWords = cats.length ? ` (${cats.map((c) => CAT_LABEL[c] || c).join(", ")})` : "";
     what = `in ${city.name}${catWords}${minDiscount ? `, ${minDiscount}% off or more` : ""}`;
     saved = await saveWatch({ kind: "city", email, city: city.name, categories: cats, minDiscount });
+  } else if (b.kind === "price") {
+    const store = await findStore(String(b.slug || ""));
+    if (!store) return NextResponse.json({ ok: false, error: "We couldn't find that store." }, { status: 400 });
+    if (!isRefUnit(b.item)) return NextResponse.json({ ok: false, error: "Pick an eighth, a 1g cart or 100mg gummies." }, { status: 400 });
+    const item = b.item;
+    // The reference price is today's real menu price; no fresh price, no watch.
+    const board = await getCheapestBoard();
+    const now = board.byRef[item].find((i) => i.listingSlug === store.slug);
+    if (!now) return NextResponse.json({ ok: false, error: "We don't have a fresh menu price for that at this store right now. Try again after the next menu read." }, { status: 400 });
+    const maxCents = parseCeiling(b.max_price);
+    const refCents = toCents(now.otd);
+    what = `on the cheapest ${itemWords(item)} at ${store.name}`;
+    ask = "email me when the price drops";
+    after = `one short email when the cheapest ${itemWords(item)} at ${store.name} drops below ${fromCents(refCents)} out the door${maxCents != null ? ` and is ${fromCents(maxCents)} or less` : ""}. We read the store's own menu twice a day. No drop, no email.`;
+    saved = await saveWatch({ kind: "price", email, slug: store.slug, city: store.city, item, refCents, maxCents });
+  } else if (b.kind === "event") {
+    const ev = eventById(typeof b.event === "string" ? b.event : "");
+    if (!ev) return NextResponse.json({ ok: false, error: "Pick a sale day." }, { status: 400 });
+    if (daysUntil(ev) < 0) return NextResponse.json({ ok: false, error: `${ev.name} has already passed.` }, { status: 400 });
+    const cityIn = String(b.city || "").trim().toLowerCase().replace(/-/g, " ");
+    const city = cityIn ? CENTRAL_IL_CITIES.find((c) => c.name.toLowerCase() === cityIn) || null : null;
+    if (cityIn && !city) return NextResponse.json({ ok: false, error: "Pick a Central Illinois city." }, { status: 400 });
+    what = `the morning of ${ev.name} (${ev.dateLabel})`;
+    ask = "email me";
+    after = `one email the morning of ${ev.name} with the best deals we find${city ? ` near ${city.name}` : " in Central Illinois"}. Just that one.`;
+    saved = await saveWatch({ kind: "event", email, event: ev.id, city: city ? city.name : null });
   } else {
     return NextResponse.json({ ok: false, error: "Pick a store or a city." }, { status: 400 });
   }
@@ -77,7 +113,7 @@ export async function POST(req: NextRequest) {
     console.error("[alerts/watch] RESEND_API_KEY not set; confirm email not sent");
     return NextResponse.json({ ok: false, error: "We couldn't send the confirm email just now. Try again later." }, { status: 503 });
   }
-  const m = renderConfirmEmail({ what, confirmUrl: confirmUrl(brand.url, saved.row.id) });
+  const m = renderConfirmEmail({ what, ask, after, confirmUrl: confirmUrl(brand.url, saved.row.id) });
   try {
     const r = await new Resend(process.env.RESEND_API_KEY).emails.send({
       from: alertsFrom(),

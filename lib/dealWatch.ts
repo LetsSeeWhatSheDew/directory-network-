@@ -4,6 +4,12 @@
 //
 //   alert_type  'city_watch'  city = lowercased city, categories = ['flower', ...] or ['all']
 //               'store_watch' city = store's city,     categories = ['store:<slug>']
+//               'price_watch' city = store's city,     categories = ['item:<slug>:<ref>', 'ref:<cents>', 'max:<cents>'?]
+//                             one menu item (lib/menuPrices RefUnit) at one store; 'ref' is the
+//                             out-the-door price a drop is measured from (lib/priceWatch.ts),
+//                             'max' the optional "only under $X" ceiling
+//               'event_watch' city = optional city,    categories = ['event:<id>'] (lib/events.ts)
+//                             one email the morning of that sale day, then the row switches off
 //   min_discount  optional "at least N% off" (city watches)
 //   is_active     false until the address is confirmed (double opt-in),
 //                 false again after unsubscribe
@@ -23,8 +29,11 @@ import { createHmac, timingSafeEqual } from "crypto";
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
 
-export const WATCH_TYPES = ["city_watch", "store_watch"] as const;
+export const WATCH_TYPES = ["city_watch", "store_watch", "price_watch", "event_watch"] as const;
 export type WatchType = (typeof WATCH_TYPES)[number];
+/** The daily "new deals" digest only ever reads these. */
+export const DIGEST_TYPES = ["city_watch", "store_watch"] as const satisfies readonly WatchType[];
+const TYPES_IN = `(${WATCH_TYPES.join(",")})`;
 export const WATCH_CATEGORIES = ["flower", "edibles", "vapes", "concentrate"] as const;
 
 export type WatchRow = {
@@ -78,6 +87,26 @@ export function isConfirmed(r: WatchRow): boolean {
 export const sentOn = (r: Pick<WatchRow, "categories">) =>
   (r.categories || []).find((c) => c.startsWith("sent:"))?.slice(5) || null;
 
+const tagValue = (r: Pick<WatchRow, "categories">, prefix: string) =>
+  (r.categories || []).find((c) => c.startsWith(prefix))?.slice(prefix.length) ?? null;
+const cents = (v: string | null) => (v != null && /^\d{1,7}$/.test(v) ? Number(v) : null);
+/** price_watch: the watched item ('item:<slug>:<ref>'). */
+export function itemOf(r: Pick<WatchRow, "categories">): { slug: string; ref: string } | null {
+  const v = tagValue(r, "item:");
+  const m = v ? v.match(/^([a-z0-9-]+):([a-z0-9_]+)$/) : null;
+  return m ? { slug: m[1], ref: m[2] } : null;
+}
+/** price_watch: out-the-door price (cents) a drop is measured from. */
+export const refCentsOf = (r: Pick<WatchRow, "categories">) => cents(tagValue(r, "ref:"));
+/** price_watch: optional "only under $X" ceiling (cents). */
+export const maxCentsOf = (r: Pick<WatchRow, "categories">) => cents(tagValue(r, "max:"));
+/** event_watch: the sale day id (lib/events.ts). */
+export const eventOf = (r: Pick<WatchRow, "categories">) => tagValue(r, "event:");
+/** Replace (or add) one 'prefix:value' tag, keeping everything else. */
+export function withTag(categories: string[] | null, prefix: string, value: string): string[] {
+  return [...(categories || []).filter((c) => !c.startsWith(prefix)), `${prefix}${value}`];
+}
+
 /** Today's date in Central Time, YYYY-MM-DD. */
 export function ctDate(d = new Date()): string {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "America/Chicago", year: "numeric", month: "2-digit", day: "2-digit" }).format(d);
@@ -107,7 +136,7 @@ const isUuid = (s: string) => /^[0-9a-f-]{36}$/i.test(s);
 export async function getWatch(id: string): Promise<WatchRow | null> {
   const H = svc();
   if (!H || !isUuid(id)) return null;
-  const r = await fetch(`${SUPABASE_URL}/rest/v1/deal_alerts?select=${COLS}&id=eq.${id}&alert_type=in.(city_watch,store_watch)&limit=1`, {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/deal_alerts?select=${COLS}&id=eq.${id}&alert_type=in.${TYPES_IN}&limit=1`, {
     headers: H,
     cache: "no-store",
   });
@@ -118,7 +147,11 @@ export async function getWatch(id: string): Promise<WatchRow | null> {
 
 export type WatchInput =
   | { kind: "store"; email: string; slug: string; city: string | null }
-  | { kind: "city"; email: string; city: string; categories: string[]; minDiscount: number | null };
+  | { kind: "city"; email: string; city: string; categories: string[]; minDiscount: number | null }
+  | { kind: "price"; email: string; slug: string; city: string | null; item: string; refCents: number; maxCents: number | null }
+  | { kind: "event"; email: string; event: string; city: string | null };
+
+const TYPE_OF: Record<WatchInput["kind"], WatchType> = { store: "store_watch", city: "city_watch", price: "price_watch", event: "event_watch" };
 
 export type SaveResult =
   | { ok: true; row: WatchRow; needsConfirm: boolean }
@@ -131,11 +164,13 @@ export async function saveWatch(input: WatchInput): Promise<SaveResult> {
   const H = svc();
   if (!H) return { ok: false, reason: "unavailable" };
   const email = input.email.trim().toLowerCase();
-  const type: WatchType = input.kind === "store" ? "store_watch" : "city_watch";
+  const type: WatchType = TYPE_OF[input.kind];
   const city = (input.city || "").trim().toLowerCase() || null;
 
   let q = `${SUPABASE_URL}/rest/v1/deal_alerts?select=${COLS}&email=ilike.${encodeURIComponent(email)}&alert_type=eq.${type}`;
   if (input.kind === "store") q += `&categories=cs.${encodeURIComponent(`{"store:${input.slug}"}`)}`;
+  else if (input.kind === "price") q += `&categories=cs.${encodeURIComponent(`{"item:${input.slug}:${input.item}"}`)}`;
+  else if (input.kind === "event") q += `&categories=cs.${encodeURIComponent(`{"event:${input.event}"}`)}`;
   else q += `&city=eq.${encodeURIComponent(city || "")}`;
   const found = await fetch(`${q}&order=created_at.asc&limit=1`, { headers: H, cache: "no-store" });
   if (!found.ok) return { ok: false, reason: "db" };
@@ -144,6 +179,10 @@ export async function saveWatch(input: WatchInput): Promise<SaveResult> {
   const prefs =
     input.kind === "store"
       ? [`store:${input.slug}`]
+      : input.kind === "price"
+      ? [`item:${input.slug}:${input.item}`, `ref:${input.refCents}`, ...(input.maxCents != null ? [`max:${input.maxCents}`] : [])]
+      : input.kind === "event"
+      ? [`event:${input.event}`]
       : input.categories.length
       ? input.categories
       : ["all"];
@@ -199,7 +238,7 @@ export async function confirmWatch(id: string): Promise<WatchRow | null> {
 export async function stopWatch(id: string): Promise<boolean> {
   const H = svc();
   if (!H || !isUuid(id)) return false;
-  const r = await fetch(`${SUPABASE_URL}/rest/v1/deal_alerts?id=eq.${id}&alert_type=in.(city_watch,store_watch)`, {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/deal_alerts?id=eq.${id}&alert_type=in.${TYPES_IN}`, {
     method: "PATCH",
     headers: { ...H, Prefer: "return=minimal" },
     body: JSON.stringify({ is_active: false }),
@@ -207,13 +246,14 @@ export async function stopWatch(id: string): Promise<boolean> {
   return r.ok;
 }
 
-/** Every active, confirmed watch. Unconfirmed rows are dropped here, so the
+/** Every active, confirmed watch of the given types (default: the daily
+ *  digest's city + store watches). Unconfirmed rows are dropped here, so the
  *  sender can't reach an address that never clicked the confirm link. */
-export async function listConfirmedWatches(): Promise<WatchRow[] | null> {
+export async function listConfirmedWatches(types: readonly WatchType[] = DIGEST_TYPES): Promise<WatchRow[] | null> {
   const H = svc();
   if (!H) return null;
   const r = await fetch(
-    `${SUPABASE_URL}/rest/v1/deal_alerts?select=${COLS}&is_active=eq.true&alert_type=in.(city_watch,store_watch)&order=created_at.asc&limit=5000`,
+    `${SUPABASE_URL}/rest/v1/deal_alerts?select=${COLS}&is_active=eq.true&alert_type=in.(${types.join(",")})&order=created_at.asc&limit=5000`,
     { headers: H, cache: "no-store" }
   );
   if (!r.ok) return null;
@@ -238,7 +278,19 @@ export async function claimForToday(row: WatchRow, day: string): Promise<string[
   return rows.length ? prev : null;
 }
 
-/** Put categories back (used when a send fails after the claim). */
+/** Switch one watch off (one-shot event watches after their day). */
+export async function deactivateWatch(id: string): Promise<void> {
+  const H = svc();
+  if (!H || !isUuid(id)) return;
+  await fetch(`${SUPABASE_URL}/rest/v1/deal_alerts?id=eq.${id}&alert_type=in.${TYPES_IN}`, {
+    method: "PATCH",
+    headers: { ...H, Prefer: "return=minimal" },
+    body: JSON.stringify({ is_active: false }),
+  }).catch(() => undefined);
+}
+
+/** Put categories back (used when a send fails after the claim), or write
+ *  updated tags (a price watch's new 'ref:'). */
 export async function restoreCategories(id: string, categories: string[]): Promise<void> {
   const H = svc();
   if (!H) return;

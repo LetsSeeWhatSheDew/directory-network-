@@ -3,13 +3,15 @@
 // email, so upsert = look up (case-insensitive) then PATCH or POST, using
 // the service key (anon can insert but not read or update).
 import { createHmac } from "crypto";
+import { WATCH_TYPES } from "./dealWatch";
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
 
-// Watch rows (lib/dealWatch.ts) share this table but are their own
-// subscriptions; the weekly-report row must never match or merge with them.
-const NOT_WATCH = `or=${encodeURIComponent("(alert_type.is.null,alert_type.not.in.(city_watch,store_watch))")}`;
+// Watch rows (lib/dealWatch.ts: city, store, price and event watches) share
+// this table but are their own subscriptions; the weekly-report row must
+// never match or merge with them.
+const NOT_WATCH = `or=${encodeURIComponent(`(alert_type.is.null,alert_type.not.in.(${WATCH_TYPES.join(",")}))`)}`;
 
 function svc() {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;

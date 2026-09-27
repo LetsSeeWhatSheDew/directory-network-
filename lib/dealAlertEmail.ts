@@ -47,23 +47,28 @@ function shell(opts: { eyebrow: string; title: string; lede: string; body: strin
 const FOOT_21 = "For adults 21 and over. Independent: nobody pays us to rank. Deals are checked on each store's own site; confirm with the store before you go.";
 
 // ---------------- confirm ----------------
-export function renderConfirmEmail(o: { what: string; confirmUrl: string }): { subject: string; html: string; text: string } {
-  const subject = `Confirm: email me new deals ${o.what}`;
+// `ask` is what they asked for ("email me new deals" by default) and `after`
+// what happens once they confirm; both default to the new-deals wording.
+export function renderConfirmEmail(o: { what: string; confirmUrl: string; ask?: string; after?: string }): { subject: string; html: string; text: string } {
+  const ask = o.ask || "email me new deals";
+  const Ask = ask.charAt(0).toUpperCase() + ask.slice(1);
+  const after = o.after || `one short email on mornings when there's something new ${o.what}. Quiet days, no email.`;
+  const subject = `Confirm: ${ask} ${o.what}`;
   const body = `
-    <p style="font-size:15px;line-height:1.6;margin:16px 0">Tap the button to start. After that, we'll send one short email on mornings when there's something new ${esc(o.what)}. Quiet days, no email.</p>
-    <p style="margin:22px 0"><a href="${o.confirmUrl}" style="display:inline-block;background:${C.green};color:${C.onGreen};padding:12px 22px;border-radius:12px;text-decoration:none;font-weight:700;font-size:15px">Yes, email me new deals</a></p>
+    <p style="font-size:15px;line-height:1.6;margin:16px 0">Tap the button to start. After that, we'll send ${esc(after)}</p>
+    <p style="margin:22px 0"><a href="${o.confirmUrl}" style="display:inline-block;background:${C.green};color:${C.onGreen};padding:12px 22px;border-radius:12px;text-decoration:none;font-weight:700;font-size:15px">Yes, ${esc(ask)}</a></p>
     <p style="font-size:13px;color:${C.muted};line-height:1.55;margin:0">If you didn't ask for this, ignore this email. Nothing starts unless you tap the button. The link works for 7 days.</p>`;
   const html = shell({
     eyebrow: `${brand.name} · one more step`,
     title: "Confirm your email",
-    lede: `You asked us to email you new deals ${esc(o.what)}.`,
+    lede: `You asked us to ${esc(ask)} ${esc(o.what)}.`,
     body,
     footer: FOOT_21,
   });
   const text = [
-    `You asked ${brand.name} to email you new deals ${o.what}.`,
+    `You asked ${brand.name} to ${ask} ${o.what}.`,
     "",
-    `Confirm here: ${o.confirmUrl}`,
+    `${Ask}? Confirm here: ${o.confirmUrl}`,
     "",
     "If you didn't ask for this, ignore this email. Nothing starts unless you confirm. The link works for 7 days.",
     "",
@@ -88,14 +93,20 @@ export function renderDigestEmail(o: {
   sections: DigestSection[];
   unsubscribeAllUrl: string;
   dayLabel: string; // "Thu, Sep 25"
+  /** Overrides for a one-off digest (the sale-day email); defaults are the daily new-deals wording. */
+  subject?: string;
+  title?: string;
+  lede?: string;
+  why?: string;
 }): { subject: string; html: string; text: string } {
   const all = o.sections.flatMap((s) => s.deals);
   const n = new Set(all.map((d) => d.id)).size;
   const lead = all[0];
   const subject =
-    n === 1 && lead
+    o.subject ||
+    (n === 1 && lead
       ? `New at ${lead.store}: ${lead.title}`.slice(0, 110)
-      : `${n} new deals${o.sections.length === 1 ? ` ${o.sections[0].heading.replace(/^New /, "")}` : ""} this morning`;
+      : `${n} new deals${o.sections.length === 1 ? ` ${o.sections[0].heading.replace(/^New /, "")}` : ""} this morning`);
 
   const row = (d: DigestDeal) => `
     <tr><td style="padding:12px 0;border-top:1px solid ${C.line}">
@@ -116,19 +127,19 @@ export function renderDigestEmail(o: {
     .join("");
 
   const stops = o.sections.map((s) => `<a href="${s.stopUrl}" style="color:${C.muted}">${esc(s.stopLabel)}</a>`).join(" · ");
-  const footer = `${FOOT_21}<br><br>You're getting this because you asked for it at puffprice.com. ${stops} · <a href="${o.unsubscribeAllUrl}" style="color:${C.muted}">Unsubscribe from all ${brand.name} email</a>`;
+  const footer = `${FOOT_21}<br><br>${esc(o.why || "You're getting this because you asked for it at puffprice.com.")} ${stops} · <a href="${o.unsubscribeAllUrl}" style="color:${C.muted}">Unsubscribe from all ${brand.name} email</a>`;
 
   const html = shell({
     eyebrow: `${brand.name} · ${o.dayLabel}`,
-    title: n === 1 ? "One new deal" : `${n} new deals`,
-    lede: "Posted on the store's own site since yesterday morning.",
+    title: o.title || (n === 1 ? "One new deal" : `${n} new deals`),
+    lede: o.lede ? esc(o.lede) : "Posted on the store's own site since yesterday morning.",
     body: sections,
     footer,
   });
 
   const text = [
     `${brand.name} · ${o.dayLabel}`,
-    n === 1 ? "One new deal since yesterday morning." : `${n} new deals since yesterday morning.`,
+    o.lede || (n === 1 ? "One new deal since yesterday morning." : `${n} new deals since yesterday morning.`),
     "",
     ...o.sections.flatMap((s) => [
       s.heading.toUpperCase(),
@@ -140,5 +151,59 @@ export function renderDigestEmail(o: {
     `Unsubscribe from all ${brand.name} email: ${o.unsubscribeAllUrl}`,
   ].join("\n");
 
+  return { subject, html, text };
+}
+
+// ---------------- price drop ----------------
+export type PriceDrop = {
+  item: string; // "eighth of flower"
+  store: string;
+  city: string;
+  product: string; // "Brand Strain 3.5g"
+  was: string; // "$31.20"
+  now: string; // "$27.41"
+  shelf: string; // "$21.00"
+  checked: string; // "Sun 7:12 AM"
+  menuUrl: string | null; // the store's own menu
+  pageUrl: string; // absolute, with utm
+  stopUrl: string;
+};
+
+export function renderPriceDropEmail(o: { drops: PriceDrop[]; unsubscribeAllUrl: string; dayLabel: string }): { subject: string; html: string; text: string } {
+  const first = o.drops[0];
+  const subject =
+    o.drops.length === 1
+      ? `Price drop: the ${first.item} at ${first.store} is now ${first.now} out the door`.slice(0, 120)
+      : `${o.drops.length} prices you're watching dropped`;
+  const row = (d: PriceDrop) => `
+    <tr><td style="padding:14px 0;border-top:1px solid ${C.line}">
+      <div style="font-size:13px;color:${C.muted}">${esc(d.store)} · ${esc(d.city)} · cheapest ${esc(d.item)}</div>
+      <div style="font-size:15px;font-weight:700;line-height:1.35;margin-top:3px">${esc(d.product)}</div>
+      <div style="margin-top:6px;font-size:15px"><span style="font-family:'IBM Plex Mono',Menlo,monospace;font-weight:700;font-size:20px;color:${C.ink}">${esc(d.now)}</span> <span style="color:${C.muted};text-decoration:line-through;margin-left:6px">${esc(d.was)}</span> <span style="color:${C.body};font-size:13px">out the door (${esc(d.shelf)} on the shelf + tax)</span></div>
+      <div style="font-size:12px;color:${C.muted};margin-top:4px">Read from ${d.menuUrl ? `<a href="${d.menuUrl}" style="color:${C.muted}">the store's own menu</a>` : "the store's own menu"} ${esc(d.checked)} Central.</div>
+      <div style="font-size:13px;margin-top:6px"><a href="${d.pageUrl}" style="color:${C.green};font-weight:600;text-decoration:none">See today's prices &rarr;</a></div>
+    </td></tr>`;
+  const stops = o.drops.map((d) => `<a href="${d.stopUrl}" style="color:${C.muted}">Stop watching the ${esc(d.item)} at ${esc(d.store)}</a>`).join(" · ");
+  const html = shell({
+    eyebrow: `${brand.name} · ${o.dayLabel}`,
+    title: o.drops.length === 1 ? "It dropped." : "A few prices dropped.",
+    lede: "Menu prices change during the day, so check the store's menu before you go. The counter has the final word.",
+    body: `<table role="presentation" width="100%" cellpadding="0" cellspacing="0">${o.drops.map(row).join("")}</table>`,
+    footer: `${FOOT_21}<br><br>You asked us to watch these prices at puffprice.com. ${stops} · <a href="${o.unsubscribeAllUrl}" style="color:${C.muted}">Unsubscribe from all ${brand.name} email</a>`,
+  });
+  const text = [
+    `${brand.name} · ${o.dayLabel}`,
+    "",
+    ...o.drops.flatMap((d) => [
+      `${d.store}, ${d.city}: cheapest ${d.item} is now ${d.now} out the door (was ${d.was}; ${d.shelf} on the shelf + tax).`,
+      `  ${d.product}. Read from the store's own menu ${d.checked} Central.${d.menuUrl ? ` ${d.menuUrl}` : ""}`,
+      `  ${d.pageUrl}`,
+      `  Stop watching this: ${d.stopUrl}`,
+      "",
+    ]),
+    "Menu prices change during the day; check before you go.",
+    FOOT_21,
+    `Unsubscribe from all ${brand.name} email: ${o.unsubscribeAllUrl}`,
+  ].join("\n");
   return { subject, html, text };
 }

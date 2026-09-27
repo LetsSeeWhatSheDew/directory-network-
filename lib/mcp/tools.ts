@@ -1,4 +1,4 @@
-// lib/mcp/tools.ts — the five read-only tools the PuffPrice MCP server exposes.
+// lib/mcp/tools.ts — the read-only tools the PuffPrice MCP server exposes.
 //
 // Each tool returns a plain object with `source_url`, `as_of` (ISO 8601: a timestamp, or a date for facts checked by the day) and
 // `cite_as` ("Source: PuffPrice (puffprice.com), checked <time CT>"). The
@@ -10,6 +10,14 @@ import {
 } from "./data";
 import { RULES, RULE_TOPICS, type RuleTopic } from "./rules";
 import { STORE_CAP } from "../storeCap";
+import { getDealOfTheDay, dotdCopy, readLiveDeals } from "../dealOfTheDay";
+import { ROUTE_CITIES, CORRIDOR_MILES, routeCity, pairSlug, planRoute } from "../routeDeals";
+import { amountOf, cleanDealTitle, storeName } from "../exhale";
+
+const ROUTE_CITY_PROP = {
+  type: "string",
+  description: `One of the 12 Central Illinois cities: ${ROUTE_CITIES.map((c) => c.name).join(", ")}.`,
+} as const;
 
 export class ToolInputError extends Error {}
 
@@ -39,10 +47,30 @@ export const TOOLS = [
     annotations: { title: "Find deals", ...READ_ONLY },
   },
   {
+    name: "deal_of_the_day",
+    title: "Today's Central Illinois dispensary deal of the day",
+    description:
+      "The single biggest everyday saving at a Central Illinois dispensary today, as shown on puffprice.com/deal-of-the-day: a stated percent or dollars off that anyone can get, re-checked on the store's own site within 7 days. First-time, veteran, birthday, 'up to' and buy-several deals never qualify; ties rotate between stores daily; no store pays to be picked. Includes up to 3 runners-up (one per store) and a share image URL. Adults 21+ only.",
+    inputSchema: { type: "object", properties: {}, additionalProperties: false },
+    annotations: { title: "Deal of the day", ...READ_ONLY },
+  },
+  {
+    name: "deals_on_route",
+    title: "Dispensary deals along a drive in Central Illinois",
+    description: `Dispensaries with live deals within ${CORRIDOR_MILES} miles of the straight line between two Central Illinois cities, in the order you reach them, with up to 2 deals per store (everyday savings first), approximate straight-line mile markers and a Google Maps link that adds the store as a stop. Same data as puffprice.com/route.`,
+    inputSchema: {
+      type: "object",
+      properties: { from: ROUTE_CITY_PROP, to: ROUTE_CITY_PROP },
+      required: ["from", "to"],
+      additionalProperties: false,
+    },
+    annotations: { title: "Deals on route", ...READ_ONLY },
+  },
+  {
     name: "list_dispensaries",
     title: "List Central Illinois dispensaries",
     description:
-      "Licensed dispensaries PuffPrice tracks in Central Illinois, with address, phone, today's hours (Central Time) when listed, ways to buy (medical, curbside, order ahead, drive-thru) as confirmed on the store's own site with the exact wording, today's live deal count, and the store's PuffPrice page. A null ways-to-buy entry means not confirmed either way, not 'no'.",
+      "Licensed dispensaries PuffPrice tracks in Central Illinois, with address, phone, today's hours (Central Time) when listed, ways to buy (medical, curbside, order ahead, drive-thru) as confirmed on the store's own site with the exact wording, today's live deal count, deal accuracy (0-100 from shoppers' Yes/No taps and daily re-checks; null score until 5 taps), and the store's PuffPrice page. A null ways-to-buy entry means not confirmed either way, not 'no'.",
     inputSchema: {
       type: "object",
       properties: { city: CITY_PROP },
@@ -160,6 +188,81 @@ export async function callTool(name: string, rawArgs: unknown): Promise<Record<s
         source_url: category === "any" ? cityUrl : `${u}/deals/${{ flower: "flower", vape: "vapes", edible: "edibles", concentrate: "concentrate", "pre-roll": "flower" }[category as Exclude<DealCategoryArg, "any">]}${city ? `?city=${encodeURIComponent(city)}` : ""}`,
         as_of: checked,
         cite_as: citeAs(ctLabel(checked)),
+        age_notice: "21+ only. Deals change daily; confirm with the store.",
+      };
+    }
+
+    case "deal_of_the_day": {
+      known(args, []);
+      const r = await getDealOfTheDay();
+      if (r.status === "unknown") throw new Error("PuffPrice's deal data is temporarily unavailable. See https://www.puffprice.com/deal-of-the-day.");
+      const toOut = (d: Parameters<typeof dotdCopy>[0]) => {
+        const c = dotdCopy(d);
+        return {
+          saving: c.saving,
+          title: c.title,
+          product: c.product,
+          store: storeName(d),
+          city: d.city,
+          verified_at: d.verified_at ?? null,
+          deal_url: `${u}/deal/${d.deal_id}`,
+          store_url: `${u}/dispensary/${d.slug || d.listing_slug}`,
+        };
+      };
+      const checked = r.status === "ok" ? r.pick.verified_at || now.toISOString() : now.toISOString();
+      return {
+        day: r.day,
+        deal: r.status === "ok" ? toOut(r.pick) : null,
+        runners_up: r.status === "ok" ? r.runnersUp.map(toOut) : [],
+        live_deals: r.live,
+        ...(r.status === "none" ? { note: "No live deal qualifies today (none is an everyday amount off re-checked within 7 days). Use find_deals for every live deal." } : {}),
+        method: "Biggest everyday saving wins; dollars-off deals compare to percent-off as a share of a typical basket for the category (ordering only). Ties rotate between stores daily. No paid placement.",
+        share_image_url: `${u}/og/deal-of-the-day?size=og`,
+        source_url: `${u}/deal-of-the-day`,
+        as_of: checked,
+        cite_as: citeAs(ctLabel(checked)),
+        age_notice: "21+ only. Deals change daily; confirm with the store.",
+      };
+    }
+
+    case "deals_on_route": {
+      known(args, ["from", "to"]);
+      const norm = (v: unknown, name: string) => {
+        const raw = typeof v === "string" ? v.trim().toLowerCase().replace(/,?\s*(il|illinois)\.?$/i, "").trim().replace(/[\s_]+/g, "-") : "";
+        const c = routeCity(raw);
+        if (!c) throw new ToolInputError(`${name} must be one of: ${ROUTE_CITIES.map((x) => x.name).join(", ")}.`);
+        return c;
+      };
+      const from = norm(args.from, "from");
+      const to = norm(args.to, "to");
+      if (from.slug === to.slug) throw new ToolInputError("from and to must be different cities.");
+      const deals = await readLiveDeals(300);
+      if (!deals) throw new Error("PuffPrice's deal data is temporarily unavailable. Try again shortly.");
+      const plan = planRoute(from, to, deals);
+      const latest = plan.stops.flatMap((st) => st.deals).reduce<string | null>((a, d) => (d.verified_at && (!a || d.verified_at > a) ? d.verified_at : a), null) || now.toISOString();
+      return {
+        from: from.name,
+        to: to.name,
+        straight_line_miles: Math.round(plan.miles),
+        corridor_miles: CORRIDOR_MILES,
+        stops: plan.stops.map((st) => ({
+          store: storeName(st.deals[0] || { slug: st.slug, name: st.name }),
+          city: st.city,
+          approx_mile: Math.round(st.along),
+          miles_off_the_line: Math.round(st.off * 10) / 10,
+          approx_extra_miles: Math.round(st.detour),
+          live_deals: st.total,
+          deals: st.deals.map((d) => {
+            const a = amountOf(d);
+            return { title: cleanDealTitle(d.deal_title), discount: a ? `${a.big} off` : null, deal_url: `${u}/deal/${d.deal_id}` };
+          }),
+          store_url: `${u}/dispensary/${st.slug}`,
+        })),
+        ...(plan.stops.length === 0 ? { note: "No store near the way has a deal posted today." } : {}),
+        method: "Straight line between city centers; miles are approximate, not driving miles. Up to 2 deals per store; no store pays to be listed.",
+        source_url: `${u}/route/${pairSlug(from.slug, to.slug)}`,
+        as_of: latest,
+        cite_as: citeAs(ctLabel(latest)),
         age_notice: "21+ only. Deals change daily; confirm with the store.",
       };
     }
