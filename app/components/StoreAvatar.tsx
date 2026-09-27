@@ -8,17 +8,18 @@ export default function StoreAvatar({ src, name, size = 44 }: { src: string | nu
   // SSR'd <img> can fail before hydration attaches onError — check once mounted.
   useEffect(() => {
     const el = ref.current;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reads browser-only state (storage/DOM) after hydration
     if (el && el.complete && el.naturalWidth === 0) setFailed(true);
   }, [src]);
   const initials = (name || "?").replace(/[^A-Za-z0-9 ]/g, "").split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase() || "?";
   const box: React.CSSProperties = {
     width: size, height: size, flex: `0 0 ${size}px`, borderRadius: 10, overflow: "hidden",
-    border: "1px solid var(--pp-border)", background: "var(--pp-canopy)", display: "flex",
+    border: "1px solid var(--pp-border)", background: "var(--pp-best-tint)", display: "flex",
     alignItems: "center", justifyContent: "center",
   };
   if (!src || failed) {
     return (
-      <span aria-hidden="true" style={{ ...box, color: "rgb(255 255 255)", fontFamily: "var(--font-display)", fontWeight: 700, fontSize: size * 0.36 }}>
+      <span aria-hidden="true" style={{ ...box, color: "var(--pp-mark)", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: size * 0.36 }}>
         {initials}
       </span>
     );

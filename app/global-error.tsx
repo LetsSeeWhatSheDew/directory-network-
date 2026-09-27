@@ -39,7 +39,6 @@ export default function GlobalError({
             padding: "32px 28px",
             maxWidth: 460,
             textAlign: "center",
-            boxShadow: "0 4px 12px rgba(31, 61, 43, 0.08)",
           }}
         >
           <h1 style={{ fontFamily: "inherit", fontSize: "1.5rem", fontWeight: 800, letterSpacing: "-0.025em", marginBottom: 12, color: "var(--pp-ink)" }}>
@@ -48,14 +47,16 @@ export default function GlobalError({
           <p style={{ fontFamily: "inherit", fontSize: "0.9375rem", color: "var(--pp-body)", lineHeight: 1.55, marginBottom: 20 }}>
             We hit an error we can&apos;t recover from. Reload the page or head back home.
           </p>
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- a full reload is the point: the root layout crashed */}
           <a
             href="/"
             style={{
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
-              background: "var(--pp-signal-fill)",
-              color: "var(--pp-on-dark)",
+              background: "var(--pp-btn)",
+              color: "var(--pp-btn-fg)",
+              border: "1px solid var(--pp-btn-border)",
               padding: "12px 22px",
               borderRadius: 9999,
               fontFamily: "inherit",

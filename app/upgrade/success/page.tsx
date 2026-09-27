@@ -18,7 +18,7 @@ export default async function UpgradeSuccessPage({
   await searchParams;
 
   return (
-    <div style={{ fontFamily: "var(--font-display), system-ui, sans-serif", background: "var(--pp-paper)", minHeight: "100vh", color: "var(--pp-ink)", display: "flex", flexDirection: "column" }}>
+    <div style={{ fontFamily: "var(--font-body)", minHeight: "100vh", color: "var(--pp-ink)", display: "flex", flexDirection: "column" }}>
       <Nav variant="light" />
 
       <main style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 24px" }}>
@@ -26,10 +26,10 @@ export default async function UpgradeSuccessPage({
           <div style={{
             display: "inline-flex", alignItems: "center", justifyContent: "center",
             width: 84, height: 84, borderRadius: "50%",
-            background: "rgba(74, 222, 128, 0.15)",
+            background: "var(--pp-best-tint)", border: "1px solid var(--pp-best-border)",
             marginBottom: 28,
           }}>
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#93CB5C" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--pp-mark)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </div>
@@ -38,7 +38,7 @@ export default async function UpgradeSuccessPage({
             You&apos;re Pro.
           </h1>
 
-          <p style={{ fontSize: "1.1rem", color: "var(--pp-muted)", fontFamily: "var(--font-body)", lineHeight: 1.6, marginBottom: 32 }}>
+          <p style={{ fontSize: "1.1rem", color: "var(--pp-body)", fontFamily: "var(--font-body)", lineHeight: 1.6, marginBottom: 32 }}>
             You&apos;ll get instant email alerts when dispensaries near you post
             a deal worth knowing about.
           </p>
@@ -52,7 +52,7 @@ export default async function UpgradeSuccessPage({
             textAlign: "left",
             fontFamily: "var(--font-body)",
           }}>
-            <h2 style={{ fontSize: ".8rem", textTransform: "uppercase", letterSpacing: ".12em", color: "var(--pp-signal)", marginBottom: 12, fontWeight: 700 }}>
+            <h2 data-keep-font style={{ fontSize: ".8rem", textTransform: "uppercase", letterSpacing: ".12em", color: "var(--pp-signal)", marginBottom: 12, fontWeight: 700 }}>
               What happens next
             </h2>
             <ol style={{ paddingLeft: 20, margin: 0, display: "flex", flexDirection: "column", gap: 10, color: "var(--pp-muted)", fontSize: ".9rem" }}>
@@ -64,8 +64,8 @@ export default async function UpgradeSuccessPage({
 
           <Link href="/" style={{
             display: "inline-block",
-            background: "var(--pp-signal-fill)", color: "var(--pp-on-dark)",
-            padding: "12px 30px", borderRadius: 10,
+            background: "var(--pp-btn)", color: "var(--pp-btn-fg)", border: "1px solid var(--pp-btn-border)",
+            padding: "12px 30px", borderRadius: 14,
             textDecoration: "none", fontFamily: "var(--font-body)",
             fontWeight: 700, fontSize: "1rem",
           }}>

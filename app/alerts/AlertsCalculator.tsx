@@ -67,7 +67,7 @@ export default function AlertsCalculator() {
       {result ? (
         <div style={resultCard} aria-live="polite">
           <div style={resultBig}>
-            You&apos;re probably overpaying <span style={{ color: "var(--pp-canopy-eyebrow)" }}>~${result.weekly}/week</span>
+            You&apos;re probably overpaying <span style={{ color: "var(--pp-mark)", fontFamily: "var(--font-mono)", fontWeight: 500, letterSpacing: "-.03em" }}>~${result.weekly}/week</span>
           </div>
           <div style={resultSmall}>
             That&apos;s <strong>${result.annual}/year</strong>
@@ -77,7 +77,7 @@ export default function AlertsCalculator() {
             type="button"
             onClick={() => {
               try {
-                const w = window as any;
+                const w = window;
                 if (typeof w.gtag === "function") w.gtag("event", "calculator_cta", { weekly: result.weekly });
               } catch {}
               const card = document.querySelector(".tier.pro");
@@ -157,7 +157,7 @@ const rowLabel: React.CSSProperties = {
   fontSize: ".88rem",
   fontWeight: 700,
   color: "var(--pp-ink)",
-  fontFamily: "var(--font-display), system-ui, sans-serif",
+  fontFamily: "var(--font-body)",
   marginBottom: 8,
 };
 const pillRow: React.CSSProperties = { display: "flex", gap: 8, flexWrap: "wrap" };
@@ -171,42 +171,43 @@ const pill: React.CSSProperties = {
   fontFamily: "var(--font-body)",
   fontSize: ".86rem",
   fontWeight: 500,
-  transition: "all .15s",
+  transition: "transform calc(150ms * var(--pp-pace)), opacity calc(150ms * var(--pp-pace))",
 };
 const pillActive: React.CSSProperties = {
-  background: "var(--pp-signal-fill)",
-  borderColor: "var(--pp-signal-fill)",
-  color: "var(--pp-on-dark)",
+  background: "var(--pp-btn)",
+  borderColor: "var(--pp-btn-border)",
+  color: "var(--pp-btn-fg)",
   fontWeight: 700,
 };
 const resultCard: React.CSSProperties = {
   marginTop: 12,
   padding: "22px",
-  background: "var(--pp-canopy)",
-  borderRadius: 12,
+  background: "var(--pp-haze)",
+  border: "1px solid var(--pp-haze-border)",
+  borderRadius: 14,
   textAlign: "center",
 };
 const resultBig: React.CSSProperties = {
   fontSize: "1.4rem",
   fontWeight: 700,
-  color: "var(--pp-on-dark)",
-  fontFamily: "var(--font-display), system-ui, sans-serif",
+  color: "var(--pp-ink)",
+  fontFamily: "var(--font-body)",
   letterSpacing: "-.02em",
   marginBottom: 8,
   lineHeight: 1.3,
 };
 const resultSmall: React.CSSProperties = {
   fontSize: ".95rem",
-  color: "rgba(255,255,255,.75)",
+  color: "var(--pp-body)",
   fontFamily: "var(--font-body)",
   marginBottom: 16,
   lineHeight: 1.5,
 };
 const cta: React.CSSProperties = {
-  background: "var(--pp-signal-fill)",
-  color: "var(--pp-on-dark)",
-  border: "none",
-  borderRadius: 10,
+  background: "var(--pp-btn)",
+  color: "var(--pp-btn-fg)",
+  border: "1px solid var(--pp-btn-border)",
+  borderRadius: 14,
   padding: "11px 20px",
   fontFamily: "var(--font-body)",
   fontWeight: 700,

@@ -14,10 +14,8 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    let {
-      listing_id,
-      project_tag,
-      listing_name,
+    let { listing_id, project_tag, listing_name } = body;
+    const {
       name,
       email,
       company,

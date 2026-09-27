@@ -154,7 +154,7 @@ export default function Footer() {
         .pp-footer-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .55rem; }
         .pp-footer-link {
           color: var(--pp-body); text-decoration: none; font-family: var(--font-body); font-weight: 500;
-          font-size: .9rem; letter-spacing: -.005em; transition: color 160ms ease;
+          font-size: .9rem; letter-spacing: -.005em; transition: none;
         }
         .pp-footer-link:hover { color: var(--pp-ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--pp-border-2); }
         .pp-footer-bottom { padding-top: 1.75rem; display: flex; flex-direction: column; gap: .6rem; }

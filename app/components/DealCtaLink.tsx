@@ -45,7 +45,7 @@ export default function DealCtaLink({ deal, onClick, children, ...rest }: Props)
       onClick={(e) => {
         recordClick(deal);
         try {
-          const w = window as any;
+          const w = window;
           if (typeof w.gtag === "function") {
             w.gtag("event", "deal_cta_click", {
               dispensary: deal.dispensary,

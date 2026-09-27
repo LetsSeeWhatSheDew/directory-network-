@@ -184,9 +184,9 @@ export default function SubmitForm({ listings }: Props) {
           type="button"
           onClick={reset}
           style={{
-            background: "var(--pp-signal-fill)",
-            color: "var(--pp-on-dark)",
-            border: "none",
+            background: "var(--pp-btn)",
+            color: "var(--pp-btn-fg)",
+            border: "1px solid var(--pp-btn-border)",
             padding: "10px 18px",
             borderRadius: 8,
             fontWeight: 700,
@@ -672,7 +672,7 @@ const styles: Record<string, React.CSSProperties> = {
     width: "100%",
   },
   hint: { fontSize: ".75rem", color: "var(--pp-muted)", textAlign: "right" },
-  fieldError: { fontSize: ".82rem", color: "#b91c1c", fontWeight: 500 },
+  fieldError: { fontSize: ".82rem", color: "var(--pp-stop-fg)", fontWeight: 500 },
   radioRow: { display: "flex", flexWrap: "wrap", gap: 12 },
   radio: { display: "flex", alignItems: "center", gap: 6, fontSize: ".92rem", color: "var(--pp-body)" },
   previewBox: {
@@ -705,9 +705,9 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: ".92rem",
   },
   cta: {
-    background: "var(--pp-signal-fill)",
-    color: "var(--pp-on-dark)",
-    border: "none",
+    background: "var(--pp-btn)",
+    color: "var(--pp-btn-fg)",
+    border: "1px solid var(--pp-btn-border)",
     padding: "14px 20px",
     borderRadius: 12,
     fontWeight: 800,
@@ -728,5 +728,5 @@ const styles: Record<string, React.CSSProperties> = {
     userSelect: "none",
     background: "var(--pp-surface)",
   },
-  dayChipOn: { background: "var(--pp-signal-fill)", color: "var(--pp-on-dark)", borderColor: "var(--pp-signal-fill)", fontWeight: 700 },
+  dayChipOn: { background: "var(--pp-btn)", color: "var(--pp-btn-fg)", borderColor: "var(--pp-btn-border)", fontWeight: 700 },
 };

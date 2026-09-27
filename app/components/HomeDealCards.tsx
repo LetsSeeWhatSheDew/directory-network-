@@ -267,7 +267,7 @@ export default function HomeDealCards({
         }}
       >
         <div style={{ fontFamily: "var(--font-display), system-ui, sans-serif", fontSize: "1.1rem", fontWeight: 700, color: "var(--pp-ink)", marginBottom: 6 }}>
-          We're refreshing Central IL deals — check back soon.
+          We&apos;re refreshing Central IL deals — check back soon.
         </div>
         <p style={{ fontSize: ".9rem", color: "var(--pp-body)", margin: "0 auto 14px", maxWidth: 420, lineHeight: 1.5 }}>
           Or get an alert the moment a new deal drops near you.

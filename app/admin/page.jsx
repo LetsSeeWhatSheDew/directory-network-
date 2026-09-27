@@ -43,7 +43,7 @@ function Badge({ status }) {
       padding: "3px 10px", borderRadius: "100px",
       fontSize: "0.72rem", fontWeight: 700,
       letterSpacing: "0.06em", textTransform: "uppercase",
-      fontFamily: "system-ui, sans-serif",
+      fontFamily: "var(--font-body)",
     }}>{status}</span>
   );
 }
@@ -51,13 +51,13 @@ function Badge({ status }) {
 function StatCard({ label, value, sub, accent }) {
   return (
     <div style={{
-      background: "#fff", border: "1px solid #e2e8f0",
+      background: "var(--pp-surface)", border: "1px solid var(--pp-border)",
       borderRadius: "12px", padding: "24px 28px",
-      borderTop: `3px solid ${accent || "#2E7D32"}`,
+      borderTop: `3px solid ${accent || "var(--pp-mark)"}`,
     }}>
-      <p style={{ margin: "0 0 6px", fontSize: "0.75rem", fontFamily: "system-ui", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#94a3b8" }}>{label}</p>
-      <p style={{ margin: "0 0 4px", fontSize: "2.2rem", fontWeight: 700, color: "#1F3D2B", letterSpacing: "-0.03em", fontFamily: "Georgia, serif" }}>{value}</p>
-      {sub && <p style={{ margin: 0, fontSize: "0.8rem", color: "#64748b", fontFamily: "system-ui" }}>{sub}</p>}
+      <p style={{ margin: "0 0 6px", fontSize: "0.75rem", fontFamily: "var(--font-body)", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pp-muted)" }}>{label}</p>
+      <p style={{ margin: "0 0 4px", fontSize: "2.2rem", fontWeight: 700, color: "var(--pp-ink)", letterSpacing: "-0.03em", fontFamily: "var(--font-mono)" }}>{value}</p>
+      {sub && <p style={{ margin: 0, fontSize: "0.8rem", color: "var(--pp-muted)", fontFamily: "var(--font-body)" }}>{sub}</p>}
     </div>
   );
 }
@@ -65,19 +65,19 @@ function StatCard({ label, value, sub, accent }) {
 function Collapsible({ title, count, children }) {
   const [open, setOpen] = useState(true);
   return (
-    <div style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: "12px", overflow: "hidden", marginBottom: "16px" }}>
+    <div style={{ background: "var(--pp-surface)", border: "1px solid var(--pp-border)", borderRadius: "12px", overflow: "hidden", marginBottom: "16px" }}>
       <button
         onClick={() => setOpen(o => !o)}
         style={{
           width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
           padding: "18px 24px", background: "none", border: "none", cursor: "pointer",
-          fontFamily: "Georgia, serif", fontSize: "1rem", fontWeight: 700, color: "#1F3D2B",
+          fontFamily: "var(--font-breath)", fontSize: "1.15rem", fontWeight: 400, color: "var(--pp-ink)",
         }}
       >
-        <span>{title} {count !== undefined && <span style={{ fontSize: "0.8rem", color: "#94a3b8", fontFamily: "system-ui", fontWeight: 400 }}>({count})</span>}</span>
-        <span style={{ fontSize: "0.75rem", color: "#94a3b8", transform: open ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>▼</span>
+        <span>{title} {count !== undefined && <span style={{ fontSize: "0.8rem", color: "var(--pp-muted)", fontFamily: "var(--font-body)", fontWeight: 400 }}>({count})</span>}</span>
+        <span style={{ fontSize: "0.75rem", color: "var(--pp-muted)", transform: open ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>▼</span>
       </button>
-      {open && <div style={{ borderTop: "1px solid #f1f5f9" }}>{children}</div>}
+      {open && <div style={{ borderTop: "1px solid var(--pp-border)" }}>{children}</div>}
     </div>
   );
 }
@@ -107,16 +107,16 @@ function LeadRow({ lead, onStatusChange }) {
       display: "grid",
       gridTemplateColumns: "1fr 1fr 120px 100px 80px",
       gap: "12px", alignItems: "center",
-      padding: "14px 24px", borderBottom: "1px solid #f8fafc",
-      fontSize: "0.875rem", fontFamily: "system-ui, sans-serif",
+      padding: "14px 24px", borderBottom: "1px solid var(--pp-border)",
+      fontSize: "0.875rem", fontFamily: "var(--font-body)",
     }}>
       <div>
-        <p style={{ margin: 0, fontWeight: 600, color: "#1e293b" }}>{lead.business_name || "—"}</p>
-        <p style={{ margin: 0, fontSize: "0.78rem", color: "#64748b" }}>{lead.city || ""} · {lead.niche || ""}</p>
+        <p style={{ margin: 0, fontWeight: 600, color: "var(--pp-ink)" }}>{lead.business_name || "—"}</p>
+        <p style={{ margin: 0, fontSize: "0.78rem", color: "var(--pp-muted)" }}>{lead.city || ""} · {lead.niche || ""}</p>
       </div>
       <div>
-        <p style={{ margin: 0, color: "#334155" }}>{lead.name || "—"}</p>
-        <p style={{ margin: 0, fontSize: "0.78rem", color: "#64748b" }}>{lead.email || ""}</p>
+        <p style={{ margin: 0, color: "var(--pp-body)" }}>{lead.name || "—"}</p>
+        <p style={{ margin: 0, fontSize: "0.78rem", color: "var(--pp-muted)" }}>{lead.email || ""}</p>
       </div>
       <div>{lead.phone || "—"}</div>
       <div>
@@ -127,7 +127,7 @@ function LeadRow({ lead, onStatusChange }) {
             onChange={e => save(e.target.value)}
             onBlur={() => setEditing(false)}
             disabled={saving}
-            style={{ fontSize: "0.8rem", padding: "4px 8px", borderRadius: "6px", border: "1px solid #e2e8f0", fontFamily: "system-ui" }}
+            style={{ fontSize: "0.8rem", padding: "4px 8px", borderRadius: "6px", border: "1px solid var(--pp-border)", fontFamily: "var(--font-body)" }}
           >
             {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
@@ -137,7 +137,7 @@ function LeadRow({ lead, onStatusChange }) {
           </button>
         )}
       </div>
-      <div style={{ color: "#94a3b8", fontSize: "0.78rem" }}>{date}</div>
+      <div style={{ color: "var(--pp-muted)", fontSize: "0.78rem" }}>{date}</div>
     </div>
   );
 }
@@ -185,19 +185,19 @@ export default function AdminPage() {
   const todayFocus = newLeads.slice(0, 5);
 
   return (
-    <div style={{ minHeight: "100vh", background: "#f8f7f4", fontFamily: "system-ui, sans-serif" }}>
-      <div style={{ background: "#1F3D2B", padding: "16px 40px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <span style={{ fontFamily: "Georgia, serif", fontSize: "1.1rem", fontWeight: 700, color: "#fff" }}>
-          puff<span style={{ color: "#2E7D32" }}>price</span>
-          <span style={{ fontSize: "0.7rem", fontWeight: 400, color: "#64748b", marginLeft: "12px", fontFamily: "system-ui", letterSpacing: "0.1em", textTransform: "uppercase" }}>Admin</span>
+    <div style={{ minHeight: "100vh", background: "var(--pp-paper)", fontFamily: "var(--font-body)" }}>
+      <div style={{ background: "var(--pp-surface)", borderBottom: "1px solid var(--pp-border)", padding: "16px 40px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <span style={{ fontFamily: "var(--font-body)", fontSize: "1.1rem", fontWeight: 700, color: "var(--pp-ink)" }}>
+          puff<span style={{ color: "var(--pp-mark)" }}>price</span>
+          <span style={{ fontSize: "0.7rem", fontWeight: 400, color: "var(--pp-muted)", marginLeft: "12px", fontFamily: "var(--font-body)", letterSpacing: "0.1em", textTransform: "uppercase" }}>Admin</span>
         </span>
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
           {lastRefresh && (
-            <span style={{ fontSize: "0.75rem", color: "#475569" }}>
+            <span style={{ fontSize: "0.75rem", color: "var(--pp-muted)" }}>
               Updated {lastRefresh.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}
             </span>
           )}
-          <button onClick={load} disabled={loading} style={{ background: "#2E7D32", color: "#fff", border: "none", padding: "8px 18px", borderRadius: "6px", cursor: "pointer", fontSize: "0.8rem", fontWeight: 600 }}>
+          <button onClick={load} disabled={loading} style={{ background: "var(--pp-btn)", color: "var(--pp-btn-fg)", border: "1px solid var(--pp-btn-border)", padding: "8px 18px", borderRadius: "14px", cursor: "pointer", fontSize: "0.8rem", fontWeight: 600 }}>
             {loading ? "Loading…" : "↻ Refresh"}
           </button>
         </div>
@@ -205,34 +205,34 @@ export default function AdminPage() {
 
       <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "40px" }}>
         {error && (
-          <div style={{ background: "#fee2e2", border: "1px solid #fca5a5", borderRadius: "8px", padding: "16px 20px", marginBottom: "24px", color: "#991b1b", fontSize: "0.9rem" }}>
+          <div style={{ background: "var(--pp-stop-bg)", border: "1px solid var(--pp-stop-edge)", borderRadius: "8px", padding: "16px 20px", marginBottom: "24px", color: "var(--pp-stop-fg)", fontSize: "0.9rem" }}>
             ⚠ Could not load leads: {error}. Check your Supabase env vars and RLS policy.
           </div>
         )}
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px", marginBottom: "40px" }}>
-          <StatCard label="Total Leads" value={total} sub="All time" accent="#2E7D32" />
+          <StatCard label="Total Leads" value={total} sub="All time" accent="var(--pp-mark)" />
           <StatCard label="New Today" value={newToday} sub="Submitted today" accent="#3b82f6" />
           <StatCard label="Live Listings" value={listed} sub="Listed or Boosted" accent="#8b5cf6" />
           <StatCard label="Top Niche" value={topNiche ? topNiche[1] : "—"} sub={topNiche ? topNiche[0] : "No data yet"} accent="#f59e0b" />
         </div>
 
         {todayFocus.length > 0 && (
-          <div style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: "12px", padding: "24px 28px", marginBottom: "24px", borderLeft: "4px solid #2E7D32" }}>
-            <p style={{ margin: "0 0 16px", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#2E7D32" }}>
-              Today's Focus — {todayFocus.length} new lead{todayFocus.length !== 1 ? "s" : ""} to contact
+          <div style={{ background: "var(--pp-surface)", border: "1px solid var(--pp-border)", borderRadius: "12px", padding: "24px 28px", marginBottom: "24px", borderLeft: "4px solid var(--pp-mark)" }}>
+            <p style={{ margin: "0 0 16px", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pp-mark)" }}>
+              Today&apos;s Focus — {todayFocus.length} new lead{todayFocus.length !== 1 ? "s" : ""} to contact
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               {todayFocus.map(l => (
-                <div key={l.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: "1px solid #f1f5f9" }}>
+                <div key={l.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: "1px solid var(--pp-border)" }}>
                   <div>
-                    <span style={{ fontWeight: 600, color: "#1e293b" }}>{l.business_name || "Unknown"}</span>
-                    <span style={{ color: "#94a3b8", margin: "0 8px" }}>·</span>
-                    <span style={{ color: "#64748b", fontSize: "0.85rem" }}>{l.city}</span>
+                    <span style={{ fontWeight: 600, color: "var(--pp-ink)" }}>{l.business_name || "Unknown"}</span>
+                    <span style={{ color: "var(--pp-muted)", margin: "0 8px" }}>·</span>
+                    <span style={{ color: "var(--pp-muted)", fontSize: "0.85rem" }}>{l.city}</span>
                   </div>
                   <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-                    {l.phone && <a href={`tel:${l.phone}`} style={{ fontSize: "0.85rem", color: "#3b82f6", textDecoration: "none" }}>{l.phone}</a>}
-                    {l.email && <a href={`mailto:${l.email}`} style={{ fontSize: "0.85rem", color: "#3b82f6", textDecoration: "none" }}>{l.email}</a>}
+                    {l.phone && <a href={`tel:${l.phone}`} style={{ fontSize: "0.85rem", color: "var(--pp-mark)", textDecoration: "none" }}>{l.phone}</a>}
+                    {l.email && <a href={`mailto:${l.email}`} style={{ fontSize: "0.85rem", color: "var(--pp-mark)", textDecoration: "none" }}>{l.email}</a>}
                   </div>
                 </div>
               ))}
@@ -240,25 +240,25 @@ export default function AdminPage() {
           </div>
         )}
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 120px 100px 80px", gap: "12px", padding: "10px 24px", fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#94a3b8" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 120px 100px 80px", gap: "12px", padding: "10px 24px", fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--pp-muted)" }}>
           <span>Business</span><span>Contact</span><span>Phone</span><span>Status</span><span>Date</span>
         </div>
 
         <Collapsible title="New Leads" count={newLeads.length}>
           {newLeads.length === 0
-            ? <p style={{ padding: "20px 24px", color: "#94a3b8", fontSize: "0.875rem" }}>No new leads yet.</p>
+            ? <p style={{ padding: "20px 24px", color: "var(--pp-muted)", fontSize: "0.875rem" }}>No new leads yet.</p>
             : newLeads.map(l => <LeadRow key={l.id} lead={l} onStatusChange={load} />)}
         </Collapsible>
 
         <Collapsible title="In Progress" count={activeLeads.length}>
           {activeLeads.length === 0
-            ? <p style={{ padding: "20px 24px", color: "#94a3b8", fontSize: "0.875rem" }}>Nothing in progress.</p>
+            ? <p style={{ padding: "20px 24px", color: "var(--pp-muted)", fontSize: "0.875rem" }}>Nothing in progress.</p>
             : activeLeads.map(l => <LeadRow key={l.id} lead={l} onStatusChange={load} />)}
         </Collapsible>
 
         <Collapsible title="Live Listings" count={liveLeads.length}>
           {liveLeads.length === 0
-            ? <p style={{ padding: "20px 24px", color: "#94a3b8", fontSize: "0.875rem" }}>No live listings yet.</p>
+            ? <p style={{ padding: "20px 24px", color: "var(--pp-muted)", fontSize: "0.875rem" }}>No live listings yet.</p>
             : liveLeads.map(l => <LeadRow key={l.id} lead={l} onStatusChange={load} />)}
         </Collapsible>
       </div>

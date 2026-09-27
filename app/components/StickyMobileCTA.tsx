@@ -54,7 +54,7 @@ export default function StickyMobileCTA() {
           opacity: visible ? 1 : 0,
           transform: visible ? "translateY(0)" : "translateY(16px)",
           pointerEvents: visible ? "auto" : "none",
-          transition: "opacity 220ms ease, transform 220ms ease",
+          transition: "opacity calc(220ms * var(--pp-pace)) ease, transform calc(220ms * var(--pp-pace)) ease",
         }}
         className="pp-sticky-mobile-cta"
       >

@@ -1,6 +1,6 @@
+import LoadingPuff from "../components/LoadingPuff";
 import Link from "next/link";
 import Nav from "../components/Nav";
-import Footer from "../components/Footer";
 import MapClient from "./MapClient";
 import { cityFromSlug } from "@/lib/cityNormalize";
 
@@ -70,12 +70,12 @@ async function getDeals(): Promise<Deal[]> {
     if (!res.ok) return [];
     const data = await res.json();
     if (!Array.isArray(data)) return [];
-    return data.map((d: any) => ({
-      listing_slug: d.listing_slug,
-      deal_title: d.title,
-      category: d.category,
-      discount_value: d.discount_value,
-      discount_unit: d.discount_unit,
+    return data.map((d: Record<string, unknown>) => ({
+      listing_slug: d.listing_slug as string,
+      deal_title: d.title as string,
+      category: d.category as string | null,
+      discount_value: d.discount_value as number | null,
+      discount_unit: d.discount_unit as string | null,
     }));
   } catch {
     return [];
@@ -116,8 +116,6 @@ export default async function MapPage() {
         .back:hover{color:var(--pp-ink)}
         .map-shell{position:relative;width:100%;height:calc(100vh - 60px);min-height:520px;background:var(--pp-border)}
         .map-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:var(--pp-border);font-family:var(--font-body);color:var(--pp-body);z-index:1;pointer-events:none}
-        .map-loading-spinner{width:36px;height:36px;border:3px solid var(--pp-border);border-top-color:var(--pp-signal-fill);border-radius:50%;animation:mapspin 1s linear infinite}
-        @keyframes mapspin{to{transform:rotate(360deg)}}
       `}</style>
 
       <Nav variant="light" />
@@ -154,8 +152,9 @@ export default async function MapPage() {
             href="/dispensaries"
             style={{
               display: "inline-block",
-              background: "var(--pp-signal-fill)",
-              color: "var(--pp-on-dark)",
+              background: "var(--pp-btn)",
+              color: "var(--pp-btn-fg)",
+              border: "1px solid var(--pp-btn-border)",
               padding: "12px 28px",
               borderRadius: 10,
               textDecoration: "none",
@@ -172,8 +171,7 @@ export default async function MapPage() {
               feedback even if Leaflet fails to download. MapClient paints
               on top of this as soon as tiles arrive. */}
           <div className="map-loading">
-            <div className="map-loading-spinner" />
-            <div>Loading Illinois map…</div>
+            <LoadingPuff label="Loading the map…" />
           </div>
           <MapClient points={points} />
         </div>

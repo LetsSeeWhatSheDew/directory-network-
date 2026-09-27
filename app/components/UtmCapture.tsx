@@ -42,7 +42,7 @@ export default function UtmCapture() {
 
     // Fire a single analytics event. Safe if gtag isn't defined.
     try {
-      const w = window as any;
+      const w = window;
       if (captured && typeof w.gtag === "function") {
         w.gtag("event", "campaign_landing", captured);
       }

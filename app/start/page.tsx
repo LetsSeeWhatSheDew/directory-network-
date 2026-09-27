@@ -26,14 +26,8 @@ export default function StartPage() {
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:var(--font-body),system-ui,sans-serif;background:var(--pp-paper);color:var(--pp-body);min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-surface);position:sticky;top:0;z-index:100;border-bottom:1px solid var(--pp-border)}
-        .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
-        .logo-dot{width:8px;height:8px;border-radius:50%;background:var(--pp-signal-fill);animation:pulse 2.5s infinite}
+        body{font-family:var(--font-body);color:var(--pp-body);min-height:100vh}
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-        .logo-text{font-size:1.1rem;font-weight:700;color:var(--pp-ink)}
-        .logo-text span{color:var(--pp-signal)}
-        .back{font-size:.82rem;color:var(--pp-muted);text-decoration:none;font-family:var(--font-body)}
 
         .wrap{max-width:720px;margin:0 auto;padding:48px 22px 72px}
         .eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);font-family:var(--font-body);margin-bottom:10px}
@@ -53,8 +47,8 @@ export default function StartPage() {
 
         .cta-row{margin-top:32px;padding:22px 24px;background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:14px;text-align:center}
         .cta-row p{font-size:.92rem;color:var(--pp-body);margin-bottom:12px}
-        .cta-btn{display:inline-block;background:var(--pp-signal-fill);color:var(--pp-on-dark);padding:14px 26px;border-radius:10px;text-decoration:none;font-family:var(--font-body);font-weight:700;font-size:1rem}
-        .cta-btn:hover{background:var(--pp-signal-fill)}
+        .cta-btn{display:inline-block;background:var(--pp-btn);color:var(--pp-btn-fg);border:1px solid var(--pp-btn-border);padding:14px 26px;border-radius:10px;text-decoration:none;font-family:var(--font-body);font-weight:700;font-size:1rem}
+        .cta-btn:hover{filter:brightness(.97)}
 
         @media(max-width:600px){.wrap{padding:32px 16px 56px}h2{font-size:1.2rem}p,li{font-size:.98rem}}
       `}</style>

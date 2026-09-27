@@ -31,55 +31,29 @@ export default function AboutPage() {
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:var(--font-ui, system-ui, sans-serif);background:var(--pp-paper);color:var(--pp-ink);min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-surface);border-bottom:1px solid var(--pp-border);position:sticky;top:0;z-index:100}
-        .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none}
-        .back{font-size:.82rem;color:var(--pp-muted);text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif)}
-        .back:hover{color:var(--pp-ink)}
-        .about-photo{
-          position:relative;
-          width:100%;
-          height:clamp(220px, 30vw, 380px);
-          overflow:hidden;
-        }
-        .about-photo img{object-fit:cover;object-position:center 30%}
-        .about-photo-tint{
-          position:absolute;inset:0;
-          background:
-            linear-gradient(to bottom,
-              rgba(245,244,240,0) 60%,
-              rgba(245,244,240,0.95) 100%),
-            linear-gradient(rgba(15,31,61,0.06), rgba(15,31,61,0.06));
-          pointer-events:none;
-        }
-        .about-photo-credit{
-          position:absolute;bottom:8px;right:12px;
-          font-size:.7rem;color:rgba(255,255,255,0.85);
-          font-family:var(--font-ui, system-ui, sans-serif);
-          text-shadow:0 1px 2px rgba(0,0,0,0.4);
-        }
+        body{font-family:var(--font-body);color:var(--pp-ink);min-height:100vh}
         .wrap{max-width:680px;margin:0 auto;padding:48px 28px 64px}
-        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);font-family:var(--font-ui, system-ui, sans-serif);margin-bottom:14px}
+        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);font-family:var(--font-body);margin-bottom:14px}
         h1{
-          font-family:var(--font-display, var(--font-geist-sans));
+          font-family:var(--font-breath);
           font-size:clamp(2rem,4.5vw,3rem);font-weight:700;
           letter-spacing:-.04em;line-height:1.1;margin-bottom:32px;color:var(--pp-ink)
         }
         p{
-          font-family:var(--font-display), system-ui, sans-serif;
+          font-family:var(--font-body);
           font-size:1.0625rem;line-height:1.7;margin-bottom:22px;color:var(--pp-body)
         }
         p:last-of-type{margin-bottom:32px}
         .contact{
           margin-top:48px;padding-top:24px;border-top:1px solid var(--pp-border);
-          font-family:var(--font-ui, system-ui, sans-serif);
+          font-family:var(--font-body);
           font-size:.92rem;color:var(--pp-muted)
         }
         .contact a{color:var(--pp-signal);text-decoration:none;font-weight:600}
         .contact a:hover{text-decoration:underline}
         .built{
           margin-top:48px;
-          font-family:var(--font-ui, system-ui, sans-serif);
+          font-family:var(--font-body);
           font-size:.85rem;color:var(--pp-muted);text-align:center
         }
         @media(max-width:600px){.wrap{padding:48px 20px 40px}.nav{padding:12px 16px}}

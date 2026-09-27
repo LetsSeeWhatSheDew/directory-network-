@@ -25,7 +25,7 @@ export function ScraperRunRow({ result }: { result: DispensaryResult }) {
   return (
     <>
       <tr
-        className={`border-b border-white/[0.03] ${hasError ? "cursor-pointer" : ""} transition-colors hover:bg-white/[0.02]`}
+        className={`border-b border-white/[0.03] ${hasError ? "cursor-pointer" : ""} hover:bg-white/[0.02]`}
         onClick={() => hasError && setOpen(!open)}
       >
         <td className="py-3 pr-4 font-medium">{result.slug}</td>

@@ -27,10 +27,10 @@ export default async function AlertsConfirmedPage({
           <div style={{
             display: "inline-flex", alignItems: "center", justifyContent: "center",
             width: 72, height: 72, borderRadius: "50%",
-            background: "rgba(74, 222, 128, 0.15)",
+            background: "var(--pp-best-tint)", border: "1px solid var(--pp-best-border)",
             marginBottom: 24,
           }}>
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#93CB5C" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--pp-mark)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </div>
@@ -55,7 +55,7 @@ export default async function AlertsConfirmedPage({
             textAlign: "left",
             fontFamily: "var(--font-body)",
           }}>
-            <h2 style={{ fontSize: ".8rem", textTransform: "uppercase", letterSpacing: ".12em", color: "var(--pp-muted)", marginBottom: 12, fontWeight: 700 }}>
+            <h2 data-keep-font style={{ fontSize: ".8rem", textTransform: "uppercase", letterSpacing: ".12em", color: "var(--pp-muted)", marginBottom: 12, fontWeight: 700 }}>
               While you wait
             </h2>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
@@ -79,8 +79,8 @@ export default async function AlertsConfirmedPage({
 
           <Link href="/" style={{
             display: "inline-block",
-            background: "var(--pp-signal-fill)", color: "var(--pp-on-dark)",
-            padding: "12px 28px", borderRadius: 10,
+            background: "var(--pp-btn)", color: "var(--pp-btn-fg)", border: "1px solid var(--pp-btn-border)",
+            padding: "12px 28px", borderRadius: 14,
             textDecoration: "none", fontFamily: "var(--font-body)",
             fontWeight: 700, fontSize: ".95rem",
           }}>

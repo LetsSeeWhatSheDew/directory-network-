@@ -13,7 +13,7 @@ import Footer from "../../components/Footer";
 import TrustLine from "../../components/TrustLine";
 import { effectiveCategory } from "../../../lib/inferCategory";
 import { redirect } from "next/navigation";
-import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
+import { estimateSavings, formatSavingsDollars, type Deal } from "../../../lib/dealScoring";
 import DealBadge from "../../components/DealBadge";
 import DealFreshnessBadge from "../../components/DealFreshnessBadge";
 import { isInMetro, metroCities } from "../../../lib/cityNormalize";
@@ -61,14 +61,14 @@ function citySubtitle(category: string, city: string) {
  * slug + title (survives DB-level duplicates where the same deal was
  * inserted twice with different IDs).
  */
-function dealKey(d: any): string {
+function dealKey(d: Deal): string {
   if (d?.deal_id) return `id:${d.deal_id}`;
   if (d?.id) return `id:${d.id}`;
   return `st:${d?.listing_slug || d?.slug || "unknown"}|${d?.title || d?.deal_title || ""}`;
 }
 
 /** Remove rows that share the same dealKey, keeping the first. */
-function dedupeDeals<T>(list: T[]): T[] {
+function dedupeDeals<T extends Deal>(list: T[]): T[] {
   const seen = new Set<string>();
   const out: T[] = [];
   for (const d of list) {
@@ -142,10 +142,10 @@ async function getDeals(category: string, city?: string | null) {
         const inCat =
           category === "all"
             ? data
-            : data.filter((d: any) => effectiveCategory(d) === category);
+            : data.filter((d: Deal) => effectiveCategory(d) === category);
         if (!city) return { deals: inCat, source: "view" };
 
-        const metroFiltered = inCat.filter((d: any) =>
+        const metroFiltered = inCat.filter((d: Deal) =>
           isInMetro(d.city, d.slug || d.listing_slug, city)
         );
         if (metroFiltered.length > 0) {
@@ -191,7 +191,7 @@ async function getDeals(category: string, city?: string | null) {
   return { deals: Array.isArray(deals) ? deals : [], source: "table" };
 }
 
-const formatSavings = (deal: any) => formatSavingsDollars(deal);
+const formatSavings = (deal: Deal) => formatSavingsDollars(deal);
 
 /**
  * Single source of truth for expiration copy. Returns null when the
@@ -349,7 +349,7 @@ export async function generateMetadata({
 
 export const dynamic = "force-dynamic"; // Force SSR, never cache
 
-function buildItemListSchema(deals: any[], categoryLabel: string, category: string) {
+function buildItemListSchema(deals: Deal[], categoryLabel: string, category: string) {
   const top = deals.slice(0, 4).map((d, i) => {
     const price = d.sale_price ?? d.discount_value ?? undefined;
     return {
@@ -386,7 +386,7 @@ function buildItemListSchema(deals: any[], categoryLabel: string, category: stri
   };
 }
 
-function buildSpecialAnnouncements(deals: any[]) {
+function buildSpecialAnnouncements(deals: Deal[]) {
   // SpecialAnnouncement signals to AI crawlers that deals are live, fresh,
   // time-boxed. The expires date is the key Zone 4 signal.
   return deals.slice(0, 10).map((d) => ({
@@ -459,7 +459,7 @@ export default async function DealsPage({
   const slugs = Array.from(
     new Set(
       deals
-        .map((d: any) => (d.slug || d.listing_slug) as string | undefined)
+        .map((d: Deal) => (d.slug || d.listing_slug) as string | undefined)
         .filter(Boolean) as string[]
     )
   );
@@ -470,12 +470,12 @@ export default async function DealsPage({
     ? citySubtitle(category, city)
     : CATEGORY_SUBTITLES[category] || "Best deals near you";
   // Lead with the biggest everyday saving; bundles/conditional deals follow.
-  const topDeal = deals.find((d: any) => amountOf(d) && !isConditional(d) && !needsQuantity(d)) || deals[0] || null;
+  const topDeal = deals.find((d: Deal) => amountOf(d) && !isConditional(d) && !needsQuantity(d)) || deals[0] || null;
   // Fairness: the four cards above the fold hold at most STORE_CAP.shortList
   // from any one store (top deal included); the store page has the rest.
-  const ordered = topDeal ? [topDeal, ...deals.filter((d: any) => d !== topDeal)] : deals;
+  const ordered = topDeal ? [topDeal, ...deals.filter((d: Deal) => d !== topDeal)] : deals;
   const capped = capPerStore(ordered, STORE_CAP.shortList);
-  const alternatives = capped.kept.filter((d: any) => d !== topDeal).slice(0, 3);
+  const alternatives = capped.kept.filter((d: Deal) => d !== topDeal).slice(0, 3);
   const visibleCards = topDeal ? [topDeal, ...alternatives] : alternatives;
   const cardOverflow = overflowFor(visibleCards, capped.totals);
   const schemaDeals = capPerStore(deals, STORE_CAP.highlight).kept;
@@ -495,7 +495,7 @@ export default async function DealsPage({
   // Zone 4 Phase 1: direct factual answer above the fold.
   // Count unique dispensaries from the current result set.
   const dispensaryCount = new Set(
-    deals.map((d: any) => d.listing_slug || d.slug).filter(Boolean)
+    deals.map((d: Deal) => d.listing_slug || d.slug).filter(Boolean)
   ).size;
   // The default result set is now scoped to the 12 Central IL cities
   // (see CIL_CITY_IN_LIST above). Label without-city views accordingly
@@ -817,7 +817,7 @@ export default async function DealsPage({
               <>
                 <div className="alt-label">Also worth considering</div>
                 <div className="alt-cards">
-                  {alternatives.map((deal: any, i: number) => {
+                  {alternatives.map((deal: Deal, i: number) => {
                     const altHref = listingHref(deal.slug || deal.listing_slug, city);
                     if (!altHref) return null;
                     const dollars = estimateSavings(deal);

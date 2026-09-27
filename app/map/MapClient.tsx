@@ -44,8 +44,11 @@ export default function MapClient({ points }: { points: Point[] }) {
   const [leafletReady, setLeafletReady] = useState(false);
   const [loadFailed, setLoadFailed] = useState(false);
   const [dealsOnly, setDealsOnly] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Leaflet is imported dynamically on the client
   const mapInstance = useRef<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Leaflet is imported dynamically on the client
   const markersLayer = useRef<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Leaflet is imported dynamically on the client
   const leafletRef = useRef<any>(null);
 
   // Dynamic-import Leaflet client-side. If the import fails (offline /
@@ -55,6 +58,7 @@ export default function MapClient({ points }: { points: Point[] }) {
     (async () => {
       try {
         const mod = await import("leaflet");
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Leaflet is imported dynamically on the client
         const L = (mod as any).default ?? mod;
         if (cancelled) return;
         leafletRef.current = L;
@@ -89,7 +93,7 @@ export default function MapClient({ points }: { points: Point[] }) {
         <div style="font-weight:700;font-size:.95rem;color:var(--pp-ink);">${escapeHtml(display)}</div>
         <div style="font-size:.75rem;color:var(--pp-muted);margin-top:2px;">${escapeHtml(p.city)}, IL</div>
         ${dealHtml}
-        <a href="/dispensary/${encodeURIComponent(p.slug)}" style="display:inline-block;margin-top:10px;background:var(--pp-canopy);color:var(--pp-on-dark);padding:6px 12px;border-radius:6px;font-size:.78rem;text-decoration:none;font-weight:600;">View dispensary →</a>
+        <a href="/dispensary/${encodeURIComponent(p.slug)}" style="display:inline-block;margin-top:10px;background:var(--pp-btn);color:var(--pp-btn-fg);border:1px solid var(--pp-btn-border);padding:6px 12px;border-radius:999px;font-size:.78rem;text-decoration:none;font-weight:600;">View dispensary →</a>
       </div>`;
   }
 
@@ -173,8 +177,9 @@ export default function MapClient({ points }: { points: Point[] }) {
           <Link
             href="/dispensaries"
             style={{
-              background: "var(--pp-signal-fill)",
-              color: "var(--pp-on-dark)",
+              background: "var(--pp-btn)",
+              color: "var(--pp-btn-fg)",
+              border: "1px solid var(--pp-btn-border)",
               padding: "10px 20px",
               borderRadius: 10,
               textDecoration: "none",
@@ -193,8 +198,8 @@ export default function MapClient({ points }: { points: Point[] }) {
           top: 14,
           right: 14,
           background: "var(--pp-surface)",
-          borderRadius: 10,
-          boxShadow: "0 4px 12px rgba(0,0,0,.18)",
+          borderRadius: 14,
+          border: "1px solid var(--pp-border)",
           padding: 6,
           display: "flex",
           gap: 4,
@@ -225,12 +230,12 @@ export default function MapClient({ points }: { points: Point[] }) {
 function pillStyle(active: boolean): React.CSSProperties {
   return {
     padding: "6px 12px",
-    borderRadius: 7,
-    border: "none",
+    borderRadius: 10,
+    border: active ? "1px solid var(--pp-btn-border)" : "1px solid transparent",
     cursor: "pointer",
     fontWeight: 600,
-    background: active ? "var(--pp-signal-fill)" : "transparent",
-    color: active ? "rgb(255 255 255)" : "var(--pp-body)",
+    background: active ? "var(--pp-btn)" : "transparent",
+    color: active ? "var(--pp-btn-fg)" : "var(--pp-body)",
   };
 }
 

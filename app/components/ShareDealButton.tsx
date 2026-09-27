@@ -39,11 +39,11 @@ export default function ShareDealButton({
     e.stopPropagation();
     track("share_tap", { dealId });
     try {
-      const nav = typeof navigator !== "undefined" ? (navigator as any) : null;
+      const nav = typeof navigator !== "undefined" ? (navigator as Navigator) : null;
       if (nav && typeof nav.share === "function") {
         await nav.share({ title: "PuffPrice Deal", text, url });
         try {
-          const w = window as any;
+          const w = window;
           if (typeof w.gtag === "function")
             w.gtag("event", "deal_share", { method: "native", dispensary: dispensaryName });
         } catch {}
@@ -53,7 +53,7 @@ export default function ShareDealButton({
         await nav.clipboard.writeText(`${text}\n${url}`);
         setCopied(true);
         try {
-          const w = window as any;
+          const w = window;
           if (typeof w.gtag === "function")
             w.gtag("event", "deal_share", { method: "clipboard", dispensary: dispensaryName });
         } catch {}
@@ -117,7 +117,7 @@ export default function ShareDealButton({
           fontWeight: 700,
           fontSize: ".88rem",
           cursor: "pointer",
-          transition: "border-color .15s, background .15s",
+          transition: "none",
         }}
       >
         <ShareIcon size={16} />
@@ -145,7 +145,7 @@ export default function ShareDealButton({
         alignItems: "center",
         justifyContent: "center",
         flexShrink: 0,
-        transition: "background .15s, border-color .15s, color .15s",
+        transition: "none",
       }}
     >
       <ShareIcon size={15} />

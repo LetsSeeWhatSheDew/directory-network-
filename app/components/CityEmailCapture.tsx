@@ -81,7 +81,7 @@ export default function CityEmailCapture({ city, state }: Props) {
         <button
           type="submit"
           disabled={status === "submitting"}
-          className="rounded-lg bg-[#7FE3C7] px-4 py-2 text-xs font-semibold text-slate-900 shadow-sm transition hover:bg-[#6ad3b7] disabled:cursor-not-allowed disabled:opacity-60"
+          className="rounded-lg bg-[#7FE3C7] px-4 py-2 text-xs font-semibold text-slate-900 shadow-sm hover:bg-[#6ad3b7] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {status === "submitting" ? "…" : "Subscribe"}
         </button>

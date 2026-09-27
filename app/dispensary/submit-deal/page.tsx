@@ -126,7 +126,7 @@ export default function SubmitDealPage() {
   }
 
   return (
-    <div style={{ fontFamily: "var(--font-display), system-ui, sans-serif", background: "var(--pp-paper)", minHeight: "100vh", color: "var(--pp-ink)" }}>
+    <div style={{ fontFamily: "var(--font-body)", minHeight: "100vh", color: "var(--pp-ink)" }}>
       <Nav variant="light" />
 
       <div style={{ maxWidth: 680, margin: "0 auto", padding: "48px 24px" }}>
@@ -245,7 +245,7 @@ export default function SubmitDealPage() {
             <div style={{ fontSize: ".68rem", fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--pp-signal)", fontFamily: "var(--font-body)", marginBottom: 10 }}>
               Preview — this is how it will appear
             </div>
-            <div style={{ background: "linear-gradient(135deg,var(--pp-best-tint) 0%,var(--pp-surface) 60%)", border: "2px solid var(--pp-signal-fill)", borderRadius: 12, padding: 18 }}>
+            <div style={{ background: "var(--pp-surface)", border: "1px solid var(--pp-border)", borderRadius: 16, padding: 18 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10, marginBottom: 8 }}>
                 <div>
                   <div style={{ fontSize: "1rem", fontWeight: 700, color: "var(--pp-ink)" }}>
@@ -277,7 +277,7 @@ export default function SubmitDealPage() {
                   <div style={{ fontSize: ".65rem", fontWeight: 700, color: "var(--pp-signal)", fontFamily: "var(--font-body)", textTransform: "uppercase", letterSpacing: ".12em" }}>You save</div>
                   <div style={{ fontSize: ".68rem", color: "var(--pp-signal-ink)", fontFamily: "var(--font-body)", marginTop: 2 }}>vs. Illinois average</div>
                 </div>
-                <div style={{ fontSize: "1.7rem", fontWeight: 700, color: "var(--pp-signal)", letterSpacing: "-.02em", lineHeight: 1, fontFamily: "var(--font-display), system-ui, sans-serif" }}>
+                <div style={{ fontSize: "1.7rem", fontWeight: 500, color: "var(--pp-signal)", letterSpacing: "-.04em", lineHeight: 1, fontFamily: "var(--font-mono)" }}>
                   {previewSavings || "—"}
                 </div>
               </div>
@@ -285,7 +285,7 @@ export default function SubmitDealPage() {
           </div>
 
           <button type="submit" disabled={submitting} style={{
-            background: "var(--pp-signal-fill)", color: "var(--pp-on-dark)", border: "none",
+            background: "var(--pp-btn)", color: "var(--pp-btn-fg)", border: "1px solid var(--pp-btn-border)",
             padding: "14px 24px", borderRadius: 10, fontSize: "1rem",
             fontFamily: "var(--font-body)", fontWeight: 700,
             cursor: submitting ? "not-allowed" : "pointer",

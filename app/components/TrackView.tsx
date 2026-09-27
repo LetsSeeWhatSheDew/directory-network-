@@ -11,7 +11,7 @@ export default function TrackView({
 }) {
   useEffect(() => {
     try {
-      const w = window as any;
+      const w = window;
       if (typeof w.gtag === "function") {
         w.gtag("event", event, params || {});
       }

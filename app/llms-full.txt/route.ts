@@ -21,6 +21,7 @@ export async function GET() {
     getDealIndex(),
     getCheapestBoard(),
   ]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- untyped PostgREST row; fields vary by view
   const deals: Array<Record<string, any>> = dealsRes.ok ? await dealsRes.json() : [];
   const day = (iso?: string | null) => (iso ? new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "America/Chicago" }) : "date unknown");
   const now = new Date().toLocaleString("en-US", { dateStyle: "long", timeStyle: "short", timeZone: "America/Chicago" });

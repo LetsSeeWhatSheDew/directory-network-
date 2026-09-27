@@ -176,7 +176,7 @@ export default function LocationAware() {
       );
     } catch {}
     try {
-      const w = window as any;
+      const w = window;
       if (typeof w.gtag === "function") {
         w.gtag("event", "location_detected", { method: next.source, city: next.city });
       }

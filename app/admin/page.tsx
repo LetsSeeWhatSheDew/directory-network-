@@ -184,18 +184,18 @@ export default async function AdminDashboard() {
   const SEVERITY_DOT: Record<string, string> = {
     high: "bg-red-400",
     med: "bg-amber-400",
-    low: "bg-[#8a9490]",
+    low: "bg-(--pp-muted)",
   };
 
   return (
-    <div className="min-h-screen bg-[#1F3D2B] text-[#F7F4ED]">
+    <div className="min-h-screen text-(--pp-ink)">
       {/* ── Header ── */}
-      <header className="border-b border-white/5">
+      <header className="border-b border-(--pp-border)">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5 md:px-8">
           <div>
             <Link
               href="/"
-              className="text-[11px] uppercase tracking-widest text-[#8a9490] transition-colors hover:text-[#2E7D32]"
+              className="text-[11px] uppercase tracking-widest text-(--pp-muted) hover:text-(--pp-mark)"
             >
               &larr; Site
             </Link>
@@ -206,31 +206,31 @@ export default async function AdminDashboard() {
           <div className="flex items-center gap-4 text-sm">
             <Link
               href="/admin/deals/new"
-              className="text-[11px] uppercase tracking-widest text-[#8a9490] transition-colors hover:text-[#2E7D32]"
+              className="text-[11px] uppercase tracking-widest text-(--pp-muted) hover:text-(--pp-mark)"
             >
               + New deal
             </Link>
             <Link
               href="/admin/submissions"
-              className="text-[11px] uppercase tracking-widest text-[#8a9490] transition-colors hover:text-[#2E7D32]"
+              className="text-[11px] uppercase tracking-widest text-(--pp-muted) hover:text-(--pp-mark)"
             >
               Submissions →
             </Link>
             <Link
               href="/admin/reviews"
-              className="text-[11px] uppercase tracking-widest text-[#8a9490] transition-colors hover:text-[#2E7D32]"
+              className="text-[11px] uppercase tracking-widest text-(--pp-muted) hover:text-(--pp-mark)"
             >
               Reviews →
             </Link>
             <Link
               href="/admin/traffic"
-              className="text-[11px] uppercase tracking-widest text-[#8a9490] transition-colors hover:text-[#2E7D32]"
+              className="text-[11px] uppercase tracking-widest text-(--pp-muted) hover:text-(--pp-mark)"
             >
               Traffic →
             </Link>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-[#8a9490]">Project</span>
-              <span className="font-semibold text-[#2E7D32]">Green</span>
+              <span className="text-(--pp-muted)">Project</span>
+              <span className="font-semibold text-(--pp-mark)">Green</span>
             </div>
           </div>
         </div>
@@ -250,13 +250,13 @@ export default async function AdminDashboard() {
         </div>
 
         {/* ── 2. Today's Focus ── */}
-        <div className="rounded-2xl border border-white/5 bg-[#0a1a12] p-6">
-          <h2 className="mb-4 text-sm font-semibold uppercase tracking-widest text-[#8a9490]">
+        <div className="rounded-2xl border border-(--pp-border) bg-(--pp-surface) p-6">
+          <h2 className="mb-4 text-sm font-semibold uppercase tracking-widest text-(--pp-muted)">
             Today&apos;s Focus
           </h2>
 
           {focusItems.length === 0 ? (
-            <p className="py-4 text-center text-sm text-[#2E7D32]">
+            <p className="py-4 text-center text-sm text-(--pp-mark)">
               All clear — nothing needs your attention right now.
             </p>
           ) : (
@@ -264,16 +264,16 @@ export default async function AdminDashboard() {
               {focusItems.map((item, i) => (
                 <div
                   key={i}
-                  className="flex items-start gap-3 rounded-xl bg-white/[0.02] px-4 py-3"
+                  className="flex items-start gap-3 rounded-xl bg-(--pp-paper) px-4 py-3"
                 >
                   <span
                     className={`mt-1.5 h-2 w-2 flex-shrink-0 rounded-full ${SEVERITY_DOT[item.severity]}`}
                   />
                   <div>
-                    <p className="text-sm font-medium text-[#F7F4ED]">
+                    <p className="text-sm font-medium text-(--pp-ink)">
                       {item.label}
                     </p>
-                    <p className="mt-0.5 text-xs text-[#8a9490]">
+                    <p className="mt-0.5 text-xs text-(--pp-muted)">
                       {item.detail}
                     </p>
                   </div>
@@ -288,15 +288,15 @@ export default async function AdminDashboard() {
           {/* Analytics */}
           <CollapsibleSection title="Analytics">
             <div className="flex flex-col items-center justify-center py-10 text-center">
-              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-[#8a9490]">
+              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-(--pp-paper) text-(--pp-muted)">
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
                 </svg>
               </div>
-              <p className="text-sm text-[#8a9490]">
+              <p className="text-sm text-(--pp-muted)">
                 Analytics integration coming soon.
               </p>
-              <p className="mt-1 text-xs text-[#8a9490]/60">
+              <p className="mt-1 text-xs text-(--pp-muted)">
                 Vercel Analytics + Supabase event tracking
               </p>
             </div>
@@ -309,14 +309,14 @@ export default async function AdminDashboard() {
             defaultOpen={false}
           >
             {listings.length === 0 ? (
-              <p className="py-6 text-center text-sm text-[#8a9490]">
+              <p className="py-6 text-center text-sm text-(--pp-muted)">
                 No listings in the database yet.
               </p>
             ) : (
               <div className="overflow-x-auto -mx-6 px-6">
                 <table className="w-full min-w-[700px] text-sm">
                   <thead>
-                    <tr className="border-b border-white/5 text-[11px] uppercase tracking-widest text-[#8a9490]">
+                    <tr className="border-b border-(--pp-border) text-[11px] uppercase tracking-widest text-(--pp-muted)">
                       <th className="pb-3 pr-4 text-left font-medium">Name</th>
                       <th className="pb-3 pr-4 text-left font-medium">City</th>
                       <th className="pb-3 pr-4 text-left font-medium">Tier</th>
@@ -334,23 +334,23 @@ export default async function AdminDashboard() {
                       return (
                         <tr
                           key={l.id}
-                          className="border-b border-white/[0.03] transition-colors hover:bg-white/[0.02]"
+                          className="border-b border-(--pp-border) hover:bg-(--pp-paper)"
                         >
                           <td className="py-3 pr-4 font-medium">
                             {listingName(l)}
                             {l.is_featured && (
-                              <span className="ml-2 text-[10px] text-[#2E7D32]">
+                              <span className="ml-2 text-[10px] text-(--pp-mark)">
                                 ★
                               </span>
                             )}
                           </td>
-                          <td className="py-3 pr-4 text-[#8a9490]">
+                          <td className="py-3 pr-4 text-(--pp-muted)">
                             {l.city
                               ? `${l.city}${l.state ? `, ${l.state}` : ""}`
                               : "—"}
                           </td>
                           <td className="py-3 pr-4">
-                            <span className="rounded bg-white/5 px-2 py-0.5 text-xs text-[#8a9490]">
+                            <span className="rounded bg-(--pp-paper) px-2 py-0.5 text-xs text-(--pp-muted)">
                               {l.plan_tier || "free"}
                             </span>
                           </td>
@@ -358,8 +358,8 @@ export default async function AdminDashboard() {
                             <span
                               className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${
                                 isClaimed
-                                  ? "bg-[#2E7D32]/15 text-[#2E7D32]"
-                                  : "bg-white/5 text-[#8a9490]"
+                                  ? "bg-(--pp-best-tint) text-(--pp-mark)"
+                                  : "bg-(--pp-paper) text-(--pp-muted)"
                               }`}
                             >
                               {isClaimed ? "Claimed" : "Unclaimed"}
@@ -367,7 +367,7 @@ export default async function AdminDashboard() {
                           </td>
                           <td className="py-3 pr-4">
                             {hasDesc ? (
-                              <span className="text-xs text-[#8a9490]">
+                              <span className="text-xs text-(--pp-muted)">
                                 {l.short_description!.slice(0, 60)}
                                 {l.short_description!.length > 60 ? "…" : ""}
                               </span>
@@ -393,7 +393,7 @@ export default async function AdminDashboard() {
             defaultOpen={leads.length > 0}
           >
             {leads.length === 0 ? (
-              <p className="py-6 text-center text-sm text-[#8a9490]">
+              <p className="py-6 text-center text-sm text-(--pp-muted)">
                 No leads yet. They&apos;ll show up here when someone submits a
                 form.
               </p>
@@ -411,12 +411,12 @@ export default async function AdminDashboard() {
                   ).map(([label, count]) => (
                     <div
                       key={label}
-                      className="flex items-center gap-2 rounded-lg bg-white/[0.03] px-3 py-2"
+                      className="flex items-center gap-2 rounded-lg bg-(--pp-paper) px-3 py-2"
                     >
-                      <span className="text-xs capitalize text-[#8a9490]">
+                      <span className="text-xs capitalize text-(--pp-muted)">
                         {label}
                       </span>
-                      <span className="text-sm font-semibold text-[#F7F4ED]">
+                      <span className="text-sm font-semibold text-(--pp-ink)">
                         {count}
                       </span>
                     </div>
@@ -427,7 +427,7 @@ export default async function AdminDashboard() {
                 <div className="overflow-x-auto -mx-6 px-6">
                   <table className="w-full min-w-[800px] text-sm">
                     <thead>
-                      <tr className="border-b border-white/5 text-[11px] uppercase tracking-widest text-[#8a9490]">
+                      <tr className="border-b border-(--pp-border) text-[11px] uppercase tracking-widest text-(--pp-muted)">
                         <th className="pb-3 pr-4 text-left font-medium">
                           Date
                         </th>
@@ -452,9 +452,9 @@ export default async function AdminDashboard() {
                       {leads.map((lead) => (
                         <tr
                           key={lead.id}
-                          className="border-b border-white/[0.03] transition-colors hover:bg-white/[0.02]"
+                          className="border-b border-(--pp-border) hover:bg-(--pp-paper)"
                         >
-                          <td className="py-3 pr-4 text-[#8a9490] whitespace-nowrap">
+                          <td className="py-3 pr-4 text-(--pp-muted) whitespace-nowrap">
                             {fmtShort(lead.created_at)}
                           </td>
                           <td className="py-3 pr-4 font-medium">
@@ -463,15 +463,15 @@ export default async function AdminDashboard() {
                           <td className="py-3 pr-4">
                             <a
                               href={`mailto:${lead.email}`}
-                              className="text-[#8a9490] transition-colors hover:text-[#2E7D32]"
+                              className="text-(--pp-muted) hover:text-(--pp-mark)"
                             >
                               {lead.email}
                             </a>
                           </td>
-                          <td className="py-3 pr-4 text-[#8a9490]">
+                          <td className="py-3 pr-4 text-(--pp-muted)">
                             {lead.listing_name || "—"}
                           </td>
-                          <td className="py-3 pr-4 text-[#8a9490]">
+                          <td className="py-3 pr-4 text-(--pp-muted)">
                             {cityFrom(lead)}
                           </td>
                           <td className="py-3 pr-4">
@@ -508,16 +508,16 @@ function StatCard({
   accent?: boolean;
 }) {
   return (
-    <div className="rounded-2xl border border-white/5 bg-[#0a1a12] p-5">
-      <p className="text-[11px] font-medium uppercase tracking-widest text-[#8a9490]">
+    <div className="rounded-2xl border border-(--pp-border) bg-(--pp-surface) p-5">
+      <p className="text-[11px] font-medium uppercase tracking-widest text-(--pp-muted)">
         {label}
       </p>
       <p
-        className={`mt-2 text-2xl font-bold ${accent ? "text-[#2E7D32]" : "text-[#F7F4ED]"}`}
+        className={`mt-2 text-2xl font-bold ${accent ? "text-(--pp-mark)" : "text-(--pp-ink)"}`}
       >
         {value}
       </p>
-      {sub && <p className="mt-0.5 text-[11px] text-[#8a9490]">{sub}</p>}
+      {sub && <p className="mt-0.5 text-[11px] text-(--pp-muted)">{sub}</p>}
     </div>
   );
 }

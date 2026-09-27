@@ -51,12 +51,7 @@ export default async function ClaimPage({ params }: { params: Promise<{ slug: st
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:var(--font-body),system-ui,sans-serif;background:var(--pp-paper);color:var(--pp-body);min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-canopy);position:sticky;top:0;z-index:100}
-        .logo{color:var(--pp-on-dark);text-decoration:none;font-weight:700}
-        .logo span{color:var(--pp-canopy-eyebrow)}
-        .back{font-size:.82rem;color:rgba(255,255,255,.55);text-decoration:none;font-family:var(--font-body)}
-        .back:hover{color:var(--pp-on-dark)}
+        body{font-family:var(--font-body);color:var(--pp-body);min-height:100vh}
         .wrap{max-width:600px;margin:0 auto;padding:40px 20px}
         .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);font-family:var(--font-body);margin-bottom:10px}
         h1{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:6px}

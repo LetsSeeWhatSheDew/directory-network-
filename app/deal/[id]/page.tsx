@@ -20,7 +20,7 @@ import ReportIssueLink from "../../components/ReportIssueLink";
 import { getConfirmationsToday } from "../../../lib/confirmations";
 import { isInCentralIL } from "../../../lib/visibility";
 import { isDealActiveNow, describeActiveDays } from "../../../lib/dealActiveFilter";
-import { cleanDealTitle, amountOf } from "../../../lib/exhale";
+import { cleanDealTitle, amountOf, type ExDeal } from "../../../lib/exhale";
 import { otdFor, usd } from "../../../lib/otd";
 import TrackPage from "../../components/TrackPage";
 import ArrivalExhale from "../../components/ArrivalExhale";
@@ -275,7 +275,7 @@ export default async function DealPage({
   const savingsFormatted = formatSavingsDollars(deal);
   // Real amounts only: "40%" for a percent deal, "$10" for a dollar deal.
   // The dollar estimate is only a fallback when the deal has no stated amount.
-  const exAmt = amountOf({ ...deal, deal_title: deal.title } as any);
+  const exAmt = amountOf({ ...deal, deal_title: deal.title } as ExDeal);
   const exhaleBig = exAmt ? exAmt.big : dollars != null ? `$${dollars}` : null;
   const exhaleUpTo = !!exAmt?.upTo;
   const code = extractPromoCode(deal.description) || extractPromoCode(deal.title);
@@ -519,8 +519,8 @@ export default async function DealPage({
           {deal.description && <p className="desc">{deal.description}</p>}
           <div style={{ marginTop: 8, marginBottom: 8 }}>
             <DealFreshnessBadge
-              verifiedAt={(deal as any).verified_at}
-              statusReason={(deal as any).status_reason}
+              verifiedAt={(deal as ExDeal).verified_at}
+              statusReason={(deal as { status_reason?: string | null }).status_reason}
               variant="detail"
             />
           </div>

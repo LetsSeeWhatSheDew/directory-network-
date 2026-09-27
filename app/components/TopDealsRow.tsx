@@ -123,7 +123,7 @@ export default function TopDealsRow({
                 justifyContent: "space-between",
                 alignItems: "center",
                 gap: 12,
-                transition: "border-color .15s",
+                transition: "none",
               }}
             >
               <div style={{ flex: 1, minWidth: 0 }}>

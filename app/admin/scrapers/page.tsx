@@ -65,13 +65,13 @@ export default async function AdminScrapersPage() {
   const latest = runs[0] ?? null;
 
   return (
-    <div className="min-h-screen bg-[#1F3D2B] text-[#F7F4ED]">
-      <header className="border-b border-white/5">
+    <div className="min-h-screen text-(--pp-ink)">
+      <header className="border-b border-(--pp-border)">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5 md:px-8">
           <div>
             <Link
               href="/admin"
-              className="text-[11px] uppercase tracking-widest text-[#8a9490] transition-colors hover:text-[#2E7D32]"
+              className="text-[11px] uppercase tracking-widest text-(--pp-muted) hover:text-(--pp-mark)"
             >
               &larr; Dashboard
             </Link>
@@ -80,8 +80,8 @@ export default async function AdminScrapersPage() {
             </h1>
           </div>
           <div className="flex items-baseline gap-1.5 text-sm">
-            <span className="text-[#8a9490]">Project</span>
-            <span className="font-semibold text-[#2E7D32]">Green</span>
+            <span className="text-(--pp-muted)">Project</span>
+            <span className="font-semibold text-(--pp-mark)">Green</span>
           </div>
         </div>
       </header>
@@ -90,26 +90,26 @@ export default async function AdminScrapersPage() {
         {latest ? (
           <ScraperRunCard run={latest} />
         ) : (
-          <div className="rounded-2xl border border-white/5 bg-[#0a1a12] p-8 text-center">
-            <p className="text-sm text-[#8a9490]">
+          <div className="rounded-2xl border border-(--pp-border) bg-(--pp-surface) p-8 text-center">
+            <p className="text-sm text-(--pp-muted)">
               No scraper runs recorded yet. Trigger one from{" "}
-              <span className="text-[#F7F4ED]">
+              <span className="text-(--pp-ink)">
                 GitHub Actions → Daily deal scrape → Run workflow
               </span>
-              , or run <code className="rounded bg-white/5 px-1.5 py-0.5">npm run scrape:cil:live</code> locally.
+              , or run <code className="rounded bg-(--pp-paper) px-1.5 py-0.5">npm run scrape:cil:live</code> locally.
             </p>
           </div>
         )}
 
         {latest && latest.dispensary_results && latest.dispensary_results.length > 0 && (
-          <section className="rounded-2xl border border-white/5 bg-[#0a1a12] p-6">
-            <h2 className="mb-4 text-sm font-semibold uppercase tracking-widest text-[#8a9490]">
+          <section className="rounded-2xl border border-(--pp-border) bg-(--pp-surface) p-6">
+            <h2 className="mb-4 text-sm font-semibold uppercase tracking-widest text-(--pp-muted)">
               Dispensaries (latest run)
             </h2>
             <div className="overflow-x-auto -mx-6 px-6">
               <table className="w-full min-w-[700px] text-sm">
                 <thead>
-                  <tr className="border-b border-white/5 text-[11px] uppercase tracking-widest text-[#8a9490]">
+                  <tr className="border-b border-(--pp-border) text-[11px] uppercase tracking-widest text-(--pp-muted)">
                     <th className="pb-3 pr-4 text-left font-medium">Dispensary</th>
                     <th className="pb-3 pr-4 text-left font-medium">Platform</th>
                     <th className="pb-3 pr-4 text-left font-medium">Status</th>
