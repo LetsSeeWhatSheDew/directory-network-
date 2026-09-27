@@ -25,7 +25,9 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
-import { saveLabel, cleanDealTitle } from "../../../lib/exhale";
+import { saveLabel, cleanDealTitle, amountOf, EXHALE_LINES } from "../../../lib/exhale";
+import ExhaleCard from "../../components/ExhaleCard";
+import EmptyBreath from "../../components/EmptyBreath";
 import OtdLine from "../../components/OtdLine";
 import WatchControl from "../../components/WatchControl";
 import { nowInCT, isOpen, formatTime as formatHourTime } from "../../../lib/hours";
@@ -156,6 +158,69 @@ function todayOpenStatus(hours: Hours[], ct: ReturnType<typeof nowInCT>): { open
 function mapsHref(parts: Array<string | null | undefined>): string {
   const q = parts.filter(Boolean).join(", ");
   return `https://maps.google.com/?q=${encodeURIComponent(q)}`;
+}
+
+/** The always-visible part of a store-page deal card, under its tappable face. */
+function StoreDealExtras({
+  d,
+  confirmedCount,
+  visit,
+  slug,
+  hasWebsite,
+  reportContext,
+}: {
+  d: Deal;
+  confirmedCount: number;
+  visit: { href: string; label: string };
+  slug: string;
+  hasWebsite: boolean;
+  reportContext: string;
+}) {
+  return (
+    <div className="sd-after">
+      {confirmedCount > 0 && (
+        <div className="confirmed">
+          ✓ {confirmedCount} {confirmedCount === 1 ? "person" : "people"} confirmed this today
+        </div>
+      )}
+      {d.description && <p className="deal-desc">{d.description}</p>}
+      <div style={{ margin: "6px 0 8px", display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12 }}>
+        <DealFreshnessBadge verifiedAt={d.verified_at} statusReason={d.status_reason} />
+        {d.source_url && (
+          <a
+            href={d.source_url}
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+            style={{ fontFamily: "var(--font-body)", fontSize: "0.72rem", color: "var(--pp-muted)", textDecoration: "none" }}
+          >
+            Sourced from menu ↗
+          </a>
+        )}
+      </div>
+      <a
+        href={visit.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="deal-cta"
+        data-track={hasWebsite ? "website_tap" : "directions_tap"}
+        data-track-slug={slug}
+        data-track-deal={d.id}
+        data-track-from="store_deal"
+      >
+        {visit.label}
+      </a>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+        <Link href={`/deal/${d.id}`} className="deal-details" data-track="deal_tap" data-track-slug={slug} data-track-deal={d.id} data-track-from="store">
+          Deal details →
+        </Link>
+        <ReportIssueLink
+          context={reportContext}
+          url={`${brand.url}/dispensary/${slug}`}
+          dealId={d.id}
+        />
+      </div>
+    </div>
+    );
 }
 
 function formatDealTitle(d: Deal): string {
@@ -335,7 +400,7 @@ export default async function DispensaryProfilePage({
         /* Design v2: body styling from globals.css (Inter on warm paper). */ body{min-height:100vh}
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-surface);position:sticky;top:0;z-index:100;border-bottom:1px solid var(--pp-border)}
         .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
-        .logo-dot{width:8px;height:8px;border-radius:50%;background:var(--pp-signal-fill);animation:pulse 2.5s infinite}
+        .logo-dot{width:8px;height:8px;border-radius:50%;background:var(--pp-signal-fill);animation:pulse calc(2500ms * var(--pp-pace)) 12}
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
         .logo-text{font-size:1.1rem;font-weight:700;color:var(--pp-ink)}
         .logo-text span{color:var(--pp-signal)}
@@ -361,7 +426,7 @@ export default async function DispensaryProfilePage({
           background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:12px;
           padding:12px 16px;text-decoration:none;color:var(--pp-ink);
           font-family:var(--font-body);font-size:.92rem;font-weight:600;
-          transition:border-color .15s,transform .05s;
+          transition:transform calc(50ms * var(--pp-pace));
         }
         .contact-btn:hover{border-color:var(--pp-signal-fill)}
         .contact-btn:active{transform:translateY(1px)}
@@ -371,9 +436,12 @@ export default async function DispensaryProfilePage({
         .section{margin-bottom:32px}
         .section-h{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:14px}
 
-        .deal-card{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:20px;padding:18px 20px;margin-bottom:10px}
-        .deal-title{font-size:1.05rem;font-weight:700;color:var(--pp-ink);margin-bottom:4px}
-        .deal-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+        .sd-deals{display:flex;flex-direction:column;gap:10px}
+        .sd-face{padding:18px 20px 0}
+        .sd-aside{display:block}
+        .sd-after{padding:0 20px 18px}
+        .deal-title{display:block;font-size:1.05rem;font-weight:700;color:var(--pp-ink);margin-bottom:4px}
+        .deal-meta{display:flex;margin-top:6px;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
         .deal-savings{font-size:1.4rem;font-weight:700;color:var(--pp-signal);letter-spacing:-.02em}
         .deal-savings-label{font-size:.68rem;color:var(--pp-muted);font-family:var(--font-body);letter-spacing:.1em;text-transform:uppercase;font-weight:700}
         .deal-expires{font-size:.74rem;color:var(--pp-note-fg);background:var(--pp-note-bg);padding:2px 8px;border-radius:100px;font-family:var(--font-body);font-weight:600}
@@ -536,90 +604,78 @@ export default async function DispensaryProfilePage({
             </div>
           )}
           {deals.length === 0 ? (
-            <div className="no-deals">
-              <div className="no-deals-t">No active deals right now</div>
-              <div className="no-deals-s">
-                We check daily. Watch this store and we&apos;ll email you when a new deal posts.
-              </div>
-            </div>
+            <EmptyBreath
+              steps={[
+                ...(city ? [{ href: `/city/${city.toLowerCase().replace(/\s+/g, "-")}`, label: `See deals in ${city}` }] : []),
+                { href: "/deals/all", label: "Every deal today" },
+              ]}
+            >
+              {name} doesn&apos;t have a deal on its own site today. We check every morning; watch this store below and
+              we&apos;ll email you when one posts.
+            </EmptyBreath>
           ) : (
-            deals.map((d) => {
+            <div className="sd-deals">
+            {deals.map((d, i) => {
               const dollars = estimateSavings(d);
               const savingsLabel = formatSavingsDollars(d);
               const expiresLabel = formatExpires(d.expires_at);
+              const pill = saveLabel(d, dollars);
+              const a = amountOf(d);
+              const visit = visitDispensaryHref({
+                website: listing.website,
+                address1: listing.address1,
+                city: listing.city,
+              });
               return (
-                <div className="deal-card" key={d.id}>
-                  <div className="deal-title">{(dollars == null && savingsLabel !== "Deal active" ? dealContextTag(formatDealTitle(d)) : null) || formatDealTitle(d)}</div>
-                  <OtdLine deal={{ ...d, deal_title: d.title }} city={city} />
-                  {dealHistory &&
-                    dealHistory.best_discount_pct != null &&
-                    dealHistory.deals_seen_90d >= 3 &&
-                    d.discount_unit === "percent" &&
-                    d.discount_value != null &&
-                    Math.round(d.discount_value) >= dealHistory.best_discount_pct && (
-                      <div className="best-seen">Best discount we&apos;ve seen here</div>
-                    )}
-                  <div className="deal-meta">
-                    {saveLabel(d, dollars) ? (
-                      <span className="pp-save">{saveLabel(d, dollars)}</span>
-                    ) : (
-                      savingsLabel !== "Deal active" && <span className="deal-savings">{savingsLabel}</span>
-                    )}
-                    {expiresLabel && <span className="deal-expires">{expiresLabel}</span>}
-                  </div>
-                  {confirmed[d.id] > 0 && (
-                    <div className="confirmed">
-                      ✓ {confirmed[d.id]} {confirmed[d.id] === 1 ? "person" : "people"} confirmed this today
-                    </div>
-                  )}
-                  {d.description && <p className="deal-desc">{d.description}</p>}
-                  <div style={{ margin: "6px 0 8px", display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12 }}>
-                    <DealFreshnessBadge verifiedAt={d.verified_at} statusReason={d.status_reason} />
-                    {d.source_url && (
-                      <a
-                        href={d.source_url}
-                        target="_blank"
-                        rel="noopener noreferrer nofollow"
-                        style={{ fontFamily: "var(--font-body)", fontSize: "0.72rem", color: "var(--pp-muted, var(--pp-muted))", textDecoration: "none" }}
-                      >
-                        Sourced from menu ↗
-                      </a>
-                    )}
-                  </div>
-                  {(() => {
-                    const visit = visitDispensaryHref({
-                      website: listing.website,
-                      address1: listing.address1,
-                      city: listing.city,
-                    });
-                    return (
-                      <a
-                        href={visit.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="deal-cta"
-                        data-track={listing.website ? "website_tap" : "directions_tap"}
-                        data-track-slug={slug}
-                        data-track-deal={d.id}
-                        data-track-from="store_deal"
-                      >
-                        {visit.label}
-                      </a>
-                    );
-                  })()}
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
-                    <Link href={`/deal/${d.id}`} className="deal-details" data-track="deal_tap" data-track-slug={slug} data-track-deal={d.id} data-track-from="store">
-                      Deal details →
-                    </Link>
-                    <ReportIssueLink
-                      context={`${formatDealTitle(d)} at ${listing.name || slug}`}
-                      url={`${brand.url}/dispensary/${slug}`}
-                      dealId={d.id}
+                <ExhaleCard
+                  key={d.id}
+                  index={i}
+                  from="store"
+                  deal={{ id: String(d.id), slug, city }}
+                  saving={pill ? pill.replace(/^Save\s+/, "") : null}
+                  dollars={dollars ?? (a?.kind === "dollars" ? a.value : null)}
+                  percent={a?.kind === "percent" ? a.value : null}
+                  faceClassName="sd-face"
+                  words={
+                    <span className="deal-title">{(dollars == null && savingsLabel !== "Deal active" ? dealContextTag(formatDealTitle(d)) : null) || formatDealTitle(d)}</span>
+                  }
+                  aside={
+                    <span className="sd-aside">
+                      <OtdLine deal={{ ...d, deal_title: d.title }} city={city} />
+                      {dealHistory &&
+                        dealHistory.best_discount_pct != null &&
+                        dealHistory.deals_seen_90d >= 3 &&
+                        d.discount_unit === "percent" &&
+                        d.discount_value != null &&
+                        Math.round(d.discount_value) >= dealHistory.best_discount_pct && (
+                          <span className="best-seen">Best discount we&apos;ve seen here</span>
+                        )}
+                      <span className="deal-meta">
+                        {pill ? (
+                          <span className="pp-save">{pill}</span>
+                        ) : (
+                          savingsLabel !== "Deal active" && <span className="deal-savings">{savingsLabel}</span>
+                        )}
+                        {expiresLabel && <span className="deal-expires">{expiresLabel}</span>}
+                      </span>
+                    </span>
+                  }
+                  after={
+                    <StoreDealExtras
+                      d={d}
+                      confirmedCount={confirmed[d.id] || 0}
+                      visit={visit}
+                      slug={slug}
+                      hasWebsite={Boolean(listing.website)}
+                      reportContext={`${formatDealTitle(d)} at ${listing.name || slug}`}
                     />
-                  </div>
-                </div>
+                  }
+                  directionsHref={mapsHref([listing.address1, listing.city, listing.state])}
+                  line={EXHALE_LINES[i % EXHALE_LINES.length]}
+                />
               );
-            })
+            })}
+            </div>
           )}
           <WatchControl kind="store" slug={slug} storeName={name} />
         </section>
