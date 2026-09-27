@@ -7,6 +7,7 @@ import { getDealIndex } from "@/lib/dealIndex";
 import { capPerStore, STORE_CAP } from "@/lib/storeCap";
 import { GUIDES } from "@/lib/guides";
 import { getCheapestBoard, REF_UNITS, REF_DEF, RUNG_LABEL, money } from "@/lib/menuPrices";
+import { answerLlmsLines } from "@/lib/answers";
 
 export const revalidate = 3600;
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -86,5 +87,6 @@ export async function GET() {
     "- THC DUI threshold: 5 ng/mL delta-9-THC in whole blood or 10 ng/mL in other bodily substance within 2 hours of driving (625 ILCS 5/11-501(a)(7), 11-501.2).",
     "- Medical cannabis: exempt from the Cannabis Purchaser Excise Tax and local cannabis taxes; taxed at the 1% state rate (IL Dept of Revenue). IDPH card fees: $50 / $100 / $125 for 1 / 2 / 3 years.",
   );
+  lines.push(...(await answerLlmsLines()));
   return new Response(lines.join("\n") + "\n", { headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, s-maxage=3600" } });
 }

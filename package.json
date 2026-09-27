@@ -7,6 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "lint:ci": "node tests/ci/lint-ratchet.mjs",
+    "lint:baseline": "node tests/ci/lint-ratchet.mjs --update",
+    "typecheck": "tsc --noEmit -p tsconfig.typecheck.json",
+    "test:unit": "tsx --test tests/unit/*.test.ts",
+    "build:fixtures": "node tests/fixtures/with-mock.mjs next build",
+    "test:e2e": "playwright test",
     "smoke": "node tests/smoke.mjs",
     "scrape:cil": "tsx scripts/scrape-cil-deals.ts",
     "scrape:cil:dry": "tsx scripts/scrape-cil-deals.ts --dry-run",
@@ -26,6 +32,7 @@
     "stripe": "^22.0.2"
   },
   "devDependencies": {
+    "@playwright/test": "1.56.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/qrcode": "^1.5.6",

@@ -1,6 +1,7 @@
 // /llms.txt — a plain map of PuffPrice for AI assistants and answer engines.
 import { brand } from "@/lib/brand";
 import { GUIDES } from "@/lib/guides";
+import { ANSWER_TOPICS } from "@/lib/answers";
 
 export const revalidate = 86400;
 
@@ -32,6 +33,10 @@ export function GET() {
 ## Guides (plain answers, sourced)
 - [All guides](${u}/guides)
 ${GUIDES.map((g) => `- [${g.question}](${u}/guides/${g.slug}): ${g.blurb}`).join("\n")}
+
+## Quick answers by city
+One question, one city, answered from today's data (<city> is peoria, east-peoria, peoria-heights, pekin, bartonville, morton, washington, normal, bloomington, champaign, urbana or springfield). Full text of today's answers is in llms-full.txt.
+${ANSWER_TOPICS.map((t) => `- [${t.question("<city>")}](${u}${t.path("peoria")}): ${u}${t.path("<city>")}`).join("\n")}
 
 ## Cities
 ${["peoria", "east-peoria", "peoria-heights", "pekin", "bloomington", "normal", "champaign", "urbana", "springfield"].map((c) => `- [${c.replace(/-/g, " ")}](${u}/city/${c})`).join("\n")}

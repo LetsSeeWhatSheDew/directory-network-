@@ -5,6 +5,7 @@ import { isInCentralIL } from "../lib/visibility";
 import { CENTRAL_IL_PUBLIC_CITIES } from "../lib/constants/regions";
 import { GUIDES } from "../lib/guides";
 import { getCheapestBoard, storesNearEachCity } from "../lib/menuPrices";
+import { answerSitemapEntries } from "../lib/answers";
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -209,6 +210,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...base,
     ...guideUrls,
     ...cheapestUrls,
+    // City answer pages (lib/answers.ts) — indexable ones only.
+    ...(await answerSitemapEntries()),
     ...dealUrls,
     ...staticPages,
     ...dispensaryProfileUrls,

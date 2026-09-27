@@ -4,6 +4,7 @@ import Link from "next/link";
 import GuideShell from "../components/GuideShell";
 import { brand } from "../../lib/brand";
 import { GUIDES, EXISTING_GUIDES } from "../../lib/guides";
+import { QuickAnswersByCity } from "../components/QuickAnswerLinks";
 
 export const metadata: Metadata = {
   title: "Central Illinois Cannabis Guides: Prices, Deals, Law & Medical Cards",
@@ -46,6 +47,9 @@ export default function GuidesHub() {
           </Link>
         ))}
       </div>
+
+      <h2 className="gp-h2">Quick answers by city</h2>
+      <QuickAnswersByCity />
 
       <h2 className="gp-h2">More guides and tools</h2>
       <div className="gp-list">
