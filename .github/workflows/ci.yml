@@ -1,0 +1,108 @@
+name: CI
+
+# Runs on every PR (and on main): typecheck, lint (no new errors), unit
+# tests, then a production build + Playwright smoke suite against fixture
+# data. Needs no secrets. See tests/README.md.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Typecheck, lint, unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint (fails only on errors beyond tests/ci/eslint-baseline.json)
+        run: npm run lint:ci
+      - name: Unit tests
+        run: npm run test:unit
+
+  smoke:
+    name: Build + smoke (fixtures)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+      - name: next build against the mock Supabase
+        run: npm run build:fixtures
+      - name: Smoke + accessibility suites (every route, 390px + 1440px)
+        run: npm run test:e2e
+      - name: Performance budget (home + city page at 390px, Lighthouse)
+        run: npm run test:perf
+      - name: Upload report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+  # Optional: the same suite against real data. Skips itself unless the repo
+  # has a NEXT_PUBLIC_SUPABASE_ANON_KEY secret (the public anon key; the
+  # existing NEXT_PUBLIC_SUPABASE_URL secret is reused). Read-only, never
+  # uses the service-role key, and never blocks a merge: live data changes
+  # daily, so treat a red run here as a heads-up to look, not a gate.
+  smoke-live:
+    name: Smoke against live data (optional)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    continue-on-error: true
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    env:
+      CI: 'true'
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      NEXT_PUBLIC_GA_MEASUREMENT_ID: G-CI-NOOP
+    steps:
+      - name: Check for the anon key secret
+        if: env.NEXT_PUBLIC_SUPABASE_ANON_KEY == ''
+        run: echo "::notice::smoke-live skipped — add a NEXT_PUBLIC_SUPABASE_ANON_KEY repository secret to run the smoke suite against live data."
+      - uses: actions/checkout@v4
+        if: env.NEXT_PUBLIC_SUPABASE_ANON_KEY != ''
+      - uses: actions/setup-node@v4
+        if: env.NEXT_PUBLIC_SUPABASE_ANON_KEY != ''
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - if: env.NEXT_PUBLIC_SUPABASE_ANON_KEY != ''
+        run: npm ci
+      - if: env.NEXT_PUBLIC_SUPABASE_ANON_KEY != ''
+        run: npx playwright install --with-deps chromium
+      - if: env.NEXT_PUBLIC_SUPABASE_ANON_KEY != ''
+        run: npx next build
+      - name: Smoke suite against live data
+        if: env.NEXT_PUBLIC_SUPABASE_ANON_KEY != ''
+        run: |
+          npx next start -p 3100 &
+          for i in $(seq 60); do curl -sf http://127.0.0.1:3100/robots.txt > /dev/null && break; sleep 2; done
+          BASE_URL=http://127.0.0.1:3100 npm run test:e2e

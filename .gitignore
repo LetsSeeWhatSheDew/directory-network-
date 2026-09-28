@@ -44,3 +44,9 @@ yarn-error.log*
 
 # rendered scraper run output
 scrape-output/
+
+# Playwright smoke suite output
+/test-results/
+/playwright-report/
+/blob-report/
+/perf-report.md

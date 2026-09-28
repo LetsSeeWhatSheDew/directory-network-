@@ -103,7 +103,8 @@ export default function CounterCard({
           <PrintButton label="Print card" />
         </div>
       </div>
-      <div className="cc-preview">
+      {/* Scrolls sideways on narrow screens: focusable so keyboard users can scroll it too. */}
+      <div className="cc-preview" tabIndex={0} role="region" aria-label="Card preview">
         <div className={`cc-sheet${size === "letter" ? " two" : ""}`}>
           {one}
           {size === "letter" && one}
