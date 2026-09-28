@@ -26,6 +26,7 @@ import EndingSoonRow, { type EndingSoonDeal } from "../../components/EndingSoonR
 import PriceBoard from "../../components/PriceBoard";
 import { getLivePriceBoard } from "../../../lib/priceBoard";
 import ReportIssueLink from "../../components/ReportIssueLink";
+import QuickAnswerLinks from "../../components/QuickAnswerLinks";
 import StoreOverflowLinks from "../../components/StoreOverflowLinks";
 import { capPerStore, overflowFor, STORE_CAP } from "../../../lib/storeCap";
 import { getCityProfile, nearbyCities } from "../../../lib/cityProfiles";
@@ -573,6 +574,7 @@ export default async function CityPage({
             </p>
           );
         })()}
+        <QuickAnswerLinks city={slug} cityName={city} />
 
         {/* Live ticker — every number is computed from the DB at render. */}
         <div className="cp-ticker" role="group" aria-label={`${city} right now`}>

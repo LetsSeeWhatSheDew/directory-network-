@@ -21,7 +21,6 @@ const ENFORCED_CSP = [
   "object-src 'none'",
   "frame-ancestors 'self'",
   "form-action 'self'",
-  "upgrade-insecure-requests",
 ].join("; ");
 
 const REPORT_ONLY_CSP = [

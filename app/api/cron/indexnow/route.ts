@@ -6,6 +6,7 @@ import { brand } from "@/lib/brand";
 import { checkCronAuth } from "@/lib/cronAuth";
 import { submitIndexNow } from "@/lib/indexNow";
 import { REGION_CITIES } from "@/lib/waysToBuy";
+import { answerUrlsForIndexNow } from "@/lib/answers";
 import { COMMON_PAIRS, pairSlug } from "@/lib/routeDeals";
 
 export const dynamic = "force-dynamic";
@@ -30,6 +31,7 @@ export async function GET(req: NextRequest) {
     `${u}/guides/best-day-for-dispensary-deals`, `${u}/guides/illinois-cannabis-prices-2026`, `${u}/guides/dispensary-first-time-discounts-central-illinois`, `${u}/guides/where-to-buy-near-isu-and-uiuc`, `${u}/guides/buying-cannabis-in-illinois-as-an-out-of-state-visitor`,
     ...REGION_CITIES.map((c) => `${u}/city/${c.toLowerCase().replace(/\s+/g, "-")}`),
     ...slugs.map((s) => `${u}/dispensary/${s}`),
+    ...(await answerUrlsForIndexNow()),
   ];
   const res = await submitIndexNow(host, urls);
   return NextResponse.json({ ok: res.status >= 200 && res.status < 300, ...res });
