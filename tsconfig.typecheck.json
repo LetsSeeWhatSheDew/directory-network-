@@ -1,0 +1,10 @@
+{
+  "//": "CI typecheck (npm run typecheck). Same as tsconfig.json minus two scripts/ files that are plain scripts sharing top-level names (TS2451 when checked together); they run fine via tsx. Owned by the Cowork lane — drop these excludes once they're modules.",
+  "extends": "./tsconfig.json",
+  "exclude": [
+    "node_modules",
+    ".next",
+    "scripts/backfill-logos-google-places.ts",
+    "scripts/compute-ppg-from-anchors.ts"
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "scripts/backfill-logos-google-places.ts": {
+    "@typescript-eslint/no-explicit-any": 2
+  }
+}
