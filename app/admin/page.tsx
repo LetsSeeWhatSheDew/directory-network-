@@ -44,7 +44,7 @@ type Listing = {
 
 function supabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
   return { url, key };
 }
 
@@ -227,6 +227,12 @@ export default async function AdminDashboard() {
               className="text-[11px] uppercase tracking-widest text-[#8a9490] transition-colors hover:text-[#2E7D32]"
             >
               Traffic →
+            </Link>
+            <Link
+              href="/social"
+              className="text-[11px] uppercase tracking-widest text-[#8a9490] transition-colors hover:text-[#2E7D32]"
+            >
+              Social →
             </Link>
             <div className="flex items-baseline gap-1.5">
               <span className="text-[#8a9490]">Project</span>

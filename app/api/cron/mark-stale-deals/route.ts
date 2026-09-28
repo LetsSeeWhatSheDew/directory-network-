@@ -26,7 +26,7 @@ export const runtime = "nodejs";
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL ||
   "https://hnbjufmtmrhexmdrfubw.supabase.co";
-const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY || "";
 const STALE_ALERT_THRESHOLD = 10;
 const STALE_AGE_DAYS = 30;
 const ALERT_RECIPIENT =
@@ -167,7 +167,7 @@ async function handle(req: NextRequest): Promise<NextResponse> {
   if (!client) {
     return NextResponse.json({
       skipped: true,
-      reason: "SUPABASE_SERVICE_ROLE_KEY not configured",
+      reason: "Supabase service key not configured (SUPABASE_SERVICE_KEY or SUPABASE_SERVICE_ROLE_KEY)",
       ran_at: ranAt,
     });
   }

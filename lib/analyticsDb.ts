@@ -2,6 +2,7 @@
 // analytics (the `events` and `deal_clicks` tables). Uses the service-role
 // key, which bypasses RLS. Returns null when the key isn't configured so
 // every caller can no-op instead of throwing (local builds, previews).
+import "server-only";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 const URL_ =

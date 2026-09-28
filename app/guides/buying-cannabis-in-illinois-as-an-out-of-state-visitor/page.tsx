@@ -98,7 +98,7 @@ export default async function VisitorPage() {
           </div>
         );
       })}
-      <p className="gp-note">Deal counts from our check of each store&apos;s own site, {updated}. Need something open late? See <Link href="/open-late">who&apos;s open latest tonight</Link>, or find the <Link href="/on-the-way">best deal on your route</Link>.</p>
+      <p className="gp-note">Deal counts from our check of each store&apos;s own site, {updated}. Need something open late? See <Link href="/open-late">who&apos;s open latest tonight</Link>, or find the <Link href="/route">best deal on your route</Link>.</p>
 
       <FaqBlock faqs={faqs} />
       <Sources

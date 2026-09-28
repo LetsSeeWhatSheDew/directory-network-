@@ -3,17 +3,17 @@
 // have live deals). Auth: Authorization: Bearer ${CRON_SECRET}.
 import { NextRequest, NextResponse } from "next/server";
 import { brand } from "@/lib/brand";
+import { checkCronAuth } from "@/lib/cronAuth";
 import { submitIndexNow } from "@/lib/indexNow";
 import { REGION_CITIES } from "@/lib/waysToBuy";
+import { COMMON_PAIRS, pairSlug } from "@/lib/routeDeals";
 
 export const dynamic = "force-dynamic";
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
 
 export async function GET(req: NextRequest) {
-  const secret = process.env.CRON_SECRET;
-  if (!secret || req.headers.get("authorization") !== `Bearer ${secret}`) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  }
+  const auth = checkCronAuth(req, "indexnow");
+  if (!auth.ok) return auth.response;
   const u = brand.url;
   const host = new URL(u).host;
   const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
@@ -26,6 +26,7 @@ export async function GET(req: NextRequest) {
   const urls = [
     u, `${u}/this-week`, `${u}/deal-index`, `${u}/ways-to-buy`, `${u}/open-late`, `${u}/drive-thru`, `${u}/medical`,
     `${u}/deals/all`, `${u}/llms.txt`, `${u}/llms-full.txt`, `${u}/out-the-door`, `${u}/cheapest`, `${u}/status`, `${u}/green-wednesday`,
+    `${u}/deal-of-the-day`, `${u}/price-watch`, ...COMMON_PAIRS.map(([a, b]) => `${u}/route/${pairSlug(a, b)}`),
     `${u}/guides/best-day-for-dispensary-deals`, `${u}/guides/illinois-cannabis-prices-2026`, `${u}/guides/dispensary-first-time-discounts-central-illinois`, `${u}/guides/where-to-buy-near-isu-and-uiuc`, `${u}/guides/buying-cannabis-in-illinois-as-an-out-of-state-visitor`,
     ...REGION_CITIES.map((c) => `${u}/city/${c.toLowerCase().replace(/\s+/g, "-")}`),
     ...slugs.map((s) => `${u}/dispensary/${s}`),

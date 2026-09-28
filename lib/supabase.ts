@@ -1,3 +1,4 @@
+import "server-only";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
 // Lazy getter so env-less builds don't crash at module-evaluation time.
@@ -33,6 +34,6 @@ export const supabase = new Proxy({} as SupabaseClient, {
   get(_target, prop) {
     const client = getSupabase() as unknown as Record<string | symbol, unknown>;
     const value = client[prop];
-    return typeof value === "function" ? (value as Function).bind(client) : value;
+    return typeof value === "function" ? (value as (...args: unknown[]) => unknown).bind(client) : value;
   },
 });

@@ -5,6 +5,7 @@ import { isInCentralIL } from "../lib/visibility";
 import { CENTRAL_IL_PUBLIC_CITIES } from "../lib/constants/regions";
 import { GUIDES } from "../lib/guides";
 import { getCheapestBoard, storesNearEachCity } from "../lib/menuPrices";
+import { COMMON_PAIRS, pairSlug } from "../lib/routeDeals";
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -96,7 +97,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${brand.url}/how-we-rank`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
     { url: `${brand.url}/developers`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
     { url: `${brand.url}/status`, lastModified: new Date(), changeFrequency: "hourly", priority: 0.5 },
-    { url: `${brand.url}/on-the-way`, lastModified: new Date(), changeFrequency: "daily", priority: 0.7 },
+    { url: `${brand.url}/route`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
+    ...COMMON_PAIRS.map(([a, b]) => ({ url: `${brand.url}/route/${pairSlug(a, b)}`, lastModified: new Date(), changeFrequency: "daily" as const, priority: 0.7 })),
+    { url: `${brand.url}/deal-of-the-day`, lastModified: new Date(), changeFrequency: "daily", priority: 0.8 },
+    { url: `${brand.url}/price-watch`, lastModified: new Date(), changeFrequency: "daily", priority: 0.6 },
+    { url: `${brand.url}/420`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
+    { url: `${brand.url}/710`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.6 },
     { url: `${brand.url}/green-wednesday`, lastModified: new Date(), changeFrequency: "daily", priority: 0.8 },
     { url: `${brand.url}/out-the-door`, lastModified: new Date(), changeFrequency: "daily", priority: 0.85 },
     { url: `${brand.url}/illinois-cannabis-tax-calculator`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.85 },

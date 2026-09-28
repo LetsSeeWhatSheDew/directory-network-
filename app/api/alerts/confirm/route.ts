@@ -4,7 +4,14 @@
 // keeps mail-scanner link previews (which only GET) from confirming an
 // address on someone's behalf.
 import { NextRequest, NextResponse } from "next/server";
-import { confirmToken, confirmWatch, getWatch, safeEq } from "@/lib/dealWatch";
+import { confirmToken, confirmWatch, getWatch, safeEq, type WatchRow } from "@/lib/dealWatch";
+
+/** What the watch will send, in the page's words. */
+function promise(row: WatchRow): { lede: string; button: string } {
+  if (row.alert_type === "price_watch") return { lede: "when a price you're watching drops. No drop, no email.", button: "Yes, email me when it drops" };
+  if (row.alert_type === "event_watch") return { lede: "the morning of the sale day, just once.", button: "Yes, email me that morning" };
+  return { lede: "on mornings when there's a new deal. Quiet days, no email.", button: "Yes, email me new deals" };
+}
 
 export const dynamic = "force-dynamic";
 
@@ -34,10 +41,11 @@ export async function GET(req: NextRequest) {
   const row = await getWatch(c.id);
   if (!row) return page(`<p style="font-size:1.1rem">We couldn't find that sign-up. Try signing up again.</p>${back}`, 404);
   const action = `/api/alerts/confirm?${req.nextUrl.searchParams.toString()}`;
+  const p = promise(row);
   return page(
     `<p style="font-size:1.25rem;margin:0 0 8px">One tap and you're set.</p>
-     <p style="color:#3A463F;line-height:1.5;margin:0 0 20px">We'll email <b>${row.email.replace(/[<>&"]/g, "")}</b> on mornings when there's a new deal. Quiet days, no email.</p>
-     <form method="post" action="${action.replace(/"/g, "&quot;")}"><button type="submit" style="background:#1F4D36;color:#F6F4EE;border:0;border-radius:12px;padding:13px 22px;font-size:1rem;font-weight:700;cursor:pointer">Yes, email me new deals</button></form>`
+     <p style="color:#3A463F;line-height:1.5;margin:0 0 20px">We'll email <b>${row.email.replace(/[<>&"]/g, "")}</b> ${p.lede}</p>
+     <form method="post" action="${action.replace(/"/g, "&quot;")}"><button type="submit" style="background:#1F4D36;color:#F6F4EE;border:0;border-radius:12px;padding:13px 22px;font-size:1rem;font-weight:700;cursor:pointer">${p.button}</button></form>`
   );
 }
 
@@ -46,6 +54,6 @@ export async function POST(req: NextRequest) {
   if (!c.ok) return page(`<p style="font-size:1.1rem">${c.why}</p>${back}`, 400);
   const row = await confirmWatch(c.id);
   if (!row) return page(`<p style="font-size:1.1rem">That didn't save. Try the link again in a minute.</p>${back}`, 502);
-  const kind = row.alert_type === "store_watch" ? "store" : "city";
+  const kind = ({ store_watch: "store", city_watch: "city", price_watch: "price", event_watch: "event" } as const)[row.alert_type] || "city";
   return NextResponse.redirect(new URL(`/alerts/confirmed?watch=${kind}`, req.url), { status: 303 });
 }

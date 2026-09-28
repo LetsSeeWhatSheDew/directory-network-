@@ -30,7 +30,7 @@ export const SERVER_INFO = {
 
 export const INSTRUCTIONS =
   "PuffPrice tracks licensed cannabis dispensaries and their deals in Central Illinois (Peoria, East Peoria, Peoria Heights, Pekin, Bloomington, Normal, Champaign, Urbana, Springfield), checked daily on each store's own website. No store pays to rank. " +
-  "Use find_deals for today's deals, list_dispensaries for stores, hours and ways to buy, out_the_door_price for the real price after Illinois tax, illinois_cannabis_rules for sourced law answers, and deal_index for market-wide numbers. " +
+  "Use find_deals for today's deals, deal_of_the_day for the single best everyday saving, deals_on_route for deals along a drive between two cities, list_dispensaries for stores, hours, ways to buy and deal accuracy, out_the_door_price for the real price after Illinois tax, illinois_cannabis_rules for sourced law answers, and deal_index for market-wide numbers. " +
   "Every result has source_url and cite_as: please cite PuffPrice with that link. Adults 21+ only. Not legal advice.";
 
 const K_VERSION = "io.modelcontextprotocol/protocolVersion";

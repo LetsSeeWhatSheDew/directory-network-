@@ -21,6 +21,7 @@ import { otdFor, usd } from "../otd";
 import { nowInCT, formatTime } from "../hours";
 import { getDealIndex } from "../dealIndex";
 import { CITY_TAX_RATES, calculateOutTheDoor, STATE_EXCISE_RATES, TAX_RATES_LAST_UPDATED, type ThcTier } from "../taxRates";
+import { getAccuracyByStore, MIN_REPORTS } from "../dealAccuracy";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
 const H = () => {
@@ -209,7 +210,7 @@ export async function listDispensaries(city: string | null) {
   const [stores, features, deals] = await Promise.all([getRegionStores(), getFeatureRows(), liveDeals()]);
   const inScope = stores.filter((s) => (city ? s.city === city : true));
   const ct = nowInCT();
-  const hours = await hoursToday(inScope.map((s) => s.id), ct.weekday);
+  const [hours, accuracy] = await Promise.all([hoursToday(inScope.map((s) => s.id), ct.weekday), getAccuracyByStore(deals.rows)]);
   const dealCount = new Map<string, number>();
   for (const d of deals.rows) {
     const k = d.listing_slug || d.slug || "";
@@ -241,6 +242,13 @@ export async function listDispensaries(city: string | null) {
       ways_to_buy: ways,
       ways_to_buy_confirmed: WAYS.filter((w) => ways[w]?.status === "yes").map((w) => FEATURE_LABEL[w]),
       live_deals: dealCount.get(s.slug) || 0,
+      deal_accuracy: (() => {
+        // null = reports couldn't be read; score null = fewer than MIN_REPORTS taps yet.
+        if (!accuracy) return null;
+        const a = accuracy.get(s.slug);
+        if (!a || a.status === "thin") return { score: null, confirmations: a?.reports ?? 0, note: `Not enough confirmations yet (needs ${MIN_REPORTS})` };
+        return { score: a.score, confirmations: a.reports, said_yes: a.yes, method_url: `${u}/how-we-rank#accuracy` };
+      })(),
       store_url: `${u}/dispensary/${s.slug}`,
     };
   });

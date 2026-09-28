@@ -9,6 +9,9 @@ import GuideShell from "../components/GuideShell";
 import WeeklySignup from "../components/WeeklySignup";
 import OtdLine from "../components/OtdLine";
 import StoreOverflowLinks from "../components/StoreOverflowLinks";
+import WatchControl from "../components/WatchControl";
+import { watchesAvailable } from "../../lib/dealWatch";
+import { CENTRAL_IL_CITIES } from "../../lib/constants/regions";
 import { capPerStore, STORE_CAP } from "../../lib/storeCap";
 import { brand } from "../../lib/brand";
 import { amountOf, isConditional, needsQuantity, saveLabel, storeName, cleanDealTitle, type ExDeal } from "../../lib/exhale";
@@ -67,6 +70,10 @@ export default async function GreenWednesdayPage() {
 
   const faq = [
     { q: "When is Green Wednesday 2026?", a: `${DAY_LABEL}, the day before Thanksgiving.` },
+    {
+      q: "Can PuffPrice email me on Green Wednesday?",
+      a: "Yes. Leave your email on this page and we'll send one email the morning of Green Wednesday with the best deals we find, near your city if you pick one. It's the only one; nothing else follows unless you sign up for it.",
+    },
     {
       q: "Where can I find Green Wednesday dispensary deals near Peoria?",
       a: "On this page. The morning of Green Wednesday we check every Central Illinois dispensary's own website and list every deal we find, biggest saving first, with the price after tax where the store posts a price.",
@@ -138,6 +145,14 @@ export default async function GreenWednesdayPage() {
       ) : !isDay ? (
         <p className="gp-note" style={{ marginTop: 18 }}>No store has announced a Green Wednesday deal yet. The first one that does shows up here.</p>
       ) : null}
+
+      {n > 0 && watchesAvailable() && !!process.env.RESEND_API_KEY && (
+        <div className="gw-panel">
+          <b className="t">Get it the morning of</b>
+          <p>One email on Wednesday, November 25 with the best deals we find. That&apos;s the only one.</p>
+          <WatchControl kind="event" event="green-wednesday-2026" eventName="Green Wednesday" cities={CENTRAL_IL_CITIES.map((c) => c.name)} />
+        </div>
+      )}
 
       <div className="gw-panel">
         <b className="t">Get it in your inbox</b>
