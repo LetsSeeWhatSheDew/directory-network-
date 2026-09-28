@@ -1,8 +1,10 @@
 "use client";
 // Small, calm "email me new deals" control. Store pages: "Watch this store".
 // City pages: "Get these deals by email", with optional category and
-// minimum discount. Posts to /api/alerts/watch, which sends a confirm email;
-// nothing is sent until that link is tapped.
+// minimum discount. /price-watch: "Email me when it drops" for one menu item
+// at one store, with an optional ceiling. Sale-day hubs: "Email me that
+// morning", with an optional city. Posts to /api/alerts/watch, which sends a
+// confirm email; nothing is sent until that link is tapped.
 import { useState } from "react";
 
 const CATS: Array<[string, string]> = [
@@ -14,26 +16,48 @@ const CATS: Array<[string, string]> = [
 
 type Props =
   | { kind: "store"; slug: string; storeName: string }
-  | { kind: "city"; city: string };
+  | { kind: "city"; city: string }
+  | { kind: "price"; slug: string; storeName: string; item: string; itemLabel: string; nowLabel: string; startOpen?: boolean }
+  | { kind: "event"; event: string; eventName: string; cities: string[] };
 
 export default function WatchControl(props: Props) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(props.kind === "price" && !!props.startOpen);
   const [email, setEmail] = useState("");
   const [cats, setCats] = useState<string[]>([]);
   const [minPct, setMinPct] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [eventCity, setEventCity] = useState("");
   const [hp, setHp] = useState("");
   const [state, setState] = useState<"idle" | "busy" | "pending" | "active" | "err">("idle");
   const [err, setErr] = useState("");
 
-  const label = props.kind === "store" ? "Watch this store" : "Get these deals by email";
-  const where = props.kind === "store" ? `at ${props.storeName}` : `in ${props.city}`;
+  const label =
+    props.kind === "store" ? "Watch this store"
+    : props.kind === "city" ? "Get these deals by email"
+    : props.kind === "price" ? "Email me when it drops"
+    : `Email me the morning of ${props.eventName}`;
+  const where =
+    props.kind === "store" ? `at ${props.storeName}`
+    : props.kind === "city" ? `in ${props.city}`
+    : props.kind === "price" ? `the ${props.itemLabel} at ${props.storeName}`
+    : props.eventName;
+  const lede =
+    props.kind === "price"
+      ? <>One short email when the cheapest {props.itemLabel} at {props.storeName} drops below {props.nowLabel} out the door. We read the store&apos;s own menu twice a day. No drop, no email. Free.</>
+      : props.kind === "event"
+      ? <>One email the morning of {props.eventName} with the best deals we find on the stores&apos; own sites. Just that one. Free.</>
+      : <>One short email on mornings when there&apos;s a new deal {where}. Quiet days, no email. Free.</>;
+  const activeLine =
+    props.kind === "price" ? <>You&apos;re already set. We&apos;ll email you when {where} drops.</>
+    : props.kind === "event" ? <>You&apos;re already set. We&apos;ll email you the morning of {where}.</>
+    : <>You&apos;re already set. We&apos;ll email you when there&apos;s a new deal {where}.</>;
 
   if (state === "pending" || state === "active") {
     return (
       <p className="wc-done" role="status">
         {state === "pending"
           ? <>Almost done. Check <b>{email}</b> and tap the confirm link. Nothing arrives until you do.</>
-          : <>You&apos;re already set. We&apos;ll email you when there&apos;s a new deal {where}.</>}
+          : activeLine}
         <style>{CSS}</style>
       </p>
     );
@@ -61,6 +85,10 @@ export default function WatchControl(props: Props) {
               const body =
                 props.kind === "store"
                   ? { kind: "store", slug: props.slug, email, website: hp }
+                  : props.kind === "price"
+                  ? { kind: "price", slug: props.slug, item: props.item, email, max_price: maxPrice || null, website: hp }
+                  : props.kind === "event"
+                  ? { kind: "event", event: props.event, city: eventCity || null, email, website: hp }
                   : { kind: "city", city: props.city, email, categories: cats, min_discount: minPct ? Number(minPct) : null, website: hp };
               const r = await fetch("/api/alerts/watch", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
               const j = (await r.json().catch(() => ({}))) as { ok?: boolean; status?: string; error?: string };
@@ -75,9 +103,30 @@ export default function WatchControl(props: Props) {
             }
           }}
         >
-          <p className="wc-lede">
-            One short email on mornings when there&apos;s a new deal {where}. Quiet days, no email. Free.
-          </p>
+          <p className="wc-lede">{lede}</p>
+          {props.kind === "price" && (
+            <label className="wc-min">
+              Only if it&apos;s under $
+              <input
+                type="text"
+                inputMode="decimal"
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(e.target.value.replace(/[^0-9.]/g, "").slice(0, 7))}
+                placeholder="any drop"
+                aria-label="Only email me when the out-the-door price is under this many dollars (optional)"
+                style={{ width: 110 }}
+              />
+            </label>
+          )}
+          {props.kind === "event" && (
+            <label className="wc-min">
+              Near
+              <select value={eventCity} onChange={(e) => setEventCity(e.target.value)} aria-label="City (optional)">
+                <option value="">all of Central Illinois</option>
+                {props.cities.map((c) => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </label>
+          )}
           {props.kind === "city" && (
             <>
               <fieldset className="wc-cats">
@@ -150,7 +199,7 @@ const CSS = `
 .wc-cats label.on{border-color:var(--pp-mark);color:var(--pp-ink)}
 .wc-cats input{accent-color:var(--pp-mark);margin:0}
 .wc-min{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--pp-muted);margin:0 0 10px}
-.wc-min select,.wc-row input{padding:9px 11px;border-radius:10px;border:1px solid var(--pp-border);background:var(--pp-surface);color:var(--pp-ink);font:inherit;font-size:15px;min-width:0}
+.wc-min select,.wc-min input,.wc-row input{padding:9px 11px;border-radius:10px;border:1px solid var(--pp-border);background:var(--pp-surface);color:var(--pp-ink);font:inherit;font-size:15px;min-width:0}
 .wc-row{display:flex;gap:8px;flex-wrap:wrap}
 .wc-row input{flex:2 1 200px}
 .wc-row button{flex:1 1 auto;padding:9px 16px;border-radius:10px;border:none;font:inherit;font-weight:700;font-size:15px;cursor:pointer;background:var(--pp-btn);color:var(--pp-btn-fg);box-shadow:inset 0 0 0 1px var(--pp-btn-border)}
