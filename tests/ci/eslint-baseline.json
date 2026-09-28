@@ -23,9 +23,6 @@
   "app/api/deals/recommend/route.ts": {
     "@typescript-eslint/no-explicit-any": 1
   },
-  "app/api/leads/route.ts": {
-    "prefer-const": 9
-  },
   "app/cannabis/page.tsx": {
     "react/no-unescaped-entities": 5
   },
@@ -114,9 +111,6 @@
   },
   "lib/storeCap.ts": {
     "@typescript-eslint/no-explicit-any": 1
-  },
-  "lib/supabase.ts": {
-    "@typescript-eslint/no-unsafe-function-type": 1
   },
   "scripts/backfill-logos-google-places.ts": {
     "@typescript-eslint/no-explicit-any": 2
