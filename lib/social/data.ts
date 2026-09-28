@@ -1,9 +1,9 @@
 // lib/social/data.ts — reads live data for the social templates (server only).
 // Same sources as the public pages: the deals view the home page reads,
 // lib/dealIndex (/deal-index), lib/menuPrices (/cheapest) and lib/waysToBuy
-// (/drive-thru). With SOCIAL_FIXTURES=1 (local renders and tests only, never
-// set in Vercel) it returns the made-up fixtures, and every image is stamped
-// "Sample data".
+// (/drive-thru). With SOCIAL_FIXTURES=1 (local renders and tests only; ignored
+// on a production deploy) it returns the made-up fixtures, and every image is
+// stamped "Sample data". It changes the data only, never who can see /social.
 
 import { getDealIndex } from "../dealIndex";
 import { getCheapestBoard } from "../menuPrices";
@@ -14,7 +14,9 @@ import { dayAsOfLabel } from "./time";
 import { FIXTURE_BOARD, FIXTURE_DEALS, FIXTURE_FEATURES, FIXTURE_INDEX, FIXTURE_NOW, FIXTURE_STORES } from "./fixtures";
 import type { CheapestData, CityData, DriveThruData, IndexData, LawData, SavingData, SocialData, SocialTemplate } from "./types";
 
-export const fixturesOn = () => process.env.SOCIAL_FIXTURES === "1";
+/** Fixture data swap for local renders and tests. Never on a production
+ *  deploy, and it never touches access to /social (lib/social/access.ts). */
+export const fixturesOn = () => process.env.SOCIAL_FIXTURES === "1" && process.env.VERCEL_ENV !== "production";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
 // Public anon key (the same fallback app/og/shared.tsx and lib/menuPrices use).

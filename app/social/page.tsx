@@ -1,5 +1,5 @@
 // /social — the owner's daily posting kit. Private: admin cookie required
-// (same cookie as /admin), noindex, not in the sitemap, not linked from any
+// (same cookie as /admin, in every mode), noindex, not in the sitemap, not linked from any
 // public page. Shows today's set of social images (feed + story, day or
 // night), a Download button per image and a ready-to-paste caption drafted
 // from the same data. How to use it: marketing/social/README.md.
@@ -7,8 +7,8 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { ADMIN_COOKIE } from "../../lib/adminAuth";
-import { getAllSocialData, fixturesOn } from "../../lib/social/data";
+import { ADMIN_COOKIE, socialAccessAllowed } from "../../lib/social/access";
+import { getAllSocialData } from "../../lib/social/data";
 import { captionFor } from "../../lib/social/captions";
 import { citySlug, SOCIAL_CITIES } from "../../lib/social/build";
 import { LAW_FACTS } from "../../lib/social/laws";
@@ -58,11 +58,11 @@ const CSS = `
 type SP = { theme?: string; city?: string; fact?: string };
 
 export default async function SocialPage({ searchParams }: { searchParams: Promise<SP> }) {
-  // Private: the /admin password cookie. (Middleware only guards /admin/*,
-  // so the check lives here; set SOCIAL_FIXTURES=1 locally to skip it.)
-  const pw = process.env.ADMIN_PASSWORD;
-  const c = (await cookies()).get(ADMIN_COOKIE)?.value;
-  if (!fixturesOn() && (!pw || c !== pw)) redirect("/admin-login?from=/social");
+  // Private: the /admin password cookie, in every mode (fixtures included).
+  // Middleware only guards /admin/*, so the check lives here, before any data
+  // is read. tests/unit/social-access.test.ts fails if this ever loosens.
+  const cookie = (await cookies()).get(ADMIN_COOKIE)?.value;
+  if (!socialAccessAllowed(cookie, process.env.ADMIN_PASSWORD)) redirect("/admin-login?from=/social");
 
   const sp = await searchParams;
   const night = sp.theme ? sp.theme === "night" : isNightCT();

@@ -3,13 +3,28 @@
 // of the /social page. For design review; never for posting (every fixture
 // image is stamped "Sample data · not live").
 //
+// /social stays password-protected in fixture mode too, so the script logs
+// in with a throwaway test password (the same value the server was started
+// with) and first checks that the page is closed without it.
+//
 //   npx next build
-//   SOCIAL_FIXTURES=1 npx next start -p 3456 &
-//   node marketing/social/render-fixtures.mjs http://localhost:3456
+//   SOCIAL_FIXTURES=1 ADMIN_PASSWORD=local-test npx next start -p 3456 &
+//   SOCIAL_TEST_PASSWORD=local-test node marketing/social/render-fixtures.mjs http://localhost:3456
 import { mkdir, writeFile } from "node:fs/promises";
 import { chromium } from "playwright-core";
 
 const base = process.argv[2] || "http://localhost:3456";
+const password = process.env.SOCIAL_TEST_PASSWORD;
+if (!password) throw new Error("Set SOCIAL_TEST_PASSWORD to the ADMIN_PASSWORD the server was started with.");
+
+// /social must be closed without the password, fixtures or not.
+for (const cookie of [null, "dn_admin_auth=wrong-password"]) {
+  const r = await fetch(`${base}/social`, { redirect: "manual", headers: cookie ? { cookie } : {} });
+  if (![302, 303, 307, 308].includes(r.status) || !/\/admin-login/.test(r.headers.get("location") || "")) {
+    throw new Error(`/social is reachable without the admin password (HTTP ${r.status}, cookie: ${cookie ? "wrong" : "none"})`);
+  }
+}
+console.log("✓ /social is closed without the admin password");
 const out = "docs/screenshots/social";
 const templates = ["saving", "city", "index", "cheapest", "law", "drive-thru"];
 await mkdir(out, { recursive: true });
@@ -28,6 +43,7 @@ for (const t of templates) {
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined });
 for (const [name, width] of [["social-page-desktop", 1280], ["social-page-mobile", 390]]) {
   const page = await browser.newPage({ viewport: { width, height: 900 }, deviceScaleFactor: 1 });
+  await page.context().addCookies([{ name: "dn_admin_auth", value: encodeURIComponent(password), url: base }]);
   await page.goto(`${base}/social?theme=day`, { waitUntil: "networkidle" });
   // Load the lazy images before the full-page shot.
   await page.evaluate(async () => {
