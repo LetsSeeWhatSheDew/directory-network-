@@ -1,0 +1,118 @@
+{
+  "app/about/index/page.tsx": {
+    "react/no-unescaped-entities": 11
+  },
+  "app/admin/deals/new/page.tsx": {
+    "react/no-unescaped-entities": 1
+  },
+  "app/admin/leads/page.tsx": {
+    "react/no-unescaped-entities": 4
+  },
+  "app/admin/page.jsx": {
+    "react/no-unescaped-entities": 1
+  },
+  "app/alerts/AlertsCalculator.tsx": {
+    "@typescript-eslint/no-explicit-any": 1
+  },
+  "app/alerts/ProCheckoutButton.tsx": {
+    "@typescript-eslint/no-explicit-any": 3
+  },
+  "app/alerts/preferences/page.tsx": {
+    "@typescript-eslint/no-explicit-any": 1
+  },
+  "app/api/deals/recommend/route.ts": {
+    "@typescript-eslint/no-explicit-any": 1
+  },
+  "app/cannabis/page.tsx": {
+    "react/no-unescaped-entities": 5
+  },
+  "app/components/DealCtaLink.tsx": {
+    "@typescript-eslint/no-explicit-any": 1
+  },
+  "app/components/FourTwentyBanner.tsx": {
+    "react-hooks/set-state-in-effect": 1
+  },
+  "app/components/HeroDealCard.tsx": {
+    "react-hooks/set-state-in-effect": 1,
+    "react/no-unescaped-entities": 2
+  },
+  "app/components/HomeDealCards.tsx": {
+    "react/no-unescaped-entities": 1
+  },
+  "app/components/LocationAware.tsx": {
+    "@typescript-eslint/no-explicit-any": 1
+  },
+  "app/components/MobileNavMenu.tsx": {
+    "react-hooks/set-state-in-effect": 1
+  },
+  "app/components/RecentlyViewedRow.tsx": {
+    "react-hooks/set-state-in-effect": 1
+  },
+  "app/components/SavingsCallout.tsx": {
+    "react-hooks/set-state-in-effect": 1
+  },
+  "app/components/SearchTracker.tsx": {
+    "@typescript-eslint/no-explicit-any": 1
+  },
+  "app/components/ShareDealButton.tsx": {
+    "@typescript-eslint/no-explicit-any": 3
+  },
+  "app/components/StoreAvatar.tsx": {
+    "react-hooks/set-state-in-effect": 1
+  },
+  "app/components/TrackView.tsx": {
+    "@typescript-eslint/no-explicit-any": 1
+  },
+  "app/components/TrackedLink.tsx": {
+    "@typescript-eslint/no-explicit-any": 1
+  },
+  "app/components/UtmCapture.tsx": {
+    "@typescript-eslint/no-explicit-any": 1
+  },
+  "app/deal/[id]/page.tsx": {
+    "@typescript-eslint/no-explicit-any": 3
+  },
+  "app/deals/[category]/page.tsx": {
+    "@typescript-eslint/no-explicit-any": 12
+  },
+  "app/for-dispensaries/[slug]/page.tsx": {
+    "react-hooks/purity": 2
+  },
+  "app/global-error.tsx": {
+    "@next/next/no-html-link-for-pages": 1
+  },
+  "app/l/[id]/page.tsx": {
+    "@typescript-eslint/no-explicit-any": 6,
+    "react-hooks/purity": 1
+  },
+  "app/lab/c/page.tsx": {
+    "@typescript-eslint/no-explicit-any": 1
+  },
+  "app/llms-full.txt/route.ts": {
+    "@typescript-eslint/no-explicit-any": 1
+  },
+  "app/map/MapClient.tsx": {
+    "@typescript-eslint/no-explicit-any": 4
+  },
+  "app/map/page.tsx": {
+    "@typescript-eslint/no-explicit-any": 1
+  },
+  "app/savings/dashboard/page.tsx": {
+    "react-hooks/set-state-in-effect": 1
+  },
+  "components/DirectoryLandingPage.tsx": {
+    "@next/next/no-html-link-for-pages": 1
+  },
+  "lib/dealScoring.ts": {
+    "@typescript-eslint/no-explicit-any": 3
+  },
+  "lib/labData.ts": {
+    "@typescript-eslint/no-explicit-any": 1
+  },
+  "lib/storeCap.ts": {
+    "@typescript-eslint/no-explicit-any": 1
+  },
+  "scripts/backfill-logos-google-places.ts": {
+    "@typescript-eslint/no-explicit-any": 2
+  }
+}
