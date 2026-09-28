@@ -50,7 +50,7 @@ export const EXISTING_GUIDES: { href: string; title: string; blurb: string }[] =
   { href: "/drive-thru", title: "Drive-thru dispensaries", blurb: "Legal since June 2026. Who has one." },
   { href: "/medical", title: "Medical dispensaries", blurb: "Central Illinois stores confirmed selling medical." },
   { href: "/open-late", title: "Open latest tonight", blurb: "Who's still open, latest first." },
-  { href: "/on-the-way", title: "Best deal on your route", blurb: "Deals along the drive you're already making." },
+  { href: "/route", title: "Best deal on your route", blurb: "Deals along the drive you're already making." },
   { href: "/illinois-cannabis-delivery", title: "Is delivery legal in Illinois?", blurb: "Not yet. Where the bills stand." },
   { href: "/illinois-hemp-law", title: "The Nov 12 hemp change", blurb: "Delta-8 leaves gas stations and smoke shops." },
   { href: "/deal-index", title: "Deal Index", blurb: "Deals live and average discount by city, daily." },

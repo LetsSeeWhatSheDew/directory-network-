@@ -49,6 +49,7 @@ const GROUPS: { title: string; items: { href: string; label: string; hint: strin
     title: "Find a deal",
     items: [
       { href: "/deals/all", label: "Every deal today", hint: "All of Central Illinois, biggest savings first" },
+      { href: "/deal-of-the-day", label: "Deal of the day", hint: "Today's biggest real saving, ready to share" },
       { href: "/cannabis/illinois/open-now", label: "Open now", hint: "Stores you can walk into right now" },
       { href: "/map", label: "Map", hint: "What's close to you" },
       { href: "/this-week", label: "This week's report", hint: "What changed, what's worth the drive" },
@@ -60,7 +61,7 @@ const GROUPS: { title: string; items: { href: string; label: string; hint: strin
       { href: "/drive-thru", label: "Drive-thru", hint: "Legal since June — which stores have one" },
       { href: "/medical", label: "Medical", hint: "Stores that serve patients" },
       { href: "/open-late", label: "Open late", hint: "Sorted by closing time tonight" },
-      { href: "/on-the-way", label: "On the way", hint: "Best deal on your drive between towns" },
+      { href: "/route", label: "On the way", hint: "Best deal on your drive between towns" },
     ],
   },
   {

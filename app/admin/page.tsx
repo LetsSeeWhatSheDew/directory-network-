@@ -228,6 +228,12 @@ export default async function AdminDashboard() {
             >
               Traffic →
             </Link>
+            <Link
+              href="/social"
+              className="text-[11px] uppercase tracking-widest text-[#8a9490] transition-colors hover:text-[#2E7D32]"
+            >
+              Social →
+            </Link>
             <div className="flex items-baseline gap-1.5">
               <span className="text-(--pp-muted)">Project</span>
               <span className="font-semibold text-(--pp-mark)">Green</span>

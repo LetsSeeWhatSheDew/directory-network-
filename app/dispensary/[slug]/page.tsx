@@ -19,6 +19,8 @@ import TrustLine from "../../components/TrustLine";
 import { dealContextTag } from "../../../lib/dealContext";
 import { getListingDealHistory, historyIsMeaningful, dayCountsReliable } from "../../../lib/dealHistory";
 import { getConfirmationsToday } from "../../../lib/confirmations";
+import { getStoreAccuracy } from "../../../lib/dealAccuracy";
+import DealAccuracy from "../../components/DealAccuracy";
 import { getApprovedReviews, getReviewStats, reviewsEnabled } from "../../../lib/reviews";
 import { MapPin, Phone, Menu as MenuIcon } from "lucide-react";
 import { notFound } from "next/navigation";
@@ -312,7 +314,7 @@ export default async function DispensaryProfilePage({
   ]);
   const waysToBuy = (await getFeaturesForSlug(slug)).filter((r) => r.status === "yes" || r.status === "announced");
   const dealHistory = historyIsMeaningful(dealHistoryRaw) ? dealHistoryRaw : null;
-  const confirmed = await getConfirmationsToday(deals.map((d) => d.id));
+  const [confirmed, accuracy] = await Promise.all([getConfirmationsToday(deals.map((d) => d.id)), getStoreAccuracy(slug, deals)]);
 
   const ct = nowInCT();
   const status = todayOpenStatus(hours, ct);
@@ -584,6 +586,7 @@ export default async function DispensaryProfilePage({
             Active deals · {deals.length} {deals.length === 1 ? "offer" : "offers"}
           </div>
           {deals.length > 0 && <TrustLine />}
+          <DealAccuracy accuracy={accuracy} />
           {dealHistory && (
             <div className="track">
               {dayCountsReliable() && (

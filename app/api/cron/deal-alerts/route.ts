@@ -16,6 +16,10 @@
 // ?hours=N      look-back window (1–168, default 24)
 // ?to=<email>   send one sample digest of ALL new Central IL deals to that
 //               address (no claims written); for checking how it looks
+//
+// The same run also sends price-drop emails ("email me when it drops") and
+// sale-day emails (Green Wednesday, 4/20, 7/10): lib/watchRuns.ts. Their
+// results come back under `extras`; a failure there never blocks the digest.
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { createHash } from "crypto";
@@ -39,6 +43,7 @@ import { otdFor, usd } from "@/lib/otd";
 import { saveLabel, cleanDealTitle } from "@/lib/exhale";
 import { displayCity } from "@/lib/cityNormalize";
 import { isInCentralIL } from "@/lib/visibility";
+import { runExtraWatches } from "@/lib/watchRuns";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -175,11 +180,15 @@ export async function GET(req: NextRequest) {
   const since = new Date(Date.now() - hours * 3600000).toISOString();
   const day = ctDate();
 
+  // Price and sale-day watches don't depend on today's new deals, so they
+  // run first (skipped for a ?to= sample send).
+  const extras = testTo ? undefined : await runExtraWatches({ dry, day });
+
   let deals: LiveDeal[];
   try {
     deals = await newDeals(since);
   } catch (e) {
-    return NextResponse.json({ ok: false, reason: String(e).slice(0, 200) }, { status: 502 });
+    return NextResponse.json({ ok: false, reason: String(e).slice(0, 200), extras }, { status: 502 });
   }
 
   // Sample send: everything new, one section per city, to one address.
@@ -204,7 +213,7 @@ export async function GET(req: NextRequest) {
   }
 
   const watches = await listConfirmedWatches();
-  if (!watches) return NextResponse.json({ ok: false, reason: "could not read deal_alerts (service key missing?)" }, { status: 500 });
+  if (!watches) return NextResponse.json({ ok: false, reason: "could not read deal_alerts (service key missing?)", extras }, { status: 500 });
 
   const byEmail = new Map<string, WatchRow[]>();
   for (const w of watches) {
@@ -216,7 +225,7 @@ export async function GET(req: NextRequest) {
   const errors: string[] = [];
   const plan: Array<{ email: string; deals: number; sections: string[] }> = [];
   const resend = !dry && process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
-  if (!dry && !resend && deals.length) return NextResponse.json({ ok: false, reason: "RESEND_API_KEY not set", ...stats }, { status: 500 });
+  if (!dry && !resend && deals.length) return NextResponse.json({ ok: false, reason: "RESEND_API_KEY not set", ...stats, extras }, { status: 500 });
 
   for (const [email, rows] of byEmail) {
     if (rows.some((r) => sentOn(r) === day)) {
@@ -275,5 +284,5 @@ export async function GET(req: NextRequest) {
     await new Promise((res) => setTimeout(res, 550)); // Resend default rate limit: 2 req/s
   }
 
-  return NextResponse.json({ ok: errors.length === 0, dry, ...stats, plan: dry ? plan : undefined, errors: errors.slice(0, 5) });
+  return NextResponse.json({ ok: errors.length === 0, dry, ...stats, plan: dry ? plan : undefined, errors: errors.slice(0, 5), extras });
 }
