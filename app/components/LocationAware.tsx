@@ -126,11 +126,20 @@ function applyPlaceholder(city: string) {
   });
 }
 
+/** Abort a lookup that hasn't answered in GPS_WAIT_MS, so detection never hangs. */
+function quickSignal(): AbortSignal | undefined {
+  try {
+    return typeof AbortSignal !== "undefined" && "timeout" in AbortSignal ? AbortSignal.timeout(GPS_WAIT_MS) : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 async function reverseGeocode(lat: number, lng: number): Promise<string | null> {
   try {
     const res = await fetch(
       `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=12&addressdetails=1`,
-      { headers: { "Accept-Language": "en" } }
+      { headers: { "Accept-Language": "en" }, signal: quickSignal() }
     );
     if (!res.ok) return null;
     const data = await res.json();
@@ -143,13 +152,35 @@ async function reverseGeocode(lat: number, lng: number): Promise<string | null> 
 
 async function ipLookup(): Promise<{ city: string | null }> {
   try {
-    const res = await fetch("/api/location", { cache: "no-store" });
+    const res = await fetch("/api/location", { cache: "no-store", signal: quickSignal() });
     if (!res.ok) return { city: null };
     const data = await res.json();
     return { city: data?.city || null };
   } catch {
     return { city: null };
   }
+}
+
+/** How long we wait for the browser's location answer before moving on. */
+const GPS_WAIT_MS = 4000;
+
+/**
+ * GPS with a hard wait. getCurrentPosition's own timeout only starts once the
+ * visitor answers the permission prompt, so an unanswered prompt (common on
+ * desktop Chrome) would leave "Detecting location…" up forever. After
+ * GPS_WAIT_MS we resolve "timeout" and move on; `late` still resolves if they
+ * answer afterwards, so a later yes can upgrade the location.
+ */
+function requestGpsWithin(ms = GPS_WAIT_MS): {
+  first: Promise<GeolocationPosition | null | "timeout">;
+  late: Promise<GeolocationPosition | null>;
+} {
+  const late = requestGps();
+  const first = Promise.race([
+    late,
+    new Promise<"timeout">((res) => setTimeout(() => res("timeout"), ms)),
+  ]);
+  return { first, late };
 }
 
 function requestGps(): Promise<GeolocationPosition | null> {
@@ -294,9 +325,19 @@ export default function LocationAware() {
       } catch {}
 
       if (!gpsDeclined) {
-        const pos = await requestGps();
+        const { first, late } = requestGpsWithin();
+        const pos = await first;
         if (cancelled) return;
-        if (pos) {
+        if (pos === "timeout") {
+          // No answer yet: don't hang. Fall through to the IP city / saved
+          // city / "Set your city" below, and upgrade if they say yes later.
+          late.then(async (p) => {
+            if (cancelled || !p) return;
+            const { latitude, longitude } = p.coords;
+            const city = await reverseGeocode(latitude, longitude);
+            if (!cancelled && city) commit({ city, source: "gps" }, latitude, longitude);
+          });
+        } else if (pos) {
           const { latitude, longitude } = pos.coords;
           const city = await reverseGeocode(latitude, longitude);
           if (cancelled) return;

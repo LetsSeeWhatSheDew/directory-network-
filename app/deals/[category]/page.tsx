@@ -4,7 +4,7 @@
 import StoreOverflowLinks from "../../components/StoreOverflowLinks";
 import { capPerStore, overflowFor, STORE_CAP } from "../../../lib/storeCap";
 import Link from "next/link";
-import { amountOf, isConditional, needsQuantity, saveLabel, cleanDealTitle, directionsHref, EXHALE_LINES } from "../../../lib/exhale";
+import { amountOf, saveLabel, cleanDealTitle, directionsHref, EXHALE_LINES, nearestExhale, milesLabel } from "../../../lib/exhale";
 import ExhaleCard from "../../components/ExhaleCard";
 import EmptyBreath from "../../components/EmptyBreath";
 import OtdLine from "../../components/OtdLine";
@@ -470,7 +470,21 @@ export default async function DealsPage({
     ? citySubtitle(category, city)
     : CATEGORY_SUBTITLES[category] || "Best deals near you";
   // Lead with the biggest everyday saving; bundles/conditional deals follow.
-  const topDeal = deals.find((d: Deal) => amountOf(d) && !isConditional(d) && !needsQuantity(d)) || deals[0] || null;
+  // Same rule as the homepage orb (lib/exhale nearestExhale): with the
+  // visitor's city known, the biggest everyday saving nearest them first, with
+  // an honest distance; with no city, the Central-IL-wide pick, labeled so.
+  const origin = city
+    ? {
+        city,
+        // Saved GPS only applies when the city is the cookie's own, not a ?city= browse.
+        lat: !cityFromUrl || cityFromUrl.toLowerCase() === (cookieLoc?.city || "").toLowerCase() ? cookieLoc?.lat ?? null : null,
+        lng: !cityFromUrl || cityFromUrl.toLowerCase() === (cookieLoc?.city || "").toLowerCase() ? cookieLoc?.lng ?? null : null,
+      }
+    : null;
+  const topPick = nearestExhale(deals, origin);
+  const topDeal = topPick?.deal || deals[0] || null;
+  const topScope = topPick && topPick.deal === topDeal ? topPick.scope : city ? "near" : "region";
+  const topMiles = topPick && topPick.deal === topDeal ? milesLabel(topPick.miles) : null;
   // Fairness: the four cards above the fold hold at most STORE_CAP.shortList
   // from any one store (top deal included); the store page has the rest.
   const ordered = topDeal ? [topDeal, ...deals.filter((d: Deal) => d !== topDeal)] : deals;
@@ -667,7 +681,9 @@ export default async function DealsPage({
         {topDeal ? (
           <>
             <TrackView event="deal_view" params={{ dispensary: topDeal.name || topDeal.listing_slug, category }} />
-            <div className="top-label">Our recommendation</div>
+            <div className="top-label">
+              Our recommendation{topScope === "region" ? " · across Central Illinois" : city ? ` near ${city}` : ""}
+            </div>
             <div className="top-card">
               <div style={{ position: "absolute", top: 12, right: 12, zIndex: 2 }}>
                 <DealBadge dealId={topDeal.deal_id || topDeal.id} />
@@ -698,6 +714,7 @@ export default async function DealsPage({
               </div>
               <div className="disp-detail">
                 {topDeal.city ? `${topDeal.city}, ${topDeal.state_abbrev || 'IL'}` : 'IL'}
+                {topScope === "region" ? " · across Central Illinois" : topMiles && city ? ` · ${topMiles} from ${city}` : ""}
                 {topDeal.google_rating > 0 && ` · ${topDeal.google_rating}★`}
               </div>
 
