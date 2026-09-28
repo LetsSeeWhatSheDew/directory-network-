@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 };
 
 const CSS = `
-.dv-code{display:block;font-family:var(--font-mono);font-size:.82rem;line-height:1.55;background:var(--pp-paper);border:1px solid var(--pp-border);border-radius:12px;padding:12px 14px;overflow-x:auto;white-space:pre;color:var(--pp-ink);margin:8px 0 12px;max-width:100%}
+.dv-code{display:block;font-family:var(--font-mono);font-size:.82rem;line-height:1.55;background:var(--pp-paper);border:1px solid var(--pp-border);border-radius:12px;padding:12px 14px;white-space:pre-wrap;overflow-wrap:anywhere;color:var(--pp-ink);margin:8px 0 12px;max-width:100%}
 .dv-url{font-family:var(--font-mono);font-size:clamp(.95rem,3.6vw,1.15rem);font-weight:700;color:var(--pp-signal-ink);word-break:break-all}
 .dv-steps{margin:6px 0 12px;padding-left:1.3rem;line-height:1.6;max-width:66ch}
 .dv-steps li{margin:3px 0}
