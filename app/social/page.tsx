@@ -62,7 +62,7 @@ export default async function SocialPage({ searchParams }: { searchParams: Promi
   // Middleware only guards /admin/*, so the check lives here, before any data
   // is read. tests/unit/social-access.test.ts fails if this ever loosens.
   const cookie = (await cookies()).get(ADMIN_COOKIE)?.value;
-  if (!socialAccessAllowed(cookie, process.env.ADMIN_PASSWORD)) redirect("/admin-login?from=/social");
+  if (!(await socialAccessAllowed(cookie, process.env.ADMIN_PASSWORD))) redirect("/admin-login?from=/social");
 
   const sp = await searchParams;
   const night = sp.theme ? sp.theme === "night" : isNightCT();

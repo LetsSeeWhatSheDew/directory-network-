@@ -3,9 +3,11 @@
 // of the /social page. For design review; never for posting (every fixture
 // image is stamped "Sample data · not live").
 //
-// /social stays password-protected in fixture mode too, so the script logs
-// in with a throwaway test password (the same value the server was started
-// with) and first checks that the page is closed without it.
+// /social stays password-protected in fixture mode too, so the script signs
+// in through /api/admin-auth with a throwaway test password (the same value
+// the server was started with) and first checks that the page is closed
+// without it. The session cookie is a token derived from the password, so
+// it has to come from a real sign-in.
 //
 //   npx next build
 //   SOCIAL_FIXTURES=1 ADMIN_PASSWORD=local-test npx next start -p 3456 &
@@ -40,10 +42,14 @@ for (const t of templates) {
   }
 }
 
+const login = await fetch(`${base}/api/admin-auth`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ password }) });
+const session = (login.headers.get("set-cookie") || "").match(/dn_admin_auth=([^;]+)/)?.[1];
+if (login.status !== 200 || !session) throw new Error(`Sign-in with SOCIAL_TEST_PASSWORD failed (HTTP ${login.status})`);
+
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined });
 for (const [name, width] of [["social-page-desktop", 1280], ["social-page-mobile", 390]]) {
   const page = await browser.newPage({ viewport: { width, height: 900 }, deviceScaleFactor: 1 });
-  await page.context().addCookies([{ name: "dn_admin_auth", value: encodeURIComponent(password), url: base }]);
+  await page.context().addCookies([{ name: "dn_admin_auth", value: session, url: base }]);
   await page.goto(`${base}/social?theme=day`, { waitUntil: "networkidle" });
   // Load the lazy images before the full-page shot.
   await page.evaluate(async () => {

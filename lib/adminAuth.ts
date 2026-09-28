@@ -23,11 +23,16 @@ async function sha256Hex(s: string): Promise<string> {
   return Array.from(new Uint8Array(buf), (b) => b.toString(16).padStart(2, "0")).join("");
 }
 
+/** The session-cookie value that `password` signs in as. */
+export function sessionTokenFor(password: string): Promise<string> {
+  return sha256Hex(`puffprice-admin-session:v1:${password}`);
+}
+
 /** Cookie value for a signed-in admin, or null when ADMIN_PASSWORD is unset. */
 export async function adminSessionToken(): Promise<string | null> {
   const pw = process.env.ADMIN_PASSWORD;
   if (!pw) return null;
-  return sha256Hex(`puffprice-admin-session:v1:${pw}`);
+  return sessionTokenFor(pw);
 }
 
 /** Does `password` match ADMIN_PASSWORD? Constant-time; false when unset. */
