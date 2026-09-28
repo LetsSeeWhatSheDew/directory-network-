@@ -1,200 +1,113 @@
 # PuffPrice — Environment Variables Reference
-Last updated: April 15, 2026
+Last updated: September 28, 2026 (rewritten from the code plus the Vercel project's env-var list, names only)
 
-This is the single source of truth for every process.env variable used across the codebase.
-Reference this when setting up any new Vercel environment or onboarding a new developer.
+This is the single source of truth for every `process.env` variable the site reads. Where it disagrees with older docs (`HANDOFF*.md`, `PHASE1-STATUS.md`, `LAUNCH-CHECKLIST.md`), this file wins.
 
----
-
-## BLOCKING BUILD ISSUE
-
-The Production environment for puffprice.com (Vercel project: directory-network-) is
-FAILING because two NEXT_PUBLIC_ Supabase variables are missing.
-
-Fix: Vercel → directory-network- project → Settings → Environment Variables → add:
-- NEXT_PUBLIC_SUPABASE_URL
-- NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-(Use the same values already set in the directory-network project.)
+`tests/unit/envNames.test.ts` fails if the code starts reading a name Vercel doesn't have (for example, a service-key read without the `SUPABASE_SERVICE_KEY` fallback, or `NEXT_PUBLIC_GA_ID`).
 
 ---
 
-## Variable Reference
+## What's set in Vercel today (Production, 2026-09-28)
 
-### NEXT_PUBLIC_SUPABASE_URL
-- Type: NEXT_PUBLIC_ (exposed to browser)
-- Required: YES — build fails at static generation without it
-- Used in: lib/supabase.ts
-- What it does: Supabase project URL for the client-side Supabase SDK
-- Where to get it: Supabase Dashboard → Settings → API → Project URL
-- Example: https://hnbjufmtmrhexmdrfubw.supabase.co
-- Status: SET in cleanlist.co env, MISSING in puffprice.com env
+| Set | Not set |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `CRON_SECRET`, `RESEND_API_KEY`, `GOOGLE_PLACES_API_KEY`, `ADMIN_PASSWORD`, `NEXT_PUBLIC_GA_MEASUREMENT_ID` | `SUPABASE_SERVICE_ROLE_KEY`, `UNSUBSCRIBE_SECRET`, all `STRIPE_*`, `NEXT_PUBLIC_GA_ID` (unused), Sentry DSNs, Twilio |
 
-### NEXT_PUBLIC_SUPABASE_ANON_KEY
-- Type: NEXT_PUBLIC_ (exposed to browser)
-- Required: YES — build fails at static generation without it
-- Used in: lib/supabase.ts
-- What it does: Supabase anonymous/public key for client-side reads (respects RLS)
-- Where to get it: Supabase Dashboard → Settings → API → anon public key
-- Status: SET in cleanlist.co env, MISSING in puffprice.com env
-
-### SUPABASE_URL
-- Type: Server-only (no NEXT_PUBLIC_ prefix)
-- Required: YES for lead submission and admin write paths
-- Used in: app/api/leads/route.ts (raw REST fetch, not supabase-js)
-- What it does: Supabase project URL used in server-side fetch() calls
-- Note: Same value as NEXT_PUBLIC_SUPABASE_URL — identical string
-- Status: Set in both Vercel environments
-- **Action (alias cleanup):** Standardize on `NEXT_PUBLIC_SUPABASE_URL` project-wide. For now set both to the same value if used.
-
-### SUPABASE_SERVICE_KEY
-- Type: Server-only — NEVER add NEXT_PUBLIC_ prefix, never commit to code
-- Required: YES for write operations and RLS-bypassing admin reads
-- Used in: app/api/leads/route.ts, admin API endpoints
-- What it does: Service role key that bypasses Row Level Security for server writes
-- Where to get it: Supabase Dashboard → Settings → API → service_role key
-- Status: Set in both Vercel environments
-- **Action (alias cleanup):** `SUPABASE_SERVICE_KEY` is a legacy alias for `SUPABASE_SERVICE_ROLE_KEY`. Both names appear in code — standardize on `SUPABASE_SERVICE_ROLE_KEY` and remove references to `SUPABASE_SERVICE_KEY` over time. For now, set BOTH to the same value to avoid breakage.
-
-### NEXT_PUBLIC_GA_ID
-- Type: NEXT_PUBLIC_ (exposed to browser)
-- Required: Optional — falls back to placeholder string "G-PLACEHOLDER"
-- Used in: app/layout.tsx (Google Analytics script injection)
-- What it does: Google Analytics 4 Measurement ID. Without real value, no analytics fire.
-- Where to get it: Google Analytics → Admin → Data Streams → Measurement ID
-- Example: G-XXXXXXXXXX
-- Status: PLACEHOLDER — must be set before 4/20 launch
-- Note: Variable is named NEXT_PUBLIC_GA_ID in code (not NEXT_PUBLIC_GA_MEASUREMENT_ID)
-
-### STRIPE_SECRET_KEY
-- Type: Server-only — NEVER expose to client
-- Required: Optional — /api/stripe/create-checkout returns a 503 with friendly message if absent
-- Used in: app/api/stripe/create-checkout/route.ts
-- What it does: Authenticates Stripe API calls for creating checkout sessions
-- Where to get it: Stripe Dashboard → Developers → API Keys → Secret key
-- Status: NOT SET — Pro ($0.99/mo) and Featured ($49/mo) subscriptions blocked
-
-### STRIPE_PRO_PRICE_ID
-- Type: Server-only
-- Required: Required when STRIPE_SECRET_KEY is set
-- Used in: app/api/stripe/create-checkout/route.ts (tier: "pro_consumer")
-- What it does: Stripe Price ID for the $0.99/month Pro consumer subscription
-- Where to get it: Stripe Dashboard → Products → create Pro product → copy Price ID
-- Example: price_1Xxxx...
-- Status: NOT SET
-
-### STRIPE_FEATURED_PRICE_ID
-- Type: Server-only
-- Required: Required when STRIPE_SECRET_KEY is set
-- Used in: app/api/stripe/create-checkout/route.ts (tier: "featured")
-- What it does: Stripe Price ID for the $49/month Featured dispensary subscription
-- Where to get it: Stripe Dashboard → Products → create Featured product → copy Price ID
-- Status: NOT SET
-
-### STRIPE_PUBLISHABLE_KEY / NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-- Type: `NEXT_PUBLIC_` variant is client-side, non-prefixed is server-only
-- Declared in `.env.example`, **not yet referenced in code**
-- What it does: Publishable Stripe key for client-side Stripe.js when we move to embedded checkout
-- Action: Set on Vercel preemptively — costs nothing and unblocks the moment we wire client-side Stripe. Use `pk_live_` in production.
-- Status: NOT SET — preemptive Phase 2 slot
-
-### STRIPE_WEBHOOK_SECRET
-- Type: Server-only
-- Declared in `.env.example`, **not yet referenced in code**
-- What it does: Webhook signing secret used to verify incoming Stripe events
-- Action: Required as soon as the webhook handler (Code Task 6) goes live. Get from Stripe → Developers → Webhooks → your endpoint → Signing secret.
-- Status: NOT SET — needed for Code Task 6 activation
-
-### NEXT_PUBLIC_SITE_URL
-- Type: NEXT_PUBLIC_ (exposed to browser)
-- Required: Optional — defaults to "https://puffprice.com" hardcoded in route
-- Used in: app/api/stripe/create-checkout/route.ts (success_url and cancel_url)
-- What it does: Base URL injected into Stripe's post-checkout redirect URLs
-- Status: Not set (default is fine once puffprice.com is live)
-
-### RESEND_API_KEY
-- Type: Server-only
-- Required: Optional — email notifications are silently skipped if absent
-- Used in: app/api/leads/route.ts (fire-and-forget notification on new lead)
-- What it does: Sends email to matthew@jacarandapeoria.com when any lead form submits
-- Where to get it: resend.com → API Keys
-- Status: NOT SET
-
-### ADMIN_PASSWORD
-- Type: Server-only
-- Required: Optional — falls back to hardcoded default "cleanlist2026"
-- Used in: middleware.ts (protects the /admin route)
-- What it does: Password cookie value checked before allowing /admin access
-- WARNING: The default "cleanlist2026" is visible in source code — change this before launch
-- Status: Using hardcoded default
+Nothing that's missing breaks the site: every "not set" variable is optional, has a fallback, or belongs to a feature that isn't live yet (Stripe, Sentry, SMS).
 
 ---
 
-## Summary Table
+## Supabase
 
-| Variable | Visibility | Required | Status |
-|---|---|---|---|
-| NEXT_PUBLIC_SUPABASE_URL | public | YES | MISSING in puffprice env — BUILD BLOCKER |
-| NEXT_PUBLIC_SUPABASE_ANON_KEY | public | YES | MISSING in puffprice env — BUILD BLOCKER |
-| SUPABASE_URL | server | YES | Set in both envs |
-| SUPABASE_SERVICE_KEY | server | YES | Set in both envs |
-| NEXT_PUBLIC_GA_ID | public | optional | Placeholder — fix before 4/20 |
-| STRIPE_SECRET_KEY | server | optional | Not set |
-| STRIPE_PRO_PRICE_ID | server | optional | Not set |
-| STRIPE_FEATURED_PRICE_ID | server | optional | Not set |
-| NEXT_PUBLIC_SITE_URL | public | optional | Uses default |
-| RESEND_API_KEY | server | optional | Not set |
-| ADMIN_PASSWORD | server | optional | Hardcoded default — change before launch |
+### NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY — public, required — **set**
+- The project URL and the anon ("public") key. Both are safe in the browser: the anon key can only do what row-level security allows.
+- Used everywhere the site reads public data. The code falls back to the project's own URL/anon key if these are missing, so builds don't crash.
 
----
+### SUPABASE_URL — server, required by a few routes — **set**
+- Same value as `NEXT_PUBLIC_SUPABASE_URL`. Read by `/api/leads`, `/api/admin/update-lead-status` and `/admin/leads`.
 
-## Setup Checklist (new environment)
-
-Minimum viable (needed to build and run):
-- [ ] NEXT_PUBLIC_SUPABASE_URL
-- [ ] NEXT_PUBLIC_SUPABASE_ANON_KEY
-- [ ] SUPABASE_URL
-- [ ] SUPABASE_SERVICE_KEY
-
-Pre-launch (needed for full functionality):
-- [ ] STRIPE_SECRET_KEY
-- [ ] STRIPE_PRO_PRICE_ID
-- [ ] STRIPE_FEATURED_PRICE_ID
-- [ ] NEXT_PUBLIC_GA_ID (real value, not G-PLACEHOLDER)
-- [ ] RESEND_API_KEY
-- [ ] ADMIN_PASSWORD (changed from default)
+### SUPABASE_SERVICE_KEY — server-only secret, required — **set**
+### SUPABASE_SERVICE_ROLE_KEY — alternate name for the same key — **not set in Vercel**
+- The service-role key. It bypasses row-level security, so it must never get a `NEXT_PUBLIC_` prefix and must never be imported into a client component (`tests/unit/clientSecrets.test.ts` guards this).
+- **Vercel has it under `SUPABASE_SERVICE_KEY`.** The code accepts either name, trying `SUPABASE_SERVICE_ROLE_KEY` first and then `SUPABASE_SERVICE_KEY`. Before 2026-09-28, ten places read only `SUPABASE_SERVICE_ROLE_KEY`; they were fixed in the security PR:
+  - the admin pages (dashboard, submissions, reviews, scrapers)
+  - the admin approve/reject/review/manual-deal APIs
+  - the `mark-stale-deals` cron, which had been skipping every night with "not configured"
+- Needed for: subscriber sign-ups and unsubscribes, deal watches, the waitlist, leads, analytics writes, confirmation counts, `/admin`, and all crons.
+- **GitHub Actions is separate:** `.github/workflows/daily-scrape.yml` reads the GitHub repository secret `SUPABASE_SERVICE_ROLE_KEY`, not Vercel's variable. Set it there under that name.
 
 ---
 
-## Planned but not yet wired
+## Auth and secrets
 
-These names appear in launch/strategy docs but the code does not reference them yet. Set them on Vercel ahead of the corresponding feature build; they are not currently load-bearing.
+### ADMIN_PASSWORD — server-only secret, required for /admin — **set**
+- Gate for `/admin` pages (middleware plus `app/admin/layout.tsx`) and every `/api/admin/*` route (`lib/adminAuth.ts`).
+- **There is no default.** The old `cleanlist2026` fallback is gone. If the variable is missing, `/admin` fails closed: nobody can sign in, and the login page says the variable is missing.
+- The session cookie holds a SHA-256 token derived from the password, not the password itself. Changing the password signs everyone out.
 
-- `RESEND_API_KEY` — required when transactional email (deal alerts, claim confirmations, weekly digest) lands. Get from [resend.com/api-keys](https://resend.com/api-keys).
-- `STRIPE_PUBLISHABLE_KEY` / `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` — set ahead of any client-side Stripe move.
-- `STRIPE_WEBHOOK_SECRET` — set ahead of the webhook skeleton going live.
+### CRON_SECRET — server-only secret, required for crons — **set**
+- Vercel Cron sends `Authorization: Bearer <CRON_SECRET>`. All five `/api/cron/*` routes return 401 without it (`lib/cronAuth.ts`, constant-time, trims a pasted trailing newline).
+
+### UNSUBSCRIBE_SECRET — server-only secret, optional — **not set (falls back to CRON_SECRET)**
+- HMAC key for one-tap unsubscribe links, deal-watch stop links, and confirm links (`lib/alertSubscribers.ts`, `lib/dealWatch.ts`).
+- Fallback order: `UNSUBSCRIBE_SECRET` → `CRON_SECRET` → service key. With today's settings the links are signed with `CRON_SECRET`, and everything works.
+- **Recommended:** set `UNSUBSCRIBE_SECRET` to the **same value as the current `CRON_SECRET`**. Links already in people's inboxes keep working, and `CRON_SECRET` can later be rotated without breaking them. Setting it to a *new* value would invalidate every unsubscribe link already sent.
 
 ---
+
+## Email
+
+### RESEND_API_KEY — server-only secret — **set**
+- Sends the Monday report, deal-watch digests, **double opt-in confirm emails** (the Monday report sign-up now requires one; without this key, sign-ups return 503), lead notifications to the owner, and the stale-deal alert.
+
+### ALERTS_FROM — optional — not set (default `PuffPrice <alerts@puffprice.com>`)
+### STALE_ALERT_RECIPIENT — optional — not set (default: the owner's address)
+
+---
+
+## Google
+
+### NEXT_PUBLIC_GA_MEASUREMENT_ID — public — **set**
+- Google Analytics 4 id, read in `app/layout.tsx`. If it's missing, the code falls back to the live id `G-TML9Y6VMC2`, so analytics fire either way.
+- `NEXT_PUBLIC_GA_ID` (the name in older docs) is **not read anywhere**; don't set it.
+
+### GOOGLE_PLACES_API_KEY — server-only secret — **set**
+- Used only by `/api/store-photo/[slug]` (and the local backfill scripts). It stays on the server, and the browser only ever gets Google's key-free photo URL.
+
+### NEXT_PUBLIC_PLACES_PHOTOS — public flag, optional — not set
+- Set it to `1` to show Google Places store photos. Off by default because Places photo billing is off; the UI shows monograms instead.
+
+---
+
+## Payments (Pro, not live yet) — none set
+
+| Variable | Visibility | What happens without it |
+|---|---|---|
+| `STRIPE_SECRET_KEY` | server secret | `/api/stripe/create-checkout` returns 503, and the Pro button falls back to a waitlist sign-up (double opt-in). |
+| `STRIPE_PRO_PRICE_ID` | server | Same. |
+| `STRIPE_WEBHOOK_SECRET` | server secret | `/api/stripe/webhook` returns 503, so Stripe retries until it's configured. |
+| `NEXT_PUBLIC_STRIPE_PRO_CHECKOUT_URL` | public | `/upgrade` shows a mailto link instead of a Stripe Payment Link. |
+| `NEXT_PUBLIC_SITE_URL` | public | Checkout redirect base; defaults to `https://www.puffprice.com`. |
+
+---
+
+## Monitoring and SMS (scaffolded, not live) — none set
+- `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_DSN`: Sentry stays off until these are set.
+- `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_FROM_NUMBER`: the SMS scaffold in `lib/sms.ts` stays off. Alerts go by email only; carriers block cannabis texts.
+
+## Platform and local-only (never set by hand in Vercel)
+- `NODE_ENV`, `VERCEL_ENV`, `NEXT_PUBLIC_VERCEL_ENV`, `NEXT_RUNTIME`: set by Next/Vercel.
+- `PW_PROXY`, `PW_EXECUTABLE_PATH`: the local Playwright scraper on the Mac (`scripts/scrape-rendered-deals.ts`).
+
+---
+
+## Rules
+- **`NEXT_PUBLIC_*` only when the browser must have the value.** Anything secret never gets the prefix; `tests/unit/clientSecrets.test.ts` fails if a secret-looking name does.
+- **No hardcoded secrets or passwords in code.** Public values (the anon key, the GA id, the IndexNow key) are fine.
+- **Rename in one commit.** If a variable is renamed, update the code, this file and Vercel together. The `SUPABASE_SERVICE_KEY` / `SUPABASE_SERVICE_ROLE_KEY` split is the cautionary tale: ten places silently read a name that wasn't set.
 
 ## Sanity check before deploys
-
 ```bash
-# Local dev — confirm all required vars are loaded
-node -e "['NEXT_PUBLIC_SUPABASE_URL','NEXT_PUBLIC_SUPABASE_ANON_KEY','SUPABASE_SERVICE_ROLE_KEY','NEXT_PUBLIC_SITE_URL','STRIPE_SECRET_KEY','STRIPE_PRO_PRICE_ID','STRIPE_FEATURED_PRICE_ID','ADMIN_PASSWORD'].forEach(k => console.log(k.padEnd(38), process.env[k] ? 'OK' : 'MISSING'))"
+node -e "['NEXT_PUBLIC_SUPABASE_URL','NEXT_PUBLIC_SUPABASE_ANON_KEY','SUPABASE_URL','SUPABASE_SERVICE_KEY','CRON_SECRET','RESEND_API_KEY','ADMIN_PASSWORD','GOOGLE_PLACES_API_KEY','NEXT_PUBLIC_GA_MEASUREMENT_ID','UNSUBSCRIBE_SECRET'].forEach(k => console.log(k.padEnd(34), process.env[k] ? 'OK' : 'MISSING'))"
 ```
-
-Run before any production deploy:
-
-```bash
-vercel env ls production
-```
-
-Look for `MISSING` rows or any value that is still the `.env.example` placeholder.
-
----
-
-## Naming standards going forward
-
-- **`NEXT_PUBLIC_*`** — only when the value MUST be available in the browser. Anything secret never gets this prefix.
-- **No alias creep.** If you rename a variable, do a project-wide replace in the same commit. The `SUPABASE_SERVICE_KEY` / `SUPABASE_SERVICE_ROLE_KEY` split that this audit found is the cautionary tale.
-- **`.env.example`** — keep it in sync with this doc. If a new var lands in code, add a placeholder line to `.env.example` in the same PR.
+Then `vercel env ls production` and compare against the "What's set" table above.

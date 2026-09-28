@@ -37,7 +37,7 @@ async function handle(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json(
       {
         skipped: true,
-        reason: "SUPABASE_SERVICE_ROLE_KEY not configured",
+        reason: "Supabase service key not configured (SUPABASE_SERVICE_KEY or SUPABASE_SERVICE_ROLE_KEY)",
         ran_at: new Date().toISOString(),
       },
       { status: 200 }
