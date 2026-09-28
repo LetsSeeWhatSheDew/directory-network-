@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-
-const COOKIE_NAME = "dn_admin_auth";
+import { isAdmin } from "@/lib/adminAuth";
 
 const ALLOWED_REASONS = new Set([
   "duplicate",
@@ -12,21 +11,14 @@ const ALLOWED_REASONS = new Set([
   "other",
 ]);
 
-function checkAuth(req: NextRequest): boolean {
-  const adminPassword = process.env.ADMIN_PASSWORD;
-  if (!adminPassword) return false;
-  const cookie = req.cookies.get(COOKIE_NAME);
-  return cookie?.value === adminPassword;
-}
-
 function supabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
   return { url, key };
 }
 
 export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
-  if (!checkAuth(req)) {
+  if (!(await isAdmin(req))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
 

@@ -3,21 +3,27 @@ import {
   isInCentralIL,
   CANNABIS_IL_NON_CITY_SLUGS,
 } from "./lib/visibility";
+import { isAdmin } from "./lib/adminAuth";
 
-const COOKIE_NAME = "dn_admin_auth";
-
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // Admin auth — read env at request time, never at module eval, so a
   // missing ADMIN_PASSWORD doesn't kill `next build`. If unset, the
-  // /admin paths still redirect to login (no auth cookie can match an
-  // empty expected value).
-  if (pathname.startsWith("/admin")) {
-    const adminPassword = process.env.ADMIN_PASSWORD;
-    const authCookie = req.cookies.get(COOKIE_NAME);
-    if (adminPassword && authCookie?.value === adminPassword) return NextResponse.next();
-    if (req.method === "POST") return NextResponse.next();
+  // /admin paths still redirect to login (no cookie can match).
+  // Every method is gated: App Router pages render for POST too, so letting
+  // POST through (as an earlier version did) served the admin pages — leads,
+  // subscriber data — to anyone who sent a POST.
+  if (pathname === "/admin" || pathname.startsWith("/admin/")) {
+    if (await isAdmin(req)) {
+      const res = NextResponse.next();
+      res.headers.set("Cache-Control", "private, no-store");
+      res.headers.set("X-Robots-Tag", "noindex, nofollow");
+      return res;
+    }
+    if (req.method !== "GET" && req.method !== "HEAD") {
+      return new NextResponse("unauthorized", { status: 401 });
+    }
     const loginUrl = new URL("/admin-login", req.url);
     loginUrl.searchParams.set("from", pathname);
     return NextResponse.redirect(loginUrl);

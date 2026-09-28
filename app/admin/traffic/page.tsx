@@ -78,7 +78,7 @@ export default async function AdminTrafficPage() {
       <main className="pp-container-detail" style={{ padding: "32px 16px" }}>
         <Link href="/admin" style={{ fontSize: ".85rem" }}>← Admin</Link>
         <h1 style={{ margin: "12px 0 4px" }}>Traffic</h1>
-        <p>Couldn&apos;t read the events table. Check that SUPABASE_SERVICE_ROLE_KEY is set for this environment.</p>
+        <p>Couldn&apos;t read the events table. Check that SUPABASE_SERVICE_KEY (or SUPABASE_SERVICE_ROLE_KEY) is set for this environment.</p>
       </main>
     );
   }
