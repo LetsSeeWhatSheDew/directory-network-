@@ -44,6 +44,11 @@ export async function POST(req: NextRequest) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || email.length > 200) {
     return NextResponse.json({ ok: false, error: "Enter a valid email." }, { status: 400 });
   }
+  // At most 3 watch sign-ups per address per 10 minutes (each can send a
+  // confirm email), so this form can't be used to flood someone's inbox.
+  if (rateLimited(`watch-email:${email}`, 3, 10 * 60_000)) {
+    return NextResponse.json({ ok: false, error: "Too many tries. Give it a few minutes." }, { status: 429 });
+  }
 
   let what = "";
   let saved;

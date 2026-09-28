@@ -39,7 +39,8 @@ const ENDPOINT = "/api/track";
 let _vid: string | null = null;
 const _recent = new Map<string, number>();
 
-function optedOut(): boolean {
+/** Do Not Track / Global Privacy Control in this browser → send nothing. Exported for tests. */
+export function optedOut(): boolean {
   try {
     const n = navigator as Navigator & { globalPrivacyControl?: boolean; msDoNotTrack?: string };
     const w = window as Window & { doNotTrack?: string };

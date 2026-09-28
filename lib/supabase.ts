@@ -1,3 +1,4 @@
+import "server-only";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
 // Lazy getter so env-less builds don't crash at module-evaluation time.
