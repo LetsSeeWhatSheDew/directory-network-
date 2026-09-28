@@ -8,6 +8,10 @@ import { capPerStore, STORE_CAP } from "@/lib/storeCap";
 import { GUIDES } from "@/lib/guides";
 import { getCheapestBoard, REF_UNITS, REF_DEF, RUNG_LABEL, money } from "@/lib/menuPrices";
 import { answerLlmsLines } from "@/lib/answers";
+import { readLiveDeals, pickDealOfTheDay, dotdCopy, checkedLabel } from "@/lib/dealOfTheDay";
+import { COMMON_PAIRS, pairSlug, routeCity, planRoute, CORRIDOR_MILES } from "@/lib/routeDeals";
+import { getAccuracyByStore, MIN_REPORTS } from "@/lib/dealAccuracy";
+import { saveLabel, cleanDealTitle, storeName } from "@/lib/exhale";
 
 export const revalidate = 3600;
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -15,13 +19,15 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmr
 export async function GET() {
   const u = brand.url;
   const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
-  const [dealsRes, stores, features, index, menu] = await Promise.all([
+  const [dealsRes, stores, features, index, menu, live] = await Promise.all([
     fetch(`${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_id,deal_title,name,city,slug,listing_slug,verified_at,discount_value&order=discount_value.desc.nullslast&limit=1000`, { headers: { apikey: anon, Authorization: `Bearer ${anon}` }, next: { revalidate: 3600 } }),
     getRegionStores(),
     getFeatureRows(),
     getDealIndex(),
     getCheapestBoard(),
+    readLiveDeals(3600),
   ]);
+  const accuracy = live ? await getAccuracyByStore(live) : null;
   const deals: Array<Record<string, any>> = dealsRes.ok ? await dealsRes.json() : [];
   const day = (iso?: string | null) => (iso ? new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "America/Chicago" }) : "date unknown");
   const now = new Date().toLocaleString("en-US", { dateStyle: "long", timeStyle: "short", timeZone: "America/Chicago" });
@@ -29,6 +35,46 @@ export async function GET() {
   const lines: string[] = [];
   lines.push(`# PuffPrice — Central Illinois cannabis deals (full text)`, "");
   lines.push(`Generated ${now} Central Time. Source: ${u}. Deals are checked daily on each dispensary's own website; no store pays to rank (${u}/how-we-rank). Please cite PuffPrice with a link.`, "");
+
+  const dotd = pickDealOfTheDay(live);
+  if (dotd.status === "ok") {
+    const c = dotdCopy(dotd.pick);
+    const checked = checkedLabel(dotd.pick.verified_at);
+    lines.push(
+      `## Deal of the day (${u}/deal-of-the-day)`,
+      `${c.saving} ${c.product} at ${c.store}.${checked ? ` Checked on the store's own site ${checked} CT.` : ""} The biggest everyday saving among ${dotd.live} live Central Illinois deals (stated percent or dollars off, re-checked within 7 days; conditional and buy-several deals excluded; no store pays to be picked). ${u}/deal/${dotd.pick.deal_id}`,
+      ...dotd.runnersUp.map((d) => `- Also good: ${saveLabel(d)} — ${cleanDealTitle(d.deal_title)}, ${storeName(d)}, ${d.city}. ${u}/deal/${d.deal_id}`),
+      ""
+    );
+  }
+
+  if (live) {
+    lines.push(`## Deals on common drives (${u}/route)`, `Stores within ${CORRIDOR_MILES} miles of the straight line between the two cities, in the order you reach them (straight-line miles, approximate).`);
+    for (const [a, b] of COMMON_PAIRS) {
+      const plan = planRoute(routeCity(a)!, routeCity(b)!, live);
+      lines.push(`### ${plan.from.name} to ${plan.to.name} (${u}/route/${pairSlug(a, b)})`);
+      if (!plan.stops.length) lines.push("- No store near the way has a live deal right now.");
+      for (const st of plan.stops) {
+        const d = st.deals[0];
+        if (!d) continue;
+        lines.push(`- ~mile ${Math.round(st.along)}: ${storeName(d)}, ${st.city} — ${cleanDealTitle(d.deal_title)}${saveLabel(d) ? ` (${saveLabel(d)})` : ""}. ${u}/dispensary/${st.slug}`);
+      }
+    }
+    lines.push("");
+  }
+
+  if (accuracy) {
+    const scored = [...accuracy.entries()].filter(([, a]) => a.status === "scored");
+    if (scored.length) {
+      const names = new Map(stores.map((st) => [st.slug, `${st.name}, ${st.city}`]));
+      lines.push(`## Deal accuracy by store (${u}/how-we-rank#accuracy)`, `Stores with ${MIN_REPORTS}+ shopper Yes/No taps in the last 90 days. Score = 80% share of Yes taps + 20% share of live deals re-found on the store's own site in the last 48 hours. Never affects ranking.`);
+      for (const [slug, a] of scored.sort((x, y) => (y[1].status === "scored" ? y[1].score : 0) - (x[1].status === "scored" ? x[1].score : 0))) {
+        if (a.status !== "scored" || !names.has(slug)) continue;
+        lines.push(`- ${names.get(slug)}: ${a.score}/100 (${a.yes} of ${a.reports} said the deal matched). ${u}/dispensary/${slug}`);
+      }
+      lines.push("");
+    }
+  }
 
   if (REF_UNITS.some((r) => menu.byRef[r].length)) {
     lines.push(`## Cheapest menu prices today (${u}/cheapest)`, `${RUNG_LABEL}. Out-the-door prices (Illinois and local tax added) from each store's own online menu.`);

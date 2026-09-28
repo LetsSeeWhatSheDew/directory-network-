@@ -7,6 +7,7 @@ import { checkCronAuth } from "@/lib/cronAuth";
 import { submitIndexNow } from "@/lib/indexNow";
 import { REGION_CITIES } from "@/lib/waysToBuy";
 import { answerUrlsForIndexNow } from "@/lib/answers";
+import { COMMON_PAIRS, pairSlug } from "@/lib/routeDeals";
 
 export const dynamic = "force-dynamic";
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -26,6 +27,7 @@ export async function GET(req: NextRequest) {
   const urls = [
     u, `${u}/this-week`, `${u}/deal-index`, `${u}/ways-to-buy`, `${u}/open-late`, `${u}/drive-thru`, `${u}/medical`,
     `${u}/deals/all`, `${u}/llms.txt`, `${u}/llms-full.txt`, `${u}/out-the-door`, `${u}/cheapest`, `${u}/status`, `${u}/green-wednesday`,
+    `${u}/deal-of-the-day`, `${u}/price-watch`, ...COMMON_PAIRS.map(([a, b]) => `${u}/route/${pairSlug(a, b)}`),
     `${u}/guides/best-day-for-dispensary-deals`, `${u}/guides/illinois-cannabis-prices-2026`, `${u}/guides/dispensary-first-time-discounts-central-illinois`, `${u}/guides/where-to-buy-near-isu-and-uiuc`, `${u}/guides/buying-cannabis-in-illinois-as-an-out-of-state-visitor`,
     ...REGION_CITIES.map((c) => `${u}/city/${c.toLowerCase().replace(/\s+/g, "-")}`),
     ...slugs.map((s) => `${u}/dispensary/${s}`),

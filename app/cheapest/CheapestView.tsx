@@ -202,6 +202,7 @@ export default function CheapestView({
         We can read {board.stores > 0 ? `${board.stores} store menu${board.stores === 1 ? "" : "s"} ${where} right now` : "only some store menus so far"}. Some stores load
         their menus in ways we can&apos;t read yet, so a store missing here isn&apos;t necessarily more expensive. Taxes come from our{" "}
         <Link href="/illinois-cannabis-tax">Illinois cannabis tax</Link> table; percent-off deals are on <Link href="/out-the-door">out the door</Link>.
+        Want to hear when one of these drops? <Link href="/price-watch">Watch a price</Link>.
       </p>
 
       <h2 className="gp-h2">By city</h2>
