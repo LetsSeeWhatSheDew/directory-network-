@@ -15,6 +15,7 @@
     "test:e2e": "playwright test",
     "test:perf": "node tests/perf/lighthouse-budget.mjs",
     "smoke": "node tests/smoke.mjs",
+    "test:scrapers": "tsx --test tests/scrapers.test.ts tests/scraper-runs.test.ts tests/scrapers.browser.test.ts",
     "scrape:cil": "tsx scripts/scrape-cil-deals.ts",
     "scrape:cil:dry": "tsx scripts/scrape-cil-deals.ts --dry-run",
     "scrape:cil:live": "tsx scripts/scrape-cil-deals.ts --live --apply"

@@ -1,0 +1,330 @@
+{
+ "_fixture": "SYNTHETIC \u2014 written by hand in the exact Jane record shape of the real 2026-07-09 capture (tests/fixtures/jane-algolia-1517-flower.json) to cover vape/edible rules the real flower capture cannot: 1g vs half-gram carts, disposables, brand/bundle specials, a special whose numbers disagree, MED-only and other-store records, 100mg totals vs 10mg-per-piece names, ratio products, chocolates. Not a capture of any live menu.",
+ "vape": {
+  "results": [
+   {
+    "hits": [
+     {
+      "store_id": 1517,
+      "store_types": [
+       "recreational"
+      ],
+      "applicable_special_ids": [],
+      "inventory_potencies": [],
+      "product_id": 9001,
+      "name": "Blue Dream Cart",
+      "brand": "Cresco\u2122",
+      "kind": "vape",
+      "kind_subtype": "Cartridges",
+      "root_subtype": "Cartridges",
+      "available_weights": [
+       "half gram",
+       "gram"
+      ],
+      "price_gram": 45,
+      "price_half_gram": 30,
+      "percent_thc": 85.2
+     },
+     {
+      "store_id": 1517,
+      "store_types": [
+       "recreational"
+      ],
+      "applicable_special_ids": [
+       777
+      ],
+      "inventory_potencies": [],
+      "product_id": 9002,
+      "name": "Sour Diesel Live Resin Cart",
+      "brand": "Good News",
+      "kind": "vape",
+      "kind_subtype": "Cartridges",
+      "available_weights": [
+       "gram"
+      ],
+      "price_gram": 50,
+      "discounted_price_gram": 35,
+      "special_price_gram": {
+       "price": "50.0",
+       "special_id": 777,
+       "discount_price": "35.0",
+       "discount_type": "percent"
+      },
+      "percent_thc": 80
+     },
+     {
+      "store_id": 1517,
+      "store_types": [
+       "recreational"
+      ],
+      "applicable_special_ids": [],
+      "inventory_potencies": [],
+      "product_id": 9003,
+      "name": "Mango AIO",
+      "brand": "Rove",
+      "kind": "vape",
+      "kind_subtype": "Disposables",
+      "available_weights": [
+       "gram"
+      ],
+      "price_gram": 40
+     },
+     {
+      "store_id": 1517,
+      "store_types": [
+       "recreational"
+      ],
+      "applicable_special_ids": [],
+      "inventory_potencies": [],
+      "product_id": 9004,
+      "name": "Half Gram Only Cart",
+      "brand": "Aeriz",
+      "kind": "vape",
+      "kind_subtype": "Cartridges",
+      "available_weights": [
+       "half gram"
+      ],
+      "price_half_gram": 25
+     },
+     {
+      "store_id": 1517,
+      "store_types": [
+       "recreational"
+      ],
+      "applicable_special_ids": [],
+      "inventory_potencies": [],
+      "product_id": 9005,
+      "name": "Brand Special Cart",
+      "brand": "Verano",
+      "kind": "vape",
+      "kind_subtype": "Cartridges",
+      "available_weights": [
+       "gram"
+      ],
+      "price_gram": 55,
+      "brand_special_prices": {
+       "gram": {
+        "price": "55.0",
+        "discount_price": "30.0"
+       }
+      },
+      "applicable_bundle_special_ids": {
+       "qualify": [
+        888
+       ],
+       "discount": [
+        888
+       ]
+      }
+     },
+     {
+      "store_id": 1517,
+      "store_types": [
+       "recreational"
+      ],
+      "applicable_special_ids": [
+       999
+      ],
+      "inventory_potencies": [],
+      "product_id": 9006,
+      "name": "Mismatched Special Cart",
+      "brand": "Ozone",
+      "kind": "vape",
+      "kind_subtype": "Cartridges",
+      "available_weights": [
+       "gram"
+      ],
+      "price_gram": 45,
+      "discounted_price_gram": 20,
+      "special_price_gram": {
+       "price": "60.0",
+       "special_id": 999,
+       "discount_price": "30.0"
+      }
+     },
+     {
+      "store_id": 1517,
+      "store_types": [
+       "medical"
+      ],
+      "applicable_special_ids": [],
+      "inventory_potencies": [],
+      "product_id": 9007,
+      "name": "Medical Only Cart",
+      "brand": "Revolution",
+      "kind": "vape",
+      "kind_subtype": "Cartridges",
+      "available_weights": [
+       "gram"
+      ],
+      "price_gram": 20
+     },
+     {
+      "store_id": 1518,
+      "store_types": [
+       "recreational"
+      ],
+      "applicable_special_ids": [],
+      "inventory_potencies": [],
+      "product_id": 9008,
+      "name": "Wrong Store Cart",
+      "brand": "Revolution",
+      "kind": "vape",
+      "kind_subtype": "Cartridges",
+      "available_weights": [
+       "gram"
+      ],
+      "price_gram": 15
+     },
+     {
+      "store_id": 1517,
+      "store_types": [
+       "recreational"
+      ],
+      "applicable_special_ids": [],
+      "inventory_potencies": [],
+      "product_id": 9009,
+      "name": "Each-priced 1g Cart",
+      "brand": "Find.",
+      "kind": "vape",
+      "kind_subtype": "Cartridges",
+      "available_weights": [
+       "each"
+      ],
+      "price_each": 38,
+      "amount": "1g"
+     }
+    ],
+    "nbHits": 9,
+    "nbPages": 1,
+    "page": 0
+   }
+  ]
+ },
+ "edible": {
+  "results": [
+   {
+    "hits": [
+     {
+      "store_id": 1517,
+      "store_types": [
+       "recreational"
+      ],
+      "applicable_special_ids": [],
+      "inventory_potencies": [],
+      "product_id": 9101,
+      "name": "Watermelon Gummies 100mg",
+      "brand": "Wyld",
+      "kind": "edible",
+      "kind_subtype": "Gummies",
+      "available_weights": [
+       "each"
+      ],
+      "price_each": 22,
+      "amount": "100mg"
+     },
+     {
+      "store_id": 1517,
+      "store_types": [
+       "recreational"
+      ],
+      "applicable_special_ids": [],
+      "inventory_potencies": [],
+      "product_id": 9102,
+      "name": "Sour Cherry 10pk 10mg Gummies",
+      "brand": "Camino",
+      "kind": "edible",
+      "kind_subtype": "Gummies",
+      "available_weights": [
+       "each"
+      ],
+      "price_each": 20,
+      "amount": "100mg"
+     },
+     {
+      "store_id": 1517,
+      "store_types": [
+       "recreational"
+      ],
+      "applicable_special_ids": [],
+      "inventory_potencies": [],
+      "product_id": 9103,
+      "name": "1:1 CBD:THC Gummies 100mg",
+      "brand": "Wyld",
+      "kind": "edible",
+      "kind_subtype": "Gummies",
+      "available_weights": [
+       "each"
+      ],
+      "price_each": 24,
+      "amount": "100mg"
+     },
+     {
+      "store_id": 1517,
+      "store_types": [
+       "recreational"
+      ],
+      "applicable_special_ids": [],
+      "inventory_potencies": [],
+      "product_id": 9104,
+      "name": "Dark Chocolate Bar 100mg",
+      "brand": "Kiva",
+      "kind": "edible",
+      "kind_subtype": "Chocolates",
+      "available_weights": [
+       "each"
+      ],
+      "price_each": 21,
+      "amount": "100mg"
+     },
+     {
+      "store_id": 1517,
+      "store_types": [
+       "recreational"
+      ],
+      "applicable_special_ids": [],
+      "inventory_potencies": [],
+      "product_id": 9105,
+      "name": "Lemon Chews",
+      "brand": "Betty's Eddies",
+      "kind": "edible",
+      "kind_subtype": "Chews",
+      "available_weights": [
+       "each"
+      ],
+      "price_each": 18,
+      "amount": "200mg"
+     },
+     {
+      "store_id": 1517,
+      "store_types": [
+       "recreational"
+      ],
+      "applicable_special_ids": [
+       555
+      ],
+      "inventory_potencies": [],
+      "product_id": 9106,
+      "name": "Grape Gummies 100mg",
+      "brand": "Incredibles",
+      "kind": "edible",
+      "kind_subtype": "Gummies",
+      "available_weights": [
+       "each"
+      ],
+      "price_each": 25,
+      "discounted_price_each": 17.5,
+      "special_price_each": {
+       "price": "25.0",
+       "special_id": 555,
+       "discount_price": "17.5"
+      }
+     }
+    ],
+    "nbHits": 6,
+    "nbPages": 1,
+    "page": 0
+   }
+  ]
+ }
+}
