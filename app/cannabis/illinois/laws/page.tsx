@@ -86,7 +86,7 @@ export default function IllinoisLawsPage() {
         .laws-cta { background:var(--pp-canopy); border-radius: 16px; padding: 32px; text-align: center; margin-top: 48px; }
         .laws-cta-title { font-size: 1.3rem; font-weight: 700; color:var(--pp-on-dark); margin-bottom: 10px; }
         .laws-cta-sub { font-size: 0.875rem; color:var(--pp-canopy-eyebrow); font-family: var(--font-body); margin-bottom: 20px; }
-        .laws-cta-btn { display: inline-block; background:var(--pp-signal-fill); color:var(--pp-on-dark); padding: 12px 28px; border-radius: 8px; text-decoration: none; font-family: var(--font-body); font-weight: 700; font-size: 0.9rem; }
+        .laws-cta-btn { display: inline-block; background:var(--pp-btn);color:var(--pp-btn-fg);border:1px solid var(--pp-btn-border); padding: 12px 28px; border-radius: 8px; text-decoration: none; font-family: var(--font-body); font-weight: 700; font-size: 0.9rem; }
         .laws-footer { background:var(--pp-canopy); padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 80px; }
         .laws-footer-brand { font-size: 1rem; font-weight: 700; color:var(--pp-on-dark); font-family:var(--font-display), system-ui, sans-serif; }
         .laws-footer-note { font-size: 0.78rem; color:var(--pp-body); font-family: var(--font-body); }

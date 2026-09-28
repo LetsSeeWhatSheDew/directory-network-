@@ -20,7 +20,7 @@
 // page shows an honest empty state.
 // =============================================================================
 
-import { getCityProfile, milesBetween } from "./cityProfiles";
+import { cityCenter, milesBetween } from "./cityProfiles";
 import { CENTRAL_IL_CITIES } from "./constants/regions";
 
 export type RefUnit = "eighth" | "cart_1g" | "gummies_100mg";
@@ -86,19 +86,8 @@ export const MENU_FRESH_HOURS = 36;
 /** Stores within this many miles of a city count as "near" it. */
 export const NEAR_MILES = 15;
 
-// Approximate city centers for the three scope cities with no store of their
-// own (not in lib/cityProfiles, which only profiles cities with stores).
-const EXTRA_CENTERS: Record<string, { lat: number; lng: number }> = {
-  bartonville: { lat: 40.6503, lng: -89.6523 },
-  morton: { lat: 40.6128, lng: -89.4593 },
-  washington: { lat: 40.7036, lng: -89.4073 },
-};
-
-export function cityCenter(slug: string): { lat: number; lng: number } | null {
-  const p = getCityProfile(slug);
-  if (p) return { lat: p.lat, lng: p.lng };
-  return EXTRA_CENTERS[slug] || null;
-}
+// City centers live in lib/cityProfiles (shared with the homepage orb).
+export { cityCenter };
 
 export function cityName(slug: string): string | null {
   return CENTRAL_IL_CITIES.find((c) => c.slug === slug)?.name || null;

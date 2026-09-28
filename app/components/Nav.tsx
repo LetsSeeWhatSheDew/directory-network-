@@ -82,7 +82,7 @@ export default function Nav({ variant = "light", sticky = true }: Props) {
           position: relative;
           z-index: 50;
           width: 100%;
-          transition: background-color 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
+          transition: none;
         }
         .pp-nav-inner {
           display: flex;
@@ -113,7 +113,7 @@ export default function Nav({ variant = "light", sticky = true }: Props) {
           letter-spacing: -0.005em;
           text-decoration: none;
           padding: 0.5rem 0;
-          transition: color 160ms ease;
+          transition: none;
           white-space: nowrap;
         }
         .pp-nav-actions { display: flex; align-items: center; gap: 0.625rem; }

@@ -18,6 +18,7 @@ export default function SavingsCallout({ initialSavings }: { initialSavings: num
     try {
       const c = sessionStorage.getItem("cl_city");
       const trimmed = typeof c === "string" ? c.trim() : "";
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reads browser-only state (storage/DOM) after hydration
       if (trimmed) setCity(trimmed);
     } catch {}
 

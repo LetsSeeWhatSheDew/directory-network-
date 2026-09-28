@@ -190,7 +190,7 @@ export default async function PuffPriceIndexCard() {
           height:100%;
           background:var(--pp-signal-fill);
           border-radius:100px;
-          transition:width .4s ease-out;
+          transition:none;
         }
         .ppi-meta{
           font-family:var(--font-body);

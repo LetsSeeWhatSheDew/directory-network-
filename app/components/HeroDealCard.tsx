@@ -137,6 +137,7 @@ export default function HeroDealCard({
     } catch {}
 
     if (cached) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reads browser-only state (storage/DOM) after hydration
       setCity(cached);
       setResolved(true);
       fetchRecommendation(cached, controller.signal).then((data) => {
@@ -203,7 +204,7 @@ export default function HeroDealCard({
         <div className="skeleton-subline" style={{ width: "85%" }} />
         <div className="skeleton-cta" />
         <style>{`
-          .skeleton-savings{height:54px;width:62%;background:linear-gradient(90deg,var(--pp-paper) 0%,#f8f6f0 50%,var(--pp-paper) 100%);background-size:200% 100%;animation:cl-shimmer 1.4s linear infinite;border-radius:8px;margin:8px 0 4px}
+          .skeleton-savings{height:54px;width:62%;background:linear-gradient(90deg,var(--pp-paper) 0%,#f8f6f0 50%,var(--pp-paper) 100%);background-size:200% 100%;animation:cl-shimmer calc(1400ms * var(--pp-pace)) linear infinite;border-radius:8px;margin:8px 0 4px}
           .skeleton-subline{height:12px;width:40%;background:var(--pp-paper);border-radius:6px;margin-bottom:18px}
           .skeleton-name{height:18px;width:70%;background:var(--pp-paper);border-radius:6px;margin-bottom:8px}
           .skeleton-cta{height:46px;background:var(--pp-paper);border-radius:10px;margin-top:18px}
@@ -224,9 +225,9 @@ export default function HeroDealCard({
         <div className="hero-deal-label" style={{ color: "var(--pp-muted)" }}>
           {city ? `Deals near ${city}` : "Central Illinois deals"}
         </div>
-        <div className="hero-deal-empty-headline">Pulling today's deals…</div>
+        <div className="hero-deal-empty-headline">Pulling today&apos;s deals…</div>
         <p className="hero-deal-empty-sub">
-          We're re-verifying with Central Illinois dispensaries right now.
+          We&apos;re re-verifying with Central Illinois dispensaries right now.
           Browse the directory while we finish.
         </p>
         <Link href="/dispensaries" className="hero-deal-cta hero-deal-empty-cta">

@@ -403,3 +403,6 @@ function resolve(deal: Deal, anchors: Anchor[]): Resolution {
   }
   console.log(`\nDone. ${ok} applied, ${fail} failed.`);
 })();
+
+// Module scope, so this file's top-level consts don't collide with other scripts under `tsc --noEmit`.
+export {};

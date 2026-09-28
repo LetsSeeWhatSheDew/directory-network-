@@ -1,5 +1,6 @@
 // app/admin/leads/page.tsx
 import Link from "next/link";
+import { MarkC } from "@/app/components/Logo";
 
 type Lead = {
   id: string;
@@ -35,9 +36,9 @@ const FILTERS = [
 ];
 
 const STATUS_STYLES: Record<string, string> = {
-  new: "bg-[#93CB5C]/15 text-[#93CB5C] border-[#93CB5C]/30",
-  reviewed: "bg-blue-500/15 text-blue-300 border-blue-400/30",
-  converted: "bg-purple-500/15 text-purple-300 border-purple-400/30",
+  new: "bg-(--pp-best-tint) text-(--pp-mark) border-(--pp-best-border)",
+  reviewed: "bg-(--pp-note-bg) text-(--pp-note-fg) border-(--pp-note-edge)",
+  converted: "bg-(--pp-surface) text-(--pp-ink) border-(--pp-border-2)",
 };
 
 function formatDate(value: string | null) {
@@ -96,19 +97,17 @@ export default async function AdminLeadsPage({
   const newLeads = leads.filter((l) => l.status === "new").length;
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-50">
+    <main className="min-h-screen text-(--pp-ink)">
       {/* Top bar */}
-      <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur">
+      <header className="border-b border-(--pp-border) bg-(--pp-surface)">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:py-4">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#93CB5C] text-xs font-semibold text-slate-900 shadow-sm">
-              PG
-            </div>
+            <MarkC size={32} />
             <div className="flex flex-col">
               <span className="text-sm font-semibold tracking-tight">
                 PuffPrice · Admin
               </span>
-              <span className="text-xs text-slate-400">
+              <span className="text-xs text-(--pp-muted)">
                 Leads inbox · listing requests
               </span>
             </div>
@@ -116,7 +115,7 @@ export default async function AdminLeadsPage({
 
           <Link
             href="/"
-            className="rounded-full border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-200 shadow-sm hover:bg-slate-800"
+            className="rounded-full border border-(--pp-border-2) bg-(--pp-surface) px-3 py-1.5 text-xs font-medium text-(--pp-ink) hover:bg-(--pp-paper)"
           >
             ← Back to site
           </Link>
@@ -131,20 +130,20 @@ export default async function AdminLeadsPage({
               <h1 className="text-xl font-semibold tracking-tight md:text-2xl">
                 Leads inbox
               </h1>
-              <p className="text-xs text-slate-400 md:text-sm">
-                All "Get Listed" submissions, newest first.
+              <p className="text-xs text-(--pp-muted) md:text-sm">
+                All &quot;Get Listed&quot; submissions, newest first.
               </p>
             </div>
 
             <div className="flex flex-wrap gap-2 text-[11px] md:text-xs">
-              <span className="inline-flex items-center rounded-full bg-slate-900 px-3 py-1 text-slate-200">
+              <span className="inline-flex items-center rounded-full border border-(--pp-border) bg-(--pp-surface) px-3 py-1 text-(--pp-body)">
                 Total:{" "}
-                <span className="ml-1 font-semibold text-[#93CB5C]">
+                <span className="ml-1 font-semibold text-(--pp-mark)">
                   {leads.length}
                 </span>
               </span>
               {newLeads > 0 && (
-                <span className="inline-flex items-center rounded-full bg-[#93CB5C]/15 px-3 py-1 text-[#93CB5C]">
+                <span className="inline-flex items-center rounded-full bg-(--pp-best-tint) px-3 py-1 text-(--pp-mark)">
                   New:{" "}
                   <span className="ml-1 font-semibold">{newLeads}</span>
                 </span>
@@ -166,10 +165,10 @@ export default async function AdminLeadsPage({
                   key={f.value}
                   href={href}
                   className={[
-                    "inline-flex items-center rounded-full border px-3 py-1 transition-colors",
+                    "inline-flex items-center rounded-full border px-3 py-1 ",
                     isActive
-                      ? "border-[#93CB5C] bg-[#93CB5C]/15 text-[#93CB5C]"
-                      : "border-slate-700 bg-slate-900 text-slate-300 hover:border-slate-500 hover:bg-slate-800",
+                      ? "border-(--pp-best-border) bg-(--pp-best-tint) text-(--pp-mark)"
+                      : "border-(--pp-border) bg-(--pp-surface) text-(--pp-body) hover:border-(--pp-border-2) hover:text-(--pp-ink)",
                   ].join(" ")}
                 >
                   {f.label}
@@ -181,8 +180,8 @@ export default async function AdminLeadsPage({
 
         {/* No data state */}
         {leads.length === 0 && (
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/60 px-4 py-8 text-center text-sm text-slate-400 md:px-8">
-            <p>No leads yet. Once someone submits the "Get Listed" form, they&apos;ll appear here.</p>
+          <div className="rounded-2xl border border-(--pp-border) bg-(--pp-surface) px-4 py-8 text-center text-sm text-(--pp-muted) md:px-8">
+            <p>No leads yet. Once someone submits the &quot;Get Listed&quot; form, they&apos;ll appear here.</p>
           </div>
         )}
 
@@ -196,7 +195,7 @@ export default async function AdminLeadsPage({
               return (
                 <article
                   key={lead.id}
-                  className="rounded-2xl border border-slate-800 bg-slate-900/60 px-4 py-3 text-xs text-slate-100 shadow-sm md:px-5 md:py-4 md:text-sm"
+                  className="rounded-2xl border border-(--pp-border) bg-(--pp-surface) px-4 py-3 text-xs text-(--pp-ink) md:px-5 md:py-4 md:text-sm"
                 >
                   <div className="mb-2 flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
                     <div className="space-y-0.5">
@@ -204,7 +203,7 @@ export default async function AdminLeadsPage({
                         <h2 className="text-sm font-semibold md:text-base">
                           {lead.business_name}
                         </h2>
-                        <span className="inline-flex items-center rounded-full bg-slate-800 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-slate-200">
+                        <span className="inline-flex items-center rounded-full bg-(--pp-paper) px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-(--pp-body)">
                           {nicheLabel}
                         </span>
                         <span
@@ -216,19 +215,19 @@ export default async function AdminLeadsPage({
                           {lead.status}
                         </span>
                       </div>
-                      <div className="flex flex-wrap gap-3 text-[11px] text-slate-400 md:text-xs">
+                      <div className="flex flex-wrap gap-3 text-[11px] text-(--pp-muted) md:text-xs">
                         <span>{formatDate(lead.created_at)}</span>
-                        <span className="text-slate-600">•</span>
-                        <span>Tier: <span className="text-slate-200">{lead.tier_interest}</span></span>
-                        <span className="text-slate-600">•</span>
+                        <span className="text-(--pp-border-2)">•</span>
+                        <span>Tier: <span className="text-(--pp-ink)">{lead.tier_interest}</span></span>
+                        <span className="text-(--pp-border-2)">•</span>
                         <span>{lead.region}</span>
                       </div>
                     </div>
 
-                    <div className="mt-1 flex flex-col items-start gap-1 text-[11px] text-slate-300 md:mt-0 md:items-end">
-                      <span className="font-medium text-slate-100">{lead.email}</span>
+                    <div className="mt-1 flex flex-col items-start gap-1 text-[11px] text-(--pp-body) md:mt-0 md:items-end">
+                      <span className="font-medium text-(--pp-ink)">{lead.email}</span>
                       {lead.phone && (
-                        <span className="text-slate-400">{lead.phone}</span>
+                        <span className="text-(--pp-muted)">{lead.phone}</span>
                       )}
                     </div>
                   </div>

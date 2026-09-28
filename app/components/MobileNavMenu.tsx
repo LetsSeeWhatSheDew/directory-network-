@@ -10,9 +10,9 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Logo from "./Logo";
-import { longestExhale, productOf, storeWithCity, type ExDeal } from "../../lib/exhale";
+import { amountOf, nearestExhale, nearSubline, type ExDeal } from "../../lib/exhale";
 
-const toEx = (d: ApiDeal): ExDeal => ({ name: d.store, city: d.city, deal_title: d.title, discount_value: d.discount_value, discount_unit: d.discount_unit });
+const toEx = (d: ApiDeal): ExDeal => ({ name: d.store, city: d.city, deal_title: d.title, discount_value: d.discount_value, discount_unit: d.discount_unit, discount_type: d.discount_type });
 
 type Variant = "light" | "deep";
 type Props = { variant?: Variant };
@@ -23,6 +23,7 @@ type ApiDeal = {
   title: string | null;
   discount_value: number | null;
   discount_unit: string | null;
+  discount_type?: string | null;
   url: string;
 };
 
@@ -37,13 +38,10 @@ function readCookieCity(): string | null {
   }
 }
 
+// Same honest amount as the orb (lib/exhale amountOf): set prices ("2 for $60") aren't savings.
 function amount(d: ApiDeal): string | null {
-  const v = Number(d.discount_value);
-  if (!Number.isFinite(v) || v <= 0) return null;
-  const u = (d.discount_unit || "").toLowerCase();
-  if (u === "dollars") return `$${Math.round(v)} off`;
-  if ((u === "percent" || !u) && v <= 100) return `${Math.round(v)}% off`;
-  return null;
+  const a = amountOf(toEx(d));
+  return a ? `${a.big} off` : null;
 }
 
 const GROUPS: { title: string; items: { href: string; label: string; hint: string }[] }[] = [
@@ -82,6 +80,7 @@ export default function MobileNavMenu({ variant = "light" }: Props) {
   const [open, setOpen] = useState(false);
   const [city, setCity] = useState<string | null>(null);
   const [best, setBest] = useState<ApiDeal | null>(null);
+  const [bestLine, setBestLine] = useState<string | null>(null);
   const [count, setCount] = useState<number | null>(null);
 
   useEffect(() => {
@@ -90,6 +89,7 @@ export default function MobileNavMenu({ variant = "light" }: Props) {
     document.addEventListener("keydown", onKey);
     document.documentElement.classList.add("pp-menu-open");
     const c = readCookieCity();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reads browser-only state (storage/DOM) after hydration
     setCity(c);
     let alive = true;
     fetch("/api/public/deals")
@@ -97,10 +97,12 @@ export default function MobileNavMenu({ variant = "light" }: Props) {
       .then((j) => {
         if (!alive || !j) return;
         const all: ApiDeal[] = Array.isArray(j.deals) ? j.deals : [];
-        // Same pick as the homepage orb: real everyday amounts only, no "up to" or conditional deals, local city first.
+        // Same pick as the homepage orb (lib/exhale nearestExhale): biggest
+        // everyday saving within ~25 mi of the city above, widening and saying so.
         const ex = all.map(toEx);
-        const pick = longestExhale(ex, c);
-        setBest(pick ? all[ex.indexOf(pick)] : null);
+        const pick = nearestExhale(ex, c ? { city: c } : null);
+        setBest(pick ? all[ex.indexOf(pick.deal)] : null);
+        setBestLine(pick ? nearSubline(pick) : null);
         const n = typeof j.count === "number" ? j.count : all.length;
         setCount(n > 0 ? n : null);
       })
@@ -112,7 +114,7 @@ export default function MobileNavMenu({ variant = "light" }: Props) {
     };
   }, [open]);
 
-  const stroke = variant === "deep" ? "#F4F5EF" : "var(--pp-ink)";
+  const stroke = variant === "deep" ? "var(--pp-canopy-text)" : "var(--pp-ink)";
   const close = () => setOpen(false);
 
   return (
@@ -164,7 +166,7 @@ export default function MobileNavMenu({ variant = "light" }: Props) {
               {best ? (
                 <>
                   <span className="pm-exhale-amt">{amount(best)}</span>
-                  <span className="pm-exhale-where">{`${productOf(toEx(best))} at ${storeWithCity(toEx(best))}`}</span>
+                  <span className="pm-exhale-where">{bestLine}</span>
                 </>
               ) : (
                 <span className="pm-exhale-where">See every deal checked this morning →</span>
@@ -202,7 +204,7 @@ export default function MobileNavMenu({ variant = "light" }: Props) {
       )}
 
       <style>{`
-        .mobile-hamburger{display:none;background:transparent;border:none;cursor:pointer;padding:8px;margin:0;border-radius:999px;min-width:44px;min-height:44px;align-items:center;justify-content:center;transition:background-color 160ms ease,transform 160ms ease}
+        .mobile-hamburger{display:none;background:transparent;border:none;cursor:pointer;padding:8px;margin:0;border-radius:999px;min-width:44px;min-height:44px;align-items:center;justify-content:center;transition:transform calc(160ms * var(--pp-pace)) ease}
         .mobile-hamburger:active{transform:scale(.94)}
         .mobile-hamburger:hover{background:color-mix(in srgb,var(--pp-ink) 6%,transparent)}
         @media(max-width:880px){.mobile-hamburger{display:inline-flex}.desktop-only-nav{display:none !important}}
@@ -210,10 +212,10 @@ export default function MobileNavMenu({ variant = "light" }: Props) {
         html.pp-menu-open{overflow:hidden}
         html.pp-menu-open .pp-sticky-mobile-cta{display:none !important}
 
-        .pm{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;background:var(--pp-paper);color:var(--pp-ink);animation:pm-in .32s cubic-bezier(.16,1,.3,1) both}
+        .pm{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;background:var(--pp-paper);color:var(--pp-ink);animation:pm-in calc(320ms * var(--pp-pace)) cubic-bezier(.16,1,.3,1) both}
         @keyframes pm-in{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
         .pm::before{content:"";position:absolute;inset:0 0 auto 0;height:260px;pointer-events:none;background:radial-gradient(420px 220px at 80% 0%,var(--pp-warm,#F6DCC6) 0%,transparent 70%);opacity:.55}
-        html[data-daypart="night"] .pm::before{background:radial-gradient(420px 220px at 80% 0%,#24453A 0%,transparent 70%);opacity:.8}
+        html[data-daypart="night"] .pm::before{background:radial-gradient(420px 220px at 80% 0%,var(--pp-warm) 0%,transparent 70%);opacity:.8}
         .pm-top{position:relative;display:flex;align-items:center;justify-content:space-between;padding:10px clamp(1rem,4vw,2rem)}
         .pm-logo{display:inline-flex;align-items:center;min-height:44px}
         .pm-close{background:transparent;border:none;color:var(--pp-ink);min-width:44px;min-height:44px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
@@ -222,7 +224,7 @@ export default function MobileNavMenu({ variant = "light" }: Props) {
         .pm-where{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:.95rem;color:var(--pp-muted)}
         .pm-where b{color:var(--pp-ink);font-weight:600}
         .pm-change{background:transparent;border:1px solid var(--pp-border);color:var(--pp-ink);border-radius:999px;padding:8px 14px;min-height:40px;font:inherit;font-size:.9rem;cursor:pointer}
-        .pm-exhale{display:flex;flex-direction:column;gap:2px;padding:16px 18px;border-radius:18px;text-decoration:none;color:var(--pp-ink);background:var(--pp-surface);border:1px solid var(--pp-border);transition:transform .16s ease}
+        .pm-exhale{display:flex;flex-direction:column;gap:2px;padding:16px 18px;border-radius:18px;text-decoration:none;color:var(--pp-ink);background:var(--pp-surface);border:1px solid var(--pp-border);transition:transform calc(160ms * var(--pp-pace)) ease}
         .pm-exhale:active{transform:scale(.985)}
         .pm-exhale-label{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--pp-muted)}
         .pm-exhale-amt{font-family:var(--font-body);font-weight:700;font-size:2.25rem;letter-spacing:-.04em;line-height:1.1;color:var(--pp-ink)}
@@ -236,9 +238,8 @@ export default function MobileNavMenu({ variant = "light" }: Props) {
         .pm-item-label{display:block;font-size:1.05rem;font-weight:600}
         .pm-item-hint{display:block;font-size:.85rem;color:var(--pp-muted);margin-top:1px}
         .pm-chev{font-size:1.4rem;color:var(--pp-muted);line-height:1}
-        .pm-alerts{display:flex;flex-direction:column;align-items:center;gap:2px;padding:14px 18px;border-radius:999px;background:var(--pp-canopy);color:var(--pp-canopy-text);text-decoration:none;font-weight:600;font-size:1.02rem;text-align:center}
+        .pm-alerts{display:flex;flex-direction:column;align-items:center;gap:2px;padding:14px 18px;border-radius:999px;background:var(--pp-btn);color:var(--pp-btn-fg);border:1px solid var(--pp-btn-border);text-decoration:none;font-weight:600;font-size:1.02rem;text-align:center}
         .pm-alerts small{font-weight:400;font-size:.8rem;opacity:.85}
-        html[data-daypart="night"] .pm-alerts{background:#9FE0B0;color:#0E1A15}
         .pm-small{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;font-size:.88rem}
         .pm-small a{color:var(--pp-muted);text-decoration:none;padding:8px 2px}
         @media (prefers-reduced-motion: reduce){.pm{animation:none}}

@@ -11,6 +11,7 @@ export default function RecentlyViewedRow() {
   const [items, setItems] = useState<RecentItem[]>([]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reads browser-only state (storage/DOM) after hydration
     setItems(getRecentlyViewed());
   }, []);
 
@@ -62,7 +63,7 @@ export default function RecentlyViewedRow() {
               fontFamily: "var(--font-body)",
               minWidth: 160,
               maxWidth: 240,
-              transition: "border-color .15s",
+              transition: "none",
             }}
           >
             <div

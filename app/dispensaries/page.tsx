@@ -124,7 +124,7 @@ export default async function DispensariesIndexPage() {
   const cities = Array.from(byCity.keys()).sort();
 
   return (
-    <div style={{ fontFamily: "var(--font-display), system-ui, sans-serif", background: "var(--pp-paper)", minHeight: "100vh", color: "var(--pp-ink)" }}>
+    <div style={{ fontFamily: "var(--font-body)", minHeight: "100vh", color: "var(--pp-ink)" }}>
       <div>
         <Nav variant="light" />
         <header style={{ color: "var(--pp-ink)", padding: "clamp(2.5rem, 6vw, 5rem) clamp(1rem, 4vw, 2rem) clamp(2rem, 4vw, 4rem)", textAlign: "center", position: "relative", zIndex: 2 }}>
@@ -134,7 +134,7 @@ export default async function DispensariesIndexPage() {
           <h1 style={{ fontFamily: "var(--font-body)", fontWeight: 800, fontSize: "clamp(2rem, 5vw, 3.25rem)", letterSpacing: "-0.035em", lineHeight: 1.1, color: "var(--pp-ink)", marginBottom: 12 }}>
             Every licensed Central Illinois dispensary
           </h1>
-          <p style={{ color: "var(--pp-muted)", fontFamily: "var(--font-body)", fontWeight: 500, maxWidth: 580, margin: "0 auto", lineHeight: 1.6 }}>
+          <p style={{ color: "var(--pp-body)", fontFamily: "var(--font-body)", fontWeight: 500, maxWidth: 580, margin: "0 auto", lineHeight: 1.6 }}>
             {listings.length} dispensaries across {cities.length} cities. Click a city to see deals
             and hours, or jump to a specific store.
           </p>
@@ -179,8 +179,8 @@ export default async function DispensariesIndexPage() {
                           href={`/dispensary/${l.slug}`}
                           style={{
                             background: "var(--pp-surface)",
-                            border: l.plan === "featured" ? "2px solid #2E7D32" : "1px solid #DCDED2",
-                            borderRadius: 10,
+                            border: l.plan === "featured" ? "1px solid var(--pp-best-border)" : "1px solid var(--pp-border)",
+                            borderRadius: 14,
                             padding: 14,
                             textDecoration: "none",
                             color: "var(--pp-ink)",
@@ -190,7 +190,7 @@ export default async function DispensariesIndexPage() {
                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
                             <div style={{ fontSize: ".95rem", fontWeight: 700 }}>{display}</div>
                             {l.plan === "featured" && (
-                              <span style={{ fontSize: ".62rem", background: "var(--pp-signal-fill)", color: "var(--pp-on-dark)", padding: "2px 7px", borderRadius: 100, fontFamily: "var(--font-body)", fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase" }}>
+                              <span style={{ fontSize: ".62rem", background: "var(--pp-best-tint)", color: "var(--pp-signal-ink)", padding: "2px 7px", borderRadius: 100, fontFamily: "var(--font-body)", fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase" }}>
                                 Featured
                               </span>
                             )}

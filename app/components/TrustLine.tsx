@@ -18,9 +18,8 @@ export default function TrustLine({
   return (
     <p
       style={{
-        fontFamily: "var(--font-mono), ui-monospace, monospace",
-        fontSize: ".7rem",
-        letterSpacing: ".02em",
+        fontFamily: "var(--font-body)",
+        fontSize: ".8rem",
         color,
         margin: "6px 0 0",
         lineHeight: 1.6,

@@ -5,7 +5,9 @@
 // all three via internal linking.
 
 import Link from "next/link";
-import { saveLabel, isConditional, cleanDealTitle } from "@/lib/exhale";
+import { saveLabel, isConditional, cleanDealTitle, amountOf, directionsHref, EXHALE_LINES } from "@/lib/exhale";
+import ExhaleCard from "../../components/ExhaleCard";
+import EmptyBreath from "../../components/EmptyBreath";
 import OtdLine from "../../components/OtdLine";
 import WatchControl from "../../components/WatchControl";
 import { priceChip, cityTaxRates } from "@/lib/otd";
@@ -460,7 +462,7 @@ export default async function CityPage({
     <>
       <style>{`
         .cp{max-width:880px;margin:0 auto;padding:clamp(1.5rem,4vw,2.75rem) clamp(1rem,4vw,1.5rem) 4rem;color:var(--pp-body)}
-        .cp-crumb{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--pp-muted);margin-bottom:.9rem}
+        .cp-crumb{font-family:var(--font-body);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--pp-muted);margin-bottom:.9rem}
         .cp-crumb a{color:inherit;text-decoration:none}
         .cp-crumb a:hover{color:var(--pp-signal-ink)}
         .cp h1{font-family:var(--font-display);font-size:clamp(2rem,5vw,3rem);line-height:1.02;letter-spacing:-.035em;color:var(--pp-ink);font-weight:700;margin:0 0 .9rem}
@@ -475,11 +477,11 @@ export default async function CityPage({
         .cp-tick:last-child{border-right:none}
         .cp-tick-n{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-size:clamp(1.5rem,4vw,2rem);font-weight:600;color:var(--pp-ink);line-height:1}
         .cp-tick-n.sig{color:var(--pp-signal)}
-        .cp-tick-l{font-family:var(--font-mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--pp-muted);margin-top:.4rem}
-        .cp-asof{font-family:var(--font-mono);font-size:.68rem;color:var(--pp-muted);margin:0 0 2rem}
+        .cp-tick-l{font-family:var(--font-body);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--pp-muted);margin-top:.4rem}
+        .cp-asof{font-family:var(--font-body);font-size:.8rem;line-height:1.55;color:var(--pp-muted);margin:0 0 2rem}
         .cp-asof .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--pp-signal);margin-right:.4rem;vertical-align:middle}
 
-        .cp-h{font-family:var(--font-mono);font-size:.7rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--pp-muted);margin:2.25rem 0 .75rem;display:flex;justify-content:space-between;gap:1rem}
+        .cp-h{font-family:var(--font-body);font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--pp-muted);margin:2.25rem 0 .75rem;display:flex;justify-content:space-between;gap:1rem}
 
         .cp-empty{border:1px dashed var(--pp-best-border);background:var(--pp-best-tint);border-radius:12px;padding:1.1rem 1.2rem}
         .cp-empty-t{font-family:var(--font-display);font-weight:700;color:var(--pp-ink);font-size:1.05rem;margin:0 0 .3rem}
@@ -491,13 +493,14 @@ export default async function CityPage({
         .cp-alert{display:inline-block;margin-top:.9rem;font-weight:700;font-size:.88rem;color:var(--pp-signal-ink);text-decoration:none}
         .cp-alert:hover{text-decoration:underline}
 
-        .deal-row{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:20px;padding:.9rem 1.1rem;margin-bottom:.6rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;text-decoration:none;color:inherit}
-        .deal-row:hover{border-color:var(--pp-best-border)}
+        .cp-deals{display:flex;flex-direction:column;gap:.6rem;margin-bottom:.6rem}
+        .deal-row{padding:.9rem 1.1rem .5rem;display:flex !important;justify-content:space-between;align-items:center;gap:1rem;color:inherit}
         .deal-body{flex:1;min-width:0}
-        .deal-name{font-family:var(--font-display);font-size:.95rem;font-weight:700;color:var(--pp-ink);margin-bottom:2px}
-        .deal-title{font-size:.84rem;line-height:1.4}
+        .deal-name{display:block;font-family:var(--font-body);font-size:.95rem;font-weight:700;color:var(--pp-ink);margin-bottom:2px}
+        .deal-title{display:block;font-size:.84rem;line-height:1.4}
+        .deal-otd{display:block;padding:0 1.1rem .8rem}
         .deal-right{text-align:right;flex-shrink:0}
-        .deal-save-label{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--pp-muted)}
+        .deal-save-label{font-family:var(--font-body);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--pp-muted)}
         .deal-save-amt{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-size:1.4rem;color:var(--pp-signal-ink);font-weight:600;line-height:1}
 
         .st{border:1px solid var(--pp-border);border-radius:12px;background:var(--pp-surface);overflow:hidden}
@@ -644,28 +647,54 @@ export default async function CityPage({
         </div>
         {deals.length > 0 ? (
           <>
-          {shownDeals.map((d) => {
+          <div className="cp-deals">
+          {shownDeals.map((d, i) => {
             const dslug = d.slug || d.listing_slug;
             const dollars = estimateSavings(d);
             const name = d.name || dslug;
             const title = cleanDealTitle(d.deal_title || d.title) || "Active deal";
+            const pill = saveLabel({ ...d, deal_title: title }, dollars);
+            const a = amountOf({ ...d, deal_title: title });
+            const store = listings.find((l) => l.slug === dslug);
             return (
-              <Link key={d.id} href={`/dispensary/${dslug}?city=${encodeURIComponent(city)}`} className="deal-row" data-track="deal_tap" data-track-slug={dslug} data-track-deal={d.id} data-track-city={city} data-track-from="city">
-                <div className="deal-body">
-                  <div className="deal-name">{name}</div>
-                  <div className="deal-title">{title}</div>
-                  <OtdLine deal={{ ...d, deal_title: title }} city={d.city || city} />
-                </div>
-                <div className="deal-right">
-                  {saveLabel({ ...d, deal_title: title }, dollars) ? (
-                    <span className="pp-save">{saveLabel({ ...d, deal_title: title }, dollars)}</span>
-                  ) : (
-                    <div className="deal-save-label" style={{ fontSize: ".8rem" }}>{priceChip({ ...d, deal_title: title }) || "Deal"}</div>
-                  )}
-                </div>
-              </Link>
+              <ExhaleCard
+                key={d.id}
+                index={i}
+                from="city"
+                deal={{ id: String(d.id), slug: dslug, city }}
+                saving={pill ? pill.replace(/^Save\s+/, "") : null}
+                dollars={dollars ?? (a?.kind === "dollars" ? a.value : null)}
+                percent={a?.kind === "percent" ? a.value : null}
+                faceClassName="deal-row"
+                words={
+                  <span className="deal-body">
+                    <span className="deal-name">{name}</span>
+                    <span className="deal-title">{title}</span>
+                  </span>
+                }
+                aside={
+                  <span className="deal-right">
+                    {pill ? (
+                      <span className="pp-save">{pill}</span>
+                    ) : (
+                      <span className="deal-save-label" style={{ fontSize: ".8rem" }}>{priceChip({ ...d, deal_title: title }) || "Deal"}</span>
+                    )}
+                  </span>
+                }
+                after={
+                  <span className="deal-otd">
+                    <OtdLine deal={{ ...d, deal_title: title }} city={d.city || city} />
+                  </span>
+                }
+                otdDeal={{ ...d, deal_title: title, city: d.city || city }}
+                directionsHref={directionsHref({ name: store?.name || name, slug: dslug, city, lat: store?.lat ?? null, lng: store?.lng ?? null })}
+                seeHref={`/dispensary/${dslug}?city=${encodeURIComponent(city)}`}
+                seeLabel="See the store"
+                line={EXHALE_LINES[i % EXHALE_LINES.length]}
+              />
             );
           })}
+          </div>
           {shownDeals.length < deals.length && (
             <p className="cp-asof" style={{ marginTop: 10 }}>
               Showing {shownDeals.length} of {deals.length} {city} deals, up to {STORE_CAP.cityList} per store so every store gets seen.
@@ -674,14 +703,16 @@ export default async function CityPage({
           <StoreOverflowLinks stores={dealOverflow} city={city} note={false} />
           </>
         ) : (
-          <div className="cp-empty">
-            <p className="cp-empty-t">No verified deals posted in {city} today.</p>
-            <p>
-              We only list deals we can confirm on the dispensary&apos;s own site — no
-              aggregator listings, no guesses. When one posts, it shows up here.
-            </p>
+          <EmptyBreath
+            steps={[
+              ...(nearbyWithDeals[0] ? [{ href: `/city/${nearbyWithDeals[0].slug}`, label: `See ${nearbyWithDeals[0].name} deals` }] : []),
+              { href: "/alerts", label: `Get ${city} deals every Monday` },
+            ]}
+          >
+            No {city} store has a deal on its own site today. We only list what we can confirm there, so this
+            stays honest until one posts.
             {nearbyWithDeals.length > 0 && (
-              <div className="cp-near">
+              <div className="cp-near" style={{ justifyContent: "center" }}>
                 {nearbyWithDeals.map((c) => (
                   <Link key={c.slug} href={`/city/${c.slug}`}>
                     {c.name}
@@ -692,10 +723,7 @@ export default async function CityPage({
                 ))}
               </div>
             )}
-            <Link href="/alerts" className="cp-alert">
-              Get the best {city} deals every Monday →
-            </Link>
-          </div>
+          </EmptyBreath>
         )}
         <WatchControl kind="city" city={city} />
 

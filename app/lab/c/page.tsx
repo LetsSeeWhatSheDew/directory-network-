@@ -66,7 +66,7 @@ export default async function DirectionC() {
           <h2 className="tc-h2">Tonight&apos;s receipts</h2>
           <div className="tc-slips">
             {d.deals.slice(0, 6).map((x, i) => (
-              <Link key={x.id} href={`/dispensary/${x.slug}`} className="tc-slip" style={{ ["--r" as any]: rot[i % rot.length] }}>
+              <Link key={x.id} href={`/dispensary/${x.slug}`} className="tc-slip" style={{ "--r": rot[i % rot.length] } as React.CSSProperties}>
                 <small>{x.store.toUpperCase()} · {x.city.toUpperCase()}</small>
                 <div className="t">{x.title}</div>
                 <div className="p">{x.pct != null ? `-${x.pct}%` : "DEAL"}</div>

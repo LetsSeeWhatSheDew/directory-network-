@@ -157,9 +157,9 @@ export default function GenericClaimForm() {
         type="submit"
         disabled={busy}
         style={{
-          background: "var(--pp-signal-fill)",
-          color: "var(--pp-on-dark)",
-          border: "none",
+          background: "var(--pp-btn)",
+          color: "var(--pp-btn-fg)",
+          border: "1px solid var(--pp-btn-border)",
           borderRadius: 10,
           padding: "14px 20px",
           fontWeight: 700,

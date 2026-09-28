@@ -52,7 +52,7 @@ export default function ProCheckoutButton() {
     setStatus({ kind: "busy" });
     try {
       try {
-        const w = window as any;
+        const w = window;
         if (typeof w.gtag === "function") w.gtag("event", "upgrade_click", { tier: "pro" });
       } catch {}
       const res = await fetch("/api/stripe/create-checkout", {
@@ -66,7 +66,7 @@ export default function ProCheckoutButton() {
         const ok = await joinWaitlist(e, phone.trim(), smsOptIn);
         if (ok) {
           try {
-            const w = window as any;
+            const w = window;
             if (typeof w.gtag === "function")
               w.gtag("event", "pro_waitlist_joined", { tier: "pro_consumer" });
           } catch {}
@@ -82,7 +82,7 @@ export default function ProCheckoutButton() {
       const data = await res.json().catch(() => ({}));
       if (res.ok && data.url) {
         try {
-          const w = window as any;
+          const w = window;
           if (typeof w.gtag === "function")
             w.gtag("event", "pro_checkout_start", { tier: "pro_consumer" });
         } catch {}

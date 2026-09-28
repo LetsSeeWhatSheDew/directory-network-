@@ -244,7 +244,7 @@ export default function CityPickerModal({ open, onClose, onPicked }: Props) {
           align-items: center;
           justify-content: center;
           padding: 1rem;
-          animation: pp-citypicker-fade 200ms ease;
+          animation: pp-citypicker-fade calc(200ms * var(--pp-pace)) ease;
         }
         @keyframes pp-citypicker-fade {
           from { opacity: 0; }
@@ -259,7 +259,7 @@ export default function CityPickerModal({ open, onClose, onPicked }: Props) {
           border-radius: 18px;
           border:1px solid var(--pp-border, var(--pp-border));
           padding: 1.75rem 1.5rem 1.5rem;
-          animation: pp-citypicker-pop 280ms cubic-bezier(0.16, 1, 0.3, 1);
+          animation: pp-citypicker-pop calc(280ms * var(--pp-pace)) cubic-bezier(0.16, 1, 0.3, 1);
         }
         @keyframes pp-citypicker-pop {
           from { transform: translateY(8px) scale(0.98); opacity: 0; }
@@ -307,22 +307,19 @@ export default function CityPickerModal({ open, onClose, onPicked }: Props) {
           margin-bottom: 1rem;
         }
         .pp-citypicker-primary {
-          background:var(--pp-signal-fill);
-          color:rgb(255 255 255);
-          border:1px solid var(--pp-signal-fill);
-          border-radius: 12px;
+          background:var(--pp-btn);
+          color:var(--pp-btn-fg);
+          border:1px solid var(--pp-btn-border);
+          border-radius: 14px;
           padding: 0.875rem 1rem;
           font-family: var(--font-body);
           font-weight: 700;
           font-size: 0.95rem;
           cursor: pointer;
           min-height: 48px;
-          transition: background-color 160ms ease, transform 160ms ease;
+          transition: transform calc(160ms * var(--pp-pace)) ease;
         }
-        .pp-citypicker-primary:hover {
-          background:var(--pp-signal-fill);
-          border-color:var(--pp-signal-fill);
-        }
+        .pp-citypicker-primary:hover { filter: brightness(.97); }
         .pp-citypicker-primary:active { transform: translateY(1px); }
         .pp-citypicker-toggle {
           display: block;
@@ -339,7 +336,7 @@ export default function CityPickerModal({ open, onClose, onPicked }: Props) {
           margin-bottom: 0.5rem;
         }
         .pp-citypicker-toggle:hover {
-          border-color:var(--color-gray-300, #D1CABB);
+          border-color:var(--pp-border-2);
           color:var(--pp-ink);
         }
         .pp-citypicker-grid {
@@ -388,7 +385,7 @@ export default function CityPickerModal({ open, onClose, onPicked }: Props) {
         .pp-citypicker-error {
           font-family: var(--font-body);
           font-size: 0.82rem;
-          color:#B91C1C;
+          color:var(--pp-stop-fg);
           margin: 0.5rem 0 0;
         }
       `}</style>

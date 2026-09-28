@@ -30,6 +30,7 @@ export const MIN_DOLLAR_SAVINGS = 8;
 /** Legacy export — some old code paths still reference AVG_PRICE_BY_CATEGORY. */
 export const AVG_PRICE_BY_CATEGORY = AVG_SPEND_BY_CATEGORY;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- untyped PostgREST row; fields vary by view
 export type Deal = Record<string, any>;
 
 /**
@@ -104,7 +105,7 @@ export function formatSavingsDollars(d: Deal): string {
   const unit = (d?.discount_unit || "").toLowerCase();
   if (Number.isFinite(value) && value > 0) {
     if (unit === "percent" || (!unit && value <= 100)) {
-      const t = String((d as any)?.title || (d as any)?.deal_title || "");
+      const t = String(d?.title || d?.deal_title || "");
       return `${/\bup to\b/i.test(t) ? "UP TO " : ""}${Math.round(value)}% OFF`;
     }
     if (unit === "dollars" && d?.discount_type !== "fixed_price") {

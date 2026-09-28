@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
-import MobileNavMenu from "../components/MobileNavMenu";
 import Calculator from "./Calculator";
 import { TAX_RATES_LAST_UPDATED } from "../../lib/taxRates";
 
@@ -54,14 +53,14 @@ export default function TaxCalculatorPage() {
       />
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:var(--font-ui, system-ui, sans-serif);background:var(--pp-paper);color:var(--pp-ink);min-height:100vh}
+        body{font-family:var(--font-body);color:var(--pp-ink);min-height:100vh}
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-surface);border-bottom:1px solid var(--pp-border);position:sticky;top:0;z-index:100}
         .logo-link{display:flex;align-items:center}
         .nav-links{display:flex;gap:18px;align-items:center}
         .nav-link{font-size:.88rem;color:var(--pp-muted);text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif);font-weight:500}
         .nav-link:hover{color:var(--pp-ink)}
-        .nav-cta{background:var(--pp-canopy);color:var(--pp-on-dark);padding:8px 14px;border-radius:8px;font-size:.85rem;font-weight:700;text-decoration:none}
-        .nav-cta:hover{background:var(--pp-canopy)}
+        .nav-cta{background:var(--pp-btn);color:var(--pp-btn-fg);border:1px solid var(--pp-btn-border);padding:8px 14px;border-radius:8px;font-size:.85rem;font-weight:700;text-decoration:none}
+        .nav-cta:hover{filter:brightness(.97)}
         .desktop-only-nav{display:flex}
         @media(max-width:768px){.desktop-only-nav{display:none !important}}
 
@@ -74,7 +73,7 @@ export default function TaxCalculatorPage() {
           text-transform:uppercase;color:var(--pp-signal);margin-bottom:14px;
         }
         h1{
-          font-family:var(--font-display, var(--font-geist-sans));
+          font-family:var(--font-breath);
           font-size:clamp(1.9rem, 4.5vw, 2.75rem);
           font-weight:700;letter-spacing:-.04em;line-height:1.1;
           color:var(--pp-ink);margin-bottom:18px;

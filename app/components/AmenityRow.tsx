@@ -120,7 +120,7 @@ export function AmenityRow({
             border: "1px solid var(--color-gray-200, var(--pp-border))",
             padding: "4px 10px",
             borderRadius: 100,
-            transition: "border-color 150ms ease, color 150ms ease",
+            transition: "none",
           }}
         >
           <span style={{ display: "inline-flex", color: "var(--color-gray-500, var(--pp-muted))" }}>{icon}</span>

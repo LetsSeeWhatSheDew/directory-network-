@@ -2,11 +2,13 @@ import Link from "next/link";
 import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
 
+import { brand } from "@/lib/brand";
 const OG_DESC =
   "How the PuffPrice Index is calculated — our weekly Illinois flower price-per-gram benchmark.";
 const OG_IMAGE = "https://www.puffprice.com/og-image.png";
 
 export const metadata = {
+  alternates: { canonical: `${brand.url}/about/index` },
   title: "The PuffPrice Index — Illinois flower price benchmark",
   description: OG_DESC,
   openGraph: {
@@ -31,13 +33,7 @@ export default function AboutIndexPage() {
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:var(--font-body),system-ui,sans-serif;background:var(--pp-paper);color:var(--pp-body);min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-canopy);position:sticky;top:0;z-index:100}
-        .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
-        .logo-text{font-size:1.1rem;font-weight:700;color:var(--pp-on-dark);letter-spacing:-.02em}
-        .logo-text span{color:var(--pp-canopy-eyebrow)}
-        .back{font-size:.82rem;color:rgba(255,255,255,.55);text-decoration:none;font-family:var(--font-body)}
-        .back:hover{color:var(--pp-on-dark)}
+        body{font-family:var(--font-body);color:var(--pp-body);min-height:100vh}
         .wrap{max-width:720px;margin:0 auto;padding:56px 28px 80px}
         .eyebrow{
           font-family:var(--font-body);font-size:.72rem;font-weight:700;
@@ -68,7 +64,7 @@ export default function AboutIndexPage() {
         .promise{
           margin-top:40px;padding:22px 24px;
           background:var(--pp-surface);border:1px solid var(--pp-border);border-left:4px solid var(--pp-signal-fill);
-          border-radius:12px;box-shadow:0 4px 16px rgba(15,31,61,.04);
+          border-radius:14px;
         }
         .promise h2{margin:0 0 8px;font-size:1.1rem}
         .promise p{margin-bottom:0;font-size:.95rem}
@@ -101,7 +97,7 @@ export default function AboutIndexPage() {
         </p>
         <p>
           We trim prices outside a plausible range (below $0 or above $100
-          per gram) so a data-entry typo can't pull the average. The
+          per gram) so a data-entry typo can&apos;t pull the average. The
           remaining prices are averaged; that average is the Index for the
           week.
         </p>
@@ -109,18 +105,18 @@ export default function AboutIndexPage() {
         <h2>When we publish</h2>
         <p>
           We only publish the Index when we have at least 10 qualifying deals
-          in the sample. Fewer than that and the number isn't stable enough
+          in the sample. Fewer than that and the number isn&apos;t stable enough
           to be useful — one $4 eighth or one $60 gram would swing it. Until
           we cross the threshold, the homepage shows a progress bar instead
           of a fake number.
         </p>
 
-        <h2>What it's for</h2>
+        <h2>What it&apos;s for</h2>
         <p>
-          The Index answers one question: <em>is the deal I'm looking at a
+          The Index answers one question: <em>is the deal I&apos;m looking at a
           good one?</em> If a dispensary is advertising flower at $12/g and
-          the Index is $7.80/g, you know the "deal" isn't really a deal.
-          If it's $5/g, you know to grab it.
+          the Index is $7.80/g, you know the &quot;deal&quot; isn&apos;t really a deal.
+          If it&apos;s $5/g, you know to grab it.
         </p>
         <p>
           We rebuild the Index every week so it tracks the real market — not
@@ -131,8 +127,8 @@ export default function AboutIndexPage() {
           <h2>The PuffPrice Promise</h2>
           <p>
             We will never round up a sample size. We will never publish an
-            Index from fewer than 10 deals. If we can't calculate it
-            honestly, we won't publish it — that's why you see a progress
+            Index from fewer than 10 deals. If we can&apos;t calculate it
+            honestly, we won&apos;t publish it — that&apos;s why you see a progress
             bar instead of a placeholder number. <Link href="/about" style={{color: "var(--pp-signal)",fontWeight:600,textDecoration:"none"}}>More about how we work →</Link>
           </p>
         </div>

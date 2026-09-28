@@ -19,6 +19,7 @@ const SUPABASE_ANON_KEY =
 
 const VALID_CATEGORIES = new Set(["flower", "edibles", "vapes", "concentrate", "all"]);
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- untyped PostgREST row; fields vary by view
 type Deal = Record<string, any> & { score?: number; rankingReason?: string };
 
 /**

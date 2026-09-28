@@ -144,19 +144,19 @@ export default async function Home({
           <nav className="hidden items-center gap-4 text-xs text-slate-300 md:flex">
             <Link
               href="/cannabis/illinois"
-              className="transition-colors hover:text-slate-50"
+              className="hover:text-slate-50"
             >
               Illinois Cannabis
             </Link>
             <Link
               href="#how-it-works"
-              className="transition-colors hover:text-slate-50"
+              className="hover:text-slate-50"
             >
               How it works
             </Link>
             <Link
               href="#directories"
-              className="transition-colors hover:text-slate-50"
+              className="hover:text-slate-50"
             >
               Directories
             </Link>
@@ -239,13 +239,13 @@ export default async function Home({
             <div className="flex flex-wrap gap-3 pt-1 text-xs">
               <Link
                 href="/get-listed"
-                className="inline-flex items-center rounded-full bg-[#2E7D32] px-4 py-2 text-[12px] font-semibold text-[#1F3D2B] shadow-sm hover:bg-[#3da85e] transition-colors"
+                className="inline-flex items-center rounded-full bg-[#2E7D32] px-4 py-2 text-[12px] font-semibold text-[#1F3D2B] shadow-sm hover:bg-[#3da85e] "
               >
                 Request a listing
               </Link>
               <Link
                 href="/cannabis/illinois"
-                className="inline-flex items-center rounded-full border border-white/10 bg-transparent px-4 py-2 text-[12px] font-medium text-[#F7F4ED] hover:border-[#2E7D32]/30 hover:bg-white/5 transition-colors"
+                className="inline-flex items-center rounded-full border border-white/10 bg-transparent px-4 py-2 text-[12px] font-medium text-[#F7F4ED] hover:border-[#2E7D32]/30 hover:bg-white/5 "
               >
                 Browse Illinois
               </Link>
@@ -276,7 +276,7 @@ export default async function Home({
                     <Link
                       key={listing.id}
                       href={`/l/${listing.id}`}
-                      className="flex items-start justify-between gap-3 rounded-2xl border border-white/5 bg-slate-900/80 px-3 py-2.5 text-xs text-slate-100 transition hover:border-[#2E7D32]/60 hover:bg-slate-900"
+                      className="flex items-start justify-between gap-3 rounded-2xl border border-white/5 bg-slate-900/80 px-3 py-2.5 text-xs text-slate-100 hover:border-[#2E7D32]/60 hover:bg-slate-900"
                     >
                       <div>
                         <div className="flex items-center gap-2">
@@ -335,7 +335,7 @@ export default async function Home({
                     key={key}
                     href={key === "green" ? "/" : `/?tag=${key}`}
                     className={[
-                      "inline-flex items-center rounded-full border px-3 py-1 transition-colors",
+                      "inline-flex items-center rounded-full border px-3 py-1 ",
                       isActive
                         ? "border-[#2E7D32] bg-[#2E7D32]/15 text-[#2E7D32]"
                         : "border-slate-700 bg-slate-900 text-slate-300 hover:border-slate-500 hover:bg-slate-800",
@@ -369,7 +369,7 @@ export default async function Home({
                 <Link
                   key={listing.id}
                   href={`/l/${listing.id}`}
-                  className="group flex flex-col rounded-3xl border border-slate-800 bg-slate-900/60 p-4 text-xs text-slate-100 shadow-sm transition hover:border-[#2E7D32]/60 hover:bg-slate-900"
+                  className="group flex flex-col rounded-3xl border border-slate-800 bg-slate-900/60 p-4 text-xs text-slate-100 shadow-sm hover:border-[#2E7D32]/60 hover:bg-slate-900"
                 >
                   <div className="mb-2 flex items-start justify-between gap-2">
                     <div>
@@ -421,7 +421,7 @@ export default async function Home({
             </div>
             <Link
               href="/get-listed"
-              className="inline-flex items-center rounded-full bg-[#2E7D32] px-4 py-2 text-[11px] font-semibold text-[#1F3D2B] shadow-sm hover:bg-[#3da85e] transition-colors"
+              className="inline-flex items-center rounded-full bg-[#2E7D32] px-4 py-2 text-[11px] font-semibold text-[#1F3D2B] shadow-sm hover:bg-[#3da85e] "
             >
               Submit for review
             </Link>
@@ -469,8 +469,8 @@ export default async function Home({
             <Image src="/logo-512.png" alt="PuffPrice" width={20} height={20} className="h-5 w-5 opacity-60" />
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <Link href="/cannabis/illinois" className="text-[#8a9490] hover:text-[#F7F4ED] transition-colors">Illinois</Link>
-            <Link href="/cannabis/missouri" className="text-[#8a9490] hover:text-[#F7F4ED] transition-colors">Missouri</Link>
+            <Link href="/cannabis/illinois" className="text-[#8a9490] hover:text-[#F7F4ED] ">Illinois</Link>
+            <Link href="/cannabis/missouri" className="text-[#8a9490] hover:text-[#F7F4ED] ">Missouri</Link>
             <span className="hidden text-slate-700 md:inline">|</span>
             <Link
               href="/get-listed"

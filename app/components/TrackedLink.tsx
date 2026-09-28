@@ -15,7 +15,7 @@ export default function TrackedLink({ event, params, children, onClick, ...rest 
       {...rest}
       onClick={(e) => {
         try {
-          const w = window as any;
+          const w = window;
           if (typeof w.gtag === "function") {
             w.gtag("event", event, params || {});
           }

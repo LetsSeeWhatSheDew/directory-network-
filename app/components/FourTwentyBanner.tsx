@@ -13,6 +13,7 @@ export default function FourTwentyBanner() {
     const end = new Date("2026-04-20T23:59:59");
     const inWindow = now >= start && now <= end;
     const dismissed = typeof window !== "undefined" && localStorage.getItem("pp_420_dismissed") === "1";
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reads browser-only state (storage/DOM) after hydration
     setShow(inWindow && !dismissed);
   }, []);
 

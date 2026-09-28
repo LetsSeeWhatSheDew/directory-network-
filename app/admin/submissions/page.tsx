@@ -42,15 +42,15 @@ export default async function SubmissionsPage() {
   const pending = await fetchPending();
 
   return (
-    <main style={{ maxWidth: 1280, margin: "0 auto", padding: "32px 24px", fontFamily: "system-ui, sans-serif" }}>
+    <main style={{ maxWidth: 1280, margin: "0 auto", padding: "32px 24px", fontFamily: "var(--font-body)" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 24 }}>
         <div>
           <h1 style={{ fontSize: "1.5rem", margin: 0 }}>Deal submissions</h1>
-          <p style={{ color: "#6b7280", margin: "4px 0 0", fontSize: "0.9rem" }}>
+          <p style={{ color: "var(--pp-muted)", margin: "4px 0 0", fontSize: "0.9rem" }}>
             {pending.length} pending review · Target SLA: p95 ≤ 24h
           </p>
         </div>
-        <Link href="/admin" style={{ fontSize: "0.875rem", color: "#2E7D32" }}>
+        <Link href="/admin" style={{ fontSize: "0.875rem", color: "var(--pp-mark)" }}>
           ← Back to admin
         </Link>
       </div>
@@ -58,11 +58,11 @@ export default async function SubmissionsPage() {
       {pending.length === 0 ? (
         <div
           style={{
-            border: "1px dashed #d1d5db",
+            border: "1px dashed var(--pp-border-2)",
             borderRadius: 12,
             padding: "48px 24px",
             textAlign: "center",
-            color: "#6b7280",
+            color: "var(--pp-muted)",
           }}
         >
           No pending submissions — fresh slate.
