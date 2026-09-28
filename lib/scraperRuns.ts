@@ -7,6 +7,8 @@
 // Raw error text never leaves this file: publicPhrase() maps it to one of a
 // few plain phrases before anything renders.
 
+import "server-only";
+
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
 

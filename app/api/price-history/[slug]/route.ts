@@ -32,10 +32,11 @@ export async function GET(
 ) {
   try {
     const { slug } = await params;
-    if (!slug) return NextResponse.json({ error: "missing slug" }, { status: 400 });
+    if (!slug || !/^[a-z0-9-]{1,120}$/.test(slug)) return NextResponse.json({ error: "missing slug" }, { status: 400 });
 
     const { searchParams } = new URL(req.url);
-    const category = (searchParams.get("category") || "").trim().toLowerCase();
+    const categoryIn = (searchParams.get("category") || "").trim().toLowerCase();
+    const category = /^[a-z-]{1,30}$/.test(categoryIn) ? categoryIn : "";
 
     const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
 

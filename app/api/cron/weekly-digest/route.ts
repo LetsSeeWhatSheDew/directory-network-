@@ -8,15 +8,14 @@ import { getWeeklyReport } from "@/lib/weeklyReport";
 import { renderWeeklyReportEmail } from "@/lib/weeklyReportEmail";
 import { listWeeklySubscribers, unsubscribeUrl } from "@/lib/alertSubscribers";
 import { brand } from "@/lib/brand";
+import { checkCronAuth } from "@/lib/cronAuth";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 export async function GET(req: NextRequest) {
-  const secret = process.env.CRON_SECRET;
-  if (!secret || req.headers.get("authorization") !== `Bearer ${secret}`) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  }
+  const auth = checkCronAuth(req, "weekly-digest");
+  if (!auth.ok) return auth.response;
   const dry = req.nextUrl.searchParams.get("dry") === "1";
   const testTo = req.nextUrl.searchParams.get("to");
 
