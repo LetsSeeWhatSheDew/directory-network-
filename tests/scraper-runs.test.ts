@@ -9,7 +9,7 @@
 //   npm run test:scrapers
 import { test, afterEach } from "node:test";
 import assert from "node:assert/strict";
-import { runCilScrape, planRetirements, FAILED_READ, type ExistingDeal, type HtmlFetcher } from "../lib/scraper/cil-deal-scraper";
+import { runCilScrape, planRetirements, offStorePage, STORE_PAGE_URLS, FAILED_READ, type ExistingDeal, type HtmlFetcher } from "../lib/scraper/cil-deal-scraper";
 import { buildDispensaryResults, rollupStatus } from "../lib/scraper/runLog";
 import { orderMenuStores, parseMenuOrderState, MENU_SOURCES, type MenuOrderState } from "../lib/scraper/menuCapture";
 import { offerCatalog } from "../lib/scraper/renderedDeals";
@@ -160,4 +160,66 @@ test("menu order: with the deadline cutting runs short, every store is read with
   // Control: the old fixed order starves the tail under the same caps.
   const fixed = simulate(slugs, caps.map((c) => Math.min(c, slugs.length - 1)), false);
   assert.equal(fixed.get(slugs[slugs.length - 1])!.length, 0);
+});
+
+// ---------------------------------------------------------------------------
+// 3. High Haven Normal: only Normal's own page counts (first-purchase 20%,
+//    not Elgin's 42.0% from the chain-wide pages). Page text below is
+//    SYNTHETIC, built from the sentences the store pages state.
+// ---------------------------------------------------------------------------
+
+const HH = "https://highhavencannabis.com";
+const HH_NORMAL = `${HH}/high-haven-normal-il-the-puff-palace/`;
+const html = (title: string, body: string) =>
+  new Response(`<html><head><title>${title}</title></head><body>${body}</body></html>`, { status: 200, headers: { "content-type": "text/html" } });
+/** A response that arrived at `finalUrl` after redirects. */
+const redirected = (res: Response, finalUrl: string) => { Object.defineProperty(res, "url", { value: finalUrl }); return res; };
+
+// The chain-wide pages: Elgin's 42.0% with no store named, and the per-location list.
+const CHAIN_42 = "<h2>High Rollers Club</h2><p>All first-time customers who sign up for the High Rollers Club will receive 42.0% Off First Purchase!</p>";
+const NORMAL_20 = '<h1>The Puff Palace — Normal</h1><p>All first-time customers who sign up for the "High Rollers" club will receive 20% off first purchase.</p>';
+
+test("high-haven-normal: deals come only from Normal's own page — First-time 20%, never Elgin's 42%", async () => {
+  assert.deepEqual(STORE_PAGE_URLS["high-haven-normal"], [HH_NORMAL]);
+  const asked: string[] = [];
+  stubFetch(
+    // Website on file is the chain root: the pinned store page still wins.
+    [{ slug: "high-haven-normal", city: "Normal", website: `${HH}/` }],
+    [deal("1", "high-haven-normal", "First-time 42% off", "website"), deal("2", "high-haven-normal", "First-time 20% off", "website")],
+    (url) => {
+      asked.push(url);
+      if (url === HH_NORMAL) return html("Normal Dispensary - The Puff Palace by High Haven Cannabis", NORMAL_20);
+      return html("High Haven Cannabis", CHAIN_42); // home, /deals, /rewards …
+    }
+  );
+  const summary = await runCilScrape({ supabaseUrl: SB, serviceKey: "anon", mode: "live", apply: false, maxListings: 10, requestDelayMs: 0 });
+  assert.deepEqual(asked, [HH_NORMAL]); // no chain page is even requested
+  assert.deepEqual(summary.deals_found.map((d) => [d.title, d.source_url]), [["First-time 20% off", HH_NORMAL]]);
+  assert.deepEqual(summary.deals_updated, [{ slug: "high-haven-normal", title: "First-time 20% off" }]);
+  assert.deepEqual(summary.deals_aged, [{ slug: "high-haven-normal", title: "First-time 42% off" }]); // the false 42% is retired
+});
+
+test("high-haven-normal: if its page redirects to a chain or trashed page, nothing is read and nothing is retired", async () => {
+  for (const finalUrl of [`${HH}/deals__trashed/normal-deals/`, `${HH}/rewards/`]) {
+    stubFetch(
+      [{ slug: "high-haven-normal", city: "Normal", website: `${HH}/` }],
+      [deal("1", "high-haven-normal", "First-time 20% off", "website")],
+      () => redirected(html("High Haven Cannabis", CHAIN_42), finalUrl)
+    );
+    const summary = await runCilScrape({ supabaseUrl: SB, serviceKey: "anon", mode: "live", apply: false, maxListings: 10, requestDelayMs: 0 });
+    assert.deepEqual(summary.deals_found, [], finalUrl);
+    assert.match(summary.fetch_errors[0].error, /^failed_read: 0 of 1 pages loaded/);
+    assert.deepEqual(summary.deals_aged, []);
+  }
+});
+
+test("offStorePage: trashed pages and redirects off a store's own path are not the store's page", () => {
+  const store = "/high-haven-normal-il-the-puff-palace";
+  assert.match(offStorePage(`${HH}/deals__trashed/normal-deals/`, `${HH_NORMAL}deals/`, store)!, /expired/);
+  assert.match(offStorePage(`${HH}/deals__trashed/normal-deals/`, `${HH}/deals`, "")!, /expired/); // any store
+  assert.match(offStorePage(`${HH}/deals/`, `${HH_NORMAL}deals/`, store)!, /off the store's page/);
+  assert.match(offStorePage("https://risecannabis.com/x/", "https://revcanna.com/normal/", "/normal")!, /off the site/);
+  assert.equal(offStorePage(HH_NORMAL, `${HH}/high-haven-normal-il-the-puff-palace`, store), null); // trailing slash
+  assert.equal(offStorePage("https://www.highhavencannabis.com/high-haven-normal-il-the-puff-palace/specials/", `${HH_NORMAL}specials/`, store), null);
+  assert.equal(offStorePage(`${HH}/deals/`, `${HH}/deals`, ""), null); // a root-website store: unchanged
 });

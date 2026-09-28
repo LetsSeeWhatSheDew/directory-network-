@@ -517,6 +517,41 @@ export function candidateUrls(baseUrl: URL): string[] {
 // Illinois deals page) return only the deals that page assigns to that store.
 export type HtmlFetcher = (url: string, listingSlug?: string) => Promise<string[] | null>;
 
+/**
+ * Static-scraper stores whose deals are read ONLY from their own store page.
+ * Used when the caller passes no override for the slug (the Vercel cron and
+ * scripts/scrape-cil-deals.ts pass none).
+ *
+ * high-haven-normal (2026-09-28): the chain site lists first-purchase offers
+ * per location — Elgin (The Record Store) 42.0%, Darien and Normal 20% — and
+ * the chain-wide pages (home, /rewards/, /deals/, trashed deals pages) show
+ * Elgin's 42.0% without naming a store, which is how Normal got a false
+ * "First-time 42% off". Normal's own page states 20% ("All first-time
+ * customers who sign up for the High Rollers club will receive 20% off first
+ * purchase"), so that page is the only source for this store.
+ */
+export const STORE_PAGE_URLS: Record<string, string[]> = {
+  "high-haven-normal": ["https://highhavencannabis.com/high-haven-normal-il-the-puff-palace/"],
+};
+
+/**
+ * Why a fetched page is NOT this store's page, or null when it is:
+ *   - a WordPress trashed page ("…__trashed…" in the final URL) is expired;
+ *   - a page requested under a store's own path that redirected outside that
+ *     path (to a chain-wide page or another store's page) is not the store's.
+ */
+export function offStorePage(finalUrl: string, requestedUrl: string, storePath: string): string | null {
+  let f: URL, r: URL;
+  try { f = new URL(finalUrl); r = new URL(requestedUrl); } catch { return null; }
+  if (/__trashed\b/i.test(f.pathname)) return `expired (WordPress trashed page ${f.pathname})`;
+  const scope = storePath.replace(/\/+$/, "");
+  if (!scope) return null;
+  const host = (h: string) => h.replace(/^www\./, "").toLowerCase();
+  if (host(f.host) !== host(r.host)) return `redirected off the site (${f.host})`;
+  if (f.pathname !== scope && !f.pathname.startsWith(`${scope}/`)) return `redirected off the store's page to ${f.pathname}`;
+  return null;
+}
+
 // Prefix of the fetch_error recorded when NOT ONE of a store's pages could be
 // read (bot challenge, timeout, HTTP error, robots.txt). Such a store is
 // logged as failed in scraper_runs and its existing deals are left alone:
@@ -531,7 +566,7 @@ async function scrapeListing(
   deadlineMs: number = Number.POSITIVE_INFINITY,
   requestDelayMs: number = REQUEST_DELAY_MS
 ): Promise<{ deals: ScrapedDeal[]; error?: string; skipped?: string }> {
-  const override = urlOverrides?.[listing.slug];
+  const override = urlOverrides?.[listing.slug] ?? (fetcher ? undefined : STORE_PAGE_URLS[listing.slug]);
   // A store with a known deals page (urlOverrides) is scraped from that page
   // even if master_listings.website is still blank or stale.
   const websiteOrOverride = listing.website || override?.[0];
@@ -593,6 +628,10 @@ async function scrapeListing(
           return { deals: combined, error: "rate_limited_429" };
         }
         if (!res.ok) { miss(candidateUrl, `HTTP ${res.status}`); continue; }
+        // A store's own page must still be that page after redirects.
+        const scope = override ? new URL(candidateUrl).pathname : baseUrl.pathname;
+        const off = offStorePage(res.url || candidateUrl, candidateUrl, scope === "/" ? "" : scope);
+        if (off) { miss(candidateUrl, off); continue; }
         htmls = [await res.text()];
       }
       const deals = collapseVariantDeals(htmls.flatMap((h) => extractDealsFromHtml(h, candidateUrl, listing.slug)));

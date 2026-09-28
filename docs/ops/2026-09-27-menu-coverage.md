@@ -54,28 +54,87 @@ disposables, ratio edibles. So `/cheapest` picks them up with no page change.
 None of these is WORKING LIVE. They have not been seen working against the
 real sites.
 
-## Commands for the Mac
+## Mac runbook, in order
 
-Use a normal checkout such as the Desktop working copy, **not** the launchd
-clone `~/puffprice-scraper`. The launchd job runs whatever is checked out
-there.
+Use a normal checkout such as the Desktop copy, **not** `~/puffprice-scraper`.
+The launchd job runs whatever is checked out there. `.env.local` must have
+`NEXT_PUBLIC_SUPABASE_ANON_KEY` for step 2 and `SUPABASE_SERVICE_ROLE_KEY` for
+steps 3 and 5.
+
+**Step 1: get the branch and run the offline tests.**
 
 ```sh
 git fetch origin && git checkout claude/modest-darwin-2gychf && npm install
-PW_CHANNEL=chrome npm run test:scrapers          # fixtures + local-browser tests
-npx tsx scripts/scrape-rendered-deals.ts --menus-only --slug=nuera
-npx tsx scripts/scrape-rendered-deals.ts --menus-only --slug=high-haven
-npx tsx scripts/scrape-rendered-deals.ts --menus-only --slug=trinity
-npx tsx scripts/scrape-rendered-deals.ts --no-menus --slug=beyond-hello-peoria
-npx tsx scripts/scrape-rendered-deals.ts --no-menus --slug=ayr-wellness-normal
-npx tsx scripts/scrape-rendered-deals.ts --no-menus --slug=revolution-dispensary-normal
+PW_CHANNEL=chrome npm run test:scrapers
 ```
 
-These are dry runs: they read only and write nothing. The menu runs print each
-store's status, the cheapest item per unit and every dropped item with its
-reason, and save `scrape-output/menu-prices-<date>.json`. The Bloom runs print
-every RISE card, with ✓ and the stores it was mapped to, or ✗ and why it was
-skipped.
+Good: `# pass 31` and `# fail 0`. Stop if anything fails.
+
+**Step 2: dry run for the 10 new stores.** Dry runs read only and write nothing.
+
+```sh
+# 7 menu stores: nuEra x4, High Haven, Trinity x2
+npx tsx scripts/scrape-rendered-deals.ts --menus-only --slug=nuera,high-haven,trinity
+# 3 Bloom stores: deals from RISE's IL deals page
+npx tsx scripts/scrape-rendered-deals.ts --no-menus --slug=beyond-hello-peoria,ayr-wellness-normal,revolution-dispensary-normal
+```
+
+What to look for in the menu run. Each store prints one line, e.g.
+`+ nuera-east-peoria [jane] ok · 212 items · 40 dropped · 1 page load, 3 data calls · 14.2s`,
+followed by one line per unit (`eighth`, `cart`, `gummies`).
+
+| | Good | Bad (what it means) |
+|---|---|---|
+| nuEra x4 | `[jane] ok` or `partial`; `eighth NN found · cheapest $…` with real product names; about 3 data calls | `Jane: no Algolia search key found` (Jane changed how the menu loads). `queried store 1518, expected REC store 1517` (it loaded the MED menu). `menu redirected off the store's domain`. `bot challenge`. |
+| High Haven | `[jane]` or `[dutchie]` with `ok` or `partial`. Either is fine; it tells us which platform the menu is on now. | `data calls this page did make: none of the known menu platforms` (the menu URL is wrong or the menu didn't load). |
+| Trinity x2 | `[treez] ok` or `partial`; `5 page load`; plausible eighth prices | `no link matching … store picker changed?` (for University this likely means its menu is on trinitymmj.com, so a URL decision is needed). `menu page does not name the store`. `names both stores`. `no Flower / Vapes / Edibles links`. `no product cards found`. |
+| All | Cheapest prices look like real shelf prices (eighth about $15–60, 1g cart about $20–60, 100mg gummies about $8–30); `dropped` reasons make sense (THC above 35%, infused, disposable, CBD/ratio) | An item or price you know is wrong. Paste the line into the PR. |
+
+The last line reads `menu prices: X/7 stores with prices`. **X is the new-store coverage.**
+
+What to look for in the Bloom run:
+
+- Good:
+  - `· RISE IL deals page: N cards → K deals mapped` with K > 0.
+  - Each `✓ <deal> → <store(s)>` names the right store(s).
+  - The final `+ beyond-hello-peoria: …` lines are the deals that would be added.
+- Bad:
+  - `not read (bot challenge or load failure)` and `! …: failed_read: 0 of 2 pages loaded`. Cloudflare blocks the Mac too, so Bloom is **BLOCKED**. Nothing will be retired.
+  - 0 mapped with many `✗ … names no Bloom store`. The cards don't say which stores they apply to. That's correct behaviour, but it means no Bloom deals.
+  - A `✓` mapped to the wrong store. Stop and paste it into the PR.
+
+**Step 3: dry run for the High Haven deal fix** (static scraper, same as the Vercel cron). It takes several minutes because it checks every store's site, and it writes nothing.
+
+```sh
+npx tsx scripts/scrape-cil-deals.ts --dry-run --out=scrape-output/static-dry.json
+node -e 'const s=require("./scrape-output/static-dry.json");for(const k of ["deals_found","deals_aged","fetch_errors"])console.log(k,JSON.stringify(s[k].filter(d=>(d.listing_slug||d.slug)==="high-haven-normal")))'
+```
+
+- Good:
+  - `deals_found` has `First-time 20% off` with `source_url` `https://highhavencannabis.com/high-haven-normal-il-the-puff-palace/`.
+  - `deals_aged` has `First-time 42% off` if that row is live today.
+  - No 42 anywhere in `deals_found`.
+- Bad:
+  - `fetch_errors` shows `failed_read … redirected off the store's page` or `expired (WordPress trashed page …)`. Normal's own page moved. Nothing is changed, and the 42% row stays until the page URL is fixed.
+
+**Step 4: apply the enum migration.** Only if step 2 looked good. In the Supabase SQL Editor, run `sql/migrations/2026-09-27-menu-platforms-jane-treez.sql`: two `ALTER TYPE … ADD VALUE` lines, each on its own, not inside `BEGIN/COMMIT`.
+
+**Step 5: the `--apply` run** (writes deals, `menu_snapshots` / `menu_items` and `scraper_runs`).
+
+```sh
+npx tsx scripts/scrape-rendered-deals.ts --apply --menus-only --slug=nuera,high-haven,trinity
+npx tsx scripts/scrape-rendered-deals.ts --apply --no-menus --slug=beyond-hello-peoria,ayr-wellness-normal,revolution-dispensary-normal
+```
+
+- Good:
+  - Each menu store prints `wrote snapshot <id> · N menu_items`.
+  - The Bloom run ends `found … · insert …`.
+  - Within about 15 minutes `/cheapest` shows the new stores.
+- Bad:
+  - `menu_platform has no 'jane' value yet`: step 4 wasn't applied.
+  - `write failed: …`: paste the line into the PR.
+- The High Haven 42% row is retired by the next Vercel static cron (09:00 UTC) once this PR is merged.
+- After merge, the launchd job (`~/puffprice-scraper`, 06:15 and 12:15) runs everything on `main` twice a day with no further steps.
 
 ## Run-level fixes (second commit, same day)
 
@@ -96,3 +155,42 @@ skipped.
   deadline itself is unchanged (11 min). The log prints the order at the
   start of the menu phase. If the file is missing or unreadable, the stores
   run in `MENU_SOURCES` order.
+
+## High Haven Normal first-time offer (2026-09-28)
+
+The Sep 25 run found both `First-time 20% off` and `First-time 42% off` for
+High Haven Normal, and both came from High Haven's own site. They are not
+old-versus-new; they are two different stores' offers:
+
+- The chain's Rewards page lists the first-purchase offer by location:
+  Elgin (The Record Store) 42%, Darien (The Gas Station) 20%, Normal (The
+  Puff Palace) 20%.
+- The chain-wide pages (home, `/rewards/`, `/deals/`) show Elgin's
+  "42.0% Off First Purchase!" without naming a store.
+- The site also still serves trashed WordPress deals pages
+  (`/deals__trashed/normal-deals/`, `/deals__trashed/elgin-il/`,
+  `/deals__trashed/darien-il/`).
+- Normal's own page,
+  https://highhavencannabis.com/high-haven-normal-il-the-puff-palace/, states:
+  "All first-time customers who sign up for the High Rollers club will receive
+  20% off first purchase."
+
+Source caveat: this cloud session still could not load highhavencannabis.com.
+The page text above comes from search-engine results for those URLs, not from
+a direct read. The Mac dry run (step 3) is the direct check.
+
+Fix (shared scraper core, `lib/scraper/cil-deal-scraper.ts`):
+
+- `STORE_PAGE_URLS` pins `high-haven-normal` to Normal's own page, and the
+  static scraper reads only that page. So only what Normal's page states is
+  kept.
+- `offStorePage` is a generic check for every store. A fetched page whose
+  final URL is a WordPress `__trashed` page is expired and not read. A page
+  requested under a store's own path that redirected outside it is not that
+  store's page. Either way it counts as not read: if no page is read, the
+  store is a failed read and nothing is retired.
+- After merge, the next static cron retires the live `First-time 42% off` row
+  as not seen.
+
+Tests: `tests/scraper-runs.test.ts`, 3 tests. I checked them by mutation:
+removing the pin or the guard makes them fail.

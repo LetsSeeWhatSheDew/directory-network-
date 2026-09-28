@@ -15,6 +15,7 @@
 //   npx tsx scripts/scrape-rendered-deals.ts            # dry run, prints plan
 //   npx tsx scripts/scrape-rendered-deals.ts --apply    # writes + logs scraper_runs
 //   npx tsx scripts/scrape-rendered-deals.ts --slug=cloud-9
+//   npx tsx scripts/scrape-rendered-deals.ts --slug=nuera,trinity   # several stores
 //   npx tsx scripts/scrape-rendered-deals.ts --menus-only   # skip deals, menu prices only
 //   npx tsx scripts/scrape-rendered-deals.ts --no-menus     # deals only (old behaviour)
 //
@@ -75,6 +76,9 @@ const APPLY = process.argv.includes("--apply");
 // Reads (listings, existing deals) work with the anon key; writes need the service key.
 const READ_KEY = SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const SLUG = process.argv.find((a) => a.startsWith("--slug="))?.split("=")[1];
+// --slug=a,b,c matches any store whose slug contains one of the parts.
+const SLUG_PARTS = (SLUG || "").split(",").map((x) => x.trim()).filter(Boolean);
+const slugMatches = (slug: string) => SLUG_PARTS.some((p) => slug.includes(p));
 const CIL = new Set(["peoria", "east peoria", "peoria heights", "pekin", "bloomington", "normal", "champaign", "urbana", "springfield"]);
 
 // Time budgets. The launchd wrapper kills the whole process group at 15 min
@@ -125,7 +129,7 @@ async function targets(): Promise<string[]> {
     // A store with a known deals page is a target even while its website
     // field is blank (see sql/migrations/2026-09-25-website-fixes.sql).
     .filter((l) => (l.website || RENDERED_URLS[l.slug]?.length) && CIL.has((l.city || "").toLowerCase()))
-    .filter((l) => (SLUG ? l.slug.includes(SLUG) : !covered.has(l.slug)))
+    .filter((l) => (SLUG ? slugMatches(l.slug) : !covered.has(l.slug)))
     .map((l) => l.slug);
 }
 
@@ -404,7 +408,7 @@ function markMenuAttempted(state: MenuOrderState, slug: string): void {
 
 async function menuPhase(ctx: BrowserContext): Promise<void> {
   const orderState = readMenuOrderState();
-  const slugs = orderMenuStores(Object.keys(MENU_SOURCES).filter((s) => (SLUG ? s.includes(SLUG) : true)), orderState);
+  const slugs = orderMenuStores(Object.keys(MENU_SOURCES).filter((s) => (SLUG ? slugMatches(s) : true)), orderState);
   if (!slugs.length) return;
   const H = { apikey: READ_KEY!, Authorization: `Bearer ${READ_KEY}` };
   const raw: Array<{ slug: string; name: string; city: string; address1: string | null }> = await (
