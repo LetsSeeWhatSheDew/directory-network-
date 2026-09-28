@@ -101,6 +101,8 @@ const deals = [
   D("11111111-0000-4000-8000-000000000009", "sample-uptown-normal", "35% off sample flower", 35, "percent", { category: "flower" }),
   D("11111111-0000-4000-8000-000000000011", "sample-grove-peoria", "2 for $60 sample pre-rolls", 60, "dollars", { category: "flower", discount_type: "fixed_price" }),
   D("11111111-0000-4000-8000-000000000012", "sample-leaf-peoria", "$25 sample eighths", 25, "dollars", { category: "flower", discount_type: "fixed_price" }),
+  // Mirrors the live bug report: the biggest saving in Central IL is ~70 mi from Peoria Heights.
+  D("11111111-0000-4000-8000-000000000013", "sample-prairie-springfield", "50% off sample flower", 50, "percent", { category: "flower" }),
   D("11111111-0000-4000-8000-000000000010", "sample-quad-champaign", "$10 off sample vapes", 10, "dollars", { category: "vapes" }),
 ];
 

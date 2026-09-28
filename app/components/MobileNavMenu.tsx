@@ -10,9 +10,9 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Logo from "./Logo";
-import { longestExhale, productOf, storeWithCity, type ExDeal } from "../../lib/exhale";
+import { amountOf, nearestExhale, nearSubline, type ExDeal } from "../../lib/exhale";
 
-const toEx = (d: ApiDeal): ExDeal => ({ name: d.store, city: d.city, deal_title: d.title, discount_value: d.discount_value, discount_unit: d.discount_unit });
+const toEx = (d: ApiDeal): ExDeal => ({ name: d.store, city: d.city, deal_title: d.title, discount_value: d.discount_value, discount_unit: d.discount_unit, discount_type: d.discount_type });
 
 type Variant = "light" | "deep";
 type Props = { variant?: Variant };
@@ -23,6 +23,7 @@ type ApiDeal = {
   title: string | null;
   discount_value: number | null;
   discount_unit: string | null;
+  discount_type?: string | null;
   url: string;
 };
 
@@ -37,13 +38,10 @@ function readCookieCity(): string | null {
   }
 }
 
+// Same honest amount as the orb (lib/exhale amountOf): set prices ("2 for $60") aren't savings.
 function amount(d: ApiDeal): string | null {
-  const v = Number(d.discount_value);
-  if (!Number.isFinite(v) || v <= 0) return null;
-  const u = (d.discount_unit || "").toLowerCase();
-  if (u === "dollars") return `$${Math.round(v)} off`;
-  if ((u === "percent" || !u) && v <= 100) return `${Math.round(v)}% off`;
-  return null;
+  const a = amountOf(toEx(d));
+  return a ? `${a.big} off` : null;
 }
 
 const GROUPS: { title: string; items: { href: string; label: string; hint: string }[] }[] = [
@@ -81,6 +79,7 @@ export default function MobileNavMenu({ variant = "light" }: Props) {
   const [open, setOpen] = useState(false);
   const [city, setCity] = useState<string | null>(null);
   const [best, setBest] = useState<ApiDeal | null>(null);
+  const [bestLine, setBestLine] = useState<string | null>(null);
   const [count, setCount] = useState<number | null>(null);
 
   useEffect(() => {
@@ -97,10 +96,12 @@ export default function MobileNavMenu({ variant = "light" }: Props) {
       .then((j) => {
         if (!alive || !j) return;
         const all: ApiDeal[] = Array.isArray(j.deals) ? j.deals : [];
-        // Same pick as the homepage orb: real everyday amounts only, no "up to" or conditional deals, local city first.
+        // Same pick as the homepage orb (lib/exhale nearestExhale): biggest
+        // everyday saving within ~25 mi of the city above, widening and saying so.
         const ex = all.map(toEx);
-        const pick = longestExhale(ex, c);
-        setBest(pick ? all[ex.indexOf(pick)] : null);
+        const pick = nearestExhale(ex, c ? { city: c } : null);
+        setBest(pick ? all[ex.indexOf(pick.deal)] : null);
+        setBestLine(pick ? nearSubline(pick) : null);
         const n = typeof j.count === "number" ? j.count : all.length;
         setCount(n > 0 ? n : null);
       })
@@ -164,7 +165,7 @@ export default function MobileNavMenu({ variant = "light" }: Props) {
               {best ? (
                 <>
                   <span className="pm-exhale-amt">{amount(best)}</span>
-                  <span className="pm-exhale-where">{`${productOf(toEx(best))} at ${storeWithCity(toEx(best))}`}</span>
+                  <span className="pm-exhale-where">{bestLine}</span>
                 </>
               ) : (
                 <span className="pm-exhale-where">See every deal checked this morning →</span>

@@ -42,6 +42,21 @@ function readCookieCity(): string | null {
   }
 }
 
+/** The saved pp_loc city with how it was found (gps / manual / ip). */
+function readCookieLoc(): Loc | null {
+  if (typeof document === "undefined") return null;
+  try {
+    const m = document.cookie.match(/(?:^|;\s*)pp_loc=([^;]+)/);
+    if (!m) return null;
+    const p = JSON.parse(decodeURIComponent(m[1]));
+    if (typeof p?.city !== "string" || !p.city.trim()) return null;
+    const source: Source = p.source === "gps" || p.source === "manual" ? p.source : "ip";
+    return { city: p.city, source };
+  } catch {
+    return null;
+  }
+}
+
 function clearCache() {
   try {
     sessionStorage.removeItem(CITY_KEY);
@@ -156,8 +171,13 @@ export default function LocationAware() {
   const commit = useCallback((next: Loc, lat?: number, lng?: number) => {
     if (!inRegion(next.city)) {
       // Out of region: remember nothing, keep the page on "Central Illinois".
+      // Drop any older pp_loc cookie too, so server-rendered picks (the
+      // homepage orb) agree with this chip instead of an old city.
       try {
         sessionStorage.removeItem(CITY_KEY);
+      } catch {}
+      try {
+        document.cookie = "pp_loc=; path=/; max-age=0; samesite=lax";
       } catch {}
       setOutside(next.city);
       setLoc(null);
@@ -219,7 +239,11 @@ export default function LocationAware() {
 
     (async () => {
       const cachedRaw = readCached();
-      const cached = cachedRaw && inRegion(cachedRaw.city) ? cachedRaw : null;
+      // A new tab has no session cache but may carry the pp_loc cookie the
+      // server already rendered with (the homepage orb uses it). Start from
+      // it so the chip and the orb agree from the first paint.
+      const saved = cachedRaw ? null : readCookieLoc();
+      const cached = cachedRaw && inRegion(cachedRaw.city) ? cachedRaw : saved && inRegion(saved.city) ? saved : null;
       if (cachedRaw && !cached) {
         try {
           sessionStorage.removeItem(CITY_KEY);
@@ -295,7 +319,12 @@ export default function LocationAware() {
       if (city) {
         commit({ city, source: "ip" });
       } else {
-        finishUnresolved();
+        // Nothing detected this time: fall back to the city this browser
+        // already chose (the pp_loc cookie the server is reading), so the
+        // chip and the server-rendered picks agree.
+        const saved = readCookieLoc();
+        if (saved && inRegion(saved.city)) commit(saved);
+        else finishUnresolved();
       }
     })();
 

@@ -5,7 +5,7 @@ import Footer from "./components/Footer";
 import LocationAware from "./components/LocationAware";
 import TrackedLink from "./components/TrackedLink";
 import BreatheHero from "./components/BreatheHero";
-import { longestExhale, lowestList } from "../lib/exhale";
+import { nearestExhale, nearSubline, lowestList } from "../lib/exhale";
 import { getConfirmationsToday } from "../lib/confirmations";
 import { getFeatureRows } from "../lib/waysToBuy";
 import PriceBoard from "./components/PriceBoard";
@@ -545,8 +545,14 @@ export default async function HomePage() {
   // Breathe final: today's longest exhale (biggest everyday saving, local
   // first) and the "Lowest this morning" list — one deal per store.
   const exhalePool = [...(topDeals || []), ...(dealPool || [])];
-  const heroDeal = longestExhale(exhalePool, userCity);
-  const lowestCards = lowestList(exhalePool, 4, userCity, null);
+  // The orb agrees with the "Showing deals near X" label: same source (the
+  // pp_loc cookie LocationAware writes), biggest saving within ~25 mi, widening
+  // step by step and saying so. No city yet → the Central-IL-wide pick.
+  const userOrigin = userLoc ? { city: userLoc.city, lat: userLoc.lat ?? null, lng: userLoc.lng ?? null } : null;
+  const heroPick = nearestExhale(exhalePool, userOrigin);
+  const heroDeal = heroPick?.deal || null;
+  const heroLine = heroPick ? nearSubline(heroPick) : null;
+  const lowestCards = lowestList(exhalePool, 4, userOrigin, null);
   return (
     <>
       <script
@@ -1244,6 +1250,8 @@ export default async function HomePage() {
           signature PriceBoard returns here once menu prices are live. */}
       <BreatheHero
         hero={heroDeal}
+        heroLine={heroLine}
+        serverCity={userCity}
         cards={lowestCards}
         dealCount={dealCount}
         storeCount={listingCount}

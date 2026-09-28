@@ -78,8 +78,21 @@ for (const width of [390, 1440]) {
       await p.close();
       continue;
     }
-    await card.scrollIntoViewIfNeeded();
-    await p.evaluate(() => window.scrollBy(0, 120));
+    // The site scrolls smoothly (html { scroll-behavior: smooth }), so position
+    // the card with an instant scroll and wait for the page to be still before
+    // reading scrollY; otherwise the test measures its own scroll animation.
+    await p.evaluate(() => {
+      const el = document.querySelectorAll(".pp-dc")[1];
+      const top = el.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: Math.max(0, top - 200), behavior: "instant" });
+    });
+    await p.waitForFunction(
+      () =>
+        new Promise((res) => {
+          const a = window.scrollY;
+          requestAnimationFrame(() => requestAnimationFrame(() => res(window.scrollY === a)));
+        })
+    );
     await p.waitForTimeout(250);
     const y0 = await p.evaluate(() => window.scrollY);
     await card.locator(".pp-dc-face").click();

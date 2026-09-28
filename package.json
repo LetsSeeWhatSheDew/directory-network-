@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "smoke": "node tests/smoke.mjs",
+    "test:near": "tsx tests/near-exhale.test.ts",
     "scrape:cil": "tsx scripts/scrape-cil-deals.ts",
     "scrape:cil:dry": "tsx scripts/scrape-cil-deals.ts --dry-run",
     "scrape:cil:live": "tsx scripts/scrape-cil-deals.ts --live --apply"

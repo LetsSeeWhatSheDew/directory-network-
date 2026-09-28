@@ -12,6 +12,7 @@
 // under reduce-motion. Day/night copy both render; CSS picks by data-daypart.
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { MapPin } from "lucide-react";
 import ExhaleCard from "./ExhaleCard";
@@ -29,6 +30,10 @@ import {
 
 type Props = {
   hero: ExDeal | null;
+  /** Orb subline from lib/exhale nearSubline(): always names the city or the distance. */
+  heroLine?: string | null;
+  /** The city the server rendered for (pp_loc cookie), or null. */
+  serverCity?: string | null;
   cards: ExDeal[];
   dealCount: number | null;
   storeCount: number | null;
@@ -151,10 +156,25 @@ html[data-daypart="night"] .bh-all{background:transparent;color:#EEF3EE}
 }
 `;
 
-export default function BreatheHero({ hero, cards, dealCount, storeCount, location }: Props) {
+export default function BreatheHero({ hero, heroLine, serverCity = null, cards, dealCount, storeCount, location }: Props) {
   const [phase, setPhase] = useState<"load" | "exhale" | "after">("load");
   const [breaths, setBreaths] = useState(0);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const router = useRouter();
+
+  // The location chip and the orb read the same pp_loc cookie. When the chip
+  // settles on a different city than the server rendered for (first visit, or
+  // a new pick in the city picker), re-render so the orb follows the chip.
+  useEffect(() => {
+    const on = (e: Event) => {
+      const c = (e as CustomEvent<{ city?: string } | null>).detail?.city || null;
+      if (c && c.toLowerCase() !== (serverCity || "").toLowerCase()) router.refresh();
+      // Chip fell back to "Central Illinois" and the cookie is gone: follow it.
+      if (!c && serverCity && !/(?:^|;\s*)pp_loc=[^;]/.test(document.cookie)) router.refresh();
+    };
+    window.addEventListener("cl:location-resolved", on);
+    return () => window.removeEventListener("cl:location-resolved", on);
+  }, [serverCity, router]);
   const loadedAt = useRef<number>(0);
   const stageRef = useRef<HTMLDivElement | null>(null);
 
@@ -206,7 +226,7 @@ export default function BreatheHero({ hero, cards, dealCount, storeCount, locati
             onClick={hero ? onOrb : undefined}
             role={hero ? "button" : undefined}
             tabIndex={hero ? 0 : undefined}
-            aria-label={hero && amt ? `Today's longest exhale: ${amt.big} off at ${storeWithCity(hero)}` : undefined}
+            aria-label={hero && amt ? `Today's longest exhale: ${amt.big} off. ${heroLine || `at ${storeWithCity(hero)}`}` : undefined}
             onKeyDown={(e) => {
               if (hero && (e.key === "Enter" || e.key === " ")) {
                 e.preventDefault();
@@ -235,9 +255,7 @@ export default function BreatheHero({ hero, cards, dealCount, storeCount, locati
                     <b>{amt.big}</b>
                     <span>off</span>
                   </span>
-                  <span className="bh-sub">
-                    {productOf(hero)} at {storeWithCity(hero)}
-                  </span>
+                  <span className="bh-sub">{heroLine || `${productOf(hero)} at ${storeWithCity(hero)}`}</span>
                 </>
               ) : !held ? (
                 <span className="bh-empty">

@@ -25,6 +25,8 @@ const nextConfig: NextConfig = {
       { source: "/cannabis", destination: "/", permanent: true },
       { source: "/grow", destination: "/for-dispensaries", permanent: true },
       { source: "/early-access", destination: "/alerts", permanent: true },
+      // There's no /deals index; the list lives at /deals/all.
+      { source: "/deals", destination: "/deals/all", permanent: true },
     ];
   },
 };
