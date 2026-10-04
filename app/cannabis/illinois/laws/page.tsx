@@ -169,7 +169,7 @@ export default function IllinoisLawsPage() {
                 <tr><td>Infused products (edibles)</td><td>20%</td></tr>
               </tbody>
             </table>
-            <p className="laws-p">Regular Illinois sales tax (6.25% + local) and local cannabis taxes apply on top of the excise tax, and the excise itself is taxed. In Central Illinois the total comes to about 26–27% on flower, 38–39% on edibles and 44–45% on vapes and concentrates. <Link href="/illinois-cannabis-tax-calculator">The tax calculator</Link> shows your city&apos;s exact number.</p>
+            <p className="laws-p">Regular Illinois sales tax (6.25% + local) and local cannabis taxes apply on top of the excise tax, and the excise itself is taxed. In Central Illinois the total comes to about 26–28% on flower, 38–40% on edibles and 44–46% on vapes and concentrates. <Link href="/illinois-cannabis-tax-calculator">The tax calculator</Link> shows your city&apos;s exact number.</p>
           </div>
           <div className="laws-section">
             <h2 className="laws-h2">Home Cultivation</h2>

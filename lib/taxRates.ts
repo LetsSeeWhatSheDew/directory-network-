@@ -12,8 +12,9 @@
 //   3. Municipal Cannabis ROT — set per city, capped at 3%.
 //      Source: IL Municipal League PDF "Municipal Cannabis Tax Rates"
 //      (rates as of 2021-07-01; cross-checked against IL DOR bulletins
-//      FY 2024-20, FY 2025-09, FY 2025-20, FY 2026-06 — none of the 9
-//      CIL cities have changed since).
+//      FY 2024-20, FY 2025-09, FY 2025-20, FY 2026-06, FY 2026-21 — none of the 9
+//      CIL cities have changed since; FY 2026-21 (effective 2026-07-01) lists only
+//      Mount Zion, re-checked 2026-10-04).
 //   4. County Cannabis ROT — set per county, capped at 3% in
 //      incorporated areas (3.75% unincorporated).
 //      Source: IL Municipal League PDF "County Cannabis Tax Rates"
@@ -71,7 +72,7 @@ export const CITY_TAX_RATES: ReadonlyArray<CityTaxRates> = [
     countyCannabisRot: 0.03,
     municipalCannabisRot: 0.03,
     localSalesTax: 0.0275,
-    verifiedDate: "2026-05-01",
+    verifiedDate: "2026-10-04",
   },
   {
     city: "East Peoria",
@@ -81,7 +82,7 @@ export const CITY_TAX_RATES: ReadonlyArray<CityTaxRates> = [
     countyCannabisRot: 0.03,
     municipalCannabisRot: 0.03,
     localSalesTax: 0.0325,
-    verifiedDate: "2026-05-01",
+    verifiedDate: "2026-10-04",
   },
   {
     city: "Peoria Heights",
@@ -91,7 +92,7 @@ export const CITY_TAX_RATES: ReadonlyArray<CityTaxRates> = [
     countyCannabisRot: 0.03,
     municipalCannabisRot: 0.03,
     localSalesTax: 0.035,
-    verifiedDate: "2026-05-01",
+    verifiedDate: "2026-10-04",
   },
   {
     city: "Pekin",
@@ -101,7 +102,7 @@ export const CITY_TAX_RATES: ReadonlyArray<CityTaxRates> = [
     countyCannabisRot: 0.03,
     municipalCannabisRot: 0.03,
     localSalesTax: 0.0325,
-    verifiedDate: "2026-05-01",
+    verifiedDate: "2026-10-04",
   },
   {
     city: "Bloomington",
@@ -111,7 +112,7 @@ export const CITY_TAX_RATES: ReadonlyArray<CityTaxRates> = [
     countyCannabisRot: 0.03,
     municipalCannabisRot: 0.03,
     localSalesTax: 0.035,
-    verifiedDate: "2026-05-01",
+    verifiedDate: "2026-10-04",
   },
   {
     city: "Normal",
@@ -121,7 +122,7 @@ export const CITY_TAX_RATES: ReadonlyArray<CityTaxRates> = [
     countyCannabisRot: 0.03,
     municipalCannabisRot: 0.03,
     localSalesTax: 0.035,
-    verifiedDate: "2026-05-01",
+    verifiedDate: "2026-10-04",
   },
   {
     city: "Champaign",
@@ -131,7 +132,7 @@ export const CITY_TAX_RATES: ReadonlyArray<CityTaxRates> = [
     countyCannabisRot: 0.03,
     municipalCannabisRot: 0.03,
     localSalesTax: 0.03,
-    verifiedDate: "2026-05-01",
+    verifiedDate: "2026-10-04",
   },
   {
     city: "Urbana",
@@ -141,7 +142,7 @@ export const CITY_TAX_RATES: ReadonlyArray<CityTaxRates> = [
     countyCannabisRot: 0.03,
     municipalCannabisRot: 0.03,
     localSalesTax: 0.0275,
-    verifiedDate: "2026-05-01",
+    verifiedDate: "2026-10-04",
   },
   {
     city: "Springfield",
@@ -150,17 +151,20 @@ export const CITY_TAX_RATES: ReadonlyArray<CityTaxRates> = [
     stateSalesTax: 0.0625,
     countyCannabisRot: 0.03,
     municipalCannabisRot: 0.03,
-    localSalesTax: 0.035,
-    verifiedDate: "2026-05-01",
+    // Sangamon County public safety tax +0.50% from July 1, 2026 (IL DOR
+    // bulletin FY 2026-26-A): 3.5% → 4.0% local, 9.75% → 10.25% total.
+    localSalesTax: 0.04,
+    verifiedDate: "2026-10-04",
   },
 ];
 
 /** Display copy: when this calculator was last verified, used by the
  *  "Tax rates current as of …" line under the breakdown. */
-export const TAX_RATES_LAST_UPDATED = "2026-05-01";
+export const TAX_RATES_LAST_UPDATED = "2026-10-04";
 
 /** Next quarterly verification reminder (Jul 1 / Oct 1 / Jan 1 / Apr 1). */
-export const TAX_RATES_NEXT_REVIEW = "2026-07-01";
+// Next: the IL DOR bulletin for rate changes effective Jan 1, 2027 (published late in the year).
+export const TAX_RATES_NEXT_REVIEW = "2026-12-15";
 
 export function findCityRates(slug: string): CityTaxRates | undefined {
   return CITY_TAX_RATES.find((c) => c.slug === slug);
