@@ -99,6 +99,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${brand.url}/illinois-cannabis-delivery`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: `${brand.url}/illinois-hemp-law`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: `${brand.url}/deal-index`, lastModified: new Date(), changeFrequency: "daily", priority: 0.75 },
+    { url: `${brand.url}/law-updates`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
     { url: `${brand.url}/for-dispensaries`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
     { url: `${brand.url}/this-week`, lastModified: new Date(), changeFrequency: "daily", priority: 0.8 },
     { url: `${brand.url}/how-we-rank`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },

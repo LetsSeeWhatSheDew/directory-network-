@@ -2,6 +2,8 @@ import { Metadata } from "next";
 import Link from "next/link";
 import Nav from "../../../components/Nav";
 import Footer from "../../../components/Footer";
+import WatchControl from "../../../components/WatchControl";
+import { CENTRAL_IL_CITIES } from "../../../../lib/constants/regions";
 
 export const metadata: Metadata = {
   title: "Illinois Cannabis Laws 2026 — What's Legal Now",
@@ -167,7 +169,7 @@ export default function IllinoisLawsPage() {
                 <tr><td>Infused products (edibles)</td><td>20%</td></tr>
               </tbody>
             </table>
-            <p className="laws-p">Regular Illinois sales tax (6.25% + local) also applies on top of the excise tax. Effective total tax rates typically run 20–35%.</p>
+            <p className="laws-p">Regular Illinois sales tax (6.25% + local) and local cannabis taxes apply on top of the excise tax, and the excise itself is taxed. In Central Illinois the total comes to about 26–27% on flower, 38–39% on edibles and 44–45% on vapes and concentrates. <Link href="/illinois-cannabis-tax-calculator">The tax calculator</Link> shows your city&apos;s exact number.</p>
           </div>
           <div className="laws-section">
             <h2 className="laws-h2">Home Cultivation</h2>
@@ -184,6 +186,11 @@ export default function IllinoisLawsPage() {
                 <p className="laws-faq-a">{f.a}</p>
               </div>
             ))}
+          </div>
+          <div className="laws-section">
+            <h2 className="laws-h2">When the law changes</h2>
+            <p className="laws-p">We track every Illinois and Central Illinois change, with the source: <Link href="/law-updates">Illinois cannabis law changes</Link>.</p>
+            <WatchControl kind="law" cities={CENTRAL_IL_CITIES.map((c) => c.name)} />
           </div>
           <div className="laws-cta">
             <p className="laws-cta-title">Find a dispensary near you</p>

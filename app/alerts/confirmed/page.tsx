@@ -19,7 +19,7 @@ export default async function AlertsConfirmedPage({
   searchParams?: Promise<{ watch?: string }>;
 }) {
   const sp = (await searchParams) || {};
-  const watch = sp.watch === "store" || sp.watch === "city" || sp.watch === "price" || sp.watch === "event" ? sp.watch : null;
+  const watch = sp.watch === "store" || sp.watch === "city" || sp.watch === "price" || sp.watch === "event" || sp.watch === "law" ? sp.watch : null;
   return (
     <div style={{ fontFamily: "var(--font-body)", minHeight: "100vh", color: "var(--pp-ink)", display: "flex", flexDirection: "column" }}>
       <Nav variant="light" />
@@ -46,6 +46,8 @@ export default async function AlertsConfirmedPage({
               ? <>Confirmed. We&apos;ll email you when that price drops, read from the store&apos;s own menu twice a day. No drop, no email. Every email has a one-tap way out.</>
               : watch === "event"
               ? <>Confirmed. We&apos;ll send one email the morning of the sale day with the best deals we find, and that&apos;s it.</>
+              : watch === "law"
+              ? <>Confirmed. We&apos;ll email you when an Illinois cannabis law changes, and again the day a change takes effect. A few times a year, with the source every time. One tap to stop.</>
               : watch
               ? <>Confirmed. We&apos;ll send one short email on mornings when there&apos;s a new deal {watch === "store" ? "at that store" : "in that city"}. Quiet days, no email. Every email has a one-tap way out.</>
               : <>We&apos;ll email you when dispensaries near you post a deal worth knowing about.

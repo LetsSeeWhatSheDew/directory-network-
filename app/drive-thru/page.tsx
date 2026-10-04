@@ -1,9 +1,11 @@
 // app/drive-thru/page.tsx — Central Illinois cannabis drive-thru tracker.
 import type { Metadata } from "next";
 import Link from "next/link";
+import WatchControl from "../components/WatchControl";
 import GuideShell from "../components/GuideShell";
 import StoreAvatar from "../components/StoreAvatar";
 import ZipSignup from "../components/ZipSignup";
+import { CENTRAL_IL_CITIES } from "../../lib/constants/regions";
 import { brand } from "../../lib/brand";
 import { storeImageUrl } from "../../lib/storeImage";
 import { getRegionStores, getFeatureRows, featuresBySlug } from "../../lib/waysToBuy";
@@ -127,6 +129,11 @@ export default async function DriveThruPage() {
         </div>
       ))}
       <p className="gp-note">Run a Central Illinois dispensary with a drive-thru? <Link href="/claim">Tell us</Link> and we&apos;ll verify it on your site and list it the same day.</p>
+      <div className="gp-cta">
+        <b>Get an email when the law changes</b>
+        <WatchControl kind="law" cities={CENTRAL_IL_CITIES.map((c) => c.name)} />
+        <span className="gp-note">Every change we track: <Link href="/law-updates">Illinois cannabis law changes</Link></span>
+      </div>
     </GuideShell>
   );
 }

@@ -4,7 +4,7 @@
 // sends a confirm email. Nothing is ever sent to the address until the
 // confirm link is clicked.
 //
-// Body (JSON): { email, kind: "store"|"city"|"price"|"event", slug?, city?, categories?, min_discount?,
+// Body (JSON): { email, kind: "store"|"city"|"price"|"event"|"law", slug?, city?, categories?, min_discount?,
 //                item? (price: eighth|cart_1g|gummies_100mg), max_price? (price, dollars), event? (event id),
 //                website? (honeypot) }
 import { NextRequest, NextResponse } from "next/server";
@@ -105,6 +105,14 @@ export async function POST(req: NextRequest) {
     ask = "email me";
     after = `one email the morning of ${ev.name} with the best deals we find${city ? ` near ${city.name}` : " in Central Illinois"}. Just that one.`;
     saved = await saveWatch({ kind: "event", email, event: ev.id, city: city ? city.name : null });
+  } else if (b.kind === "law") {
+    const cityIn = String(b.city || "").trim().toLowerCase().replace(/-/g, " ");
+    const city = cityIn ? CENTRAL_IL_CITIES.find((c) => c.name.toLowerCase() === cityIn) || null : null;
+    if (cityIn && !city) return NextResponse.json({ ok: false, error: "Pick a Central Illinois city." }, { status: 400 });
+    what = "in Illinois";
+    ask = "email me when the law changes";
+    after = "a short email when an Illinois or Central Illinois law changes what you can buy, where, or how: drive-thrus, hemp, possession limits, taxes, delivery. And a heads-up the day a change takes effect. A few times a year, not a newsletter.";
+    saved = await saveWatch({ kind: "law", email, city: city ? city.name : null });
   } else {
     return NextResponse.json({ ok: false, error: "Pick a store or a city." }, { status: 400 });
   }

@@ -18,10 +18,11 @@ type Props =
   | { kind: "store"; slug: string; storeName: string }
   | { kind: "city"; city: string }
   | { kind: "price"; slug: string; storeName: string; item: string; itemLabel: string; nowLabel: string; startOpen?: boolean }
-  | { kind: "event"; event: string; eventName: string; cities: string[] };
+  | { kind: "event"; event: string; eventName: string; cities: string[] }
+  | { kind: "law"; cities: string[]; startOpen?: boolean };
 
 export default function WatchControl(props: Props) {
-  const [open, setOpen] = useState(props.kind === "price" && !!props.startOpen);
+  const [open, setOpen] = useState((props.kind === "price" || props.kind === "law") && !!props.startOpen);
   const [email, setEmail] = useState("");
   const [cats, setCats] = useState<string[]>([]);
   const [minPct, setMinPct] = useState("");
@@ -35,21 +36,26 @@ export default function WatchControl(props: Props) {
     props.kind === "store" ? "Watch this store"
     : props.kind === "city" ? "Get these deals by email"
     : props.kind === "price" ? "Email me when it drops"
+    : props.kind === "law" ? "Email me when the law changes"
     : `Email me the morning of ${props.eventName}`;
   const where =
     props.kind === "store" ? `at ${props.storeName}`
     : props.kind === "city" ? `in ${props.city}`
     : props.kind === "price" ? `the ${props.itemLabel} at ${props.storeName}`
+    : props.kind === "law" ? "Illinois cannabis law"
     : props.eventName;
   const lede =
     props.kind === "price"
       ? <>One short email when the cheapest {props.itemLabel} at {props.storeName} drops below {props.nowLabel} out the door. We read the store&apos;s own menu twice a day. No drop, no email. Free.</>
+      : props.kind === "law"
+      ? <>A short email when an Illinois or Central Illinois law changes what you can buy, where, or how, and a heads-up the day it takes effect. Plain words, the source every time. A few times a year. Free.</>
       : props.kind === "event"
       ? <>One email the morning of {props.eventName} with the best deals we find on the stores&apos; own sites. Just that one. Free.</>
       : <>One short email on mornings when there&apos;s a new deal {where}. Quiet days, no email. Free.</>;
   const activeLine =
     props.kind === "price" ? <>You&apos;re already set. We&apos;ll email you when {where} drops.</>
     : props.kind === "event" ? <>You&apos;re already set. We&apos;ll email you the morning of {where}.</>
+    : props.kind === "law" ? <>You&apos;re already set. We&apos;ll email you when the law changes.</>
     : <>You&apos;re already set. We&apos;ll email you when there&apos;s a new deal {where}.</>;
 
   if (state === "pending" || state === "active") {
@@ -89,6 +95,8 @@ export default function WatchControl(props: Props) {
                   ? { kind: "price", slug: props.slug, item: props.item, email, max_price: maxPrice || null, website: hp }
                   : props.kind === "event"
                   ? { kind: "event", event: props.event, city: eventCity || null, email, website: hp }
+                  : props.kind === "law"
+                  ? { kind: "law", city: eventCity || null, email, website: hp }
                   : { kind: "city", city: props.city, email, categories: cats, min_discount: minPct ? Number(minPct) : null, website: hp };
               const r = await fetch("/api/alerts/watch", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
               const j = (await r.json().catch(() => ({}))) as { ok?: boolean; status?: string; error?: string };
@@ -118,7 +126,7 @@ export default function WatchControl(props: Props) {
               />
             </label>
           )}
-          {props.kind === "event" && (
+          {(props.kind === "event" || props.kind === "law") && (
             <label className="wc-min">
               Near
               <select value={eventCity} onChange={(e) => setEventCity(e.target.value)} aria-label="City (optional)">

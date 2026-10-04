@@ -9,6 +9,8 @@
 //                             out-the-door price a drop is measured from (lib/priceWatch.ts),
 //                             'max' the optional "only under $X" ceiling
 //               'event_watch' city = optional city,    categories = ['event:<id>'] (lib/events.ts)
+//               'law_watch'   city = optional city,    categories = ['law', 'law:<YYYY-MM-DD cursor>'] (lib/lawUpdates.ts)
+//                             an email when an Illinois or local cannabis law changes, or takes effect
 //                             one email the morning of that sale day, then the row switches off
 //   min_discount  optional "at least N% off" (city watches)
 //   is_active     false until the address is confirmed (double opt-in),
@@ -29,7 +31,7 @@ import { createHmac, timingSafeEqual } from "crypto";
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
 
-export const WATCH_TYPES = ["city_watch", "store_watch", "price_watch", "event_watch"] as const;
+export const WATCH_TYPES = ["city_watch", "store_watch", "price_watch", "event_watch", "law_watch"] as const;
 export type WatchType = (typeof WATCH_TYPES)[number];
 /** The daily "new deals" digest only ever reads these. */
 export const DIGEST_TYPES = ["city_watch", "store_watch"] as const satisfies readonly WatchType[];
@@ -76,7 +78,7 @@ export function safeEq(a: string, b: string): boolean {
 // ---------- tags inside categories ----------
 export const storeSlugOf = (r: Pick<WatchRow, "categories">) =>
   (r.categories || []).find((c) => c.startsWith("store:"))?.slice(6) || null;
-const isMeta = (c: string) => c.startsWith("ok:") || c.startsWith("sent:");
+const isMeta = (c: string) => c.startsWith("ok:") || c.startsWith("sent:") || c.startsWith("law:");
 export const userCategories = (r: Pick<WatchRow, "categories">) =>
   (r.categories || []).filter((c) => !isMeta(c) && !c.startsWith("store:"));
 /** Exported for tests; the tag is only valid with the server secret. */
@@ -150,9 +152,10 @@ export type WatchInput =
   | { kind: "store"; email: string; slug: string; city: string | null }
   | { kind: "city"; email: string; city: string; categories: string[]; minDiscount: number | null }
   | { kind: "price"; email: string; slug: string; city: string | null; item: string; refCents: number; maxCents: number | null }
-  | { kind: "event"; email: string; event: string; city: string | null };
+  | { kind: "event"; email: string; event: string; city: string | null }
+  | { kind: "law"; email: string; city: string | null };
 
-const TYPE_OF: Record<WatchInput["kind"], WatchType> = { store: "store_watch", city: "city_watch", price: "price_watch", event: "event_watch" };
+const TYPE_OF: Record<WatchInput["kind"], WatchType> = { store: "store_watch", city: "city_watch", price: "price_watch", event: "event_watch", law: "law_watch" };
 
 export type SaveResult =
   | { ok: true; row: WatchRow; needsConfirm: boolean }
@@ -172,6 +175,7 @@ export async function saveWatch(input: WatchInput): Promise<SaveResult> {
   if (input.kind === "store") q += `&categories=cs.${encodeURIComponent(`{"store:${input.slug}"}`)}`;
   else if (input.kind === "price") q += `&categories=cs.${encodeURIComponent(`{"item:${input.slug}:${input.item}"}`)}`;
   else if (input.kind === "event") q += `&categories=cs.${encodeURIComponent(`{"event:${input.event}"}`)}`;
+  else if (input.kind === "law") q += ""; // one law watch per address; a new city just updates it
   else q += `&city=eq.${encodeURIComponent(city || "")}`;
   const found = await fetch(`${q}&order=created_at.asc&limit=1`, { headers: H, cache: "no-store" });
   if (!found.ok) return { ok: false, reason: "db" };
@@ -184,6 +188,8 @@ export async function saveWatch(input: WatchInput): Promise<SaveResult> {
       ? [`item:${input.slug}:${input.item}`, `ref:${input.refCents}`, ...(input.maxCents != null ? [`max:${input.maxCents}`] : [])]
       : input.kind === "event"
       ? [`event:${input.event}`]
+      : input.kind === "law"
+      ? ["law"]
       : input.categories.length
       ? input.categories
       : ["all"];
@@ -210,7 +216,8 @@ export async function saveWatch(input: WatchInput): Promise<SaveResult> {
       email,
       city,
       state: "IL",
-      categories: prefs,
+      // A new law watch starts its cursor today: it never gets the back catalogue.
+      categories: input.kind === "law" ? [...prefs, `law:${ctDate()}`] : prefs,
       min_discount: minDiscount,
       alert_type: type,
       is_active: false,

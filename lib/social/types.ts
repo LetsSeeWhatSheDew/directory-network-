@@ -83,6 +83,8 @@ export type LawFact = {
   page: string;
   /** YYYY-MM-DD the fact was last checked (the source page's "checked" date). */
   checked: string;
+  /** YYYY-MM-DD PuffPrice first published this fact (law-change emails key off it). Defaults to `checked`. */
+  published?: string;
   tags: string[];
 };
 export type LawData = Base & { status: "ok"; fact: LawFact };

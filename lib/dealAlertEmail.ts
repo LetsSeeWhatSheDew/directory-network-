@@ -207,3 +207,46 @@ export function renderPriceDropEmail(o: { drops: PriceDrop[]; unsubscribeAllUrl:
   ].join("\n");
   return { subject, html, text };
 }
+
+// ---------------- law changes ----------------
+export type LawEmailItem = { headline: string; body: string; sourceName: string; sourceUrl: string; pageUrl: string; effective: boolean };
+
+export function renderLawEmail(o: { items: LawEmailItem[]; stopUrl: string; unsubscribeAllUrl: string; dayLabel: string; hubUrl: string }): { subject: string; html: string; text: string } {
+  const first = o.items[0];
+  const subject =
+    o.items.length === 1
+      ? first.effective ? `Takes effect today: ${first.headline}` : `Illinois cannabis law: ${first.headline}`
+      : `${o.items.length} Illinois cannabis law changes`;
+  const blocks = o.items
+    .map(
+      (i) => `
+    <div style="padding:14px 0;border-bottom:1px solid ${C.line}">
+      ${i.effective ? `<div style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:${C.green};margin-bottom:4px">Takes effect today</div>` : ""}
+      <div style="font-size:17px;font-weight:700;line-height:1.3;color:${C.ink}">${esc(i.headline)}</div>
+      <p style="font-size:14px;line-height:1.6;color:${C.body};margin:6px 0 8px">${esc(i.body)}</p>
+      <div style="font-size:13px"><a href="${esc(i.pageUrl)}" style="color:${C.green};font-weight:600">What it means here</a> <span style="color:${C.muted}">· Source: <a href="${esc(i.sourceUrl)}" style="color:${C.muted}">${esc(i.sourceName)}</a></span></div>
+    </div>`
+    )
+    .join("");
+  const body = `${blocks}
+    <p style="font-size:13px;color:${C.muted};line-height:1.55;margin:18px 0 0">Every change we track, with sources: <a href="${esc(o.hubUrl)}" style="color:${C.green}">${esc(o.hubUrl.replace(/^https?:\/\//, ""))}</a>. Not legal advice.</p>
+    <p style="font-size:12px;color:${C.muted};margin:14px 0 0"><a href="${esc(o.stopUrl)}" style="color:${C.muted}">Stop law emails</a> · <a href="${esc(o.unsubscribeAllUrl)}" style="color:${C.muted}">Unsubscribe from everything</a></p>`;
+  const html = shell({
+    eyebrow: `${brand.name} · law watch · ${o.dayLabel}`,
+    title: o.items.length === 1 ? (first.effective ? "It takes effect today." : "The law changed.") : "The law changed.",
+    lede: "You asked us to tell you when Illinois cannabis law changes. Here's what's new, in plain words.",
+    body,
+    footer: "For adults 21 and over. Not legal advice. PuffPrice is independent: nobody pays us to rank.",
+  });
+  const text = [
+    "You asked PuffPrice to tell you when Illinois cannabis law changes.",
+    "",
+    ...o.items.flatMap((i) => [`${i.effective ? "TAKES EFFECT TODAY: " : ""}${i.headline}`, i.body, `What it means here: ${i.pageUrl}`, `Source: ${i.sourceName} ${i.sourceUrl}`, ""]),
+    `Every change we track: ${o.hubUrl}`,
+    `Stop law emails: ${o.stopUrl}`,
+    `Unsubscribe from everything: ${o.unsubscribeAllUrl}`,
+    "",
+    "For adults 21 and over. Not legal advice.",
+  ].join("\n");
+  return { subject, html, text };
+}

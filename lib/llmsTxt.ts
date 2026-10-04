@@ -42,6 +42,7 @@ ${SALE_EVENTS.map((e) => `- [${e.name}, ${e.dateLabel}](${u}${e.path}): every Ce
 ## Ways to buy
 - [Compare every store](${u}/ways-to-buy): drive-thru, medical, order ahead, curbside, closing time
 - [Drive-thru tracker](${u}/drive-thru)
+- [Illinois cannabis law changes](${u}/law-updates): every Illinois and Central Illinois change tracked, newest first, with sources (RSS: ${u}/law-updates/feed.xml)
 - [Medical dispensaries](${u}/medical)
 - [Open latest tonight](${u}/open-late)
 

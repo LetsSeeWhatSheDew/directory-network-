@@ -1,8 +1,10 @@
 // app/illinois-cannabis-delivery/page.tsx — delivery law tracker + ZIP waitlist.
 import type { Metadata } from "next";
 import Link from "next/link";
+import WatchControl from "../components/WatchControl";
 import GuideShell from "../components/GuideShell";
 import ZipSignup from "../components/ZipSignup";
+import { CENTRAL_IL_CITIES } from "../../lib/constants/regions";
 import { brand } from "../../lib/brand";
 
 export const revalidate = 3600;
@@ -82,6 +84,11 @@ export default async function DeliveryPage() {
         <div key={f.q} style={{ marginBottom: 14 }}><b>{f.q}</b><p className="gp-p" style={{ marginTop: 4 }}>{f.a}</p></div>
       ))}
       <p className="gp-note">Not legal advice. We track public bill status and update this page when anything moves.</p>
+      <div className="gp-cta">
+        <b>Get an email when the law changes</b>
+        <WatchControl kind="law" cities={CENTRAL_IL_CITIES.map((c) => c.name)} />
+        <span className="gp-note">Every change we track: <Link href="/law-updates">Illinois cannabis law changes</Link></span>
+      </div>
     </GuideShell>
   );
 }
