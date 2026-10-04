@@ -59,7 +59,7 @@ export default async function HempPage() {
       ))}
       <p className="gp-note">Not legal advice. Summarized from the public reporting linked above.</p>
       <div className="gp-cta">
-        <b>Get an email when the law changes</b>
+        <b>Laws keep changing. We&apos;ll tell you when they do.</b>
         <WatchControl kind="law" cities={CENTRAL_IL_CITIES.map((c) => c.name)} />
         <span className="gp-note">Every change we track: <Link href="/law-updates">Illinois cannabis law changes</Link></span>
       </div>

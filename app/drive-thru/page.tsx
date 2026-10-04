@@ -130,7 +130,7 @@ export default async function DriveThruPage() {
       ))}
       <p className="gp-note">Run a Central Illinois dispensary with a drive-thru? <Link href="/claim">Tell us</Link> and we&apos;ll verify it on your site and list it the same day.</p>
       <div className="gp-cta">
-        <b>Get an email when the law changes</b>
+        <b>Laws keep changing. We&apos;ll tell you when they do.</b>
         <WatchControl kind="law" cities={CENTRAL_IL_CITIES.map((c) => c.name)} />
         <span className="gp-note">Every change we track: <Link href="/law-updates">Illinois cannabis law changes</Link></span>
       </div>
