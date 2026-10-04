@@ -7,6 +7,7 @@ export const metadata = {
   title: "How much are you leaving on the table?",
   description:
     "Quick calculator: see how much Central Illinois cannabis shoppers with your habits are overpaying — and how much PuffPrice users save.",
+  alternates: { canonical: "https://www.puffprice.com/savings" },
 };
 
 export default function SavingsPage() {

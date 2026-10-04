@@ -17,59 +17,36 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
+// The FAQ section rendered below and the FAQPage schema come from this one
+// list, so the markup can never claim Q&A that isn't visible on the page
+// (Google's FAQPage rule; the old schema carried six different questions).
+const FAQS: { q: string; a: string }[] = [
+  {
+    q: "Can I buy cannabis without a medical card in Illinois?",
+    a: "Yes. Illinois has full recreational cannabis. You don't need a medical card — just a valid ID showing you are 21 or older.",
+  },
+  {
+    q: "Can I smoke cannabis in my hotel room?",
+    a: "Most hotels prohibit smoking of any kind, including cannabis. Check your hotel's policy before assuming it's allowed. Vaping or edibles are often the more practical option for hotel stays.",
+  },
+  {
+    q: "Do dispensaries take credit cards?",
+    a: "Rarely. Most Illinois dispensaries accept cash and debit cards (with a fee). Almost all have ATMs on-site. Bring cash to be safe.",
+  },
+  {
+    q: "What if I'm a medical patient visiting from another state?",
+    a: "Illinois does not have reciprocity with other states' medical programs. Out-of-state medical patients are treated as recreational customers and subject to visitor purchase limits.",
+  },
+  {
+    q: "Is there a tax on cannabis in Illinois?",
+    a: "Yes. Illinois imposes an excise tax of 10% on cannabis flower with 35% THC or less, 25% on cannabis with more than 35% THC, and 20% on infused products like edibles. Regular sales tax applies on top of that.",
+  },
+];
+
 const faqSchema = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "Can I buy cannabis in Illinois without a medical card?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Yes. Illinois legalized recreational cannabis for adults 21 and older in January 2020. You do not need a medical card to purchase cannabis at any licensed recreational dispensary in Illinois.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What ID do I need to buy cannabis in Illinois?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "You need a valid, government-issued photo ID proving you are 21 or older. Acceptable forms include a driver's license, state ID, passport, or military ID. Expired IDs are not accepted.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How much cannabis can I buy at once in Illinois?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Since June 12, 2026, Illinois residents can possess up to 60 grams of cannabis flower, 1,000 milligrams of THC in cannabis-infused products, or 10 grams of cannabis concentrate. Out-of-state visitors are limited to half those amounts (30 g, 500 mg, 5 g).",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Can tourists buy cannabis in Illinois?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Yes. Anyone 21 or older with a valid government-issued ID can purchase cannabis at Illinois dispensaries, regardless of what state or country they are from. Out-of-state visitors have lower possession limits than Illinois residents.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Where can I smoke cannabis in Illinois?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Cannabis can be consumed in private residences where the property owner permits it. Public consumption is illegal in Illinois, including parks, sidewalks, and vehicles. Some municipalities have cannabis lounges or social consumption spaces.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How much does cannabis cost in Illinois?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Prices vary by product type and quality. Flower typically ranges from $30–$60 per eighth (3.5 grams). Edibles usually cost $15–$30 for a 10-piece pack. Vape cartridges range from $35–$65. Many dispensaries offer first-time customer discounts of 10–25%.",
-      },
-    },
-  ],
+  mainEntity: FAQS.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
 });
 
 export default function FirstTimeGuidePage() {
@@ -136,7 +113,7 @@ export default function FirstTimeGuidePage() {
         <div className="guide-breadcrumb">
           <Link href="/">Home</Link>
           <span>›</span>
-          <Link href="/cannabis">Cannabis</Link>
+          <Link href="/guides">Guides</Link>
           <span>›</span>
           <Link href="/">Central IL</Link>
           <span>›</span>
@@ -311,26 +288,12 @@ export default function FirstTimeGuidePage() {
 
           <div id="faq" className="guide-faq">
             <h2 className="guide-h2">Frequently Asked Questions</h2>
-            <div className="guide-faq-item">
-              <p className="guide-faq-q">Can I buy cannabis without a medical card in Illinois?</p>
-              <p className="guide-faq-a">Yes. Illinois has full recreational cannabis. You don&apos;t need a medical card — just a valid ID showing you are 21 or older.</p>
-            </div>
-            <div className="guide-faq-item">
-              <p className="guide-faq-q">Can I smoke cannabis in my hotel room?</p>
-              <p className="guide-faq-a">Most hotels prohibit smoking of any kind, including cannabis. Check your hotel&apos;s policy before assuming it&apos;s allowed. Vaping or edibles are often the more practical option for hotel stays.</p>
-            </div>
-            <div className="guide-faq-item">
-              <p className="guide-faq-q">Do dispensaries take credit cards?</p>
-              <p className="guide-faq-a">Rarely. Most Illinois dispensaries accept cash and debit cards (with a fee). Almost all have ATMs on-site. Bring cash to be safe.</p>
-            </div>
-            <div className="guide-faq-item">
-              <p className="guide-faq-q">What if I&apos;m a medical patient visiting from another state?</p>
-              <p className="guide-faq-a">Illinois does not have reciprocity with other states&apos; medical programs. Out-of-state medical patients are treated as recreational customers and subject to visitor purchase limits.</p>
-            </div>
-            <div className="guide-faq-item">
-              <p className="guide-faq-q">Is there a tax on cannabis in Illinois?</p>
-              <p className="guide-faq-a">Yes. Illinois imposes an excise tax of 10% on cannabis with less than 35% THC, 20% on cannabis with more than 35% THC, and 25% on infused products like edibles. Regular sales tax applies on top of that.</p>
-            </div>
+            {FAQS.map((f) => (
+              <div key={f.q} className="guide-faq-item">
+                <p className="guide-faq-q">{f.q}</p>
+                <p className="guide-faq-a">{f.a}</p>
+              </div>
+            ))}
           </div>
 
           <div id="find">

@@ -17,31 +17,31 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
+// The FAQ section rendered below and the FAQPage schema come from this one
+// list, so the markup only ever claims Q&A that is visible on the page.
+const FAQS: { q: string; a: string }[] = [
+  {
+    q: "Can I bring cannabis from Illinois to another state?",
+    a: "No. Transporting cannabis across state lines is a federal crime regardless of the laws in either state. Never bring cannabis through airports or across state borders.",
+  },
+  {
+    q: "Can tourists buy cannabis in Illinois?",
+    a: "Yes. Any adult 21+ with a valid government-issued ID can purchase at any Illinois licensed dispensary. Out-of-state visitors have lower possession limits than residents.",
+  },
+  {
+    q: "Can employers drug test for cannabis?",
+    a: "Yes. Illinois employers can maintain drug-free workplace policies and test for cannabis. You can be disciplined or fired for failing a cannabis test, particularly in safety-sensitive positions.",
+  },
+  {
+    q: "Is cannabis legal on college campuses?",
+    a: "Generally no. Most Illinois colleges prohibit cannabis on campus because they receive federal funding. Possession on campus can result in disciplinary action even though it is legal under state law.",
+  },
+];
+
 const faqSchema = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "Is cannabis legal in Illinois?",
-      acceptedAnswer: { "@type": "Answer", text: "Yes. Illinois legalized recreational cannabis on January 1, 2020 under the Cannabis Regulation and Tax Act. Adults 21 and older can legally purchase, possess, and consume cannabis from licensed dispensaries throughout Illinois." },
-    },
-    {
-      "@type": "Question",
-      name: "How much cannabis can you possess in Illinois?",
-      acceptedAnswer: { "@type": "Answer", text: "Since June 12, 2026 (SB 3222), Illinois residents may possess up to 60 grams of cannabis flower, 1,000 milligrams of THC in cannabis-infused products, and 10 grams of cannabis concentrate. Non-residents are limited to half those amounts (30 g, 500 mg, 5 g)." },
-    },
-    {
-      "@type": "Question",
-      name: "Can you smoke cannabis in public in Illinois?",
-      acceptedAnswer: { "@type": "Answer", text: "No. Public consumption of cannabis is illegal in Illinois, including parks, sidewalks, restaurants, bars, and vehicles. Cannabis can only be consumed in private residences where the property owner permits it." },
-    },
-    {
-      "@type": "Question",
-      name: "Can you drive after using cannabis in Illinois?",
-      acceptedAnswer: { "@type": "Answer", text: "No. Driving under the influence of cannabis is illegal in Illinois. The legal limit is 5 nanograms of THC per milliliter of blood." },
-    },
-  ],
+  mainEntity: FAQS.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
 });
 
 export default function IllinoisLawsPage() {
@@ -96,7 +96,7 @@ export default function IllinoisLawsPage() {
         <Nav variant="light" />
         <div className="laws-breadcrumb">
           <Link href="/">Home</Link><span>›</span>
-          <Link href="/cannabis">Cannabis</Link><span>›</span>
+          <Link href="/guides">Guides</Link><span>›</span>
           <Link href="/">Central IL</Link><span>›</span>
           <span style={{ color: "var(--pp-body)" }}>Laws</span>
         </div>
@@ -178,22 +178,12 @@ export default function IllinoisLawsPage() {
           </div>
           <div className="laws-section">
             <h2 className="laws-h2">Frequently Asked Questions</h2>
-            <div className="laws-faq-item">
-              <p className="laws-faq-q">Can I bring cannabis from Illinois to another state?</p>
-              <p className="laws-faq-a">No. Transporting cannabis across state lines is a federal crime regardless of the laws in either state. Never bring cannabis through airports or across state borders.</p>
-            </div>
-            <div className="laws-faq-item">
-              <p className="laws-faq-q">Can tourists buy cannabis in Illinois?</p>
-              <p className="laws-faq-a">Yes. Any adult 21+ with a valid government-issued ID can purchase at any Illinois licensed dispensary. Out-of-state visitors have lower possession limits than residents.</p>
-            </div>
-            <div className="laws-faq-item">
-              <p className="laws-faq-q">Can employers drug test for cannabis?</p>
-              <p className="laws-faq-a">Yes. Illinois employers can maintain drug-free workplace policies and test for cannabis. You can be disciplined or fired for failing a cannabis test, particularly in safety-sensitive positions.</p>
-            </div>
-            <div className="laws-faq-item">
-              <p className="laws-faq-q">Is cannabis legal on college campuses?</p>
-              <p className="laws-faq-a">Generally no. Most Illinois colleges prohibit cannabis on campus because they receive federal funding. Possession on campus can result in disciplinary action even though it is legal under state law.</p>
-            </div>
+            {FAQS.map((f) => (
+              <div key={f.q} className="laws-faq-item">
+                <p className="laws-faq-q">{f.q}</p>
+                <p className="laws-faq-a">{f.a}</p>
+              </div>
+            ))}
           </div>
           <div className="laws-cta">
             <p className="laws-cta-title">Find a dispensary near you</p>

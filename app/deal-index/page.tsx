@@ -36,9 +36,21 @@ export default async function DealIndexPage() {
     name: "Central Illinois Cannabis Deal Index",
     description: "Daily count of live dispensary deals, stores discounting, and average discount by city in Central Illinois, from PuffPrice's daily checks of each store's own website.",
     url: `${brand.url}/deal-index`,
-    creator: { "@type": "Organization", name: "PuffPrice", url: brand.url },
+    creator: { "@type": "Organization", "@id": `${brand.url}/#organization`, name: "PuffPrice", url: brand.url },
     temporalCoverage: days.length ? `${days[0].day}/${days[days.length - 1].day}` : undefined,
-    spatialCoverage: "Central Illinois, USA",
+    ...(latestDay ? { dateModified: latestDay } : {}),
+    spatialCoverage: {
+      "@type": "Place",
+      name: "Central Illinois, USA",
+      containedInPlace: { "@type": "State", name: "Illinois" },
+    },
+    // The three columns this page publishes, by city and day.
+    variableMeasured: [
+      { "@type": "PropertyValue", name: "Deals live", description: "Dispensary deals seen live that morning on the stores' own sites" },
+      { "@type": "PropertyValue", name: "Stores discounting", description: "Dispensaries with at least one live deal" },
+      { "@type": "PropertyValue", name: "Average discount", unitText: "percent", description: "Mean stated percent-off across live percent-off deals" },
+    ],
+    keywords: ["cannabis deals", "dispensary discounts", "Central Illinois", "Peoria", "Bloomington-Normal", "Champaign-Urbana", "Springfield"],
     isAccessibleForFree: true,
   };
   return (

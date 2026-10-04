@@ -30,7 +30,9 @@ import { capPerStore, STORE_CAP } from "../lib/storeCap";
 // via the "Browse all Illinois" link below; out-of-scope city pages keep
 // their own city-specific metadata for SEO retention.
 export const metadata = {
-  title: `Cannabis Deals in Central Illinois`,
+  // The layout's "%s | PuffPrice" template doesn't apply to a page in the
+  // same segment as the root layout, so the brand goes in by hand here.
+  title: { absolute: `Cannabis Deals in Central Illinois | ${brand.name}` },
   description:
     "Live dispensary deals across Peoria, Bloomington-Normal, Champaign-Urbana, Springfield, and the rest of Central Illinois — updated continuously and always free to browse.",
   alternates: { canonical: brand.url },
@@ -465,6 +467,7 @@ const FAQ_SCHEMA = {
 const ORG_SCHEMA = {
   "@context": "https://schema.org",
   "@type": "Organization",
+  "@id": `${brand.url}/#organization`,
   name: brand.name,
   url: brand.url,
   logo: `${brand.url}/apple-touch-icon.png`,
@@ -472,6 +475,24 @@ const ORG_SCHEMA = {
   email: brand.supportEmail,
   areaServed: { "@type": "AdministrativeArea", name: "Central Illinois" },
   sameAs: [`https://twitter.com/${brand.social.twitter.replace("@", "")}`],
+};
+
+// WebSite schema — names the site entity (Google site name, AI entity
+// resolution) and declares the real /search?q= endpoint (app/search/page.tsx).
+const WEBSITE_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${brand.url}/#website`,
+  name: brand.name,
+  url: brand.url,
+  description: brand.description,
+  inLanguage: "en-US",
+  publisher: { "@id": `${brand.url}/#organization` },
+  potentialAction: {
+    "@type": "SearchAction",
+    target: { "@type": "EntryPoint", urlTemplate: `${brand.url}/search?q={search_term_string}` },
+    "query-input": "required name=search_term_string",
+  },
 };
 
 // Prefer user-city deals when we know the city; otherwise fall back to the
@@ -552,6 +573,10 @@ export default async function HomePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_SCHEMA) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(WEBSITE_SCHEMA) }}
       />
       <script
         type="application/ld+json"

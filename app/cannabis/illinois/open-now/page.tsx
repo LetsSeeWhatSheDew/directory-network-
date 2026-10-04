@@ -180,7 +180,7 @@ export default async function OpenNowPage() {
         <div className="on-breadcrumb">
           <Link href="/">Home</Link>
           <span>›</span>
-          <Link href="/cannabis">Cannabis</Link>
+          <Link href="/guides">Guides</Link>
           <span>›</span>
           <Link href="/">Central IL</Link>
           <span>›</span>

@@ -455,6 +455,17 @@ export default async function CityPage({
     q: "Do I need to be 21?",
     a: "Yes. Adult-use cannabis in Illinois is 21+ with a valid government-issued photo ID.",
   });
+  // FAQPage from the exact Q&A rendered in the "{city} questions" block
+  // below — built from today's store data, so schema and page always match.
+  (jsonLd as Record<string, unknown>[]).push({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  });
 
   return (
     <>

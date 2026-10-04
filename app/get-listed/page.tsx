@@ -7,6 +7,7 @@ export const metadata = {
   title: "Get your dispensary listed",
   description:
     "Free listing for every Central Illinois cannabis dispensary. Get discovered on city pages, search, and deal pages. Claim or add your dispensary in under 2 minutes.",
+  alternates: { canonical: "https://www.puffprice.com/get-listed" },
 };
 
 export default function GetListedPage() {

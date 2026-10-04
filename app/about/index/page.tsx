@@ -9,6 +9,7 @@ const OG_IMAGE = "https://www.puffprice.com/og-image.png";
 export const metadata = {
   title: "The PuffPrice Index — Illinois flower price benchmark",
   description: OG_DESC,
+  alternates: { canonical: "https://www.puffprice.com/about/index" },
   openGraph: {
     title: "The PuffPrice Index",
     description: OG_DESC,

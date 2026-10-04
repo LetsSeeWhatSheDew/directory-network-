@@ -393,7 +393,6 @@ function buildSpecialAnnouncements(deals: any[]) {
     name: d.deal_title || d.title || "Cannabis deal",
     text: d.deal_description || d.description || `${d.discount_value ?? ""}${d.discount_unit === "percent" ? "%" : ""} off ${d.category || "cannabis"} at ${d.name || d.listing_slug || "Illinois dispensary"}`,
     ...(d.expires_at ? { expires: d.expires_at } : {}),
-    category: "https://schema.org/SpecialAnnouncement",
     announcementLocation: {
       "@type": "LocalBusiness",
       name: d.name || d.listing_slug || "Illinois cannabis dispensary",

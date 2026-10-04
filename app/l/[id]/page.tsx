@@ -429,7 +429,6 @@ export default async function ListingPage({
     name: d.title || "Cannabis deal",
     text: d.description || d.title || "Deal at this dispensary",
     ...(d.expires_at ? { expires: d.expires_at } : {}),
-    category: "https://schema.org/SpecialAnnouncement",
     announcementLocation: {
       "@type": "LocalBusiness",
       name: listing.name,

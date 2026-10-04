@@ -299,7 +299,6 @@ export default async function DealPage({
     name: headline,
     text: deal.description || headline,
     ...(deal.expires_at ? { expires: deal.expires_at } : {}),
-    category: "https://schema.org/SpecialAnnouncement",
     announcementLocation: {
       "@type": "LocalBusiness",
       name: disp,

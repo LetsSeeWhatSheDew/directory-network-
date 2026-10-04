@@ -14,6 +14,11 @@ const SUPABASE_ANON_KEY =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300";
 
+// Rebuild hourly. Without this the sitemap was being served from a build-time
+// snapshot (live Age header ~3 days on 2026-10-04), so data-driven entries
+// (/cheapest/*, answer pages, dispensaries) drifted from what the pages say.
+export const revalidate = 3600;
+
 const DEAL_CATEGORIES = ["flower", "edibles", "vapes", "concentrate", "all"] as const;
 
 const NOINDEX_SLUGS = [
@@ -85,6 +90,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${brand.url}`, lastModified: new Date(), changeFrequency: "daily", priority: 1.0 },
     { url: `${brand.url}/alerts`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: `${brand.url}/dispensaries`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
+    { url: `${brand.url}/map`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.6 },
     { url: `${brand.url}/about`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${brand.url}/ways-to-buy`, lastModified: new Date(), changeFrequency: "daily", priority: 0.85 },
     { url: `${brand.url}/drive-thru`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
