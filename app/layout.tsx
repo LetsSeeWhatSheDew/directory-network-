@@ -68,11 +68,16 @@ export const metadata: Metadata = {
     ],
     apple: "/apple-touch-icon.png",
   },
+  // No title / description / url here on purpose: Next.js replaces the
+  // openGraph object wholesale, so any page without its own openGraph used to
+  // inherit the HOMEPAGE og:title and og:url (crawl 2026-10-04: /deal-index,
+  // /status, /how-we-rank, /cheapest, /developers, every /guides/* page…).
+  // Without them, link previews and crawlers fall back to the page's own
+  // <title>, meta description and canonical. Pages that want a custom
+  // preview still set their own openGraph.
   openGraph: {
-    title: `Cannabis Deals in Central Illinois | ${brand.name}`,
-    description: brand.description,
-    url: brand.url,
     siteName: brand.name,
+    locale: "en_US",
     type: "website",
     images: [
       {
@@ -85,8 +90,6 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `Cannabis Deals in Central Illinois | ${brand.name}`,
-    description: brand.description,
     images: [`${brand.url}/og-image.png`],
   },
 };
