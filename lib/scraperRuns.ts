@@ -142,3 +142,4 @@ export function latestGoodRun(runs: ScraperRun[]): ScraperRun | null {
   }
   return best;
 }
+
