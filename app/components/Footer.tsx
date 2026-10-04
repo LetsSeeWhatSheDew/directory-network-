@@ -48,11 +48,10 @@ const FOOTER_COLUMNS: { heading: string; links: { href: string; label: string }[
     heading: "PuffPrice",
     links: [
       { href: "/about", label: "About" },
-      { href: "/about/index", label: "PuffPrice Index" },
+      { href: "/deal-index", label: "Deal Index" },
       { href: "/deal-of-the-day", label: "Deal of the day" },
       { href: "/this-week", label: "This week's deals" },
       { href: "/green-wednesday", label: "Green Wednesday" },
-      { href: "/deal-index", label: "Deal Index" },
       { href: "/how-we-rank", label: "How we rank" },
       { href: "/developers", label: "For AI assistants (MCP)" },
       { href: "/status", label: "Status: is this up to date?" },
