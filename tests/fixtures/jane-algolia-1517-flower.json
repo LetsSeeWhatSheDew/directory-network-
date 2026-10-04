@@ -1,0 +1,3364 @@
+{
+ "_fixture": "REAL records: nuEra East Peoria (REC), Jane store 1517, flower. Trimmed from reference-data/captures-jul09/jane-1517-flower.json (captured 2026-07-09 from the store's own menu; those records are the Algolia menu-products record shape). Only descriptive fields (photos, descriptions, effects) were removed; every price, weight, special and potency field is as captured. Wrapped in the Algolia /1/indexes/*/queries response shape.",
+ "results": [
+  {
+   "hits": [
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [
+       3369513
+      ],
+      "discount": [
+       3369513
+      ]
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3369506,
+      3373620
+     ],
+     "applicable_special_types": [
+      "product",
+      "bundle"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "quarter ounce",
+      "half ounce",
+      "ounce"
+     ],
+     "brand": "High Supply\u2122",
+     "brand_special_prices": {},
+     "brand_subtype": "Popcorn",
+     "bucket_price": 48,
+     "category": "hybrid",
+     "custom_product_subtype": "Smalls",
+     "custom_product_type": "flower",
+     "discounted_price_half_ounce": 90,
+     "discounted_price_ounce": 100,
+     "discounted_price_quarter_ounce": 48.75,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "quarter_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 28.33
+      },
+      {
+       "price_id": "ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 21.26
+      },
+      {
+       "price_id": "half_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 24.79
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Popcorn",
+     "kind_root_subtype": "flower:Smalls",
+     "kind_subtype": "Popcorn",
+     "name": "Pineapple Express",
+     "net_weight_grams": 0,
+     "objectID": 6147688,
+     "percent_cbd": 0.08,
+     "percent_thc": 21.26,
+     "pos_product_lookup": {
+      "ounce": "2810499",
+      "half_ounce": "2810498",
+      "quarter_ounce": "2810500"
+     },
+     "price_half_ounce": 120,
+     "price_ounce": 200,
+     "price_quarter_ounce": 65,
+     "product_brand_id": 21089,
+     "product_id": 395068,
+     "quantity_units": "g",
+     "review_count": 260,
+     "root_subtype": "Smalls",
+     "root_types": [
+      "flower",
+      "sale",
+      "best_selling",
+      "flower:Smalls"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "high-supply-pineapple-express-395068",
+     "special_amount": "25% OFF",
+     "special_id": 3373620,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {},
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {
+      "price": "120.0",
+      "special_id": 3373620,
+      "discount_type": "percent",
+      "discount_price": "90.0",
+      "discount_amount": 30,
+      "discount_percent": "25.0"
+     },
+     "special_price_ounce": {
+      "price": "200.0",
+      "special_id": 3369506,
+      "discount_type": "target_price",
+      "discount_price": "100.0",
+      "discount_amount": "100.0",
+      "discount_percent": "0.0"
+     },
+     "special_price_quarter_ounce": {
+      "price": "65.0",
+      "special_id": 3373620,
+      "discount_type": "percent",
+      "discount_price": "48.75",
+      "discount_amount": 16.25,
+      "discount_percent": "25.0"
+     },
+     "special_price_two_gram": {},
+     "special_title": "ENTIRE-STORE-25%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "hybrid",
+     "unique_slug": "high-supply-hybrid-pineapple-express",
+     "url_slug": "high-supply-pineapple-express",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [
+       3369513
+      ],
+      "discount": [
+       3369513
+      ]
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3373620
+     ],
+     "applicable_special_types": [
+      "product",
+      "bundle"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "quarter ounce",
+      "half ounce"
+     ],
+     "brand": "High Supply\u2122",
+     "brand_special_prices": {},
+     "brand_subtype": "Popcorn",
+     "bucket_price": 48,
+     "category": "sativa",
+     "custom_product_subtype": "Smalls",
+     "custom_product_type": "flower",
+     "discounted_price_half_ounce": 90,
+     "discounted_price_quarter_ounce": 48.75,
+     "has_brand_discount": false,
+     "has_photos": true,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "half_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 28.68
+      },
+      {
+       "price_id": "quarter_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 29.37
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Popcorn",
+     "kind_root_subtype": "flower:Smalls",
+     "kind_subtype": "Popcorn",
+     "name": "Purple Plague",
+     "net_weight_grams": 0,
+     "objectID": 19137854,
+     "percent_thc": 28.68,
+     "pos_product_lookup": {
+      "ounce": "3767802",
+      "half_ounce": "3125775",
+      "quarter_ounce": "2810501"
+     },
+     "price_half_ounce": 120,
+     "price_quarter_ounce": 65,
+     "product_brand_id": 21089,
+     "product_id": 1247433,
+     "quantity_units": "g",
+     "review_count": 63,
+     "root_subtype": "Smalls",
+     "root_types": [
+      "flower",
+      "sale",
+      "best_selling",
+      "flower:Smalls"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "high-supply-purple-plague-1247433",
+     "special_amount": "25% OFF",
+     "special_id": 3373620,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {},
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {
+      "price": "120.0",
+      "special_id": 3373620,
+      "discount_type": "percent",
+      "discount_price": "90.0",
+      "discount_amount": 30,
+      "discount_percent": "25.0"
+     },
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {
+      "price": "65.0",
+      "special_id": 3373620,
+      "discount_type": "percent",
+      "discount_price": "48.75",
+      "discount_amount": 16.25,
+      "discount_percent": "25.0"
+     },
+     "special_price_two_gram": {},
+     "special_title": "ENTIRE-STORE-25%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "sativa",
+     "unique_slug": "high-supply-sativa-purple-plague",
+     "url_slug": "high-supply-purple-plague",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3361842
+     ],
+     "applicable_special_types": [
+      "product"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "eighth ounce"
+     ],
+     "brand": "nuEra",
+     "brand_special_prices": {},
+     "brand_subtype": "Premium Flower",
+     "bucket_price": 30,
+     "category": "hybrid",
+     "custom_product_subtype": "Premium",
+     "custom_product_type": "flower",
+     "discounted_price_eighth_ounce": 30,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "eighth_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 34.31
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Premium Flower",
+     "kind_root_subtype": "flower:Premium",
+     "kind_subtype": "Premium Flower",
+     "name": "Gelly Roll",
+     "net_weight_grams": 0,
+     "objectID": 29383367,
+     "percent_thc": 34.31,
+     "pos_product_lookup": {
+      "eighth_ounce": "4443744",
+      "quarter_ounce": "4450036"
+     },
+     "price_eighth_ounce": 50,
+     "product_brand_id": 21149,
+     "product_id": 2296309,
+     "review_count": 1,
+     "root_subtype": "Premium",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Premium"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "nuera-gelly-roll-2296309",
+     "special_amount": "40% OFF",
+     "special_id": 3361842,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {
+      "price": "50.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "30.0",
+      "discount_amount": 20,
+      "discount_percent": "40.0"
+     },
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {},
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {},
+     "special_price_two_gram": {},
+     "special_title": "GET-HOUSE-OF-BRANDS-AT-40%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "hybrid",
+     "unique_slug": "nuera-hybrid-gelly-roll",
+     "url_slug": "nuera-gelly-roll",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3361842
+     ],
+     "applicable_special_types": [
+      "product"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "eighth ounce",
+      "quarter ounce"
+     ],
+     "brand": "nuEra",
+     "brand_special_prices": {},
+     "brand_subtype": "Premium Flower",
+     "bucket_price": 30,
+     "category": "indica",
+     "custom_product_subtype": "Premium",
+     "custom_product_type": "flower",
+     "discounted_price_eighth_ounce": 30,
+     "discounted_price_quarter_ounce": 44.4,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "eighth_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 33.69
+      },
+      {
+       "price_id": "quarter_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 31.69,
+       "thca_potency": 0
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Premium Flower",
+     "kind_root_subtype": "flower:Premium",
+     "kind_subtype": "Premium Flower",
+     "name": "Black Inferno",
+     "net_weight_grams": 0,
+     "objectID": 25440918,
+     "percent_thc": 31.69,
+     "pos_product_lookup": {
+      "gram": "4018261",
+      "eighth_ounce": "4039776",
+      "quarter_ounce": "4445283"
+     },
+     "price_eighth_ounce": 50,
+     "price_quarter_ounce": 74,
+     "product_brand_id": 21149,
+     "product_id": 1911171,
+     "quantity_units": "",
+     "review_count": 17,
+     "root_subtype": "Premium",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Premium"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "nuera-black-inferno-1911171",
+     "special_amount": "40% OFF",
+     "special_id": 3361842,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {
+      "price": "50.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "30.0",
+      "discount_amount": 20,
+      "discount_percent": "40.0"
+     },
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {},
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {
+      "price": "74.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "44.4",
+      "discount_amount": 29.6,
+      "discount_percent": "40.0"
+     },
+     "special_price_two_gram": {},
+     "special_title": "GET-HOUSE-OF-BRANDS-AT-40%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "indica",
+     "unique_slug": "nuera-indica-black-inferno",
+     "url_slug": "nuera-black-inferno",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3361842
+     ],
+     "applicable_special_types": [
+      "product"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "eighth ounce",
+      "quarter ounce"
+     ],
+     "brand": "nuEra",
+     "brand_special_prices": {},
+     "brand_subtype": "Premium Flower",
+     "bucket_price": 30,
+     "category": "hybrid",
+     "custom_product_subtype": "Premium",
+     "custom_product_type": "flower",
+     "discounted_price_eighth_ounce": 30,
+     "discounted_price_quarter_ounce": 42,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "eighth_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 36.96,
+       "thca_potency": 0
+      },
+      {
+       "price_id": "quarter_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 34.16,
+       "thca_potency": 0
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Premium Flower",
+     "kind_root_subtype": "flower:Premium",
+     "kind_subtype": "Premium Flower",
+     "name": "Kandy Kush",
+     "net_weight_grams": 0,
+     "objectID": 34848453,
+     "percent_thc": 34.16,
+     "pos_product_lookup": {
+      "eighth_ounce": "4458126",
+      "quarter_ounce": "4458329"
+     },
+     "price_eighth_ounce": 50,
+     "price_quarter_ounce": 70,
+     "product_brand_id": 21149,
+     "product_id": 2646809,
+     "review_count": 2,
+     "root_subtype": "Premium",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Premium"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "nuera-kandy-kush-2646809",
+     "special_amount": "40% OFF",
+     "special_id": 3361842,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {
+      "price": "50.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "30.0",
+      "discount_amount": 20,
+      "discount_percent": "40.0"
+     },
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {},
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {
+      "price": "70.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "42.0",
+      "discount_amount": 28,
+      "discount_percent": "40.0"
+     },
+     "special_price_two_gram": {},
+     "special_title": "GET-HOUSE-OF-BRANDS-AT-40%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "hybrid",
+     "unique_slug": "nuera-hybrid-kandy-kush",
+     "url_slug": "nuera-kandy-kush",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [
+       3369513
+      ],
+      "discount": [
+       3369513
+      ]
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3373620
+     ],
+     "applicable_special_types": [
+      "product",
+      "bundle"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "quarter ounce",
+      "half ounce"
+     ],
+     "brand": "High Supply\u2122",
+     "brand_special_prices": {},
+     "brand_subtype": "Popcorn",
+     "bucket_price": 48,
+     "category": "indica",
+     "custom_product_subtype": "Smalls",
+     "custom_product_type": "flower",
+     "discounted_price_half_ounce": 90,
+     "discounted_price_quarter_ounce": 48.75,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "quarter_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 24.72
+      },
+      {
+       "price_id": "half_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 26.61
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Popcorn",
+     "kind_root_subtype": "flower:Smalls",
+     "kind_subtype": "Popcorn",
+     "name": "Blu Bomb Pop",
+     "net_weight_grams": 0,
+     "objectID": 23750821,
+     "percent_thc": 24.72,
+     "pos_product_lookup": {
+      "ounce": "4438270",
+      "half_ounce": "4161932",
+      "quarter_ounce": "3526640"
+     },
+     "price_half_ounce": 120,
+     "price_quarter_ounce": 65,
+     "product_brand_id": 21089,
+     "product_id": 1739822,
+     "review_count": 14,
+     "root_subtype": "Smalls",
+     "root_types": [
+      "flower",
+      "sale",
+      "best_selling",
+      "flower:Smalls"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "high-supply-blu-bomb-pop-1739822",
+     "special_amount": "25% OFF",
+     "special_id": 3373620,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {},
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {
+      "price": "120.0",
+      "special_id": 3373620,
+      "discount_type": "percent",
+      "discount_price": "90.0",
+      "discount_amount": 30,
+      "discount_percent": "25.0"
+     },
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {
+      "price": "65.0",
+      "special_id": 3373620,
+      "discount_type": "percent",
+      "discount_price": "48.75",
+      "discount_amount": 16.25,
+      "discount_percent": "25.0"
+     },
+     "special_price_two_gram": {},
+     "special_title": "ENTIRE-STORE-25%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "indica",
+     "unique_slug": "high-supply-indica-blu-bomb-pop",
+     "url_slug": "high-supply-blu-bomb-pop",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [
+       3369513
+      ],
+      "discount": [
+       3369513
+      ]
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3369506,
+      3373620
+     ],
+     "applicable_special_types": [
+      "product",
+      "bundle"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "half ounce",
+      "ounce"
+     ],
+     "brand": "High Supply\u2122",
+     "brand_special_prices": {},
+     "brand_subtype": "Popcorn",
+     "bucket_price": 90,
+     "category": "sativa",
+     "custom_product_subtype": "Smalls",
+     "custom_product_type": "flower",
+     "discounted_price_half_ounce": 90,
+     "discounted_price_ounce": 100,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "half_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 27.18
+      },
+      {
+       "price_id": "ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 21.54
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Popcorn",
+     "kind_root_subtype": "flower:Smalls",
+     "kind_subtype": "Popcorn",
+     "name": "Rainbows & Cherries",
+     "net_weight_grams": 0,
+     "objectID": 17789099,
+     "percent_thc": 21.54,
+     "pos_product_lookup": {
+      "ounce": "3630386",
+      "half_ounce": "3625209",
+      "quarter_ounce": "3632198"
+     },
+     "price_half_ounce": 120,
+     "price_ounce": 200,
+     "product_brand_id": 21089,
+     "product_id": 998622,
+     "review_count": 64,
+     "root_subtype": "Smalls",
+     "root_types": [
+      "flower",
+      "sale",
+      "best_selling",
+      "flower:Smalls"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "high-supply-rainbows-cherries-998622",
+     "special_amount": "25% OFF",
+     "special_id": 3373620,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {},
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {
+      "price": "120.0",
+      "special_id": 3373620,
+      "discount_type": "percent",
+      "discount_price": "90.0",
+      "discount_amount": 30,
+      "discount_percent": "25.0"
+     },
+     "special_price_ounce": {
+      "price": "200.0",
+      "special_id": 3369506,
+      "discount_type": "target_price",
+      "discount_price": "100.0",
+      "discount_amount": "100.0",
+      "discount_percent": "0.0"
+     },
+     "special_price_quarter_ounce": {},
+     "special_price_two_gram": {},
+     "special_title": "ENTIRE-STORE-25%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "sativa",
+     "unique_slug": "high-supply-sativa-rainbows-cherries",
+     "url_slug": "high-supply-rainbows-cherries",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3361842
+     ],
+     "applicable_special_types": [
+      "product"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "eighth ounce"
+     ],
+     "brand": "nuEra",
+     "brand_special_prices": {},
+     "brand_subtype": "Premium Flower",
+     "bucket_price": 30,
+     "category": "indica",
+     "custom_product_subtype": "Premium",
+     "custom_product_type": "flower",
+     "discounted_price_eighth_ounce": 30,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "eighth_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 34.7,
+       "thca_potency": 0
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Premium Flower",
+     "kind_root_subtype": "flower:Premium",
+     "kind_subtype": "Premium Flower",
+     "name": "Mac Daddy",
+     "net_weight_grams": 0,
+     "objectID": 34942559,
+     "percent_thc": 34.7,
+     "pos_product_lookup": {
+      "eighth_ounce": "4458330",
+      "quarter_ounce": "4458331"
+     },
+     "price_eighth_ounce": 50,
+     "product_brand_id": 21149,
+     "product_id": 2646810,
+     "review_count": 0,
+     "root_subtype": "Premium",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Premium"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "nuera-mac-daddy-2646810",
+     "special_amount": "40% OFF",
+     "special_id": 3361842,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {
+      "price": "50.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "30.0",
+      "discount_amount": 20,
+      "discount_percent": "40.0"
+     },
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {},
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {},
+     "special_price_two_gram": {},
+     "special_title": "GET-HOUSE-OF-BRANDS-AT-40%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "indica",
+     "unique_slug": "nuera-indica-mac-daddy",
+     "url_slug": "nuera-mac-daddy",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [
+       3369513
+      ],
+      "discount": [
+       3369513
+      ]
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3373620
+     ],
+     "applicable_special_types": [
+      "product",
+      "bundle"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "quarter ounce",
+      "half ounce"
+     ],
+     "brand": "High Supply\u2122",
+     "brand_special_prices": {},
+     "brand_subtype": "Popcorn",
+     "bucket_price": 48,
+     "category": "indica",
+     "custom_product_subtype": "Smalls",
+     "custom_product_type": "flower",
+     "discounted_price_half_ounce": 90,
+     "discounted_price_quarter_ounce": 48.75,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "quarter_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 27.25
+      },
+      {
+       "price_id": "half_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 26.21
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Popcorn",
+     "kind_root_subtype": "flower:Smalls",
+     "kind_subtype": "Popcorn",
+     "name": "Ice Cream Cake",
+     "net_weight_grams": 0,
+     "objectID": 7001081,
+     "percent_cbd": 0.03,
+     "percent_thc": 26.21,
+     "pos_product_lookup": {
+      "ounce": "4447804",
+      "half_ounce": "4447862",
+      "quarter_ounce": "4448066"
+     },
+     "price_half_ounce": 120,
+     "price_quarter_ounce": 65,
+     "product_brand_id": 21089,
+     "product_id": 450141,
+     "review_count": 77,
+     "root_subtype": "Smalls",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Smalls"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "high-supply-ice-cream-cake-450141",
+     "special_amount": "25% OFF",
+     "special_id": 3373620,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {},
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {
+      "price": "120.0",
+      "special_id": 3373620,
+      "discount_type": "percent",
+      "discount_price": "90.0",
+      "discount_amount": 30,
+      "discount_percent": "25.0"
+     },
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {
+      "price": "65.0",
+      "special_id": 3373620,
+      "discount_type": "percent",
+      "discount_price": "48.75",
+      "discount_amount": 16.25,
+      "discount_percent": "25.0"
+     },
+     "special_price_two_gram": {},
+     "special_title": "ENTIRE-STORE-25%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "indica",
+     "unique_slug": "high-supply-indica-ice-cream-cake",
+     "url_slug": "high-supply-ice-cream-cake",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3361842
+     ],
+     "applicable_special_types": [
+      "product"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "eighth ounce"
+     ],
+     "brand": "nuEra",
+     "brand_special_prices": {},
+     "brand_subtype": "Premium Flower",
+     "bucket_price": 30,
+     "category": "sativa",
+     "custom_product_subtype": "Premium",
+     "custom_product_type": "flower",
+     "discounted_price_eighth_ounce": 30,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "eighth_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 32.24
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Premium Flower",
+     "kind_root_subtype": "flower:Premium",
+     "kind_subtype": "Premium Flower",
+     "name": "Jungle Pie",
+     "net_weight_grams": 0,
+     "objectID": 26646638,
+     "percent_thc": 32.24,
+     "pos_product_lookup": {
+      "eighth_ounce": "4391024",
+      "quarter_ounce": "4450643"
+     },
+     "price_eighth_ounce": 50,
+     "product_brand_id": 21149,
+     "product_id": 2038254,
+     "review_count": 12,
+     "root_subtype": "Premium",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Premium"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "nuera-jungle-pie-2038254",
+     "special_amount": "40% OFF",
+     "special_id": 3361842,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {
+      "price": "50.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "30.0",
+      "discount_amount": 20,
+      "discount_percent": "40.0"
+     },
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {},
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {},
+     "special_price_two_gram": {},
+     "special_title": "GET-HOUSE-OF-BRANDS-AT-40%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "indica",
+     "unique_slug": "nuera-sativa-jungle-pie",
+     "url_slug": "nuera-jungle-pie",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3361842
+     ],
+     "applicable_special_types": [
+      "product"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "eighth ounce"
+     ],
+     "brand": "nuEra",
+     "brand_special_prices": {},
+     "brand_subtype": "Premium Flower",
+     "bucket_price": 30,
+     "category": "sativa",
+     "custom_product_subtype": "Premium",
+     "custom_product_type": "flower",
+     "discounted_price_eighth_ounce": 30,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "eighth_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 36.67,
+       "thca_potency": 0
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Premium Flower",
+     "kind_root_subtype": "flower:Premium",
+     "kind_subtype": "Premium Flower",
+     "name": "Royal Gorilla",
+     "net_weight_grams": 0,
+     "objectID": 32247667,
+     "percent_thc": 36.67,
+     "pos_product_lookup": {
+      "eighth_ounce": "4451906",
+      "quarter_ounce": "4455059"
+     },
+     "price_eighth_ounce": 50,
+     "product_brand_id": 21149,
+     "product_id": 2550551,
+     "review_count": 1,
+     "root_subtype": "Premium",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Premium"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "nuera-royal-gorilla-2550551",
+     "special_amount": "40% OFF",
+     "special_id": 3361842,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {
+      "price": "50.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "30.0",
+      "discount_amount": 20,
+      "discount_percent": "40.0"
+     },
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {},
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {},
+     "special_price_two_gram": {},
+     "special_title": "GET-HOUSE-OF-BRANDS-AT-40%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "sativa",
+     "unique_slug": "nuera-sativa-royal-gorilla",
+     "url_slug": "nuera-royal-gorilla",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [
+       3369513
+      ],
+      "discount": [
+       3369513
+      ]
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3369506,
+      3373620
+     ],
+     "applicable_special_types": [
+      "product",
+      "bundle"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "half ounce",
+      "ounce"
+     ],
+     "brand": "High Supply\u2122",
+     "brand_special_prices": {},
+     "brand_subtype": "Popcorn",
+     "bucket_price": 90,
+     "category": "sativa",
+     "custom_product_subtype": "Smalls",
+     "custom_product_type": "flower",
+     "discounted_price_half_ounce": 90,
+     "discounted_price_ounce": 100,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 27.4,
+       "thca_potency": 0
+      },
+      {
+       "price_id": "half_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 28.85,
+       "thca_potency": 0
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Popcorn",
+     "kind_root_subtype": "flower:Smalls",
+     "kind_subtype": "Popcorn",
+     "name": "Mango Mintality",
+     "net_weight_grams": 0,
+     "objectID": 32853946,
+     "percent_thc": 27.4,
+     "pos_product_lookup": {
+      "ounce": "4455959",
+      "half_ounce": "4453463",
+      "quarter_ounce": "4453462"
+     },
+     "price_half_ounce": 120,
+     "price_ounce": 200,
+     "product_brand_id": 21089,
+     "product_id": 2608166,
+     "review_count": 4,
+     "root_subtype": "Smalls",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Smalls"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "high-supply-mango-mintality-2608166",
+     "special_amount": "25% OFF",
+     "special_id": 3373620,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {},
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {
+      "price": "120.0",
+      "special_id": 3373620,
+      "discount_type": "percent",
+      "discount_price": "90.0",
+      "discount_amount": 30,
+      "discount_percent": "25.0"
+     },
+     "special_price_ounce": {
+      "price": "200.0",
+      "special_id": 3369506,
+      "discount_type": "target_price",
+      "discount_price": "100.0",
+      "discount_amount": "100.0",
+      "discount_percent": "0.0"
+     },
+     "special_price_quarter_ounce": {},
+     "special_price_two_gram": {},
+     "special_title": "ENTIRE-STORE-25%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "sativa",
+     "unique_slug": "high-supply-sativa-mango-mintality",
+     "url_slug": "high-supply-mango-mintality",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3361842
+     ],
+     "applicable_special_types": [
+      "product"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "eighth ounce"
+     ],
+     "brand": "Interstate 420",
+     "brand_special_prices": {},
+     "brand_subtype": "Flower",
+     "bucket_price": 24,
+     "category": "hybrid",
+     "custom_product_subtype": "Flower",
+     "custom_product_type": "flower",
+     "discounted_price_eighth_ounce": 24,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "eighth_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 31.79,
+       "thca_potency": 0
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Flower",
+     "kind_root_subtype": "flower:Flower",
+     "kind_subtype": "Flower",
+     "name": "Project 903",
+     "net_weight_grams": 0,
+     "objectID": 29753986,
+     "percent_thc": 31.79,
+     "pos_product_lookup": {
+      "ounce": "4445807",
+      "eighth_ounce": "4450386",
+      "quarter_ounce": "4445048"
+     },
+     "price_eighth_ounce": 40,
+     "product_brand_id": 37058,
+     "product_id": 2329109,
+     "review_count": 0,
+     "root_subtype": "Flower",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Flower"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "interstate-420-project-903-2329109",
+     "special_amount": "40% OFF",
+     "special_id": 3361842,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {
+      "price": "40.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "24.0",
+      "discount_amount": 16,
+      "discount_percent": "40.0"
+     },
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {},
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {},
+     "special_price_two_gram": {},
+     "special_title": "GET-HOUSE-OF-BRANDS-AT-40%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "hybrid",
+     "unique_slug": "interstate-420-hybrid-project-903",
+     "url_slug": "interstate-420-project-903",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [
+       3369513
+      ],
+      "discount": [
+       3369513
+      ]
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3373620
+     ],
+     "applicable_special_types": [
+      "product",
+      "bundle"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "quarter ounce",
+      "half ounce"
+     ],
+     "brand": "High Supply\u2122",
+     "brand_special_prices": {},
+     "brand_subtype": "Popcorn",
+     "bucket_price": 48,
+     "category": "sativa",
+     "custom_product_subtype": "Smalls",
+     "custom_product_type": "flower",
+     "discounted_price_half_ounce": 90,
+     "discounted_price_quarter_ounce": 48.75,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "quarter_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 30.25
+      },
+      {
+       "price_id": "half_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 27.36
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Popcorn",
+     "kind_root_subtype": "flower:Smalls",
+     "kind_subtype": "Popcorn",
+     "name": "Pineapple Punch",
+     "net_weight_grams": 0,
+     "objectID": 31923006,
+     "percent_thc": 27.36,
+     "pos_product_lookup": {
+      "ounce": "4451053",
+      "half_ounce": "4451041",
+      "quarter_ounce": "4451052"
+     },
+     "price_half_ounce": 120,
+     "price_quarter_ounce": 65,
+     "product_brand_id": 21089,
+     "product_id": 2522331,
+     "review_count": 17,
+     "root_subtype": "Smalls",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Smalls"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "high-supply-pineapple-punch-2522331",
+     "special_amount": "25% OFF",
+     "special_id": 3373620,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {},
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {
+      "price": "120.0",
+      "special_id": 3373620,
+      "discount_type": "percent",
+      "discount_price": "90.0",
+      "discount_amount": 30,
+      "discount_percent": "25.0"
+     },
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {
+      "price": "65.0",
+      "special_id": 3373620,
+      "discount_type": "percent",
+      "discount_price": "48.75",
+      "discount_amount": 16.25,
+      "discount_percent": "25.0"
+     },
+     "special_price_two_gram": {},
+     "special_title": "ENTIRE-STORE-25%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "sativa",
+     "unique_slug": "high-supply-sativa-pineapple-punch",
+     "url_slug": "high-supply-pineapple-punch",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3361842
+     ],
+     "applicable_special_types": [
+      "product"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "eighth ounce"
+     ],
+     "brand": "Interstate 420",
+     "brand_special_prices": {},
+     "brand_subtype": "Flower",
+     "bucket_price": 24,
+     "category": "sativa",
+     "custom_product_subtype": "Flower",
+     "custom_product_type": "flower",
+     "discounted_price_eighth_ounce": 24,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "eighth_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 29.8
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Flower",
+     "kind_root_subtype": "flower:Flower",
+     "kind_subtype": "Flower",
+     "name": "Stella Blue",
+     "net_weight_grams": 0,
+     "objectID": 28875890,
+     "percent_thc": 29.8,
+     "pos_product_lookup": {
+      "ounce": "4445229",
+      "half_ounce": "4442643",
+      "eighth_ounce": "4443143",
+      "quarter_ounce": "4443746"
+     },
+     "price_eighth_ounce": 40,
+     "product_brand_id": 37058,
+     "product_id": 2250223,
+     "product_percent_thc": 17,
+     "review_count": 8,
+     "root_subtype": "Flower",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Flower"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "interstate-420-stella-blue-2250223",
+     "special_amount": "40% OFF",
+     "special_id": 3361842,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {
+      "price": "40.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "24.0",
+      "discount_amount": 16,
+      "discount_percent": "40.0"
+     },
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {},
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {},
+     "special_price_two_gram": {},
+     "special_title": "GET-HOUSE-OF-BRANDS-AT-40%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "sativa",
+     "unique_slug": "interstate-420-sativa-stella-blue",
+     "url_slug": "interstate-420-stella-blue",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3361842
+     ],
+     "applicable_special_types": [
+      "product"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "eighth ounce"
+     ],
+     "brand": "Interstate 420",
+     "brand_special_prices": {},
+     "brand_subtype": "Flower",
+     "bucket_price": 24,
+     "category": "hybrid",
+     "custom_product_subtype": "Flower",
+     "custom_product_type": "flower",
+     "discounted_price_eighth_ounce": 24,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "eighth_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 33.1
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Flower",
+     "kind_root_subtype": "flower:Flower",
+     "kind_subtype": "Flower",
+     "name": "Umami",
+     "net_weight_grams": 0,
+     "objectID": 29663974,
+     "percent_thc": 33.1,
+     "pos_product_lookup": {
+      "eighth_ounce": "4444951",
+      "quarter_ounce": "4445389"
+     },
+     "price_eighth_ounce": 40,
+     "product_brand_id": 37058,
+     "product_id": 2315037,
+     "review_count": 1,
+     "root_subtype": "Flower",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Flower"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "interstate-420-umami-2315037",
+     "special_amount": "40% OFF",
+     "special_id": 3361842,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {
+      "price": "40.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "24.0",
+      "discount_amount": 16,
+      "discount_percent": "40.0"
+     },
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {},
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {},
+     "special_price_two_gram": {},
+     "special_title": "GET-HOUSE-OF-BRANDS-AT-40%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "hybrid",
+     "unique_slug": "interstate-420-hybrid-umami",
+     "url_slug": "interstate-420-umami",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3373620
+     ],
+     "applicable_special_types": [
+      "product"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "quarter ounce"
+     ],
+     "brand": "High Supply\u2122",
+     "brand_special_prices": {},
+     "brand_subtype": "Shake",
+     "bucket_price": 37,
+     "category": "sativa",
+     "custom_product_subtype": "Shake",
+     "custom_product_type": "flower",
+     "discounted_price_quarter_ounce": 37.5,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "quarter_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 34.74,
+       "thca_potency": 0
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Shake",
+     "kind_root_subtype": "flower:Shake",
+     "kind_subtype": "Shake",
+     "name": "Blue Sapphire",
+     "net_weight_grams": 0,
+     "objectID": 33963247,
+     "percent_thc": 34.74,
+     "pos_product_lookup": {
+      "quarter_ounce": "4456358"
+     },
+     "price_quarter_ounce": 50,
+     "product_brand_id": 21089,
+     "product_id": 2714593,
+     "review_count": 0,
+     "root_subtype": "Shake",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Shake"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "high-supply-blue-sapphire-2714593",
+     "special_amount": "25% OFF",
+     "special_id": 3373620,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {},
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {},
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {
+      "price": "50.0",
+      "special_id": 3373620,
+      "discount_type": "percent",
+      "discount_price": "37.5",
+      "discount_amount": 12.5,
+      "discount_percent": "25.0"
+     },
+     "special_price_two_gram": {},
+     "special_title": "ENTIRE-STORE-25%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "sativa",
+     "unique_slug": "high-supply-sativa-blue-sapphire",
+     "url_slug": "high-supply-blue-sapphire",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3361842
+     ],
+     "applicable_special_types": [
+      "product"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "eighth ounce"
+     ],
+     "brand": "Interstate 420",
+     "brand_special_prices": {},
+     "brand_subtype": "Flower",
+     "bucket_price": 24,
+     "category": "indica",
+     "custom_product_subtype": "Whole Flower",
+     "custom_product_type": "flower",
+     "discounted_price_eighth_ounce": 24,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "eighth_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 31.7
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Flower",
+     "kind_root_subtype": "flower:Whole Flower",
+     "kind_subtype": "Flower",
+     "name": "Black Inferno",
+     "net_weight_grams": 0,
+     "objectID": 27718273,
+     "percent_thc": 31.7,
+     "pos_product_lookup": {
+      "half_ounce": "4440176",
+      "eighth_ounce": "4441139",
+      "quarter_ounce": "4440416"
+     },
+     "price_eighth_ounce": 40,
+     "product_brand_id": 37058,
+     "product_id": 1954859,
+     "review_count": 9,
+     "root_subtype": "Whole Flower",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Whole Flower"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "interstate-420-black-inferno-1954859",
+     "special_amount": "40% OFF",
+     "special_id": 3361842,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {
+      "price": "40.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "24.0",
+      "discount_amount": 16,
+      "discount_percent": "40.0"
+     },
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {},
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {},
+     "special_price_two_gram": {},
+     "special_title": "GET-HOUSE-OF-BRANDS-AT-40%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "indica",
+     "unique_slug": "interstate-420-indica-black-inferno",
+     "url_slug": "interstate-420-black-inferno",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3373620
+     ],
+     "applicable_special_types": [
+      "product"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "quarter ounce"
+     ],
+     "brand": "Ozone",
+     "brand_special_prices": {},
+     "brand_subtype": "Shake",
+     "bucket_price": 41,
+     "category": "indica",
+     "custom_product_subtype": "Shake",
+     "custom_product_type": "flower",
+     "discounted_price_quarter_ounce": 41.25,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "quarter_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 33.78
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Shake",
+     "kind_root_subtype": "flower:Shake",
+     "kind_subtype": "Shake",
+     "name": "Butterstuff",
+     "net_weight_grams": 0,
+     "objectID": 19258517,
+     "percent_cbd": 0.12,
+     "percent_thc": 33.78,
+     "pos_product_lookup": {
+      "quarter_ounce": "2810401"
+     },
+     "price_quarter_ounce": 55,
+     "product_brand_id": 21158,
+     "product_id": 802990,
+     "review_count": 104,
+     "root_subtype": "Shake",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Shake"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "ozone-butterstuff-802990",
+     "special_amount": "25% OFF",
+     "special_id": 3373620,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {},
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {},
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {
+      "price": "55.0",
+      "special_id": 3373620,
+      "discount_type": "percent",
+      "discount_price": "41.25",
+      "discount_amount": 13.75,
+      "discount_percent": "25.0"
+     },
+     "special_price_two_gram": {},
+     "special_title": "ENTIRE-STORE-25%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "indica",
+     "unique_slug": "ozone-indica-butterstuff",
+     "url_slug": "ozone-butterstuff",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3361842
+     ],
+     "applicable_special_types": [
+      "product"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "eighth ounce",
+      "quarter ounce"
+     ],
+     "brand": "Interstate 420",
+     "brand_special_prices": {},
+     "brand_subtype": "Flower",
+     "bucket_price": 24,
+     "category": "indica",
+     "custom_product_subtype": "Whole Flower",
+     "custom_product_type": "flower",
+     "discounted_price_eighth_ounce": 24,
+     "discounted_price_quarter_ounce": 38.4,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "eighth_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 26.36
+      },
+      {
+       "price_id": "quarter_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 25.3
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Flower",
+     "kind_root_subtype": "flower:Whole Flower",
+     "kind_subtype": "Flower",
+     "name": "Black Cherry Gelato",
+     "net_weight_grams": 0,
+     "objectID": 27631608,
+     "percent_thc": 25.3,
+     "pos_product_lookup": {
+      "half_ounce": "4440053",
+      "eighth_ounce": "4440175",
+      "quarter_ounce": "4445392"
+     },
+     "price_eighth_ounce": 40,
+     "price_quarter_ounce": 64,
+     "product_brand_id": 37058,
+     "product_id": 2132528,
+     "review_count": 4,
+     "root_subtype": "Whole Flower",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Whole Flower"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "interstate-420-black-cherry-gelato-2132528",
+     "special_amount": "40% OFF",
+     "special_id": 3361842,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {
+      "price": "40.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "24.0",
+      "discount_amount": 16,
+      "discount_percent": "40.0"
+     },
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {},
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {
+      "price": "64.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "38.4",
+      "discount_amount": 25.6,
+      "discount_percent": "40.0"
+     },
+     "special_price_two_gram": {},
+     "special_title": "GET-HOUSE-OF-BRANDS-AT-40%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "indica",
+     "unique_slug": "interstate-420-indica-black-cherry-gelato",
+     "url_slug": "interstate-420-black-cherry-gelato",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3361842
+     ],
+     "applicable_special_types": [
+      "product"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "eighth ounce",
+      "quarter ounce"
+     ],
+     "brand": "Interstate 420",
+     "brand_special_prices": {},
+     "brand_subtype": "Flower",
+     "bucket_price": 24,
+     "category": "indica",
+     "custom_product_subtype": "Flower",
+     "custom_product_type": "flower",
+     "discounted_price_eighth_ounce": 24,
+     "discounted_price_quarter_ounce": 44.4,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "eighth_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 31.65,
+       "thca_potency": 0
+      },
+      {
+       "price_id": "quarter_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 31.11,
+       "thca_potency": 0
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Flower",
+     "kind_root_subtype": "flower:Flower",
+     "kind_subtype": "Flower",
+     "name": "Gelly Roll",
+     "net_weight_grams": 0,
+     "objectID": 32514362,
+     "percent_thc": 31.11,
+     "pos_product_lookup": {
+      "eighth_ounce": "4452662",
+      "quarter_ounce": "4449485"
+     },
+     "price_eighth_ounce": 40,
+     "price_quarter_ounce": 74,
+     "product_brand_id": 37058,
+     "product_id": 2288138,
+     "review_count": 0,
+     "root_subtype": "Flower",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Flower"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "interstate-420-gelly-roll-2288138",
+     "special_amount": "40% OFF",
+     "special_id": 3361842,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {
+      "price": "40.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "24.0",
+      "discount_amount": 16,
+      "discount_percent": "40.0"
+     },
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {},
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {
+      "price": "74.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "44.4",
+      "discount_amount": 29.6,
+      "discount_percent": "40.0"
+     },
+     "special_price_two_gram": {},
+     "special_title": "GET-HOUSE-OF-BRANDS-AT-40%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "indica",
+     "unique_slug": "interstate-420-indica-gelly-roll",
+     "url_slug": "interstate-420-gelly-roll",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [
+       3369513
+      ],
+      "discount": [
+       3369513
+      ]
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3369506,
+      3373620
+     ],
+     "applicable_special_types": [
+      "product",
+      "bundle"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "quarter ounce",
+      "half ounce",
+      "ounce"
+     ],
+     "brand": "High Supply\u2122",
+     "brand_special_prices": {},
+     "brand_subtype": "Popcorn",
+     "bucket_price": 48,
+     "category": "indica",
+     "custom_product_subtype": "Smalls",
+     "custom_product_type": "flower",
+     "discounted_price_half_ounce": 90,
+     "discounted_price_ounce": 100,
+     "discounted_price_quarter_ounce": 48.75,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 23.23
+      },
+      {
+       "price_id": "quarter_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 28
+      },
+      {
+       "price_id": "half_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 23.31
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Popcorn",
+     "kind_root_subtype": "flower:Smalls",
+     "kind_subtype": "Popcorn",
+     "name": "Bio Jesus",
+     "net_weight_grams": 0,
+     "objectID": 1813903,
+     "percent_cbd": 0.04,
+     "percent_thc": 23.23,
+     "pos_product_lookup": {
+      "ounce": "3228917",
+      "half_ounce": "4444817",
+      "quarter_ounce": "3125764"
+     },
+     "price_half_ounce": 120,
+     "price_ounce": 200,
+     "price_quarter_ounce": 65,
+     "product_brand_id": 21089,
+     "product_id": 387805,
+     "review_count": 245,
+     "root_subtype": "Smalls",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Smalls"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "high-supply-bio-jesus-387805",
+     "special_amount": "25% OFF",
+     "special_id": 3373620,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {},
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {
+      "price": "120.0",
+      "special_id": 3373620,
+      "discount_type": "percent",
+      "discount_price": "90.0",
+      "discount_amount": 30,
+      "discount_percent": "25.0"
+     },
+     "special_price_ounce": {
+      "price": "200.0",
+      "special_id": 3369506,
+      "discount_type": "target_price",
+      "discount_price": "100.0",
+      "discount_amount": "100.0",
+      "discount_percent": "0.0"
+     },
+     "special_price_quarter_ounce": {
+      "price": "65.0",
+      "special_id": 3373620,
+      "discount_type": "percent",
+      "discount_price": "48.75",
+      "discount_amount": 16.25,
+      "discount_percent": "25.0"
+     },
+     "special_price_two_gram": {},
+     "special_title": "ENTIRE-STORE-25%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "indica",
+     "unique_slug": "high-supply-indica-bio-jesus",
+     "url_slug": "high-supply-bio-jesus",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3361842
+     ],
+     "applicable_special_types": [
+      "product"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "eighth ounce",
+      "quarter ounce"
+     ],
+     "brand": "Interstate 420",
+     "brand_special_prices": {},
+     "brand_subtype": "Flower",
+     "bucket_price": 24,
+     "category": "hybrid",
+     "custom_product_subtype": "Flower",
+     "custom_product_type": "flower",
+     "discounted_price_eighth_ounce": 24,
+     "discounted_price_quarter_ounce": 38.4,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "quarter_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 30.44,
+       "thca_potency": 0
+      },
+      {
+       "price_id": "eighth_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 32.95,
+       "thca_potency": 0
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Flower",
+     "kind_root_subtype": "flower:Flower",
+     "kind_subtype": "Flower",
+     "name": "Windy City OG",
+     "net_weight_grams": 0,
+     "objectID": 32514367,
+     "percent_thc": 30.44,
+     "pos_product_lookup": {
+      "eighth_ounce": "4452665",
+      "quarter_ounce": "4452674"
+     },
+     "price_eighth_ounce": 40,
+     "price_quarter_ounce": 64,
+     "product_brand_id": 37058,
+     "product_id": 2294083,
+     "review_count": 2,
+     "root_subtype": "Flower",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Flower"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "interstate-420-windy-city-og-2294083",
+     "special_amount": "40% OFF",
+     "special_id": 3361842,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {
+      "price": "40.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "24.0",
+      "discount_amount": 16,
+      "discount_percent": "40.0"
+     },
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {},
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {
+      "price": "64.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "38.4",
+      "discount_amount": 25.6,
+      "discount_percent": "40.0"
+     },
+     "special_price_two_gram": {},
+     "special_title": "GET-HOUSE-OF-BRANDS-AT-40%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "hybrid",
+     "unique_slug": "interstate-420-hybrid-windy-city-og",
+     "url_slug": "interstate-420-windy-city-og",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3361842
+     ],
+     "applicable_special_types": [
+      "product"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "eighth ounce"
+     ],
+     "brand": "Interstate 420",
+     "brand_special_prices": {},
+     "brand_subtype": "Flower",
+     "bucket_price": 24,
+     "category": "indica",
+     "custom_product_subtype": "Flower",
+     "custom_product_type": "flower",
+     "discounted_price_eighth_ounce": 24,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "eighth_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 28.65,
+       "thca_potency": 0
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Flower",
+     "kind_root_subtype": "flower:Flower",
+     "kind_subtype": "Flower",
+     "name": "Dirty Banana",
+     "net_weight_grams": 0,
+     "objectID": 33387759,
+     "percent_thc": 28.65,
+     "pos_product_lookup": {
+      "eighth_ounce": "4452677",
+      "quarter_ounce": "4454875"
+     },
+     "price_eighth_ounce": 40,
+     "product_brand_id": 37058,
+     "product_id": 2550132,
+     "review_count": 0,
+     "root_subtype": "Flower",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Flower"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "interstate-420-dirty-banana-2550132",
+     "special_amount": "40% OFF",
+     "special_id": 3361842,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {
+      "price": "40.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "24.0",
+      "discount_amount": 16,
+      "discount_percent": "40.0"
+     },
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {},
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {},
+     "special_price_two_gram": {},
+     "special_title": "GET-HOUSE-OF-BRANDS-AT-40%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "indica",
+     "unique_slug": "interstate-420-indica-dirty-banana",
+     "url_slug": "interstate-420-dirty-banana",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3361842
+     ],
+     "applicable_special_types": [
+      "product"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "eighth ounce",
+      "quarter ounce"
+     ],
+     "brand": "Interstate 420",
+     "brand_special_prices": {},
+     "brand_subtype": "Flower",
+     "bucket_price": 24,
+     "category": "hybrid",
+     "custom_product_subtype": "Flower",
+     "custom_product_type": "flower",
+     "discounted_price_eighth_ounce": 24,
+     "discounted_price_quarter_ounce": 44.4,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "quarter_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 29.05,
+       "thca_potency": 0
+      },
+      {
+       "price_id": "eighth_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 32.52,
+       "thca_potency": 0
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Flower",
+     "kind_root_subtype": "flower:Flower",
+     "kind_subtype": "Flower",
+     "name": "Jungle Pie",
+     "net_weight_grams": 0,
+     "objectID": 29202810,
+     "percent_thc": 29.05,
+     "pos_product_lookup": {
+      "ounce": "4443681",
+      "half_ounce": "4443141",
+      "eighth_ounce": "4451329",
+      "quarter_ounce": "4443745"
+     },
+     "price_eighth_ounce": 40,
+     "price_quarter_ounce": 74,
+     "product_brand_id": 37058,
+     "product_id": 2268985,
+     "review_count": 3,
+     "root_subtype": "Flower",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Flower"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "interstate-420-jungle-pie-2268985",
+     "special_amount": "40% OFF",
+     "special_id": 3361842,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {
+      "price": "40.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "24.0",
+      "discount_amount": 16,
+      "discount_percent": "40.0"
+     },
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {},
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {
+      "price": "74.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "44.4",
+      "discount_amount": 29.6,
+      "discount_percent": "40.0"
+     },
+     "special_price_two_gram": {},
+     "special_title": "GET-HOUSE-OF-BRANDS-AT-40%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "sativa",
+     "unique_slug": "interstate-420-hybrid-jungle-pie",
+     "url_slug": "interstate-420-jungle-pie",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3361842
+     ],
+     "applicable_special_types": [
+      "product"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "eighth ounce"
+     ],
+     "brand": "Interstate 420",
+     "brand_special_prices": {},
+     "brand_subtype": "Flower",
+     "bucket_price": 24,
+     "category": "indica",
+     "custom_product_subtype": "Flower",
+     "custom_product_type": "flower",
+     "discounted_price_eighth_ounce": 24,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "eighth_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 29.4,
+       "thca_potency": 0
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Flower",
+     "kind_root_subtype": "flower:Flower",
+     "kind_subtype": "Flower",
+     "name": "Space Creme",
+     "net_weight_grams": 0,
+     "objectID": 34349662,
+     "percent_thc": 29.4,
+     "pos_product_lookup": {
+      "eighth_ounce": "4457277"
+     },
+     "price_eighth_ounce": 40,
+     "product_brand_id": 37058,
+     "product_id": 2646896,
+     "review_count": 0,
+     "root_subtype": "Flower",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Flower"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "interstate-420-space-creme-2646896",
+     "special_amount": "40% OFF",
+     "special_id": 3361842,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {
+      "price": "40.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "24.0",
+      "discount_amount": 16,
+      "discount_percent": "40.0"
+     },
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {},
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {},
+     "special_price_two_gram": {},
+     "special_title": "GET-HOUSE-OF-BRANDS-AT-40%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "indica",
+     "unique_slug": "interstate-420-indica-space-creme",
+     "url_slug": "interstate-420-space-creme",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3361842
+     ],
+     "applicable_special_types": [
+      "product"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "eighth ounce",
+      "quarter ounce"
+     ],
+     "brand": "Interstate 420",
+     "brand_special_prices": {},
+     "brand_subtype": "Flower",
+     "bucket_price": 24,
+     "category": "hybrid",
+     "custom_product_subtype": "Flower",
+     "custom_product_type": "flower",
+     "discounted_price_eighth_ounce": 24,
+     "discounted_price_quarter_ounce": 38.4,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "eighth_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 31.78,
+       "thca_potency": 0
+      },
+      {
+       "price_id": "quarter_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 30.4,
+       "thca_potency": 0
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Flower",
+     "kind_root_subtype": "flower:Flower",
+     "kind_subtype": "Flower",
+     "name": "Carbon Fiber",
+     "net_weight_grams": 0,
+     "objectID": 33925783,
+     "percent_thc": 30.4,
+     "pos_product_lookup": {
+      "eighth_ounce": "4456241",
+      "quarter_ounce": "4458125"
+     },
+     "price_eighth_ounce": 40,
+     "price_quarter_ounce": 64,
+     "product_brand_id": 37058,
+     "product_id": 2646881,
+     "review_count": 0,
+     "root_subtype": "Flower",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Flower"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "interstate-420-carbon-fiber-2646881",
+     "special_amount": "40% OFF",
+     "special_id": 3361842,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {
+      "price": "40.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "24.0",
+      "discount_amount": 16,
+      "discount_percent": "40.0"
+     },
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {},
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {
+      "price": "64.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "38.4",
+      "discount_amount": 25.6,
+      "discount_percent": "40.0"
+     },
+     "special_price_two_gram": {},
+     "special_title": "GET-HOUSE-OF-BRANDS-AT-40%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "hybrid",
+     "unique_slug": "interstate-420-hybrid-carbon-fiber",
+     "url_slug": "interstate-420-carbon-fiber",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3361842
+     ],
+     "applicable_special_types": [
+      "product"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "eighth ounce"
+     ],
+     "brand": "Interstate 420",
+     "brand_special_prices": {},
+     "brand_subtype": "Flower",
+     "bucket_price": 24,
+     "category": "hybrid",
+     "custom_product_subtype": "Flower",
+     "custom_product_type": "flower",
+     "discounted_price_eighth_ounce": 24,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "eighth_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 30.49
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Flower",
+     "kind_root_subtype": "flower:Flower",
+     "kind_subtype": "Flower",
+     "name": "Big Perm",
+     "net_weight_grams": 0,
+     "objectID": 31139167,
+     "percent_thc": 30.49,
+     "pos_product_lookup": {
+      "eighth_ounce": "4448591",
+      "quarter_ounce": "4453017"
+     },
+     "price_eighth_ounce": 40,
+     "product_brand_id": 37058,
+     "product_id": 2446713,
+     "review_count": 1,
+     "root_subtype": "Flower",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Flower"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "interstate-420-big-perm-2446713",
+     "special_amount": "40% OFF",
+     "special_id": 3361842,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {
+      "price": "40.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "24.0",
+      "discount_amount": 16,
+      "discount_percent": "40.0"
+     },
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {},
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {},
+     "special_price_two_gram": {},
+     "special_title": "GET-HOUSE-OF-BRANDS-AT-40%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "hybrid",
+     "unique_slug": "interstate-420-hybrid-big-perm",
+     "url_slug": "interstate-420-big-perm",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3361842
+     ],
+     "applicable_special_types": [
+      "product"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "eighth ounce"
+     ],
+     "brand": "Interstate 420",
+     "brand_special_prices": {},
+     "brand_subtype": "Flower",
+     "bucket_price": 24,
+     "category": "hybrid",
+     "custom_product_subtype": "Flower",
+     "custom_product_type": "flower",
+     "discounted_price_eighth_ounce": 24,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "eighth_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 27.18
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Flower",
+     "kind_root_subtype": "flower:Flower",
+     "kind_subtype": "Flower",
+     "name": "Honey Bun",
+     "net_weight_grams": 0,
+     "objectID": 29111053,
+     "percent_thc": 27.18,
+     "pos_product_lookup": {
+      "ounce": "4445227",
+      "half_ounce": "4443749",
+      "eighth_ounce": "4443008",
+      "quarter_ounce": "4444296"
+     },
+     "price_eighth_ounce": 40,
+     "product_brand_id": 37058,
+     "product_id": 2272798,
+     "review_count": 5,
+     "root_subtype": "Flower",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Flower"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "interstate-420-honey-bun-2272798",
+     "special_amount": "40% OFF",
+     "special_id": 3361842,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {
+      "price": "40.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "24.0",
+      "discount_amount": 16,
+      "discount_percent": "40.0"
+     },
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {},
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {},
+     "special_price_two_gram": {},
+     "special_title": "GET-HOUSE-OF-BRANDS-AT-40%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "hybrid",
+     "unique_slug": "interstate-420-hybrid-honey-bun",
+     "url_slug": "interstate-420-honey-bun",
+     "visible": true
+    },
+    {
+     "allow_multiple_flower_count": true,
+     "applicable_any_discountable_special_ids": [],
+     "applicable_any_qualifier_special_ids": [],
+     "applicable_brand_specials_excluded_user_segments": -1,
+     "applicable_brand_specials_included_user_segments": -1,
+     "applicable_bundle_brand_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_bundle_special_ids": {
+      "qualify": [],
+      "discount": []
+     },
+     "applicable_cart_total_special_ids": [],
+     "applicable_special_ids": [
+      3361842
+     ],
+     "applicable_special_types": [
+      "product"
+     ],
+     "at_visible_store": true,
+     "available_for_delivery": false,
+     "available_for_pickup": true,
+     "available_weights": [
+      "eighth ounce",
+      "quarter ounce"
+     ],
+     "brand": "Interstate 420",
+     "brand_special_prices": {},
+     "brand_subtype": "Flower",
+     "bucket_price": 24,
+     "category": "hybrid",
+     "custom_product_subtype": "Flower",
+     "custom_product_type": "flower",
+     "discounted_price_eighth_ounce": 24,
+     "discounted_price_quarter_ounce": 38.4,
+     "has_brand_discount": false,
+     "has_photos": false,
+     "has_thc_potency": true,
+     "inventory_potencies": [
+      {
+       "price_id": "eighth_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 33.25,
+       "thca_potency": 0
+      },
+      {
+       "price_id": "quarter_ounce",
+       "cbd_potency": 0,
+       "tac_potency": 0,
+       "thc_potency": 25.46,
+       "thca_potency": 0
+      }
+     ],
+     "kind": "flower",
+     "kind_brand_subtype": "flower:Flower",
+     "kind_root_subtype": "flower:Flower",
+     "kind_subtype": "Flower",
+     "name": "Cherry Icee",
+     "net_weight_grams": 0,
+     "objectID": 34276278,
+     "percent_thc": 25.46,
+     "pos_product_lookup": {
+      "eighth_ounce": "4457086",
+      "quarter_ounce": "4457767"
+     },
+     "price_eighth_ounce": 40,
+     "price_quarter_ounce": 64,
+     "product_brand_id": 37058,
+     "product_id": 2550133,
+     "review_count": 0,
+     "root_subtype": "Flower",
+     "root_types": [
+      "flower",
+      "sale",
+      "flower:Flower"
+     ],
+     "roots_custom_rows": [],
+     "searchable_slug": "interstate-420-cherry-icee-2550133",
+     "special_amount": "40% OFF",
+     "special_id": 3361842,
+     "special_price_each": {},
+     "special_price_eighth_ounce": {
+      "price": "40.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "24.0",
+      "discount_amount": 16,
+      "discount_percent": "40.0"
+     },
+     "special_price_gram": {},
+     "special_price_half_gram": {},
+     "special_price_half_ounce": {},
+     "special_price_ounce": {},
+     "special_price_quarter_ounce": {
+      "price": "64.0",
+      "special_id": 3361842,
+      "discount_type": "percent",
+      "discount_price": "38.4",
+      "discount_amount": 25.6,
+      "discount_percent": "40.0"
+     },
+     "special_price_two_gram": {},
+     "special_title": "GET-HOUSE-OF-BRANDS-AT-40%-OFF",
+     "store_id": 1517,
+     "store_specific_product": false,
+     "store_types": [
+      "recreational"
+     ],
+     "terpenes": [],
+     "type": "hybrid",
+     "unique_slug": "interstate-420-hybrid-cherry-icee",
+     "url_slug": "interstate-420-cherry-icee",
+     "visible": true
+    }
+   ],
+   "nbHits": 30,
+   "nbPages": 1,
+   "page": 0,
+   "hitsPerPage": 1000,
+   "index": "menu-products-production"
+  }
+ ]
+}
