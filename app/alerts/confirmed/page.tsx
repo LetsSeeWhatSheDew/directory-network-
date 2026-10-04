@@ -9,6 +9,8 @@ import Footer from "../../components/Footer";
 export const metadata = {
   title: "You're in — PuffPrice deal alerts",
   description: "You're signed up for Illinois dispensary deal alerts.",
+  // Post-signup confirmation: nothing for a searcher here.
+  robots: { index: false, follow: true },
 };
 
 export default async function AlertsConfirmedPage({
