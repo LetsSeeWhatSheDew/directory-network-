@@ -17,6 +17,7 @@ export const metadata = {
   title: "Central Illinois cannabis map — every dispensary + live deals",
   description:
     "Every Central Illinois cannabis dispensary on one map. Green pins mark live deals. Click any pin to see the best deal today.",
+  alternates: { canonical: "https://www.puffprice.com/map" },
 };
 
 type Listing = {
@@ -121,6 +122,8 @@ export default async function MapPage() {
       `}</style>
 
       <Nav variant="light" />
+      {/* The map is the page; this heading is for crawlers and screen readers. */}
+      <h1 className="sr-only">Central Illinois cannabis dispensary map</h1>
 
       {/* When we have fewer than 3 geocoded dispensaries there's nothing
           a map adds over the list view — most dispensaries have null

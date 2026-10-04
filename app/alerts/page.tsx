@@ -54,6 +54,7 @@ const OG_DESC =
 export const metadata = {
   title: "Get Deal Alerts",
   description: OG_DESC,
+  alternates: { canonical: "https://www.puffprice.com/alerts" },
   openGraph: {
     title: "Get Deal Alerts | PuffPrice",
     description: OG_DESC,

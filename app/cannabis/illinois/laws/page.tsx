@@ -96,7 +96,7 @@ export default function IllinoisLawsPage() {
         <Nav variant="light" />
         <div className="laws-breadcrumb">
           <Link href="/">Home</Link><span>›</span>
-          <Link href="/cannabis">Cannabis</Link><span>›</span>
+          <Link href="/guides">Guides</Link><span>›</span>
           <Link href="/">Central IL</Link><span>›</span>
           <span style={{ color: "var(--pp-body)" }}>Laws</span>
         </div>

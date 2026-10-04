@@ -136,7 +136,7 @@ export default function FirstTimeGuidePage() {
         <div className="guide-breadcrumb">
           <Link href="/">Home</Link>
           <span>›</span>
-          <Link href="/cannabis">Cannabis</Link>
+          <Link href="/guides">Guides</Link>
           <span>›</span>
           <Link href="/">Central IL</Link>
           <span>›</span>

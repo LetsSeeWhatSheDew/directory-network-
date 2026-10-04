@@ -9,6 +9,7 @@ const OG_IMAGE = "https://www.puffprice.com/og-image.png";
 export const metadata = {
   title: "About PuffPrice — Built in Peoria, Illinois",
   description: OG_DESC,
+  alternates: { canonical: "https://www.puffprice.com/about" },
   openGraph: {
     title: "About PuffPrice — Built in Peoria, Illinois",
     description: OG_DESC,

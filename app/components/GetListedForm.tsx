@@ -64,9 +64,10 @@ export function GetListedForm() {
   return (
     <div className="space-y-4">
       <div className="space-y-1">
-        <h1 className="text-xl font-semibold tracking-tight text-slate-900 md:text-2xl">
+        {/* h2: the page that hosts this form owns the one <h1>. */}
+        <h2 className="text-xl font-semibold tracking-tight text-slate-900 md:text-2xl">
           Get listed in the PuffPrice
-        </h1>
+        </h2>
         <p className="text-sm text-slate-600">
           Tell us about your business and which directory you belong in. We&apos;ll
           review and follow up with next steps within 1–2 business days.
