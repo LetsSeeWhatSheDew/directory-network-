@@ -35,6 +35,7 @@ import { visitDispensaryHref } from "../../../lib/links";
 import { cityFromSlug } from "../../../lib/cityNormalize";
 import { isInCentralIL } from "../../../lib/visibility";
 import TrackPage from "../../components/TrackPage";
+import { buildDispensaryLocalBusiness, nameWithCity } from "../../../lib/dispensarySchema";
 
 export const revalidate = 300;
 
@@ -54,6 +55,8 @@ type Listing = {
   address1: string | null;
   phone: string | null;
   website: string | null;
+  lat?: number | null;
+  lng?: number | null;
   short_description: string | null;
   long_description: string | null;
   menu_url?: string | null;
@@ -199,7 +202,7 @@ export async function generateMetadata({
   }
   const name = listing.name || slug;
   const city = listing.city || cityFromSlug(slug) || null;
-  const title = `${name} — Deals, Hours & Directions`;
+  const title = `${nameWithCity(name, city)} — Deals, Hours & Directions`;
   const description = city
     ? `${name} in ${city}, IL. See current cannabis deals, full week hours, phone, and directions.`
     : `${name} — Illinois cannabis dispensary. See current deals, full week hours, phone, and directions.`;
@@ -257,59 +260,37 @@ export default async function DispensaryProfilePage({
   const city = listing.city || cityFromSlug(slug) || null;
   const todayIdx = ct.weekday;
 
-  // LocalBusiness schema — mirrors /l/[slug] so both pages give Google the
-  // same canonical entity data.
-  const openingHours = hours
-    .filter((h) => !h.is_closed && h.opens_at && h.closes_at)
-    .map((h) => ({
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"][h.weekday],
-      opens: h.opens_at?.substring(0, 5),
-      closes: h.closes_at?.substring(0, 5),
-    }));
-  const schemaLocal = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
+  // LocalBusiness schema (lib/dispensarySchema.ts) — real listing fields
+  // only; sameAs is the store's own website, geo only when we have it.
+  const schemaImage = storeImageUrl(listing.logo_url, listing.slug);
+  const schemaLocal = buildDispensaryLocalBusiness({
+    pageUrl: `${brand.url}/dispensary/${slug}`,
+    ownHost: brand.domain,
     name,
-    ...(listing.address1
-      ? {
-          address: {
-            "@type": "PostalAddress",
-            streetAddress: listing.address1,
-            addressLocality: listing.city,
-            addressRegion: listing.state || "IL",
-            addressCountry: "US",
-          },
-        }
-      : {}),
-    ...(listing.phone ? { telephone: listing.phone } : {}),
-    url: `${brand.url}/dispensary/${slug}`,
-    ...(storeImageUrl(listing.logo_url, listing.slug) ? { image: (storeImageUrl(listing.logo_url, listing.slug) as string).replace(/^\//, `${brand.url}/`) } : {}),
-    ...(openingHours.length > 0 ? { openingHoursSpecification: openingHours } : {}),
-    ...(listing.short_description ? { description: listing.short_description } : {}),
+    listing,
+    image: schemaImage ? schemaImage.replace(/^\//, `${brand.url}/`) : null,
+    hours,
     // Stars in search: only from real, approved PuffPrice-user reviews.
-    ...(reviewStats && reviewStats.review_count > 0
-      ? {
-          aggregateRating: {
-            "@type": "AggregateRating",
-            ratingValue: reviewStats.avg_rating,
-            reviewCount: reviewStats.review_count,
-            bestRating: 5,
-            worstRating: 1,
-          },
-          review: reviews.slice(0, 5).map((r) => ({
-            "@type": "Review",
-            reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5, worstRating: 1 },
-            author: { "@type": "Person", name: r.display_name || "PuffPrice user" },
-            datePublished: r.created_at.slice(0, 10),
-            ...(r.body ? { reviewBody: r.body } : {}),
-          })),
-        }
-      : {}),
-    sameAs: [
-      `${brand.url}/dispensary/${slug}`,
-    ],
-  };
+    ratingFields:
+      reviewStats && reviewStats.review_count > 0
+        ? {
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: reviewStats.avg_rating,
+              reviewCount: reviewStats.review_count,
+              bestRating: 5,
+              worstRating: 1,
+            },
+            review: reviews.slice(0, 5).map((r) => ({
+              "@type": "Review",
+              reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5, worstRating: 1 },
+              author: { "@type": "Person", name: r.display_name || "PuffPrice user" },
+              datePublished: r.created_at.slice(0, 10),
+              ...(r.body ? { reviewBody: r.body } : {}),
+            })),
+          }
+        : undefined,
+  });
 
   // Amenity icons live in <AmenityRow /> per brand spec 2.5; this just
   // tracks whether anything qualifies so the section renders only when
