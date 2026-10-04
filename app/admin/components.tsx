@@ -21,7 +21,7 @@ export function CollapsibleSection({
     <div className="rounded-2xl border border-white/5 bg-[#0a1a12] overflow-hidden">
       <button
         onClick={() => setOpen(!open)}
-        className="flex w-full items-center justify-between px-6 py-5 text-left transition-colors hover:bg-white/[0.02]"
+        className="flex w-full items-center justify-between px-6 py-5 text-left hover:bg-white/[0.02]"
       >
         <div className="flex items-center gap-3">
           <h2 className="text-base font-semibold text-[#F7F4ED]">{title}</h2>
@@ -32,7 +32,7 @@ export function CollapsibleSection({
           )}
         </div>
         <svg
-          className={`h-4 w-4 text-[#8a9490] transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          className={`h-4 w-4 text-[#8a9490] transition-transform ${open ? "rotate-180" : ""}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -100,7 +100,7 @@ export function StatusPill({
     <button
       onClick={cycle}
       disabled={saving}
-      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-all ${STATUS_STYLES[status]} ${saving ? "opacity-50" : "hover:ring-1 hover:ring-white/20 cursor-pointer"}`}
+      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium ${STATUS_STYLES[status]} ${saving ? "opacity-50" : "hover:ring-1 hover:ring-white/20 cursor-pointer"}`}
       title="Click to change status"
     >
       {status.charAt(0).toUpperCase() + status.slice(1)}

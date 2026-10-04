@@ -94,6 +94,28 @@ export function getCityProfile(slug: string): CityProfile | null {
   return CITY_PROFILES[slug.toLowerCase()] ?? null;
 }
 
+// Approximate city centers for the three scope cities with no store of their
+// own (they aren't profiled above, which only covers cities with stores).
+const EXTRA_CENTERS: Record<string, { lat: number; lng: number }> = {
+  bartonville: { lat: 40.6503, lng: -89.6523 },
+  morton: { lat: 40.6128, lng: -89.4593 },
+  washington: { lat: 40.7036, lng: -89.4073 },
+};
+
+/** "Peoria Heights" → "peoria-heights". */
+export function citySlug(city: string | null | undefined): string {
+  return String(city || "").trim().toLowerCase().replace(/\s+/g, "-");
+}
+
+/** Center of a scope city (by slug or display name), or null if unknown. */
+export function cityCenter(cityOrSlug: string | null | undefined): { lat: number; lng: number } | null {
+  const slug = citySlug(cityOrSlug);
+  if (!slug) return null;
+  const p = getCityProfile(slug);
+  if (p) return { lat: p.lat, lng: p.lng };
+  return EXTRA_CENTERS[slug] || null;
+}
+
 /** Straight-line distance in miles (haversine). */
 export function milesBetween(
   a: { lat: number; lng: number },

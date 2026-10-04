@@ -59,22 +59,9 @@ export const FIXTURE_ONLY = new Set(["/deal/00000000-0000-4000-8000-000000005000
  *  problem stops happening, the test fails until the entry is removed.
  *  Keys are the visited URL; values are problem prefixes as the suite words them.
  *
- *  2026-09-27: these pages don't use the Breathe page components yet and are
- *  being restyled in a parallel session; each needs `alternates.canonical`
- *  (public pages) or `robots: noindex` (confirmation / dashboard screens). */
-export const KNOWN_ISSUES: Record<string, string[]> = {
-  "/about": ["missing canonical"],
-  "/about/index": ["missing canonical"],
-  "/alerts": ["missing canonical"],
-  "/alerts/confirmed": ["missing canonical"],
-  "/early-access": ["missing canonical"], // 308 → /alerts
-  "/get-listed": ["missing canonical"],
-  "/map": ["missing canonical"],
-  "/savings": ["missing canonical"],
-  "/savings/dashboard": ["missing canonical"],
-  "/upgrade/success": ["missing canonical"],
-  "/dispensary/submit-deal": ["missing canonical"],
-};
+ *  Empty since PR #10 landed its restyle (every page now has a canonical or
+ *  noindex). Add an entry only with a reason and an owner. */
+export const KNOWN_ISSUES: Record<string, string[]> = {};
 
 /** The URLs to visit, in order. */
 export function smokeUrls(): string[] {

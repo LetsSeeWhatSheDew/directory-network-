@@ -17,19 +17,6 @@ const PR10 = "PR #10 (motion + off-system sweep)";
 
 export const A11Y_KNOWN: KnownA11y[] = [
   {
-    rule: "color-contrast",
-    pages: ["/cannabis/missouri", "/cannabis/missouri/st-louis"],
-    owner: PR10,
-    reason: "Legacy dark Tailwind sections inherit the Breathe ink color (#14231a on near-black). Out-of-scope Missouri pages built on components/CityPage.tsx, which #10 is sweeping.",
-  },
-  {
-    rule: "link-in-text-block",
-    pages: ["/deals/all", "/deals/flower", "/illinois-cannabis-tax-calculator"],
-    dayparts: ["day"],
-    owner: PR10,
-    reason: "Inline links are only told apart from body text by color (1.41:1); they need an underline. Files are in #10's sweep.",
-  },
-  {
     rule: "link-in-text-block",
     pages: ["/upgrade/success"],
     owner: PR10,

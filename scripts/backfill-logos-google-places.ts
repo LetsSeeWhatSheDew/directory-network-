@@ -157,3 +157,6 @@ function sleep(ms: number) {
   }
   console.log(`Done. updated=${ok} skipped=${skipped}`);
 })();
+
+// Module scope, so this file's top-level consts don't collide with other scripts under `tsc --noEmit`.
+export {};

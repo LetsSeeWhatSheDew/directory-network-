@@ -15,6 +15,7 @@ export async function getLabData() {
     getFeatureRows(),
     getDealIndex(),
   ]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- untyped PostgREST row; fields vary by view
   const raw: Array<Record<string, any>> = dRes.ok ? await dRes.json() : [];
   const inRegion = raw.filter((d) => REGION_CITIES.includes(d.city));
   const seen = new Set<string>();

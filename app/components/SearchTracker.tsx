@@ -14,7 +14,7 @@ export default function SearchTracker() {
       if (!q) return;
       track("search", { meta: { q } });
       try {
-        const w = window as any;
+        const w = window;
         if (typeof w.gtag === "function") {
           w.gtag("event", "search", { search_term: q });
         }

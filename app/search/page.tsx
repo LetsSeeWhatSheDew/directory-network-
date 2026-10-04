@@ -185,12 +185,7 @@ export default async function SearchPage({
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:var(--font-body),system-ui,sans-serif;background:var(--pp-paper);color:var(--pp-body);min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-canopy);position:sticky;top:0;z-index:100}
-        .logo{display:flex;align-items:center;gap:8px;color:var(--pp-on-dark);text-decoration:none;font-weight:700}
-        .logo span{color:var(--pp-canopy-eyebrow)}
-        .back{font-size:.82rem;color:rgba(255,255,255,.55);text-decoration:none;font-family:var(--font-body)}
-        .back:hover{color:var(--pp-on-dark)}
+        body{font-family:var(--font-body);color:var(--pp-body);min-height:100vh}
         .wrap{max-width:800px;margin:0 auto;padding:40px 20px}
         h1{font-size:clamp(1.4rem,3vw,1.9rem);font-weight:700;letter-spacing:-.03em;margin-bottom:6px}
         .sub{font-size:.88rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:24px}
@@ -205,7 +200,7 @@ export default async function SearchPage({
         .chip{display:inline-flex;align-items:center;padding:9px 14px;border-radius:999px;border:1px solid var(--pp-border);background:var(--pp-surface);color:var(--pp-ink);text-decoration:none;font-size:.9rem;font-weight:500}
         .chip:hover{border-color:var(--pp-border-2)}
         .cards{display:flex;flex-direction:column;gap:10px}
-        .card{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:12px;padding:16px;text-decoration:none;color:inherit;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;transition:border-color .15s}
+        .card{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:12px;padding:16px;text-decoration:none;color:inherit;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;transition:none}
         .card:hover{border-color:var(--pp-signal-fill)}
         .cname{font-size:1rem;font-weight:700;color:var(--pp-ink)}
         .ccity{font-size:.78rem;color:var(--pp-muted);font-family:var(--font-body);margin-top:2px}

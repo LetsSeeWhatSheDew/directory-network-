@@ -147,15 +147,10 @@ export default async function BrandPage({
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:var(--font-body),system-ui,sans-serif;background:var(--pp-paper);color:var(--pp-body);min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-surface);border-bottom:1px solid var(--pp-border)}
-        .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
-        .logo-text{font-size:1.1rem;font-weight:700;color:var(--pp-ink)}
-        .logo-text span{color:var(--pp-signal)}
-        .back{font-size:.82rem;color:var(--pp-muted);text-decoration:none;font-family:var(--font-body)}
+        body{font-family:var(--font-body);color:var(--pp-body);min-height:100vh}
         .wrap{max-width:780px;margin:0 auto;padding:44px 24px 72px}
         .head{display:flex;align-items:center;gap:18px;margin-bottom:22px}
-        .logo-mark{width:72px;height:72px;border-radius:16px;background:var(--pp-canopy);color:var(--pp-on-dark);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.6rem;letter-spacing:.02em;font-family:var(--font-body);flex-shrink:0}
+        .logo-mark{width:72px;height:72px;border-radius:16px;background:var(--pp-best-tint);border:1px solid var(--pp-border);color:var(--pp-mark);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.6rem;letter-spacing:.02em;font-family:var(--font-body);flex-shrink:0}
         .eyebrow{font-family:var(--font-body);font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);margin-bottom:6px}
         h1{font-size:clamp(1.8rem,4.5vw,2.4rem);font-weight:700;letter-spacing:-.04em;line-height:1.1}
         .meta{font-family:var(--font-body);font-size:.85rem;color:var(--pp-muted);margin-top:4px}
@@ -164,8 +159,8 @@ export default async function BrandPage({
         .prose{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:14px;padding:22px 22px;font-family:var(--font-body);font-size:1rem;line-height:1.65;color:var(--pp-body);margin-bottom:32px;max-width:64ch}
         h2{font-size:1.2rem;font-weight:700;color:var(--pp-ink);margin-bottom:14px;font-family:var(--font-display), system-ui, sans-serif;letter-spacing:-.01em}
         .deal-list{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:28px}
-        .deal-card{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:20px;padding:16px 18px;text-decoration:none;color:inherit;transition:border-color .15s, box-shadow .15s}
-        .deal-card:hover{border-color:var(--pp-signal-fill);box-shadow:0 2px 8px rgba(22,163,74,.12)}
+        .deal-card{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:20px;padding:16px 18px;text-decoration:none;color:inherit;transition:none}
+        .deal-card:hover{border-color:var(--pp-border-2)}
         .deal-head{font-family:var(--font-body);font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);margin-bottom:4px}
         .deal-title{font-size:1.02rem;font-weight:700;color:var(--pp-ink);line-height:1.25;margin-bottom:4px}
         .deal-sub{font-family:var(--font-body);font-size:.85rem;color:var(--pp-muted)}

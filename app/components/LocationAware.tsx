@@ -42,6 +42,21 @@ function readCookieCity(): string | null {
   }
 }
 
+/** The saved pp_loc city with how it was found (gps / manual / ip). */
+function readCookieLoc(): Loc | null {
+  if (typeof document === "undefined") return null;
+  try {
+    const m = document.cookie.match(/(?:^|;\s*)pp_loc=([^;]+)/);
+    if (!m) return null;
+    const p = JSON.parse(decodeURIComponent(m[1]));
+    if (typeof p?.city !== "string" || !p.city.trim()) return null;
+    const source: Source = p.source === "gps" || p.source === "manual" ? p.source : "ip";
+    return { city: p.city, source };
+  } catch {
+    return null;
+  }
+}
+
 function clearCache() {
   try {
     sessionStorage.removeItem(CITY_KEY);
@@ -111,11 +126,20 @@ function applyPlaceholder(city: string) {
   });
 }
 
+/** Abort a lookup that hasn't answered in GPS_WAIT_MS, so detection never hangs. */
+function quickSignal(): AbortSignal | undefined {
+  try {
+    return typeof AbortSignal !== "undefined" && "timeout" in AbortSignal ? AbortSignal.timeout(GPS_WAIT_MS) : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 async function reverseGeocode(lat: number, lng: number): Promise<string | null> {
   try {
     const res = await fetch(
       `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=12&addressdetails=1`,
-      { headers: { "Accept-Language": "en" } }
+      { headers: { "Accept-Language": "en" }, signal: quickSignal() }
     );
     if (!res.ok) return null;
     const data = await res.json();
@@ -128,13 +152,35 @@ async function reverseGeocode(lat: number, lng: number): Promise<string | null> 
 
 async function ipLookup(): Promise<{ city: string | null }> {
   try {
-    const res = await fetch("/api/location", { cache: "no-store" });
+    const res = await fetch("/api/location", { cache: "no-store", signal: quickSignal() });
     if (!res.ok) return { city: null };
     const data = await res.json();
     return { city: data?.city || null };
   } catch {
     return { city: null };
   }
+}
+
+/** How long we wait for the browser's location answer before moving on. */
+const GPS_WAIT_MS = 4000;
+
+/**
+ * GPS with a hard wait. getCurrentPosition's own timeout only starts once the
+ * visitor answers the permission prompt, so an unanswered prompt (common on
+ * desktop Chrome) would leave "Detecting location…" up forever. After
+ * GPS_WAIT_MS we resolve "timeout" and move on; `late` still resolves if they
+ * answer afterwards, so a later yes can upgrade the location.
+ */
+function requestGpsWithin(ms = GPS_WAIT_MS): {
+  first: Promise<GeolocationPosition | null | "timeout">;
+  late: Promise<GeolocationPosition | null>;
+} {
+  const late = requestGps();
+  const first = Promise.race([
+    late,
+    new Promise<"timeout">((res) => setTimeout(() => res("timeout"), ms)),
+  ]);
+  return { first, late };
 }
 
 function requestGps(): Promise<GeolocationPosition | null> {
@@ -156,8 +202,13 @@ export default function LocationAware() {
   const commit = useCallback((next: Loc, lat?: number, lng?: number) => {
     if (!inRegion(next.city)) {
       // Out of region: remember nothing, keep the page on "Central Illinois".
+      // Drop any older pp_loc cookie too, so server-rendered picks (the
+      // homepage orb) agree with this chip instead of an old city.
       try {
         sessionStorage.removeItem(CITY_KEY);
+      } catch {}
+      try {
+        document.cookie = "pp_loc=; path=/; max-age=0; samesite=lax";
       } catch {}
       setOutside(next.city);
       setLoc(null);
@@ -176,7 +227,7 @@ export default function LocationAware() {
       );
     } catch {}
     try {
-      const w = window as any;
+      const w = window;
       if (typeof w.gtag === "function") {
         w.gtag("event", "location_detected", { method: next.source, city: next.city });
       }
@@ -219,7 +270,11 @@ export default function LocationAware() {
 
     (async () => {
       const cachedRaw = readCached();
-      const cached = cachedRaw && inRegion(cachedRaw.city) ? cachedRaw : null;
+      // A new tab has no session cache but may carry the pp_loc cookie the
+      // server already rendered with (the homepage orb uses it). Start from
+      // it so the chip and the orb agree from the first paint.
+      const saved = cachedRaw ? null : readCookieLoc();
+      const cached = cachedRaw && inRegion(cachedRaw.city) ? cachedRaw : saved && inRegion(saved.city) ? saved : null;
       if (cachedRaw && !cached) {
         try {
           sessionStorage.removeItem(CITY_KEY);
@@ -270,9 +325,19 @@ export default function LocationAware() {
       } catch {}
 
       if (!gpsDeclined) {
-        const pos = await requestGps();
+        const { first, late } = requestGpsWithin();
+        const pos = await first;
         if (cancelled) return;
-        if (pos) {
+        if (pos === "timeout") {
+          // No answer yet: don't hang. Fall through to the IP city / saved
+          // city / "Set your city" below, and upgrade if they say yes later.
+          late.then(async (p) => {
+            if (cancelled || !p) return;
+            const { latitude, longitude } = p.coords;
+            const city = await reverseGeocode(latitude, longitude);
+            if (!cancelled && city) commit({ city, source: "gps" }, latitude, longitude);
+          });
+        } else if (pos) {
           const { latitude, longitude } = pos.coords;
           const city = await reverseGeocode(latitude, longitude);
           if (cancelled) return;
@@ -295,7 +360,12 @@ export default function LocationAware() {
       if (city) {
         commit({ city, source: "ip" });
       } else {
-        finishUnresolved();
+        // Nothing detected this time: fall back to the city this browser
+        // already chose (the pp_loc cookie the server is reading), so the
+        // chip and the server-rendered picks agree.
+        const saved = readCookieLoc();
+        if (saved && inRegion(saved.city)) commit(saved);
+        else finishUnresolved();
       }
     })();
 

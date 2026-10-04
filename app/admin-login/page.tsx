@@ -42,29 +42,29 @@ function LoginForm() {
   }
 
   return (
-    <div style={{minHeight:"100vh",background:"#f7f6f2",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"system-ui,sans-serif",padding:"24px"}}>
-      <div style={{background:"#fff",borderRadius:"16px",border:"1px solid #e8e5de",padding:"40px",width:"100%",maxWidth:"380px"}}>
+    <div style={{minHeight:"100vh",background:"var(--pp-paper)",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"var(--font-body)",padding:"24px"}}>
+      <div style={{background:"var(--pp-surface)",borderRadius:"16px",border:"1px solid var(--pp-border)",padding:"40px",width:"100%",maxWidth:"380px"}}>
         <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"28px"}}>
-          <div style={{width:"10px",height:"10px",borderRadius:"50%",background:"#2E7D32"}}/>
-          <span style={{fontSize:"1rem",fontWeight:700,color:"#1F3D2B",letterSpacing:"-.02em"}}>puff<span style={{color:"#2E7D32"}}>price</span></span>
+          <div style={{width:"10px",height:"10px",borderRadius:"50%",background:"var(--pp-mark-dot)"}}/>
+          <span style={{fontSize:"1rem",fontWeight:700,color:"var(--pp-ink)",letterSpacing:"-.02em"}}>puff<span style={{color:"var(--pp-mark)"}}>price</span></span>
         </div>
-        <h1 style={{fontSize:"1.3rem",fontWeight:700,color:"#1F3D2B",marginBottom:"6px",letterSpacing:"-.02em"}}>Admin access</h1>
-        <p style={{fontSize:".85rem",color:"#6b7280",marginBottom:"24px"}}>Enter your password to continue</p>
+        <h1 style={{fontSize:"1.3rem",fontWeight:400,color:"var(--pp-ink)",marginBottom:"6px",letterSpacing:"-.02em"}}>Admin access</h1>
+        <p style={{fontSize:".85rem",color:"var(--pp-muted)",marginBottom:"24px"}}>Enter your password to continue</p>
         <form onSubmit={handleSubmit}>
           <input type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password" autoFocus
-            style={{width:"100%",padding:"10px 14px",border:errorCode?"1px solid #dc2626":"1px solid #e8e5de",borderRadius:"8px",fontSize:".95rem",outline:"none",marginBottom:"12px",boxSizing:"border-box",background:"#fff",color:"#1F3D2B"}}/>
+            style={{width:"100%",padding:"10px 14px",border:errorCode?"1px solid var(--pp-stop-edge)":"1px solid var(--pp-border)",borderRadius:"8px",fontSize:".95rem",outline:"none",marginBottom:"12px",boxSizing:"border-box",background:"var(--pp-paper)",color:"var(--pp-ink)"}}/>
           {errorCode === "bad_password" && (
-            <p style={{fontSize:".8rem",color:"#dc2626",marginBottom:"12px"}}>Incorrect password. Try again.</p>
+            <p style={{fontSize:".8rem",color:"var(--pp-stop-fg)",marginBottom:"12px"}}>Incorrect password. Try again.</p>
           )}
           {errorCode === "config_missing" && (
-            <div style={{fontSize:".78rem",color:"#92400e",background:"#fef3c7",border:"1px solid #fcd34d",borderRadius:"8px",padding:"10px 12px",marginBottom:"12px",lineHeight:1.45}}>
-              <strong style={{color:"#7c2d12"}}>Server not configured.</strong>
+            <div style={{fontSize:".78rem",color:"var(--pp-note-fg)",background:"var(--pp-note-bg)",border:"1px solid var(--pp-note-edge)",borderRadius:"8px",padding:"10px 12px",marginBottom:"12px",lineHeight:1.45}}>
+              <strong style={{color:"var(--pp-note-fg)"}}>Server not configured.</strong>
               <br />
               {errorDetail || "ADMIN_PASSWORD is missing for this deployment. Set it in the Vercel environment variables (Preview + Production) and redeploy."}
             </div>
           )}
           <button type="submit" disabled={loading||!password}
-            style={{width:"100%",padding:"10px",background:loading||!password?"#9ca3af":"#1F3D2B",color:"#fff",border:"none",borderRadius:"8px",fontSize:".9rem",fontWeight:700,cursor:loading||!password?"not-allowed":"pointer"}}>
+            style={{width:"100%",padding:"10px",background:"var(--pp-btn)",color:"var(--pp-btn-fg)",border:"1px solid var(--pp-btn-border)",opacity:loading||!password?0.55:1,borderRadius:"14px",fontSize:".9rem",fontWeight:700,cursor:loading||!password?"not-allowed":"pointer"}}>
             {loading?"Signing in...":"Sign in"}
           </button>
         </form>
@@ -75,7 +75,7 @@ function LoginForm() {
 
 export default function AdminLoginPage() {
   return (
-    <Suspense fallback={<div style={{minHeight:"100vh",background:"#f7f6f2",display:"flex",alignItems:"center",justifyContent:"center"}}><p style={{fontFamily:"system-ui",color:"#6b7280"}}>Loading...</p></div>}>
+    <Suspense fallback={<div style={{minHeight:"100vh",background:"var(--pp-paper)",display:"flex",alignItems:"center",justifyContent:"center"}}><p style={{fontFamily:"var(--font-body)",color:"var(--pp-muted)"}}>Loading...</p></div>}>
       <LoginForm />
     </Suspense>
   );

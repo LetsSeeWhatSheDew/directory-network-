@@ -79,7 +79,7 @@ const nextConfig: NextConfig = {
       { source: "/cannabis", destination: "/", permanent: true },
       { source: "/grow", destination: "/for-dispensaries", permanent: true },
       { source: "/early-access", destination: "/alerts", permanent: true },
-      // /deals had no index page (404 since at least Sep 25); the full list lives at /deals/all.
+      // There's no /deals index; the list lives at /deals/all.
       { source: "/deals", destination: "/deals/all", permanent: true },
     ];
   },

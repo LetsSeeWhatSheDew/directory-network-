@@ -200,20 +200,21 @@ const pillStyle: React.CSSProperties = {
   fontFamily: "var(--font-body)",
   fontSize: ".88rem",
   fontWeight: 500,
-  transition: "all .15s",
+  transition: "transform calc(150ms * var(--pp-pace)), opacity calc(150ms * var(--pp-pace))",
 };
 const pillActive: React.CSSProperties = {
-  background: "var(--pp-canopy)",
-  borderColor: "var(--pp-canopy)",
-  color: "var(--pp-on-dark)",
+  background: "var(--pp-btn)",
+  borderColor: "var(--pp-btn-border)",
+  color: "var(--pp-btn-fg)",
   fontWeight: 700,
 };
 
 const resultCard: React.CSSProperties = {
   marginTop: 10,
   padding: "24px",
-  background: "var(--pp-canopy)",
-  color: "var(--pp-on-dark)",
+  background: "var(--pp-haze)",
+  border: "1px solid var(--pp-haze-border)",
+  color: "var(--pp-ink)",
   borderRadius: 14,
   textAlign: "center",
 };
@@ -221,7 +222,7 @@ const resultEyebrow: React.CSSProperties = {
   fontSize: ".7rem",
   fontWeight: 700,
   letterSpacing: ".14em",
-  color: "var(--pp-canopy-eyebrow)",
+  color: "var(--pp-muted)",
   fontFamily: "var(--font-body)",
   textTransform: "uppercase",
   marginBottom: 14,
@@ -229,30 +230,31 @@ const resultEyebrow: React.CSSProperties = {
 const resultBig: React.CSSProperties = {
   fontSize: "1.4rem",
   fontWeight: 700,
-  color: "var(--pp-on-dark)",
-  fontFamily: "var(--font-display), system-ui, sans-serif",
+  color: "var(--pp-ink)",
+  fontFamily: "var(--font-body)",
   lineHeight: 1.3,
   marginBottom: 14,
 };
 const resultBody: React.CSSProperties = {
   fontSize: "1rem",
-  color: "rgba(255,255,255,.85)",
+  color: "var(--pp-body)",
   fontFamily: "var(--font-body)",
   lineHeight: 1.55,
   marginBottom: 6,
 };
 const resultSub: React.CSSProperties = {
   fontSize: ".95rem",
-  color: "rgba(255,255,255,.72)",
+  color: "var(--pp-muted)",
   fontFamily: "var(--font-body)",
   marginBottom: 18,
 };
 const cta: React.CSSProperties = {
   display: "inline-block",
-  background: "var(--pp-signal-fill)",
-  color: "var(--pp-on-dark)",
+  background: "var(--pp-btn)",
+  color: "var(--pp-btn-fg)",
+  border: "1px solid var(--pp-btn-border)",
   padding: "12px 22px",
-  borderRadius: 10,
+  borderRadius: 14,
   textDecoration: "none",
   fontFamily: "var(--font-body)",
   fontWeight: 700,
@@ -261,7 +263,7 @@ const cta: React.CSSProperties = {
 };
 const resultFineprint: React.CSSProperties = {
   fontSize: ".7rem",
-  color: "rgba(255,255,255,.45)",
+  color: "var(--pp-muted)",
   fontFamily: "var(--font-body)",
   lineHeight: 1.5,
   marginTop: 2,

@@ -1,5 +1,5 @@
-// The dashboard page is a client component (reads this browser's tracked
-// deals), so its metadata lives here. Personal, per-browser view: noindex.
+// A personal dashboard (reads this browser's saved records), not a page for search.
+// The page itself is a client component, so its metadata lives here.
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,6 +7,6 @@ export const metadata: Metadata = {
   robots: { index: false, follow: true },
 };
 
-export default function SavingsDashboardLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return children;
 }

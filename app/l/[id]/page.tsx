@@ -12,7 +12,7 @@ import RecentlyViewedTracker from "../../components/RecentlyViewedTracker";
 import ShareDealButton from "../../components/ShareDealButton";
 import AmenityRow from "../../components/AmenityRow";
 import { estimateSavings } from "../../../lib/dealScoring";
-import { saveLabel } from "../../../lib/exhale";
+import { saveLabel, type ExDeal } from "../../../lib/exhale";
 import DealFreshnessBadge from "../../components/DealFreshnessBadge";
 import { nowInCT, isOpen, formatTime as formatHourTime } from "../../../lib/hours";
 import { isInCentralIL } from "../../../lib/visibility";
@@ -666,14 +666,15 @@ export default async function ListingPage({
                 flexWrap: "wrap",
               }}>
                 <span>{activeDeal!.title}</span>
-                {saveLabel(activeDeal as any, estimateSavings(activeDeal)) && (
-                  <span className="pp-save">{saveLabel(activeDeal as any, estimateSavings(activeDeal))}</span>
+                {saveLabel(activeDeal as ExDeal, estimateSavings(activeDeal)) && (
+                  <span className="pp-save">{saveLabel(activeDeal as ExDeal, estimateSavings(activeDeal))}</span>
                 )}
                 {(() => {
                   const exp = activeDeal!.expires_at;
                   if (!exp) return null;
                   const t = new Date(exp).getTime();
                   if (!Number.isFinite(t)) return null;
+                  // eslint-disable-next-line react-hooks/purity -- server component; rendered per request, so "now" is the request time
                   const hoursLeft = Math.floor((t - Date.now()) / 3_600_000);
                   if (hoursLeft <= 0 || hoursLeft > 24) return null;
                   return (
@@ -714,8 +715,8 @@ export default async function ListingPage({
               </div>
               <div style={{ marginBottom: 12 }}>
                 <DealFreshnessBadge
-                  verifiedAt={(activeDeal as any).verified_at}
-                  statusReason={(activeDeal as any).status_reason}
+                  verifiedAt={(activeDeal as ExDeal).verified_at}
+                  statusReason={(activeDeal as { status_reason?: string | null }).status_reason}
                 />
               </div>
               {activeDeal!.id && (
@@ -737,8 +738,8 @@ export default async function ListingPage({
                       <li key={d.id || d.title} style={{ padding: "10px 12px", background: "var(--pp-paper)", borderRadius: 8 }}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
                           <div style={{ fontWeight: 600, color: "var(--pp-ink)", fontSize: ".9rem" }}>{d.title}</div>
-                          {saveLabel(d as any, estimateSavings(d)) && (
-                            <span className="pp-save" style={{ fontSize: 13, padding: "5px 10px" }}>{saveLabel(d as any, estimateSavings(d))}</span>
+                          {saveLabel(d as ExDeal, estimateSavings(d)) && (
+                            <span className="pp-save" style={{ fontSize: 13, padding: "5px 10px" }}>{saveLabel(d as ExDeal, estimateSavings(d))}</span>
                           )}
                         </div>
                         {d.description && (

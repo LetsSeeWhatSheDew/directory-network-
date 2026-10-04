@@ -9,7 +9,9 @@ import Footer from "../components/Footer";
 import AlertsCalculator from "./AlertsCalculator";
 import ProCheckoutButton from "./ProCheckoutButton";
 import WeeklySignup from "../components/WeeklySignup";
+import HazeBand from "../components/HazeBand";
 
+import { brand } from "@/lib/brand";
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL ||
   "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -52,9 +54,9 @@ const OG_DESC =
   "Central Illinois cannabis deal alerts. Free forever, no account needed. Pro is $0.99/month. Deal alerts within minutes.";
 
 export const metadata = {
+  alternates: { canonical: `${brand.url}/alerts` },
   title: "Get Deal Alerts",
   description: OG_DESC,
-  alternates: { canonical: "https://www.puffprice.com/alerts" },
   openGraph: {
     title: "Get Deal Alerts | PuffPrice",
     description: OG_DESC,
@@ -97,17 +99,14 @@ export default async function AlertsPage() {
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:var(--font-body),system-ui,sans-serif;background:var(--pp-paper);color:var(--pp-body);min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-canopy);position:sticky;top:0;z-index:100}
-        .logo{color:var(--pp-on-dark);text-decoration:none;font-weight:700;letter-spacing:-.02em;font-size:1.1rem}
-        .logo span{color:var(--pp-canopy-eyebrow)}
-        .back{font-size:.82rem;color:rgba(255,255,255,.55);text-decoration:none;font-family:var(--font-body)}
-        .back:hover{color:var(--pp-on-dark)}
+        body{font-family:var(--font-body);color:var(--pp-body);min-height:100vh}
 
-        .hero{background:transparent;color:var(--pp-ink);padding:48px 28px 24px;text-align:center}
-        .hero h1{color:var(--pp-ink);font-size:clamp(2rem,5vw,3rem);font-weight:700;letter-spacing:-.04em;line-height:1.1;margin-bottom:14px}
-        .hero h1 em{color:var(--pp-signal);font-style:italic}
-        .hero-sub{font-size:clamp(1rem,2.5vw,1.15rem);color:var(--pp-muted);font-family:var(--font-body);line-height:1.55;max-width:560px;margin:0 auto}
+        .hero{background:transparent;color:var(--pp-ink);padding:8px 28px 24px;text-align:center}
+        .hero h1{color:var(--pp-ink);font-size:clamp(2.2rem,6vw,3rem);line-height:1.02;margin-bottom:14px;text-wrap:balance}
+        .hero h1 em{color:var(--pp-mark);font-style:italic}
+        .hero-sub{font-size:clamp(1rem,2.5vw,1.08rem);color:var(--pp-body);font-family:var(--font-body);line-height:1.55;max-width:560px;margin:0 auto}
+        .hero-count{margin-top:14px;font-size:.85rem;color:var(--pp-muted);font-family:var(--font-body)}
+        .hero-count b{font-family:var(--font-mono);font-weight:500;color:var(--pp-ink)}
 
         .tiers{max-width:960px;margin:0 auto;padding:48px 20px 24px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
         @media(max-width:720px){.tiers{grid-template-columns:1fr}}
@@ -115,10 +114,10 @@ export default async function AlertsPage() {
         .tier.pro{background:var(--pp-haze);color:var(--pp-ink);border-color:var(--pp-haze-border)}
         .tier-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);font-family:var(--font-body)}
         .tier.pro .tier-eyebrow{color:var(--pp-mark)}
-        .tier-name{font-size:1.35rem;font-weight:700;letter-spacing:-.02em;font-family:var(--font-display), system-ui, sans-serif;line-height:1.1}
+        .tier-name{font-size:1.35rem;font-weight:700;letter-spacing:-.02em;font-family:var(--font-body);line-height:1.1}
         .tier.pro .tier-name{color:var(--pp-ink)}
         .tier-price{display:flex;align-items:baseline;gap:6px}
-        .tier-price-big{font-size:2.4rem;font-weight:700;color:var(--pp-signal-ink);letter-spacing:-.03em;line-height:1;font-family:var(--font-display), system-ui, sans-serif}
+        .tier-price-big{font-size:2.4rem;font-weight:500;color:var(--pp-signal-ink);letter-spacing:-.04em;line-height:1;font-family:var(--font-mono)}
         .tier.pro .tier-price-big{color:var(--pp-big)}
         .tier-price-period{font-size:.85rem;color:var(--pp-muted);font-family:var(--font-body)}
         .tier.pro .tier-price-period{color:var(--pp-muted)}
@@ -133,23 +132,17 @@ export default async function AlertsPage() {
         .tier.pro ul.tier-features li{color:var(--pp-body)}
         .check{color:var(--pp-signal);font-weight:700;flex-shrink:0}
         .tier.pro .check{color:var(--pp-mark)}
-        .testimonial{background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.22);border-radius:10px;padding:14px 16px;margin-top:6px}
-        .tier:not(.pro) .testimonial{background:var(--pp-best-tint);border-color:var(--pp-best-border)}
-        .testimonial blockquote{font-family:var(--font-display), system-ui, sans-serif;font-style:italic;font-size:.92rem;line-height:1.5;color:inherit;margin:0;opacity:.88}
-        .testimonial figcaption{font-family:var(--font-body);font-size:.74rem;color:rgba(255,255,255,.55);margin-top:8px}
-        .tier:not(.pro) .testimonial figcaption{color:var(--pp-signal)}
-        .tier.pro .testimonial figcaption strong{color:var(--pp-on-dark)}
 
-        .cta{display:inline-block;padding:13px 22px;border-radius:10px;font-family:var(--font-body);font-weight:700;font-size:.95rem;text-decoration:none;text-align:center;transition:all .15s;cursor:pointer;border:none;width:100%}
+        .cta{display:inline-block;padding:13px 22px;border-radius:14px;font-family:var(--font-body);font-weight:700;font-size:.95rem;text-decoration:none;text-align:center;transition:transform calc(150ms * var(--pp-pace)), opacity calc(150ms * var(--pp-pace));cursor:pointer;border:none;width:100%}
         .cta-free{background:var(--pp-btn);color:var(--pp-btn-fg);box-shadow:inset 0 0 0 1px var(--pp-btn-border)}
         .cta-free:hover{filter:brightness(.97)}
-        .cta-pro{background:var(--pp-signal-fill);color:var(--pp-on-dark)}
-        .cta-pro:hover{background:var(--pp-signal-fill)}
+        .cta-pro{background:var(--pp-btn);color:var(--pp-btn-fg);box-shadow:inset 0 0 0 1px var(--pp-btn-border);font-weight:600}
+        .cta-pro:hover{filter:brightness(.97)}
         .cta-pro:disabled{opacity:.7;cursor:not-allowed}
 
         .feels{max-width:760px;margin:24px auto 0;padding:48px 24px}
-        .feels h2{font-size:clamp(1.5rem,3.5vw,2rem);font-weight:700;letter-spacing:-.03em;line-height:1.15;margin-bottom:24px;font-family:var(--font-display), system-ui, sans-serif}
-        .feels p{font-family:var(--font-display), system-ui, sans-serif;font-size:1.02rem;line-height:1.7;color:var(--pp-body);margin-bottom:20px}
+        .feels h2{font-size:clamp(1.5rem,3.5vw,2rem);font-weight:700;letter-spacing:-.03em;line-height:1.15;margin-bottom:24px;font-family:var(--font-body)}
+        .feels p{font-family:var(--font-body);font-size:1.02rem;line-height:1.7;color:var(--pp-body);margin-bottom:20px}
         .feels p em{color:var(--pp-signal);font-style:normal;font-weight:700}
         .feels p.closer{color:var(--pp-signal-ink);font-weight:600}
 
@@ -158,23 +151,16 @@ export default async function AlertsPage() {
 
       <Nav variant="light" />
 
+      <HazeBand height={150} />
+
       <header className="hero">
-        <h1>Never overpay for weed again.</h1>
+        <h1>Never overpay for weed <em>again.</em></h1>
         <p className="hero-sub">
           Check this before you buy. You might be leaving money on the table.
         </p>
         {alertCount !== null && alertCount > 0 && (
-          <p
-            style={{
-              marginTop: 14,
-              fontSize: ".85rem",
-              color: "var(--pp-muted)",
-              fontFamily: "var(--font-body)",
-            }}
-          >
-            <span style={{ color: "var(--pp-signal)", fontWeight: 700 }}>
-              {alertCount.toLocaleString()}
-            </span>{" "}
+          <p className="hero-count">
+            <b>{alertCount.toLocaleString()}</b>{" "}
             {alertCount === 1 ? "person is" : "people are"} already getting deal alerts in Central Illinois.
           </p>
         )}

@@ -64,11 +64,11 @@ export function GetListedForm() {
   return (
     <div className="space-y-4">
       <div className="space-y-1">
-        {/* h2: the page that hosts this form owns the one <h1>. */}
-        <h2 className="text-xl font-semibold tracking-tight text-slate-900 md:text-2xl">
-          Get listed in the PuffPrice
+        {/* The page owns the h1 ("List your dispensary"); this is the form's section title. */}
+        <h2 data-keep-font className="text-xl font-semibold tracking-tight text-[color:var(--pp-ink)] md:text-2xl">
+          Get listed on PuffPrice
         </h2>
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-[color:var(--pp-body)]">
           Tell us about your business and which directory you belong in. We&apos;ll
           review and follow up with next steps within 1–2 business days.
         </p>
@@ -77,14 +77,14 @@ export function GetListedForm() {
       <form onSubmit={handleSubmit} className="space-y-3 text-xs md:text-sm">
         {/* Directory */}
         <div className="space-y-1.5">
-          <label className="block text-slate-700" htmlFor="directory">
+          <label className="block text-[color:var(--pp-body)]" htmlFor="directory">
             Which directory should this appear in?
           </label>
           <select
             id="directory"
             name="directory"
             required
-            className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[color:var(--pp-signal)]/40 focus:border-[color:var(--pp-signal)]"
+            className="w-full rounded-md border border-[color:var(--pp-border)] bg-[color:var(--pp-surface)] px-2 py-1.5 text-sm text-[color:var(--pp-ink)] focus:outline-none focus:ring-2 focus:ring-[color:var(--pp-signal)]/40 focus:border-[color:var(--pp-signal)]"
             defaultValue=""
           >
             <option value="" disabled>
@@ -101,25 +101,25 @@ export function GetListedForm() {
         {/* Business name + website */}
         <div className="grid gap-3 md:grid-cols-2">
           <div className="space-y-1.5">
-            <label className="block text-slate-700" htmlFor="business_name">
+            <label className="block text-[color:var(--pp-body)]" htmlFor="business_name">
               Business name
             </label>
             <input
               id="business_name"
               name="business_name"
               required
-              className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[color:var(--pp-signal)]/40 focus:border-[color:var(--pp-signal)]"
+              className="w-full rounded-md border border-[color:var(--pp-border)] bg-[color:var(--pp-surface)] px-2 py-1.5 text-sm text-[color:var(--pp-ink)] placeholder:text-[color:var(--pp-muted)] focus:outline-none focus:ring-2 focus:ring-[color:var(--pp-signal)]/40 focus:border-[color:var(--pp-signal)]"
               placeholder="Mile High Greens"
             />
           </div>
           <div className="space-y-1.5">
-            <label className="block text-slate-700" htmlFor="website">
+            <label className="block text-[color:var(--pp-body)]" htmlFor="website">
               Website (optional)
             </label>
             <input
               id="website"
               name="website"
-              className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[color:var(--pp-signal)]/40 focus:border-[color:var(--pp-signal)]"
+              className="w-full rounded-md border border-[color:var(--pp-border)] bg-[color:var(--pp-surface)] px-2 py-1.5 text-sm text-[color:var(--pp-ink)] placeholder:text-[color:var(--pp-muted)] focus:outline-none focus:ring-2 focus:ring-[color:var(--pp-signal)]/40 focus:border-[color:var(--pp-signal)]"
               placeholder="https://example.com"
             />
           </div>
@@ -128,19 +128,19 @@ export function GetListedForm() {
         {/* Contact name + email */}
         <div className="grid gap-3 md:grid-cols-2">
           <div className="space-y-1.5">
-            <label className="block text-slate-700" htmlFor="name">
+            <label className="block text-[color:var(--pp-body)]" htmlFor="name">
               Your name
             </label>
             <input
               id="name"
               name="name"
               required
-              className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[color:var(--pp-signal)]/40 focus:border-[color:var(--pp-signal)]"
+              className="w-full rounded-md border border-[color:var(--pp-border)] bg-[color:var(--pp-surface)] px-2 py-1.5 text-sm text-[color:var(--pp-ink)] placeholder:text-[color:var(--pp-muted)] focus:outline-none focus:ring-2 focus:ring-[color:var(--pp-signal)]/40 focus:border-[color:var(--pp-signal)]"
               placeholder="Jane Doe"
             />
           </div>
           <div className="space-y-1.5">
-            <label className="block text-slate-700" htmlFor="email">
+            <label className="block text-[color:var(--pp-body)]" htmlFor="email">
               Email
             </label>
             <input
@@ -148,7 +148,7 @@ export function GetListedForm() {
               name="email"
               type="email"
               required
-              className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[color:var(--pp-signal)]/40 focus:border-[color:var(--pp-signal)]"
+              className="w-full rounded-md border border-[color:var(--pp-border)] bg-[color:var(--pp-surface)] px-2 py-1.5 text-sm text-[color:var(--pp-ink)] placeholder:text-[color:var(--pp-muted)] focus:outline-none focus:ring-2 focus:ring-[color:var(--pp-signal)]/40 focus:border-[color:var(--pp-signal)]"
               placeholder="you@example.com"
             />
           </div>
@@ -156,14 +156,14 @@ export function GetListedForm() {
 
         {/* Message */}
         <div className="space-y-1.5">
-          <label className="block text-slate-700" htmlFor="message">
+          <label className="block text-[color:var(--pp-body)]" htmlFor="message">
             Anything else we should know?
           </label>
           <textarea
             id="message"
             name="message"
             rows={4}
-            className="w-full rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[color:var(--pp-signal)]/40 focus:border-[color:var(--pp-signal)]"
+            className="w-full rounded-md border border-[color:var(--pp-border)] bg-[color:var(--pp-surface)] px-2 py-1.5 text-sm text-[color:var(--pp-ink)] placeholder:text-[color:var(--pp-muted)] focus:outline-none focus:ring-2 focus:ring-[color:var(--pp-signal)]/40 focus:border-[color:var(--pp-signal)]"
             placeholder="Licensing info, specialties, service area, or how you heard about us."
           />
         </div>
@@ -173,23 +173,23 @@ export function GetListedForm() {
           <button
             type="submit"
             disabled={status === "submitting"}
-            className="inline-flex items-center rounded-full bg-[color:var(--pp-signal-fill)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="inline-flex items-center rounded-full border border-[color:var(--pp-btn-border)] bg-[color:var(--pp-btn)] px-5 py-2.5 text-sm font-semibold text-[color:var(--pp-btn-fg)] hover:brightness-[.97] disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {status === "submitting" ? "Submitting…" : "Submit request"}
           </button>
-          <p className="text-[11px] text-slate-500">
+          <p className="text-[11px] text-[color:var(--pp-muted)]">
             We&apos;ll never sell your data. We only use this info to review your
             listing request.
           </p>
         </div>
 
         {status === "success" && (
-          <p className="text-[11px] text-emerald-600">
+          <p className="text-[11px] text-[color:var(--pp-mark)]">
             Got it. Your request was submitted — we&apos;ll review and follow up.
           </p>
         )}
         {status === "error" && (
-          <p className="text-[11px] text-red-500">{error}</p>
+          <p className="text-[11px] text-[color:var(--pp-stop-fg)]">{error}</p>
         )}
       </form>
     </div>
