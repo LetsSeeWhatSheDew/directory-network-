@@ -79,6 +79,11 @@ const nextConfig: NextConfig = {
       { source: "/cannabis", destination: "/", permanent: true },
       { source: "/grow", destination: "/for-dispensaries", permanent: true },
       { source: "/early-access", destination: "/alerts", permanent: true },
+      // There's no /deals index; the list lives at /deals/all.
+      { source: "/deals", destination: "/deals/all", permanent: true },
+      // /about/index described a statewide blended $/g "index" — against the
+      // no-blended-price rule. The real index is the per-city Deal Index.
+      { source: "/about/index", destination: "/deal-index", permanent: true },
     ];
   },
 };

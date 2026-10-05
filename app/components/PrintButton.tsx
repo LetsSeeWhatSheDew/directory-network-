@@ -6,10 +6,10 @@ export default function PrintButton({ label = "Print" }: { label?: string }) {
       type="button"
       onClick={() => window.print()}
       style={{
-        background: "var(--pp-signal-fill)",
-        color: "var(--pp-on-dark)",
-        border: 0,
-        borderRadius: 10,
+        background: "var(--pp-btn)",
+        color: "var(--pp-btn-fg)",
+        border: "1px solid var(--pp-btn-border)",
+        borderRadius: 14,
         padding: "10px 16px",
         fontWeight: 700,
         fontSize: ".95rem",

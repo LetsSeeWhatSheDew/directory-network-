@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import Link from "next/link";
 import { submitLead } from "@/lib/submitLead";
 import type { DirectoryConfig } from "@/config/directories/project-green";
 
@@ -67,7 +68,7 @@ export default function DirectoryLandingPage({ config }: Props) {
           </span>
           <a
             href="#get-listed"
-            className="rounded-full px-4 py-1.5 text-xs font-semibold text-[#1C3A22] shadow-sm transition hover:opacity-90"
+            className="rounded-full px-4 py-1.5 text-xs font-semibold text-[#1C3A22] shadow-sm hover:opacity-90"
             style={{ backgroundColor: accentColor }}
           >
             Get listed
@@ -96,14 +97,14 @@ export default function DirectoryLandingPage({ config }: Props) {
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <a
             href="#get-listed"
-            className="inline-flex items-center rounded-full px-6 py-2.5 text-sm font-semibold text-[#1C3A22] shadow-sm transition hover:opacity-90"
+            className="inline-flex items-center rounded-full px-6 py-2.5 text-sm font-semibold text-[#1C3A22] shadow-sm hover:opacity-90"
             style={{ backgroundColor: accentColor }}
           >
             Claim your listing
           </a>
           <a
             href="#pricing"
-            className="inline-flex items-center rounded-full border border-white/10 px-6 py-2.5 text-sm font-medium text-slate-200 transition hover:border-white/30 hover:bg-white/5"
+            className="inline-flex items-center rounded-full border border-white/10 px-6 py-2.5 text-sm font-medium text-slate-200 hover:border-white/30 hover:bg-white/5"
           >
             See pricing
           </a>
@@ -192,7 +193,7 @@ export default function DirectoryLandingPage({ config }: Props) {
                   <a
                     href="#get-listed"
                     onClick={() => setSelectedTier(tier.name)}
-                    className="block w-full rounded-full py-2 text-center text-sm font-semibold transition hover:opacity-90"
+                    className="block w-full rounded-full py-2 text-center text-sm font-semibold hover:opacity-90"
                     style={
                       isHighlighted
                         ? { backgroundColor: accentColor, color: "#1C3A22" }
@@ -308,7 +309,7 @@ export default function DirectoryLandingPage({ config }: Props) {
                 <button
                   type="submit"
                   disabled={status === "submitting"}
-                  className="w-full rounded-full py-2.5 text-sm font-semibold text-[#1C3A22] shadow-sm transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="w-full rounded-full py-2.5 text-sm font-semibold text-[#1C3A22] shadow-sm hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
                   style={{ backgroundColor: accentColor }}
                 >
                   {status === "submitting" ? "Submitting…" : "Submit request"}
@@ -328,12 +329,12 @@ export default function DirectoryLandingPage({ config }: Props) {
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-5 text-xs text-slate-500">
           <span>{directoryName} · {region} Cannabis Directory</span>
           <div className="flex items-center gap-4">
-            <a href="/cannabis/illinois" className="hover:text-slate-300 transition-colors">
+            <a href="/cannabis/illinois" className="hover:text-slate-300 ">
               Illinois City Guides →
             </a>
-            <a href="/" className="hover:text-slate-300 transition-colors">
+            <Link href="/" className="hover:text-slate-300 ">
               PuffPrice →
-            </a>
+            </Link>
           </div>
         </div>
       </footer>

@@ -9,7 +9,7 @@
 - **Type:** Instrument Sans (UI), Instrument Serif (h1 + section titles), IBM Plex Mono (prices, counts).
 - **Logo:** mark C — the P with a breath dot (`app/components/Logo.tsx`, `MarkC`). The mark replaces the "P" in the wordmark. Primary app icon is the cream one (a green square read as a parking sign).
 - **One bold element per screen:** the savings number / `.pp-save` pill (dark by day, firefly yellow by night).
-- **Signature motion:** the orb breathes on an 8s cycle; tapping a deal is "the exhale" (orb breathes out, ring releases, warm wash, "You're saving X." slides up). Numbers never fade or scale. Reduce-motion turns it all off.
+- **Signature motion (Motion Study, Sep 27 — `docs/brand/2026-09-27-motion-system.md`):** one pace dial (`PP_PACE` in `lib/motion.ts` / `--pp-pace`). Orb inhales .86→1.05 on load (2s), breathes three times, rests. Tapping a deal opens the card in place (no scroll; cards below ease down over 1.4s) to "You're saving X." + Get directions, while the orb releases (2.6s) and a puff ring + plume rise out of the card, sized by the saving. Haze drifts (48s/61s) and fireflies settle after ~30s. Numbers never fade, scale, blur or move. Only transform/opacity animate. Reduce-motion = a still page. No sound.
 - **Voice:** calm, warm, a little wry, never a pot pun. "Take a breath. We found the deal." · "Drop your shoulders. The comparing is done." Footer: "Independent. Nobody pays us to rank. 21+." No founder line.
 - **Honesty:** real amounts only (`lib/exhale.ts`); conditional deals (first-time, veterans, "up to") never lead.
 - **Don't:** smoke, leaves, botanical art, stoner humor, stock/AI photos, parallax, 3D, scroll-jacking.

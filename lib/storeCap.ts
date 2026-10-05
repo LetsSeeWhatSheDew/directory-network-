@@ -20,6 +20,7 @@ export const STORE_CAP = {
   shortList: 2,
 } as const;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- untyped PostgREST row; fields vary by view
 type AnyDeal = Record<string, any>;
 
 /** Stable store identity for a deal row (view rows carry slug + listing_slug). */

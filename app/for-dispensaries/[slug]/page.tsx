@@ -25,6 +25,7 @@ export default async function StoreReport({ params }: { params: Promise<{ slug: 
   const store = stores.find((s) => s.slug === slug);
   if (!store) notFound();
   const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+  // eslint-disable-next-line react-hooks/purity -- server component; rendered per request, so "now" is the request time
   const since = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10);
   const [obsRes, liveRes, features, index, traffic] = await Promise.all([
     fetch(`${SUPABASE_URL}/rest/v1/deal_observations?select=deal_id,event,observed_day,title,discount_pct&project_tag=eq.green&listing_slug=eq.${slug}&observed_day=gte.${since}&limit=2000`, { headers: { apikey: anon, Authorization: `Bearer ${anon}` }, next: { revalidate: 3600 } }),
@@ -36,6 +37,7 @@ export default async function StoreReport({ params }: { params: Promise<{ slug: 
   const trafficTotal = traffic
     ? traffic.views + traffic.dealViews + traffic.directions + traffic.calls + traffic.websiteOrOrder + traffic.qrScans
     : 0;
+  // eslint-disable-next-line react-hooks/purity -- server component; rendered per request, so "now" is the request time
   const windowDays = Math.max(1, Math.min(30, Math.ceil((Date.now() - new Date(`${COUNTING_SINCE}T00:00:00-05:00`).getTime()) / 86400000)));
   const obs: Obs[] = obsRes.ok ? await obsRes.json() : [];
   const live: Array<{ id: string; title: string; discount_value: number | null; discount_unit: string | null; verified_at: string | null }> = liveRes.ok ? await liveRes.json() : [];

@@ -12,6 +12,9 @@ import { readLiveDeals, pickDealOfTheDay, dotdCopy, checkedLabel } from "@/lib/d
 import { COMMON_PAIRS, pairSlug, routeCity, planRoute, CORRIDOR_MILES } from "@/lib/routeDeals";
 import { getAccuracyByStore, MIN_REPORTS } from "@/lib/dealAccuracy";
 import { saveLabel, cleanDealTitle, storeName } from "@/lib/exhale";
+import { LAW_FACTS } from "@/lib/social/laws";
+import { lawTimeline, momentLine } from "@/lib/lawUpdates";
+import { ctDay } from "@/lib/social/time";
 
 export const revalidate = 3600;
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -28,6 +31,7 @@ export async function GET() {
     readLiveDeals(3600),
   ]);
   const accuracy = live ? await getAccuracyByStore(live) : null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- untyped PostgREST row; fields vary by view
   const deals: Array<Record<string, any>> = dealsRes.ok ? await dealsRes.json() : [];
   const day = (iso?: string | null) => (iso ? new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "America/Chicago" }) : "date unknown");
   const now = new Date().toLocaleString("en-US", { dateStyle: "long", timeStyle: "short", timeZone: "America/Chicago" });
@@ -121,6 +125,9 @@ export async function GET() {
     `- Every dispensary can add medical sales; IDFPR issued the first batch of licenses Sept 10, 2026. ${u}/medical`,
     `- Cannabis delivery is not legal in Illinois; HB2557 (delivery licenses) died in committee in 2026. ${u}/illinois-cannabis-delivery`,
     `- The Illinois Hemp Act takes effect Nov 12, 2026, capping hemp products at 0.4 mg total THC per container (delta-8 etc. leave gas stations). ${u}/illinois-hemp-law`,
+    "",
+    `## Latest law changes (${u}/law-updates, RSS ${u}/law-updates/feed.xml)`,
+    ...lawTimeline(LAW_FACTS, ctDay()).slice(0, 6).map((m) => `- ${m.day}: ${momentLine(m)} ${m.fact.body} Source: ${m.fact.sourceName} ${m.fact.sourceUrl}`),
   );
   lines.push(
     "",

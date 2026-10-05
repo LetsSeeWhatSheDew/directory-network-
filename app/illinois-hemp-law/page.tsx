@@ -1,7 +1,9 @@
 // app/illinois-hemp-law/page.tsx — Nov 12, 2026: intoxicating hemp leaves gas stations.
 import type { Metadata } from "next";
 import Link from "next/link";
+import WatchControl from "../components/WatchControl";
 import GuideShell from "../components/GuideShell";
+import { CENTRAL_IL_CITIES } from "../../lib/constants/regions";
 import { brand } from "../../lib/brand";
 import { getRegionStores, REGION_CITIES } from "../../lib/waysToBuy";
 
@@ -56,6 +58,11 @@ export default async function HempPage() {
         <div key={f.q} style={{ marginBottom: 14 }}><b>{f.q}</b><p className="gp-p" style={{ marginTop: 4 }}>{f.a}</p></div>
       ))}
       <p className="gp-note">Not legal advice. Summarized from the public reporting linked above.</p>
+      <div className="gp-cta">
+        <b>Laws keep changing. We&apos;ll tell you when they do.</b>
+        <WatchControl kind="law" cities={CENTRAL_IL_CITIES.map((c) => c.name)} />
+        <span className="gp-note">Every change we track: <Link href="/law-updates">Illinois cannabis law changes</Link></span>
+      </div>
     </GuideShell>
   );
 }

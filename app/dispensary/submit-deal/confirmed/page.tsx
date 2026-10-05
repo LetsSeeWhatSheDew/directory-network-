@@ -20,12 +20,7 @@ export default async function ConfirmedPage({
     <>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:var(--font-body),system-ui,sans-serif;background:var(--pp-paper);color:var(--pp-body);min-height:100vh}
-        .nav{padding:14px 28px;background:var(--pp-canopy);display:flex;justify-content:space-between;align-items:center}
-        .logo{color:var(--pp-on-dark);text-decoration:none;font-weight:700;letter-spacing:-.02em}
-        .logo span{color:var(--pp-canopy-eyebrow)}
-        .back{font-size:.82rem;color:rgba(255,255,255,.55);text-decoration:none;font-family:var(--font-body)}
-        .back:hover{color:var(--pp-on-dark)}
+        body{font-family:var(--font-body);color:var(--pp-body);min-height:100vh}
         .wrap{max-width:600px;margin:0 auto;padding:64px 24px 48px}
         .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);font-family:var(--font-body);margin-bottom:12px}
         h1{font-size:clamp(1.8rem,4.5vw,2.4rem);font-weight:700;letter-spacing:-.03em;line-height:1.15;margin-bottom:14px}
@@ -33,8 +28,8 @@ export default async function ConfirmedPage({
         .card{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:14px;padding:22px;margin-top:24px}
         .card h2{font-size:1.1rem;font-weight:700;margin-bottom:8px;letter-spacing:-.02em}
         .card p{font-size:.92rem;margin-bottom:14px}
-        .cta{display:inline-block;background:var(--pp-signal-fill);color:var(--pp-on-dark);padding:12px 22px;border-radius:10px;text-decoration:none;font-family:var(--font-body);font-weight:700;font-size:.95rem}
-        .cta:hover{background:var(--pp-signal-fill)}
+        .cta{display:inline-block;background:var(--pp-btn);color:var(--pp-btn-fg);border:1px solid var(--pp-btn-border);padding:12px 22px;border-radius:10px;text-decoration:none;font-family:var(--font-body);font-weight:700;font-size:.95rem}
+        .cta:hover{filter:brightness(.97)}
         .cta-secondary{display:inline-block;color:var(--pp-ink);border:1px solid var(--pp-border);padding:12px 20px;border-radius:10px;text-decoration:none;font-family:var(--font-body);font-weight:600;font-size:.9rem;margin-left:8px}
         .cta-secondary:hover{border-color:var(--pp-muted)}
       `}</style>

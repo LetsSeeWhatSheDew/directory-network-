@@ -183,9 +183,9 @@ const styles: Record<string, React.CSSProperties> = {
   },
   submit: {
     width: "100%",
-    background: "var(--pp-signal-fill)",
-    color: "var(--pp-on-dark)",
-    border: "none",
+    background: "var(--pp-btn)",
+    color: "var(--pp-btn-fg)",
+    border: "1px solid var(--pp-btn-border)",
     borderRadius: 10,
     padding: "12px 20px",
     fontFamily: "var(--font-body)",

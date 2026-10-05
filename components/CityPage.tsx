@@ -3,6 +3,8 @@ import type { CityListing } from "@/lib/fetchCityListings";
 import CityEmailCapture from "@/app/components/CityEmailCapture";
 import Nav from "@/app/components/Nav";
 import Footer from "@/app/components/Footer";
+import HazeBand from "@/app/components/HazeBand";
+import { MarkC } from "@/app/components/Logo";
 import { getNearbyCities } from "@/config/cities/illinois/geo";
 
 /* ------------------------------------------------------------------ */
@@ -209,71 +211,73 @@ export default function CityPage({ config, listings = [] }: Props) {
         />
       ))}
 
-      <main className="min-h-screen bg-[#1C3A22] text-slate-50">
-        {/* ---- Top gradient halo ---- */}
-        <div className="pointer-events-none fixed inset-x-0 top-0 z-0 h-64 bg-gradient-to-b from-[#1C3A22] via-[#1C3A22] to-transparent opacity-80" />
+      {/* Breathe: CityEmailCapture ships its own dark styling; re-skin it
+          onto the tokens from here so it reads on paper, day and night. */}
+      <style>{CAPTURE_CSS}</style>
 
+      <main className="min-h-screen text-(--pp-body)">
         {/* ---- Header / Nav ---- */}
         <div className="relative z-10">
-          <Nav variant="deep" />
+          <Nav />
         </div>
 
         {/* ---- Breadcrumbs ---- */}
         <nav
           aria-label="Breadcrumb"
-          className="relative z-10 border-b border-white/5 bg-black/20"
+          className="relative z-10 border-b border-(--pp-border)"
         >
-          <div className="mx-auto flex max-w-6xl items-center gap-1.5 px-4 py-2 text-[11px] text-slate-400">
-            <Link
-              href="/"
-              className="transition-colors hover:text-slate-200"
-            >
+          <div className="mx-auto flex max-w-6xl items-center gap-1.5 px-4 py-2 text-[11px] text-(--pp-muted)">
+            <Link href="/" className="hover:text-(--pp-ink)">
               Home
             </Link>
-            <span className="text-slate-600">/</span>
+            <span aria-hidden="true">/</span>
             <Link
               href="/cannabis/illinois"
-              className="transition-colors hover:text-slate-200"
+              className="hover:text-(--pp-ink)"
             >
               Illinois
             </Link>
-            <span className="text-slate-600">/</span>
-            <span className="text-slate-200">{city}</span>
+            <span aria-hidden="true">/</span>
+            <span className="text-(--pp-ink)">{city}</span>
           </div>
         </nav>
 
         {/* ============================================================ */}
         {/*  HERO SECTION                                                */}
         {/* ============================================================ */}
-        <section className="relative z-10 border-b border-white/5 bg-gradient-to-b from-black/60 via-[#1C3A22] to-[#1C3A22]">
-          <div className="mx-auto max-w-6xl px-4 py-10 md:py-16">
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-[11px] font-medium text-emerald-200">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />
+        <section className="relative z-10 border-b border-(--pp-border)">
+          <HazeBand height={160} />
+          <div className="mx-auto max-w-6xl px-4 pb-10 pt-6 md:pb-16 md:pt-8">
+            <div className="inline-flex items-center gap-2 rounded-full border border-(--pp-border) bg-(--pp-surface) px-3 py-1 text-[11px] font-medium text-(--pp-muted)">
+              <span className="pp-breathe-dot" style={{ width: 6, height: 6 }} />
               {city}, {state} · Cannabis Guide
             </div>
 
-            <h1 className="mt-5 text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl md:text-4xl">
+            <h1 className="mt-5 text-3xl tracking-tight text-(--pp-ink) sm:text-4xl md:text-5xl">
               Dispensaries in{" "}
-              <span className="bg-gradient-to-r from-[#2E7D32] to-[#2E7D32] bg-clip-text text-transparent">
+              <span>
                 {city}, {state}
               </span>
             </h1>
 
-            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-300 md:text-base">
+            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-(--pp-body) md:text-base">
               {heroIntro}
             </p>
 
             {/* Quick-reference stats */}
-            <div className="mt-6 grid grid-cols-2 gap-3 text-xs text-slate-200 sm:flex sm:flex-wrap sm:gap-4">
+            <div className="mt-6 grid grid-cols-2 gap-3 text-xs sm:flex sm:flex-wrap sm:gap-4">
               {liveStats.map((stat) => (
                 <div
                   key={stat.label}
-                  className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2"
+                  className="rounded-[14px] border border-(--pp-border) bg-(--pp-surface) px-3 py-2"
                 >
-                  <div className="text-[11px] uppercase tracking-wide text-slate-400">
+                  <div className="text-[11px] uppercase tracking-wide text-(--pp-muted)">
                     {stat.label}
                   </div>
-                  <div className="text-lg font-semibold text-slate-50">
+                  <div
+                    className="text-lg font-semibold text-(--pp-ink)"
+                    style={IS_NUMERIC.test(stat.value) ? MONO : undefined}
+                  >
                     {stat.value}
                   </div>
                 </div>
@@ -281,16 +285,10 @@ export default function CityPage({ config, listings = [] }: Props) {
             </div>
 
             <div className="mt-6 flex flex-wrap gap-3">
-              <Link
-                href="/get-listed"
-                className="inline-flex items-center rounded-full bg-[#2E7D32] px-4 py-2 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#2E5320]"
-              >
+              <Link href="/get-listed" className={BTN_PRIMARY}>
                 Claim your dispensary listing
               </Link>
-              <a
-                href="#laws"
-                className="inline-flex items-center rounded-full border border-white/10 bg-transparent px-4 py-2 text-[11px] font-medium text-slate-200 hover:border-white/40 hover:bg-white/5"
-              >
+              <a href="#laws" className={BTN_QUIET}>
                 Local cannabis laws
               </a>
             </div>
@@ -301,22 +299,19 @@ export default function CityPage({ config, listings = [] }: Props) {
         {/*  DISPENSARY LISTINGS (dynamic from Supabase)                  */}
         {/* ============================================================ */}
         {listings.length > 0 && (
-          <section className="relative z-10 border-b border-white/5 bg-[#1C3A22]">
+          <section className="relative z-10 border-b border-(--pp-border)">
             <div className="mx-auto max-w-6xl px-4 py-10 md:py-14">
               <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <div>
-                  <h2 className="text-lg font-semibold tracking-tight text-slate-100 md:text-xl">
+                  <h2 className="text-2xl tracking-tight text-(--pp-ink) md:text-3xl">
                     Dispensaries in {city}
                   </h2>
-                  <p className="text-sm text-slate-400">
-                    {listings.length} listing{listings.length === 1 ? "" : "s"}{" "}
-                    — featured first.
+                  <p className="text-sm text-(--pp-muted)">
+                    <span style={MONO}>{listings.length}</span> listing
+                    {listings.length === 1 ? "" : "s"} — featured first.
                   </p>
                 </div>
-                <Link
-                  href="/get-listed"
-                  className="inline-flex items-center rounded-full bg-[#2E7D32] px-4 py-2 text-[11px] font-semibold text-slate-900 shadow-sm hover:bg-[#2E5320]"
-                >
+                <Link href="/get-listed" className={BTN_PRIMARY}>
                   Add your dispensary
                 </Link>
               </div>
@@ -333,33 +328,31 @@ export default function CityPage({ config, listings = [] }: Props) {
                     <Link
                       key={listing.id}
                       href={`/dispensary/${listing.slug || listing.id}`}
-                      className="group flex flex-col rounded-3xl border border-slate-800 bg-slate-900/60 p-4 text-xs text-slate-100 shadow-sm transition hover:border-[#2E7D32]/60 hover:bg-slate-900"
+                      className={`group flex flex-col p-4 text-xs text-(--pp-ink) hover:border-(--pp-border-2) ${CARD}`}
                     >
                       <div className="mb-2 flex items-start justify-between gap-2">
                         <div>
                           <h3 className="line-clamp-1 text-sm font-semibold">
                             {name}
                           </h3>
-                          <p className="mt-0.5 text-[11px] text-slate-400">
+                          <p className="mt-0.5 text-[11px] text-(--pp-muted)">
                             {loc || "Location on file"}
                           </p>
                         </div>
                         {listing.is_featured && (
-                          <span className="rounded-full bg-[#2E7D32]/15 px-2 py-0.5 text-[10px] font-medium text-[#2E7D32]">
+                          <span className="rounded-full border border-(--pp-best-border) bg-(--pp-best-tint) px-2 py-0.5 text-[10px] font-medium text-(--pp-mark)">
                             Featured
                           </span>
                         )}
                       </div>
                       {listing.short_description && (
-                        <p className="mb-3 line-clamp-3 text-[11px] text-slate-300">
+                        <p className="mb-3 line-clamp-3 text-[11px] text-(--pp-body)">
                           {listing.short_description}
                         </p>
                       )}
-                      <div className="mt-auto flex items-center justify-between pt-1 text-[11px] text-slate-400">
+                      <div className="mt-auto flex items-center justify-between pt-1 text-[11px] text-(--pp-muted)">
                         <span>View profile</span>
-                        <span className="text-slate-500 group-hover:text-[#2E7D32]">
-                          →
-                        </span>
+                        <span className="group-hover:text-(--pp-mark)">→</span>
                       </div>
                     </Link>
                   );
@@ -371,14 +364,14 @@ export default function CityPage({ config, listings = [] }: Props) {
 
         {/* Empty state — no listings yet */}
         {listings.length === 0 && (
-          <section className="relative z-10 border-b border-white/5 bg-[#1C3A22]">
+          <section className="relative z-10 border-b border-(--pp-border)">
             <div className="mx-auto max-w-6xl px-4 py-10 md:py-14">
-              <div className="rounded-3xl border border-dashed border-slate-700 bg-slate-900/40 px-4 py-10 text-center text-sm text-slate-400 md:px-8">
-                <p>
+              <div className="pp-haze rounded-[20px] px-4 py-10 text-center text-sm md:px-8">
+                <p className="text-(--pp-body)">
                   We&apos;re building the {city} dispensary directory now.{" "}
                   <Link
                     href="/get-listed"
-                    className="font-medium text-[#2E7D32] underline-offset-2 hover:underline"
+                    className="font-medium text-(--pp-mark) underline underline-offset-2"
                   >
                     Claim your listing
                   </Link>{" "}
@@ -392,15 +385,12 @@ export default function CityPage({ config, listings = [] }: Props) {
         {/* ============================================================ */}
         {/*  LOCAL CANNABIS LAWS                                          */}
         {/* ============================================================ */}
-        <section
-          id="laws"
-          className="relative z-10 border-b border-white/5 bg-[#1C3A22]"
-        >
+        <section id="laws" className="relative z-10 border-b border-(--pp-border)">
           <div className="mx-auto max-w-6xl px-4 py-10 md:py-14">
-            <h2 className="mb-2 text-lg font-semibold tracking-tight text-slate-100 md:text-xl">
+            <h2 className="mb-2 text-2xl tracking-tight text-(--pp-ink) md:text-3xl">
               Cannabis Laws in {city}, {state}
             </h2>
-            <p className="mb-6 max-w-3xl text-sm leading-relaxed text-slate-300">
+            <p className="mb-6 max-w-3xl text-sm leading-relaxed text-(--pp-body)">
               Illinois legalized recreational cannabis on January 1, 2020 under
               the Cannabis Regulation and Tax Act. {city} has opted in to allow
               both recreational and medical dispensary sales. Here&apos;s what
@@ -409,14 +399,11 @@ export default function CityPage({ config, listings = [] }: Props) {
 
             <div className="grid gap-4 md:grid-cols-2">
               {laws.map((law) => (
-                <div
-                  key={law.title}
-                  className="rounded-2xl border border-white/10 bg-slate-950/80 p-5"
-                >
-                  <div className="mb-2 text-[11px] font-semibold text-[#2E7D32]">
+                <div key={law.title} className={`p-5 ${CARD}`}>
+                  <div className="mb-2 text-[11px] font-semibold text-(--pp-mark)">
                     {law.title}
                   </div>
-                  <p className="text-xs leading-relaxed text-slate-300 md:text-sm">
+                  <p className="text-xs leading-relaxed text-(--pp-body) md:text-sm">
                     {law.body}
                   </p>
                 </div>
@@ -428,12 +415,12 @@ export default function CityPage({ config, listings = [] }: Props) {
         {/* ============================================================ */}
         {/*  FIRST-TIMER GUIDE                                           */}
         {/* ============================================================ */}
-        <section className="relative z-10 border-b border-white/5 bg-black">
+        <section className="relative z-10 border-b border-(--pp-border)">
           <div className="mx-auto max-w-6xl px-4 py-10 md:py-14">
-            <h2 className="mb-2 text-lg font-semibold tracking-tight text-slate-100 md:text-xl">
+            <h2 className="mb-2 text-2xl tracking-tight text-(--pp-ink) md:text-3xl">
               First Time at a {city} Dispensary?
             </h2>
-            <p className="mb-6 max-w-3xl text-sm leading-relaxed text-slate-300">
+            <p className="mb-6 max-w-3xl text-sm leading-relaxed text-(--pp-body)">
               Walking into a dispensary for the first time can feel unfamiliar.
               Here&apos;s what a typical visit looks like in {city} so you know
               exactly what to expect.
@@ -441,23 +428,20 @@ export default function CityPage({ config, listings = [] }: Props) {
 
             <div className="grid gap-4 md:grid-cols-3">
               {firstTimerSteps.map((step, i) => (
-                <div
-                  key={step.title}
-                  className="rounded-3xl border border-white/10 bg-slate-950/80 p-4 text-xs text-slate-200"
-                >
-                  <div className="mb-2 text-[11px] font-semibold text-[#2E7D32]">
+                <div key={step.title} className={`p-4 text-xs ${CARD}`}>
+                  <div className="mb-2 text-[11px] font-semibold text-(--pp-mark)">
                     {String(i + 1).padStart(2, "0")} · {step.title}
                   </div>
-                  <p className="text-slate-300">{step.body}</p>
+                  <p className="text-(--pp-body)">{step.body}</p>
                 </div>
               ))}
             </div>
 
-            <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-              <h3 className="mb-2 text-sm font-semibold text-slate-100">
+            <div className="pp-haze mt-6 rounded-[20px] p-5">
+              <h3 className="mb-2 text-sm font-semibold text-(--pp-ink)">
                 Average Price Ranges in {city}
               </h3>
-              <p className="text-xs leading-relaxed text-slate-300 md:text-sm">
+              <p className="text-xs leading-relaxed text-(--pp-body) md:text-sm">
                 {priceBlurb}
               </p>
             </div>
@@ -467,25 +451,22 @@ export default function CityPage({ config, listings = [] }: Props) {
         {/* ============================================================ */}
         {/*  FAQ SECTION                                                 */}
         {/* ============================================================ */}
-        <section className="relative z-10 border-b border-white/5 bg-[#1C3A22]">
+        <section className="relative z-10 border-b border-(--pp-border)">
           <div className="mx-auto max-w-6xl px-4 py-10 md:py-14">
-            <h2 className="mb-2 text-lg font-semibold tracking-tight text-slate-100 md:text-xl">
+            <h2 className="mb-2 text-2xl tracking-tight text-(--pp-ink) md:text-3xl">
               Frequently Asked Questions
             </h2>
-            <p className="mb-6 text-sm text-slate-400">
+            <p className="mb-6 text-sm text-(--pp-muted)">
               Common questions about cannabis in {city}, IL.
             </p>
 
             <div className="space-y-4">
               {liveFaqs.map((faq) => (
-                <div
-                  key={faq.question}
-                  className="rounded-2xl border border-white/10 bg-slate-950/80 p-5"
-                >
-                  <h3 className="mb-2 text-sm font-semibold text-slate-100">
+                <div key={faq.question} className={`p-5 ${CARD}`}>
+                  <h3 className="mb-2 text-sm font-semibold text-(--pp-ink)">
                     {faq.question}
                   </h3>
-                  <p className="text-xs leading-relaxed text-slate-300 md:text-sm">
+                  <p className="text-xs leading-relaxed text-(--pp-body) md:text-sm">
                     {faq.answer}
                   </p>
                 </div>
@@ -497,12 +478,12 @@ export default function CityPage({ config, listings = [] }: Props) {
         {/* ============================================================ */}
         {/*  NEARBY CITIES                                               */}
         {/* ============================================================ */}
-        <section className="relative z-10 border-b border-white/5 bg-black">
+        <section className="relative z-10 border-b border-(--pp-border)">
           <div className="mx-auto max-w-6xl px-4 py-10 md:py-14">
-            <h2 className="mb-2 text-lg font-semibold tracking-tight text-slate-100 md:text-xl">
+            <h2 className="mb-2 text-2xl tracking-tight text-(--pp-ink) md:text-3xl">
               Nearby Cities
             </h2>
-            <p className="mb-6 text-sm text-slate-400">
+            <p className="mb-6 text-sm text-(--pp-muted)">
               Browse dispensaries in nearby Illinois cities.
             </p>
 
@@ -511,10 +492,13 @@ export default function CityPage({ config, listings = [] }: Props) {
                 <Link
                   key={nearby.slug}
                   href={`/cannabis/illinois/${nearby.slug}`}
-                  className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-3.5 py-1.5 text-[11px] text-slate-300 transition-colors hover:border-[#2E7D32]/60 hover:bg-slate-800 hover:text-slate-50"
+                  className={`px-3.5 py-1.5 ${CHIP}`}
                 >
                   <span>{nearby.name}</span>
-                  <span className="ml-2 rounded bg-slate-800 px-1.5 py-0.5 text-[10px] font-medium text-[#2E7D32]">
+                  <span
+                    className="ml-2 rounded-full bg-(--pp-best-tint) px-1.5 py-0.5 text-[10px] font-medium text-(--pp-mark)"
+                    style={MONO}
+                  >
                     {nearby.distanceMi} mi
                   </span>
                 </Link>
@@ -526,8 +510,8 @@ export default function CityPage({ config, listings = [] }: Props) {
         {/* ============================================================ */}
         {/*  EMAIL CAPTURE                                               */}
         {/* ============================================================ */}
-        <section className="relative z-10 border-b border-white/5 bg-[#1C3A22]">
-          <div className="mx-auto max-w-xl px-4 py-10 md:py-14">
+        <section className="relative z-10 border-b border-(--pp-border)">
+          <div className="cp-capture mx-auto max-w-xl px-4 py-10 md:py-14">
             <CityEmailCapture city={city} state={state} />
           </div>
         </section>
@@ -535,13 +519,13 @@ export default function CityPage({ config, listings = [] }: Props) {
         {/* ============================================================ */}
         {/*  RELATED CITIES BAND  (true site footer follows below)       */}
         {/* ============================================================ */}
-        <section className="relative z-10 border-t border-white/5 bg-black">
+        <section className="relative z-10">
           <div className="mx-auto max-w-6xl px-4 py-8 md:py-10">
             <div className="mb-4">
-              <h2 className="text-sm font-semibold tracking-tight text-slate-100">
+              <h2 className="text-xl tracking-tight text-(--pp-ink)">
                 Explore Other Central Illinois Cities
               </h2>
-              <p className="text-[11px] text-slate-400">
+              <p className="text-[11px] text-(--pp-muted)">
                 Find dispensaries and cannabis info across the Central IL metro belt.
               </p>
             </div>
@@ -551,41 +535,30 @@ export default function CityPage({ config, listings = [] }: Props) {
                 <Link
                   key={c.slug}
                   href={`/cannabis/illinois/${c.slug}`}
-                  className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-[11px] text-slate-300 transition-colors hover:border-[#2E7D32]/60 hover:bg-slate-800 hover:text-slate-50"
+                  className={`px-3 py-1 ${CHIP}`}
                 >
                   {c.name}
                 </Link>
               ))}
             </div>
 
-            <div className="mt-6 flex flex-col gap-3 border-t border-white/5 pt-5 text-[11px] text-slate-500 md:flex-row md:items-center md:justify-between">
+            <div className="mt-6 flex flex-col gap-3 border-t border-(--pp-border) pt-5 text-[11px] text-(--pp-muted) md:flex-row md:items-center md:justify-between">
               <div className="flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#2E7D32]/10 text-[10px] font-semibold text-[#2E7D32]">
-                  PG
-                </div>
+                <MarkC size={28} />
                 <span>
                   PuffPrice · {city}, {state} Cannabis Guide
                 </span>
               </div>
               <div className="flex flex-wrap gap-3">
-                <Link
-                  href="/"
-                  className="text-slate-300 underline-offset-2 hover:text-slate-100 hover:underline"
-                >
+                <Link href="/" className={FOOT_LINK}>
                   PuffPrice
                 </Link>
-                <span className="hidden text-slate-600 md:inline">·</span>
-                <Link
-                  href="/grow"
-                  className="text-slate-300 underline-offset-2 hover:text-slate-100 hover:underline"
-                >
+                <span className="hidden md:inline" aria-hidden="true">·</span>
+                <Link href="/grow" className={FOOT_LINK}>
                   All Listings
                 </Link>
-                <span className="hidden text-slate-600 md:inline">·</span>
-                <Link
-                  href="/get-listed"
-                  className="text-slate-300 underline-offset-2 hover:text-slate-100 hover:underline"
-                >
+                <span className="hidden md:inline" aria-hidden="true">·</span>
+                <Link href="/get-listed" className={FOOT_LINK}>
                   Get Listed
                 </Link>
               </div>
@@ -597,3 +570,36 @@ export default function CityPage({ config, listings = [] }: Props) {
     </>
   );
 }
+
+/* ------------------------------------------------------------------ */
+/*  Breathe styling (tokens only — night mode flips them)              */
+/* ------------------------------------------------------------------ */
+
+const CARD =
+  "rounded-[18px] border border-(--pp-border) bg-(--pp-surface)";
+const CHIP =
+  "inline-flex items-center rounded-full border border-(--pp-border) bg-(--pp-surface) text-[11px] text-(--pp-body) hover:border-(--pp-border-2) hover:text-(--pp-ink)";
+const BTN_PRIMARY =
+  "inline-flex min-h-[44px] items-center rounded-[14px] border border-(--pp-btn-border) bg-(--pp-btn) px-4 py-2 text-sm font-semibold text-(--pp-btn-fg) hover:brightness-[.97]";
+const BTN_QUIET =
+  "inline-flex min-h-[44px] items-center rounded-[14px] border border-(--pp-border-2) bg-transparent px-4 py-2 text-sm font-medium text-(--pp-ink) hover:bg-(--pp-surface)";
+const FOOT_LINK =
+  "text-(--pp-body) underline-offset-2 hover:text-(--pp-ink) hover:underline";
+
+/** Prices and counts only get the mono face. */
+const MONO = { fontFamily: "var(--font-mono)" } as const;
+const IS_NUMERIC = /^[~$<>]?\d/;
+
+const CAPTURE_CSS = `
+.cp-capture > div { background: var(--pp-surface); border: 1px solid var(--pp-border); border-radius: 18px; }
+.cp-capture > div.text-center { background: var(--pp-best-tint); border-color: var(--pp-best-border); }
+.cp-capture .text-center > div:first-child { background: var(--pp-surface); color: var(--pp-mark); }
+.cp-capture h3, .cp-capture .text-slate-100 { color: var(--pp-ink); }
+.cp-capture .text-slate-400, .cp-capture .text-slate-500 { color: var(--pp-muted); }
+.cp-capture input { background: var(--pp-paper); border: 1px solid var(--pp-border); border-radius: 14px; color: var(--pp-ink); min-height: 44px; }
+.cp-capture input::placeholder { color: var(--pp-muted); }
+.cp-capture input:focus { border-color: var(--pp-mark); --tw-ring-color: var(--pp-mark); }
+.cp-capture button[type="submit"] { background: var(--pp-btn); color: var(--pp-btn-fg); border: 1px solid var(--pp-btn-border); border-radius: 14px; box-shadow: none; min-height: 44px; }
+.cp-capture button[type="submit"]:hover { background: var(--pp-btn); filter: brightness(.97); }
+.cp-capture .text-red-400 { color: var(--pp-stop-fg); }
+`;

@@ -92,8 +92,9 @@ export const RULES: Record<RuleTopic, Rule> = {
     points: [
       "At the Illinois drive-thrus open so far, you order online first and pick up at the window, where staff check your ID.",
       "PuffPrice's drive-thru page lists the first Central Illinois one the day it opens. For the live per-store status call list_dispensaries (ways_to_buy.drive_thru).",
+      "Cities can add their own step. On Oct 1, 2026, Peoria's Planning and Zoning Commission recommended special use approval (a public hearing, then a City Council vote) for any dispensary drive-thru; the Council decides next.",
     ],
-    checked: "2026-09-23",
+    checked: "2026-10-04",
     source_url: `${u}/drive-thru`,
     also_see: [`${u}/ways-to-buy`],
     primary_sources: ["Public Act 104-0463 (SB 3222)"],

@@ -1,9 +1,11 @@
 // app/drive-thru/page.tsx — Central Illinois cannabis drive-thru tracker.
 import type { Metadata } from "next";
 import Link from "next/link";
+import WatchControl from "../components/WatchControl";
 import GuideShell from "../components/GuideShell";
 import StoreAvatar from "../components/StoreAvatar";
 import ZipSignup from "../components/ZipSignup";
+import { CENTRAL_IL_CITIES } from "../../lib/constants/regions";
 import { brand } from "../../lib/brand";
 import { storeImageUrl } from "../../lib/storeImage";
 import { getRegionStores, getFeatureRows, featuresBySlug } from "../../lib/waysToBuy";
@@ -79,6 +81,7 @@ export default async function DriveThruPage() {
 
       <h2 className="gp-h2">Where Illinois drive-thrus are already open</h2>
       <div className="gp-timeline">
+        <div><div className="when">Oct 1, 2026</div>Peoria&apos;s Planning and Zoning Commission recommended that any dispensary wanting a drive-thru get special use approval: a public hearing, then a City Council vote. Stores that already have a permit would need to amend it. The City Council decides next. <span className="gp-src">— <a href="https://www.25newsnow.com/2026/10/03/peoria-weighing-how-regulate-cannabis-dispensaries-offering-drive-thru-curbside-pickup/" rel="nofollow noopener" target="_blank">25 News Now</a></span></div>
         <div><div className="when">Sept 4, 2026</div>Terrabis in Grayville (near I-64) opened what it called Illinois&apos; first dual-window dispensary drive-thru. <span className="gp-src">— <a href="https://greenwaymagazine.com/2026/09/04/terrabis-opens-illinois-first-dual-window-drive-thru-dispensary-in-grayville/" rel="nofollow noopener" target="_blank">Greenway Magazine</a></span></div>
         <div><div className="when">Sept 2026</div>Terrabis announced a drive-thru at its Woodstock store (McHenry County), set to open by the end of September, and plans one at each of its five Illinois stores by year-end. <span className="gp-src">— <a href="https://www.prnewswire.com/news-releases/terrabis-to-open-mchenry-countys-first-dispensary-drive-thru-in-woodstock-302873322.html" rel="nofollow noopener" target="_blank">Terrabis via PR Newswire</a></span></div>
         <div><div className="when">Sept 13, 2026</div>Dixon&apos;s city council cleared the way for a cannabis drive-thru. <span className="gp-src">— <a href="https://www.shawlocal.com/sauk-valley/2026/09/13/dixon-council-clears-way-for-cannabis-drive-thru/" rel="nofollow noopener" target="_blank">Shaw Local</a></span></div>
@@ -126,6 +129,11 @@ export default async function DriveThruPage() {
         </div>
       ))}
       <p className="gp-note">Run a Central Illinois dispensary with a drive-thru? <Link href="/claim">Tell us</Link> and we&apos;ll verify it on your site and list it the same day.</p>
+      <div className="gp-cta">
+        <b>Laws keep changing. We&apos;ll tell you when they do.</b>
+        <WatchControl kind="law" cities={CENTRAL_IL_CITIES.map((c) => c.name)} />
+        <span className="gp-note">Every change we track: <Link href="/law-updates">Illinois cannabis law changes</Link></span>
+      </div>
     </GuideShell>
   );
 }

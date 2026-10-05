@@ -5,7 +5,7 @@ import Footer from "./components/Footer";
 import LocationAware from "./components/LocationAware";
 import TrackedLink from "./components/TrackedLink";
 import BreatheHero from "./components/BreatheHero";
-import { longestExhale, lowestList } from "../lib/exhale";
+import { nearestExhale, nearSubline, lowestList } from "../lib/exhale";
 import { getConfirmationsToday } from "../lib/confirmations";
 import { getFeatureRows } from "../lib/waysToBuy";
 import PriceBoard from "./components/PriceBoard";
@@ -30,7 +30,9 @@ import { capPerStore, STORE_CAP } from "../lib/storeCap";
 // via the "Browse all Illinois" link below; out-of-scope city pages keep
 // their own city-specific metadata for SEO retention.
 export const metadata = {
-  title: `Cannabis Deals in Central Illinois`,
+  // The layout's "%s | PuffPrice" template doesn't apply to a page in the
+  // same segment as the root layout, so the brand goes in by hand here.
+  title: { absolute: `Cannabis Deals in Central Illinois | ${brand.name}` },
   description:
     "Live dispensary deals across Peoria, Bloomington-Normal, Champaign-Urbana, Springfield, and the rest of Central Illinois — updated continuously and always free to browse.",
   alternates: { canonical: brand.url },
@@ -465,6 +467,7 @@ const FAQ_SCHEMA = {
 const ORG_SCHEMA = {
   "@context": "https://schema.org",
   "@type": "Organization",
+  "@id": `${brand.url}/#organization`,
   name: brand.name,
   url: brand.url,
   logo: `${brand.url}/apple-touch-icon.png`,
@@ -472,6 +475,24 @@ const ORG_SCHEMA = {
   email: brand.supportEmail,
   areaServed: { "@type": "AdministrativeArea", name: "Central Illinois" },
   sameAs: [`https://twitter.com/${brand.social.twitter.replace("@", "")}`],
+};
+
+// WebSite schema — names the site entity (Google site name, AI entity
+// resolution) and declares the real /search?q= endpoint (app/search/page.tsx).
+const WEBSITE_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${brand.url}/#website`,
+  name: brand.name,
+  url: brand.url,
+  description: brand.description,
+  inLanguage: "en-US",
+  publisher: { "@id": `${brand.url}/#organization` },
+  potentialAction: {
+    "@type": "SearchAction",
+    target: { "@type": "EntryPoint", urlTemplate: `${brand.url}/search?q={search_term_string}` },
+    "query-input": "required name=search_term_string",
+  },
 };
 
 // Prefer user-city deals when we know the city; otherwise fall back to the
@@ -545,13 +566,23 @@ export default async function HomePage() {
   // Breathe final: today's longest exhale (biggest everyday saving, local
   // first) and the "Lowest this morning" list — one deal per store.
   const exhalePool = [...(topDeals || []), ...(dealPool || [])];
-  const heroDeal = longestExhale(exhalePool, userCity);
-  const lowestCards = lowestList(exhalePool, 4, userCity, null);
+  // The orb agrees with the "Showing deals near X" label: same source (the
+  // pp_loc cookie LocationAware writes), biggest saving within ~25 mi, widening
+  // step by step and saying so. No city yet → the Central-IL-wide pick.
+  const userOrigin = userLoc ? { city: userLoc.city, lat: userLoc.lat ?? null, lng: userLoc.lng ?? null } : null;
+  const heroPick = nearestExhale(exhalePool, userOrigin);
+  const heroDeal = heroPick?.deal || null;
+  const heroLine = heroPick ? nearSubline(heroPick) : null;
+  const lowestCards = lowestList(exhalePool, 4, userOrigin, null);
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_SCHEMA) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(WEBSITE_SCHEMA) }}
       />
       <script
         type="application/ld+json"
@@ -585,8 +616,8 @@ export default async function HomePage() {
         @media(max-width:768px){.nav .logo img{height:46px!important}}
         .footer .footer-logo img{width:auto!important;height:40px!important}
         .logo-mark{position:relative;width:28px;height:28px;display:inline-block;flex-shrink:0}
-        .logo-mark-dot{position:absolute;top:-2px;right:-2px;width:10px;height:10px;border-radius:50%;background:var(--pp-signal-fill);border:2px solid var(--pp-border);animation:pulse 2.5s infinite}
-        .logo-dot{width:8px;height:8px;border-radius:50%;background:var(--pp-signal-fill);animation:pulse 2.5s infinite}
+        .logo-mark-dot{position:absolute;top:-2px;right:-2px;width:10px;height:10px;border-radius:50%;background:var(--pp-signal-fill);border:2px solid var(--pp-border);animation:pulse calc(2500ms * var(--pp-pace)) 12}
+        .logo-dot{width:8px;height:8px;border-radius:50%;background:var(--pp-signal-fill);animation:pulse calc(2500ms * var(--pp-pace)) 12}
         @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.9)}}
         .logo-text{font-size:1.15rem;font-weight:700;color:var(--pp-ink);letter-spacing:-.02em}
         .logo-text span{color:var(--pp-signal)}
@@ -604,7 +635,7 @@ export default async function HomePage() {
         .promo-banner{background:var(--pp-canopy);color:var(--pp-on-dark)}
         .promo-inner{max-width:1100px;margin:0 auto;padding:8px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
         .promo-left{display:flex;align-items:center;gap:10px;font-family:var(--font-body);font-size:.82rem;font-weight:600}
-        .promo-dot{width:7px;height:7px;border-radius:50%;background:var(--pp-canopy-eyebrow);animation:pulse 2s infinite;flex-shrink:0}
+        .promo-dot{width:7px;height:7px;border-radius:50%;background:var(--pp-canopy-eyebrow);animation:pulse calc(2000ms * var(--pp-pace)) 15;flex-shrink:0}
         .promo-text{line-height:1.3}
         .promo-cta{color:var(--pp-on-dark);text-decoration:none;font-family:var(--font-body);font-size:.82rem;font-weight:600;white-space:nowrap}
         .promo-cta:hover{text-decoration:underline}
@@ -740,7 +771,7 @@ export default async function HomePage() {
           padding:12px 22px;border-radius:10px;
           text-decoration:none;font-family:var(--font-ui, system-ui, sans-serif);
           font-weight:700;font-size:.92rem;letter-spacing:.02em;
-          transition:background 150ms ease, transform 150ms ease;
+          transition:transform calc(150ms * var(--pp-pace)) ease;
           white-space:nowrap;
           min-height:44px;display:inline-flex;align-items:center;
         }
@@ -773,7 +804,7 @@ export default async function HomePage() {
           border-radius:10px;padding:11px 14px;
           font-size:.85rem;font-family:var(--font-body);font-weight:500;
           color:var(--pp-ink);cursor:pointer;text-decoration:none;
-          transition:all .15s;
+          transition:transform calc(150ms * var(--pp-pace)), opacity calc(150ms * var(--pp-pace));
         }
         .cat-btn:hover{background:var(--pp-best-tint);border-color:var(--pp-signal-fill);color:var(--pp-ink)}
         .cat-btn svg{flex-shrink:0;width:24px;height:24px}
@@ -807,7 +838,7 @@ export default async function HomePage() {
         .deal-card{
           background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:14px;
           padding:18px;position:relative;
-          transition:border-color .15s;
+          transition:none;
         }
         .deal-card:hover{border-color:var(--pp-signal-fill)}
         .deal-card.top-pick{
@@ -902,7 +933,7 @@ export default async function HomePage() {
           font-family:var(--font-ui, system-ui, sans-serif);
           font-weight:700;font-size:.95rem;
           text-decoration:none;min-height:44px;
-          transition:background 150ms ease, transform 150ms ease;
+          transition:transform calc(150ms * var(--pp-pace)) ease;
         }
         .tax-callout-cta:hover{background:var(--pp-canopy);transform:translateY(-1px)}
         @media(max-width:520px){
@@ -1003,7 +1034,7 @@ export default async function HomePage() {
           font-size:.92rem;font-weight:700;color:var(--pp-on-dark);background:var(--pp-signal-fill);
           text-decoration:none;padding:11px 22px;border-radius:10px;
           min-height:44px;display:inline-flex;align-items:center;
-          transition:background 150ms ease, transform 150ms ease;
+          transition:transform calc(150ms * var(--pp-pace)) ease;
         }
         .trust-cta:hover{background:var(--pp-canopy);transform:translateY(-1px)}
         .trust-cta-muted{
@@ -1194,7 +1225,7 @@ export default async function HomePage() {
           font-weight: 500;
           font-size: 0.8125rem;
           letter-spacing: -0.005em;
-          transition: border-color 160ms ease;
+          transition: none;
           min-height: 78px;
         }
         .pp-home-hero-cat-tile:hover {
@@ -1244,6 +1275,8 @@ export default async function HomePage() {
           signature PriceBoard returns here once menu prices are live. */}
       <BreatheHero
         hero={heroDeal}
+        heroLine={heroLine}
+        serverCity={userCity}
         cards={lowestCards}
         dealCount={dealCount}
         storeCount={listingCount}
@@ -1335,7 +1368,7 @@ export default async function HomePage() {
           <p className="pp-eyebrow">Central Illinois · Coverage</p>
           <h2 id="cities-heading" className="cities-h2">Browse deals by city</h2>
           <div className="cities-grid">
-            {CENTRAL_IL_PUBLIC_CITIES.map((c, i) => {
+            {CENTRAL_IL_PUBLIC_CITIES.map((c) => {
               // Pull live counts from the unfiltered city map. Earlier
               // versions used localizedDealPool, which is filtered to the
               // user's metro — that meant cards outside the user's city
@@ -1344,13 +1377,10 @@ export default async function HomePage() {
               const slot = cityCounts.get(c.name.toLowerCase()) || { deals: 0, listings: 0 };
               const dealN = slot.deals;
               const listingN = slot.listings;
-              // Stagger fade-in: cycle through delay-1/2/3 so adjacent
-              // cards don't all animate on the same frame, but we never
-              // delay a card more than 240ms (delay-3) so the section
-              // feels instant on slow connections.
-              const delay = ["", " pp-fade-up-delay-1", " pp-fade-up-delay-2", " pp-fade-up-delay-3"][i % 4];
+              // No entrance motion here: these cards carry store and deal
+              // counts, and numbers never fade or move (motion system).
               return (
-                <Link key={c.slug} href={`/city/${c.slug}`} className={`city-card pp-card pp-fade-up${delay}`}>
+                <Link key={c.slug} href={`/city/${c.slug}`} className="city-card pp-card">
                   <span className="city-card-name">{c.name}</span>
                   <span className="city-card-meta">
                     {listingN > 0 && (

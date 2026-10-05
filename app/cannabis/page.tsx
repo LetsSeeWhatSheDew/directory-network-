@@ -41,7 +41,7 @@ export default function CannabisCentralHub() {
           <nav className="flex items-center gap-3 text-xs">
             <Link
               href="/grow"
-              className="hidden text-slate-300 transition-colors hover:text-slate-50 md:inline"
+              className="hidden text-slate-300 hover:text-slate-50 md:inline"
             >
               All Listings
             </Link>
@@ -61,7 +61,7 @@ export default function CannabisCentralHub() {
         className="relative z-10 border-b border-white/5 bg-black/20"
       >
         <div className="mx-auto flex max-w-6xl items-center gap-1.5 px-4 py-2 text-[11px] text-slate-400">
-          <Link href="/" className="transition-colors hover:text-slate-200">
+          <Link href="/" className="hover:text-slate-200">
             Home
           </Link>
           <span className="text-slate-600">/</span>
@@ -115,7 +115,7 @@ export default function CannabisCentralHub() {
             {/* Illinois - Live */}
             <Link
               href="/"
-              className="group flex flex-col rounded-3xl border border-slate-800 bg-slate-900/60 p-6 text-xs shadow-sm transition hover:border-[#7FE3C7]/60 hover:bg-slate-900"
+              className="group flex flex-col rounded-3xl border border-slate-800 bg-slate-900/60 p-6 text-xs shadow-sm hover:border-[#7FE3C7]/60 hover:bg-slate-900"
             >
               <div className="mb-3 flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-slate-100">
@@ -171,7 +171,7 @@ export default function CannabisCentralHub() {
               </div>
 
               <p className="mb-4 flex-1 text-xs leading-relaxed text-slate-400">
-                We're building Missouri's complete cannabis guide. Check back
+                We&apos;re building Missouri&apos;s complete cannabis guide. Check back
                 soon for city-by-city dispensary info, local regulations, and
                 more.
               </p>
@@ -189,7 +189,7 @@ export default function CannabisCentralHub() {
               More States Coming
             </h3>
             <p className="mt-2 text-xs text-slate-400">
-              We're expanding to additional states. Subscribe for updates on
+              We&apos;re expanding to additional states. Subscribe for updates on
               California, Colorado, Massachusetts, and more.
             </p>
           </div>
@@ -266,7 +266,7 @@ export default function CannabisCentralHub() {
       <section className="relative z-10 border-b border-white/5 bg-[#020617]">
         <div className="mx-auto max-w-6xl px-4 py-10 md:py-14">
           <h2 className="mb-2 text-lg font-semibold tracking-tight text-slate-100 md:text-xl">
-            What's in Each State Guide
+            What&apos;s in Each State Guide
           </h2>
           <p className="mb-6 text-sm text-slate-400">
             Every state guide includes comprehensive information to help you
@@ -319,7 +319,7 @@ export default function CannabisCentralHub() {
                 Tax Breakdowns
               </div>
               <p className="text-xs leading-relaxed text-slate-300">
-                Understand how much you'll actually pay: excise taxes, sales
+                Understand how much you&apos;ll actually pay: excise taxes, sales
                 taxes, municipal taxes, and product pricing.
               </p>
             </div>
@@ -376,19 +376,19 @@ export default function CannabisCentralHub() {
           <div className="flex flex-wrap gap-2 mb-6">
             <Link
               href="/"
-              className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-[11px] text-slate-300 transition-colors hover:border-[#7FE3C7]/60 hover:bg-slate-800 hover:text-slate-50"
+              className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-[11px] text-slate-300 hover:border-[#7FE3C7]/60 hover:bg-slate-800 hover:text-slate-50"
             >
               Central Illinois Dispensaries
             </Link>
             <Link
               href="/cannabis/illinois/laws"
-              className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-[11px] text-slate-300 transition-colors hover:border-[#7FE3C7]/60 hover:bg-slate-800 hover:text-slate-50"
+              className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-[11px] text-slate-300 hover:border-[#7FE3C7]/60 hover:bg-slate-800 hover:text-slate-50"
             >
               Illinois Cannabis Laws
             </Link>
             <Link
               href="/city/peoria"
-              className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-[11px] text-slate-300 transition-colors hover:border-[#7FE3C7]/60 hover:bg-slate-800 hover:text-slate-50"
+              className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-[11px] text-slate-300 hover:border-[#7FE3C7]/60 hover:bg-slate-800 hover:text-slate-50"
             >
               Peoria Dispensaries
             </Link>

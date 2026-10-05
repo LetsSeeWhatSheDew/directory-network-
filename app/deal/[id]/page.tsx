@@ -20,9 +20,11 @@ import ReportIssueLink from "../../components/ReportIssueLink";
 import { getConfirmationsToday } from "../../../lib/confirmations";
 import { isInCentralIL } from "../../../lib/visibility";
 import { isDealActiveNow, describeActiveDays } from "../../../lib/dealActiveFilter";
-import { cleanDealTitle, amountOf } from "../../../lib/exhale";
+import { cleanDealTitle, amountOf, type ExDeal } from "../../../lib/exhale";
 import { otdFor, usd } from "../../../lib/otd";
 import TrackPage from "../../components/TrackPage";
+import ArrivalExhale from "../../components/ArrivalExhale";
+import { exhaleSize } from "../../../lib/motion";
 
 export const revalidate = 60;
 
@@ -273,7 +275,7 @@ export default async function DealPage({
   const savingsFormatted = formatSavingsDollars(deal);
   // Real amounts only: "40%" for a percent deal, "$10" for a dollar deal.
   // The dollar estimate is only a fallback when the deal has no stated amount.
-  const exAmt = amountOf({ ...deal, deal_title: deal.title } as any);
+  const exAmt = amountOf({ ...deal, deal_title: deal.title } as ExDeal);
   const exhaleBig = exAmt ? exAmt.big : dollars != null ? `$${dollars}` : null;
   const exhaleUpTo = !!exAmt?.upTo;
   const code = extractPromoCode(deal.description) || extractPromoCode(deal.title);
@@ -299,7 +301,6 @@ export default async function DealPage({
     name: headline,
     text: deal.description || headline,
     ...(deal.expires_at ? { expires: deal.expires_at } : {}),
-    category: "https://schema.org/SpecialAnnouncement",
     announcementLocation: {
       "@type": "LocalBusiness",
       name: disp,
@@ -356,7 +357,7 @@ export default async function DealPage({
         /* Design v2: body styling from globals.css (Inter on warm paper). */ body{min-height:100vh}
         .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-surface);position:sticky;top:0;z-index:100;border-bottom:1px solid var(--pp-border)}
         .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
-        .logo-dot{width:8px;height:8px;border-radius:50%;background:var(--pp-signal-fill);animation:pulse 2.5s infinite}
+        .logo-dot{width:8px;height:8px;border-radius:50%;background:var(--pp-signal-fill);animation:pulse calc(2.5s * var(--pp-pace)) 12}
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
         .logo-text{font-size:1.1rem;font-weight:700;color:var(--pp-ink)}
         .logo-text span{color:var(--pp-signal)}
@@ -379,8 +380,8 @@ export default async function DealPage({
         .sv-line{font-family:var(--font-breath);font-size:1.45rem;line-height:1.15;color:var(--pp-ink);margin:0 0 4px}
         .sv-sub{font-size:.85rem;color:var(--pp-muted);margin:0}
         @media (prefers-reduced-motion: no-preference){
-          .sv-line{animation:pp-land 1.2s .3s cubic-bezier(.2,.7,.2,1) both}
-          .sv-sub{animation:pp-land 1.2s .8s cubic-bezier(.2,.7,.2,1) both}
+          .sv-line{animation:pp-land calc(1.2s * var(--pp-pace)) calc(.3s * var(--pp-pace)) cubic-bezier(.2,.7,.2,1) both}
+          .sv-sub{animation:pp-land calc(1.2s * var(--pp-pace)) calc(.8s * var(--pp-pace)) cubic-bezier(.2,.7,.2,1) both}
         }
         @keyframes pp-land{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
         .otd-box{border:1px solid var(--pp-border);border-radius:14px;padding:12px 14px;margin:0 0 16px;background:var(--pp-paper);font-family:var(--font-body)}
@@ -399,8 +400,8 @@ export default async function DealPage({
         .code-label{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--pp-muted);font-weight:700}
         .code-value{font-family:var(--font-mono);font-size:1.05rem;font-weight:500;background:var(--pp-surface);border:1px dashed var(--pp-border-2);padding:6px 14px;border-radius:8px;letter-spacing:.06em}
         .how-to{font-size:.88rem;color:var(--pp-body);font-family:var(--font-body);line-height:1.5;margin-bottom:18px;padding:12px 14px;background:var(--pp-best-tint);border:1px solid var(--pp-best-border);border-radius:10px;color:var(--pp-signal-ink)}
-        .cta{display:block;width:100%;text-align:center;background:var(--pp-signal-fill);color:var(--pp-on-dark);padding:16px;border-radius:12px;text-decoration:none;font-family:var(--font-body);font-weight:800;font-size:1rem;letter-spacing:.02em;min-height:52px;transition:background .15s}
-        .cta:hover{background:var(--pp-canopy)}
+        .cta{display:flex;align-items:center;justify-content:center;width:100%;background:var(--pp-btn);color:var(--pp-btn-fg);border:1px solid var(--pp-btn-border);padding:0 18px;border-radius:999px;text-decoration:none;font-family:var(--font-body);font-weight:600;font-size:17px;min-height:56px}
+        .cta:hover{filter:brightness(.97)}
         .secondary{display:block;text-align:center;margin-top:12px;color:var(--pp-muted);font-family:var(--font-body);font-size:.82rem;text-decoration:none}
         .secondary:hover{color:var(--pp-ink);text-decoration:underline}
         @media(max-width:600px){.wrap{padding:24px 14px}.savings-block{padding:20px 18px}.sv-exhale{margin:-20px -18px 18px;padding:24px 18px 20px}}
@@ -458,8 +459,12 @@ export default async function DealPage({
           )}
           {exhaleBig ? (
             <div className="sv-exhale">
+              <ArrivalExhale
+                targetId="pp-arrive"
+                size={exhaleSize(dollars != null ? { dollars } : { percent: exAmt?.kind === "percent" ? exAmt.value : null })}
+              />
               <div className="sv-label">You&rsquo;re saving{exhaleUpTo ? " up to" : ""}</div>
-              <div className="sv-amt">
+              <div className="sv-amt" id="pp-arrive">
                 <b>{exhaleBig}</b>
               </div>
               <p className="sv-line">Drop your shoulders. The comparing is done.</p>
@@ -513,8 +518,8 @@ export default async function DealPage({
           {deal.description && <p className="desc">{deal.description}</p>}
           <div style={{ marginTop: 8, marginBottom: 8 }}>
             <DealFreshnessBadge
-              verifiedAt={(deal as any).verified_at}
-              statusReason={(deal as any).status_reason}
+              verifiedAt={(deal as ExDeal).verified_at}
+              statusReason={(deal as { status_reason?: string | null }).status_reason}
               variant="detail"
             />
           </div>

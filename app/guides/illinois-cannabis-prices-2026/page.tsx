@@ -143,7 +143,7 @@ export default async function PricesPage() {
           { href: "https://tax.illinois.gov/research/taxinformation/other/cannabis-taxes.html", label: "Illinois Department of Revenue — Cannabis Taxes" },
         ]}
       />
-      <RelatedGuides current={SLUG} extra={[{ href: "/cheapest", label: "Cheapest eighth, cart and gummies today" }, { href: "/about/index", label: "PuffPrice Index (flower price per gram)" }]} />
+      <RelatedGuides current={SLUG} extra={[{ href: "/cheapest", label: "Cheapest eighth, cart and gummies today" }, { href: "/deal-index", label: "Central Illinois Deal Index" }]} />
     </GuideShell>
   );
 }

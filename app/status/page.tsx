@@ -23,6 +23,7 @@ import {
   latestGoodRun,
   type ScraperRun,
 } from "../../lib/scraperRuns";
+import { checkerFreshness } from "../../lib/scraperFreshness";
 
 export const revalidate = 600;
 
@@ -50,6 +51,12 @@ async function j<T>(path: string): Promise<T | null> {
 
 const fmt = (iso: string) =>
   new Intl.DateTimeFormat("en-US", { timeZone: "America/Chicago", weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }).format(new Date(iso));
+
+function c_renderedNote(n: number): string {
+  return n > 0
+    ? `, so ${n} deal${n === 1 ? "" : "s"} from stores whose menus load with JavaScript may have changed since.`
+    : ".";
+}
 
 const hoursSince = (iso: string) => (Date.now() - new Date(iso).getTime()) / 3600000;
 const withinDays = (iso: string, days: number) => Date.now() - new Date(iso).getTime() <= days * 86400000;
@@ -93,7 +100,14 @@ export default async function StatusPage() {
   const latest = [latestDeal, lastCheck].filter((x): x is string => !!x).sort((a, b) => +new Date(a) - +new Date(b)).pop() || null;
   const latestIsCheck = !!lastCheck && latest === lastCheck;
   const hours = latest ? hoursSince(latest) : null;
-  const fresh = hours != null && hours <= 30;
+  const anyFresh = hours != null && hours <= 30;
+  // Every checker has to be current for "Up to date". If the website check
+  // ran this morning but the menu reader (stores whose menus load with
+  // JavaScript, most of the deals) hasn't finished in days, say that.
+  const behindCheckers = runs ? checkerFreshness(runs).filter((c) => !c.fresh) : [];
+  const fresh = anyFresh && behindCheckers.length === 0;
+  const partlyBehind = anyFresh && behindCheckers.length > 0;
+  const renderedLive = (live || []).filter((d) => d.source === "website_rendered").length;
   // A newer check that stopped partway is worth saying out loud.
   const newestRun = runs && runs[0] ? runs[0] : null;
   const newerTrouble =
@@ -144,9 +158,21 @@ export default async function StatusPage() {
       <div className="st-banner" role="status">
         <span className={`st-dot${fresh ? "" : " late"}`} aria-hidden="true" />
         <div>
-          <b>{latest == null ? "We couldn't read the check log just now." : fresh ? "Up to date." : "Running behind."}</b>
+          <b>{latest == null ? "We couldn't read the check log just now." : fresh ? "Up to date." : partlyBehind ? "Partly behind." : "Running behind."}</b>
           <span>
-            {latest == null
+            {partlyBehind ? (
+              <>
+                {behindCheckers
+                  .map((c) =>
+                    c.lastFinished
+                      ? `The ${c.name.toLowerCase()} last finished ${ago(c.lastFinished)} (${fmt(c.lastFinished)} CT)`
+                      : `The ${c.name.toLowerCase()} hasn't finished in 30 days`
+                  )
+                  .join(". ")}
+                {c_renderedNote(renderedLive)}
+                {lastCheck ? ` The morning website check is current (${ago(lastCheck)}).` : ""}
+              </>
+            ) : latest == null
               ? "Try again in a minute. Deals on the site are still the ones we last confirmed."
               : latestIsCheck
               ? fresh

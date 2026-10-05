@@ -7,6 +7,7 @@ import TrackListener from "./components/TrackListener";
 import CityPickerHost from "./components/CityPickerHost";
 import ExhaleLayer from "./components/ExhaleLayer";
 import { brand } from "../lib/brand";
+import { PP_PACE, PACE_SCRIPT } from "../lib/motion";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-TML9Y6VMC2";
 
@@ -68,11 +69,16 @@ export const metadata: Metadata = {
     ],
     apple: "/apple-touch-icon.png",
   },
+  // No title / description / url here on purpose: Next.js replaces the
+  // openGraph object wholesale, so any page without its own openGraph used to
+  // inherit the HOMEPAGE og:title and og:url (crawl 2026-10-04: /deal-index,
+  // /status, /how-we-rank, /cheapest, /developers, every /guides/* page…).
+  // Without them, link previews and crawlers fall back to the page's own
+  // <title>, meta description and canonical. Pages that want a custom
+  // preview still set their own openGraph.
   openGraph: {
-    title: `Cannabis Deals in Central Illinois | ${brand.name}`,
-    description: brand.description,
-    url: brand.url,
     siteName: brand.name,
+    locale: "en_US",
     type: "website",
     images: [
       {
@@ -85,8 +91,6 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `Cannabis Deals in Central Illinois | ${brand.name}`,
-    description: brand.description,
     images: [`${brand.url}/og-image.png`],
   },
 };
@@ -100,6 +104,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${instrumentSans.variable} ${plexMono.variable} ${instrumentSerif.variable}`}
+      style={{ "--pp-pace": PP_PACE } as React.CSSProperties}
       suppressHydrationWarning
     >
       <body className="antialiased">
@@ -110,6 +115,8 @@ export default function RootLayout({
             __html: `(function(){try{var q=new URLSearchParams(location.search).get('daypart');var h=new Date().getHours();document.documentElement.setAttribute('data-daypart',q==='night'||q==='day'?q:(h>=19||h<6?'night':'day'));}catch(e){}})();`,
           }}
         />
+        {/* Motion pace (lib/motion.ts). ?pace=1.5 slows every animation for review. */}
+        <script dangerouslySetInnerHTML={{ __html: PACE_SCRIPT }} />
         {/* Hoisted to <head> by React 19 — warms the Supabase connection. */}
         <link rel="preconnect" href={SUPABASE_ORIGIN} crossOrigin="anonymous" />
         <link rel="dns-prefetch" href={SUPABASE_ORIGIN} />

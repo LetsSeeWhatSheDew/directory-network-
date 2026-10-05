@@ -100,7 +100,7 @@ export default function EndingSoonRow({ deals }: { deals: EndingSoonDeal[] }) {
               fontFamily: "var(--font-body)",
               minWidth: 220,
               maxWidth: 280,
-              transition: "border-color .15s, transform .05s",
+              transition: "transform calc(50ms * var(--pp-pace))",
             }}
           >
             <div

@@ -70,17 +70,17 @@ const CHECKOUT_URL =
 
 export default function UpgradePage() {
   return (
-    <main className="min-h-screen text-gray-900" style={{ background: "var(--pp-paper)" }}>
+    <main className="min-h-screen text-gray-900">
       <Nav variant="light" />
 
       <section className="max-w-2xl mx-auto px-6 pt-8 pb-16 text-center">
         <p className="text-xs tracking-[0.2em] uppercase text-gray-500 mb-4">
           PuffPrice Pro
         </p>
-        <h1 className="font-serif text-5xl md:text-6xl leading-[1.05] mb-5">
-          Low Prices.
+        <h1 className="text-5xl md:text-6xl leading-[1.05] mb-5">
+          Low prices.
           <br />
-          <em className="italic text-[color:var(--pp-signal-ink)] font-serif">High Times.</em>
+          <em className="italic text-[color:var(--pp-mark)]">Without the looking.</em>
         </h1>
         <p className="text-lg text-gray-700 mb-10 max-w-xl mx-auto leading-relaxed">
           Get an email the instant a deal drops near you.
@@ -88,15 +88,15 @@ export default function UpgradePage() {
           $0.99 a month. Cancel any time.
         </p>
 
-        <div className="bg-white border border-gray-200 rounded-2xl p-8 md:p-10 shadow-sm text-left">
+        <div className="bg-[color:var(--pp-surface)] border border-[color:var(--pp-border)] rounded-2xl p-8 md:p-10 text-left">
           <div className="flex items-start justify-between mb-6 gap-4">
             <div>
               <p className="text-xs tracking-[0.15em] uppercase text-[color:var(--pp-signal-ink)] font-semibold mb-1">
                 Pro
               </p>
-              <p className="font-serif text-5xl leading-none whitespace-nowrap">
+              <p className="text-5xl leading-none whitespace-nowrap" style={{ fontFamily: "var(--font-mono)", fontWeight: 500, letterSpacing: "-.04em", color: "var(--pp-big)" }}>
                 $0.99
-                <span className="text-base text-gray-500 font-sans font-normal">
+                <span className="text-base text-gray-500 font-normal" style={{ fontFamily: "var(--font-body)", letterSpacing: 0 }}>
                   {" "}
                   / month
                 </span>
@@ -118,7 +118,8 @@ export default function UpgradePage() {
 
           <a
             href={CHECKOUT_URL}
-            className="block w-full text-center bg-green-700 hover:bg-green-800 text-white font-semibold rounded-xl py-3.5 transition"
+            className="block w-full text-center font-semibold rounded-[14px] py-3.5 hover:brightness-[.97]"
+            style={{ background: "var(--pp-btn)", color: "var(--pp-btn-fg)", border: "1px solid var(--pp-btn-border)" }}
           >
             Go Pro — $0.99/mo
           </a>
@@ -130,7 +131,7 @@ export default function UpgradePage() {
       </section>
 
       <section className="max-w-2xl mx-auto px-6 pb-16">
-        <h2 className="font-serif text-2xl mb-6">FAQ</h2>
+        <h2 className="text-2xl mb-6">FAQ</h2>
         <div className="space-y-6">
           {FAQ.map(({ q, a }) => (
             <div key={q}>

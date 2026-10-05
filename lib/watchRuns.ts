@@ -34,7 +34,9 @@ import {
   watchStopUrl,
   type WatchRow,
 } from "./dealWatch";
-import { renderPriceDropEmail, renderDigestEmail, alertsFrom, type PriceDrop, type DigestDeal } from "./dealAlertEmail";
+import { renderPriceDropEmail, renderDigestEmail, renderLawEmail, alertsFrom, type PriceDrop, type DigestDeal } from "./dealAlertEmail";
+import { LAW_FACTS } from "./social/laws";
+import { dueLawMoments, lawCursorOf, LAW_CURSOR } from "./lawUpdates";
 import { getCheapestBoard, checkedLabel, money, type CheapestItem } from "./menuPrices";
 import { decidePriceDrop, isRefUnit, itemWords, toCents, fromCents } from "./priceWatch";
 import { eventById, eventsOn } from "./events";
@@ -248,8 +250,67 @@ export async function runEventWatches(opts: { dry: boolean; day: string; resend:
   return { ...stats, errors: errors.slice(0, 5) };
 }
 
+// ── Law watches ──────────────────────────────────────────────────────────
+// One email per address when a law fact is published, or on the day a change
+// takes effect (lib/lawUpdates.ts). The cursor moves only after the send.
+export async function runLawWatches(opts: { dry: boolean; day: string; resend: Resend | null }): Promise<RunStats> {
+  const watches = await listConfirmedWatches(["law_watch"]);
+  if (!watches) return { ok: false, reason: "could not read deal_alerts (service key missing?)" };
+  const stats = { ok: true, watches: watches.length, due: 0, sent: 0, failed: 0 };
+  const errors: string[] = [];
+  for (const [email, rows] of groupByEmail(watches)) {
+    const row = rows[0];
+    if (sentOn(row) === opts.day) continue;
+    const due = dueLawMoments(LAW_FACTS, lawCursorOf(row.categories, row.created_at), opts.day);
+    if (!due.length) continue;
+    stats.due++;
+    if (opts.dry) continue;
+    if (!opts.resend) { stats.failed++; errors.push("RESEND_API_KEY not set"); continue; }
+    const claimed = await claimAll(rows, opts.day);
+    if (!claimed) continue;
+    const unsubAll = unsubscribeUrl(brand.url, email);
+    const m = renderLawEmail({
+      items: due.map((d) => ({
+        headline: d.fact.headline,
+        body: d.fact.body,
+        sourceName: d.fact.sourceName,
+        sourceUrl: d.fact.sourceUrl,
+        pageUrl: `${brand.url}${d.fact.page}`,
+        effective: d.kind === "effective",
+      })),
+      stopUrl: watchStopUrl(brand.url, row.id),
+      unsubscribeAllUrl: unsubAll,
+      dayLabel: dayLabel(),
+      hubUrl: `${brand.url}/law-updates`,
+    });
+    try {
+      const r = await opts.resend.emails.send(
+        {
+          from: alertsFrom(), to: email, replyTo: brand.supportEmail, subject: m.subject, html: m.html, text: m.text,
+          headers: { "List-Unsubscribe": `<${unsubAll}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" },
+        },
+        { idempotencyKey: idem("law", opts.day, email) }
+      );
+      const err = (r as { error?: unknown }).error;
+      if (err) throw new Error(JSON.stringify(err).slice(0, 200));
+      stats.sent++;
+      // Move the cursor on every row for this address (claim tags stay).
+      for (const c of claimed) {
+        const afterClaim = withTag(c.prev, "sent:", opts.day); // what claimForToday wrote
+        await restoreCategories(c.row.id, withTag(afterClaim, LAW_CURSOR, opts.day));
+      }
+    } catch (e) {
+      stats.failed++;
+      errors.push(String(e).slice(0, 200));
+      for (const c of claimed) await restoreCategories(c.row.id, c.prev);
+    }
+    await pause();
+  }
+  return { ...stats, errors: errors.slice(0, 5) };
+}
+
 /** Both runs, never throwing: a failure here must not stop the deal digest. */
-export async function runExtraWatches(opts: { dry: boolean; day: string }): Promise<{ price: RunStats; events: RunStats }> {
+export async function runExtraWatches(opts: { dry: boolean; day: string }): Promise<{ price: RunStats; events: RunStats; law: RunStats }> {
   const resend = !opts.dry && process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
   const safe = async (f: () => Promise<RunStats>): Promise<RunStats> => {
     try {
@@ -260,5 +321,6 @@ export async function runExtraWatches(opts: { dry: boolean; day: string }): Prom
   };
   const price = await safe(() => runPriceWatches({ ...opts, resend }));
   const events = await safe(() => runEventWatches({ ...opts, resend }));
-  return { price, events };
+  const law = await safe(() => runLawWatches({ ...opts, resend }));
+  return { price, events, law };
 }

@@ -48,14 +48,14 @@ const FOOTER_COLUMNS: { heading: string; links: { href: string; label: string }[
     heading: "PuffPrice",
     links: [
       { href: "/about", label: "About" },
-      { href: "/about/index", label: "PuffPrice Index" },
+      { href: "/deal-index", label: "Deal Index" },
       { href: "/deal-of-the-day", label: "Deal of the day" },
       { href: "/this-week", label: "This week's deals" },
       { href: "/green-wednesday", label: "Green Wednesday" },
-      { href: "/deal-index", label: "Deal Index" },
       { href: "/how-we-rank", label: "How we rank" },
       { href: "/developers", label: "For AI assistants (MCP)" },
       { href: "/status", label: "Status: is this up to date?" },
+      { href: "/law-updates", label: "Law changes" },
       { href: "/cheapest", label: "Cheapest eighth today" },
       { href: "/price-watch", label: "Price watch" },
       { href: "/out-the-door", label: "Out-the-door prices" },
@@ -156,7 +156,7 @@ export default function Footer() {
         .pp-footer-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .55rem; }
         .pp-footer-link {
           color: var(--pp-body); text-decoration: none; font-family: var(--font-body); font-weight: 500;
-          font-size: .9rem; letter-spacing: -.005em; transition: color 160ms ease;
+          font-size: .9rem; letter-spacing: -.005em; transition: none;
         }
         .pp-footer-link:hover { color: var(--pp-ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--pp-border-2); }
         .pp-footer-bottom { padding-top: 1.75rem; display: flex; flex-direction: column; gap: .6rem; }

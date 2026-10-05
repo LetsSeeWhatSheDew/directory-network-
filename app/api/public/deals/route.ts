@@ -11,7 +11,7 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmr
 export async function GET() {
   const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
   const r = await fetch(
-    `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_id,deal_title,name,city,slug,listing_slug,discount_value,discount_unit,category,verified_at&order=discount_value.desc.nullslast&limit=1000`,
+    `${SUPABASE_URL}/rest/v1/active_deals_with_listings?select=deal_id,deal_title,name,city,slug,listing_slug,discount_value,discount_unit,discount_type,category,verified_at&order=discount_value.desc.nullslast&limit=1000`,
     { headers: { apikey: anon, Authorization: `Bearer ${anon}` }, next: { revalidate: 900 } }
   );
   const rows: Array<Record<string, unknown>> = r.ok ? await r.json() : [];
@@ -26,6 +26,9 @@ export async function GET() {
       title: d.deal_title ?? null,
       discount_value: d.discount_value ?? null,
       discount_unit: d.discount_unit ?? null,
+      // "fixed_price" = a set price ("2 for $60"), not money off. Readers need it
+      // to avoid showing a bundle price as a saving.
+      discount_type: d.discount_type ?? null,
       category: d.category ?? null,
       verified_at: d.verified_at ?? null,
       url: `${brand.url}/dispensary/${d.slug || d.listing_slug}`,
