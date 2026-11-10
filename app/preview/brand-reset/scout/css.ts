@@ -75,4 +75,5 @@ html[data-daypart="night"] .sc{--paper:#161B18;--rule:rgba(220,230,220,.05);--ma
 .sc-tier.later li::before{content:"○";color:var(--muted)}
 .sc-tier .why{display:block;margin-top:8px;font-size:14px;color:var(--muted)}
 @media (prefers-reduced-motion: reduce){.sc-more{transition:none}}
+.sc h1,.sc h2,.sc h3{color:var(--ink)}
 `;

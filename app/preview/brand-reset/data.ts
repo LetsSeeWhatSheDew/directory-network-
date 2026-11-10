@@ -9,6 +9,7 @@ import { amountOf, isConditional, needsQuantity, productOf, storeName, direction
 import { otdFor, usd } from "@/lib/otd";
 import { getListingDealHistory, historyIsMeaningful } from "@/lib/dealHistory";
 import { milesBetween } from "@/lib/cityProfiles";
+import { storeImageUrl } from "@/lib/storeImage";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
 const ANON =
@@ -39,6 +40,8 @@ export type PDeal = {
   otd: { shelf: string; total: string; ratePct: number; city: string } | null;
   lat: number | null;
   lng: number | null;
+  logo: string | null;
+  category: string | null;
 };
 
 const FEAT_SHORT: Record<Feature, string> = {
@@ -123,6 +126,8 @@ export async function getPreviewData() {
       otd: o ? { shelf: usd(o.shelf), total: usd(o.total), ratePct: Math.round(o.rate * 1000) / 10, city: o.city } : null,
       lat,
       lng,
+      logo: storeImageUrl((d.logo_url as string) || storeBySlug.get(slug)?.logo_url || null, slug),
+      category: (d.category as string) || null,
     };
   });
 

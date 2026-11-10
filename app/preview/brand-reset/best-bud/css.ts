@@ -83,4 +83,5 @@ html[data-daypart="night"] .bud-hi{color:var(--ink);background:linear-gradient(1
 .bud-tier li{margin:4px 0}
 .bud-tier .why{display:block;margin-top:10px;font-size:14px}
 @media (prefers-reduced-motion: reduce){.bud-more{transition:none}}
+.bud h1,.bud h2,.bud h3{color:var(--ink)}
 `;

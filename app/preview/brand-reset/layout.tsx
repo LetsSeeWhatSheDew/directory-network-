@@ -8,9 +8,15 @@
 //   layout mounts are hidden only while a preview page is open.
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Familjen_Grotesk, Zilla_Slab, Public_Sans } from "next/font/google";
+import { Familjen_Grotesk, Zilla_Slab, Public_Sans, Host_Grotesk, Martian_Mono, Hedvig_Letters_Serif, Hedvig_Letters_Sans, Afacad_Flux } from "next/font/google";
 
 const familjen = Familjen_Grotesk({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--brx-bud", display: "swap" });
+// Round 2 (Nov 10, after Matthew's review): Vault, Gallery, Instrument.
+const hostGrotesk = Host_Grotesk({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--brx-vault-sans", display: "swap" });
+const martian = Martian_Mono({ subsets: ["latin"], weight: ["300", "400", "500"], variable: "--brx-vault-mono", display: "swap" });
+const hedvigSerif = Hedvig_Letters_Serif({ subsets: ["latin"], weight: "400", variable: "--brx-gal-serif", display: "swap" });
+const hedvigSans = Hedvig_Letters_Sans({ subsets: ["latin"], weight: "400", variable: "--brx-gal-sans", display: "swap" });
+const suse = Afacad_Flux({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--brx-ins-sans", display: "swap" });
 const zilla = Zilla_Slab({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--brx-scout-display", display: "swap" });
 const publicSans = Public_Sans({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], variable: "--brx-scout-body", display: "swap" });
 
@@ -44,7 +50,7 @@ export default function BrandResetLayout({ children }: { children: React.ReactNo
           __html: `document.documentElement.classList.add('brx-on');try{sessionStorage.setItem('cl_picker_seen','1')}catch(e){}`,
         }}
       />
-      <div className={`${familjen.variable} ${zilla.variable} ${publicSans.variable}`}>{children}</div>
+      <div className={`${familjen.variable} ${zilla.variable} ${publicSans.variable} ${hostGrotesk.variable} ${martian.variable} ${hedvigSerif.variable} ${hedvigSans.variable} ${suse.variable}`}>{children}</div>
     </>
   );
 }

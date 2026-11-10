@@ -1,12 +1,38 @@
 // /preview/brand-reset — index of every preview screen (not public, noindex).
 import Link from "next/link";
 
+const ROUND2 = [
+  {
+    key: "vault",
+    name: "1 · The Vault",
+    line: "Finance-grade calm, like a premium bank app. One huge thin number, one store, one gold button. Dark at night, warm paper by day.",
+    ref: "Feels like: Mercury, Apple Card",
+  },
+  {
+    key: "gallery",
+    name: "2 · The Gallery",
+    line: "Every deal hung like a piece in a gallery: a color plate and a wall label. Quiet stone, elegant serif, no shouting.",
+    ref: "Feels like: Aesop, Le Labo",
+  },
+  {
+    key: "instrument",
+    name: "3 · The Instrument",
+    line: "A well-made device: white modules on grey, everything labeled, one orange signal that means go.",
+    ref: "Feels like: Teenage Engineering, Braun",
+  },
+];
+const SCREENS2 = [
+  ["", "Free home", "One answer, open-now, one button"],
+  ["/deal", "Deal opened in place", "Details + three more, each opens on tap"],
+  ["/flyer", "4×6 QR flyer", "Printable; the QR opens puffprice.com"],
+] as const;
+
 const DIRS = [
   {
     key: "best-bud",
     name: "A8 · Best Bud",
     line: "“Best Bud For Your Buck$.” A thrifty friend telling you the deal in one sentence, with a check under every claim.",
-    pick: "My pick for the brand",
+    pick: "Round 1 pick: “looks cheap” (your review)",
   },
   {
     key: "scout",
@@ -45,6 +71,29 @@ export default function BrandResetIndex() {
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
       <h1 data-keep-font="">Brand reset previews</h1>
       <p>Nov 10, 2026. Live deals from the database, duplicates removed. Not public, not indexed, not linked from the site.</p>
+      <h2 data-keep-font="" style={{ marginTop: 28, fontSize: 15, color: "#666" }}>Round 2 · three new looks (after your review)</h2>
+      {ROUND2.map((d) => (
+        <section key={d.key}>
+          <h2 data-keep-font="">{d.name}</h2>
+          <p>{d.line}</p>
+          <span className="pick">{d.ref}</span>
+          <ul>
+            {SCREENS2.map(([path, label, hint]) => (
+              <li key={path}>
+                <Link href={`/preview/brand-reset/${d.key}${path}`}>
+                  <b>{label}</b>
+                  <span>{hint}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <div className="dn">
+            <a href={`/preview/brand-reset/${d.key}?daypart=day`}>Day</a>
+            <a href={`/preview/brand-reset/${d.key}?daypart=night`}>Night</a>
+          </div>
+        </section>
+      ))}
+      <h2 data-keep-font="" style={{ marginTop: 40, fontSize: 15, color: "#666" }}>Round 1 · reviewed, not chosen</h2>
       {DIRS.map((d) => (
         <section key={d.key}>
           <h2 data-keep-font="">{d.name}</h2>

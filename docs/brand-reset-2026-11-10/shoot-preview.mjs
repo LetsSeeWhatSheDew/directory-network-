@@ -20,6 +20,15 @@ const ROUTES = [
   ["scout-2-deal", "/preview/brand-reset/scout/deal", ".sc-row"],
   ["scout-3-pro", "/preview/brand-reset/scout/pro"],
   ["scout-4-stores", "/preview/brand-reset/scout/stores"],
+  ["r2-vault-1-home", "/preview/brand-reset/vault", ".vt-dx"],
+  ["r2-vault-2-deal", "/preview/brand-reset/vault/deal", ".vt-row"],
+  ["r2-vault-3-flyer", "/preview/brand-reset/vault/flyer"],
+  ["r2-gallery-1-home", "/preview/brand-reset/gallery", ".gl-dx"],
+  ["r2-gallery-2-deal", "/preview/brand-reset/gallery/deal", ".gl-row"],
+  ["r2-gallery-3-flyer", "/preview/brand-reset/gallery/flyer"],
+  ["r2-instrument-1-home", "/preview/brand-reset/instrument", ".in-dx"],
+  ["r2-instrument-2-deal", "/preview/brand-reset/instrument/deal", ".in-row"],
+  ["r2-instrument-3-flyer", "/preview/brand-reset/instrument/flyer"],
 ].filter(([n]) => n.startsWith(ONLY));
 
 const browser = await chromium.launch();
@@ -54,7 +63,7 @@ for (const daypart of ["day", "night"]) {
           return r.width > 0 && r.height > 0 && r.height < 44 && !inline;
         })
         .map((el) => `${Math.round(el.getBoundingClientRect().height)}px "${(el.textContent || "").trim().slice(0, 30)}"`);
-      const fonts = [".bud-say", ".bud-sub", ".sc-big", ".sc-body"].map((s) => {
+      const fonts = [".bud-say", ".sc-big", ".vt-big", ".vt-what", ".gl-num", ".gl-title", ".in-num", ".in-name"].map((s) => {
         const el = document.querySelector(s);
         return el ? `${s}: ${getComputedStyle(el).fontFamily.split(",")[0]}` : null;
       }).filter(Boolean);
