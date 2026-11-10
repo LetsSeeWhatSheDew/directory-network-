@@ -1,0 +1,732 @@
+[
+  {
+    "name": "home",
+    "daypart": "day",
+    "url": "https://www.puffprice.com/?daypart=day",
+    "status": 200,
+    "loadMs": 4936,
+    "title": "Cannabis Deals in Central Illinois | PuffPrice",
+    "h1": [
+      "Take a breath. We found the deal."
+    ],
+    "canonical": "https://www.puffprice.com",
+    "robots": null,
+    "description": "Live dispensary deals across Peoria, Bloomington-Normal, Champaign-Urbana, Springfield, and the rest of Central Illinois — updated continuously and always free to browse.",
+    "jsonld": [
+      "Organization",
+      "WebSite",
+      "FAQPage"
+    ],
+    "firstText": "uffPrice | Cheapest eighth today | Price watch | Out-the-door prices | Tax calculator | Guides: straight answers | First-time guide | Illinois cannabis laws | For dispensaries | Free store report | Get listed | Claim a listing | Dispensary directory | Privacy | Terms | Independent. Nobody pays us to rank. 21+. | © | 2026 | PuffPrice. For adults 21+. Cannabis is legal for recreational and medical use in Illinois. Consume responsibly. Not affiliated with any dispensary listed. The counter always has the final word. | See all Central IL deals →",
+    "firstWords": 71,
+    "firstNumbers": 3,
+    "pageHeight": 6713,
+    "tapTargets": 74,
+    "smallTaps": 48,
+    "smallSamples": [
+      "92x23 \"uffPrice\"",
+      "83x19 \"click to update\"",
+      "215x18 \"Or try any price in the calcul\"",
+      "259x18 \"Browse every Central IL dispen\"",
+      "42x18 \"Peoria\"",
+      "74x18 \"East Peoria\"",
+      "97x18 \"Peoria Heights\"",
+      "37x18 \"Pekin\""
+    ],
+    "lowContrastCount": 2,
+    "lowContrast": [
+      "1.00 \"Breathing in\"",
+      "1.00 \"Breathe in\""
+    ],
+    "lcp": 1412
+  },
+  {
+    "name": "deals-all",
+    "daypart": "day",
+    "url": "https://www.puffprice.com/deals/all?daypart=day",
+    "status": 200,
+    "loadMs": 4131,
+    "title": "Peoria Dispensary Deals Today | PuffPrice",
+    "h1": [
+      "Best cannabis deals near Peoria right now"
+    ],
+    "canonical": "https://www.puffprice.com/deals/all?city=Peoria",
+    "robots": null,
+    "description": "Browse today's best dispensary deals in Peoria, Illinois. Save money on cannabis with live offers.",
+    "jsonld": [
+      "ItemList",
+      "BreadcrumbList",
+      "SpecialAnnouncement"
+    ],
+    "firstText": "uffPrice | 66 active deals at 5 dispensaries within 15 miles of Peoria, IL right now. | All deals | Best cannabis deals near Peoria right now | 66 active deals found within 15 miles of Peoria | Checked on each store's own site · No store pays to rank | · | How we rank | Showing deals within 15 miles of | Peoria | , IL | What are you looking for? | Flower | Edibles | Vapes | Concentrates | All deals | Our recommendation | near Peoria | 40% OFF | on this deal | nuEra East Peoria | East Peoria, IL | · under 1 mi from Peoria | 40% off Ogeez products",
+    "firstWords": 81,
+    "firstNumbers": 9,
+    "pageHeight": 3065,
+    "tapTargets": 63,
+    "smallTaps": 58,
+    "smallSamples": [
+      "92x23 \"uffPrice\"",
+      "76x15 \"How we rank\"",
+      "65x33 \"Flower\"",
+      "68x33 \"Edibles\"",
+      "62x33 \"Vapes\"",
+      "105x33 \"Concentrates\"",
+      "75x33 \"All deals\"",
+      "55x28 \"Details →\""
+    ],
+    "lowContrastCount": 0,
+    "lowContrast": [],
+    "lcp": 604
+  },
+  {
+    "name": "city-peoria",
+    "daypart": "day",
+    "url": "https://www.puffprice.com/city/peoria?daypart=day",
+    "status": 200,
+    "loadMs": 4449,
+    "title": "Peoria Dispensary Deals Today | PuffPrice",
+    "h1": [
+      "Peoria dispensary deals today"
+    ],
+    "canonical": "https://www.puffprice.com/city/peoria",
+    "robots": null,
+    "description": "2 verified deals today across 5 Peoria, IL dispensaries — plus hours, who's open now, and how to order ahead.",
+    "jsonld": [
+      "BreadcrumbList",
+      "ItemList",
+      "FAQPage"
+    ],
+    "firstText": "uffPrice | Central Illinois | / | Peoria | Peoria | dispensary deals today | Peoria sits on the west bank of the Illinois River. East Peoria and Peoria Heights each have their own dispensaries a few minutes away, so comparing across the river is easy. | Quick answer ( | 10:38 AM | CT): | Peoria | deals right now are bundles and set prices, not straight discounts. | 2 | deals are | live | at | 2 | of | 5 | Peoria | dispensaries | . | Trinity on Glen | closes latest tonight, at | 10:00 PM | . | Quick answers | Cheapest eighth | Cheapest vape cart | Cheapest edibles | Best deals today | Open latest tonight | Medical dispensary | Drive-thru | 5 | Dispensaries | 4 | Open now | 2 | Verified deals",
+    "firstWords": 93,
+    "firstNumbers": 8,
+    "pageHeight": 5367,
+    "tapTargets": 92,
+    "smallTaps": 89,
+    "smallSamples": [
+      "92x23 \"uffPrice\"",
+      "134x14 \"CENTRAL ILLINOIS\"",
+      "122x30 \"Cheapest eighth\"",
+      "139x30 \"Cheapest vape cart\"",
+      "126x30 \"Cheapest edibles\"",
+      "120x30 \"Best deals today\"",
+      "138x30 \"Open latest tonight\"",
+      "138x30 \"Medical dispensary\""
+    ],
+    "lowContrastCount": 0,
+    "lowContrast": [],
+    "lcp": 840
+  },
+  {
+    "name": "city-east-peoria",
+    "daypart": "day",
+    "url": "https://www.puffprice.com/city/east-peoria?daypart=day",
+    "status": 200,
+    "loadMs": 5134,
+    "title": "East Peoria Dispensary Deals Today | PuffPrice",
+    "h1": [
+      "East Peoria dispensary deals today"
+    ],
+    "canonical": "https://www.puffprice.com/city/east-peoria",
+    "robots": null,
+    "description": "42 verified deals today across 3 East Peoria, IL dispensaries — plus hours, who's open now, and how to order ahead.",
+    "jsonld": [
+      "BreadcrumbList",
+      "ItemList",
+      "FAQPage"
+    ],
+    "firstText": "uffPrice | Central Illinois | / | East Peoria | East Peoria | dispensary deals today | East Peoria is right across the Illinois River from downtown Peoria, off I-74. Peoria's dispensaries are a short drive, which makes it easy to compare before you go. | Quick answer ( | 10:38 AM | CT): | the biggest everyday discount in | East Peoria | right now is | 40% off Ogeez products | at | nuEra East Peoria | . | 42 | deals are | live | at | 1 | of | 3 | East Peoria | dispensaries | . | Cloud 9 East Peoria | closes latest tonight, at | 9:00 PM | . | Quick answers | Cheapest eighth | Cheapest vape cart | Cheapest edibles | Best deals today | Open latest tonight | Medical dispensary | Drive-thru",
+    "firstWords": 93,
+    "firstNumbers": 8,
+    "pageHeight": 5307,
+    "tapTargets": 89,
+    "smallTaps": 82,
+    "smallSamples": [
+      "92x23 \"uffPrice\"",
+      "134x14 \"CENTRAL ILLINOIS\"",
+      "122x30 \"Cheapest eighth\"",
+      "139x30 \"Cheapest vape cart\"",
+      "126x30 \"Cheapest edibles\"",
+      "120x30 \"Best deals today\"",
+      "138x30 \"Open latest tonight\"",
+      "138x30 \"Medical dispensary\""
+    ],
+    "lowContrastCount": 0,
+    "lowContrast": [],
+    "lcp": 1560
+  },
+  {
+    "name": "dispensary-nuera-east-peoria",
+    "daypart": "day",
+    "url": "https://www.puffprice.com/dispensary/nuera-east-peoria?daypart=day",
+    "status": 200,
+    "loadMs": 4300,
+    "title": "nuEra East Peoria — Deals, Hours & Directions | PuffPrice",
+    "h1": [
+      "nuEra East Peoria"
+    ],
+    "canonical": "https://www.puffprice.com/dispensary/nuera-east-peoria",
+    "robots": null,
+    "description": "nuEra East Peoria in East Peoria, IL. See current cannabis deals, full week hours, phone, and directions.",
+    "jsonld": [
+      "LocalBusiness"
+    ],
+    "firstText": "uffPrice | ← East Peoria deals | dispensary | nuEra East Peoria | East Peoria, IL | Open until 8:00 PM | ✓ | Medical | ✓ | Curbside pickup | ✓ | Order ahead | How we know | Medical | : | Page title: “nuEra East Peoria Dispensary – Recreational & Medical Cannabis” | — | store's site | , checked | Sep 22 | Curbside pickup | : | Store page: “Curbside Pickup” | — | store's site | , checked | Sep 22 | Order ahead | : | Store page: “Online ordering available” | — | store's site | , checked | Sep 22 | 504 Riverside Dr, East Peoria, IL 61611 | Tap for directions | (309) 839-1330 | Tap to call | Visit Website | External site | Active deals · | 42 | offers | Checked on each store's own site · No store pays to rank | · | How we rank",
+    "firstWords": 89,
+    "firstNumbers": 10,
+    "pageHeight": 14283,
+    "tapTargets": 355,
+    "smallTaps": 266,
+    "smallSamples": [
+      "92x23 \"uffPrice\"",
+      "118x16 \"← East Peoria deals\"",
+      "81x27 \"✓ Medical\"",
+      "131x27 \"✓ Curbside pickup\"",
+      "108x27 \"✓ Order ahead\"",
+      "59x15 \"\"",
+      "321x35 \"\"",
+      "59x15 \"\""
+    ],
+    "lowContrastCount": 0,
+    "lowContrast": [],
+    "lcp": 4668
+  },
+  {
+    "name": "drive-thru",
+    "daypart": "day",
+    "url": "https://www.puffprice.com/drive-thru?daypart=day",
+    "status": 200,
+    "loadMs": 3736,
+    "title": "Drive-Thru Dispensaries in Central Illinois (Peoria, Bloomington, Champaign, Springfield) | PuffPrice",
+    "h1": [
+      "Drive-thru dispensaries in Central Illinois"
+    ],
+    "canonical": "https://www.puffprice.com/drive-thru",
+    "robots": null,
+    "description": "Illinois legalized cannabis drive-thrus on June 12, 2026. Which Central Illinois dispensaries have one, how a dispensary drive-thru works, and where to order ahead and pick up fast today.",
+    "jsonld": [
+      "FAQPage"
+    ],
+    "firstText": "uffPrice | Central IL | › | Ways to buy | Drive-thru tracker · checked Sept 23, 2026 | Drive-thru dispensaries in Central Illinois | Illinois made cannabis drive-thrus legal on June 12, 2026. As of | Sept 23, 2026 | , none of the | 26 | Central Illinois stores we track has opened one yet. The day one does, it goes at the top of this page. | Checked on each store's own site · No store pays to rank | · | How we rank | Be first to know when a drive-thru opens near you | Tell me first | ZIP only is fine. We never sell or share it.",
+    "firstWords": 86,
+    "firstNumbers": 7,
+    "pageHeight": 6205,
+    "tapTargets": 79,
+    "smallTaps": 61,
+    "smallSamples": [
+      "92x23 \"uffPrice\"",
+      "57x15 \"Central IL\"",
+      "71x15 \"Ways to buy\"",
+      "76x15 \"How we rank\"",
+      "1x1 \"\"",
+      "76x15 \"25 News Now\"",
+      "116x15 \"Greenway Magazine\"",
+      "141x15 \"Terrabis via PR Newswire\""
+    ],
+    "lowContrastCount": 0,
+    "lowContrast": [],
+    "lcp": 256
+  },
+  {
+    "name": "how-we-rank",
+    "daypart": "day",
+    "url": "https://www.puffprice.com/how-we-rank?daypart=day",
+    "status": 200,
+    "loadMs": 3742,
+    "title": "How We Rank Deals | PuffPrice",
+    "h1": [
+      "How we find, check, and rank deals"
+    ],
+    "canonical": "https://www.puffprice.com/how-we-rank",
+    "robots": null,
+    "description": "How PuffPrice finds, verifies, and ranks Central Illinois dispensary deals. No store pays to rank. Deals come from each dispensary's own site and are re-checked daily.",
+    "jsonld": [],
+    "firstText": "uffPrice | The rules | How we find, check, and rank deals | PuffPrice exists for one person: you, in a parking lot, trying not to overpay. These are the rules we hold ourselves to. | 01 | No store pays to rank. Ever. | Order on PuffPrice comes from the deal itself — how much you save, how recently we confirmed it, and how close it is to you. There's no featured slot, no boosted listing, and no way to buy a higher spot. If that ever changes, it'll be labeled on the page, not hidden. | 02 | Deals come from the dispensary's own site. | We read each store's own website and official posts. We don't copy listings from Weedmaps, Leafly, or other aggregators — if we can't see it at the source, it doesn't go up.",
+    "firstWords": 127,
+    "firstNumbers": 2,
+    "pageHeight": 3690,
+    "tapTargets": 48,
+    "smallTaps": 47,
+    "smallSamples": [
+      "92x23 \"uffPrice\"",
+      "129x19 \"hi@puffprice.com\"",
+      "142x19 \"See today's deals →\"",
+      "42x18 \"Peoria\"",
+      "74x18 \"East Peoria\"",
+      "97x18 \"Peoria Heights\"",
+      "37x18 \"Pekin\"",
+      "86x18 \"Bloomington\""
+    ],
+    "lowContrastCount": 0,
+    "lowContrast": [],
+    "lcp": 152
+  },
+  {
+    "name": "alerts",
+    "daypart": "day",
+    "url": "https://www.puffprice.com/alerts?daypart=day",
+    "status": 200,
+    "loadMs": 3774,
+    "title": "Get Deal Alerts | PuffPrice",
+    "h1": [
+      "Never overpay for weed again."
+    ],
+    "canonical": "https://www.puffprice.com/alerts",
+    "robots": null,
+    "description": "Central Illinois cannabis deal alerts. Free forever, no account needed. Pro is $0.99/month. Deal alerts within minutes.",
+    "jsonld": [],
+    "firstText": "uffPrice | Never overpay for weed | again. | Check this before you buy. You might be leaving money on the table. | Free · no account | Start here | $0 | forever | No account, no friction, forever. Actually free — not a trial. | ✓ | Best deal near you right now — always | ✓ | Browse every Central Illinois dispensary we track — updated weekly",
+    "firstWords": 51,
+    "firstNumbers": 1,
+    "pageHeight": 4560,
+    "tapTargets": 62,
+    "smallTaps": 56,
+    "smallSamples": [
+      "92x23 \"uffPrice\"",
+      "1x1 \"\"",
+      "296x21 \"See this week's report →\"",
+      "82x41 \"Weekly\"",
+      "127x41 \"Twice a month\"",
+      "87x41 \"Monthly\"",
+      "93x41 \"$20–$40\"",
+      "94x41 \"$40–$80\""
+    ],
+    "lowContrastCount": 0,
+    "lowContrast": [],
+    "lcp": 192
+  },
+  {
+    "name": "law-updates",
+    "daypart": "day",
+    "url": "https://www.puffprice.com/law-updates?daypart=day",
+    "status": 200,
+    "loadMs": 3808,
+    "title": "Illinois Cannabis Law Changes: What's New, in Plain Words | PuffPrice",
+    "h1": [
+      "Illinois cannabis law changes"
+    ],
+    "canonical": "https://www.puffprice.com/law-updates",
+    "robots": null,
+    "description": "Every Illinois and Central Illinois cannabis law change PuffPrice tracks — drive-thrus, the Nov 12 hemp cap, possession limits, delivery — newest first, with sources. Get an email when the law changes.",
+    "jsonld": [
+      "ItemList"
+    ],
+    "firstText": "uffPrice | Central IL | › | Guides | Law watch · Illinois + Central Illinois | Illinois cannabis law changes | What changed, what's coming, and what it means if you buy in Peoria, Bloomington-Normal, Champaign-Urbana, Pekin or Springfield. Plain words, the source every time. Not legal advice. | Checked on each store's own site · No store pays to rank | · | How we rank | Get an email when the law changes | A short email when an Illinois or Central Illinois law changes what you can buy, where, or how, and a heads-up the day it takes effect. Plain words, the source every time. A few times a year. Free. | Near",
+    "firstWords": 100,
+    "firstNumbers": 0,
+    "pageHeight": 4207,
+    "tapTargets": 71,
+    "smallTaps": 67,
+    "smallSamples": [
+      "92x23 \"uffPrice\"",
+      "57x15 \"Central IL\"",
+      "41x15 \"Guides\"",
+      "76x15 \"How we rank\"",
+      "177x41 \"all of Central Illinois Peoria\"",
+      "286x43 \"\"",
+      "286x43 \"Email me\"",
+      "1x1 \"\""
+    ],
+    "lowContrastCount": 0,
+    "lowContrast": [],
+    "lcp": 196
+  },
+  {
+    "name": "status",
+    "daypart": "day",
+    "url": "https://www.puffprice.com/status?daypart=day",
+    "status": 200,
+    "loadMs": 3748,
+    "title": "Status: Is PuffPrice Up to Date? | PuffPrice",
+    "h1": [
+      "Is PuffPrice up to date?"
+    ],
+    "canonical": "https://www.puffprice.com/status",
+    "robots": null,
+    "description": "When PuffPrice last checked each Central Illinois dispensary's own website for deals, how it reads each store, and how many deals are live right now.",
+    "jsonld": [],
+    "firstText": "uffPrice | Central IL | › | How we rank | Status · how fresh is this | Is PuffPrice up to date? | Every morning we check each Central Illinois store's own website for deals. Here's when we last saw one at each store, how we read its site, and what's live right now. If a check didn't run, this page says so. | Checked on each store's own site · No store pays to rank | · | How we rank | Partly behind. | The menu reader last finished 24 days ago (Sat, Oct 17, 12:21 PM CT) | , so 1 deal from stores whose menus load with JavaScript may have changed since. | The morning website check is current (6 hours ago). | A later check stopped before finishing. | 110 | deals live now | 26 | stores we check | 9 | with a deal today",
+    "firstWords": 120,
+    "firstNumbers": 8,
+    "pageHeight": 12814,
+    "tapTargets": 76,
+    "smallTaps": 49,
+    "smallSamples": [
+      "92x23 \"uffPrice\"",
+      "57x15 \"Central IL\"",
+      "75x15 \"How we rank\"",
+      "76x15 \"How we rank\"",
+      "76x16 \"how we rank\"",
+      "42x18 \"Peoria\"",
+      "74x18 \"East Peoria\"",
+      "97x18 \"Peoria Heights\""
+    ],
+    "lowContrastCount": 0,
+    "lowContrast": [],
+    "lcp": 4104
+  },
+  {
+    "name": "home",
+    "daypart": "night",
+    "url": "https://www.puffprice.com/?daypart=night",
+    "status": 200,
+    "loadMs": 5143,
+    "title": "Cannabis Deals in Central Illinois | PuffPrice",
+    "h1": [
+      "Take a breath. We found the deal."
+    ],
+    "canonical": "https://www.puffprice.com",
+    "robots": null,
+    "description": "Live dispensary deals across Peoria, Bloomington-Normal, Champaign-Urbana, Springfield, and the rest of Central Illinois — updated continuously and always free to browse.",
+    "jsonld": [
+      "Organization",
+      "WebSite",
+      "FAQPage"
+    ],
+    "firstText": "uffPrice | Cheapest eighth today | Price watch | Out-the-door prices | Tax calculator | Guides: straight answers | First-time guide | Illinois cannabis laws | For dispensaries | Free store report | Get listed | Claim a listing | Dispensary directory | Privacy | Terms | Independent. Nobody pays us to rank. 21+. | © | 2026 | PuffPrice. For adults 21+. Cannabis is legal for recreational and medical use in Illinois. Consume responsibly. Not affiliated with any dispensary listed. The counter always has the final word. | See all Central IL deals →",
+    "firstWords": 71,
+    "firstNumbers": 3,
+    "pageHeight": 6713,
+    "tapTargets": 74,
+    "smallTaps": 48,
+    "smallSamples": [
+      "92x23 \"uffPrice\"",
+      "83x19 \"click to update\"",
+      "215x18 \"Or try any price in the calcul\"",
+      "259x18 \"Browse every Central IL dispen\"",
+      "42x18 \"Peoria\"",
+      "74x18 \"East Peoria\"",
+      "97x18 \"Peoria Heights\"",
+      "37x18 \"Pekin\""
+    ],
+    "lowContrastCount": 2,
+    "lowContrast": [
+      "1.00 \"Breathing in\"",
+      "1.00 \"Breathe in\""
+    ],
+    "lcp": 1632
+  },
+  {
+    "name": "deals-all",
+    "daypart": "night",
+    "url": "https://www.puffprice.com/deals/all?daypart=night",
+    "status": 200,
+    "loadMs": 4461,
+    "title": "Peoria Dispensary Deals Today | PuffPrice",
+    "h1": [
+      "Best cannabis deals near Peoria right now"
+    ],
+    "canonical": "https://www.puffprice.com/deals/all?city=Peoria",
+    "robots": null,
+    "description": "Browse today's best dispensary deals in Peoria, Illinois. Save money on cannabis with live offers.",
+    "jsonld": [
+      "ItemList",
+      "BreadcrumbList",
+      "SpecialAnnouncement"
+    ],
+    "firstText": "uffPrice | 66 active deals at 5 dispensaries within 15 miles of Peoria, IL right now. | All deals | Best cannabis deals near Peoria right now | 66 active deals found within 15 miles of Peoria | Checked on each store's own site · No store pays to rank | · | How we rank | Showing deals within 15 miles of | Peoria | , IL | What are you looking for? | Flower | Edibles | Vapes | Concentrates | All deals | Our recommendation | near Peoria | 40% OFF | on this deal | nuEra East Peoria | East Peoria, IL | · under 1 mi from Peoria | 40% off Ogeez products",
+    "firstWords": 81,
+    "firstNumbers": 9,
+    "pageHeight": 3065,
+    "tapTargets": 63,
+    "smallTaps": 58,
+    "smallSamples": [
+      "92x23 \"uffPrice\"",
+      "76x15 \"How we rank\"",
+      "65x33 \"Flower\"",
+      "68x33 \"Edibles\"",
+      "62x33 \"Vapes\"",
+      "105x33 \"Concentrates\"",
+      "75x33 \"All deals\"",
+      "55x28 \"Details →\""
+    ],
+    "lowContrastCount": 0,
+    "lowContrast": [],
+    "lcp": 888
+  },
+  {
+    "name": "city-peoria",
+    "daypart": "night",
+    "url": "https://www.puffprice.com/city/peoria?daypart=night",
+    "status": 200,
+    "loadMs": 5250,
+    "title": "Peoria Dispensary Deals Today | PuffPrice",
+    "h1": [
+      "Peoria dispensary deals today"
+    ],
+    "canonical": "https://www.puffprice.com/city/peoria",
+    "robots": null,
+    "description": "2 verified deals today across 5 Peoria, IL dispensaries — plus hours, who's open now, and how to order ahead.",
+    "jsonld": [
+      "BreadcrumbList",
+      "ItemList",
+      "FAQPage"
+    ],
+    "firstText": "uffPrice | Central Illinois | / | Peoria | Peoria | dispensary deals today | Peoria sits on the west bank of the Illinois River. East Peoria and Peoria Heights each have their own dispensaries a few minutes away, so comparing across the river is easy. | Quick answer ( | 10:39 AM | CT): | Peoria | deals right now are bundles and set prices, not straight discounts. | 2 | deals are | live | at | 2 | of | 5 | Peoria | dispensaries | . | Trinity on Glen | closes latest tonight, at | 10:00 PM | . | Quick answers | Cheapest eighth | Cheapest vape cart | Cheapest edibles | Best deals today | Open latest tonight | Medical dispensary | Drive-thru | 5 | Dispensaries | 4 | Open now | 2 | Verified deals",
+    "firstWords": 93,
+    "firstNumbers": 8,
+    "pageHeight": 5367,
+    "tapTargets": 92,
+    "smallTaps": 89,
+    "smallSamples": [
+      "92x23 \"uffPrice\"",
+      "134x14 \"CENTRAL ILLINOIS\"",
+      "122x30 \"Cheapest eighth\"",
+      "139x30 \"Cheapest vape cart\"",
+      "126x30 \"Cheapest edibles\"",
+      "120x30 \"Best deals today\"",
+      "138x30 \"Open latest tonight\"",
+      "138x30 \"Medical dispensary\""
+    ],
+    "lowContrastCount": 0,
+    "lowContrast": [],
+    "lcp": 1720
+  },
+  {
+    "name": "city-east-peoria",
+    "daypart": "night",
+    "url": "https://www.puffprice.com/city/east-peoria?daypart=night",
+    "status": 200,
+    "loadMs": 5029,
+    "title": "East Peoria Dispensary Deals Today | PuffPrice",
+    "h1": [
+      "East Peoria dispensary deals today"
+    ],
+    "canonical": "https://www.puffprice.com/city/east-peoria",
+    "robots": null,
+    "description": "42 verified deals today across 3 East Peoria, IL dispensaries — plus hours, who's open now, and how to order ahead.",
+    "jsonld": [
+      "BreadcrumbList",
+      "ItemList",
+      "FAQPage"
+    ],
+    "firstText": "uffPrice | Central Illinois | / | East Peoria | East Peoria | dispensary deals today | East Peoria is right across the Illinois River from downtown Peoria, off I-74. Peoria's dispensaries are a short drive, which makes it easy to compare before you go. | Quick answer ( | 10:39 AM | CT): | the biggest everyday discount in | East Peoria | right now is | 40% off Ogeez products | at | nuEra East Peoria | . | 42 | deals are | live | at | 1 | of | 3 | East Peoria | dispensaries | . | Cloud 9 East Peoria | closes latest tonight, at | 9:00 PM | . | Quick answers | Cheapest eighth | Cheapest vape cart | Cheapest edibles | Best deals today | Open latest tonight | Medical dispensary | Drive-thru",
+    "firstWords": 93,
+    "firstNumbers": 8,
+    "pageHeight": 5307,
+    "tapTargets": 89,
+    "smallTaps": 82,
+    "smallSamples": [
+      "92x23 \"uffPrice\"",
+      "134x14 \"CENTRAL ILLINOIS\"",
+      "122x30 \"Cheapest eighth\"",
+      "139x30 \"Cheapest vape cart\"",
+      "126x30 \"Cheapest edibles\"",
+      "120x30 \"Best deals today\"",
+      "138x30 \"Open latest tonight\"",
+      "138x30 \"Medical dispensary\""
+    ],
+    "lowContrastCount": 0,
+    "lowContrast": [],
+    "lcp": 1512
+  },
+  {
+    "name": "dispensary-nuera-east-peoria",
+    "daypart": "night",
+    "url": "https://www.puffprice.com/dispensary/nuera-east-peoria?daypart=night",
+    "status": 200,
+    "loadMs": 4286,
+    "title": "nuEra East Peoria — Deals, Hours & Directions | PuffPrice",
+    "h1": [
+      "nuEra East Peoria"
+    ],
+    "canonical": "https://www.puffprice.com/dispensary/nuera-east-peoria",
+    "robots": null,
+    "description": "nuEra East Peoria in East Peoria, IL. See current cannabis deals, full week hours, phone, and directions.",
+    "jsonld": [
+      "LocalBusiness"
+    ],
+    "firstText": "uffPrice | ← East Peoria deals | dispensary | nuEra East Peoria | East Peoria, IL | Open until 8:00 PM | ✓ | Medical | ✓ | Curbside pickup | ✓ | Order ahead | How we know | Medical | : | Page title: “nuEra East Peoria Dispensary – Recreational & Medical Cannabis” | — | store's site | , checked | Sep 22 | Curbside pickup | : | Store page: “Curbside Pickup” | — | store's site | , checked | Sep 22 | Order ahead | : | Store page: “Online ordering available” | — | store's site | , checked | Sep 22 | 504 Riverside Dr, East Peoria, IL 61611 | Tap for directions | (309) 839-1330 | Tap to call | Visit Website | External site | Active deals · | 42 | offers | Checked on each store's own site · No store pays to rank | · | How we rank",
+    "firstWords": 89,
+    "firstNumbers": 10,
+    "pageHeight": 14283,
+    "tapTargets": 355,
+    "smallTaps": 266,
+    "smallSamples": [
+      "92x23 \"uffPrice\"",
+      "118x16 \"← East Peoria deals\"",
+      "81x27 \"✓ Medical\"",
+      "131x27 \"✓ Curbside pickup\"",
+      "108x27 \"✓ Order ahead\"",
+      "59x15 \"\"",
+      "321x35 \"\"",
+      "59x15 \"\""
+    ],
+    "lowContrastCount": 0,
+    "lowContrast": [],
+    "lcp": 768
+  },
+  {
+    "name": "drive-thru",
+    "daypart": "night",
+    "url": "https://www.puffprice.com/drive-thru?daypart=night",
+    "status": 200,
+    "loadMs": 3720,
+    "title": "Drive-Thru Dispensaries in Central Illinois (Peoria, Bloomington, Champaign, Springfield) | PuffPrice",
+    "h1": [
+      "Drive-thru dispensaries in Central Illinois"
+    ],
+    "canonical": "https://www.puffprice.com/drive-thru",
+    "robots": null,
+    "description": "Illinois legalized cannabis drive-thrus on June 12, 2026. Which Central Illinois dispensaries have one, how a dispensary drive-thru works, and where to order ahead and pick up fast today.",
+    "jsonld": [
+      "FAQPage"
+    ],
+    "firstText": "uffPrice | Central IL | › | Ways to buy | Drive-thru tracker · checked Sept 23, 2026 | Drive-thru dispensaries in Central Illinois | Illinois made cannabis drive-thrus legal on June 12, 2026. As of | Sept 23, 2026 | , none of the | 26 | Central Illinois stores we track has opened one yet. The day one does, it goes at the top of this page. | Checked on each store's own site · No store pays to rank | · | How we rank | Be first to know when a drive-thru opens near you | Tell me first | ZIP only is fine. We never sell or share it.",
+    "firstWords": 86,
+    "firstNumbers": 7,
+    "pageHeight": 6205,
+    "tapTargets": 79,
+    "smallTaps": 61,
+    "smallSamples": [
+      "92x23 \"uffPrice\"",
+      "57x15 \"Central IL\"",
+      "71x15 \"Ways to buy\"",
+      "76x15 \"How we rank\"",
+      "1x1 \"\"",
+      "76x15 \"25 News Now\"",
+      "116x15 \"Greenway Magazine\"",
+      "141x15 \"Terrabis via PR Newswire\""
+    ],
+    "lowContrastCount": 0,
+    "lowContrast": [],
+    "lcp": 104
+  },
+  {
+    "name": "how-we-rank",
+    "daypart": "night",
+    "url": "https://www.puffprice.com/how-we-rank?daypart=night",
+    "status": 200,
+    "loadMs": 3643,
+    "title": "How We Rank Deals | PuffPrice",
+    "h1": [
+      "How we find, check, and rank deals"
+    ],
+    "canonical": "https://www.puffprice.com/how-we-rank",
+    "robots": null,
+    "description": "How PuffPrice finds, verifies, and ranks Central Illinois dispensary deals. No store pays to rank. Deals come from each dispensary's own site and are re-checked daily.",
+    "jsonld": [],
+    "firstText": "uffPrice | The rules | How we find, check, and rank deals | PuffPrice exists for one person: you, in a parking lot, trying not to overpay. These are the rules we hold ourselves to. | 01 | No store pays to rank. Ever. | Order on PuffPrice comes from the deal itself — how much you save, how recently we confirmed it, and how close it is to you. There's no featured slot, no boosted listing, and no way to buy a higher spot. If that ever changes, it'll be labeled on the page, not hidden. | 02 | Deals come from the dispensary's own site. | We read each store's own website and official posts. We don't copy listings from Weedmaps, Leafly, or other aggregators — if we can't see it at the source, it doesn't go up.",
+    "firstWords": 127,
+    "firstNumbers": 2,
+    "pageHeight": 3690,
+    "tapTargets": 48,
+    "smallTaps": 47,
+    "smallSamples": [
+      "92x23 \"uffPrice\"",
+      "129x19 \"hi@puffprice.com\"",
+      "142x19 \"See today's deals →\"",
+      "42x18 \"Peoria\"",
+      "74x18 \"East Peoria\"",
+      "97x18 \"Peoria Heights\"",
+      "37x18 \"Pekin\"",
+      "86x18 \"Bloomington\""
+    ],
+    "lowContrastCount": 0,
+    "lowContrast": [],
+    "lcp": 140
+  },
+  {
+    "name": "alerts",
+    "daypart": "night",
+    "url": "https://www.puffprice.com/alerts?daypart=night",
+    "status": 200,
+    "loadMs": 3668,
+    "title": "Get Deal Alerts | PuffPrice",
+    "h1": [
+      "Never overpay for weed again."
+    ],
+    "canonical": "https://www.puffprice.com/alerts",
+    "robots": null,
+    "description": "Central Illinois cannabis deal alerts. Free forever, no account needed. Pro is $0.99/month. Deal alerts within minutes.",
+    "jsonld": [],
+    "firstText": "uffPrice | Never overpay for weed | again. | Check this before you buy. You might be leaving money on the table. | Free · no account | Start here | $0 | forever | No account, no friction, forever. Actually free — not a trial. | ✓ | Best deal near you right now — always | ✓ | Browse every Central Illinois dispensary we track — updated weekly",
+    "firstWords": 51,
+    "firstNumbers": 1,
+    "pageHeight": 4560,
+    "tapTargets": 62,
+    "smallTaps": 56,
+    "smallSamples": [
+      "92x23 \"uffPrice\"",
+      "1x1 \"\"",
+      "296x21 \"See this week's report →\"",
+      "82x41 \"Weekly\"",
+      "127x41 \"Twice a month\"",
+      "87x41 \"Monthly\"",
+      "93x41 \"$20–$40\"",
+      "94x41 \"$40–$80\""
+    ],
+    "lowContrastCount": 0,
+    "lowContrast": [],
+    "lcp": 148
+  },
+  {
+    "name": "law-updates",
+    "daypart": "night",
+    "url": "https://www.puffprice.com/law-updates?daypart=night",
+    "status": 200,
+    "loadMs": 3765,
+    "title": "Illinois Cannabis Law Changes: What's New, in Plain Words | PuffPrice",
+    "h1": [
+      "Illinois cannabis law changes"
+    ],
+    "canonical": "https://www.puffprice.com/law-updates",
+    "robots": null,
+    "description": "Every Illinois and Central Illinois cannabis law change PuffPrice tracks — drive-thrus, the Nov 12 hemp cap, possession limits, delivery — newest first, with sources. Get an email when the law changes.",
+    "jsonld": [
+      "ItemList"
+    ],
+    "firstText": "uffPrice | Central IL | › | Guides | Law watch · Illinois + Central Illinois | Illinois cannabis law changes | What changed, what's coming, and what it means if you buy in Peoria, Bloomington-Normal, Champaign-Urbana, Pekin or Springfield. Plain words, the source every time. Not legal advice. | Checked on each store's own site · No store pays to rank | · | How we rank | Get an email when the law changes | A short email when an Illinois or Central Illinois law changes what you can buy, where, or how, and a heads-up the day it takes effect. Plain words, the source every time. A few times a year. Free. | Near",
+    "firstWords": 100,
+    "firstNumbers": 0,
+    "pageHeight": 4207,
+    "tapTargets": 71,
+    "smallTaps": 67,
+    "smallSamples": [
+      "92x23 \"uffPrice\"",
+      "57x15 \"Central IL\"",
+      "41x15 \"Guides\"",
+      "76x15 \"How we rank\"",
+      "177x41 \"all of Central Illinois Peoria\"",
+      "286x43 \"\"",
+      "286x43 \"Email me\"",
+      "1x1 \"\""
+    ],
+    "lowContrastCount": 0,
+    "lowContrast": [],
+    "lcp": 244
+  },
+  {
+    "name": "status",
+    "daypart": "night",
+    "url": "https://www.puffprice.com/status?daypart=night",
+    "status": 200,
+    "loadMs": 3658,
+    "title": "Status: Is PuffPrice Up to Date? | PuffPrice",
+    "h1": [
+      "Is PuffPrice up to date?"
+    ],
+    "canonical": "https://www.puffprice.com/status",
+    "robots": null,
+    "description": "When PuffPrice last checked each Central Illinois dispensary's own website for deals, how it reads each store, and how many deals are live right now.",
+    "jsonld": [],
+    "firstText": "uffPrice | Central IL | › | How we rank | Status · how fresh is this | Is PuffPrice up to date? | Every morning we check each Central Illinois store's own website for deals. Here's when we last saw one at each store, how we read its site, and what's live right now. If a check didn't run, this page says so. | Checked on each store's own site · No store pays to rank | · | How we rank | Partly behind. | The menu reader last finished 24 days ago (Sat, Oct 17, 12:21 PM CT) | , so 1 deal from stores whose menus load with JavaScript may have changed since. | The morning website check is current (7 hours ago). | A later check stopped before finishing. | 110 | deals live now | 26 | stores we check | 9 | with a deal today",
+    "firstWords": 120,
+    "firstNumbers": 8,
+    "pageHeight": 12793,
+    "tapTargets": 76,
+    "smallTaps": 49,
+    "smallSamples": [
+      "92x23 \"uffPrice\"",
+      "57x15 \"Central IL\"",
+      "75x15 \"How we rank\"",
+      "76x15 \"How we rank\"",
+      "76x16 \"how we rank\"",
+      "42x18 \"Peoria\"",
+      "74x18 \"East Peoria\"",
+      "97x18 \"Peoria Heights\""
+    ],
+    "lowContrastCount": 0,
+    "lowContrast": [],
+    "lcp": 136
+  }
+]
