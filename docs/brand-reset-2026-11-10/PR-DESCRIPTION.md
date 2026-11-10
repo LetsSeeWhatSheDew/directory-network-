@@ -28,6 +28,23 @@ Phase 1 of the Nov 10 brand-reset run. Docs and preview pages only. No productio
 - Add `?daypart=night` to any screen for the night look.
 - Phone screenshots (390px, day and night, plus the tapped state) are in `shots/preview/`.
 
+## Round 2: after Matthew's decision sheet
+
+Matthew rejected the Best Bud and Scout looks as cheap, and the live Breathe look too. I built three new concepts on live data, each with a home screen, a deal that opens in place, and a flyer:
+
+- The Vault: `/preview/brand-reset/vault`
+- The Gallery: `/preview/brand-reset/gallery`
+- The Instrument: `/preview/brand-reset/instrument`
+
+His answer to each decision is in [ROUND2-notes.md](docs/brand-reset-2026-11-10/ROUND2-notes.md). The trust fixes (scraper dedupe, 3 SQL files, menu-reader runner) are on their own branch, `claude/trust-fixes-2026-11-10`.
+
+## Round 3: flyers
+
+- Each flyer is built around one cannabis leaf, drawn in code in `app/preview/brand-reset/leaf.ts`: Gold Leaf, Big Leaf and Leaf Code. All three are in use.
+- Each design has its own QR tag (`utm_campaign=nov26-gold-leaf`, `nov26-big-leaf`, `nov26-leaf-code`).
+- There are PDFs for letter paper (one per sheet, or two 4×6 per sheet) and for 4×6 cards, in `docs/brand-reset-2026-11-10/flyers/`. Every QR code decodes.
+- To print the PDFs again: `node docs/brand-reset-2026-11-10/flyers/make-pdfs.mjs` with a dev server running on port 3100.
+
 How the preview pages are fenced off:
 
 - They use live data from Supabase, with duplicates removed.
