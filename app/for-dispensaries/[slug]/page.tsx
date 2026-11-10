@@ -55,7 +55,7 @@ export default async function StoreReport({ params }: { params: Promise<{ slug: 
       crumbs={[{ href: "/for-dispensaries", label: "For dispensaries" }]}
       eyebrow={`Store report · ${store.city}`}
       title={store.name}
-      lede={<>What PuffPrice shoppers see for your store, from our daily checks of your own site. <Link href={`/dispensary/${slug}`}>See your public page →</Link> · <Link href={`/for-dispensaries/${slug}/card`}>Print counter card →</Link></>}
+      lede={<>What PuffPrice shoppers see for your store, from our daily checks of your own site. <Link href={`/dispensary/${slug}`}>See your public page →</Link> · <Link href={`/for-dispensaries/${slug}/market-report`}>Free market report →</Link> · <Link href={`/for-dispensaries/${slug}/card`}>Print counter card →</Link></>}
     >
       <div className="gp-grid" style={{ marginTop: 22 }}>
         <div className="gp-card"><span>Deals live now</span><span className="gp-big">{live.length}</span><span>{cityRow ? `${store.city} total: ${cityRow.deals_live} across ${cityRow.stores_with_deals} stores` : ""}</span></div>
