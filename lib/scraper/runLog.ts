@@ -125,6 +125,10 @@ export function buildDispensaryResults(summary: ScraperSummary): DispensaryResul
     const r = ensure(a.slug);
     r.deals_deactivated += 1;
   }
+  for (const a of summary.deals_deduped ?? []) {
+    const r = ensure(a.slug);
+    r.deals_deactivated += 1;
+  }
 
   return [...bySlug.values()].sort((a, b) => a.slug.localeCompare(b.slug));
 }

@@ -72,6 +72,7 @@ async function handle(req: NextRequest): Promise<NextResponse> {
       deals_inserted: summary.deals_inserted.length,
       deals_updated: summary.deals_updated.length,
       deals_aged: summary.deals_aged.length,
+      deals_deduped: summary.deals_deduped.length,
       fetch_errors: summary.fetch_errors.length,
       rate_limited_hosts: summary.rate_limited_hosts,
       verification: {

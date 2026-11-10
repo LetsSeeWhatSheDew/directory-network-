@@ -230,6 +230,8 @@ export type ScraperSummary = {
   fetch_errors: Array<{ slug: string; error: string }>;
   deals_found: ScrapedDeal[];
   deals_inserted: Array<{ slug: string; title: string }>;
+  /** Extra active copies of a deal retired this run (see planDuplicateRetirements). */
+  deals_deduped: Array<{ slug: string; title: string }>;
   deals_updated: Array<{ slug: string; title: string }>;
   deals_aged: Array<{ slug: string; title: string }>;
   rate_limited_hosts: string[];
@@ -659,19 +661,43 @@ async function scrapeListing(
   return { deals: combined };
 }
 
-function pickMatchingExisting(
+function sameDeal(scraped: ScrapedDeal, e: ExistingDeal): boolean {
+  return (
+    e.listing_slug === scraped.listing_slug &&
+    normalizeTitle(e.title) === normalizeTitle(scraped.title) &&
+    (scraped.discount_value == null ||
+      e.discount_value == null ||
+      Number(e.discount_value) === Number(scraped.discount_value))
+  );
+}
+
+/**
+ * The existing row a scraped deal updates: an active row first, newest first
+ * (`existing` is loaded newest-first). Exported for tests.
+ */
+export function pickMatchingExisting(
   scraped: ScrapedDeal,
   existing: ExistingDeal[]
 ): ExistingDeal | undefined {
-  const key = normalizeTitle(scraped.title);
-  return existing.find(
-    (e) =>
-      e.listing_slug === scraped.listing_slug &&
-      normalizeTitle(e.title) === key &&
-      (scraped.discount_value == null ||
-        e.discount_value == null ||
-        e.discount_value === scraped.discount_value)
-  );
+  const all = existing.filter((e) => sameDeal(scraped, e));
+  return all.find((e) => e.is_active) || all[0];
+}
+
+/**
+ * Other ACTIVE rows for the same deal at the same store (same source family as
+ * the kept row). Nov 10, 2026: the scraper re-inserted live deals every morning
+ * because its "existing deals" read was capped at 500 rows, and the daily
+ * verification sweep kept every copy alive — 110 rows shown for 37 deals.
+ * These copies are retired as "duplicate_of_newer" so each deal is one row.
+ */
+export function planDuplicateRetirements(
+  scraped: ScrapedDeal,
+  keep: ExistingDeal | undefined,
+  existing: ExistingDeal[]
+): ExistingDeal[] {
+  if (!keep) return [];
+  const rendered = (e: ExistingDeal) => e.source === "website_rendered";
+  return existing.filter((e) => e.id !== keep.id && e.is_active && rendered(e) === rendered(keep) && sameDeal(scraped, e));
 }
 
 /**
@@ -777,6 +803,7 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
     fetch_errors: [],
     deals_found: [],
     deals_inserted: [],
+    deals_deduped: [],
     deals_updated: [],
     deals_aged: [],
     rate_limited_hosts: [],
@@ -812,13 +839,22 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
 
   const SOURCE = cfg.fetcher ? "website_rendered" : "website";
   const slugsIn = cilListings.map((l) => `"${l.slug}"`).join(",");
-  const existing = slugsIn
-    ? await supaGet<ExistingDeal[]>(
+  // Every row for these stores, newest first, paged. (Was one request with
+  // limit=500 and no order: once the table passed 500 rows, live deals fell
+  // out of this list and got re-inserted as new rows every morning.)
+  const existing: ExistingDeal[] = [];
+  if (slugsIn) {
+    const PAGE = 1000;
+    for (let offset = 0; offset < 50_000; offset += PAGE) {
+      const page = await supaGet<ExistingDeal[]>(
         cfg.supabaseUrl,
         readKey,
-        `/deals?select=id,listing_slug,title,discount_value,is_active,status_reason,source&listing_slug=in.(${slugsIn})&limit=500`
-      )
-    : [];
+        `/deals?select=id,listing_slug,title,discount_value,is_active,status_reason,source&listing_slug=in.(${slugsIn})&order=created_at.desc,id.asc&limit=${PAGE}&offset=${offset}`
+      );
+      existing.push(...page);
+      if (page.length < PAGE) break;
+    }
+  }
 
   const allScraped: ScrapedDeal[] = [];
   for (const l of cilListings) {
@@ -866,6 +902,7 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
   }
 
   const upsertPlan: Array<{ op: "insert" | "update"; scraped: ScrapedDeal; existingId?: string }> = [];
+  const duplicates: ExistingDeal[] = [];
   const seenKeys = new Set<string>();
   for (const s of allScraped) {
     const key = `${s.listing_slug}|${normalizeTitle(s.title)}`;
@@ -874,6 +911,7 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
     const match = pickMatchingExisting(s, existing);
     if (match) upsertPlan.push({ op: "update", scraped: s, existingId: match.id });
     else upsertPlan.push({ op: "insert", scraped: s });
+    for (const dup of planDuplicateRetirements(s, match, existing)) duplicates.push(dup);
   }
 
   const scrapedKeys = new Set(upsertPlan.map((u) => `${u.scraped.listing_slug}|${normalizeTitle(u.scraped.title)}`));
@@ -982,7 +1020,16 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
       });
       summary.deals_aged.push({ slug: a.listing_slug, title: a.title });
     }
+    for (const d of duplicates) {
+      await supaPatch(cfg.supabaseUrl, cfg.serviceKey, `/deals?id=eq.${d.id}`, {
+        status_reason: "duplicate_of_newer",
+        is_active: false,
+        updated_at: new Date().toISOString(),
+      });
+      summary.deals_deduped.push({ slug: d.listing_slug, title: d.title });
+    }
   } else {
+    for (const d of duplicates) summary.deals_deduped.push({ slug: d.listing_slug, title: d.title });
     for (const u of upsertPlan) {
       if (u.op === "insert") summary.deals_inserted.push({ slug: u.scraped.listing_slug, title: u.scraped.title });
       else summary.deals_updated.push({ slug: u.scraped.listing_slug, title: u.scraped.title });
