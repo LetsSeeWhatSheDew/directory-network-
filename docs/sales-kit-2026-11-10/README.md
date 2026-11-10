@@ -15,7 +15,7 @@ Everything you need to walk into a dispensary and sell the Market Report.
 The reports are live pages. Print a fresh one the morning of the meeting, so the deals and prices are that day's:
 
 - Open `https://www.puffprice.com/for-dispensaries/<store-slug>/market-report`, then Print → Save as PDF. Set Letter, "Actual size", background graphics on.
-- Or regenerate all 26 with a local dev server on port 3100. The renderer script is in `make-market-reports.cjs`: `NODE_PATH=node_modules node docs/sales-kit-2026-11-10/make-market-reports.cjs docs/sales-kit-2026-11-10/market-reports <slug> <slug> …`
+- Or regenerate all 26 with a local dev server on port 3100. The renderer script is in `make-market-reports.mjs`: `node docs/sales-kit-2026-11-10/make-market-reports.mjs docs/sales-kit-2026-11-10/market-reports <slug> <slug> …`
 
 ## Still open
 
