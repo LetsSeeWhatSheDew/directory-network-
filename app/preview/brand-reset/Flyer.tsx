@@ -76,13 +76,14 @@ html.brx-on,html.brx-on body{background:#D9D6D0!important}
 .instrument .fl-h{color:#161616!important;font-family:var(--brx-ins-sans),sans-serif!important;font-weight:700;font-size:39px;line-height:.93;letter-spacing:-.04em;margin-top:.16in!important}
 .instrument .fl-h span{color:#FF5A1F}
 .instrument .fl-code{position:relative;width:3.05in;height:3.05in;margin:.24in auto 0;color:#161616}
-.instrument .fl-badge{position:absolute;left:50%;top:50%;width:25%;height:25%;transform:translate(-50%,-50%);background:#FF5A1F;border-radius:22%;box-shadow:0 0 0 .06in #F3F1EC;padding:5%}
+.instrument .fl-badge{position:absolute;left:50%;top:50%;width:21%;height:21%;transform:translate(-50%,-50%);background:#FF5A1F;border-radius:22%;box-shadow:0 0 0 .035in #F3F1EC;padding:4%}
 .instrument .fl-go{margin-top:auto;background:#FF5A1F;color:#fff;border-radius:999px;padding:.11in .2in;display:flex;justify-content:space-between;font-weight:600;font-size:14.5px}
 .instrument .fl-small{margin-top:.09in;font-family:var(--brx-vault-mono),monospace;font-size:7.5px;color:#77776F;display:flex;justify-content:space-between}
 `;
 
 export default async function Flyer({ variant }: { variant: Variant }) {
-  const url = flyerUrl(variant);
+  // Each design gets its own QR tag so GA4 can tell them apart.
+  const url = flyerUrl({ vault: "gold-leaf", gallery: "big-leaf", instrument: "leaf-code" }[variant]);
   const html = (s: string, className: string) => <div className={className} dangerouslySetInnerHTML={{ __html: s }} />;
 
   if (variant === "vault") {

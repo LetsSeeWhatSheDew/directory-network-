@@ -67,9 +67,14 @@ Subscribers in `deal_alerts` today: **0**.
 
 ## #8 Flyers
 
-- **Files:** `flyers/flyer-vault-4x6.pdf`, `flyers/flyer-gallery-4x6.pdf`, `flyers/flyer-instrument-4x6.pdf`, all at 4×6 in.
-- **Copy is evergreen:** "Scan before you buy." No prices or deals that go stale on a pole.
-- **QR target:** `https://www.puffprice.com/?utm_source=flyer&utm_medium=qr&utm_campaign=nov26-<look>`
+- **Round 3 (current):** one cannabis leaf as the focal point in each design: Gold Leaf, Big Leaf and Leaf Code. Matthew is using all three in different spots.
+- **Files, per design** (in `flyers/`):
+  - `<name>-letter.pdf`: one flyer per US Letter sheet (7 × 10.5 in, crop marks)
+  - `<name>-letter-2up.pdf`: two 4×6 flyers per landscape Letter sheet (cut marks)
+  - `<name>-4x6.pdf`: for a print shop or photo paper
+- **Each design has its own QR tag**, so GA4 separates them: `utm_source=flyer`, `utm_medium=qr`, `utm_campaign=nov26-gold-leaf` / `nov26-big-leaf` / `nov26-leaf-code`.
+- **Copy is evergreen:** no prices or deals that go stale on a pole.
+- **Home printing:** print at "Actual size" / 100%, never "Fit to page"; use the best quality setting. Gold Leaf and Big Leaf are heavy-ink designs; a laser printer handles that better than inkjet.
 - **Before printing 500:**
   - Scan a printed proof with an iPhone and an Android.
   - Check Peoria's rules on posting bills on poles and public boards (UNVERIFIED).
