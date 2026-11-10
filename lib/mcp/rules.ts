@@ -11,7 +11,7 @@
 //               app/guides/buying-cannabis-in-illinois-as-an-out-of-state-visitor
 //   driving     app/guides/cannabis-and-driving-illinois (quick answer + FAQ)
 //   delivery    app/illinois-cannabis-delivery (FAQ, LAST_CHECKED Sept 23, 2026)
-//   drive_thru  app/drive-thru (FAQ, LAST_CHECKED Sept 23, 2026)
+//   drive_thru  app/drive-thru (FAQ, LAST_CHECKED Nov 10, 2026)
 //   hemp        app/illinois-hemp-law (timeline + FAQ)
 //   medical     app/guides/illinois-medical-cannabis-card-2026, app/medical
 //   tax         app/illinois-cannabis-tax + lib/taxRates.ts
@@ -88,13 +88,13 @@ export const RULES: Record<RuleTopic, Rule> = {
     topic: "drive_thru",
     question: "Are cannabis drive-thrus legal in Illinois?",
     answer:
-      "Yes. SB 3222, signed June 12, 2026, allows dispensaries to serve customers through a drive-through once IDFPR reviews and approves the store's setup. As of Sept 23, 2026, none of the Central Illinois stores PuffPrice tracks has opened one.",
+      "Yes. SB 3222, signed June 12, 2026, allows dispensaries to serve customers through a drive-through once IDFPR reviews and approves the store's setup. As of Nov 10, 2026, none of the Central Illinois stores PuffPrice tracks has opened one.",
     points: [
       "At the Illinois drive-thrus open so far, you order online first and pick up at the window, where staff check your ID.",
       "PuffPrice's drive-thru page lists the first Central Illinois one the day it opens. For the live per-store status call list_dispensaries (ways_to_buy.drive_thru).",
-      "Cities can add their own step. On Oct 1, 2026, Peoria's Planning and Zoning Commission recommended special use approval (a public hearing, then a City Council vote) for any dispensary drive-thru; the Council decides next.",
+      "Cities can add their own step. On Oct 1, 2026, Peoria's Planning and Zoning Commission recommended special use approval (a public hearing, then a City Council vote) for any dispensary drive-thru; on Oct 27, 2026 the Council put the decision off for two weeks.",
     ],
-    checked: "2026-10-04",
+    checked: "2026-11-10",
     source_url: `${u}/drive-thru`,
     also_see: [`${u}/ways-to-buy`],
     primary_sources: ["Public Act 104-0463 (SB 3222)"],

@@ -139,7 +139,7 @@ export function buildCheapest(board: CheapestBoard): CheapestData {
 }
 
 /** Kept in step with LAST_CHECKED on app/drive-thru/page.tsx (the last manual sweep). */
-export const DRIVE_THRU_LAST_SWEEP = "2026-09-23T17:00:00Z";
+export const DRIVE_THRU_LAST_SWEEP = "2026-11-10T20:00:00Z";
 
 export function buildDriveThru(stores: RegionStore[], rows: FeatureRow[]): DriveThruData {
   if (!stores.length) return { status: "unknown", postable: false, asOf: "" };
