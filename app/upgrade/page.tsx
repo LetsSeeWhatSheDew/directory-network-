@@ -61,7 +61,7 @@ const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "Do dispensaries pay you?",
-    a: "No. Dispensary listings are free, forever. PuffPrice is funded by Pro subscribers only. That's why you can trust the deal ranking.",
+    a: "Not for placement, ever. Listings are free, and nobody can pay to rank, including the stores. Stores can buy a market report: a monthly read on how their deals compare with the stores around them. It never changes where their deals show up.",
   },
 ];
 
