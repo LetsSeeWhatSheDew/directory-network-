@@ -159,7 +159,7 @@ export default async function MarketReport({ params }: { params: Promise<{ slug:
   if (impressions) findings.push(`Google showed PuffPrice's ${store.city} page ${impressions.toLocaleString("en-US")} times in four weeks (${SEARCH_WINDOW.from} – ${SEARCH_WINDOW.to}).`);
 
   return (
-    <div className={`mr-root ${sans.variable}`}>
+    <div className={`mr-root ${sans.variable}`} tabIndex={0} role="region" aria-label={`Market report for ${name}`}>
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
       <p className="mr-screen">
         Sample market report. Print it or save as PDF (letter, &ldquo;Actual size&rdquo;, background graphics on).
@@ -355,14 +355,14 @@ export default async function MarketReport({ params }: { params: Promise<{ slug:
 }
 
 const CSS = `
-.mr-root{--ink:#16150F;--muted:#6B6759;--rule:#E3DED2;--paper:#FFFDF8;--gold:#B08A3E;--gold-soft:#F4ECD8;--green:#1E3A2B;
+.mr-root{--ink:#16150F;--muted:#6B6759;--rule:#E3DED2;--paper:#FFFDF8;--gold:#B08A3E;--gold-ink:#7E6025;--gold-soft:#F4ECD8;--green:#1E3A2B;
   font-family:var(--mr-sans),system-ui,sans-serif;color:var(--ink);background:#E9E5DC;padding:24px 0 48px;min-height:100vh}
 .mr-screen{max-width:8.5in;margin:0 auto 14px;font-size:13px;color:#555;text-align:center}
 .mr-page{width:8.5in;height:11in;box-sizing:border-box;margin:0 auto 24px;background:var(--paper);padding:.55in .6in .45in;display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(0,0,0,.06),0 14px 40px rgba(0,0,0,.10);position:relative;overflow:hidden}
 .mr-top{display:flex;justify-content:space-between;align-items:center;font-size:9pt;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--rule);padding-bottom:.12in}
 .mr-word{display:inline-flex;align-items:center;gap:7px;color:var(--ink);font-weight:600;letter-spacing:-.01em;text-transform:none;font-size:13pt}
 .mr-word i{width:9px;height:9px;border-radius:50%;background:var(--gold);display:inline-block}
-.mr-kicker{margin:.3in 0 0;font-size:9pt;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.mr-kicker{margin:.3in 0 0;font-size:9pt;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-ink);font-weight:600}
 .mr-root h1.mr-h1{margin:.04in 0 0;font-family:var(--mr-sans),sans-serif!important;font-weight:300;font-size:34pt;line-height:1.02;letter-spacing:-.035em;color:var(--ink)}
 .mr-lede{margin:.1in 0 0;font-size:11pt;line-height:1.45;color:#3F3C33;max-width:6.2in}
 .mr-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.12in;margin-top:.24in}
@@ -376,12 +376,12 @@ const CSS = `
 .mr-root h2.mr-h2.flat{margin:.02in 0 .06in;font-size:15pt}
 .mr-find{margin:0;padding-left:.22in;font-size:10.5pt;line-height:1.45}
 .mr-find li{margin:.03in 0;padding-left:.04in}
-.mr-find li::marker{color:var(--gold);font-weight:600}
+.mr-find li::marker{color:var(--gold-ink);font-weight:600}
 .mr-t{width:100%;border-collapse:collapse;font-size:9.5pt}
 .mr-t th{text-align:left;font-weight:500;font-size:8pt;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--ink);padding:.05in .06in}
 .mr-t td{border-bottom:1px solid var(--rule);padding:.055in .06in;font-variant-numeric:tabular-nums}
 .mr-t tr.me td{background:var(--gold-soft);font-weight:600}
-.mr-t sup{color:var(--gold);margin-left:2px}
+.mr-t sup{color:var(--gold-ink);margin-left:2px}
 .mr-bar{display:inline-block;width:.6in;height:6px;border-radius:3px;background:var(--rule);margin-right:6px;position:relative;vertical-align:middle;overflow:hidden}
 .mr-bar::after{content:"";position:absolute;inset:0 auto 0 0;width:var(--w);background:var(--green)}
 .mr-note{margin:.08in 0 0;font-size:8pt;line-height:1.4;color:var(--muted)}
