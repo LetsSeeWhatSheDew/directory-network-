@@ -106,15 +106,25 @@ export const MENU_SOURCES: Record<string, MenuSource> = {
   // could not load them — first real read is the Mac run). Store ids from the
   // store's own menu URLs (…/shop/store/<id>/…): 1517 East Peoria REC (1518 is
   // MED), 1519 Urbana REC (1520 is MED). Champaign and Pekin ids are taken
-  // from the page's own query at run time.
+  // from the page at run time (2026-11-10: the REC menu pages redirect to
+  // /shop/store/3057 Champaign and /shop/store/3050 Pekin).
+  // 2026-11-10: nuEra moved to Jane "Bloom" (a React Router app on the store's
+  // own domain) — no Algolia call any more; see readJaneBloom.
   "nuera-east-peoria": { platform: "jane", url: "https://nueracannabis.com/shop/store/1517/featured", janeStoreId: 1517 },
   "nuera-champaign": { platform: "jane", url: "https://nueracannabis.com/dispensaries/il/champaign/menu-rec/" },
   "nuera-pekin": { platform: "jane", url: "https://nueracannabis.com/dispensaries/il/pekin/menu-rec/" },
   "nuera-urbana": { platform: "jane", url: "https://nueracannabis.com/dispensaries/il/urbana/menu-rec/", janeStoreId: 1519 },
   // High Haven Normal ("The Puff Palace"): listed as a Jane embed on Sep 25,
   // but its current specials links carry Dutchie ids — the run uses whichever
-  // the page actually calls.
+  // the page actually calls. 2026-11-10: Jane frameless embed, store 6285,
+  // products from the embed's own dmerch /v2/smart search (readJaneDmerch).
   "high-haven-normal": { platform: "jane", alsoTry: "dutchie", url: "https://highhavencannabis.com/high-haven-normal-il-the-puff-palace/normal-menu/" },
+  // Beyond / Hello (Jushi): the store page on beyond-hello.com links its own
+  // "Adult-Use Menu" (found 2026-11-10 from …/illinois-dispensaries/<city>/);
+  // a Jane frameless embed like High Haven's. REC store ids seen in the page's
+  // own query: 2754 Bloomington, 1634 Normal.
+  "beyond-hello-bloomington": { platform: "jane", url: "https://beyond-hello.com/illinois-dispensaries/bloomington/adult-use-menu/", janeStoreId: 2754 },
+  "beyond-hello-normal": { platform: "jane", url: "https://beyond-hello.com/illinois-dispensaries/normal/adult-use-menu/", janeStoreId: 1634 },
   // Trinity (Treez / GapCommerce): one domain, two stores; the store is
   // picked by following the store's own link from the site's home page.
   // "University St" also appears in street addresses ("3125 N University St"),
@@ -130,8 +140,6 @@ export const MENU_NOT_COVERED: Record<string, string> = {
   "cloud-9-east-peoria": "Cresco/Sunnyside storefront: its inventory call (api.crescolabs.com) returned 0 products for store 974 from the cloud; not parsed until a Mac run shows real rows",
   "sunnyside-champaign": "Cresco/Sunnyside storefront: inventory call returned 0 products from the cloud (same as Cloud 9)",
   "shangri-la-springfield": "Cresco/Sunnyside storefront: inventory call returned 0 products for store 970 from the cloud",
-  "beyond-hello-bloomington": "Jane (per the pipeline registry); the registry's menu URL is now a 404 — needs a new menu URL",
-  "beyond-hello-normal": "Jane (per the pipeline registry); menu URL not re-found",
   "beyond-hello-peoria": "Bloom Wellness on risecannabis.com — Cloudflare Turnstile blocks the cloud",
   "ayr-wellness-normal": "Bloom Wellness on risecannabis.com — Cloudflare Turnstile blocks the cloud",
   "revolution-dispensary-normal": "Bloom Wellness on risecannabis.com — Cloudflare Turnstile blocks the cloud",
@@ -179,7 +187,7 @@ export const ADAPTER_VERSION: Record<MenuPlatform, string> = {
   dutchie: "rendered-dutchie@1.0.0",
   sweed: "rendered-sweed@1.0.0",
   joint: "rendered-joint@1.0.0",
-  jane: "rendered-jane-algolia@1.0.0",
+  jane: "rendered-jane@1.1.0", // 1.1: Bloom route data + dmerch search (Algolia kept as a fallback)
   treez: "rendered-treez-html@1.0.0",
 };
 
@@ -622,7 +630,9 @@ export function janeCandidates(r: JaneRecord, ref: RefUnit): MenuCandidate[] {
   const weights = (r.available_weights || []).map((w) => String(w).toLowerCase());
   const amount = clean(r.amount);
   const netG = num(r.net_weight_grams);
-  const eachOnly = weights.length === 1 && weights[0] === "each";
+  // Sold by the unit: "each" is its only weight — or (Jane Bloom / dmerch
+  // records, 2026-11-10) no weights listed at all and a price_each.
+  const eachOnly = (weights.length === 1 && weights[0] === "each") || (weights.length === 0 && num(r.price_each) != null);
   let label: string | null = null;
   if (ref === "eighth") {
     if (kind !== "flower") return [];
@@ -760,6 +770,159 @@ async function readJane(ctx: Ctx, h: AlgoliaHandle, storeId: number): Promise<Me
   return out;
 }
 
+// ---- Jane without Algolia (2026-11-10) ---------------------------------------
+//
+// Jane stopped making Algolia calls from the browser. Two shapes now, both
+// carrying the same Jane product record (JaneRecord) as before:
+//
+//   Bloom    nuera (…/shop/store/<id>/…): a React Router app on the store's own
+//            domain. Each category route's loader data holds
+//            `recommendedSortResults`, a JSON string with `products[].attributes`
+//            (= JaneRecord) and `totalProducts`. `?currentPage=N` is the page's
+//            own "load more": it returns the first 15 + 60·(N−1) products.
+//            Read by navigating the page's own router to each category, so the
+//            data calls are the store domain's own `<category>.data` requests.
+//   dmerch   High Haven / Beyond Hello frameless embed: the page POSTs a product
+//            search to dmerch.iheartjane.com/v2/smart (public jdm_api_key in the
+//            URL, store_ids in the body). Replayed with only the category filter
+//            and page size changed; `products[].search_attributes` = JaneRecord.
+
+/** What we need to replay the embed's own dmerch product search. */
+export type JaneSmartHandle = { url: string; body: Record<string, unknown>; storeIds: number[] };
+
+const DMERCH_HOST = /(^|\.)dmerch\.iheartjane\.com$/i;
+
+/** The page's own dmerch /v2/smart request → handle (key and store from the page, never from code). */
+export function parseJaneSmartRequest(url: string, postData: string | null): JaneSmartHandle | null {
+  let u: URL;
+  try { u = new URL(url); } catch { return null; }
+  if (!DMERCH_HOST.test(u.host) || u.pathname !== "/v2/smart" || !u.searchParams.get("jdm_api_key")) return null;
+  let body: Record<string, unknown>;
+  try { body = JSON.parse(postData || ""); } catch { return null; }
+  if (!body || typeof body !== "object" || Array.isArray(body)) return null;
+  const ids = Array.isArray(body.store_ids) ? body.store_ids : body.store_id != null ? [body.store_id] : [];
+  const storeIds = [...new Set(ids.map(Number).filter((n) => Number.isInteger(n) && n > 0))];
+  if (!storeIds.length) return null;
+  return { url: u.toString(), body, storeIds };
+}
+
+/** dmerch /v2/smart answer → Jane records (each keeps its store id). */
+export function janeSmartToRecords(j: unknown): JaneRecord[] {
+  const products = (j as { products?: unknown })?.products;
+  if (!Array.isArray(products)) throw new Error("Jane dmerch answer changed shape (no products[])");
+  const out: JaneRecord[] = [];
+  for (const p of products as Array<{ search_attributes?: JaneRecord | null; store_id?: number }>) {
+    const sa = p?.search_attributes;
+    if (!sa || typeof sa !== "object") continue;
+    out.push({ ...sa, store_id: sa.store_id ?? p.store_id });
+  }
+  return out;
+}
+
+/** A Bloom category route's `recommendedSortResults` string → Jane records + the menu's total. */
+export function bloomResultsToRecords(s: unknown): { records: JaneRecord[]; total: number | null } {
+  if (typeof s !== "string") throw new Error("Jane Bloom: category page has no recommendedSortResults");
+  const j = JSON.parse(s) as { products?: Array<{ attributes?: JaneRecord | null }>; totalProducts?: number };
+  if (!Array.isArray(j?.products)) throw new Error("Jane Bloom: recommendedSortResults changed shape (no products[])");
+  const records = j.products.map((p) => p?.attributes).filter((a): a is JaneRecord => !!a && typeof a === "object");
+  return { records, total: typeof j.totalProducts === "number" ? j.totalProducts : null };
+}
+
+const JANE_PLAN: Array<[RefUnit, string]> = [["eighth", "flower"], ["cart_1g", "vape"], ["gummies_100mg", "edible"]];
+
+/** Object ids the /v2/smart answer listed without their record (the rest of the "load more" pages). */
+export function janeSmartMissingIds(j: unknown): string[] {
+  const products = (j as { products?: Array<{ object_id?: unknown; search_attributes?: unknown }> })?.products || [];
+  return products.filter((p) => !p?.search_attributes && p?.object_id != null).map((p) => String(p.object_id));
+}
+
+async function readJaneDmerch(ctx: Ctx, h: JaneSmartHandle, storeId: number): Promise<{ raw: MenuCandidate[]; missing: string[] }> {
+  const raw: MenuCandidate[] = [];
+  const missing: string[] = [];
+  // The embed's own "load more" call: same host and query string, /v2/smartpage.
+  const pageUrl = h.url.replace(/\/v2\/smart\?/, "/v2/smartpage?");
+  const post = (url: string, body: unknown) =>
+    inPageJson(ctx, url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body), credentials: "omit" });
+  for (const [ref, kind] of JANE_PLAN) {
+    // The page's own search, with only the category and page size changed.
+    // It lists every matching product but returns the record for the first
+    // 60 only; the rest come from smartpage, 60 object ids at a time.
+    const j = await post(h.url, { ...h.body, store_ids: [storeId], search_filter: `root_types:"${kind}"`, search_query: "", max_products: 1000, page_size: 1000, disable_ads: true });
+    const records = janeSmartToRecords(j);
+    const rest = janeSmartMissingIds(j);
+    let i = 0;
+    for (; i < rest.length && i < 600 && left(ctx) > 5000; i += 60) {
+      const pj = await post(pageUrl, { app_mode: h.body.app_mode, jane_device_id: h.body.jane_device_id, object_ids: rest.slice(i, i + 60), search_attributes: ["*"] });
+      records.push(...janeSmartToRecords(pj));
+    }
+    if (i < rest.length) missing.push(`${kind}: read ${records.length} of ${records.length + rest.length - i} products`);
+    raw.push(...janeHitsToCandidates(records, storeId, ref));
+  }
+  return { raw, missing };
+}
+
+/** Is this page a Jane Bloom menu (React Router app with a store id in its URL)? */
+async function bloomStoreId(page: Page): Promise<number | null> {
+  const id = Number(new URL(page.url()).pathname.match(/\/store\/(\d+)(?:\/|$)/)?.[1]) || null;
+  if (!id) return null;
+  const isBloom = await Promise.race([
+    page.evaluate(() => {
+      const w = window as unknown as { __reactRouterDataRouter?: { navigate?: unknown }; __BLOOM_CLIENT_ENV__?: unknown };
+      return typeof w.__reactRouterDataRouter?.navigate === "function" && w.__BLOOM_CLIENT_ENV__ != null;
+    }).catch(() => false),
+    new Promise<boolean>((r) => setTimeout(() => r(false), 5000)),
+  ]);
+  return isBloom ? id : null;
+}
+
+async function readJaneBloom(ctx: Ctx, storeId: number, isAllowed: (url: string) => Promise<boolean>): Promise<{ raw: MenuCandidate[]; missing: string[] }> {
+  const { page } = ctx;
+  const origin = new URL(page.url()).origin;
+  const raw: MenuCandidate[] = [];
+  const missing: string[] = [];
+  for (const [ref, kind] of JANE_PLAN) {
+    try {
+      let currentPage = 20; // 15 + 60·19 = 1155 products; a second, bigger read if the menu is longer
+      for (let attempt = 0; attempt < 2; attempt++) {
+        if (left(ctx) < 5000) throw new Error("store menu budget used up");
+        const bloomBase = await page.evaluate(() => (window as unknown as { __reactRouterDataRouter?: { basename?: string } }).__reactRouterDataRouter?.basename || "");
+        if (!(await isAllowed(`${origin}${bloomBase.replace(/\/+$/, "")}/store/${storeId}/${kind}.data`))) throw new Error("robots.txt disallows the menu data path");
+        ctx.calls.n++;
+        const ms = Math.max(2000, Math.min(25_000, left(ctx) - 2000));
+        const got = await Promise.race([
+          page.evaluate(
+            async ([path, k, t]) => {
+              // (No named helper functions in here: tsx wraps them in __name().)
+              const router = (window as unknown as { __reactRouterDataRouter: { navigate: (to: string) => Promise<void>; state: { navigation: { state: string }; loaderData: Record<string, Record<string, unknown> | null> } } }).__reactRouterDataRouter;
+              await router.navigate(path as string);
+              const until = Date.now() + (t as number);
+              while (router.state.navigation.state !== "idle" && Date.now() < until) await new Promise((r) => setTimeout(r, 200));
+              for (const [id, d] of Object.entries(router.state.loaderData || {})) {
+                if (new RegExp(`\\.${k}\\._index$`).test(id) && d && typeof d.recommendedSortResults === "string") return { route: id, s: d.recommendedSortResults as string };
+              }
+              return { route: null, s: null };
+            },
+            [`/store/${storeId}/${kind}?currentPage=${currentPage}`, kind, ms] as const
+          ),
+          new Promise<never>((_, rej) => setTimeout(() => rej(new Error(`category page timeout ${ms}ms`)), ms + 2000)),
+        ]);
+        if (new URL(page.url()).pathname.match(/\/store\/(\d+)\//)?.[1] !== String(storeId)) throw new Error(`menu switched store (${page.url()})`);
+        const { records, total } = bloomResultsToRecords(got.s);
+        if (total != null && records.length < total && attempt === 0) {
+          currentPage = Math.min(60, 1 + Math.ceil((total - 15) / 60));
+          if (currentPage > 20) continue;
+        }
+        raw.push(...janeHitsToCandidates(records, storeId, ref));
+        if (total != null && records.length < total) missing.push(`${kind}: read ${records.length} of ${total} products`);
+        break;
+      }
+    } catch (e) {
+      missing.push(`${kind}: ${(e as Error).message.slice(0, 80)}`);
+    }
+  }
+  return { raw, missing };
+}
+
 // ---- Treez / GapCommerce (server-rendered HTML) ----------------------------
 //
 // No data call to replay: each product is a card in the page's HTML. A card
@@ -783,32 +946,43 @@ const NOT_A_NAME = /^(\$|\/$)|^\d+(?:\.\d+)?\s?(?:g|mg|oz)$|^(thc|cbd|tac)\b|^(s
 /** One rendered product card → candidates for one reference unit. */
 export function htmlCardCandidates(card: HtmlCard, ref: RefUnit, pageCategory: "flower" | "vape" | "edible"): MenuCandidate[] {
   const lines = card.lines.map((l) => l.replace(/\s+/g, " ").trim()).filter(Boolean);
-  const name = clean(card.name) || lines.find((l) => l.length > 2 && !NOT_A_NAME.test(l)) || "";
+  // (2026-11-10: a card's link can carry only an aria-label, "Go to <name>".)
+  const name = clean(card.name).replace(/^go to\s+/i, "") || lines.find((l) => l.length > 2 && !NOT_A_NAME.test(l)) || "";
   const text = lines.join("\n");
   const want = { eighth: "flower", cart_1g: "vape", gummies_100mg: "edible" }[ref];
   if (pageCategory !== want) return [];
   if (ref === "cart_1g" && !/\b(cart|carts|cartridge|cartridges|510)\b/i.test(`${name}\n${text}`)) return [];
   if (ref === "gummies_100mg" && !/gumm|chew/i.test(`${name}\n${text}`)) return [];
   const conditional = CONDITIONAL.test(text);
-  // Price pairs: one or two prices, then "/", then the size.
+  // Price pairs: one or two prices, then "/", then the size ("each" for a
+  // unit sold whole) — and, on the 2026-11 layout, the struck-through regular
+  // price right after the size ("$27 / 3.5g $45"), unless that price starts
+  // the next "$x / size" pair.
+  const P = String.raw`\$\s?(\d{1,3}(?:\.\d{2})?)(?!\.?\d)`; // whole prices only ("$55" never reads as "$5")
+  const re = new RegExp(String.raw`${P}\s*(?:\n\s*)?(?:${P}\s*(?:\n\s*)?)?\/\s*(?:\n\s*)?(?:(\d+(?:\.\d+)?)\s?(g|mg)|(each))\b(?:\s*(?:\n\s*)?${P}(?!\s*(?:\n\s*)?\/))?`, "gi");
   const pairs: Array<{ prices: number[]; n: number; u: string }> = [];
-  const re = /\$\s?(\d{1,3}(?:\.\d{2})?)\s*(?:\n\s*)?(?:\$\s?(\d{1,3}(?:\.\d{2})?)\s*(?:\n\s*)?)?\/\s*(?:\n\s*)?(\d+(?:\.\d+)?)\s?(g|mg)\b/gi;
-  for (const m of text.matchAll(re)) pairs.push({ prices: [m[1], m[2]].filter(Boolean).map(Number), n: Number(m[3]), u: m[4].toLowerCase() });
+  for (const m of text.matchAll(re)) {
+    pairs.push({ prices: [m[1], m[2], m[6]].filter(Boolean).map(Number), n: m[5] ? NaN : Number(m[3]), u: m[5] ? "each" : m[4].toLowerCase() });
+  }
+  const sized = pairs.filter((p) => p.u !== "each");
   let prices: number[] | null = null;
   let weight = "";
-  const hit = pairs.filter((p) => TREEZ_SIZE[ref](p.n, p.u));
+  const hit = sized.filter((p) => TREEZ_SIZE[ref](p.n, p.u));
   if (hit.length > 1) return []; // the same size listed twice: ambiguous
   if (hit.length === 1) {
     prices = hit[0].prices;
     weight = `${hit[0].n}${hit[0].u}`;
-  } else if (!pairs.length) {
-    // No "$x / size" pair: the size must be in the product name and the card
-    // must show exactly one price.
+  } else if (!sized.length) {
+    // No "$x / size" pair: the size must be in the product name, and the card
+    // must show exactly one "$x / each" pair — or exactly one price.
+    const each = pairs.filter((p) => p.u === "each");
     const all = [...new Set([...text.matchAll(/\$\s?(\d{1,3}(?:\.\d{2})?)\b/g)].map((m) => Number(m[1])))];
     const sizeInName = { eighth: /\b3\.5\s?g\b|\b1\/8\s?(?:oz|ounce)\b/i, cart_1g: /\b1(?:\.0)?\s?g\b/i, gummies_100mg: /\b100\s?mg\b/i }[ref];
     const otherMg = ref === "gummies_100mg" && [...name.matchAll(/\b(\d+(?:\.\d+)?)\s?mg\b/gi)].some((m) => Number(m[1]) !== 100);
-    if (all.length !== 1 || !sizeInName.test(name) || otherMg) return [];
-    prices = all;
+    if (!sizeInName.test(name) || otherMg) return [];
+    if (each.length === 1) prices = each[0].prices;
+    else if (!each.length && all.length === 1) prices = all;
+    else return [];
     weight = REF_DEF[ref].size;
   }
   if (!prices?.length) return [];
@@ -874,6 +1048,30 @@ async function htmlCards(page: Page): Promise<HtmlCard[]> {
   ]);
 }
 
+/**
+ * The site's own store picker (Trinity, 2026-11-10): a dialog of radio
+ * options ("Select store: Trinity Glen - Peoria, IL") plus a confirm button
+ * ("SHOP PICKUP"); the choice is kept in a cookie. Opens the dialog when it is
+ * not already showing. Exactly one option must match, or nothing is picked.
+ */
+async function pickStore(page: Page, store: RegExp, timeoutMs: number): Promise<boolean> {
+  const radio = page.getByRole("radio", { name: store });
+  if ((await radio.count().catch(() => 0)) === 0) {
+    const opener = page.getByRole("button", { name: /store selector|select (?:a |your )?store|change store/i }).first();
+    if (!(await opener.count().catch(() => 0))) return false;
+    await opener.click({ timeout: 5000 });
+    await page.waitForTimeout(800);
+  }
+  if ((await radio.count().catch(() => 0)) !== 1) return false;
+  await radio.check({ timeout: 5000 });
+  await page.waitForTimeout(300);
+  const confirm = page.getByRole("button", { name: /^(?:shop pickup|shop now|start shopping|confirm|continue|select store)$/i }).first();
+  if (await confirm.count().catch(() => 0)) await confirm.click({ timeout: 5000 });
+  await page.waitForLoadState("networkidle", { timeout: timeoutMs }).catch(() => {});
+  await page.waitForTimeout(800);
+  return true;
+}
+
 async function readTreez(
   ctx: Ctx,
   source: MenuSource,
@@ -896,21 +1094,32 @@ async function readTreez(
     await page.waitForLoadState("networkidle", { timeout: Math.max(1000, Math.min(10_000, left(ctx) - 5000)) }).catch(() => {});
     if (new URL(page.url()).host !== host) throw new Error(`left the store's domain (${new URL(page.url()).host})`);
   };
-  // 1. The store's own menu: follow its link from the start page.
+  // 1. The store's own menu: follow its link from the start page — or, on the
+  //    current site (2026-11-10), pick the store in the site's own store picker.
+  let picked = false;
   if (source.storeLink) {
     const store = (await linksByText(page)).find((l) => source.storeLink!.test(l.text) && !/\/product/.test(new URL(l.href).pathname));
-    if (!store) throw new Error(`no link matching ${source.storeLink} on ${source.url} — store picker changed?`);
-    await go(store.href);
+    if (store) await go(store.href);
+    else {
+      picked = await pickStore(page, source.storeLink, Math.max(1000, Math.min(10_000, left(ctx) - 5000)));
+      if (!picked) throw new Error(`no link or store-picker option matching ${source.storeLink} on ${source.url} — store picker changed?`);
+    }
   }
-  // 2. Make sure the menu is this store's, not the other one's.
-  if (source.storeLabel) {
+  // 2. Make sure the menu is this store's, not the other one's. With the
+  //    picker, the selected store is shown on the store-selector button.
+  const checkStore = async (where: string) => {
+    if (!source.storeLabel) return;
     const top = await Promise.race([
-      page.evaluate(() => (document.body?.innerText || "").split("\n").slice(0, 60).join("\n")),
+      page.evaluate((usePicker) => {
+        const sel = usePicker ? (document.querySelector('button[aria-label*="store selector" i]') as HTMLElement | null) : null;
+        return sel ? sel.innerText || "" : (document.body?.innerText || "").split("\n").slice(0, 60).join("\n");
+      }, picked),
       new Promise<string>((r) => setTimeout(() => r(""), 5000)),
     ]);
-    if (!source.storeLabel.test(top)) throw new Error(`menu page does not name the store (${source.storeLabel}) near the top — not read, prices could be another store's`);
-    if (source.notLabel?.test(top)) throw new Error(`menu page names both stores near the top — can't tell which store's prices these are, not read`);
-  }
+    if (!source.storeLabel.test(top)) throw new Error(`${where} does not name the store (${source.storeLabel}) ${picked ? "as the selected store" : "near the top"} — not read, prices could be another store's`);
+    if (source.notLabel?.test(top)) throw new Error(`${where} names both stores ${picked ? "as the selected store" : "near the top"} — can't tell which store's prices these are, not read`);
+  };
+  await checkStore("menu page");
   // 3. The category pages the store's menu links to.
   const links = await linksByText(page);
   const plan: Array<[RefUnit, "flower" | "vape" | "edible", string | undefined]> = [];
@@ -927,12 +1136,25 @@ async function readTreez(
     // One category failing (slow page, budget) keeps what the others read.
     try {
       await go(href);
+      // The picked store lives in a cookie; make sure each category page still shows it.
+      if (picked) await checkStore(`${cat} page`);
       // Lazy-loaded grids: scroll a few times (bounded).
       for (let i = 0; i < 4 && left(ctx) > 10_000; i++) {
         await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight)).catch(() => {});
         await page.waitForTimeout(700);
       }
       const cards = await htmlCards(page);
+      // Paged grids (2026-11: 20 cards a page): follow the page's own "Next"
+      // link a couple of times while the store's budget allows.
+      for (let pg = 0; pg < 2 && cards.length && left(ctx) > 40_000; pg++) {
+        const here = new URL(page.url());
+        const next = (await linksByText(page)).find((l) => /^next$/i.test(l.text) && new URL(l.href).pathname === here.pathname && new URL(l.href).search !== here.search);
+        if (!next) break;
+        await go(next.href);
+        if (picked) await checkStore(`${cat} page`);
+        const seenHref = new Set(cards.map((c) => c.href));
+        cards.push(...(await htmlCards(page)).filter((c) => !seenHref.has(c.href)));
+      }
       if (!cards.length) missing.push(`${cat}: no product cards found`);
       for (const c of cards) raw.push(...htmlCardCandidates(c, ref, cat));
     } catch (e) {
@@ -977,6 +1199,7 @@ export async function captureStoreMenu(opts: {
   let sweedApi: string | null = null; // "https://<store host>/_api/" or the store embed's "…/_api/proxy/"
   let jointBusiness: string | null = null;
   const algolia: AlgoliaHandle[] = [];
+  const janeSmart: JaneSmartHandle[] = [];
   let janeDmerch = false;
   const onRequest = (r: import("playwright-core").Request) => {
     const u = r.url();
@@ -993,8 +1216,10 @@ export async function captureStoreMenu(opts: {
       } else if (ALGOLIA_HOST.test(new URL(u).host)) {
         const h = parseAlgoliaRequest(u, r.headers(), r.postData());
         if (h) algolia.push(h);
-      } else if (/(^|\.)dmerch\.iheartjane\.com$/.test(new URL(u).host)) {
+      } else if (DMERCH_HOST.test(new URL(u).host)) {
         janeDmerch = true;
+        const h = r.method() === "POST" ? parseJaneSmartRequest(u, r.postData()) : null;
+        if (h) janeSmart.push(h);
       }
     } catch {
       /* a malformed request never breaks the capture */
@@ -1023,14 +1248,20 @@ export async function captureStoreMenu(opts: {
 
     // Which reader: the expected platform when the page shows its handle,
     // else `alsoTry` when the page shows that one instead.
+    const bloomId = source.platform === "jane" || source.alsoTry === "jane" ? await bloomStoreId(page) : null;
+    // A Jane embed can fire its product search late (after a busy page never
+    // goes network-idle): give it a few more seconds before calling it missing.
+    if (source.platform === "jane" && bloomId == null) {
+      for (let i = 0; i < 20 && !algolia.length && !janeSmart.length && !dutchieUrl && !dutchieAny && left(ctx) > 20_000; i++) await page.waitForTimeout(500);
+    }
     const seen: Partial<Record<MenuPlatform, boolean>> = {
-      dutchie: !!(dutchieUrl || dutchieAny), sweed: !!sweedStore, joint: !!jointBusiness, jane: algolia.length > 0, treez: true,
+      dutchie: !!(dutchieUrl || dutchieAny), sweed: !!sweedStore, joint: !!jointBusiness, jane: algolia.length > 0 || janeSmart.length > 0 || bloomId != null, treez: true,
     };
     let platform: MenuPlatform = source.platform;
     if (!seen[platform] && source.alsoTry && seen[source.alsoTry]) platform = source.alsoTry;
     base.platform = platform;
     const seenList: string[] = (Object.keys(seen) as MenuPlatform[]).filter((k) => k !== "treez" && seen[k]);
-    if (janeDmerch) seenList.push("jane (dmerch only, no Algolia)");
+    if (janeDmerch && !seen.jane) seenList.push("jane (dmerch only, no product search)");
     const notSeen = (what: string) => `${what}; data calls this page did make: ${seenList.length ? seenList.join(", ") : "none of the known menu platforms"}`;
 
     let raw: MenuCandidate[] = [];
@@ -1055,11 +1286,28 @@ export async function captureStoreMenu(opts: {
     } else if (platform === "joint") {
       if (!(await opts.isAllowed(new URL("/wp-json/joint-ecommerce/v1/products/", page.url()).toString()))) return done({ status: "error", error: "robots.txt disallows the menu data path" });
       raw = await readJoint(ctx, jointBusiness);
+    } else if (platform === "jane" && (bloomId != null || janeSmart.length)) {
+      // 2026-11-10 shapes (no Algolia from the browser): Bloom or dmerch.
+      const want = source.janeStoreId;
+      const ids = bloomId != null ? [bloomId] : [...new Set(janeSmart.flatMap((h) => h.storeIds))];
+      let storeId: number | null = null;
+      if (want != null) {
+        if (!ids.includes(want)) return done({ status: "error", error: `Jane: page queried store ${ids.join("/")}, expected REC store ${want} — not read` });
+        storeId = want;
+      } else if (ids.length === 1) storeId = ids[0];
+      else return done({ status: "error", error: `Jane: page queried several stores (${ids.join(", ")}) — set janeStoreId for this store` });
+      if (bloomId != null) {
+        ({ raw, missing } = await readJaneBloom(ctx, storeId, opts.isAllowed));
+      } else {
+        const h = janeSmart.find((x) => x.storeIds.includes(storeId!))!;
+        if (!(await opts.isAllowed(h.url))) return done({ status: "error", error: "robots.txt disallows the menu data path" });
+        ({ raw, missing } = await readJaneDmerch(ctx, h, storeId));
+      }
     } else if (platform === "jane") {
       let handle: AlgoliaHandle | null = null;
       // Prefer a captured call that queried the expected store.
       const want = source.janeStoreId;
-      handle = algolia.find((h) => want != null && h.storeIds.includes(want)) || algolia.find((h) => h.storeIds.length) || algolia[0] || null;
+      handle =algolia.find((h) => want != null && h.storeIds.includes(want)) || algolia.find((h) => h.storeIds.length) || algolia[0] || null;
       if (!handle) {
         // No Algolia call seen: look for the key in the page's own config.
         const texts: string[] = [];
