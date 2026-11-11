@@ -26,7 +26,7 @@ Top searches PuffPrice showed for (Aug 9 – Nov 8): "dispensary deals near me" 
 ## Coverage (live database, Nov 10, 2026)
 
 - 26 licensed dispensaries in 9 Central Illinois cities (Bartonville, Morton and Washington have none).
-- 355 live deals statewide after Nov 10's cleanup; every one is a distinct deal.
+- 355 live deals across 20 Central Illinois stores after Nov 10's cleanup; every one is distinct (NOXX alone lists 131 menu specials).
 - Menu shelf prices: 8 stores read on Nov 10. The reader fixes merged Nov 10 bring it to 17 of 18 readable stores in a test run.
 - Deals come from each store's own website or official social only. No aggregators.
 
