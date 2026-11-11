@@ -90,10 +90,11 @@ export default async function ForDispensariesPage() {
         Shared lists show up to {STORE_CAP.cityList} deals per store with a link to the rest; your store page shows every one.
       </p>
 
-      <h2 className="gp-h2">Why it&apos;s free</h2>
+      <h2 className="gp-h2">What&apos;s free, and what isn&apos;t</h2>
       <p className="gp-p">
-        Shoppers fund it with <Link href="/upgrade">Pro</Link>. Stores can buy market reports later, never position.
-        That&apos;s the whole model, so there&apos;s nothing to sell you today.
+        Being listed is free, and nobody can buy position. What stores can buy is a monthly market report: how your deals and
+        shelf prices compare with every store within 15 miles. Your first one is free. Find your store below and open
+        &ldquo;Free market report&rdquo;.
       </p>
 
       <h2 className="gp-h2">Three free things that help</h2>
