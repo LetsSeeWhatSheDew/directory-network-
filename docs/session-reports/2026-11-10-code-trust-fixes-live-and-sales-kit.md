@@ -8,6 +8,8 @@ Matthew's go-ahead (Nov 10, evening): "MERGE to main, Deploy Production, DO sql 
 | --- | --- |
 | [LetsSeeWhatSheDew/directory-network-#15](https://github.com/LetsSeeWhatSheDew/directory-network-/pull/15) | One live row per deal; menu reader fixes (nuEra, Trinity, High Haven, Beyond Hello; Chrome browser ID on Jane pages); drive-thru re-check; honest "how we make money" copy; the market report route; CI pinned to ubuntu-24.04; sales kit |
 | [LetsSeeWhatSheDew/directory-network-#16](https://github.com/LetsSeeWhatSheDew/directory-network-/pull/16) | `/for-dispensaries` "What's free, and what isn't" (was "nothing to sell you today") |
+| [LetsSeeWhatSheDew/directory-network-#17](https://github.com/LetsSeeWhatSheDew/directory-network-/pull/17) | Price board pages through menu rows (PostgREST 1,000-row cap dropped most stores once 16 were read). `/cheapest/peoria` verified showing all 6 Peoria-area stores |
+| [LetsSeeWhatSheDew/directory-network-#18](https://github.com/LetsSeeWhatSheDew/directory-network-/pull/18) | Sales kit refresh (docs only) |
 
 Both were verified on production after Vercel showed Ready:
 - nuEra East Peoria shows 9 offers (was 42).
@@ -25,10 +27,16 @@ Both were verified on production after Vercel showed Ready:
 5. `master_listings.website` changes:
    - cloud-9-east-peoria → `https://www.cloud9dispensaries.shop/` (the old /menu URL returned 404)
    - aroma-hill-peoria → `https://shop.aromahillcannabis.com/peoria` (the old /peoria/ URL redirected to the homepage)
+6. nuera-pekin name `NuEra` → `nuEra Pekin`.
 
 ## Menu reader
 
-`~/puffprice-scraper` was pulled to main (d3dd273) and a full run was started by hand at 18:07 CST. See the log for results.
+`~/puffprice-scraper` was pulled to main (d3dd273) and a full `--apply` run was started by hand at 18:07 CST.
+
+- Menu prices: 16 of 17 stores, 3,327 items written.
+- Ivy Hall: its robots.txt disallows the menu data path, and that's respected.
+- Trinity on University: hit the run deadline; it goes first next run.
+- The three RISE/Bloom stores: deal pages blocked by Cloudflare; not bypassed.
 
 ## Sales kit
 
