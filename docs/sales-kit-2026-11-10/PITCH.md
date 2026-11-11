@@ -27,9 +27,10 @@ Then stop talking and let them read page 1.
 
 | If the report shows… | Say |
 | --- | --- |
-| They're #1 on shelf price (Aroma Hill: lowest eighth, cart and gummies within 15 miles) | "You're the cheapest in town on all three, and shoppers can see it. The report tells you the day someone undercuts you." |
-| A deal every day but menu not readable (Ivy Hall: 30 of 30 days) | "You run a deal every day, but shoppers comparing an eighth can't see your price. Send me your menu link and you're in the comparison." |
-| Few days with a deal against neighbors who run them daily | "The stores around you post a deal every day. Here's what they ran and how deep." |
+| They lead on something (Trinity on Glen: lowest eighth $22.77 and gummies $9.94 within 15 miles; Aroma Hill: lowest cart $33.21 and the deepest deal, 55%) | "You're the cheapest in town on this, and shoppers can see it. The report tells you the day someone undercuts you." |
+| A deal nearly every day but no prices in the comparison (Ivy Hall: 29 of 30 days) | "You run a deal almost every day, but shoppers comparing an eighth can't see your price." Ivy Hall's own site tells automated readers to stay out of the menu (robots.txt). So ask: "If you're OK with it, allow us to read your menu and you're in the comparison." |
+| A deal every day but priced high (Cookies Peoria Heights: eighth $31.83, #6 of 6; gummies #6 of 6) | "You run deals daily, but your shelf price is the highest around. Here's who's under you and by how much." |
+| Strong deals, middle prices (nuEra East Peoria: #1 typical deal at 30%, but eighth and cart #5 of 6) | "Your deals are the best around. Your everyday shelf price isn't. The report shows both." |
 | 0 deals found (Bloom Peoria, Trinity on University, Cloud 9) | "Shoppers searching your city see your neighbors' deals and nothing from you. Tell me where your deals live and they show up free." This is the free tier, not a sale. It fills the data. |
 
 ## Objections
@@ -57,10 +58,10 @@ The order follows the 30-day plan. Check ownership before you go (UNVERIFIED: I 
 
 | # | Store | Why them | Hook from their report |
 | --- | --- | --- | --- |
-| 1 | **Aroma Hill Peoria** | Already wins on price | Lowest eighth ($25.30), cart ($33.21) and gummies ($11.59) out the door within 15 miles; deepest deal nearby (55%) |
-| 2 | **Ivy Hall Dispensary** (Peoria) | Deal every day, invisible on price | 30 of 30 days with a deal; menu prices not readable yet |
-| 3 | **nuEra East Peoria** | Daily-deal store at the top of the list | 30 of 30 days, 30% typical, 9 live deals |
-| 4 | Cookies Peoria Heights | Daily deals, priced above neighbors | 30 of 30 days; eighth $50.93 vs $25.30 lowest nearby |
-| 5 | Trinity on Glen / University | Local, under-covered | Glen: 13 days; University: none found. A free-tier conversation first |
+| 1 | **Trinity on Glen** (Peoria) | Local, and the cheapest in town on two of three | Lowest eighth ($22.77) and gummies ($9.94) out the door within 15 miles; deals on 13 of 30 days |
+| 2 | **Aroma Hill Peoria** | Wins on cart price and deal depth | Lowest cart ($33.21); deepest deal nearby (55%); eighth #2 of 6 |
+| 3 | **Ivy Hall Dispensary** (Peoria) | Deal almost every day, invisible on price | 29 of 30 days with a deal; its robots.txt keeps its menu out of the price comparison |
+| 4 | **nuEra East Peoria** | Best deals, middle prices | #1 typical deal (30%); eighth and cart #5 of 6 |
+| 5 | Cookies Peoria Heights | Daily deals, highest shelf prices | Eighth $31.83 and gummies $16.67, both #6 of 6 |
 
-The prices above are from the menu reader's Nov 10 read and the reports generated the same day. Regenerate the PDFs before each visit (see `README.md`).
+The prices above are from the menu reader's full run on the evening of Nov 10 (16 of 17 readable stores) and the reports regenerated afterward. Regenerate the PDFs before each visit (see `README.md`).
