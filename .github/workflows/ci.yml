@@ -20,7 +20,7 @@ permissions:
 jobs:
   checks:
     name: Typecheck, lint, unit tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -38,7 +38,7 @@ jobs:
 
   smoke:
     name: Build + smoke (fixtures)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     env:
       CI: 'true'
@@ -74,7 +74,7 @@ jobs:
   # daily, so treat a red run here as a heads-up to look, not a gate.
   smoke-live:
     name: Smoke against live data (optional)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     continue-on-error: true
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository

@@ -38,6 +38,7 @@ export const DYNAMIC_SAMPLES: Record<string, string[]> = {
   "/dispensary/[slug]": ["/dispensary/noxx-east-peoria", "/dispensary/nuera-urbana"],
   "/for-dispensaries/[slug]": ["/for-dispensaries/noxx-east-peoria"],
   "/for-dispensaries/[slug]/card": ["/for-dispensaries/noxx-east-peoria/card"],
+  "/for-dispensaries/[slug]/market-report": ["/for-dispensaries/noxx-east-peoria/market-report"],
   "/l/[id]": ["/l/noxx-east-peoria"],
   "/cheapest/[city]": ["/cheapest/peoria", "/cheapest/champaign"],
   "/cheapest/[city]/[item]": ["/cheapest/peoria/eighth", "/cheapest/normal/edibles", "/cheapest/springfield/vape-cart", "/cheapest/morton/eighth"],

@@ -57,7 +57,7 @@ const FAQ: { q: string; a: string; link?: { href: string; label: string } }[] = 
   },
   {
     q: "How does PuffPrice make money?",
-    a: "Shoppers fund it with Pro, an optional $0.99-a-month plan for shoppers. Later, stores may be able to buy market reports. Nobody will ever be able to buy position.",
+    a: "Shoppers never pay to see deals. Stores can buy a market report: a monthly read on how your deals stack up against the stores around you, with the first one free. Being listed stays free, and nobody can buy position, including you.",
   },
 ];
 

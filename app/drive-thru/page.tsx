@@ -11,7 +11,7 @@ import { storeImageUrl } from "../../lib/storeImage";
 import { getRegionStores, getFeatureRows, featuresBySlug } from "../../lib/waysToBuy";
 
 export const revalidate = 3600;
-const LAST_CHECKED = "Sept 23, 2026";
+const LAST_CHECKED = "Nov 10, 2026";
 
 export const metadata: Metadata = {
   title: "Drive-Thru Dispensaries in Central Illinois (Peoria, Bloomington, Champaign, Springfield)",
@@ -41,7 +41,7 @@ export default async function DriveThruPage() {
       lede={
         open.length > 0
           ? <>Illinois made cannabis drive-thrus legal on June 12, 2026. {open.length} Central Illinois {open.length === 1 ? "store has" : "stores have"} one open — listed first below.</>
-          : <>Illinois made cannabis drive-thrus legal on June 12, 2026. As of {LAST_CHECKED}, none of the {stores.length} Central Illinois stores we track has opened one yet. The day one does, it goes at the top of this page.</>
+          : <>Illinois made cannabis drive-thrus legal on June 12, 2026. As of {LAST_CHECKED}, none of the {stores.length} Central Illinois stores we track has opened one yet. The day one does, it goes at the top of this page. <span className="gp-src">(We check each store&apos;s own website. This time three couldn&apos;t be read: both Trinity stores in Peoria sit behind an age-gate, and The Dispensary in Champaign has no site.)</span></>
       }
       jsonLd={{ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: FAQ.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) }}
     >
@@ -81,6 +81,7 @@ export default async function DriveThruPage() {
 
       <h2 className="gp-h2">Where Illinois drive-thrus are already open</h2>
       <div className="gp-timeline">
+        <div><div className="when">Oct 27, 2026</div>Peoria&apos;s City Council voted 7–4 to put off the drive-thru decision for two weeks. Members were split between allowing drive-thrus by special use permit and banning them. <span className="gp-src">— <a href="https://www.wcbu.org/local-news/2026-10-28/peoria-city-council-indecisive-on-drive-through-cannabis-service" rel="nofollow noopener" target="_blank">WCBU</a>, <a href="https://www.25newsnow.com/2026/10/28/council-delays-action-drive-thru-cannabis-dispensaries-peoria/" rel="nofollow noopener" target="_blank">25 News Now</a></span></div>
         <div><div className="when">Oct 1, 2026</div>Peoria&apos;s Planning and Zoning Commission recommended that any dispensary wanting a drive-thru get special use approval: a public hearing, then a City Council vote. Stores that already have a permit would need to amend it. The City Council decides next. <span className="gp-src">— <a href="https://www.25newsnow.com/2026/10/03/peoria-weighing-how-regulate-cannabis-dispensaries-offering-drive-thru-curbside-pickup/" rel="nofollow noopener" target="_blank">25 News Now</a></span></div>
         <div><div className="when">Sept 4, 2026</div>Terrabis in Grayville (near I-64) opened what it called Illinois&apos; first dual-window dispensary drive-thru. <span className="gp-src">— <a href="https://greenwaymagazine.com/2026/09/04/terrabis-opens-illinois-first-dual-window-drive-thru-dispensary-in-grayville/" rel="nofollow noopener" target="_blank">Greenway Magazine</a></span></div>
         <div><div className="when">Sept 2026</div>Terrabis announced a drive-thru at its Woodstock store (McHenry County), set to open by the end of September, and plans one at each of its five Illinois stores by year-end. <span className="gp-src">— <a href="https://www.prnewswire.com/news-releases/terrabis-to-open-mchenry-countys-first-dispensary-drive-thru-in-woodstock-302873322.html" rel="nofollow noopener" target="_blank">Terrabis via PR Newswire</a></span></div>
@@ -101,7 +102,7 @@ export default async function DriveThruPage() {
         <li><b>IDFPR reviews the floor plan, security plan and procedures.</b> <span className="gp-src">(<a href="https://www.shawlocal.com/sauk-valley/2026/09/13/dixon-council-clears-way-for-cannabis-drive-thru/" rel="nofollow noopener" target="_blank">Shaw Local</a>)</span></li>
         <li><b>Time and money.</b> The law is new, and September went to adding medical sales.</li>
       </ol>
-      <p className="gp-p"><b>Watching the city councils:</b> as of {LAST_CHECKED} we haven&apos;t seen a drive-thru ordinance on the agenda in Peoria, East Peoria, Peoria Heights, Pekin, Bloomington, Normal, Champaign, Urbana or Springfield. The first one to show up goes here — sign up above and you&apos;ll hear it first.</p>
+      <p className="gp-p"><b>Watching the city councils:</b> Peoria is the only one of our nine cities where a drive-thru rule has reached the City Council (put off on Oct 27; see above). As of {LAST_CHECKED} we haven&apos;t seen one in the news for East Peoria, Peoria Heights, Pekin, Bloomington, Normal, Champaign, Urbana or Springfield. The next one goes here — sign up above and you&apos;ll hear it first.</p>
 
       <h2 className="gp-h2">Fastest pickup in Central Illinois today</h2>
       <p className="gp-p">No drive-thru yet — but these stores let you order ahead or pick up curbside, which is the closest thing.</p>

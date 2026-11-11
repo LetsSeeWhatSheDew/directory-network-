@@ -185,6 +185,10 @@ function buildDispensaryResults(summary: ScraperSummary): DispensaryResult[] {
     const r = ensure(a.slug);
     r.deals_deactivated += 1;
   }
+  for (const d of summary.deals_deduped ?? []) {
+    const r = ensure(d.slug);
+    r.deals_deactivated += 1;
+  }
 
   return [...bySlug.values()].sort((a, b) => a.slug.localeCompare(b.slug));
 }

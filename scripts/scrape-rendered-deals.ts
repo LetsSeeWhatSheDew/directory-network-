@@ -406,7 +406,33 @@ function markMenuAttempted(state: MenuOrderState, slug: string): void {
   }
 }
 
+// Jane's embedded menus (High Haven, Beyond Hello) run no product search when
+// the browser calls itself "HeadlessChrome". Matthew decided on 2026-11-10 to
+// read those menus with the same Chrome's ordinary browser ID: the real
+// version string with only the word "Headless" removed. Nothing else is
+// disguised, and pages that show a bot challenge are still skipped.
+async function janeContext(ctx: BrowserContext): Promise<BrowserContext> {
+  const browser = ctx.browser();
+  if (!browser) return ctx;
+  const probe = await ctx.newPage();
+  const ua = (await probe.evaluate(() => navigator.userAgent)).replace("HeadlessChrome", "Chrome");
+  await probe.close();
+  const jctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, locale: "en-US", timezoneId: "America/Chicago", userAgent: ua });
+  jctx.setDefaultTimeout(ACTION_TIMEOUT_MS);
+  jctx.setDefaultNavigationTimeout(NAV_TIMEOUT_MS);
+  return jctx;
+}
+
 async function menuPhase(ctx: BrowserContext): Promise<void> {
+  let jctx: BrowserContext | null = null;
+  try {
+    await menuPhaseInner(ctx, async () => (jctx ??= await janeContext(ctx)));
+  } finally {
+    if (jctx) await (jctx as BrowserContext).close().catch(() => {});
+  }
+}
+
+async function menuPhaseInner(ctx: BrowserContext, getJaneCtx: () => Promise<BrowserContext>): Promise<void> {
   const orderState = readMenuOrderState();
   const slugs = orderMenuStores(Object.keys(MENU_SOURCES).filter((s) => (SLUG ? slugMatches(s) : true)), orderState);
   if (!slugs.length) return;
@@ -428,7 +454,8 @@ async function menuPhase(ctx: BrowserContext): Promise<void> {
     let page: Page | null = null;
     let r: StoreMenuResult;
     try {
-      page = await withTimeout(ctx.newPage(), ACTION_TIMEOUT_MS, "newPage");
+      const pageCtx = MENU_SOURCES[slug].platform === "jane" ? await getJaneCtx() : ctx;
+      page = await withTimeout(pageCtx.newPage(), ACTION_TIMEOUT_MS, "newPage");
       page.setDefaultTimeout(ACTION_TIMEOUT_MS);
       page.setDefaultNavigationTimeout(NAV_TIMEOUT_MS);
       r = await withTimeout(
