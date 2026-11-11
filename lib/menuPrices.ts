@@ -153,24 +153,37 @@ export type CheapestBoard = {
 
 const EMPTY: CheapestBoard = { byRef: { eighth: [], cart_1g: [], gummies_100mg: [] }, stores: 0, newest: null, oldest: null };
 
+// PostgREST caps every response at 1,000 rows (the project's max-rows), so a
+// single request silently dropped most stores once 16 menus were read at once
+// (Nov 10: 3,333 rows). Read in pages until a short page comes back.
+const PAGE = 1000;
+const MAX_PAGES = 20;
+
 async function readRows(key: string): Promise<MenuRow[] | null> {
   const since = new Date(Date.now() - MENU_FRESH_HOURS * 3600_000).toISOString();
-  const url =
+  const base =
     `${SUPABASE_URL}/rest/v1/latest_menu_items` +
     `?select=snapshot_id,dispensary_id,scraped_at,raw_name,raw_brand,raw_weight,raw_price,raw_sale_price,is_on_sale,price_pretax,price_out_the_door,raw_payload` +
     `&raw_payload->>puffprice_ref=in.(${REF_UNITS.join(",")})` +
     `&scraped_at=gte.${encodeURIComponent(since)}` +
-    `&price_out_the_door=not.is.null&limit=5000`;
+    `&price_out_the_door=not.is.null` +
+    `&order=snapshot_id.asc,raw_name.asc,raw_weight.asc,price_out_the_door.asc`;
+  const out: MenuRow[] = [];
   try {
-    const r = await fetch(url, {
-      headers: { apikey: key, Authorization: `Bearer ${key}` },
-      next: { revalidate: 900, tags: ["menu-prices"] },
-    });
-    if (!r.ok) return null;
-    const j = await r.json();
-    return Array.isArray(j) ? j : null;
+    for (let page = 0; page < MAX_PAGES; page++) {
+      const r = await fetch(`${base}&limit=${PAGE}&offset=${page * PAGE}`, {
+        headers: { apikey: key, Authorization: `Bearer ${key}` },
+        next: { revalidate: 900, tags: ["menu-prices"] },
+      });
+      if (!r.ok) return page === 0 ? null : out;
+      const j = await r.json();
+      if (!Array.isArray(j)) return page === 0 ? null : out;
+      out.push(...(j as MenuRow[]));
+      if (j.length < PAGE) break;
+    }
+    return out;
   } catch {
-    return null;
+    return out.length ? out : null;
   }
 }
 
