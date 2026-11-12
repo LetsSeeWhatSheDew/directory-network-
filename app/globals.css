@@ -981,7 +981,8 @@ html[data-daypart="night"] .bg-green-600, html[data-daypart="night"] .bg-green-7
 .gp-cta span, .tw-cta span, .gp-cta p, .tw-cta p { color: var(--pp-body) !important; }
 
 /* Section titles breathe in serif, like the homepage. Card-level h3/h4 stay sans. */
-h2:not([data-keep-font]):not(.pp-footer-heading) {
+h2:not([data-keep-font]):not(.pp-footer-heading),
+h3:not([data-keep-font]) {
   font-family: var(--font-breath) !important; font-weight: 400 !important; letter-spacing: -.01em !important;
 }
 
@@ -1254,7 +1255,8 @@ html.pp-away .pp-lp::before { animation-play-state: paused !important; }
 }
 body { background: var(--pp-paper); color: var(--pp-ink); }
 h1:not([data-keep-font]),
-h2:not([data-keep-font]):not(.pp-footer-heading) {
+h2:not([data-keep-font]):not(.pp-footer-heading),
+h3:not([data-keep-font]) {
   font-family: var(--font-gold-display), "Fraunces", Georgia, serif !important;
   font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
   font-weight: 700 !important;
@@ -1267,3 +1269,13 @@ h1 em, .bh-h1 em, h2 em {
 }
 /* Retired Breathe ambience: no orb glow, haze or fireflies anywhere. */
 .pp-haze, .pp-fireflies, .pp-firefly, .pp-plume, .pp-plume-b { display: none !important; }
+/* Gold Leaf: the Morning Haze photo-less bands become a slim forest band
+   with the gold leaf watermark, so legacy pages open like the rest. */
+.pp-band { background: var(--pp-canopy) url("/gold-leaf-band.svg") no-repeat right -40px center / auto 140% !important; max-height: 120px; }
+.pp-band > div, .bh-haze > *, .hz-sky, .hz-sun, .hz-river, .hz-w, .dk-mist { display: none !important; }
+.bh-band.bh-haze { background: var(--pp-canopy) !important; }
+:root { --pp-haze: #FFFAF0; --pp-haze-border: #E6D8BB; }
+/* One type system: prices and labels in the UI face with tabular numbers,
+   not a terminal font. */
+:root { --font-mono: var(--font-body-loaded), "Instrument Sans", system-ui, sans-serif; }
+.font-mono, [class*="mono"] { font-variant-numeric: tabular-nums; }
