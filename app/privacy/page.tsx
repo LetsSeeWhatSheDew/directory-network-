@@ -5,8 +5,6 @@
 
 import Link from "next/link";
 import type { Metadata } from "next";
-import Nav from "../components/Nav";
-import Footer from "../components/Footer";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -19,7 +17,6 @@ export default function PrivacyPage() {
   return (
     <div style={{ fontFamily: "var(--font-body)", background: "var(--pp-paper)", minHeight: "100vh", color: "var(--pp-ink)" }}>
       <div>
-        <Nav variant="light" />
         <header style={{ color: "var(--pp-ink)", padding: "clamp(2rem, 5vw, 4rem) clamp(1rem, 4vw, 2rem)", textAlign: "center", position: "relative", zIndex: 2 }}>
           <p className="pp-eyebrow" style={{ color: "var(--pp-muted)", marginBottom: 10 }}>Legal</p>
           <h1 style={{ fontFamily: "var(--font-body)", fontWeight: 800, fontSize: "clamp(2rem, 5vw, 3rem)", letterSpacing: "-0.035em", lineHeight: 1.1, marginBottom: 12, color: "var(--pp-ink)" }}>
@@ -129,7 +126,6 @@ export default function PrivacyPage() {
           See also: <Link href="/terms" style={link}>Terms of Service</Link>
         </p>
       </section>
-      <Footer />
     </div>
   );
 }

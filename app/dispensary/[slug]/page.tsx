@@ -27,7 +27,6 @@ import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
 import { cleanDealTitle, amountOf, nearestExhale, stripStaleDealClaims } from "../../../lib/exhale";
-import ExhaleCard from "../../components/ExhaleCard";
 import EmptyBreath from "../../components/EmptyBreath";
 import OtdLine from "../../components/OtdLine";
 import WatchControl from "../../components/WatchControl";

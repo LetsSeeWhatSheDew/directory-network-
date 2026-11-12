@@ -21,8 +21,6 @@ import { isDealActiveNow, describeActiveDays } from "../../../lib/dealActiveFilt
 import { cleanDealTitle, amountOf, type ExDeal } from "../../../lib/exhale";
 import { otdFor, usd } from "../../../lib/otd";
 import TrackPage from "../../components/TrackPage";
-import ArrivalExhale from "../../components/ArrivalExhale";
-import { exhaleSize } from "../../../lib/motion";
 
 export const revalidate = 60;
 
@@ -456,10 +454,6 @@ export default async function DealPage({
           )}
           {exhaleBig ? (
             <div className="sv-exhale">
-              <ArrivalExhale
-                targetId="pp-arrive"
-                size={exhaleSize(dollars != null ? { dollars } : { percent: exAmt?.kind === "percent" ? exAmt.value : null })}
-              />
               <div className="sv-label">You&rsquo;re saving{exhaleUpTo ? " up to" : ""}</div>
               <div className="sv-amt" id="pp-arrive">
                 <b>{exhaleBig}</b>

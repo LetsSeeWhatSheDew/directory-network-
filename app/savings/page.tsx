@@ -1,5 +1,3 @@
-import Nav from "../components/Nav";
-import Footer from "../components/Footer";
 import SavingsCalculator from "./SavingsCalculator";
 
 import { brand } from "@/lib/brand";
@@ -22,7 +20,6 @@ export default function SavingsPage() {
         .sub{font-size:1rem;color:var(--pp-body);font-family:var(--font-body);line-height:1.6;margin-bottom:28px;max-width:520px}
       `}</style>
 
-      <Nav variant="light" />
 
       <main className="wrap">
         <div className="eyebrow">Savings calculator</div>
@@ -34,7 +31,6 @@ export default function SavingsPage() {
         </p>
         <SavingsCalculator />
       </main>
-      <Footer />
     </>
   );
 }

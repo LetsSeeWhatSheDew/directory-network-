@@ -5,7 +5,6 @@
 
 import Link from "next/link";
 import { Band } from "../components/gold/Kit";
-import Footer from "../components/Footer";
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -208,7 +207,6 @@ export default async function DispensariesIndexPage() {
         )}
       </section>
 
-      <Footer />
     </div>
   );
 }

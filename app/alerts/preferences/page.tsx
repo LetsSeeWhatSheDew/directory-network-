@@ -1,8 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Nav from "../../components/Nav";
-import Footer from "../../components/Footer";
 import { useState } from "react";
 
 export default function AlertPreferencesPage() {
@@ -90,7 +88,6 @@ export default function AlertPreferencesPage() {
         .msg.ok{background:var(--pp-best-tint);color:var(--pp-signal);border:1px solid var(--pp-best-border)}
       `}</style>
 
-      <Nav variant="light" />
 
       <div className="wrap">
         <h1>Deal alert preferences</h1>
@@ -169,7 +166,6 @@ export default function AlertPreferencesPage() {
           {saved && <div className="msg ok">Saved. You&apos;re all set.</div>}
         </form>
       </div>
-      <Footer />
     </>
   );
 }

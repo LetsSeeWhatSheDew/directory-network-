@@ -1,6 +1,4 @@
 import Link from "next/link";
-import Nav from "../../../components/Nav";
-import Footer from "../../../components/Footer";
 
 export const metadata = {
   title: "Deal submitted — thanks!",
@@ -34,7 +32,6 @@ export default async function ConfirmedPage({
         .cta-secondary:hover{border-color:var(--pp-muted)}
       `}</style>
 
-      <Nav variant="light" />
 
       <div className="wrap">
         <div className="eyebrow">✓ Submitted</div>
@@ -58,7 +55,6 @@ export default async function ConfirmedPage({
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 }

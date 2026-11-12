@@ -7,7 +7,6 @@ import Link from "next/link";
 import { Band, HeroTicket, StoreDeals } from "../../components/gold/Kit";
 import { CategoryArt } from "../../components/gold/Art";
 import { amountOf, saveLabel, cleanDealTitle, directionsHref, EXHALE_LINES, nearestExhale, milesLabel } from "../../../lib/exhale";
-import ExhaleCard from "../../components/ExhaleCard";
 import EmptyBreath from "../../components/EmptyBreath";
 import OtdLine from "../../components/OtdLine";
 import TrustLine from "../../components/TrustLine";

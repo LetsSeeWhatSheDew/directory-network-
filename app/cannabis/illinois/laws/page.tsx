@@ -1,7 +1,5 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import Nav from "../../../components/Nav";
-import Footer from "../../../components/Footer";
 import WatchControl from "../../../components/WatchControl";
 import { CENTRAL_IL_CITIES } from "../../../../lib/constants/regions";
 
@@ -95,7 +93,6 @@ export default function IllinoisLawsPage() {
         @media (max-width: 768px) { .laws-nav { padding: 14px 20px; } .laws-breadcrumb { padding: 10px 20px; } .laws-inner { padding: 24px 16px 60px; } }
       `}</style>
       <div className="laws-root">
-        <Nav variant="light" />
         <div className="laws-breadcrumb">
           <Link href="/">Home</Link><span>›</span>
           <Link href="/guides">Guides</Link><span>›</span>
@@ -199,7 +196,6 @@ export default function IllinoisLawsPage() {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 }

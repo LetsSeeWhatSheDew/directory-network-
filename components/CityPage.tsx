@@ -1,8 +1,6 @@
 import Link from "next/link";
 import type { CityListing } from "@/lib/fetchCityListings";
 import CityEmailCapture from "@/app/components/CityEmailCapture";
-import Nav from "@/app/components/Nav";
-import Footer from "@/app/components/Footer";
 import HazeBand from "@/app/components/HazeBand";
 import { MarkC } from "@/app/components/Logo";
 import { getNearbyCities } from "@/config/cities/illinois/geo";
@@ -218,7 +216,6 @@ export default function CityPage({ config, listings = [] }: Props) {
       <main className="min-h-screen text-(--pp-body)">
         {/* ---- Header / Nav ---- */}
         <div className="relative z-10">
-          <Nav />
         </div>
 
         {/* ---- Breadcrumbs ---- */}
@@ -566,7 +563,6 @@ export default function CityPage({ config, listings = [] }: Props) {
           </div>
         </section>
       </main>
-      <Footer />
     </>
   );
 }

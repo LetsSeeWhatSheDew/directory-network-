@@ -1,6 +1,4 @@
 import Link from "next/link";
-import Nav from "../components/Nav";
-import Footer from "../components/Footer";
 import type { Metadata } from "next";
 import { getAllBrands } from "../../lib/brands";
 import { brand as site } from "../../lib/brand";
@@ -46,7 +44,6 @@ export default async function BrandIndex() {
         .stub-foot a:hover{text-decoration:underline}
       `}</style>
 
-      <Nav variant="light" />
 
       <div className="wrap">
         <div className="eyebrow">Brands</div>
@@ -82,7 +79,6 @@ export default async function BrandIndex() {
           </ul>
         )}
       </div>
-      <Footer />
     </>
   );
 }

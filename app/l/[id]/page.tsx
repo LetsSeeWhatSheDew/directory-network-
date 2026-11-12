@@ -5,8 +5,6 @@ import { storeImageUrl } from "@/lib/storeImage";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { MapPin, Phone } from "lucide-react";
-import Nav from "../../components/Nav";
-import Footer from "../../components/Footer";
 import ClaimForm from "../../components/ClaimForm";
 import RecentlyViewedTracker from "../../components/RecentlyViewedTracker";
 import ShareDealButton from "../../components/ShareDealButton";
@@ -616,7 +614,6 @@ export default async function ListingPage({
       `}</style>
 
       <div className="dn-root">
-        <Nav variant="light" />
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(1rem, 4vw, 2rem) 4px", fontSize: 13 }}>
           <Link href={backHref} style={{ color: "var(--color-gray-500, var(--pp-muted))", textDecoration: "none", fontFamily: "var(--font-body)", fontWeight: 500 }}>
             {backLabel}
@@ -1071,7 +1068,6 @@ export default async function ListingPage({
         </div>
 
       </div>
-      <Footer />
     </>
   );
 }

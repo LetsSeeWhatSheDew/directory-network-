@@ -1,6 +1,4 @@
 import Link from "next/link";
-import Nav from "../../components/Nav";
-import Footer from "../../components/Footer";
 import ClaimForm from "./ClaimForm";
 
 const SUPABASE_URL =
@@ -58,7 +56,6 @@ export default async function ClaimPage({ params }: { params: Promise<{ slug: st
         .city{font-size:.88rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:24px}
       `}</style>
 
-      <Nav variant="light" />
 
       <div className="wrap">
         <div className="eyebrow">Claim listing</div>
@@ -66,7 +63,6 @@ export default async function ClaimPage({ params }: { params: Promise<{ slug: st
         <div className="city">{city ? `${city}, IL` : "Illinois"}</div>
         <ClaimForm slug={slug} />
       </div>
-      <Footer />
     </>
   );
 }

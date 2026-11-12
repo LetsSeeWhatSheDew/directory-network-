@@ -1,6 +1,4 @@
 import Link from "next/link";
-import Nav from "../components/Nav";
-import Footer from "../components/Footer";
 import {
   STATE_EXCISE_RATES,
   STATE_SALES_TAX,
@@ -159,7 +157,6 @@ export default function IllinoisCannabisTaxPage() {
         .footer-copy{font-size:.74rem;color:var(--pp-muted);font-family:var(--font-ui, system-ui, sans-serif)}
       `}</style>
 
-      <Nav variant="light" />
 
       <main className="wrap">
         <p className="eyebrow">Pricing</p>
@@ -347,7 +344,6 @@ export default function IllinoisCannabisTaxPage() {
         </p>
       </main>
 
-      <Footer />
     </>
   );
 }

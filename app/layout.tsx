@@ -8,7 +8,6 @@ import { GoldHeader, GoldFooter } from "./components/gold/Chrome";
 import UtmCapture from "./components/UtmCapture";
 import TrackListener from "./components/TrackListener";
 import CityPickerHost from "./components/CityPickerHost";
-import ExhaleLayer from "./components/ExhaleLayer";
 import { brand } from "../lib/brand";
 import { PP_PACE, PACE_SCRIPT } from "../lib/motion";
 
@@ -106,7 +105,6 @@ export default function RootLayout({
         <UtmCapture />
         <TrackListener />
         <CityPickerHost />
-        <ExhaleLayer />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
           strategy="lazyOnload"

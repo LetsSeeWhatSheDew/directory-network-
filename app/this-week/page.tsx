@@ -2,8 +2,6 @@
 // Rolling 7-day report built from the daily deal log (deal_observations).
 import type { Metadata } from "next";
 import Link from "next/link";
-import Nav from "../components/Nav";
-import Footer from "../components/Footer";
 import TrustLine from "../components/TrustLine";
 import StoreAvatar from "../components/StoreAvatar";
 import WeeklySignup from "../components/WeeklySignup";
@@ -55,7 +53,6 @@ export default async function ThisWeekPage() {
 
   return (
     <>
-      <Nav variant="light" />
       <style>{`
         .tw-wrap{max-width:880px;margin:0 auto;padding:12px clamp(1rem,4vw,2rem) 48px;font-family:var(--font-body);color:var(--pp-ink)}
         .tw-eyebrow{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-muted)}
@@ -158,7 +155,6 @@ export default async function ThisWeekPage() {
         </div>
       </main>
       {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />}
-      <Footer />
     </>
   );
 }

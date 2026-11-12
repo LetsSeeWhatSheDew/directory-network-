@@ -3,7 +3,6 @@
 // notFound() call inside a server component.
 
 import Link from "next/link";
-import Footer from "./components/Footer";
 
 export const metadata = {
   title: "Page not found",
@@ -44,7 +43,6 @@ export default function NotFound() {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 }

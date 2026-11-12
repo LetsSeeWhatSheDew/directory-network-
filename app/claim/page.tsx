@@ -5,8 +5,6 @@
 // general inquiry with listing_slug="_generic_" — admin reconciles.
 
 import Link from "next/link";
-import Nav from "../components/Nav";
-import Footer from "../components/Footer";
 import type { Metadata } from "next";
 import { brand } from "../../lib/brand";
 import GenericClaimForm from "./GenericClaimForm";
@@ -55,7 +53,6 @@ export default function ClaimLandingPage() {
         @media(max-width:600px){.wrap{padding:28px 14px}}
       `}</style>
 
-      <Nav variant="light" />
 
       <main className="wrap">
         <div className="eyebrow">For dispensary owners</div>
@@ -105,7 +102,6 @@ export default function ClaimLandingPage() {
         {/* Fallback path — typed name + contact info, admin reconciles */}
         <GenericClaimForm />
       </main>
-      <Footer />
     </>
   );
 }

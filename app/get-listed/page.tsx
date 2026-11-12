@@ -1,6 +1,4 @@
 // app/get-listed/page.tsx
-import Nav from "../components/Nav";
-import Footer from "../components/Footer";
 import { GetListedForm } from "../components/GetListedForm";
 
 import { brand } from "@/lib/brand";
@@ -14,7 +12,6 @@ export const metadata = {
 export default function GetListedPage() {
   return (
     <main className="min-h-screen" style={{ background: "var(--pp-paper)", color: "var(--pp-ink)" }}>
-      <Nav variant="light" />
 
       <header style={{ padding: "clamp(2rem, 4vw, 3rem) clamp(1rem, 4vw, 2rem) 0", maxWidth: 880, margin: "0 auto" }}>
         <p className="pp-eyebrow" style={{ marginBottom: 12 }}>For dispensaries</p>
@@ -31,7 +28,6 @@ export default function GetListedPage() {
         </section>
       </div>
 
-      <Footer />
     </main>
   );
 }

@@ -1,7 +1,5 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import Nav from "../../../components/Nav";
-import Footer from "../../../components/Footer";
 
 export const metadata: Metadata = {
   title: "First Time Buying Cannabis in Illinois — Complete Beginner's Guide",
@@ -108,7 +106,6 @@ export default function FirstTimeGuidePage() {
       `}</style>
 
       <div className="guide-root">
-        <Nav variant="light" />
 
         <div className="guide-breadcrumb">
           <Link href="/">Home</Link>
@@ -343,7 +340,6 @@ export default function FirstTimeGuidePage() {
         </div>
 
       </div>
-      <Footer />
     </>
   );
 }

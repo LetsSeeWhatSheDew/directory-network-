@@ -4,7 +4,6 @@
 // at this stage.
 
 import Link from "next/link";
-import Footer from "../components/Footer";
 import AlertsCalculator from "./AlertsCalculator";
 import ProCheckoutButton from "./ProCheckoutButton";
 import WeeklySignup from "../components/WeeklySignup";
@@ -218,7 +217,6 @@ export default async function AlertsPage() {
       <section className="calc">
         <AlertsCalculator />
       </section>
-      <Footer />
     </>
   );
 }

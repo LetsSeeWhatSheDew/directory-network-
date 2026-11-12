@@ -2,8 +2,6 @@
 // Thank-you page after a successful Stripe Checkout. Single-tier Pro model.
 
 import Link from "next/link";
-import Nav from "../../components/Nav";
-import Footer from "../../components/Footer";
 
 export const metadata = {
   // Post-action confirmation: useful to the person, not to search.
@@ -21,7 +19,6 @@ export default async function UpgradeSuccessPage({
 
   return (
     <div style={{ fontFamily: "var(--font-body)", minHeight: "100vh", color: "var(--pp-ink)", display: "flex", flexDirection: "column" }}>
-      <Nav variant="light" />
 
       <main style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 24px" }}>
         <div style={{ maxWidth: 560, textAlign: "center" }}>
@@ -79,7 +76,6 @@ export default async function UpgradeSuccessPage({
           </p>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

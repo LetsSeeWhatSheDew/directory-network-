@@ -9,8 +9,6 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
-import Nav from "../../components/Nav";
-import Footer from "../../components/Footer";
 import SubmitForm from "./SubmitForm";
 import { brand } from "../../../lib/brand";
 
@@ -91,7 +89,6 @@ export default async function SubmitDealPage() {
         .trust strong{color:var(--pp-ink)}
       `}</style>
 
-      <Nav variant="light" />
 
       <main className="wrap">
         <div className="eyebrow">For dispensaries</div>
@@ -108,7 +105,6 @@ export default async function SubmitDealPage() {
 
         <SubmitForm listings={listings} />
       </main>
-      <Footer />
     </>
   );
 }

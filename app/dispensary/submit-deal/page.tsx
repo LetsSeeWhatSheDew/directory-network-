@@ -11,8 +11,6 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import DispensaryAutocomplete from "./DispensaryAutocomplete";
-import Footer from "../../components/Footer";
-import Nav from "../../components/Nav";
 
 type FormState = {
   dispensary_name: string;
@@ -127,7 +125,6 @@ export default function SubmitDealPage() {
 
   return (
     <div style={{ fontFamily: "var(--font-body)", minHeight: "100vh", color: "var(--pp-ink)" }}>
-      <Nav variant="light" />
 
       <div style={{ maxWidth: 680, margin: "0 auto", padding: "48px 24px" }}>
         <h1 style={{ fontSize: "2rem", marginBottom: 8, letterSpacing: "-0.02em" }}>Submit your deal</h1>
@@ -299,7 +296,6 @@ export default function SubmitDealPage() {
           </p>
         </form>
       </div>
-      <Footer />
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import { Band } from "../components/gold/Kit";
-import Footer from "../components/Footer";
 
 import { brand } from "@/lib/brand";
 const OG_DESC =
@@ -113,7 +112,6 @@ export default function AboutPage() {
         </div>
 
       </main>
-      <Footer />
     </>
   );
 }

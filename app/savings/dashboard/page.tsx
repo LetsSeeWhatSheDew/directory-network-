@@ -1,8 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Nav from "../../components/Nav";
-import Footer from "../../components/Footer";
 import LoadingPuff from "../../components/LoadingPuff";
 import { useEffect, useMemo, useState } from "react";
 
@@ -100,7 +98,6 @@ export default function SavingsDashboard() {
         .cta:hover{filter:brightness(.97)}
       `}</style>
 
-      <Nav variant="light" />
 
       <div className="wrap">
         <div className="eyebrow">My savings</div>
@@ -170,7 +167,6 @@ export default function SavingsDashboard() {
           </>
         )}
       </div>
-      <Footer />
     </>
   );
 }

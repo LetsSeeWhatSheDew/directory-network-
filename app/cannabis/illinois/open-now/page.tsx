@@ -3,8 +3,6 @@ export const revalidate = 300; // revalidate every 5 minutes — hours change th
 import { Metadata } from "next";
 import { storeImageUrl } from "@/lib/storeImage";
 import Link from "next/link";
-import Nav from "../../../components/Nav";
-import Footer from "../../../components/Footer";
 import { nowInCT, isOpen, formatTime as formatHourTime } from "../../../../lib/hours";
 import { getServerLocation } from "../../../../lib/location";
 import { isInMetro } from "../../../../lib/cityNormalize";
@@ -175,7 +173,6 @@ export default async function OpenNowPage() {
       `}</style>
 
       <div className="on-root">
-        <Nav variant="light" />
 
         <div className="on-breadcrumb">
           <Link href="/">Home</Link>
@@ -266,7 +263,6 @@ export default async function OpenNowPage() {
         </div>
 
       </div>
-      <Footer />
     </>
   );
 }

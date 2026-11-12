@@ -1,6 +1,4 @@
 import Link from "next/link";
-import Nav from "../components/Nav";
-import Footer from "../components/Footer";
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -212,7 +210,6 @@ export default async function SearchPage({
         .empty-sub{font-size:.85rem;color:var(--pp-muted);font-family:var(--font-body)}
       `}</style>
 
-      <Nav variant="light" />
 
       <div className="wrap">
         <h1>
@@ -283,7 +280,6 @@ export default async function SearchPage({
           </div>
         )}
       </div>
-      <Footer />
     </>
   );
 }

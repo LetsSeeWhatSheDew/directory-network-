@@ -2,7 +2,6 @@
 import { Band } from "../components/gold/Kit";
 import type { Metadata } from "next";
 import Link from "next/link";
-import Footer from "../components/Footer";
 import { brand } from "../../lib/brand";
 import { MIN_REPORTS, WINDOW_DAYS, FRESH_HOURS, PEOPLE_WEIGHT } from "../../lib/dealAccuracy";
 
@@ -73,7 +72,6 @@ export default function HowWeRankPage() {
           <Link href="/deals/all" style={{ color: "var(--pp-signal-ink)", fontWeight: 700 }}>See today&apos;s deals →</Link>
         </p>
       </main>
-      <Footer />
     </>
   );
 }

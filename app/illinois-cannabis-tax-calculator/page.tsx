@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Band } from "../components/gold/Kit";
-import Footer from "../components/Footer";
 import Calculator from "./Calculator";
 import { TAX_RATES_LAST_UPDATED } from "../../lib/taxRates";
 
@@ -168,7 +167,6 @@ export default function TaxCalculatorPage() {
         </p>
       </main>
 
-      <Footer />
     </>
   );
 }

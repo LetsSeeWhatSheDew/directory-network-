@@ -5,7 +5,6 @@
 import { Band } from "../components/gold/Kit";
 import type { Metadata } from "next";
 import Link from "next/link";
-import Footer from "../components/Footer";
 
 export const metadata: Metadata = {
   title: "Go Pro — $0.99/mo",
@@ -148,7 +147,6 @@ export default function UpgradePage() {
           Claim your free listing →
         </Link>
       </section>
-      <Footer />
     </main>
   );
 }

@@ -2,8 +2,6 @@
 // drive-thru campaign pictures, and every city's link preview, each one tap
 // to open or save. noindex: it's a tool, not a page for search.
 import type { Metadata } from "next";
-import Nav from "../components/Nav";
-import Footer from "../components/Footer";
 
 export const metadata: Metadata = {
   title: "Share kit",
@@ -43,7 +41,6 @@ export default function SharePage() {
   return (
     <>
       <style>{CSS}</style>
-      <Nav variant="light" />
       <main className="sk">
         <h1>
           Share kit. <em>Made fresh from today&rsquo;s deals.</em>
@@ -90,7 +87,6 @@ export default function SharePage() {
           ))}
         </div>
       </main>
-      <Footer />
     </>
   );
 }

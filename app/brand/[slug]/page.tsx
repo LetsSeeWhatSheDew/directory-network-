@@ -1,6 +1,4 @@
 import Link from "next/link";
-import Nav from "../../components/Nav";
-import Footer from "../../components/Footer";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getBrand, type Brand } from "../../../lib/brands";
@@ -169,7 +167,6 @@ export default async function BrandPage({
         .cat-tag{font-family:var(--font-body);font-size:.72rem;color:var(--pp-muted);background:var(--pp-paper);border-radius:100px;padding:3px 10px}
       `}</style>
 
-      <Nav variant="light" />
 
       <main className="wrap">
         <div className="head">
@@ -237,7 +234,6 @@ export default async function BrandPage({
           .
         </div>
       </main>
-      <Footer />
     </>
   );
 }
