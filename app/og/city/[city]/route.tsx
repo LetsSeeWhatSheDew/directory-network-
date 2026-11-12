@@ -23,8 +23,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ city: s
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ fontSize: 18, letterSpacing: "0.26em", textTransform: "uppercase", color: C.body, fontWeight: 500 }}>{`${city} · dispensary deals`}</div>
             <div style={{ display: "flex", flexDirection: "column", fontFamily: "Serif", fontSize: 76, lineHeight: 1.0, marginTop: 18, color: C.ink }}>
-              <span>Take a breath.</span>
-              <span style={{ fontStyle: "italic", color: C.canopy }}>We found the deal.</span>
+              <span>Best Bud For</span>
+              <span style={{ fontStyle: "italic", color: C.canopy }}>Your Buck$.</span>
             </div>
             <div style={{ fontSize: 26, color: C.body, marginTop: 24, lineHeight: 1.35 }}>
               {!unknown && n.deals > 0

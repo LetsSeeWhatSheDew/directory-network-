@@ -5,12 +5,16 @@
 
 import { amountOf, longestExhale, productOf, storeWithCity, needsQuantity, isConditional, type ExDeal } from "../../lib/exhale";
 
+// Gold Leaf (2026-11-11): one look for every share image, day or night —
+// deep forest, cream type, gold for the money. Day and night keys map to the
+// same palette so older routes that still pass ?theme=night stay on brand.
 export const C = {
-  paper: "#F6F1E8", paperTop: "#FBE9DC", surface: "#FFFAF3", ink: "#14231A", body: "#4F4A41", muted: "#5F5A50",
-  border: "#ECDFD0", canopy: "#1F4D33", peach: "#F3C3A0", peachDot: "#D4845A", sage: "#BCD0B3",
-  nPaper: "#0B1510", nSurface: "#12211A", nInk: "#F3F7F4", nBody: "#B4C7BA", nMuted: "#9FB3A6", mint: "#A8E6BF", firefly: "#EEF3B0",
+  paper: "#10291C", paperTop: "#10291C", surface: "#173A28", ink: "#F4EAD5", body: "rgba(244,234,213,0.82)", muted: "rgba(244,234,213,0.62)",
+  border: "rgba(217,172,79,0.45)", canopy: "#D9AC4F", peach: "#F2CDB3", peachDot: "#D9AC4F", sage: "#CFE2CF",
+  nPaper: "#10291C", nSurface: "#173A28", nInk: "#F4EAD5", nBody: "rgba(244,234,213,0.82)", nMuted: "rgba(244,234,213,0.62)", mint: "#D9AC4F", firefly: "#F6DC8F",
 };
 
+import { readFileSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
@@ -39,6 +43,13 @@ export async function loadFonts() {
     { name: "Mono", data: mono, weight: 500 as const, style: "normal" as const },
   ];
 }
+
+// The gold leaf from the Nov 10 flyers (public/gold-leaf.svg), inlined for Satori.
+let leafUri = "";
+try {
+  leafUri = `data:image/svg+xml;base64,${readFileSync(join(process.cwd(), "public/gold-leaf.svg")).toString("base64")}`;
+} catch {}
+export const LEAF_URI = leafUri;
 
 export const REGION = ["Peoria", "East Peoria", "Peoria Heights", "Pekin", "Bloomington", "Normal", "Champaign", "Urbana", "Springfield"];
 export const CITY_SLUGS: Record<string, string> = Object.fromEntries(REGION.map((c) => [c.toLowerCase().replace(/\s+/g, "-"), c]));
@@ -100,68 +111,52 @@ export function Mark({ size, night = false, crop = false }: { size: number; nigh
   );
 }
 
-export function Wordmark({ size = 40, night = false }: { size?: number; night?: boolean }) {
+export function Wordmark({ size = 40 }: { size?: number; night?: boolean }) {
   return (
-    <div style={{ display: "flex", alignItems: "flex-end", gap: 1 }}>
-      <Mark size={Math.round(size * 0.84)} night={night} crop />
-      <span style={{ fontFamily: "Sans", fontWeight: 600, fontSize: size, letterSpacing: "-0.02em", color: night ? C.mint : C.canopy, lineHeight: 1 }}>uffPrice</span>
+    <div style={{ display: "flex", alignItems: "center", gap: Math.round(size * 0.25) }}>
+      <img src={LEAF_URI} width={Math.round(size * 1.05)} height={Math.round(size * 1.05)} alt="" />
+      <span style={{ fontFamily: "Sans", fontWeight: 700, fontSize: size, letterSpacing: "-0.02em", color: C.ink, lineHeight: 1 }}>PuffPrice</span>
     </div>
   );
 }
 
 /** Paper background with the morning light (day) or deep green with a glow (night).
  *  (Satori note: radial-gradient takes "circle, stops" only — no closest-side.) */
-export function Backdrop({ night = false, children, w, h }: { night?: boolean; children: React.ReactNode; w: number; h: number }) {
+export function Backdrop({ children, w, h }: { night?: boolean; children: React.ReactNode; w: number; h: number }) {
   const g = Math.round(Math.max(w, h) * 0.9);
+  const leaf = Math.round(Math.min(w, h) * 0.95);
   return (
     <div
       style={{
         width: w, height: h, display: "flex", position: "relative", overflow: "hidden",
-        backgroundColor: night ? C.nPaper : C.paper,
-        backgroundImage: night ? `linear-gradient(180deg, #0E1B15 0%, ${C.nPaper} 55%)` : `linear-gradient(180deg, ${C.paperTop} 0%, ${C.paper} 55%)`,
-        fontFamily: "Sans", color: night ? C.nInk : C.ink,
+        backgroundColor: C.paper, fontFamily: "Sans", color: C.ink,
       }}
     >
       <div
         style={{
           position: "absolute", left: -g * 0.42, top: -g * 0.5, width: g, height: g, display: "flex",
-          backgroundImage: night
-            ? "radial-gradient(circle, rgba(72,150,104,0.30) 0%, rgba(11,21,16,0) 70%)"
-            : "radial-gradient(circle, rgba(255,224,192,0.85) 0%, rgba(255,224,192,0) 70%)",
+          backgroundImage: "radial-gradient(circle, rgba(217,172,79,0.22) 0%, rgba(16,41,28,0) 70%)",
         }}
       />
+      <img src={LEAF_URI} width={leaf} height={leaf} alt="" style={{ position: "absolute", right: -leaf * 0.28, bottom: -leaf * 0.22, opacity: 0.22 }} />
       {children}
     </div>
   );
 }
 
-/** The breathing orb, frozen at the top of an inhale, with its ring. */
-export function Orb({ size, night = false, children }: { size: number; night?: boolean; children: React.ReactNode }) {
-  const b = Math.round(size * 0.72);
-  const layer = (left: number, top: number, d: number, img: string) => (
-    <div style={{ position: "absolute", left, top, width: d, height: d, display: "flex", backgroundImage: img }} />
-  );
-  const fly = (x: number, y: number, d: number) => (
-    <div style={{ position: "absolute", left: x, top: y, width: d, height: d, borderRadius: 9999, backgroundColor: C.firefly, boxShadow: "0 0 14px 5px rgba(238,243,176,0.5)", display: "flex" }} />
-  );
+/** The deal card (was the Breathe orb): forest-green coupon, gold dashed edge. */
+export function Orb({ size, children }: { size: number; night?: boolean; children: React.ReactNode }) {
   return (
-    <div style={{ width: size, height: size, display: "flex", position: "relative" }}>
-      {night ? (
-        layer(-size * 0.1, -size * 0.1, size * 1.2, "radial-gradient(circle, rgba(72,150,104,0.55) 0%, rgba(40,94,64,0.25) 38%, rgba(11,21,16,0) 70%)")
-      ) : (
-        <>
-          {layer(-size * 0.02, -size * 0.04, b, "radial-gradient(circle, rgba(243,195,160,0.9) 0%, rgba(243,195,160,0) 68%)")}
-          {layer(size - b + size * 0.02, size - b + size * 0.04, b, "radial-gradient(circle, rgba(188,208,179,1) 0%, rgba(188,208,179,0) 68%)")}
-          {layer(size * 0.02, size * 0.02, size * 0.96, "radial-gradient(circle, rgba(255,250,243,1) 0%, rgba(251,241,230,1) 34%, rgba(226,236,218,0.85) 56%, rgba(226,236,218,0) 70%)")}
-        </>
-      )}
-      <div style={{ position: "absolute", left: size * 0.03, top: size * 0.03, width: size * 0.94, height: size * 0.94, borderRadius: 9999, border: `2px solid ${night ? "rgba(168,230,191,0.3)" : "rgba(31,77,51,0.25)"}`, display: "flex" }} />
-      {night && fly(size * 0.1, size * 0.18, 6)}
-      {night && fly(size * 0.88, size * 0.62, 5)}
-      {night && fly(size * 0.16, size * 0.8, 4)}
+    <div
+      style={{
+        width: size, height: size, display: "flex", position: "relative",
+        backgroundColor: C.surface, borderRadius: Math.round(size * 0.08),
+        border: `3px dashed ${C.border}`,
+      }}
+    >
       <div
         style={{
-          position: "absolute", left: 0, top: 0, width: size, height: size, padding: size * 0.14,
+          position: "absolute", left: 0, top: 0, width: size, height: size, padding: size * 0.1,
           display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center",
         }}
       >

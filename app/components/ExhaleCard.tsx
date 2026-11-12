@@ -83,7 +83,7 @@ export default function ExhaleCard({
   directionsHref,
   seeHref,
   seeLabel = "See the deal",
-  line = "Go on, let your shoulders drop.",
+  line = "Best bud for your buck$.",
   otdDeal = null,
   after,
   children,

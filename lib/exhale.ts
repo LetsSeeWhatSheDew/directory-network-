@@ -244,9 +244,10 @@ export function lowestList(deals: ExDeal[], n: number, city?: string | Origin | 
   return out;
 }
 
+// Gold Leaf voice (2026-11-11): short, plain, a little wry. No urgency.
 export const EXHALE_LINES = [
-  "Go on, let your shoulders drop.",
-  "Keep the difference. Let the rest go.",
-  "Go ahead and sigh. Nobody's timing you.",
+  "Best bud for your buck$.",
+  "Keep the difference.",
+  "Seen on the store's own site.",
   "The math is done. That part's handled.",
 ];

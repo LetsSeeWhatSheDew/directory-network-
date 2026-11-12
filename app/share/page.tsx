@@ -53,7 +53,7 @@ export default function SharePage() {
           full size, then save or share. They refresh through the day.
         </p>
 
-        <h2>Today&rsquo;s longest exhale</h2>
+        <h2>Today&rsquo;s best deal</h2>
         <p className="sk-note">
           Good for X, Threads, Reddit, Nextdoor and group texts. Meta (Facebook and Instagram) restricts posts that promote
           cannabis deals, so keep these off Meta.

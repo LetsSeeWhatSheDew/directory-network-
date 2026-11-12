@@ -6,8 +6,6 @@
 // is on file, or to Google Maps directions otherwise.
 
 import Link from "next/link";
-import Nav from "../../components/Nav";
-import Footer from "../../components/Footer";
 import { notFound, permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
@@ -370,15 +368,15 @@ export default async function DealPage({
         .disp a:hover{text-decoration:underline}
         .city{font-size:.85rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:22px}
         .city a{color:var(--pp-signal);text-decoration:none}
-        .savings-block{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:20px;padding:24px;margin-bottom:18px}
-        .sv-exhale{position:relative;margin:-24px -24px 18px;padding:28px 24px 22px;border-radius:20px 20px 0 0;background:var(--pp-haze);border-bottom:1px solid var(--pp-haze-border);overflow:hidden}
-        .sv-exhale .sv-label{font-size:11px;letter-spacing:.26em;color:var(--pp-body);font-weight:500}
-        .sv-exhale .sv-amt{display:flex;align-items:baseline;gap:8px;color:var(--pp-big);margin:6px 0 10px}
-        .sv-exhale .sv-amt b{font-family:var(--font-body);font-weight:700;font-size:clamp(64px,18vw,88px);line-height:.95;letter-spacing:-.055em}
-        .sv-exhale .sv-amt small{font-size:15px;font-weight:500;color:var(--pp-muted)}
+        .savings-block{background:#F4EAD5;border:0;border-radius:22px;overflow:hidden;padding:24px;margin-bottom:18px}
+        .sv-exhale{position:relative;margin:-24px -24px 18px;padding:28px 24px 22px;border-radius:20px 20px 0 0;background:var(--pp-canopy) url("/gold-leaf-band.svg") no-repeat right -60px top -20px / 200px auto;border-bottom:2px dashed rgba(217,172,79,.5);overflow:hidden}
+        .sv-exhale .sv-label{font-size:12px;letter-spacing:.18em;color:#D9AC4F;font-weight:700}
+        .sv-exhale .sv-amt{display:flex;align-items:baseline;gap:8px;color:#F4EAD5;margin:6px 0 10px}
+        .sv-exhale .sv-amt b{font-family:var(--font-gold-display),Fraunces,serif;font-variation-settings:"SOFT" 100,"WONK" 1,"opsz" 144;font-weight:800;font-size:clamp(64px,18vw,88px);line-height:.95;letter-spacing:-.055em}
+        .sv-exhale .sv-amt small{font-size:15px;font-weight:600;color:#D9AC4F}
         html[data-daypart="night"] .sv-exhale .sv-amt b{text-shadow:0 0 28px rgba(238,243,176,.25)}
-        .sv-line{font-family:var(--font-breath);font-size:1.45rem;line-height:1.15;color:var(--pp-ink);margin:0 0 4px}
-        .sv-sub{font-size:.85rem;color:var(--pp-muted);margin:0}
+        .sv-line{font-family:var(--font-gold-display),Fraunces,serif;font-style:italic;font-size:1.45rem;line-height:1.15;color:#F6DC8F;margin:0 0 4px}
+        .sv-sub{font-size:.85rem;color:rgba(244,234,213,.8);margin:0}
         @media (prefers-reduced-motion: no-preference){
           .sv-line{animation:pp-land calc(1.2s * var(--pp-pace)) calc(.3s * var(--pp-pace)) cubic-bezier(.2,.7,.2,1) both}
           .sv-sub{animation:pp-land calc(1.2s * var(--pp-pace)) calc(.8s * var(--pp-pace)) cubic-bezier(.2,.7,.2,1) both}
@@ -400,15 +398,14 @@ export default async function DealPage({
         .code-label{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--pp-muted);font-weight:700}
         .code-value{font-family:var(--font-mono);font-size:1.05rem;font-weight:500;background:var(--pp-surface);border:1px dashed var(--pp-border-2);padding:6px 14px;border-radius:8px;letter-spacing:.06em}
         .how-to{font-size:.88rem;color:var(--pp-body);font-family:var(--font-body);line-height:1.5;margin-bottom:18px;padding:12px 14px;background:var(--pp-best-tint);border:1px solid var(--pp-best-border);border-radius:10px;color:var(--pp-signal-ink)}
-        .cta{display:flex;align-items:center;justify-content:center;width:100%;background:var(--pp-btn);color:var(--pp-btn-fg);border:1px solid var(--pp-btn-border);padding:0 18px;border-radius:999px;text-decoration:none;font-family:var(--font-body);font-weight:600;font-size:17px;min-height:56px}
+        .cta{display:flex;align-items:center;justify-content:center;width:100%;background:var(--pp-canopy);color:#F4EAD5;border:0;font-weight:700!important;padding:0 18px;border-radius:999px;text-decoration:none;font-family:var(--font-body);font-weight:600;font-size:17px;min-height:56px}
         .cta:hover{filter:brightness(.97)}
         .secondary{display:block;text-align:center;margin-top:12px;color:var(--pp-muted);font-family:var(--font-body);font-size:.82rem;text-decoration:none}
         .secondary:hover{color:var(--pp-ink);text-decoration:underline}
         @media(max-width:600px){.wrap{padding:24px 14px}.savings-block{padding:20px 18px}.sv-exhale{margin:-20px -18px 18px;padding:24px 18px 20px}}
       `}</style>
 
-      <Nav variant="light" />
-      <TrackPage type="deal_view" slug={deal.listing_slug} dealId={id} city={city} />
+            <TrackPage type="deal_view" slug={deal.listing_slug} dealId={id} city={city} />
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(1rem, 4vw, 2rem) 4px", fontSize: 13 }}>
         <Link
           href={city ? `/city/${city.toLowerCase().trim().replace(/\s+/g, "-")}` : "/deals/all"}
@@ -467,8 +464,8 @@ export default async function DealPage({
               <div className="sv-amt" id="pp-arrive">
                 <b>{exhaleBig}</b>
               </div>
-              <p className="sv-line">Drop your shoulders. The comparing is done.</p>
-              <p className="sv-sub">The counter always has the final word.</p>
+              <p className="sv-line">Best bud for your buck$.</p>
+              <p className="sv-sub">Seen on the store&rsquo;s own site. The counter always has the final word.</p>
             </div>
           ) : otd ? (
             <div className="sv-exhale">
@@ -606,7 +603,6 @@ export default async function DealPage({
           </div>
         </div>
       </main>
-      <Footer />
     </>
   );
 }

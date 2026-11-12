@@ -29,7 +29,7 @@ export async function GET(req: Request) {
 
   const orbInner = ex ? (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
-      <span style={{ fontSize: size === "og" ? 15 : 22, letterSpacing: "0.26em", textTransform: "uppercase", color: body, fontWeight: 500 }}>Today&rsquo;s longest exhale</span>
+      <span style={{ fontSize: size === "og" ? 15 : 22, letterSpacing: "0.26em", textTransform: "uppercase", color: body, fontWeight: 500 }}>Best deal today</span>
       <div style={{ display: "flex", alignItems: "baseline", marginTop: 8, color: big }}>
         <span style={{ fontWeight: 700, fontSize: size === "og" ? 132 : ex.big.length > 3 ? 190 : 220, letterSpacing: "-0.055em", lineHeight: 1 }}>{ex.big}</span>
         <span style={{ fontWeight: 600, fontSize: size === "og" ? 30 : 46, marginLeft: 10 }}>off</span>
@@ -56,11 +56,11 @@ export async function GET(req: Request) {
             <Wordmark size={44} night={night} />
             <div style={{ display: "flex", flexDirection: "column" }}>
               <div style={{ display: "flex", flexDirection: "column", fontFamily: "Serif", fontSize: 78, lineHeight: 1.0, color: ink }}>
-                <span>Take a breath.</span>
-                <span style={{ fontStyle: "italic", color: accent }}>We found the deal.</span>
+                <span>Best Bud For</span>
+                <span style={{ fontStyle: "italic", color: accent }}>Your Buck$.</span>
               </div>
               <div style={{ fontSize: 26, color: body, marginTop: 24, lineHeight: 1.35 }}>
-                {unknown ? "Best Bud For Your Buck$. Central Illinois deals, checked on the stores' own sites every morning." : `Best Bud For Your Buck$. ${n.deals} Central Illinois deals, checked on the stores' own sites every morning.`}
+                {unknown ? "Central Illinois deals, checked on the stores' own sites every morning." : `${n.deals} Central Illinois deals, checked on the stores' own sites every morning.`}
               </div>
             </div>
             <div style={{ fontFamily: "Mono", fontSize: 22, color: muted }}>puffprice.com</div>
@@ -87,8 +87,8 @@ export async function GET(req: Request) {
             <Orb size={story ? 800 : 700} night={night}>{orbInner}</Orb>
           </div>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", fontFamily: "Serif", fontSize: story ? 64 : 54, lineHeight: 1.05, color: ink, marginTop: story ? 60 : 20, textAlign: "center" }}>
-            <span>Drop your shoulders.</span>
-            <span style={{ fontStyle: "italic", color: accent }}>The comparing is done.</span>
+            <span>Best Bud For</span>
+            <span style={{ fontStyle: "italic", color: accent }}>Your Buck$.</span>
           </div>
           {more.length > 0 && (
             <div style={{ display: "flex", flexDirection: "column", width: "100%", marginTop: story ? 70 : 30, gap: 12 }}>
@@ -100,7 +100,7 @@ export async function GET(req: Request) {
                       <span style={{ fontSize: 28, fontWeight: 600, color: ink }}>{storeName(d)}{d.city && !storeName(d).toLowerCase().includes(String(d.city).toLowerCase()) ? ` · ${d.city}` : ""}</span>
                       <span style={{ fontSize: 23, color: body, marginTop: 2 }}>{productOf(d).slice(0, 44)}</span>
                     </div>
-                    <span style={{ fontSize: 26, fontWeight: 700, padding: "10px 18px", borderRadius: 999, background: night ? C.firefly : C.ink, color: night ? C.nPaper : "#FBF6EE" }}>Save {a.upTo ? "up to " : ""}{a.big}</span>
+                    <span style={{ fontSize: 26, fontWeight: 700, padding: "10px 18px", borderRadius: 999, background: C.firefly, color: "#10291C" }}>Save {a.upTo ? "up to " : ""}{a.big}</span>
                   </div>
                 );
               })}

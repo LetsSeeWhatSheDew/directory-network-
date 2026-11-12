@@ -105,7 +105,7 @@ export function SavingCard({ d, size, night }: P & { d: SavingData }) {
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <Orb size={orb} night={night}>{inner}</Orb>
         <div style={{ display: "flex", marginTop: story ? 56 : 18 }}>
-          <Serif a="Drop your shoulders." b="The comparing is done." size={story ? 66 : 54} night={night} center />
+          <Serif a="Best Bud For" b="Your Buck$." size={story ? 66 : 54} night={night} center />
         </div>
         {d.status === "ok" && <span style={{ fontSize: story ? 28 : 25, color: t.body, marginTop: story ? 40 : 22, textAlign: "center" }}>{count}</span>}
       </div>
