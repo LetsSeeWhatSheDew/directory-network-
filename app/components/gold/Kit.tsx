@@ -72,7 +72,7 @@ function seenLine(d: KitDeal): string {
   return `Seen on ${store}'s own site ${day} at ${t}. Nobody pays to rank.`;
 }
 
-export function HeroTicket({ deal, miles, scope }: { deal: KitDeal; miles: number | null; scope: "near" | "widened" | "region" }) {
+export function HeroTicket({ deal, miles, scope, label }: { deal: KitDeal; miles: number | null; scope: "near" | "widened" | "region"; label?: string }) {
   const a = amountOf(deal)!;
   const cat = artCategory(deal);
   const ml = milesLabel(miles);
@@ -82,7 +82,7 @@ export function HeroTicket({ deal, miles, scope }: { deal: KitDeal; miles: numbe
       <article className="g-ticket" aria-label={`Best deal: ${a.big} off ${productOf(deal)} at ${storeName(deal)}`}>
         <div className="g-ticket-top">
           <div className="g-ticket-label">
-            <span>{scope === "region" ? "Best deal in Central IL" : scope === "widened" ? "Closest big one" : "Best deal near you"}</span>
+            <span>{label || (scope === "region" ? "Best deal in Central IL" : scope === "widened" ? "Closest big one" : "Best deal near you")}</span>
             <span>{deal.city}</span>
           </div>
           <div className="g-save g-display">

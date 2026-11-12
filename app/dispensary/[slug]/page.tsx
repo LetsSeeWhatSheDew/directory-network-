@@ -6,11 +6,10 @@
 // serves as the bookmark/permalink destination for repeat visitors.
 
 import Link from "next/link";
+import { Band, HeroTicket, DealLine } from "../../components/gold/Kit";
 import StoreAvatar from "@/app/components/StoreAvatar";
 import { storeImageUrl } from "@/lib/storeImage";
 import { getFeaturesForSlug, FEATURE_LABEL } from "@/lib/waysToBuy";
-import Nav from "../../components/Nav";
-import Footer from "../../components/Footer";
 import AmenityRow from "../../components/AmenityRow";
 import DealFreshnessBadge from "../../components/DealFreshnessBadge";
 import ReportIssueLink from "../../components/ReportIssueLink";
@@ -27,7 +26,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
-import { saveLabel, cleanDealTitle, amountOf, EXHALE_LINES } from "../../../lib/exhale";
+import { cleanDealTitle, amountOf, nearestExhale } from "../../../lib/exhale";
 import ExhaleCard from "../../components/ExhaleCard";
 import EmptyBreath from "../../components/EmptyBreath";
 import OtdLine from "../../components/OtdLine";
@@ -372,359 +371,169 @@ export default async function DispensaryProfilePage({
     listing.cash_only,
   ].some((v) => v === true);
 
+  const citySlugStr = city ? city.toLowerCase().trim().replace(/\s+/g, "-") : null;
+  const kitDeals = deals.map((d) => ({ ...d, deal_id: String(d.id), deal_title: d.title, name, slug, city, lat: listing.lat ?? null, lng: listing.lng ?? null }));
+  const heroPick = nearestExhale(kitDeals, null);
+  const heroId = heroPick?.deal.deal_id || null;
+  const restDeals = kitDeals
+    .filter((d) => d.deal_id !== heroId)
+    .sort((a, b) => (amountOf(b)?.value || 0) - (amountOf(a)?.value || 0));
+  const directions = listing.address1 ? mapsHref([listing.address1, listing.city, listing.state]) : null;
+  const menuHref = listing.menu_url || listing.website || null;
+
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaLocal) }}
-      />
-      <style>{`
-        *{box-sizing:border-box;margin:0;padding:0}
-        /* Design v2: body styling from globals.css (Inter on warm paper). */ body{min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-surface);position:sticky;top:0;z-index:100;border-bottom:1px solid var(--pp-border)}
-        .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
-        .logo-dot{width:8px;height:8px;border-radius:50%;background:var(--pp-signal-fill);animation:pulse calc(2500ms * var(--pp-pace)) 12}
-        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-        .logo-text{font-size:1.1rem;font-weight:700;color:var(--pp-ink)}
-        .logo-text span{color:var(--pp-signal)}
-        .back{font-size:.82rem;color:var(--pp-muted);text-decoration:none;font-family:var(--font-body)}
-
-        .wrap{max-width:900px;margin:0 auto;padding:40px 20px 64px}
-        .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);font-family:var(--font-body);margin-bottom:10px}
-        h1{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:8px}
-        .city-line{font-size:.95rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:18px}
-
-        .status-row{display:flex;gap:10px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
-        .status{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:100px;font-size:.82rem;font-family:var(--font-body);font-weight:600}
-        .status-open{background:var(--pp-best-tint);color:var(--pp-signal-ink)}
-        .status-closed{background:var(--pp-stop-bg);color:var(--pp-stop-fg)}
-        .status-dot{width:7px;height:7px;border-radius:50%}
-        .status-dot-open{background:var(--pp-signal-fill)}
-        .status-dot-closed{background:var(--pp-stop-edge)}
-
-        .contact-grid{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
-        .contact-btn{
-          flex:1 1 220px;min-width:200px;min-height:52px;
-          display:flex;align-items:center;gap:10px;
-          background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:12px;
-          padding:12px 16px;text-decoration:none;color:var(--pp-ink);
-          font-family:var(--font-body);font-size:.92rem;font-weight:600;
-          transition:transform calc(50ms * var(--pp-pace));
-        }
-        .contact-btn:hover{border-color:var(--pp-signal-fill)}
-        .contact-btn:active{transform:translateY(1px)}
-        .contact-btn .ico{font-size:1.15rem}
-        .contact-btn .sub{display:block;font-size:.72rem;color:var(--pp-muted);font-weight:500;margin-top:2px}
-
-        .section{margin-bottom:32px}
-        .section-h{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:14px}
-
-        .sd-deals{display:flex;flex-direction:column;gap:10px}
-        .sd-face{padding:18px 20px 0}
-        .sd-aside{display:block}
-        .sd-after{padding:0 20px 18px}
-        .deal-title{display:block;font-size:1.05rem;font-weight:700;color:var(--pp-ink);margin-bottom:4px}
-        .deal-meta{display:flex;margin-top:6px;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
-        .deal-savings{font-size:1.4rem;font-weight:700;color:var(--pp-signal);letter-spacing:-.02em}
-        .deal-savings-label{font-size:.68rem;color:var(--pp-muted);font-family:var(--font-body);letter-spacing:.1em;text-transform:uppercase;font-weight:700}
-        .deal-expires{font-size:.74rem;color:var(--pp-note-fg);background:var(--pp-note-bg);padding:2px 8px;border-radius:100px;font-family:var(--font-body);font-weight:600}
-        .deal-desc{font-size:.88rem;color:var(--pp-body);font-family:var(--font-body);line-height:1.5;margin-bottom:12px}
-        .track{display:flex;flex-wrap:wrap;gap:6px 16px;margin:-4px 0 14px;font-size:.8rem;color:var(--pp-muted,var(--pp-muted))}
-        .track b{color:var(--pp-ink,var(--pp-ink));font-weight:600}
-        .mono{font-family:var(--font-mono,ui-monospace),monospace;font-variant-numeric:tabular-nums}
-        .confirmed{font-size:.78rem;font-weight:600;color:var(--pp-signal-ink,var(--pp-signal-ink));margin:2px 0 6px}
-        .best-seen{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.02em;color:var(--pp-signal-ink,var(--pp-signal-ink));background:var(--pp-best-tint,var(--pp-best-tint));border:1px solid var(--pp-best-border,var(--pp-best-border));border-radius:999px;padding:2px 9px;margin-bottom:6px}
-        /* Lighter per-deal CTA: outline, so a stack of 3 deals doesn't read as 3 slabs. */
-        .deal-cta{display:block;width:100%;text-align:center;background:var(--pp-surface,var(--pp-surface));color:var(--pp-signal-ink,var(--pp-signal-ink));border:1.5px solid var(--pp-signal,var(--pp-signal-fill));padding:12px;border-radius:10px;text-decoration:none;font-family:var(--font-body,system-ui),sans-serif;font-weight:700;font-size:.9rem;min-height:44px}
-        .deal-cta:hover{background:var(--pp-best-tint,var(--pp-best-tint))}
-        .deal-details{font-size:.76rem;color:var(--pp-signal);text-decoration:none;display:inline-block;margin-top:8px;font-family:var(--font-body);font-weight:600}
-        .deal-details:hover{text-decoration:underline}
-
-        .no-deals{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:14px;padding:28px 24px;text-align:center}
-        .no-deals-t{font-size:.98rem;font-weight:700;color:var(--pp-ink)}
-        .no-deals-s{font-size:.82rem;color:var(--pp-muted);font-family:var(--font-body);margin-top:4px}
-
-        .hours{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:14px;padding:18px 22px}
-        .hr{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-family:var(--font-body);font-size:.9rem;color:var(--pp-body)}
-        .hr-today{background:var(--pp-best-tint);margin:0 -10px;padding:8px 10px;border-radius:8px}
-        .hr-today-day,.hr-today-t{color:var(--pp-signal-ink);font-weight:700}
-        .hr-closed{color:var(--pp-muted)}
-
-        .amenities{display:flex;flex-wrap:wrap;gap:8px}
-        .amenity{font-size:.78rem;font-family:var(--font-body);color:var(--pp-body);background:var(--pp-surface);border:1px solid var(--pp-border);padding:4px 12px;border-radius:100px}
-
-        .about{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:14px;padding:18px 22px;font-size:.925rem;color:var(--pp-body);line-height:1.7;font-family:var(--font-body)}
-
-        .claim-cta{margin-top:32px;padding:18px;background:var(--pp-surface);border:1px dashed var(--pp-border);border-radius:12px;text-align:center;font-family:var(--font-body);font-size:.82rem;color:var(--pp-muted)}
-        .claim-cta a{color:var(--pp-signal);font-weight:700;text-decoration:none}
-        .claim-cta a:hover{text-decoration:underline}
-
-        @media(max-width:600px){.wrap{padding:24px 14px}.contact-btn{flex-basis:100%}}
-      `}</style>
-
-      <Nav variant="light" />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaLocal) }} />
       <TrackPage type="store_view" slug={slug} city={city} />
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(1rem, 4vw, 2rem) 4px", fontSize: 13 }}>
-        <Link
-          href={city ? `/city/${city.toLowerCase().trim().replace(/\s+/g, "-")}` : "/deals/all"}
-          style={{ color: "var(--color-gray-500, var(--pp-muted))", textDecoration: "none", fontFamily: "var(--font-body)", fontWeight: 500 }}
-        >
-          {city ? `← ${city} deals` : "← All deals"}
-        </Link>
-      </div>
 
-      <main className="wrap">
-        <div className="eyebrow">{listing.type || "Dispensary"}</div>
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <StoreAvatar src={storeImageUrl(listing.logo_url, listing.slug)} name={name} size={56} />
-          <h1 style={{ margin: 0 }}>{name}</h1>
-        </div>
-        <div className="city-line">{city ? `${city}, IL` : "Illinois"}</div>
-
-        <div className="status-row">
-          <span className={`status ${status.open ? "status-open" : "status-closed"}`}>
-            <span className={`status-dot ${status.open ? "status-dot-open" : "status-dot-closed"}`} />
+      <Band
+        eyebrow={<Link href={citySlugStr ? `/city/${citySlugStr}` : "/deals"} style={{ color: "inherit", textDecoration: "none" }}>{city ? `← ${city} deals` : "← All deals"}</Link>}
+        title={name}
+        sub={listing.address1 ? `${listing.address1.replace(/,\s*IL\s*\d{5}.*$/, "")}${city && !listing.address1.includes(city) ? `, ${city}` : ""}` : city ? `${city}, IL` : "Illinois"}
+      >
+        <div className="g-stats">
+          <span className="g-stat" style={{ color: status.open ? "#9fe3b4" : "#f2b48f", fontWeight: 700 }}>
+            <span className={`g-dot${status.open ? "" : " closed"}`} />
             {status.label}
           </span>
+          <span className="g-stat"><b>{deals.length}</b> deal{deals.length === 1 ? "" : "s"} today</span>
+          {dealHistory?.best_discount_pct != null && <span className="g-stat">best seen <b>{dealHistory.best_discount_pct}%</b></span>}
         </div>
-
-        {waysToBuy.length > 0 && (
-          <div style={{ margin: "-6px 0 18px" }} aria-label="Ways to buy">
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-              {waysToBuy.map((w) => (
-                <Link key={w.feature} href={w.feature === "drive_thru" ? "/drive-thru" : w.feature === "medical" ? "/medical" : "/ways-to-buy#compare"}
-                  title={w.evidence}
-                  style={{ fontSize: ".78rem", fontWeight: 700, padding: "4px 10px", borderRadius: 999, background: "var(--pp-best-tint)", color: "var(--pp-signal-ink)", textDecoration: "none" }}>
-                  {w.status === "announced" ? "Coming: " : "✓ "}{FEATURE_LABEL[w.feature]}
-                </Link>
-              ))}
-            </div>
-            <details style={{ marginTop: 6, fontSize: ".78rem", color: "var(--pp-muted)" }}>
-              <summary style={{ cursor: "pointer" }}>How we know</summary>
-              <ul style={{ margin: "6px 0 0", paddingLeft: 18, lineHeight: 1.6 }}>
-                {waysToBuy.map((w) => (
-                  <li key={w.feature}>
-                    {FEATURE_LABEL[w.feature]}: {w.evidence} — <a href={w.source_url} target="_blank" rel="nofollow noopener noreferrer" style={{ color: "inherit" }}>store&apos;s site</a>, checked {new Date(w.verified_at).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "America/Chicago" })}
-                  </li>
-                ))}
-              </ul>
-            </details>
-          </div>
-        )}
-
-        {/* Contact actions — big tap targets for mobile */}
-        <div className="contact-grid">
-          {listing.address1 && (
-            <a
-              href={mapsHref([listing.address1, listing.city, listing.state])}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="contact-btn"
-              aria-label={`Directions to ${name}`}
-              data-track="directions_tap"
-              data-track-slug={slug}
-              data-track-from="store"
-            >
-              <span className="ico" aria-hidden="true"><MapPin size={20} strokeWidth={1.75} /></span>
-              <span>
-                {listing.address1}
-                <span className="sub">Tap for directions</span>
-              </span>
+        <div className="g-sc-actions" style={{ marginTop: 18 }}>
+          {directions && (
+            <a className="g-btn g-btn-gold g-btn-sm" href={directions} target="_blank" rel="noopener noreferrer" data-track="directions_tap" data-track-slug={slug} data-track-from="store">
+              <MapPin size={18} strokeWidth={2.2} /> Directions
             </a>
           )}
           {listing.phone && (
-            <a href={`tel:${listing.phone}`} className="contact-btn" aria-label={`Call ${name}`} data-track="call_tap" data-track-slug={slug} data-track-from="store">
-              <span className="ico" aria-hidden="true"><Phone size={20} strokeWidth={1.75} /></span>
-              <span>
-                {listing.phone}
-                <span className="sub">Tap to call</span>
-              </span>
+            <a className="g-btn g-btn-ghost g-btn-sm" href={`tel:${listing.phone}`} data-track="call_tap" data-track-slug={slug} data-track-from="store">
+              <Phone size={18} strokeWidth={2.2} /> Call
             </a>
           )}
-          {(listing.menu_url || listing.website) && (
-            <a
-              href={listing.menu_url || listing.website!}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="contact-btn"
-              aria-label="Open full menu"
-              data-track={listing.menu_url ? "order_tap" : "website_tap"}
-              data-track-slug={slug}
-              data-track-from="store"
-            >
-              <span className="ico" aria-hidden="true"><MenuIcon size={20} strokeWidth={1.75} /></span>
-              <span>
-                {listing.menu_url ? "View Full Menu" : "Visit Website"}
-                <span className="sub">{listing.menu_url ? "External menu" : "External site"}</span>
-              </span>
+          {menuHref && (
+            <a className="g-btn g-btn-ghost g-btn-sm" href={menuHref} target="_blank" rel="noopener noreferrer" data-track={listing.menu_url ? "order_tap" : "website_tap"} data-track-slug={slug} data-track-from="store">
+              <MenuIcon size={18} strokeWidth={2.2} /> {listing.menu_url ? "Menu" : "Website"}
             </a>
           )}
         </div>
+        {heroPick && <HeroTicket deal={heroPick.deal} miles={null} scope="near" label="Best deal here today" />}
+      </Band>
 
-        {/* Active deals */}
-        <section className="section" aria-label="Active deals">
-          <div className="section-h">
-            Active deals · {deals.length} {deals.length === 1 ? "offer" : "offers"}
+      <main className="g-page">
+        <div className="g-wrap">
+          {waysToBuy.length > 0 && (
+            <div className="g-block" aria-label="Ways to buy">
+              <div className="g-near">
+                {waysToBuy.map((w) => (
+                  <Link key={w.feature} href={w.feature === "drive_thru" ? "/drive-thru" : w.feature === "medical" ? "/medical" : "/ways-to-buy#compare"} title={w.evidence}>
+                    {w.status === "announced" ? "Coming: " : "✓ "}{FEATURE_LABEL[w.feature]}
+                  </Link>
+                ))}
+              </div>
+              <details className="g-rest">
+                <summary>How we know</summary>
+                <ul className="g-note" style={{ paddingLeft: 18 }}>
+                  {waysToBuy.map((w) => (
+                    <li key={w.feature}>
+                      {FEATURE_LABEL[w.feature]}: {w.evidence} (<a href={w.source_url} target="_blank" rel="nofollow noopener noreferrer">store&apos;s site</a>, checked {new Date(w.verified_at).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "America/Chicago" })})
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            </div>
+          )}
+
+          <section className="g-block" aria-label="Active deals">
+            <div className="g-eyebrow">On their own site today</div>
+            <h2 className="g-display">{restDeals.length > 0 ? (heroPick ? "More deals here" : "Today's deals") : deals.length > 0 ? "That's the one deal today" : "No deal today"}</h2>
+            {deals.length === 0 ? (
+              <div className="g-answer">
+                {name} doesn&apos;t have a deal on its own site today. We check every morning; watch this store below and we&apos;ll
+                email you when one posts.
+                <div className="g-near" style={{ marginTop: 12 }}>
+                  {citySlugStr && <Link href={`/city/${citySlugStr}`}>See deals in {city}</Link>}
+                  <Link href="/deals">Every deal today</Link>
+                </div>
+              </div>
+            ) : restDeals.length > 0 ? (
+              <div className="g-group">
+                <div className="g-lines">
+                  {restDeals.slice(0, 8).map((d) => (
+                    <DealLine key={d.deal_id} deal={d} href={`/deal/${d.deal_id}`} />
+                  ))}
+                </div>
+                {restDeals.length > 8 && (
+                  <details className="g-rest">
+                    <summary>{restDeals.length - 8} more deals here</summary>
+                    <div className="g-lines">
+                      {restDeals.slice(8).map((d) => (
+                        <DealLine key={d.deal_id} deal={d} href={`/deal/${d.deal_id}`} />
+                      ))}
+                    </div>
+                  </details>
+                )}
+              </div>
+            ) : null}
+            {dealHistory && (
+              <div className="g-near" style={{ marginTop: 14 }}>
+                {dayCountsReliable() && <span className="g-chip">{dealHistory.deal_days_30d} of the last 30 days with a deal</span>}
+                {dealHistory.typical_discount_pct != null && <span className="g-chip">Typical {dealHistory.typical_discount_pct}% off</span>}
+              </div>
+            )}
+            {deals.length > 0 && <TrustLine />}
+            <DealAccuracy accuracy={accuracy} />
+            {heroId && (confirmed[heroId] || 0) > 0 && (
+              <p className="g-note">✓ {confirmed[heroId]} {confirmed[heroId] === 1 ? "person" : "people"} confirmed the top deal today</p>
+            )}
+            <div style={{ marginTop: 14 }}>
+              <WatchControl kind="store" slug={slug} storeName={name} />
+            </div>
+          </section>
+
+          {hours.length > 0 && (
+            <section className="g-block" aria-label="Weekly hours">
+              <div className="g-eyebrow">When to go</div>
+              <h2 className="g-display">Hours</h2>
+              <div className="g-hours">
+                {DAY_NAMES.map((day, i) => {
+                  const row = hours.find((h) => h.weekday === i);
+                  const isToday = i === todayIdx;
+                  const closed = !row || row.is_closed || !row.opens_at || !row.closes_at;
+                  return (
+                    <div key={day} className={`g-hr${isToday ? " today" : ""}`}>
+                      <span>{day}{isToday ? " · today" : ""}</span>
+                      <span>{closed ? "Closed" : `${formatTime(row!.opens_at)} – ${formatTime(row!.closes_at)}`}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+
+          {(listing.long_description || listing.short_description) && (
+            <section className="g-block" aria-label={`About ${name}`}>
+              <div className="g-eyebrow">The store</div>
+              <h2 className="g-display">About {name}</h2>
+              <p className="g-answer" style={{ borderLeftColor: "var(--g-line-ink)" }}>{listing.long_description || listing.short_description}</p>
+            </section>
+          )}
+
+          {hasAmenities && (
+            <section className="g-block" aria-label="Amenities">
+              <div className="g-eyebrow">Good to know</div>
+              <AmenityRow listing={listing} variant="pill" />
+            </section>
+          )}
+
+          <div className="g-block">
+            <ReviewsSection slug={slug} name={name} reviews={reviews} stats={reviewStats} enabled={reviewsOn} />
           </div>
-          {deals.length > 0 && <TrustLine />}
-          <DealAccuracy accuracy={accuracy} />
-          {dealHistory && (
-            <div className="track">
-              {dayCountsReliable() && (
-                <span>
-                  <b className="mono">{dealHistory.deal_days_30d}</b> of the last 30 days with a deal
-                </span>
-              )}
-              {dealHistory.typical_discount_pct != null && (
-                <span>
-                  Typical <b className="mono">{dealHistory.typical_discount_pct}%</b> off
-                </span>
-              )}
-              {dealHistory.best_discount_pct != null && (
-                <span>
-                  Best seen <b className="mono">{dealHistory.best_discount_pct}%</b>
-                </span>
-              )}
-            </div>
-          )}
-          {deals.length === 0 ? (
-            <EmptyBreath
-              steps={[
-                ...(city ? [{ href: `/city/${city.toLowerCase().replace(/\s+/g, "-")}`, label: `See deals in ${city}` }] : []),
-                { href: "/deals/all", label: "Every deal today" },
-              ]}
-            >
-              {name} doesn&apos;t have a deal on its own site today. We check every morning; watch this store below and
-              we&apos;ll email you when one posts.
-            </EmptyBreath>
-          ) : (
-            <div className="sd-deals">
-            {deals.map((d, i) => {
-              const dollars = estimateSavings(d);
-              const savingsLabel = formatSavingsDollars(d);
-              const expiresLabel = formatExpires(d.expires_at);
-              const pill = saveLabel(d, dollars);
-              const a = amountOf(d);
-              const visit = visitDispensaryHref({
-                website: listing.website,
-                address1: listing.address1,
-                city: listing.city,
-              });
-              return (
-                <ExhaleCard
-                  key={d.id}
-                  index={i}
-                  from="store"
-                  deal={{ id: String(d.id), slug, city }}
-                  saving={pill ? pill.replace(/^Save\s+/, "") : null}
-                  dollars={dollars ?? (a?.kind === "dollars" ? a.value : null)}
-                  percent={a?.kind === "percent" ? a.value : null}
-                  faceClassName="sd-face"
-                  words={
-                    <span className="deal-title">{(dollars == null && savingsLabel !== "Deal active" ? dealContextTag(formatDealTitle(d)) : null) || formatDealTitle(d)}</span>
-                  }
-                  aside={
-                    <span className="sd-aside">
-                      <OtdLine deal={{ ...d, deal_title: d.title }} city={city} />
-                      {dealHistory &&
-                        dealHistory.best_discount_pct != null &&
-                        dealHistory.deals_seen_90d >= 3 &&
-                        d.discount_unit === "percent" &&
-                        d.discount_value != null &&
-                        Math.round(d.discount_value) >= dealHistory.best_discount_pct && (
-                          <span className="best-seen">Best discount we&apos;ve seen here</span>
-                        )}
-                      <span className="deal-meta">
-                        {pill ? (
-                          <span className="pp-save">{pill}</span>
-                        ) : (
-                          savingsLabel !== "Deal active" && <span className="deal-savings">{savingsLabel}</span>
-                        )}
-                        {expiresLabel && <span className="deal-expires">{expiresLabel}</span>}
-                      </span>
-                    </span>
-                  }
-                  after={
-                    <StoreDealExtras
-                      d={d}
-                      confirmedCount={confirmed[d.id] || 0}
-                      visit={visit}
-                      slug={slug}
-                      hasWebsite={Boolean(listing.website)}
-                      reportContext={`${formatDealTitle(d)} at ${listing.name || slug}`}
-                    />
-                  }
-                  otdDeal={{ ...d, deal_title: d.title, city }}
-                  directionsHref={mapsHref([listing.address1, listing.city, listing.state])}
-                  line={EXHALE_LINES[i % EXHALE_LINES.length]}
-                />
-              );
-            })}
-            </div>
-          )}
-          <WatchControl kind="store" slug={slug} storeName={name} />
-        </section>
 
-        {/* Hours */}
-        {hours.length > 0 && (
-          <section className="section" aria-label="Weekly hours">
-            <div className="section-h">Hours</div>
-            <div className="hours">
-              {DAY_NAMES.map((day, i) => {
-                const row = hours.find((h) => h.weekday === i);
-                const isToday = i === todayIdx;
-                const closed = !row || row.is_closed || !row.opens_at || !row.closes_at;
-                return (
-                  <div key={day} className={`hr ${isToday ? "hr-today" : ""}`}>
-                    <span className={isToday ? "hr-today-day" : ""}>
-                      {isToday && "● "}{day}
-                    </span>
-                    <span className={`${isToday ? "hr-today-t" : ""} ${closed ? "hr-closed" : ""}`}>
-                      {closed ? "Closed" : `${formatTime(row!.opens_at)} – ${formatTime(row!.closes_at)}`}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-        )}
-
-        {/* About */}
-        {(listing.long_description || listing.short_description) && (
-          <section className="section" aria-label={`About ${name}`}>
-            <div className="section-h">About</div>
-            <div className="about">
-              {listing.long_description || listing.short_description}
-            </div>
-          </section>
-        )}
-
-        {/* Amenities — lucide icons replacing the legacy emoji per brand
-            spec 2.5. AmenityRow knows the boolean→icon mapping. */}
-        {hasAmenities && (
-          <section className="section" aria-label="Amenities">
-            <div className="section-h">Amenities</div>
-            <AmenityRow listing={listing} variant="pill" />
-          </section>
-        )}
-
-        {/* Reviews — moderated, real users only */}
-        <ReviewsSection
-          slug={slug}
-          name={name}
-          reviews={reviews}
-          stats={reviewStats}
-          enabled={reviewsOn}
-        />
-
-        {/* Claim CTA — subtle, non-intrusive */}
-        <div className="claim-cta">
-          Own {name}?{" "}
-          <Link href={`/claim/${slug}`}>Claim this listing →</Link>
+          <p className="g-block g-note">
+            Own {name}? <Link href={`/claim/${slug}`}>Claim this listing</Link>
+          </p>
         </div>
       </main>
-
-      <Footer />
     </>
   );
 }

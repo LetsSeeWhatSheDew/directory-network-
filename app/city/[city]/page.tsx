@@ -485,7 +485,7 @@ export default async function CityPage({
           <span className="g-stat"><b>{stores.length}</b> store{stores.length === 1 ? "" : "s"}</span>
           {hasHours && <span className="g-stat"><b>{openCount}</b> open now</span>}
         </div>
-        {heroPick && <HeroTicket deal={heroPick.deal} miles={null} scope="near" />}
+        {heroPick && <HeroTicket deal={heroPick.deal} miles={null} scope="near" label={`Best deal in ${city}`} />}
       </Band>
 
       <main className="g-page">
