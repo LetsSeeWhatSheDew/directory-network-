@@ -66,6 +66,21 @@ Built from the only design he had put to use: the three Nov 10 flyers (Gold Leaf
 - **The Nov 11 3:39 a.m. cron took 23 deals down.** Code and data say this was legitimate: all four nuEra stores replaced their brand-by-brand deals with "25% off entire store". The cron only retires its own static-read deals at stores it read cleanly (`planRetirements`). UNVERIFIED against nuEra's site, because this sandbox can't reach it.
 - **The 337 vs 339 split** between pages was ISR cache age, not two different filters. Every page reads the same view.
 
+## Rounds 2–3 (after launch, same night)
+
+- **Guide template, 26 pages:** `GuideShell` now opens on the forest band, with gold cards and pills. Pages: drive-thru, status, cheapest, law updates, for-dispensaries, open-late, guides, ways-to-buy, medical, best-deals, route and others.
+- **Pages rebuilt:** how-we-rank, the tax calculator, upgrade, the store directory and the 404 now open on the band too.
+- **`/map`:** a "See today's deals as a list" button, because on a phone the map was a dead end.
+- **`/upgrade`:** the "Cancel anytime" pill no longer overflows its card.
+- **`/cheapest/*`:** ALL-CAPS menu product names show in normal case in the quick answer.
+- **`/status`:** the latest three checks are shown and the rest of the week is folded. The page was ~12,000px tall; it's now ~4,700.
+- **Scraper run log:** lists every store read, including clean reads with no deals. Cloud 9 East Peoria had vanished from `scraper_runs` and `/status`, which read as "never checked" (`lib/scraper/runLog.ts`, plus a test).
+- **Cleanup:**
+  - Dropped the retired `<Nav/>`/`<Footer/>` calls from 32 pages.
+  - Deleted the Breathe plume layer (ExhaleLayer, ExhaleCard, ArrivalExhale).
+- **CLAUDE.md:** Current State rebuilt from the live DB.
+- **Checks:** 436/436 Playwright checks pass after each round. Lighthouse: home 93, city 97.
+
 ## Still open
 
 - **Free alerts are untested end to end.** I didn't submit a real signup.
