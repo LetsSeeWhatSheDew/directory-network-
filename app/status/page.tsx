@@ -223,8 +223,10 @@ export default async function StatusPage() {
           {weekRuns.length === 0 ? (
             <p className="gp-p">No checks ran in the last 7 days. That&apos;s on us; deals below are the last ones we confirmed.</p>
           ) : (
-            <div className="gp-list">
-              {weekRuns.map((r) => {
+            (() => {
+              const runRows = (list: typeof weekRuns) => (
+                <div className="gp-list">
+              {list.map((r) => {
                 const st = runStatusWords(r);
                 const results = r.dispensary_results || [];
                 const misses = results.filter((x) => x && !storeOk(x));
@@ -255,7 +257,22 @@ export default async function StatusPage() {
                   </div>
                 );
               })}
-            </div>
+                </div>
+              );
+              return (
+                <>
+                  {runRows(weekRuns.slice(0, 3))}
+                  {weekRuns.length > 3 && (
+                    <details style={{ marginTop: 10 }}>
+                      <summary style={{ cursor: "pointer", fontWeight: 700, color: "#1F4A33", padding: "8px 0" }}>
+                        {weekRuns.length - 3} earlier checks this week
+                      </summary>
+                      {runRows(weekRuns.slice(3))}
+                    </details>
+                  )}
+                </>
+              );
+            })()
           )}
         </>
       )}
