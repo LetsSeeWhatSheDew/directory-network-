@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { Instrument_Sans, IBM_Plex_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
+import "./components/gold/gold.css";
+import { fraunces } from "./components/gold/fonts";
+import { GoldHeader, GoldFooter } from "./components/gold/Chrome";
 import UtmCapture from "./components/UtmCapture";
 import TrackListener from "./components/TrackListener";
 import CityPickerHost from "./components/CityPickerHost";
@@ -103,24 +106,22 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${instrumentSans.variable} ${plexMono.variable} ${instrumentSerif.variable}`}
+      className={`${instrumentSans.variable} ${plexMono.variable} ${instrumentSerif.variable} ${fraunces.variable}`}
       style={{ "--pp-pace": PP_PACE } as React.CSSProperties}
       suppressHydrationWarning
     >
       <body className="antialiased">
-        {/* Daypart for the Breathe night sky (19:00–06:00 local). Runs before
-            paint so there's no flash. ?daypart=night|day forces it for testing. */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var q=new URLSearchParams(location.search).get('daypart');var h=new Date().getHours();document.documentElement.setAttribute('data-daypart',q==='night'||q==='day'?q:(h>=19||h<6?'night':'day'));}catch(e){}})();`,
-          }}
-        />
+        {/* Gold Leaf (2026-11-11) has one theme. data-daypart stays "day" so the
+            retired Breathe night rules never apply. */}
+        <script dangerouslySetInnerHTML={{ __html: `document.documentElement.setAttribute('data-daypart','day');` }} />
         {/* Motion pace (lib/motion.ts). ?pace=1.5 slows every animation for review. */}
         <script dangerouslySetInnerHTML={{ __html: PACE_SCRIPT }} />
         {/* Hoisted to <head> by React 19 — warms the Supabase connection. */}
         <link rel="preconnect" href={SUPABASE_ORIGIN} crossOrigin="anonymous" />
         <link rel="dns-prefetch" href={SUPABASE_ORIGIN} />
+        <GoldHeader />
         {children}
+        <GoldFooter />
         <UtmCapture />
         <TrackListener />
         <CityPickerHost />

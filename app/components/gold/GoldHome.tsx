@@ -1,6 +1,8 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { Leaf, CategoryArt, Grain } from "./Art";
-import { GoldHeader, GoldFooter } from "./Chrome";
+import GoldLocate from "./GoldLocate";
+import { HeroTicket, MiniTicket, Arrow, Check } from "./Kit";
 import {
   nearestExhale,
   lowestList,
@@ -24,115 +26,7 @@ const CATS: { slug: string; label: string }[] = [
   { slug: "concentrate", label: "Dabs & wax" },
 ];
 
-function Arrow() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M5 12h14M13 6l6 6-6 6" />
-    </svg>
-  );
-}
-function Check() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <circle cx="12" cy="12" r="10" />
-      <path d="m7.5 12.5 3 3 6-6.5" />
-    </svg>
-  );
-}
-
-/** Picture for a deal: the inferred category, with vape words winning
- *  ("live resin all-in-one" is a vape, not a concentrate). */
-function artCategory(d: GoldDeal): string | null {
-  const t = `${d.deal_title || ""} ${d.deal_description || ""}`;
-  if (/\b(vapes?|all[- ]in[- ]ones?|aio|carts?|cartridges?|disposables?|pods?)\b/i.test(t)) return "vapes";
-  if (/\b(pre[- ]?rolls?|joints?|blunts?)\b/i.test(t)) return "flower";
-  return effectiveCategory(d);
-}
-
-function seenLine(d: GoldDeal): string {
-  const day = ctDay(d.verified_at);
-  const t = ctTime(d.verified_at);
-  const store = storeName(d);
-  if (!day || !t) return `Seen on ${store}'s own site. Nobody pays to rank.`;
-  return `Seen on ${store}'s own site ${day} at ${t}. Nobody pays to rank.`;
-}
-
-function HeroTicket({ deal, miles }: { deal: GoldDeal; miles: number | null }) {
-  const a = amountOf(deal)!;
-  const cat = artCategory(deal);
-  const ml = milesLabel(miles);
-  const isPct = a.kind === "percent";
-  return (
-    <div>
-      <article className="g-ticket" aria-label={`Best deal near you: ${a.big} off ${productOf(deal)} at ${storeName(deal)}`}>
-        <div className="g-ticket-top">
-          <div className="g-ticket-label">
-            <span>Best deal near you</span>
-            <span>{deal.city}</span>
-          </div>
-          <div className="g-save g-display">
-            {a.upTo && <span className="g-off" style={{ display: "block", marginLeft: 0, fontSize: 20 }}>up to</span>}
-            <span className="g-num">{isPct ? a.big.replace("%", "") : a.big}</span>
-            <span className="g-off g-italic">{isPct ? "% off" : "off"}</span>
-          </div>
-          <div className="g-ticket-art">
-            <CategoryArt category={cat} />
-          </div>
-          <p className="g-product">{productOf(deal)}</p>
-        </div>
-        <div className="g-tear" aria-hidden="true" />
-        <div className="g-ticket-bot">
-          <div className="g-store">
-            <div>
-              <Link href={storeHref(deal)} className="g-store-name">{storeName(deal)}</Link>
-              <div className="g-meta">
-                <span>{deal.city}, IL</span>
-                {deal.drive_thru ? <span>Drive-thru</span> : null}
-              </div>
-            </div>
-            {ml && (
-              <div className="g-miles">
-                {ml.replace(" mi", "")}
-                <small>{ml.startsWith("under") ? "" : "miles"}</small>
-              </div>
-            )}
-          </div>
-          <a className="g-btn" href={directionsHref(deal)} target="_blank" rel="noopener noreferrer">
-            Take me there <Arrow />
-          </a>
-        </div>
-      </article>
-      <p className="g-proof">
-        <Check />
-        <span>{seenLine(deal)}</span>
-      </p>
-    </div>
-  );
-}
-
-function MiniTicket({ deal, origin }: { deal: GoldDeal; origin: Origin | null }) {
-  const a = amountOf(deal)!;
-  const ml = milesLabel(milesTo(deal, origin));
-  const isPct = a.kind === "percent";
-  return (
-    <Link className="g-mini" href={storeHref(deal)}>
-      <div className="g-mini-top">
-        <div className="g-mini-save g-display">
-          {isPct ? a.big.replace("%", "") : a.big}
-          <small className="g-italic">{isPct ? "%" : "off"}</small>
-        </div>
-        <CategoryArt category={artCategory(deal)} className="g-mini-art" />
-      </div>
-      <div className="g-mini-prod">{productOf(deal)}</div>
-      <div className="g-mini-store">
-        <span>{storeName(deal)}</span>
-        <span>{ml || deal.city}</span>
-      </div>
-    </Link>
-  );
-}
-
-export default function GoldHome({ data, origin }: { data: Data; origin: Origin | null }) {
+export default function GoldHome({ data, origin, faq }: { data: Data; origin: Origin | null; faq?: ReactNode }) {
   const pick = nearestExhale(data.pool, origin);
   const hero = (pick?.deal as GoldDeal) || null;
   const more = lowestList(data.pool, 4, origin, hero?.deal_id || null) as GoldDeal[];
@@ -141,8 +35,6 @@ export default function GoldHome({ data, origin }: { data: Data; origin: Origin 
 
   return (
     <div className="g-root">
-      <GoldHeader city={city} />
-
       <section className="g-hero" aria-labelledby="g-h1">
         <Grain />
         <span className="g-hero-glow" aria-hidden="true" />
@@ -153,9 +45,10 @@ export default function GoldHome({ data, origin }: { data: Data; origin: Origin 
               Best Bud <span className="g-buck">For Your <span className="g-gold-text">Buck$</span></span>
             </h1>
             <div className="g-eyebrow" style={{ marginTop: 14 }}>{data.total} deals · {data.stores} stores · today</div>
+            <GoldLocate serverCity={city} />
           </div>
           {hero ? (
-            <HeroTicket deal={hero} miles={pick?.miles ?? null} />
+            <HeroTicket deal={hero} miles={pick?.miles ?? null} scope={pick?.scope || "region"} />
           ) : (
             <p className="g-hero-sub">Nothing worth the drive yet today. We check again tomorrow morning.</p>
           )}
@@ -263,7 +156,27 @@ export default function GoldHome({ data, origin }: { data: Data; origin: Origin 
         </div>
       </section>
 
-      <GoldFooter />
+      {faq}
     </div>
+  );
+}
+
+/** Visible FAQ that backs the home page's FAQPage schema. */
+export function GoldFaq({ entries }: { entries: { q: string; a: string }[] }) {
+  return (
+    <section className="g-sec g-sec-paper g-faq" aria-labelledby="g-faq">
+      <div className="g-wrap">
+        <div className="g-eyebrow">Good questions</div>
+        <h2 id="g-faq" className="g-display">Asked a lot</h2>
+        <div className="g-faq-list">
+          {entries.map((e, i) => (
+            <details key={i} className="g-faq-item">
+              <summary>{e.q}</summary>
+              <p>{e.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }

@@ -5,29 +5,21 @@
 // all three via internal linking.
 
 import Link from "next/link";
-import { saveLabel, isConditional, cleanDealTitle, amountOf, directionsHref, EXHALE_LINES } from "@/lib/exhale";
-import ExhaleCard from "../../components/ExhaleCard";
-import EmptyBreath from "../../components/EmptyBreath";
-import OtdLine from "../../components/OtdLine";
+import { isConditional, nearestExhale } from "@/lib/exhale";
+import { Band, HeroTicket, StoreDeals, StoreCard, Faq } from "../../components/gold/Kit";
 import WatchControl from "../../components/WatchControl";
-import { priceChip, cityTaxRates } from "@/lib/otd";
+import { cityTaxRates } from "@/lib/otd";
 import { getFeatureRows, featuresBySlug } from "@/lib/waysToBuy";
 import StoreAvatar from "@/app/components/StoreAvatar";
 import { storeImageUrl } from "@/lib/storeImage";
-import Nav from "../../components/Nav";
-import Footer from "../../components/Footer";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
 import { isInCentralIL } from "../../../lib/visibility";
 import { isCentralILPublicCity } from "../../../lib/constants/regions";
-import { estimateSavings } from "../../../lib/dealScoring";
-import EndingSoonRow, { type EndingSoonDeal } from "../../components/EndingSoonRow";
 import PriceBoard from "../../components/PriceBoard";
 import { getLivePriceBoard } from "../../../lib/priceBoard";
 import ReportIssueLink from "../../components/ReportIssueLink";
-import QuickAnswerLinks from "../../components/QuickAnswerLinks";
-import StoreOverflowLinks from "../../components/StoreOverflowLinks";
 import { capPerStore, overflowFor, STORE_CAP } from "../../../lib/storeCap";
 import { getCityProfile, nearbyCities } from "../../../lib/cityProfiles";
 import { getCityMonth, dayCountsReliable } from "../../../lib/dealHistory";
@@ -469,390 +461,178 @@ export default async function CityPage({
     })),
   });
 
+  const heroPick = nearestExhale(deals.map((d) => ({ ...d, deal_id: d.id })), { city });
+  const withDeals = new Set(deals.map((d) => d.listing_slug)).size;
+  const pctDeals = deals
+    .filter((d) => (d.discount_unit === "percent" || !d.discount_unit) && Number(d.discount_value) > 0 && Number(d.discount_value) <= 100 && !isConditional({ ...d, deal_title: d.deal_title || d.title }))
+    .sort((a, b) => Number(b.discount_value) - Number(a.discount_value));
+  const topPct = pctDeals[0];
+  const nameOf = (d: DealRow) => String(stores.find((x) => x.l.slug === d.listing_slug)?.l.name || d.name || d.listing_slug || "").replace(/^nuera\b/i, "nuEra");
+  const tax = cityTaxRates(city);
+  const pctLabel = (n: number) => `${(n * 100).toFixed(1).replace(/\.0$/, "")}%`;
+
   return (
     <>
-      <style>{`
-        .cp{max-width:880px;margin:0 auto;padding:clamp(1.5rem,4vw,2.75rem) clamp(1rem,4vw,1.5rem) 4rem;color:var(--pp-body)}
-        .cp-crumb{font-family:var(--font-body);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--pp-muted);margin-bottom:.9rem}
-        .cp-crumb a{color:inherit;text-decoration:none}
-        .cp-crumb a:hover{color:var(--pp-signal-ink)}
-        .cp h1{font-family:var(--font-display);font-size:clamp(2rem,5vw,3rem);line-height:1.02;letter-spacing:-.035em;color:var(--pp-ink);font-weight:700;margin:0 0 .9rem}
-        .cp-intro{font-size:1rem;line-height:1.6;max-width:640px;margin:0 0 1.5rem;color:var(--pp-body)}
-        .cp-tax{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;font-size:.86rem;color:var(--pp-body);margin:-.4rem 0 1.6rem;padding:10px 14px;border:1px solid var(--pp-haze-border);border-radius:14px;background:var(--pp-haze)}
-        .cp-tax-l{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--pp-muted);width:100%}
-        .cp-tax b{font-family:var(--font-mono);font-weight:500;color:var(--pp-ink)}
-        .cp-tax a{margin-left:auto;color:var(--pp-mark);font-weight:600;text-decoration:none}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-        .cp-ticker{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--pp-border);border-radius:12px;background:var(--pp-surface);margin:0 0 .5rem;overflow:hidden}
-        .cp-tick{padding:.9rem 1rem;border-right:1px solid var(--pp-border)}
-        .cp-tick:last-child{border-right:none}
-        .cp-tick-n{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-size:clamp(1.5rem,4vw,2rem);font-weight:600;color:var(--pp-ink);line-height:1}
-        .cp-tick-n.sig{color:var(--pp-signal)}
-        .cp-tick-l{font-family:var(--font-body);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--pp-muted);margin-top:.4rem}
-        .cp-asof{font-family:var(--font-body);font-size:.8rem;line-height:1.55;color:var(--pp-muted);margin:0 0 2rem}
-        .cp-asof .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--pp-signal);margin-right:.4rem;vertical-align:middle}
+      <Band
+        eyebrow={<><Link href="/" style={{ color: "inherit", textDecoration: "none" }}>Central Illinois</Link> / {city}</>}
+        title={city}
+        italic="deals today"
+      >
+        <div className="g-stats">
+          <span className="g-stat"><b>{deals.length}</b> deal{deals.length === 1 ? "" : "s"}</span>
+          <span className="g-stat"><b>{stores.length}</b> store{stores.length === 1 ? "" : "s"}</span>
+          {hasHours && <span className="g-stat"><b>{openCount}</b> open now</span>}
+        </div>
+        {heroPick && <HeroTicket deal={heroPick.deal} miles={null} scope="near" />}
+      </Band>
 
-        .cp-h{font-family:var(--font-body);font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--pp-muted);margin:2.25rem 0 .75rem;display:flex;justify-content:space-between;gap:1rem}
-
-        .cp-empty{border:1px dashed var(--pp-best-border);background:var(--pp-best-tint);border-radius:12px;padding:1.1rem 1.2rem}
-        .cp-empty-t{font-family:var(--font-display);font-weight:700;color:var(--pp-ink);font-size:1.05rem;margin:0 0 .3rem}
-        .cp-empty p{font-size:.9rem;line-height:1.55;margin:0}
-        .cp-near{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.85rem}
-        .cp-near a{display:inline-flex;align-items:baseline;gap:.45rem;padding:.45rem .75rem;border:1px solid var(--pp-best-border);background:var(--pp-surface);border-radius:999px;text-decoration:none;color:var(--pp-ink);font-size:.85rem;font-weight:600}
-        .cp-near a:hover{border-color:var(--pp-signal)}
-        .cp-near .m{font-family:var(--font-mono);font-size:.72rem;color:var(--pp-signal-ink);font-weight:500}
-        .cp-alert{display:inline-block;margin-top:.9rem;font-weight:700;font-size:.88rem;color:var(--pp-signal-ink);text-decoration:none}
-        .cp-alert:hover{text-decoration:underline}
-
-        .cp-deals{display:flex;flex-direction:column;gap:.6rem;margin-bottom:.6rem}
-        .deal-row{padding:.9rem 1.1rem .5rem;display:flex !important;justify-content:space-between;align-items:center;gap:1rem;color:inherit}
-        .deal-body{flex:1;min-width:0}
-        .deal-name{display:block;font-family:var(--font-body);font-size:.95rem;font-weight:700;color:var(--pp-ink);margin-bottom:2px}
-        .deal-title{display:block;font-size:.84rem;line-height:1.4}
-        .deal-otd{display:block;padding:0 1.1rem .8rem}
-        .deal-right{text-align:right;flex-shrink:0}
-        .deal-save-label{font-family:var(--font-body);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--pp-muted)}
-        .deal-save-amt{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-size:1.4rem;color:var(--pp-signal-ink);font-weight:600;line-height:1}
-
-        .st{border:1px solid var(--pp-border);border-radius:12px;background:var(--pp-surface);overflow:hidden}
-        .st-row{display:grid;grid-template-columns:1fr auto;gap:.35rem 1rem;padding:1rem 1.1rem;border-bottom:1px solid var(--pp-border)}
-        .st-row:last-child{border-bottom:none}
-        .st-name{font-family:var(--font-display);font-size:1.05rem;font-weight:700;color:var(--pp-ink);text-decoration:none;letter-spacing:-.01em}
-        .st-name:hover{color:var(--pp-signal-ink)}
-        .st-status{font-family:var(--font-mono);font-size:.72rem;white-space:nowrap;align-self:start;padding-top:.2rem}
-        .st-status.open{color:var(--pp-signal)}
-        .st-status.open::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--pp-signal);margin-right:.4rem;vertical-align:middle}
-        .st-status.closed{color:var(--pp-muted)}
-        .st-meta{grid-column:1/-1;font-size:.8rem;color:var(--pp-muted);display:flex;flex-wrap:wrap;gap:.25rem .9rem}
-        .st-meta .mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
-        .st-desc{grid-column:1/-1;font-size:.88rem;line-height:1.5;margin:.15rem 0 0;max-width:640px}
-        .st-chips{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.35rem}
-        .st-chip{font-size:.72rem;padding:.2rem .55rem;border:1px solid var(--pp-border);border-radius:999px;color:var(--pp-body);background:var(--pp-paper)}
-        .st-chip.deal{border-color:var(--pp-best-border);background:var(--pp-best-tint);color:var(--pp-signal-ink);font-weight:600}
-        .st-actions{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:1.1rem;margin-top:.5rem;font-size:.82rem;font-weight:600}
-        .st-actions a{color:var(--pp-signal-ink);text-decoration:none;min-height:32px;display:inline-flex;align-items:center}
-        .st-actions a:hover{text-decoration:underline}
-
-        .faq{border-top:1px solid var(--pp-border)}
-        .faq-item{border-bottom:1px solid var(--pp-border);padding:1rem 0}
-        .faq-q{font-family:var(--font-display);font-weight:700;color:var(--pp-ink);font-size:1rem;margin:0 0 .3rem}
-        .faq-a{font-size:.9rem;line-height:1.55;margin:0}
-
-        .cp-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;align-items:center;margin-top:2.5rem;padding-top:1.25rem;border-top:1px solid var(--pp-border);font-size:.82rem;color:var(--pp-muted)}
-        .cp-foot a{color:var(--pp-signal-ink);font-weight:600;text-decoration:none}
-
-        @media(max-width:560px){
-          .st-row{grid-template-columns:1fr}
-          .st-status{padding-top:0}
-          .cp-tick{padding:.75rem .7rem}
-          .cp-tick-l{font-size:.58rem}
-          .deal-save-amt{font-size:1.2rem}
-        }
-      `}</style>
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-
-      <Nav variant="light" />
-
-      <main className="cp">
-        <nav className="cp-crumb" aria-label="Breadcrumb">
-          <Link href="/">Central Illinois</Link> / {city}
-        </nav>
-        <h1>{city} dispensary deals today</h1>
-        {profile?.intro && <p className="cp-intro">{profile.intro}</p>}
-        {/* Quick answer — one quotable paragraph for people and AI assistants:
-            the best deal, how many are live, who's open latest. Real data only. */}
-        {(() => {
-          const pctDeals = deals
-            .filter((d) => (d.discount_unit === "percent" || !d.discount_unit) && Number(d.discount_value) > 0 && Number(d.discount_value) <= 100 && !isConditional({ ...d, deal_title: d.deal_title || d.title }))
-            .sort((a, b) => Number(b.discount_value) - Number(a.discount_value));
-          const top = pctDeals[0];
-          const storeName = (d: DealRow) => String(stores.find((x) => x.l.slug === d.listing_slug)?.l.name || d.name || d.listing_slug || "").replace(/^nuera\b/i, "nuEra");
-          const withDeals = new Set(deals.map((d) => d.listing_slug)).size;
-          return (
-            <p className="cp-intro" style={{ background: "var(--pp-surface)", border: "1px solid var(--pp-border)", borderRadius: 12, padding: "12px 14px" }}>
+      <main className="g-page">
+        <div className="g-wrap">
+          <div className="g-block">
+            {/* Quick answer: one quotable paragraph for people and AI assistants. Real data only. */}
+            <p className="g-answer">
               <b>Quick answer ({asOf} CT):</b>{" "}
-              {top
-                ? <>the biggest everyday discount in {city} right now is <b>{top.deal_title || top.title}</b> at {storeName(top)}. </>
+              {topPct
+                ? <>the biggest everyday discount in {city} right now is <b>{topPct.deal_title || topPct.title}</b> at {nameOf(topPct)}. </>
                 : deals.length > 0
                   ? <>{city} deals right now are bundles and set prices, not straight discounts. </>
                   : <>no {city} store has a deal posted on its own site right now. </>}
               {deals.length > 0 && <>{deals.length} {deals.length === 1 ? "deal is" : "deals are"} live {stores.length === 1 ? <>at {city}&apos;s one dispensary</> : <>at {withDeals} of {stores.length} {city} dispensaries</>}. </>}
               {lateNight?.today?.closes_at && <>{String(lateNight.l.name || "").replace(/^nuera\b/i, "nuEra")} closes latest tonight, at {formatTime(lateNight.today.closes_at)}.</>}
             </p>
-          );
-        })()}
-        <QuickAnswerLinks city={slug} cityName={city} />
-
-        {/* Live ticker — every number is computed from the DB at render. */}
-        <div className="cp-ticker" role="group" aria-label={`${city} right now`}>
-          <div className="cp-tick">
-            <div className="cp-tick-n">{stores.length}</div>
-            <div className="cp-tick-l">{stores.length === 1 ? "Dispensary" : "Dispensaries"}</div>
-          </div>
-          <div className="cp-tick">
-            <div className={`cp-tick-n${openCount > 0 ? " sig" : ""}`}>
-              {hasHours ? openCount : "—"}
-            </div>
-            <div className="cp-tick-l">Open now</div>
-          </div>
-          <div className="cp-tick">
-            <div className={`cp-tick-n${deals.length > 0 ? " sig" : ""}`}>{deals.length}</div>
-            <div className="cp-tick-l">Verified deals</div>
-          </div>
-        </div>
-        <p className="cp-asof">
-          <span className="dot" aria-hidden="true" />
-          As of {asOf} CT · deals checked daily on each dispensary&apos;s own site
-          {month && dayCountsReliable() && (
-            <>
-              {" "}· last 30 days: deals on {month.daysWithDeals} day{month.daysWithDeals === 1 ? "" : "s"}
-              {month.avgDiscountPct != null ? `, avg ${month.avgDiscountPct}% off` : ""}
-            </>
-          )}
-          {" "}· No store pays to rank ·{" "}
-          <Link href="/how-we-rank" style={{ color: "var(--pp-signal-ink)", fontWeight: 600 }}>How we rank</Link>
-        </p>
-
-        {(() => {
-          const t = cityTaxRates(city);
-          if (!t) return null;
-          const p = (n: number) => `${(n * 100).toFixed(1).replace(/\.0$/, "")}%`;
-          return (
-            <p className="cp-tax">
-              <span className="cp-tax-l">Tax at the register in {city}</span>
-              <span>Flower <b>+{p(t.flower)}</b></span>
-              <span>Vapes <b>+{p(t.concentrate)}</b></span>
-              <span>Edibles <b>+{p(t.edible)}</b></span>
-              <Link href="/out-the-door">Deals with tax included →</Link>
+            <p className="g-note">
+              Checked daily on each dispensary&apos;s own site
+              {month && dayCountsReliable() && (
+                <>
+                  {" "}· last 30 days: deals on {month.daysWithDeals} day{month.daysWithDeals === 1 ? "" : "s"}
+                  {month.avgDiscountPct != null ? `, avg ${month.avgDiscountPct}% off` : ""}
+                </>
+              )}
+              {" "}· Nobody pays to rank · <Link href="/how-we-rank">How we rank</Link>
             </p>
-          );
-        })()}
-
-        {livePriceBoard && /· LIVE$/.test(livePriceBoard.locationTag || "") && (
-          <div style={{ margin: "0 0 2rem", maxWidth: 560 }}>
-            <PriceBoard {...livePriceBoard} />
           </div>
-        )}
 
-        <EndingSoonRow
-          deals={capPerStore(endingWithin24h(deals), STORE_CAP.highlight).kept
-            .slice(0, 5)
-            .map(
-              (d): EndingSoonDeal => ({
-                id: d.id,
-                listing_slug: d.slug || d.listing_slug,
-                dispensary_name: d.name || d.listing_slug || "Dispensary",
-                city: d.city || city,
-                title: d.deal_title || d.title || "Active deal",
-                expires_at: d.expires_at!,
-              })
+          <div className="g-block">
+            <div className="g-eyebrow">Every deal, by store</div>
+            <h2 className="g-display">What&apos;s on in {city}</h2>
+            {deals.length > 0 ? (
+              <StoreDeals deals={deals.map((d) => ({ ...d, deal_id: d.id }))} cityParam={city} />
+            ) : (
+              <div className="g-answer">
+                No {city} store has a deal on its own site today. We only list what we can confirm there.
+                {nearbyWithDeals.length > 0 && (
+                  <div className="g-near" style={{ marginTop: 12 }}>
+                    {nearbyWithDeals.map((c) => (
+                      <Link key={c.slug} href={`/city/${c.slug}`}>
+                        {c.name} <small>{c.deals} deal{c.deals === 1 ? "" : "s"} · ~{c.miles} mi</small>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             )}
-        />
-
-        <div className="cp-h">
-          <span>Deals · best savings first</span>
-        </div>
-        {deals.length > 0 ? (
-          <>
-          <div className="cp-deals">
-          {shownDeals.map((d, i) => {
-            const dslug = d.slug || d.listing_slug;
-            const dollars = estimateSavings(d);
-            const name = d.name || dslug;
-            const title = cleanDealTitle(d.deal_title || d.title) || "Active deal";
-            const pill = saveLabel({ ...d, deal_title: title }, dollars);
-            const a = amountOf({ ...d, deal_title: title });
-            const store = listings.find((l) => l.slug === dslug);
-            return (
-              <ExhaleCard
-                key={d.id}
-                index={i}
-                from="city"
-                deal={{ id: String(d.id), slug: dslug, city }}
-                saving={pill ? pill.replace(/^Save\s+/, "") : null}
-                dollars={dollars ?? (a?.kind === "dollars" ? a.value : null)}
-                percent={a?.kind === "percent" ? a.value : null}
-                faceClassName="deal-row"
-                words={
-                  <span className="deal-body">
-                    <span className="deal-name">{name}</span>
-                    <span className="deal-title">{title}</span>
-                  </span>
-                }
-                aside={
-                  <span className="deal-right">
-                    {pill ? (
-                      <span className="pp-save">{pill}</span>
-                    ) : (
-                      <span className="deal-save-label" style={{ fontSize: ".8rem" }}>{priceChip({ ...d, deal_title: title }) || "Deal"}</span>
-                    )}
-                  </span>
-                }
-                after={
-                  <span className="deal-otd">
-                    <OtdLine deal={{ ...d, deal_title: title }} city={d.city || city} />
-                  </span>
-                }
-                otdDeal={{ ...d, deal_title: title, city: d.city || city }}
-                directionsHref={directionsHref({ name: store?.name || name, slug: dslug, city, lat: store?.lat ?? null, lng: store?.lng ?? null })}
-                seeHref={`/dispensary/${dslug}?city=${encodeURIComponent(city)}`}
-                seeLabel="See the store"
-                line={EXHALE_LINES[i % EXHALE_LINES.length]}
-              />
-            );
-          })}
+            <div style={{ marginTop: 14 }}>
+              <WatchControl kind="city" city={city} />
+            </div>
           </div>
-          {shownDeals.length < deals.length && (
-            <p className="cp-asof" style={{ marginTop: 10 }}>
-              Showing {shownDeals.length} of {deals.length} {city} deals, up to {STORE_CAP.cityList} per store so every store gets seen.
-            </p>
+
+          {(tax || (livePriceBoard && /· LIVE$/.test(livePriceBoard.locationTag || ""))) && (
+            <div className="g-block">
+              <div className="g-eyebrow">At the register</div>
+              <h2 className="g-display">Prices &amp; tax</h2>
+              {tax && (
+                <p className="g-answer">
+                  Tax in {city} adds <b>{pctLabel(tax.flower)}</b> on flower, <b>{pctLabel(tax.concentrate)}</b> on vapes and concentrates, and{" "}
+                  <b>{pctLabel(tax.edible)}</b> on edibles. <Link className="g-link" href="/out-the-door">See deals with tax included</Link>
+                </p>
+              )}
+              {livePriceBoard && /· LIVE$/.test(livePriceBoard.locationTag || "") && (
+                <div style={{ marginTop: 14, maxWidth: 560 }}>
+                  <PriceBoard {...livePriceBoard} />
+                </div>
+              )}
+            </div>
           )}
-          <StoreOverflowLinks stores={dealOverflow} city={city} note={false} />
-          </>
-        ) : (
-          <EmptyBreath
-            steps={[
-              ...(nearbyWithDeals[0] ? [{ href: `/city/${nearbyWithDeals[0].slug}`, label: `See ${nearbyWithDeals[0].name} deals` }] : []),
-              { href: "/alerts", label: `Get ${city} deals every Monday` },
-            ]}
-          >
-            No {city} store has a deal on its own site today. We only list what we can confirm there, so this
-            stays honest until one posts.
-            {nearbyWithDeals.length > 0 && (
-              <div className="cp-near" style={{ justifyContent: "center" }}>
-                {nearbyWithDeals.map((c) => (
+
+          {stores.length > 0 && (
+            <div className="g-block">
+              <div className="g-eyebrow">{hasHours ? "Open ones first" : "Every store"}</div>
+              <h2 className="g-display">
+                {stores.length} dispensar{stores.length === 1 ? "y" : "ies"} in {city}
+              </h2>
+              <div className="g-stores">
+                {stores.map(({ l, status, openNow, todayLabel, dealCount }) => {
+                  const maps =
+                    l.lat != null && l.lng != null
+                      ? `https://www.google.com/maps/dir/?api=1&destination=${l.lat},${l.lng}`
+                      : l.address1
+                      ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(l.address1)}`
+                      : null;
+                  return (
+                    <StoreCard
+                      key={l.id}
+                      slug={l.slug}
+                      name={String(l.name || l.slug).replace(/^nuera\b/i, "nuEra")}
+                      address={l.address1 ? l.address1.replace(/,\s*IL\s*\d{5}.*$/, "") : null}
+                      status={status?.label || null}
+                      open={openNow}
+                      todayLabel={todayLabel}
+                      dealCount={dealCount}
+                      chips={amenityChips(l, featureMap.get(l.slug)).slice(0, 3)}
+                      directions={maps}
+                      phone={l.phone}
+                      logo={<StoreAvatar src={storeImageUrl(l.logo_url, l.slug)} name={l.name || l.slug} size={44} />}
+                    />
+                  );
+                })}
+              </div>
+              <p className="g-note">
+                <Link href="/ways-to-buy#compare">Compare drive-thru, medical, order-ahead &amp; curbside for every store</Link>
+              </p>
+            </div>
+          )}
+
+          {nearby.length > 0 && (
+            <div className="g-block">
+              <div className="g-eyebrow">Short drive</div>
+              <h2 className="g-display">Nearby towns</h2>
+              <div className="g-near">
+                {nearby.map((c) => (
                   <Link key={c.slug} href={`/city/${c.slug}`}>
-                    {c.name}
-                    <span className="m">
-                      {c.deals} deal{c.deals === 1 ? "" : "s"} · ~{c.miles} mi
-                    </span>
+                    {c.name} <small>~{c.miles} mi{c.deals > 0 ? ` · ${c.deals} deal${c.deals === 1 ? "" : "s"}` : ""}</small>
                   </Link>
                 ))}
               </div>
-            )}
-          </EmptyBreath>
-        )}
-        <WatchControl kind="city" city={city} />
-
-        {stores.length > 0 && (
-          <>
-            <div className="cp-h">
-              <span>
-                {stores.length} dispensar{stores.length === 1 ? "y" : "ies"} in {city}
-              </span>
-              {hasHours && <span>Open first</span>}
             </div>
-            <p style={{ margin: "0 0 10px", fontSize: ".85rem" }}>
-              <Link href="/ways-to-buy#compare" style={{ color: "var(--pp-signal-ink)", fontWeight: 600 }}>Compare drive-thru, medical, order-ahead &amp; curbside for every store →</Link>
-            </p>
-            <div className="st">
-              {stores.map(({ l, status, openNow, todayLabel, dealCount }) => {
-                const chips = amenityChips(l, featureMap.get(l.slug));
-                const maps =
-                  l.lat != null && l.lng != null
-                    ? `https://www.google.com/maps/dir/?api=1&destination=${l.lat},${l.lng}`
-                    : l.address1
-                    ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(l.address1)}`
-                    : null;
-                return (
-                  <div key={l.id} className="st-row">
-                    <Link href={`/dispensary/${l.slug}`} className="st-name" style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
-                      <StoreAvatar src={storeImageUrl(l.logo_url, l.slug)} name={l.name || l.slug} size={36} />
-                      <span>{l.name || l.slug}</span>
-                    </Link>
-                    {status ? (
-                      <span className={`st-status ${openNow ? "open" : "closed"}`}>{status.label}</span>
-                    ) : (
-                      <span />
-                    )}
-                    <div className="st-meta">
-                      {l.address1 && <span>{l.address1.replace(/,\s*IL\s*\d{5}.*$/, "")}</span>}
-                      {todayLabel && <span className="mono">Today {todayLabel}</span>}
-                    </div>
-                    {l.short_description && <p className="st-desc">{l.short_description}</p>}
-                    {(chips.length > 0 || dealCount > 0) && (
-                      <div className="st-chips">
-                        {dealCount > 0 && (
-                          <span className="st-chip deal">
-                            {dealCount} deal{dealCount === 1 ? "" : "s"} today
-                          </span>
-                        )}
-                        {chips.map((c) => (
-                          <span key={c} className="st-chip">{c}</span>
-                        ))}
-                      </div>
-                    )}
-                    <div className="st-actions">
-                      <Link href={`/dispensary/${l.slug}`}>Details →</Link>
-                      {maps && (
-                        <a href={maps} target="_blank" rel="noopener noreferrer" data-track="directions_tap" data-track-slug={l.slug} data-track-city={city} data-track-from="city">Directions</a>
-                      )}
-                      {l.phone && <a href={`tel:${l.phone.replace(/[^\d+]/g, "")}`} data-track="call_tap" data-track-slug={l.slug} data-track-city={city} data-track-from="city">{l.phone}</a>}
-                    </div>
-                  </div>
-                );
-              })}
+          )}
+
+          {faqs.length > 0 && (
+            <div className="g-block">
+              <Faq items={faqs} title={`${city} questions`} />
+              <div className="g-near" style={{ marginTop: 16 }}>
+                {[
+                  ...(["Normal", "Bloomington", "Champaign", "Urbana"].includes(city)
+                    ? [{ href: "/guides/where-to-buy-near-isu-and-uiuc", label: city === "Normal" || city === "Bloomington" ? "Near ISU (21+)" : "Near UIUC (21+)" }]
+                    : []),
+                  { href: "/guides/best-day-for-dispensary-deals", label: "Best day for deals" },
+                  { href: "/guides/dispensary-first-time-discounts-central-illinois", label: "First-time & veteran discounts" },
+                  { href: "/guides/can-you-use-a-credit-card-at-illinois-dispensaries", label: "Paying: cash or debit?" },
+                  { href: "/guides", label: "All guides" },
+                ].map((g) => (
+                  <Link key={g.href} href={g.href}>{g.label}</Link>
+                ))}
+              </div>
             </div>
-          </>
-        )}
+          )}
 
-        {nearby.length > 0 && (
-          <>
-            <div className="cp-h"><span>Nearby cities</span></div>
-            <div className="cp-near" style={{ marginTop: 0 }}>
-              {nearby.map((c) => (
-                <Link key={c.slug} href={`/city/${c.slug}`}>
-                  {c.name}
-                  <span className="m">
-                    ~{c.miles} mi{c.deals > 0 ? ` · ${c.deals} deal${c.deals === 1 ? "" : "s"}` : ""}
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </>
-        )}
-
-        <div className="cp-h"><span>Common questions</span></div>
-        <div className="cp-near" style={{ marginTop: 0 }}>
-          {[
-            ...(["Normal", "Bloomington", "Champaign", "Urbana"].includes(city)
-              ? [{ href: "/guides/where-to-buy-near-isu-and-uiuc", label: city === "Normal" || city === "Bloomington" ? "Near ISU (21+)" : "Near UIUC (21+)" }]
-              : []),
-            { href: "/guides/best-day-for-dispensary-deals", label: "Best day for deals" },
-            { href: "/guides/dispensary-first-time-discounts-central-illinois", label: "First-time & veteran discounts" },
-            { href: "/guides/can-you-use-a-credit-card-at-illinois-dispensaries", label: "Paying: cash or debit?" },
-            { href: "/guides/buying-cannabis-in-illinois-as-an-out-of-state-visitor", label: "Visiting from out of state" },
-            { href: "/guides", label: "All guides" },
-          ].map((g) => (
-            <Link key={g.href} href={g.href}>{g.label}</Link>
-          ))}
-        </div>
-
-        {faqs.length > 0 && (
-          <>
-            <div className="cp-h"><span>{city} questions</span></div>
-            <div className="faq">
-              {faqs.map((f) => (
-                <div key={f.q} className="faq-item">
-                  <h2 className="faq-q">{f.q}</h2>
-                  <p className="faq-a">{f.a}</p>
-                </div>
-              ))}
-            </div>
-          </>
-        )}
-
-        <div className="cp-foot">
-          <Link href="/deals/all">All Central IL deals →</Link>
-          <ReportIssueLink context={`${city} city page`} url={pageUrl} label="See something wrong? Tell us" />
+          <div className="g-block g-note" style={{ display: "flex", flexWrap: "wrap", gap: 16, justifyContent: "space-between" }}>
+            <Link href="/deals">All Central IL deals</Link>
+            <ReportIssueLink context={`${city} city page`} url={pageUrl} label="See something wrong? Tell us" />
+          </div>
         </div>
       </main>
-
-      <Footer />
     </>
   );
 }

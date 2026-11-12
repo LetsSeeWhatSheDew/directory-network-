@@ -916,7 +916,7 @@ html[data-daypart="night"] .leaflet-control-zoom a { background: var(--pp-surfac
 /* Breathe final: fine film grain over every page so it feels made, not generated.
    A tiny tiled PNG (cheap) instead of a full-screen SVG filter. */
 body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 1000;
-  background-image: url(/grain.png); background-size: 160px 160px; opacity: .35; mix-blend-mode: multiply; }
+  background-image: url(/grain.png); background-size: 160px 160px; opacity: .14; mix-blend-mode: multiply; }
 html[data-daypart="night"] body::after { opacity: .22; mix-blend-mode: screen; }
 @media print { body::after { display: none; } }
 
@@ -1207,3 +1207,63 @@ html.pp-away .pp-lp::before { animation-play-state: paused !important; }
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   html { scroll-behavior: auto !important; }
 }
+
+/* ============================================================
+ * GOLD LEAF (2026-11-11) — sitewide foundation.
+ * Taken from the flyers Matthew approved (Gold Leaf / Big Leaf).
+ * Every older page reads the --pp-* tokens, so remapping them here
+ * puts the whole site on one palette and one type system. Pages are
+ * cream paper with forest ink and gold accents; the header, footer and
+ * hero bands are deep forest. Component styles: app/components/gold/gold.css.
+ * ============================================================ */
+:root {
+  --pp-ink: #10201A;
+  --pp-body: #3C4A40;
+  --pp-paper: #F7F0E1;
+  --pp-paper-top: #F7F0E1;
+  --pp-surface: #FFFAF0;
+  --pp-canopy: #10291C;
+  --pp-canopy-text: #F4EAD5;
+  --pp-canopy-eyebrow: #D9AC4F;
+  --pp-signal: #1F4A33;
+  --pp-signal-ink: #1F4A33;
+  --pp-signal-fill: #10291C;
+  --pp-best-tint: #F4EAD5;
+  --pp-best-border: #E2CF9F;
+  --pp-muted: #55604F;
+  --pp-strike: #857E72;
+  --pp-border: #E6D8BB;
+  --pp-border-2: #DCCBA8;
+  --pp-glow: #E9D49C;
+  --pp-peach: #F2CDB3;
+  --pp-peach-dot: #D9AC4F;
+  --pp-sage: #CFE2CF;
+  --pp-btn: #F4EAD5;
+  --pp-btn-border: #D9AC4F;
+  --pp-btn-fg: #10201A;
+  --pp-save-bg: #10291C;
+  --pp-save-fg: #F6DC8F;
+  --pp-big: #10291C;
+  --pp-mark: #1F4A33;
+  --pp-mark-dot: #D9AC4F;
+  --pp-warm: #F4EAD5;
+  --pp-on-dark: #F4EAD5;
+  --color-sage-vibrant: #1F4A33;
+  --font-breath: var(--font-gold-display), "Fraunces", Georgia, serif;
+  --font-display: var(--font-gold-display), "Fraunces", Georgia, serif;
+}
+body { background: var(--pp-paper); color: var(--pp-ink); }
+h1:not([data-keep-font]),
+h2:not([data-keep-font]):not(.pp-footer-heading) {
+  font-family: var(--font-gold-display), "Fraunces", Georgia, serif !important;
+  font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  color: var(--pp-ink);
+}
+h1 em, .bh-h1 em, h2 em {
+  font-family: var(--font-gold-display), "Fraunces", Georgia, serif !important;
+  font-style: italic; font-weight: 500 !important; color: var(--g-gold-ink, #7A5214);
+}
+/* Retired Breathe ambience: no orb glow, haze or fireflies anywhere. */
+.pp-haze, .pp-fireflies, .pp-firefly, .pp-plume, .pp-plume-b { display: none !important; }

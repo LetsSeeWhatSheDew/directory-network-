@@ -1,7 +1,21 @@
 import Link from "next/link";
 import { LeafMark, Leaf } from "./Art";
+import CityChip from "./CityChip";
 
-export function GoldHeader({ city }: { city?: string | null }) {
+const MENU: [string, string][] = [
+  ["Today's deals", "/deals"],
+  ["Deals by town", "/city/peoria"],
+  ["Map", "/map"],
+  ["Open late", "/open-late"],
+  ["Drive-thru", "/drive-thru"],
+  ["Free alerts", "/alerts"],
+  ["Tax calculator", "/illinois-cannabis-tax-calculator"],
+  ["Law updates", "/law-updates"],
+  ["How we rank", "/how-we-rank"],
+];
+
+/** Site header. Rendered once, in the root layout. */
+export function GoldHeader() {
   return (
     <header className="g-head">
       <div className="g-wrap g-head-in">
@@ -13,13 +27,19 @@ export function GoldHeader({ city }: { city?: string | null }) {
           <Link className="g-hl" href="/deals">Deals</Link>
           <Link className="g-hl" href="/map">Map</Link>
           <Link className="g-hl" href="/alerts">Free alerts</Link>
-          <Link className="g-city" href="/city/peoria" aria-label={`Showing deals near ${city || "Central Illinois"}. Change town`}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z" />
-              <circle cx="12" cy="9.5" r="2.5" />
-            </svg>
-            {city || "Central IL"}
-          </Link>
+          <CityChip />
+          <details className="g-menu">
+            <summary aria-label="Menu">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
+                <path d="M4 8h16M4 16h16" />
+              </svg>
+            </summary>
+            <div className="g-menu-panel">
+              {MENU.map(([label, href]) => (
+                <Link key={href} href={href}>{label}</Link>
+              ))}
+            </div>
+          </details>
         </nav>
       </div>
     </header>
@@ -40,6 +60,7 @@ const FOOT_LINKS: [string, string][] = [
   ["Terms", "/terms"],
 ];
 
+/** Site footer. Rendered once, in the root layout. */
 export function GoldFooter() {
   return (
     <footer className="g-foot">
