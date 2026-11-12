@@ -372,10 +372,10 @@ export default async function DealPage({
         .sv-exhale{position:relative;margin:-24px -24px 18px;padding:28px 24px 22px;border-radius:20px 20px 0 0;background:var(--pp-canopy) url("/gold-leaf-band.svg") no-repeat right -60px top -20px / 200px auto;border-bottom:2px dashed rgba(217,172,79,.5);overflow:hidden}
         .sv-exhale .sv-label{font-size:12px;letter-spacing:.18em;color:#D9AC4F;font-weight:700}
         .sv-exhale .sv-amt{display:flex;align-items:baseline;gap:8px;color:#F4EAD5;margin:6px 0 10px}
-        .sv-exhale .sv-amt b{font-family:var(--font-gold-display),Fraunces,serif;font-variation-settings:"SOFT" 100,"WONK" 1,"opsz" 144;font-weight:800;font-size:clamp(64px,18vw,88px);line-height:.95;letter-spacing:-.055em}
+        .sv-exhale .sv-amt b{font-family:var(--font-gold-display),Fraunces,serif;font-variation-settings:"SOFT" 100,"opsz" 144;font-weight:800;font-size:clamp(64px,18vw,88px);line-height:.95;letter-spacing:-.055em}
         .sv-exhale .sv-amt small{font-size:15px;font-weight:600;color:#D9AC4F}
         html[data-daypart="night"] .sv-exhale .sv-amt b{text-shadow:0 0 28px rgba(238,243,176,.25)}
-        .sv-line{font-family:var(--font-gold-display),Fraunces,serif;font-style:italic;font-size:1.45rem;line-height:1.15;color:#F6DC8F;margin:0 0 4px}
+        .sv-line{font-family:var(--font-gold-italic),var(--font-gold-display),Fraunces,serif;font-style:italic;font-size:1.45rem;line-height:1.15;color:#F6DC8F;margin:0 0 4px}
         .sv-sub{font-size:.85rem;color:rgba(244,234,213,.8);margin:0}
         @media (prefers-reduced-motion: no-preference){
           .sv-line{animation:pp-land calc(1.2s * var(--pp-pace)) calc(.3s * var(--pp-pace)) cubic-bezier(.2,.7,.2,1) both}

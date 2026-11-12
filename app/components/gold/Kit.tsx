@@ -92,7 +92,7 @@ export function HeroTicket({ deal, miles, scope, label }: { deal: KitDeal; miles
             <div className="g-save g-display">
               {a.upTo && <span className="g-off" style={{ display: "block", marginLeft: 0, fontSize: 20 }}>up to</span>}
               <span className="g-num">{isPct ? a.big.replace("%", "") : a.big}</span>
-              <span className="g-off g-italic">{isPct ? "% off" : "off"}</span>
+              <span className="g-off">{isPct ? "% off" : "off"}</span>
             </div>
           ) : (
             <div className="g-save g-display g-save-words">{words}</div>
@@ -142,7 +142,7 @@ export function MiniTicket({ deal, origin }: { deal: KitDeal; origin: Origin | n
       <div className="g-mini-top">
         <div className="g-mini-save g-display">
           {isPct ? a.big.replace("%", "") : a.big}
-          <small className="g-italic">{isPct ? "%" : "off"}</small>
+          <small>{isPct ? "%" : "off"}</small>
         </div>
         <CategoryArt category={artCategory(deal)} className="g-mini-art" />
       </div>

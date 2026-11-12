@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Instrument_Sans, IBM_Plex_Mono, Instrument_Serif } from "next/font/google";
+import { Instrument_Sans } from "next/font/google";
 import "./globals.css";
 import "./components/gold/gold.css";
-import { fraunces } from "./components/gold/fonts";
+import { fraunces, frauncesItalic } from "./components/gold/fonts";
 import { GoldHeader, GoldFooter } from "./components/gold/Chrome";
 import UtmCapture from "./components/UtmCapture";
 import TrackListener from "./components/TrackListener";
@@ -22,37 +22,18 @@ const SUPABASE_ORIGIN = (
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co"
 ).replace(/\/+$/, "");
 
-// Design Direction v2 (2026-06-13): the "warm price-truth instrument".
-// Three self-hosted families via next/font (no layout shift):
-//   Display  — Space Grotesk  (headlines, store names, section titles)
-//   Body     — Inter          (paragraphs, nav, buttons, labels)
-//   Numerals — JetBrains Mono  (ALL prices, %, counts, timestamps, eyebrows)
-// Exposed as --font-display / --font-body / --font-mono; globals.css aliases
-// the legacy --font-manrope-loaded / --font-display / --font-ui names onto
-// these so unmigrated components keep working through the transition.
-// Breathe final (2026-09-23): Instrument Sans for UI + display,
-// IBM Plex Mono for prices/counts, Instrument Serif for headlines.
+// Gold Leaf (2026-11-11): two families via next/font (no layout shift).
+//   Body + UI + numbers: Instrument Sans (--font-body-loaded; tabular nums)
+//   Display: Fraunces, upright + italic (app/components/gold/fonts.ts)
+// The old IBM Plex Mono and Instrument Serif are gone; globals.css maps
+// --font-mono and --font-breath onto these so older pages follow along.
 const instrumentSans = Instrument_Sans({
   variable: "--font-body-loaded",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
 });
-const plexMono = IBM_Plex_Mono({
-  variable: "--font-mono-loaded",
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  display: "swap",
-});
 
-// Breathe (2026-09-23): serif for headlines.
-const instrumentSerif = Instrument_Serif({
-  variable: "--font-breath-loaded",
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(brand.url),
@@ -106,7 +87,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${instrumentSans.variable} ${plexMono.variable} ${instrumentSerif.variable} ${fraunces.variable}`}
+      className={`${instrumentSans.variable} ${fraunces.variable} ${frauncesItalic.variable}`}
       style={{ "--pp-pace": PP_PACE } as React.CSSProperties}
       suppressHydrationWarning
     >

@@ -1258,13 +1258,13 @@ h1:not([data-keep-font]),
 h2:not([data-keep-font]):not(.pp-footer-heading),
 h3:not([data-keep-font]) {
   font-family: var(--font-gold-display), "Fraunces", Georgia, serif !important;
-  font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
+  font-variation-settings: "SOFT" 100, "opsz" 144;
   font-weight: 700 !important;
   letter-spacing: -0.02em !important;
   color: var(--pp-ink);
 }
 h1 em, .bh-h1 em, h2 em {
-  font-family: var(--font-gold-display), "Fraunces", Georgia, serif !important;
+  font-family: var(--font-gold-italic), var(--font-gold-display), "Fraunces", Georgia, serif !important;
   font-style: italic; font-weight: 500 !important; color: var(--g-gold-ink, #7A5214);
 }
 /* Retired Breathe ambience: no orb glow, haze or fireflies anywhere. */
