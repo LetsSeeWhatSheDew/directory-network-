@@ -57,7 +57,7 @@ export default async function UpgradeSuccessPage({
             <ol style={{ paddingLeft: 20, margin: 0, display: "flex", flexDirection: "column", gap: 10, color: "var(--pp-muted)", fontSize: ".9rem" }}>
               <li>Watch your inbox for a confirmation email from PuffPrice.</li>
               <li>Set your city, radius and categories on your <a href="/alerts/preferences" style={{ color: "var(--pp-signal)" }}>alert preferences</a>.</li>
-              <li>Alerts come by email and browser notification — never by text. Usually 2&ndash;5 a week, never more than one a day.</li>
+              <li>Alerts come by email — never by text. Usually 2&ndash;5 a week, never more than one a day.</li>
             </ol>
           </div>
 

@@ -20,6 +20,15 @@ import {
 import { QuickAnswer, FaqBlock, GUIDE_EXTRA_CSS, type Faq } from "../guides/GuideParts";
 
 const CSS = `
+.cp-best{display:grid;grid-template-columns:1fr;gap:10px;margin:6px 0 4px}
+@media(min-width:700px){.cp-best{grid-template-columns:repeat(3,1fr)}}
+.cp-best-card{display:grid;gap:2px;padding:16px 18px;border-radius:18px;background:#10291C;color:#F4EAD5;text-decoration:none}
+.cp-best-card:hover{background:#173A28}
+.cp-best-l{font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#D9AC4F}
+.cp-best-card b{font-family:var(--font-gold-display),Georgia,serif;font-size:2.6rem;line-height:1;color:#F6DC8F;margin:4px 0}
+.cp-best-s{font-weight:700}
+.cp-best-p{font-size:.85rem;color:rgba(244,234,213,.8);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
 .cp-rung{display:inline-flex;align-items:center;gap:8px;margin:14px 0 2px;padding:6px 12px;border-radius:999px;background:var(--pp-paper);border:1px solid var(--pp-border);font-size:.8rem;font-weight:600;color:var(--pp-ink)}
 .cp-rung span{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--pp-muted);font-weight:500}
 .cp-sec{margin-top:30px}
@@ -137,7 +146,29 @@ export default function CheapestView({
         {RUNG_LABEL}
       </div>
 
-      {quick && board.newest && <QuickAnswer updated={`${checkedLabel(board.newest)} Central`}>{quick}</QuickAnswer>}
+      {hasData && (
+        <div className="cp-best" aria-label="Lowest prices today">
+          {REF_UNITS.map((ref) => {
+            const it = board.byRef[ref][0];
+            if (!it) return null;
+            return (
+              <Link key={ref} href={`/dispensary/${it.listingSlug}`} className="cp-best-card">
+                <span className="cp-best-l">{REF_DEF[ref].label}</span>
+                <b>{money(it.otd)}</b>
+                <span className="cp-best-s">{it.storeName}</span>
+                <span className="cp-best-p">{itemLine(it)}</span>
+              </Link>
+            );
+          })}
+        </div>
+      )}
+
+      {quick && board.newest && (
+        <details className="g-rest" style={{ margin: "14px 0 8px" }}>
+          <summary>The short answer, in words</summary>
+          <QuickAnswer updated={`${checkedLabel(board.newest)} Central`}>{quick}</QuickAnswer>
+        </details>
+      )}
 
       {!hasData ? (
         <div className="cp-empty">
@@ -164,7 +195,7 @@ export default function CheapestView({
                 <p className="gp-note">No store we read {where} lists one today.</p>
               ) : (
                 <div className="gp-list">
-                  {rows.map((it, i) => (
+                  {rows.slice(0, 3).map((it, i) => (
                     <div key={it.listingSlug} className="cp-row">
                       <span className="cp-n">{i + 1}</span>
                       <span style={{ minWidth: 0 }}>
@@ -173,14 +204,11 @@ export default function CheapestView({
                         <br />
                         <span className="cp-prod">{itemLine(it)}</span>
                         <br />
-                        <span className="cp-meta">
-                          checked {checkedLabel(it.checkedAt)} on{" "}
-                          {it.sourceUrl ? (
-                            <a href={it.sourceUrl} rel="nofollow noopener" target="_blank">the store&apos;s own menu</a>
-                          ) : (
-                            "the store's own menu"
-                          )}
-                        </span>
+                        {it.sourceUrl && (
+                          <a className="cp-meta" href={it.sourceUrl} rel="nofollow noopener" target="_blank" title={`Checked ${checkedLabel(it.checkedAt)}`}>
+                            menu ↗
+                          </a>
+                        )}
                       </span>
                       <span className="cp-r">
                         <b>{money(it.otd)}</b>
@@ -190,6 +218,28 @@ export default function CheapestView({
                     </div>
                   ))}
                 </div>
+              )}
+              {rows.length > 3 && (
+                <details className="g-rest">
+                  <summary>{rows.length - 3} more stores</summary>
+                  <div className="gp-list">
+                    {rows.slice(3).map((it, j) => (
+                      <div key={it.listingSlug} className="cp-row">
+                        <span className="cp-n">{j + 4}</span>
+                        <span style={{ minWidth: 0 }}>
+                          <Link href={`/dispensary/${it.listingSlug}`} className="cp-store">{it.storeName}</Link>
+                          <span className="cp-meta"> · {it.city}</span>
+                          <br />
+                          <span className="cp-prod">{itemLine(it)}</span>
+                        </span>
+                        <span className="cp-r">
+                          <b>{money(it.otd)}</b>
+                          <span>{money(it.pretax)} + tax</span>
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </details>
               )}
               <p className="gp-note">Out-the-door price in the store&apos;s city, {def.taxNote}.</p>
             </section>

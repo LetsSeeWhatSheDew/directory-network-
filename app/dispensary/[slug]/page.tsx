@@ -415,7 +415,7 @@ export default async function DispensaryProfilePage({
             </a>
           )}
         </div>
-        {heroPick && <HeroTicket deal={heroPick.deal} miles={null} scope="near" label="Best deal here today" />}
+        {heroPick && <HeroTicket deal={heroPick.deal} miles={null} scope="near" label="Best everyday deal here" status={{ isOpen: status.open, label: status.label }} />}
       </Band>
 
       <main className="g-page">

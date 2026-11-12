@@ -9,12 +9,12 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Go Pro — $0.99/mo",
   description:
-    "Instant alerts when cannabis deals drop near you in Central Illinois. $0.99 a month. Cancel anytime.",
+    "An email as soon as our check finds a new cannabis deal near you in Central Illinois. $0.99 a month. Cancel anytime.",
   alternates: { canonical: "https://www.puffprice.com/upgrade" },
   openGraph: {
     title: "PuffPrice Pro — $0.99/mo",
     description:
-      "Never miss a deal. Instant alerts the moment prices drop near you in Central Illinois.",
+      "Never miss a deal. An email as soon as our check finds a new deal near you in Central Illinois.",
     url: "https://www.puffprice.com/upgrade",
     siteName: "PuffPrice",
     type: "website",
@@ -24,15 +24,14 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "PuffPrice Pro — $0.99/mo",
     description:
-      "Never miss a deal. Instant alerts the moment prices drop near you in Central Illinois.",
+      "Never miss a deal. An email as soon as our check finds a new deal near you in Central Illinois.",
     images: ["https://www.puffprice.com/og-image.png"],
   },
 };
 
 const FEATURES: string[] = [
-  "Instant alerts by email and browser notification the moment a deal goes live near you",
+  "An email as soon as our check finds a new deal near you (we read every store's own site each morning), not just on Mondays",
   'Price drop alerts — "Flower just dropped below $30 near you"',
-  "Flash-sale early access — 15 minutes before public",
   "Your total-savings dashboard",
   "First to know when a new dispensary opens",
 ];
@@ -43,8 +42,8 @@ const FAQ: { q: string; a: string }[] = [
     a: "We're finishing the alert system now. Join the early list and you'll be first in at $0.99/mo — nothing is charged until Pro is live.",
   },
   {
-    q: "Why email and browser alerts instead of texts?",
-    a: "Phone carriers block cannabis-related text messages, even for legal businesses. Email and browser notifications actually reach you.",
+    q: "Why email instead of texts?",
+    a: "Phone carriers block cannabis-related text messages, even for legal businesses. Email actually reaches you.",
   },
   {
     q: "Is there a contract?",
@@ -74,7 +73,7 @@ export default function UpgradePage() {
         eyebrow="PuffPrice Pro"
         title="Low prices."
         italic="Without the looking."
-        sub="Get an email the instant a deal drops near you. $0.99 a month. Cancel any time."
+        sub="An email as soon as our check finds a new deal near you, instead of once a week. $0.99 a month. Cancel any time."
       />
 
       <section className="max-w-2xl mx-auto px-6 pt-8 pb-16 text-center">

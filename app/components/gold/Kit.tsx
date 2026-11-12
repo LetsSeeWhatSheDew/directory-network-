@@ -58,9 +58,11 @@ export function Check() {
 /** Picture for a deal: the inferred category, with vape words winning
  *  ("live resin all-in-one" is a vape, not a concentrate). */
 export function artCategory(d: KitDeal): string | null {
-  const t = `${d.deal_title || ""} ${d.deal_description || ""}`;
-  if (/\b(vapes?|all[- ]in[- ]ones?|aio|carts?|cartridges?|disposables?|pods?)\b/i.test(t)) return "vapes";
-  if (/\b(pre[- ]?rolls?|joints?|blunts?)\b/i.test(t)) return "flower";
+  const t = `${d.deal_title || d.title || ""} ${d.deal_description || d.description || ""}`;
+  if (/\b(vapes?|all[- ]in[- ]ones?|aio|carts?|cartridges?|disposables?|pods?|510)\b/i.test(t)) return "vapes";
+  if (/\b(gumm(y|ies)|chocolates?|chews?|edibles?|mints?|drinks?|seltzers?|beverages?|tinctures?|cookies? bites?|mg\b)/i.test(t)) return "edibles";
+  if (/\b(rosin|resin|badder|budder|sugar|diamonds?|sauce|wax|shatter|crumble|concentrates?|dabs?|hash)\b/i.test(t)) return "concentrate";
+  if (/\b(pre[- ]?rolls?|joints?|blunts?|flower|eighths?|3\.5g|7g|14g|28g|ounces?|oz|quarters?|smalls|popcorn|shake|buds?)\b/i.test(t)) return "flower";
   return effectiveCategory(d);
 }
 
@@ -72,7 +74,7 @@ function seenLine(d: KitDeal): string {
   return `Seen on ${store}'s own site ${day} at ${t}. Nobody pays to rank.`;
 }
 
-export function HeroTicket({ deal, miles, scope, label }: { deal: KitDeal; miles: number | null; scope: "near" | "widened" | "region"; label?: string }) {
+export function HeroTicket({ deal, miles, scope, label, status }: { deal: KitDeal; miles: number | null; scope: "near" | "widened" | "region"; label?: string; status?: { isOpen: boolean; label: string } | null }) {
   // Bundles and set prices ("2 for $60") have no savings figure: the ticket
   // then leads with the deal's own words instead of a number.
   const a = amountOf({ ...deal, deal_title: deal.deal_title || deal.title });
@@ -85,7 +87,7 @@ export function HeroTicket({ deal, miles, scope, label }: { deal: KitDeal; miles
       <article className="g-ticket" aria-label={a ? `Best deal: ${a.big} off ${productOf(deal)} at ${storeName(deal)}` : `Best deal: ${words} at ${storeName(deal)}`}>
         <div className="g-ticket-top">
           <div className="g-ticket-label">
-            <span>{label || (scope === "region" ? "Best deal in Central IL" : scope === "widened" ? "Closest big one" : "Best deal near you")}</span>
+            <span>{label || (scope === "region" ? "Best everyday deal · Central IL" : scope === "widened" ? "Closest big one" : "Best everyday deal near you")}</span>
             <span>{deal.city}</span>
           </div>
           {a ? (
@@ -108,7 +110,14 @@ export function HeroTicket({ deal, miles, scope, label }: { deal: KitDeal; miles
             <div>
               <Link href={storeHref(deal)} className="g-store-name">{storeName(deal)}</Link>
               <div className="g-meta">
-                <span>{deal.city}, IL</span>
+                {status ? (
+                  <span className={status.isOpen ? "g-open" : "g-closed"}>
+                    <span className={`g-dot${status.isOpen ? "" : " closed"}`} />
+                    {status.label}
+                  </span>
+                ) : (
+                  <span>{deal.city}, IL</span>
+                )}
                 {deal.drive_thru ? <span>Drive-thru</span> : null}
               </div>
             </div>
@@ -192,7 +201,14 @@ export function Band({
 /** The saving as a pill: "40% off", "$10 off", or the deal's own wording. */
 export function SavePill({ deal }: { deal: KitDeal }) {
   const a = amountOf({ ...deal, deal_title: deal.deal_title || deal.title });
-  if (!a) return <span className="g-pill g-pill-quiet">Deal</span>;
+  if (!a) {
+    // Set prices ("$25 eighths", "2 for $60") show the price, not a blank "Deal".
+    const v = Number(deal.discount_value);
+    if (deal.discount_type === "fixed_price" && Number.isFinite(v) && v > 0) return <span className="g-pill">${Math.round(v)}</span>;
+    const m = (deal.deal_title || deal.title || "").match(/\$\s?(\d{1,4})(?:\.\d{2})?\b/);
+    if (m) return <span className="g-pill">${m[1]}</span>;
+    return <span className="g-pill g-pill-quiet">Deal</span>;
+  }
   return <span className="g-pill">{a.upTo ? "up to " : ""}{a.big} off</span>;
 }
 
@@ -247,10 +263,15 @@ export function StoreDeals({ deals, show = 3, cityParam }: { deals: KitDeal[]; s
               <details className="g-rest">
                 <summary>{rest.length} more at {storeName(list[0])}</summary>
                 <div className="g-lines">
-                  {rest.map((d) => (
+                  {rest.slice(0, 10).map((d) => (
                     <DealLine key={String(d.deal_id || d.id)} deal={d} />
                   ))}
                 </div>
+                {rest.length > 10 && (
+                  <Link href={href} className="g-rest-all">
+                    All {list.length} deals at {storeName(list[0])} →
+                  </Link>
+                )}
               </details>
             )}
           </div>

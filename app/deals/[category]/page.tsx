@@ -5,6 +5,7 @@ import StoreOverflowLinks from "../../components/StoreOverflowLinks";
 import { capPerStore, overflowFor, STORE_CAP } from "../../../lib/storeCap";
 import Link from "next/link";
 import { Band, HeroTicket, StoreDeals } from "../../components/gold/Kit";
+import { getOpenBySlug, pickOpenFirst } from "../../../lib/home/goldData";
 import { CategoryArt } from "../../components/gold/Art";
 import { amountOf, saveLabel, cleanDealTitle, directionsHref, EXHALE_LINES, nearestExhale, milesLabel } from "../../../lib/exhale";
 import EmptyBreath from "../../components/EmptyBreath";
@@ -479,7 +480,8 @@ export default async function DealsPage({
         lng: !cityFromUrl || cityFromUrl.toLowerCase() === (cookieLoc?.city || "").toLowerCase() ? cookieLoc?.lng ?? null : null,
       }
     : null;
-  const topPick = nearestExhale(deals, origin);
+  const openBySlug = await getOpenBySlug();
+  const topPick = pickOpenFirst(deals, origin, openBySlug);
   const topDeal = topPick?.deal || deals[0] || null;
   const topScope = topPick && topPick.deal === topDeal ? topPick.scope : city ? "near" : "region";
   const topMiles = topPick && topPick.deal === topDeal ? milesLabel(topPick.miles) : null;
@@ -577,7 +579,8 @@ export default async function DealsPage({
             deal={topDeal}
             miles={topPick && topPick.deal === topDeal ? topPick.miles : null}
             scope={topScope as "near" | "widened" | "region"}
-            label={topScope === "region" ? `Best ${category === "all" ? "deal" : categoryLabel.toLowerCase() + " deal"} in Central IL` : `Best ${category === "all" ? "deal" : categoryLabel.toLowerCase() + " deal"} near ${city}`}
+            status={openBySlug[(topDeal.slug || topDeal.listing_slug) as string] || null}
+            label={topScope === "region" ? `Best everyday ${category === "all" ? "deal" : categoryLabel.toLowerCase() + " deal"} · Central IL` : `Best everyday ${category === "all" ? "deal" : categoryLabel.toLowerCase() + " deal"} near ${city}`}
           />
         )}
       </Band>

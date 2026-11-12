@@ -18,7 +18,7 @@ import {
 } from "../../../lib/exhale";
 import { effectiveCategory } from "../../../lib/inferCategory";
 import { CENTRAL_IL_PUBLIC_CITIES } from "../../../lib/constants/regions";
-import { ctTime, ctDay, type GoldHome as Data, type GoldDeal } from "../../../lib/home/goldData";
+import { ctTime, ctDay, pickOpenFirst, type GoldHome as Data, type GoldDeal } from "../../../lib/home/goldData";
 
 const CATS: { slug: string; label: string }[] = [
   { slug: "flower", label: "Flower" },
@@ -28,7 +28,8 @@ const CATS: { slug: string; label: string }[] = [
 ];
 
 export default function GoldHome({ data, origin, faq }: { data: Data; origin: Origin | null; faq?: ReactNode }) {
-  const pick = nearestExhale(data.pool, origin);
+  // Open stores first: the best deal at a store you can walk into right now.
+  const pick = pickOpenFirst(data.pool, origin, data.open);
   const hero = (pick?.deal as GoldDeal) || null;
   const more = lowestList(data.pool, 4, origin, hero?.deal_id || null) as GoldDeal[];
   const city = origin?.city || null;
@@ -45,11 +46,11 @@ export default function GoldHome({ data, origin, faq }: { data: Data; origin: Or
             <h1 id="g-h1" className="g-display">
               Best Bud <span className="g-buck">For Your <span className="g-gold-text">Buck$</span></span>
             </h1>
-            <div className="g-eyebrow" style={{ marginTop: 14 }}>{data.total} deals · {data.stores} stores · today</div>
+            <div className="g-eyebrow" style={{ marginTop: 14 }}>{data.total} deals · {data.stores} stores · all of Central IL</div>
             <GoldLocate serverCity={city} />
           </div>
           {hero ? (
-            <HeroTicket deal={hero} miles={pick?.miles ?? null} scope={pick?.scope || "region"} />
+            <HeroTicket deal={hero} miles={pick?.miles ?? null} scope={pick?.scope || "region"} status={data.open[(hero.slug || hero.listing_slug) as string] || null} />
           ) : (
             <p className="g-hero-sub">Nothing worth the drive yet today. We check again tomorrow morning.</p>
           )}
@@ -88,7 +89,7 @@ export default function GoldHome({ data, origin, faq }: { data: Data; origin: Or
               <Link key={c.slug} className="g-cat" href={`/deals/${c.slug}`}>
                 <CategoryArt category={c.slug} className="g-cat-art" />
                 <b>{c.label}</b>
-                <span>{data.byCategory[c.slug] ? `${data.byCategory[c.slug]} deals today` : "See today's deals"}</span>
+                <span>{data.byCategory[c.slug] ? `${data.byCategory[c.slug]} in Central IL` : "See today's deals"}</span>
               </Link>
             ))}
           </div>

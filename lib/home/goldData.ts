@@ -6,6 +6,8 @@ import { filterActiveDeals } from "../dealActiveFilter";
 import { capPerStore, STORE_CAP } from "../storeCap";
 import { CENTRAL_IL_CITIES } from "../constants/regions";
 import { effectiveCategory } from "../inferCategory";
+import { computeOpenStatus, nowInCT, type HoursRow, type OpenStatus } from "../hours";
+import { nearestExhale, type ExDeal, type Origin, type NearPick } from "../exhale";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
 const SUPABASE_ANON_KEY =
@@ -68,10 +70,11 @@ export type GoldHome = {
   byCategory: Record<string, number>;
   byCity: Record<string, number>;
   lastSeen: string | null;
+  open: OpenBySlug;
 };
 
 export async function getGoldHome(): Promise<GoldHome> {
-  const all = await getAllActiveDeals();
+  const [all, open] = await Promise.all([getAllActiveDeals(), getOpenBySlug()]);
   const pool = capPerStore(all, STORE_CAP.highlight).kept as GoldDeal[];
   const stores = new Set(all.map((d) => d.listing_slug || d.slug)).size;
   const byCategory: Record<string, number> = {};
@@ -83,7 +86,7 @@ export async function getGoldHome(): Promise<GoldHome> {
     if (d.city) byCity[d.city] = (byCity[d.city] || 0) + 1;
     if (d.verified_at && (!lastSeen || d.verified_at > lastSeen)) lastSeen = d.verified_at;
   }
-  return { all, pool, total: all.length, stores, byCategory, byCity, lastSeen };
+  return { all, pool, total: all.length, stores, byCategory, byCity, lastSeen, open };
 }
 
 /** "6:15 AM" in Central time. */
@@ -104,4 +107,59 @@ export function ctDay(iso: string | null | undefined): string | null {
   if (fmt(d) === fmt(now)) return "today";
   if (fmt(d) === fmt(new Date(now.getTime() - 86400000))) return "yesterday";
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "America/Chicago" });
+}
+
+// ---------------------------------------------------------------------------
+// Open now. A parking-lot shopper at 9 PM needs the best deal at a store that
+// is open, so the coupon prefers open stores and always says which it is.
+
+export type OpenBySlug = Record<string, OpenStatus>;
+
+export async function getOpenBySlug(): Promise<OpenBySlug> {
+  const H = { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` };
+  try {
+    const lres = await fetch(
+      `${SUPABASE_URL}/rest/v1/master_listings?select=id,slug&project_tag=eq.green&is_active=eq.true&state=eq.IL&city=in.${encodeURIComponent(CITY_IN)}&limit=200`,
+      { headers: H, next: { revalidate: 3600, tags: ["listings"] } },
+    );
+    if (!lres.ok) return {};
+    const listings = (await lres.json()) as { id: string; slug: string }[];
+    if (!Array.isArray(listings) || !listings.length) return {};
+    const hres = await fetch(
+      `${SUPABASE_URL}/rest/v1/listing_hours?select=listing_id,weekday,opens_at,closes_at,is_closed&project_tag=eq.green&listing_id=in.(${listings.map((l) => l.id).join(",")})`,
+      { headers: H, next: { revalidate: 3600, tags: ["listings"] } },
+    );
+    if (!hres.ok) return {};
+    const rows = (await hres.json()) as (HoursRow & { listing_id: string; weekday: number })[];
+    const ct = nowInCT();
+    const out: OpenBySlug = {};
+    for (const l of listings) {
+      const st = computeOpenStatus(rows.filter((r) => r.listing_id === l.id), ct);
+      if (st) out[l.slug] = st;
+    }
+    return out;
+  } catch {
+    return {};
+  }
+}
+
+/** Deals at stores open right now; when none are (late night), all deals. */
+export function preferOpen<T extends { slug?: string | null; listing_slug?: string | null }>(deals: T[], open: OpenBySlug): T[] {
+  const openOnes = deals.filter((d) => open[(d.slug || d.listing_slug) as string]?.isOpen);
+  return openOnes.length ? openOnes : deals;
+}
+
+/** The coupon's pick: the best everyday deal at an OPEN store near the
+ *  visitor; if no open store nearby has one, the best nearby deal anyway
+ *  (the coupon then says "Closed · Opens at 9 AM"). Never sends someone 80
+ *  miles just because the nearby stores have closed for the night. */
+export function pickOpenFirst(pool: ExDeal[], origin: Origin | null, open: OpenBySlug): NearPick | null {
+  const openPool = pool.filter((d) => open[(d.slug || d.listing_slug) as string]?.isOpen);
+  const openPick = openPool.length ? nearestExhale(openPool, origin) : null;
+  const anyPick = nearestExhale(pool, origin);
+  if (!openPick) return anyPick;
+  if (!anyPick) return openPick;
+  // Same reach (both near, or no location at all): the open one wins.
+  if (openPick.scope === anyPick.scope) return openPick;
+  return anyPick;
 }

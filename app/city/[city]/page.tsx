@@ -5,7 +5,8 @@
 // all three via internal linking.
 
 import Link from "next/link";
-import { isConditional, nearestExhale } from "@/lib/exhale";
+import { isConditional } from "@/lib/exhale";
+import { pickOpenFirst } from "@/lib/home/goldData";
 import { Band, HeroTicket, StoreDeals, StoreCard, Faq } from "../../components/gold/Kit";
 import WatchControl from "../../components/WatchControl";
 import { cityTaxRates } from "@/lib/otd";
@@ -461,7 +462,14 @@ export default async function CityPage({
     })),
   });
 
-  const heroPick = nearestExhale(deals.map((d) => ({ ...d, deal_id: d.id })), { city });
+  // Open stores first, so the coupon points somewhere you can walk into now.
+  const openBySlug = new Map(stores.map((x) => [x.l.slug, x.status] as const));
+  const asKit = deals.map((d) => ({ ...d, deal_id: d.id }));
+  const heroPick = pickOpenFirst(
+    asKit,
+    { city },
+    Object.fromEntries([...openBySlug].filter(([, st]) => st).map(([k, st]) => [k, st!])),
+  );
   const withDeals = new Set(deals.map((d) => d.listing_slug)).size;
   const pctDeals = deals
     .filter((d) => (d.discount_unit === "percent" || !d.discount_unit) && Number(d.discount_value) > 0 && Number(d.discount_value) <= 100 && !isConditional({ ...d, deal_title: d.deal_title || d.title }))
@@ -485,7 +493,7 @@ export default async function CityPage({
           <span className="g-stat"><b>{stores.length}</b> store{stores.length === 1 ? "" : "s"}</span>
           {hasHours && <span className="g-stat"><b>{openCount}</b> open now</span>}
         </div>
-        {heroPick && <HeroTicket deal={heroPick.deal} miles={null} scope="near" label={`Best deal in ${city}`} />}
+        {heroPick && <HeroTicket deal={heroPick.deal} miles={null} scope="near" label={`Best everyday deal in ${city}`} status={openBySlug.get((heroPick.deal.listing_slug || heroPick.deal.slug) as string) || null} />}
       </Band>
 
       <main className="g-page">

@@ -203,9 +203,6 @@ export default async function StatusPage() {
                 {s.city} · {seen ? `last deal seen ${ago(seen)}` : "no deal seen in our log yet"}
                 {goodChecks ? (goodChecks.get(s.slug) ? ` · last good check ${ago(goodChecks.get(s.slug) as string)}` : " · no good check in 30 days") : null}
               </span>
-              <span className="st-how">
-                {l?.rendered ? "Read with a real browser (menu loads with JavaScript)" : l?.site ? "Read from the store's own site" : "Checked daily on the store's own site"}
-              </span>
             </span>
             <span className="gp-row-right" style={{ color: l ? "var(--pp-ink)" : "var(--pp-muted)" }}>
               {l ? `${l.n} live` : "none today"}

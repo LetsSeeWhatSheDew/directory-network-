@@ -1239,9 +1239,10 @@ html.pp-away .pp-lp::before { animation-play-state: paused !important; }
   --pp-peach: #F2CDB3;
   --pp-peach-dot: #D9AC4F;
   --pp-sage: #CFE2CF;
-  --pp-btn: #F4EAD5;
-  --pp-btn-border: #D9AC4F;
-  --pp-btn-fg: #10201A;
+  /* Buttons: filled forest with cream text, like "Take me there". */
+  --pp-btn: #10291C;
+  --pp-btn-border: #10291C;
+  --pp-btn-fg: #F4EAD5;
   --pp-save-bg: #10291C;
   --pp-save-fg: #F6DC8F;
   --pp-big: #10291C;

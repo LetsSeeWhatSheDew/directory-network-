@@ -44,7 +44,7 @@ export default function PrivacyPage() {
             <strong>Email</strong> — if you subscribe to alerts, Pro, or sign up for the waitlist. We use it to send you the alerts or receipts you asked for.
           </p>
           <p>
-            <strong>Phone number</strong> — we don&apos;t collect one for alerts. Phone carriers block cannabis-related text messages, so alerts go by email and browser notification.
+            <strong>Phone number</strong> — we don&apos;t collect one for alerts. Phone carriers block cannabis-related text messages, so alerts go by email.
           </p>
           <p>
             <strong>ZIP code</strong> — if you set a preferred ZIP to filter deals, we store the 5-digit ZIP. No street address.
