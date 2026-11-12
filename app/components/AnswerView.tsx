@@ -15,7 +15,7 @@ const CSS = `
 .qa-row-src a{color:var(--pp-muted)}
 .qa-right{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:2px;text-align:right}
 .qa-right b{font-family:var(--font-mono);font-weight:500;font-size:1.05rem;letter-spacing:-.02em;white-space:nowrap}
-.qa-right span{font-size:.74rem;color:var(--pp-muted);white-space:nowrap}
+.qa-right span:not(.gp-pill){font-size:.74rem;color:var(--pp-muted);white-space:nowrap}
 .qa-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
 .qa-links a{font-size:.85rem;padding:6px 11px;border-radius:999px;border:1px solid var(--pp-border);background:var(--pp-surface);color:inherit;text-decoration:none}
 .qa-links a[aria-current=page]{border-color:var(--pp-canopy);font-weight:600}

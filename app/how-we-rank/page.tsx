@@ -1,7 +1,7 @@
 // app/how-we-rank/page.tsx — the public rules. Plain language, no hedging.
+import { Band } from "../components/gold/Kit";
 import type { Metadata } from "next";
 import Link from "next/link";
-import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import { brand } from "../../lib/brand";
 import { MIN_REPORTS, WINDOW_DAYS, FRESH_HOURS, PEOPLE_WEIGHT } from "../../lib/dealAccuracy";
@@ -48,15 +48,13 @@ const RULES: { h: string; p: string; id?: string }[] = [
 export default function HowWeRankPage() {
   return (
     <>
-      <Nav variant="light" />
-      <main className="pp-container-reading" style={{ padding: "clamp(1.5rem,4vw,3rem) 1rem 4rem" }}>
-        <p className="pp-eyebrow pp-eyebrow-signal" style={{ marginBottom: 10 }}>The rules</p>
-        <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2rem,5vw,2.75rem)", lineHeight: 1.05, letterSpacing: "-.03em", color: "var(--pp-ink)", margin: "0 0 14px" }}>
-          How we find, check, and rank deals
-        </h1>
-        <p style={{ fontSize: "1.05rem", lineHeight: 1.6, color: "var(--pp-body)", margin: "0 0 28px" }}>
-          PuffPrice exists for one person: you, in a parking lot, trying not to overpay. These are the rules we hold ourselves to.
-        </p>
+      <Band
+        eyebrow="The rules"
+        title="How we find, check"
+        italic="and rank deals"
+        sub="PuffPrice exists for one person: you, in a parking lot, trying not to overpay. These are the rules we hold ourselves to."
+      />
+      <main className="pp-container-reading" style={{ padding: "28px 1rem 4rem" }}>
         <ol style={{ listStyle: "none", padding: 0, margin: 0, borderTop: "1px solid var(--pp-border)" }}>
           {RULES.map((r, i) => (
             <li key={r.h} id={r.id} style={{ padding: "18px 0", borderBottom: "1px solid var(--pp-border)", display: "grid", gridTemplateColumns: "2.2rem 1fr", gap: 8 }}>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Nav from "../components/Nav";
+import { Band } from "../components/gold/Kit";
 import Footer from "../components/Footer";
 import Calculator from "./Calculator";
 import { TAX_RATES_LAST_UPDATED } from "../../lib/taxRates";
@@ -127,17 +127,15 @@ export default function TaxCalculatorPage() {
         .footer-copy{font-size:.74rem;color:var(--pp-muted);font-family:var(--font-ui, system-ui, sans-serif)}
       `}</style>
 
-      <Nav variant="light" />
+      <Band
+        eyebrow="Pricing"
+        title="What it costs"
+        italic="out the door"
+        sub="What does an item on a Central Illinois dispensary shelf actually cost at the register? Drop in the shelf price, pick the product type and your city, and see every tax that lands."
+      />
 
       <main className="wrap">
-        <p className="eyebrow">Pricing</p>
-        <h1>Illinois cannabis tax calculator.</h1>
-        <p className="lede">
-          What does an item on a Central Illinois dispensary shelf actually cost
-          at the register? Drop in the shelf price, pick the product type, pick
-          your city, and we&apos;ll show you every tax that lands and what
-          you&apos;ll pay out the door.
-        </p>
+        <h1 className="sr-only">Illinois cannabis tax calculator</h1>
 
         <div className="medical-banner">
           <strong>Recreational only.</strong>{" "}

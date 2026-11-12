@@ -1,6 +1,5 @@
 import LoadingPuff from "../components/LoadingPuff";
 import Link from "next/link";
-import Nav from "../components/Nav";
 import MapClient from "./MapClient";
 import { cityFromSlug } from "@/lib/cityNormalize";
 
@@ -116,11 +115,11 @@ export default async function MapPage() {
         .logo span{color:var(--pp-signal)}
         .back{font-size:.82rem;color:var(--pp-muted);text-decoration:none;font-family:var(--font-body)}
         .back:hover{color:var(--pp-ink)}
+        .map-list-link{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);z-index:500;display:inline-flex;align-items:center;min-height:48px;padding:0 20px;border-radius:999px;background:#10291C;color:#F4EAD5;font-weight:700;font-size:15px;text-decoration:none;white-space:nowrap;box-shadow:0 10px 30px rgba(0,0,0,.25)}
         .map-shell{position:relative;width:100%;height:calc(100vh - 60px);min-height:520px;background:var(--pp-border)}
         .map-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:var(--pp-border);font-family:var(--font-body);color:var(--pp-body);z-index:1;pointer-events:none}
       `}</style>
 
-      <Nav variant="light" />
       {/* The map is the page; this heading is for crawlers and screen readers. */}
       <h1 className="sr-only">Central Illinois cannabis dispensary map</h1>
 
@@ -171,6 +170,8 @@ export default async function MapPage() {
         </div>
       ) : (
         <div className="map-shell">
+          {/* On a phone the map is the whole screen: keep a way to the list. */}
+          <Link href="/deals" className="map-list-link">See today&apos;s deals as a list →</Link>
           {/* Baseline loader rendered at the page level so the user sees
               feedback even if Leaflet fails to download. MapClient paints
               on top of this as soon as tiles arrive. */}

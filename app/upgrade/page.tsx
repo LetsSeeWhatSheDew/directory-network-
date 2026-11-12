@@ -2,9 +2,9 @@
 // CTA uses NEXT_PUBLIC_STRIPE_PRO_CHECKOUT_URL (Stripe Payment Link).
 // Fallback: mailto — so page never looks broken before env var is set.
 
+import { Band } from "../components/gold/Kit";
 import type { Metadata } from "next";
 import Link from "next/link";
-import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 
 export const metadata: Metadata = {
@@ -71,25 +71,17 @@ const CHECKOUT_URL =
 export default function UpgradePage() {
   return (
     <main className="min-h-screen text-gray-900">
-      <Nav variant="light" />
+      <Band
+        eyebrow="PuffPrice Pro"
+        title="Low prices."
+        italic="Without the looking."
+        sub="Get an email the instant a deal drops near you. $0.99 a month. Cancel any time."
+      />
 
       <section className="max-w-2xl mx-auto px-6 pt-8 pb-16 text-center">
-        <p className="text-xs tracking-[0.2em] uppercase text-gray-500 mb-4">
-          PuffPrice Pro
-        </p>
-        <h1 className="text-5xl md:text-6xl leading-[1.05] mb-5">
-          Low prices.
-          <br />
-          <em className="italic text-[color:var(--pp-mark)]">Without the looking.</em>
-        </h1>
-        <p className="text-lg text-gray-700 mb-10 max-w-xl mx-auto leading-relaxed">
-          Get an email the instant a deal drops near you.
-          {" "}<br className="hidden md:inline" />
-          $0.99 a month. Cancel any time.
-        </p>
 
         <div className="bg-[color:var(--pp-surface)] border border-[color:var(--pp-border)] rounded-2xl p-8 md:p-10 text-left">
-          <div className="flex items-start justify-between mb-6 gap-4">
+          <div className="flex flex-wrap items-start justify-between mb-6 gap-4">
             <div>
               <p className="text-xs tracking-[0.15em] uppercase text-[color:var(--pp-signal-ink)] font-semibold mb-1">
                 Pro
