@@ -161,6 +161,11 @@ export default async function MarketReport({ params }: { params: Promise<{ slug:
   return (
     <div className={`mr-root ${sans.variable}`} tabIndex={0} role="region" aria-label={`Market report for ${name}`}>
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `(function(){function f(){var z=Math.min(1,(window.innerWidth-24)/816);document.documentElement.style.setProperty('--mr-z',String(z));}f();window.addEventListener('resize',f);})();`,
+        }}
+      />
       <p className="mr-screen">
         Sample market report. Print it or save as PDF (letter, &ldquo;Actual size&rdquo;, background graphics on).
       </p>
@@ -427,5 +432,7 @@ const CSS = `
   .mr-screen{display:none}
   .mr-page{margin:0;box-shadow:none;break-after:page}
 }
-@media (max-width:8.6in){.mr-root{overflow-x:auto}.mr-page{margin-left:16px;margin-right:16px}}
+/* On a phone the letter page is shrunk to fit the screen (whole page in
+   view, pinch to zoom), instead of being cut off at the right edge. */
+@media screen and (max-width:8.6in){.mr-root{overflow-x:hidden;padding:12px 0}.mr-page,.mr-screen{zoom:var(--mr-z,1);margin-left:auto;margin-right:auto}.mr-screen{zoom:1;padding:0 16px}}
 `;
