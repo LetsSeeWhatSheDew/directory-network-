@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { isCentralILCity } from "../../lib/constants/regions";
+import { nearestScopeCity, refinedCityLabel } from "../../lib/regionGeo";
 
 // Only Central IL cities count as a "location" for PuffPrice. An IP lookup
 // that lands on an ISP hub (Chicago, San Francisco…) or a GPS fix outside
@@ -199,8 +200,8 @@ export default function LocationAware() {
   const [busy, setBusy] = useState(false);
   const [outside, setOutside] = useState<string | null>(null);
 
-  const commit = useCallback((next: Loc, lat?: number, lng?: number) => {
-    if (!inRegion(next.city)) {
+  const commit = useCallback((next: Loc, lat?: number, lng?: number, forceOutside = false) => {
+    if (forceOutside || !inRegion(next.city)) {
       // Out of region: remember nothing, keep the page on "Central Illinois".
       // Drop any older pp_loc cookie too, so server-rendered picks (the
       // homepage orb) agree with this chip instead of an old city.
@@ -242,6 +243,36 @@ export default function LocationAware() {
     } catch {}
   }, []);
 
+  /**
+   * Resolve a GPS fix from our own coordinates: inside/outside and the
+   * nearest scope city come from lib/regionGeo, never from the reverse
+   * geocode. Nominatim only refines the label afterwards (and only to a
+   * nearby scope city), so a slow or failed lookup can't push a Peoria
+   * user "outside Central Illinois".
+   */
+  const resolveGps = useCallback(
+    async (lat: number, lng: number, isCancelled: () => boolean = () => false): Promise<boolean> => {
+      const match = nearestScopeCity(lat, lng);
+      if (!match) return false;
+      if (!match.inside) {
+        // Out of region by distance. Force the outside path even if the
+        // geocoder returns a name that collides with a scope city
+        // (Springfield, MO; Normal, AL...).
+        const label = await reverseGeocode(lat, lng);
+        if (isCancelled()) return true;
+        commit({ city: label || "your area", source: "gps" }, lat, lng, true);
+        return true;
+      }
+      commit({ city: match.name, source: "gps" }, lat, lng);
+      const label = refinedCityLabel(lat, lng, await reverseGeocode(lat, lng));
+      if (!isCancelled() && label && label !== match.name) {
+        commit({ city: label, source: "gps" }, lat, lng);
+      }
+      return true;
+    },
+    [commit]
+  );
+
   const useGps = useCallback(async () => {
     setBusy(true);
     try {
@@ -253,16 +284,11 @@ export default function LocationAware() {
         return false;
       }
       const { latitude, longitude } = pos.coords;
-      const city = await reverseGeocode(latitude, longitude);
-      if (city) {
-        commit({ city, source: "gps" }, latitude, longitude);
-        return true;
-      }
-      return false;
+      return await resolveGps(latitude, longitude);
     } finally {
       setBusy(false);
     }
-  }, [commit]);
+  }, [resolveGps]);
 
   // Initial detection on mount
   useEffect(() => {
@@ -304,9 +330,7 @@ export default function LocationAware() {
             if (cancelled) return;
             if (pos) {
               const { latitude, longitude } = pos.coords;
-              const city = await reverseGeocode(latitude, longitude);
-              if (cancelled) return;
-              if (city) commit({ city, source: "gps" }, latitude, longitude);
+              await resolveGps(latitude, longitude, () => cancelled);
             }
           }
         }
@@ -334,18 +358,13 @@ export default function LocationAware() {
           late.then(async (p) => {
             if (cancelled || !p) return;
             const { latitude, longitude } = p.coords;
-            const city = await reverseGeocode(latitude, longitude);
-            if (!cancelled && city) commit({ city, source: "gps" }, latitude, longitude);
+            await resolveGps(latitude, longitude, () => cancelled);
           });
         } else if (pos) {
           const { latitude, longitude } = pos.coords;
-          const city = await reverseGeocode(latitude, longitude);
+          setBusy(false);
+          if (await resolveGps(latitude, longitude, () => cancelled)) return;
           if (cancelled) return;
-          if (city) {
-            setBusy(false);
-            commit({ city, source: "gps" }, latitude, longitude);
-            return;
-          }
         } else {
           try {
             sessionStorage.setItem(DECLINED_KEY, "1");
@@ -372,7 +391,7 @@ export default function LocationAware() {
     return () => {
       cancelled = true;
     };
-  }, [commit, finishUnresolved]);
+  }, [commit, finishUnresolved, resolveGps]);
 
   // Manual-override shortcut: listen for the hero search submit and treat
   // the typed query as a city if it doesn't look like a dispensary name.

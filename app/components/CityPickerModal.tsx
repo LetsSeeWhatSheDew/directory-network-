@@ -14,6 +14,7 @@
 import { useEffect, useState } from "react";
 import { MapPin, X, Locate } from "lucide-react";
 import { CENTRAL_IL_PUBLIC_CITIES } from "../../lib/constants/regions";
+import { nearestScopeCity, refinedCityLabel } from "../../lib/regionGeo";
 
 const PRIMARY_CITIES = ["Peoria", "Bloomington", "Champaign", "Springfield"];
 
@@ -73,7 +74,11 @@ async function reverseGeocode(lat: number, lng: number): Promise<string | null> 
   try {
     const res = await fetch(
       `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=12&addressdetails=1`,
-      { headers: { "Accept-Language": "en" } }
+      {
+        headers: { "Accept-Language": "en" },
+        // Label refinement only; never hold the picker on a slow lookup.
+        signal: typeof AbortSignal !== "undefined" && "timeout" in AbortSignal ? AbortSignal.timeout(4000) : undefined,
+      }
     );
     if (!res.ok) return null;
     const data = await res.json();
@@ -137,11 +142,18 @@ export default function CityPickerModal({ open, onClose, onPicked }: Props) {
         return;
       }
       const { latitude, longitude } = pos.coords;
-      const city = await reverseGeocode(latitude, longitude);
-      if (!city) {
+      // In/out of region and the city come from our own coordinates;
+      // the reverse geocode may only refine the label to a nearby scope city.
+      const match = nearestScopeCity(latitude, longitude);
+      if (!match) {
         setError("Couldn't read your city — pick one below.");
         return;
       }
+      if (!match.inside) {
+        setError("Looks like you're outside Central Illinois — pick a city below.");
+        return;
+      }
+      const city = refinedCityLabel(latitude, longitude, await reverseGeocode(latitude, longitude)) || match.name;
       persistLocation(city, "gps", latitude, longitude);
       onPicked?.(city);
       onClose();
