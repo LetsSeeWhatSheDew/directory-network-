@@ -6,6 +6,7 @@
 // is on file, or to Google Maps directions otherwise.
 
 import Link from "next/link";
+import { Band } from "../../components/gold/Kit";
 import { notFound, permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
@@ -389,7 +390,7 @@ export default async function DealPage({
         .sv-label{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:2px}
         .sv-amt{font-size:clamp(2.4rem,9vw,3.4rem);font-weight:700;color:var(--pp-signal);letter-spacing:-.04em;line-height:1;margin-bottom:4px}
         .sv-vs{font-size:.78rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:14px}
-        .expires{display:inline-block;font-size:.74rem;color:var(--pp-note-fg);background:var(--pp-note-bg);padding:3px 10px;border-radius:100px;font-family:var(--font-body);font-weight:700;margin-bottom:14px}
+        .expires{display:inline-block;font-size:.74rem;color:var(--pp-note-fg);background:var(--pp-note-bg);padding:3px 10px;border-radius:100px;font-family:var(--font-body);font-weight:700;margin:0}
         .expires.ongoing{color:var(--pp-signal-ink);background:var(--pp-best-tint)}
         .desc{font-size:.98rem;color:var(--pp-body);font-family:var(--font-body);line-height:1.6;margin-bottom:16px}
         .code-box{background:var(--pp-haze);border:1px solid var(--pp-haze-border);color:var(--pp-ink);border-radius:10px;padding:14px 18px;margin-bottom:18px;font-family:var(--font-body);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
@@ -404,32 +405,22 @@ export default async function DealPage({
       `}</style>
 
             <TrackPage type="deal_view" slug={deal.listing_slug} dealId={id} city={city} />
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(1rem, 4vw, 2rem) 4px", fontSize: 13 }}>
-        <Link
-          href={city ? `/city/${city.toLowerCase().trim().replace(/\s+/g, "-")}` : "/deals/all"}
-          style={{ color: "var(--color-gray-500, var(--pp-muted))", textDecoration: "none", fontFamily: "var(--font-body)", fontWeight: 500 }}
-        >
-          ← {city ? `${city} deals` : "All deals"}
-        </Link>
-      </div>
+      <Band
+        eyebrow={
+          <Link href={city ? `/city/${city.toLowerCase().trim().replace(/\s+/g, "-")}` : "/deals/all"} style={{ color: "inherit", textDecoration: "none" }}>
+            ← {city ? `${city} deals` : "All deals"}{deal.category ? ` · ${deal.category}` : ""}
+          </Link>
+        }
+        title={headline}
+        sub={
+          <>
+            at <Link href={`/dispensary/${deal.listing_slug}`} style={{ color: "#F6DC8F", fontWeight: 700 }}>{disp}</Link>
+            {rawCity ? `, ${rawCity}, IL` : ", Central Illinois"}
+          </>
+        }
+      />
 
       <main className="wrap">
-        <div className="eyebrow">Active deal{deal.category ? ` · ${deal.category}` : ""}</div>
-        <h1>{headline}</h1>
-        <p className="disp">
-          at{" "}
-          <Link href={`/dispensary/${deal.listing_slug}`}>
-            {disp}
-          </Link>
-        </p>
-        <p className="city">
-          {rawCity ? (
-            <Link href={`/city/${rawCity.toLowerCase().trim().replace(/\s+/g, "-")}`}>{rawCity}, IL</Link>
-          ) : (
-            <Link href="/">Central Illinois</Link>
-          )}
-        </p>
-
         <div className="savings-block">
           {!activeNow && (
             <div
@@ -494,6 +485,7 @@ export default async function DealPage({
               </p>
             </div>
           )}
+          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "6px 12px", margin: "0 0 10px" }}>
           <span
             className="expires"
             style={{
@@ -506,14 +498,13 @@ export default async function DealPage({
           >
             {expiry.text}
           </span>
-          {deal.description && <p className="desc">{deal.description}</p>}
-          <div style={{ marginTop: 8, marginBottom: 8 }}>
             <DealFreshnessBadge
               verifiedAt={(deal as ExDeal).verified_at}
               statusReason={(deal as { status_reason?: string | null }).status_reason}
               variant="detail"
             />
           </div>
+          {deal.description && <p className="desc">{deal.description}</p>}
           {/* Sourcing line — where this deal was seen. Only renders when we
               actually have a source_url on file (no fabricated attribution).
               rel=nofollow: it's an outbound menu link, not an endorsement. */}

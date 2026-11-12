@@ -489,6 +489,7 @@ export default async function DispensaryProfilePage({
             </div>
           </section>
 
+          <div className="g-two">
           {hours.length > 0 && (
             <section className="g-block" aria-label="Weekly hours">
               <div className="g-eyebrow">When to go</div>
@@ -516,6 +517,8 @@ export default async function DispensaryProfilePage({
               <p className="g-answer" style={{ borderLeftColor: "var(--g-line-ink)" }}>{stripStaleDealClaims(listing.long_description || listing.short_description)}</p>
             </section>
           )}
+
+          </div>
 
           {hasAmenities && (
             <section className="g-block" aria-label="Amenities">

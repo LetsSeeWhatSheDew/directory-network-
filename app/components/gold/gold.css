@@ -436,3 +436,5 @@ a.g-line:hover { background: var(--g-cream); }
 .g-band-long h1 { font-size: clamp(32px, 8.6vw, 54px); max-width: 22ch; line-height: 1; }
 .g-rest-all { display: inline-block; margin: 10px 4px 2px; font-weight: 700; color: var(--g-forest); text-decoration: underline; text-decoration-color: var(--g-gold); text-underline-offset: 3px; }
 .g-band-long .g-band-leaf { opacity: .2; }
+.g-two { display: grid; gap: 0 40px; align-items: start; }
+@media (min-width: 900px) { .g-two { grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); } .g-two .g-hours { max-width: none; } }

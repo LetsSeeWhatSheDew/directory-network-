@@ -161,11 +161,7 @@ export default async function MarketReport({ params }: { params: Promise<{ slug:
   return (
     <div className={`mr-root ${sans.variable}`} tabIndex={0} role="region" aria-label={`Market report for ${name}`}>
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `(function(){function f(){var z=Math.min(1,(window.innerWidth-24)/816);document.documentElement.style.setProperty('--mr-z',String(z));}f();window.addEventListener('resize',f);})();`,
-        }}
-      />
+
       <p className="mr-screen">
         Sample market report. Print it or save as PDF (letter, &ldquo;Actual size&rdquo;, background graphics on).
       </p>
@@ -218,7 +214,7 @@ export default async function MarketReport({ params }: { params: Promise<{ slug:
         </ol>
 
         <h2 className="mr-h2" data-keep-font="">Every store near you, last 30 days</h2>
-        <table className="mr-t">
+        <table className="mr-t" tabIndex={0} aria-label="Every store near you, last 30 days">
           <thead>
             <tr>
               <th>Store</th>
@@ -434,5 +430,21 @@ const CSS = `
 }
 /* On a phone the letter page is shrunk to fit the screen (whole page in
    view, pinch to zoom), instead of being cut off at the right edge. */
-@media screen and (max-width:8.6in){.mr-root{overflow-x:hidden;padding:12px 0}.mr-page,.mr-screen{zoom:var(--mr-z,1);margin-left:auto;margin-right:auto}.mr-screen{zoom:1;padding:0 16px}}
+/* On a phone the report reflows like a web page (real text sizes, one
+   column); printing still produces the letter pages above. */
+@media screen and (max-width:8.6in){
+  .mr-root{overflow-x:hidden;padding:12px 0}
+  .mr-screen{padding:0 16px}
+  .mr-page{width:auto;height:auto;margin:0 12px 16px;padding:20px 16px;overflow:visible}
+  .mr-top{flex-wrap:wrap;gap:6px}
+  .mr-root h1.mr-h1{font-size:30px}
+  .mr-lede{font-size:15px;max-width:none}
+  .mr-stats{grid-template-columns:1fr 1fr}
+  .mr-prices,.mr-search,.mr-offer{grid-template-columns:1fr}
+  .mr-price{border-left:0;padding-left:0;border-top:1px solid rgba(244,239,228,.2);padding-top:12px}
+  .mr-t{display:block;overflow-x:auto;font-size:12px;white-space:nowrap}
+  .mr-foot{flex-wrap:wrap;gap:6px}
+  .mr-checks li{grid-template-columns:26px 1fr;row-gap:2px}
+  .mr-checks em{grid-column:2}
+}
 `;
