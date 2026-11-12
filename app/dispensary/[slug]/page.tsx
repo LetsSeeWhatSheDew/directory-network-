@@ -477,7 +477,7 @@ export default async function DispensaryProfilePage({
             {dealHistory && (
               <div className="g-near" style={{ marginTop: 14 }}>
                 {dayCountsReliable() && <span className="g-chip">{dealHistory.deal_days_30d} of the last 30 days with a deal</span>}
-                {dealHistory.typical_discount_pct != null && <span className="g-chip">Typical {dealHistory.typical_discount_pct}% off</span>}
+                {dealHistory.typical_discount_pct != null && dealHistory.deal_days_30d > 0 && <span className="g-chip">Typical {dealHistory.typical_discount_pct}% off</span>}
               </div>
             )}
             {deals.length > 0 && <TrustLine />}

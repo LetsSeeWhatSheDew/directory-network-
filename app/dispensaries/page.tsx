@@ -4,7 +4,7 @@
 // This page is for users who land via /dispensaries directly.
 
 import Link from "next/link";
-import Nav from "../components/Nav";
+import { Band } from "../components/gold/Kit";
 import Footer from "../components/Footer";
 
 const SUPABASE_URL =
@@ -125,21 +125,12 @@ export default async function DispensariesIndexPage() {
 
   return (
     <div style={{ fontFamily: "var(--font-body)", minHeight: "100vh", color: "var(--pp-ink)" }}>
-      <div>
-        <Nav variant="light" />
-        <header style={{ color: "var(--pp-ink)", padding: "clamp(2.5rem, 6vw, 5rem) clamp(1rem, 4vw, 2rem) clamp(2rem, 4vw, 4rem)", textAlign: "center", position: "relative", zIndex: 2 }}>
-          <p className="pp-eyebrow" style={{ color: "var(--pp-muted)", marginBottom: 10 }}>
-            Central Illinois directory
-          </p>
-          <h1 style={{ fontFamily: "var(--font-body)", fontWeight: 800, fontSize: "clamp(2rem, 5vw, 3.25rem)", letterSpacing: "-0.035em", lineHeight: 1.1, color: "var(--pp-ink)", marginBottom: 12 }}>
-            Every licensed Central Illinois dispensary
-          </h1>
-          <p style={{ color: "var(--pp-body)", fontFamily: "var(--font-body)", fontWeight: 500, maxWidth: 580, margin: "0 auto", lineHeight: 1.6 }}>
-            {listings.length} dispensaries across {cities.length} cities. Click a city to see deals
-            and hours, or jump to a specific store.
-          </p>
-        </header>
-      </div>
+      <Band
+        eyebrow="Central Illinois directory"
+        title="Every licensed dispensary"
+        italic="in Central IL"
+        sub={`${listings.length} dispensaries across ${cities.length} cities. Pick a city for deals and hours, or jump to a store.`}
+      />
 
       <section style={{ maxWidth: 1100, margin: "0 auto", padding: "44px 28px" }}>
         {cities.length === 0 ? (
@@ -195,10 +186,11 @@ export default async function DispensariesIndexPage() {
                               </span>
                             )}
                           </div>
-                          <div style={{ marginTop: 6, fontSize: ".78rem", color: "var(--pp-muted)", fontFamily: "var(--font-body)" }}>
-                            {l.google_rating ? `${l.google_rating.toFixed(1)} ★` : "No rating yet"}
-                            {attrs.length > 0 ? ` · ${attrs.join(" · ")}` : ""}
-                          </div>
+                          {(l.google_rating || attrs.length > 0) && (
+                            <div style={{ marginTop: 6, fontSize: ".78rem", color: "var(--pp-muted)", fontFamily: "var(--font-body)" }}>
+                              {[l.google_rating ? `${l.google_rating.toFixed(1)} ★` : null, ...attrs].filter(Boolean).join(" · ")}
+                            </div>
+                          )}
                           {count > 0 && (
                             <div style={{ marginTop: 10, display: "inline-flex", alignItems: "center", gap: 6, fontSize: ".7rem", fontFamily: "var(--font-body)", fontWeight: 700, color: "var(--pp-signal)", background: "var(--pp-best-tint)", border: "1px solid var(--pp-best-border)", padding: "3px 9px", borderRadius: 100 }}>
                               <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--pp-signal-fill)" }} />

@@ -3,7 +3,6 @@
 // notFound() call inside a server component.
 
 import Link from "next/link";
-import Nav from "./components/Nav";
 import Footer from "./components/Footer";
 
 export const metadata = {
@@ -26,16 +25,16 @@ export default function NotFound() {
         .nf-link { color:var(--pp-signal-ink); text-decoration: none; font-weight: 500; }
         .nf-link:hover { text-decoration: underline; }
       `}</style>
-      <Nav variant="light" />
       <div className="nf-shell">
         <div className="nf-wrap">
+          <img src="/gold-leaf.svg" alt="" width={88} height={88} style={{ display: "block", margin: "0 auto 14px" }} />
           <div className="nf-eyebrow">404 · Not found</div>
-          <h1 className="nf-title">Deal not found.</h1>
+          <h1 className="nf-title">Nothing here. <em>The deals are this way.</em></h1>
           <p className="nf-sub">
             This page doesn&apos;t exist — but good deals do. Head back home and
             we&apos;ll point you at the best one near you.
           </p>
-          <Link href="/" className="pp-btn pp-btn-lg pp-btn-primary">
+          <Link href="/" className="g-btn" style={{ display: "inline-flex", margin: "0 auto" }}>
             Find deals near me &rarr;
           </Link>
           <div className="nf-links">
