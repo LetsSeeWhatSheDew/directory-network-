@@ -73,27 +73,34 @@ function seenLine(d: KitDeal): string {
 }
 
 export function HeroTicket({ deal, miles, scope, label }: { deal: KitDeal; miles: number | null; scope: "near" | "widened" | "region"; label?: string }) {
-  const a = amountOf(deal)!;
+  // Bundles and set prices ("2 for $60") have no savings figure: the ticket
+  // then leads with the deal's own words instead of a number.
+  const a = amountOf({ ...deal, deal_title: deal.deal_title || deal.title });
   const cat = artCategory(deal);
   const ml = milesLabel(miles);
-  const isPct = a.kind === "percent";
+  const isPct = a?.kind === "percent";
+  const words = cleanDealTitle(deal.deal_title || deal.title) || "Deal";
   return (
     <div>
-      <article className="g-ticket" aria-label={`Best deal: ${a.big} off ${productOf(deal)} at ${storeName(deal)}`}>
+      <article className="g-ticket" aria-label={a ? `Best deal: ${a.big} off ${productOf(deal)} at ${storeName(deal)}` : `Best deal: ${words} at ${storeName(deal)}`}>
         <div className="g-ticket-top">
           <div className="g-ticket-label">
             <span>{label || (scope === "region" ? "Best deal in Central IL" : scope === "widened" ? "Closest big one" : "Best deal near you")}</span>
             <span>{deal.city}</span>
           </div>
-          <div className="g-save g-display">
-            {a.upTo && <span className="g-off" style={{ display: "block", marginLeft: 0, fontSize: 20 }}>up to</span>}
-            <span className="g-num">{isPct ? a.big.replace("%", "") : a.big}</span>
-            <span className="g-off g-italic">{isPct ? "% off" : "off"}</span>
-          </div>
+          {a ? (
+            <div className="g-save g-display">
+              {a.upTo && <span className="g-off" style={{ display: "block", marginLeft: 0, fontSize: 20 }}>up to</span>}
+              <span className="g-num">{isPct ? a.big.replace("%", "") : a.big}</span>
+              <span className="g-off g-italic">{isPct ? "% off" : "off"}</span>
+            </div>
+          ) : (
+            <div className="g-save g-display g-save-words">{words}</div>
+          )}
           <div className="g-ticket-art">
             <CategoryArt category={cat} />
           </div>
-          <p className="g-product">{productOf(deal)}</p>
+          {a && <p className="g-product">{productOf(deal)}</p>}
         </div>
         <div className="g-tear" aria-hidden="true" />
         <div className="g-ticket-bot">
@@ -126,7 +133,8 @@ export function HeroTicket({ deal, miles, scope, label }: { deal: KitDeal; miles
 }
 
 export function MiniTicket({ deal, origin }: { deal: KitDeal; origin: Origin | null }) {
-  const a = amountOf(deal)!;
+  const a = amountOf(deal);
+  if (!a) return null;
   const ml = milesLabel(milesTo(deal, origin));
   const isPct = a.kind === "percent";
   return (

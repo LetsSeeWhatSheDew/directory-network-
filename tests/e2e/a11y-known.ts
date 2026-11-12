@@ -17,23 +17,10 @@ const PR10 = "PR #10 (motion + off-system sweep)";
 
 export const A11Y_KNOWN: KnownA11y[] = [
   {
-    rule: "link-in-text-block",
-    pages: ["/upgrade/success"],
-    owner: PR10,
-    reason: "Same: the 'preferences' link needs an underline. File is in #10's sweep.",
-  },
-  {
     rule: "aria-command-name",
     pages: ["/map"],
     owner: PR10,
     reason: "Leaflet store pins are role=button with no accessible name; pass title/alt to L.marker in app/map/MapClient.tsx (in #10's sweep).",
-  },
-  {
-    rule: "color-contrast",
-    pages: ["/map"],
-    dayparts: ["night"],
-    owner: PR10,
-    reason: "Leaflet attribution link at night (#9fb3a6 on #ced0cf). app/map/MapClient.tsx CSS, in #10's sweep.",
   },
   {
     rule: "color-contrast",

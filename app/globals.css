@@ -1279,3 +1279,6 @@ h1 em, .bh-h1 em, h2 em {
    not a terminal font. */
 :root { --font-mono: var(--font-body-loaded), "Instrument Sans", system-ui, sans-serif; }
 .font-mono, [class*="mono"] { font-variant-numeric: tabular-nums; }
+/* Links inside running text are underlined, so they read as links without
+   relying on color alone (WCAG link-in-text-block). */
+main p a:not([class]), main li a:not([class]), .g-note a, .g-answer a { text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
