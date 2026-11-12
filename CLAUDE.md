@@ -27,42 +27,41 @@ Live at puffprice.com.
 - Error monitoring: Sentry (scaffolded with env-var gating, DSN pending)
 - Brand config: lib/brand.ts — one string change renames entire site
 
-## Current State (2026-04-26 night — parent HEAD: 64d2087 + this docs commit)
+## Current State (2026-11-11 night, verified against Supabase; main at Gold Leaf)
 
-All counts in this section verified against the live `master_listings` and `deals` tables in Supabase (project ref `hnbjufmtmrhexmdrfubw`) at 2026-04-26 night. Earlier sessions inherited stale numbers; this block is rewritten from the DB, not from prior memory.
+Counts verified against the live `master_listings` and `deals` tables (project `hnbjufmtmrhexmdrfubw`) on Nov 11, 2026 ~9 PM CT. Re-query before quoting; deals change every run.
 
-- **Scope:** Central Illinois only — 12 cities, 9 populated with dispensaries, 3 empty-with-nearest-alternative placeholder (Bartonville, Morton, Washington). Pekin moved off the empty list when nuEra Pekin was added April 25.
-- **Central IL active listings:** **26** (verified). Filter: `state='IL' AND is_active=true AND type='dispensary' AND city IN (12-city scope)`. Two earlier rows (`ascend-springfield`, `consume-cannabis-champaign`) deactivated this evening; three Springfield, **MO** rows that briefly polluted the Cowork count (`flora-farms-springfield`, `key-cannabis-springfield`, `terrabis-springfield`) were never CIL.
-- **Central IL active deals:** **10** (verified), all `source='website'` (direct dispensary sites). Zero from Leafly, Weedmaps, iHeartJane, or Dutchie marketplace. NOXX "50% off vape" deactivated this evening as a BOGO false positive (scraper rule tightened — see `docs/session-reports/2026-04-26-code-ci-fix.md`).
-- **Per-city distribution (live DB):**
+- **Scope:** Central Illinois only — 12 cities, 9 with licensed dispensaries (Bartonville, Morton, Washington have none).
+- **Central IL active listings:** **26.** Filter: `project_tag='green' AND state='IL' AND is_active AND type='dispensary' AND city IN (12-city scope)`.
+- **Active deals:** **337 at 20 stores.** 321 from the Mac-hosted rendered menu reader (`source='website_rendered'`), 16 from the Vercel cron (`source='website'`). One live row per deal since the Nov 10 dedupe.
+- **Per city (live DB):**
 
-  | City | Listings | Deals |
-  |---|---:|---:|
-  | Springfield | 6 | 1 |
-  | Peoria | 5 | 3 |
-  | Normal | 4 | 0 |
-  | Champaign | 3 | 0 |
-  | East Peoria | 3 | 1 |
-  | Bloomington | 2 | 3 |
-  | Pekin | 1 | 0 |
-  | Peoria Heights | 1 | 2 |
-  | Urbana | 1 | 0 |
-  | Bartonville | 0 | 0 |
-  | Morton | 0 | 0 |
-  | Washington | 0 | 0 |
-  | **Total** | **26** | **10** |
+  | City | Listings | Stores with deals | Deals |
+  |---|---:|---:|---:|
+  | Springfield | 6 | 6 | 157 |
+  | East Peoria | 3 | 2 | 130 |
+  | Peoria | 5 | 3 | 28 |
+  | Champaign | 3 | 2 | 8 |
+  | Normal | 4 | 2 | 4 |
+  | Bloomington | 2 | 2 | 4 |
+  | Peoria Heights | 1 | 1 | 4 |
+  | Urbana | 1 | 1 | 1 |
+  | Pekin | 1 | 1 | 1 |
+  | **Total** | **26** | **20** | **337** |
 
-- **Scrape policy:** direct dispensary websites + official social only. No Leafly, Weedmaps, iHeartJane, Dutchie marketplace, or any aggregator. Dispensary-owned pages that embed a POS menu widget (Dutchie, Jane, Cookies.co, etc.) count as direct. See `docs/deal-data-policy.md`.
-- **Cron status:** registered in `vercel.json`. `/api/cron/scrape-deals` runs **daily at 09:00 UTC** (Vercel Hobby plan caps cron at once per day; original spec was every 6 hours and is documented in the deal data policy as the long-term target). `/api/cron/mark-stale-deals` runs daily at 04:00 UTC. `CRON_SECRET` is required in Vercel env (Production, Sensitive); the route returns 401 until it's set.
-- **Freshness rules:** deals unverified for 72+ hours render with a "verification pending" state; 7+ days auto-deactivate via `mark-stale-deals` cron.
-- **Statewide DB (not publicly rendered):** preserved; hidden at the app level via `lib/constants/regions.ts` scope filter. One-line reversal.
-- **URL canonicalization:** `/city/[city]` and `/dispensary/[slug]` are the canonical patterns. The legacy `/cannabis/illinois/[city]` template tree is being redirected to `/city/[city]` in a parallel Code session tonight. See `docs/url-canonical-decisions-20260426.md`.
-- **Enhanced Places backfill complete** — phone + website + hours populated for enriched rows; GPS seeded for Central IL listings.
-- **Content floor:** Central IL listing drafts landed through April 25; ongoing maintenance pass per session.
-- PuffPrice Index — statewide flower price-per-gram benchmark at `/about/index`.
-- Brand pages scaffolded at `/brand` and `/brand/[slug]` (populate when brands table lands).
-- Content depth layer on `/l/[id]` — monogram fallback, stat strip, serif prose, map iframe, report-outdated link.
-- Sitemap scoped to Central IL cities/listings/brands/deals only; out-of-scope URLs return 404.
+- **Concentration:** NOXX East Peoria (~129) and SHARE Springfield (~80) post most deals as single-product menu specials. Counts are honest but tilt town totals.
+- **No deals today and why:**
+  - The Dispensary Champaign: no website.
+  - The three RISE/Bloom stores (beyond-hello-peoria, revolution-dispensary-normal, ayr-wellness-normal): their deal pages sit behind Cloudflare, which we don't bypass.
+  - Trinity on University: age gate / run deadline.
+  - Cloud 9 East Peoria: read, nothing posted.
+- **Scrapers:**
+  - Vercel cron `/api/cron/scrape-deals`: daily 09:00 UTC, static HTML; it only retires its own `source='website'` deals, at stores read cleanly.
+  - Mac rendered reader: `~/puffprice-scraper`, `scripts/run-rendered-scrape.sh`, pulls main each run; it only retires `website_rendered` deals. It runs only while the Mac is awake.
+  - `scraper_runs.dispensary_results` lists every store read (since Nov 11), including clean reads with no deals.
+- **Freshness rules:** 72h without verification → "verification pending"; 7 days → auto-deactivate (`mark-stale-deals`).
+- **Free alerts:** a weekly Monday email (`/api/alerts/signup`, tier `free`, double opt-in). Pro ($0.99) is instant, but there's no card processor yet: Stripe prohibits cannabis-related businesses.
+- **Design:** Gold Leaf (see the Look paragraph above). Accessibility, smoke and Lighthouse budget run in CI (`.github/workflows/ci.yml`); home and city score ~93–97.
 
 ## Business Tiers
 - FREE: No account, full deal access, always
