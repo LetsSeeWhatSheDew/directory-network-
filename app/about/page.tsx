@@ -1,5 +1,4 @@
-import Nav from "../components/Nav";
-import HazeBand from "../components/HazeBand";
+import { Band } from "../components/gold/Kit";
 import Footer from "../components/Footer";
 
 import { brand } from "@/lib/brand";
@@ -61,13 +60,9 @@ export default function AboutPage() {
         @media(max-width:600px){.wrap{padding:48px 20px 40px}.nav{padding:12px 16px}}
       `}</style>
 
-      <Nav variant="light" />
-
-      <HazeBand height={180} />
+      <Band eyebrow="About" title="We built the thing" italic="we wished existed." />
 
       <main className="wrap">
-        <div className="eyebrow">About</div>
-        <h1>We built the thing we wished existed.</h1>
 
         <p>
           PuffPrice tells you where to find the best cannabis deal near you

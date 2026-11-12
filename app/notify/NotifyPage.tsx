@@ -6,7 +6,6 @@
 import Link from "next/link";
 import ZipSignup from "../components/ZipSignup";
 import Logo from "../components/Logo";
-import HazeBand from "../components/HazeBand";
 
 const CSS = `
 .np{min-height:100vh;display:flex;flex-direction:column;font-family:var(--font-body);color:var(--pp-body)}
@@ -54,7 +53,6 @@ export default function NotifyPage({
           </p>
         </div>
       </main>
-      <HazeBand height={150} />
     </div>
   );
 }

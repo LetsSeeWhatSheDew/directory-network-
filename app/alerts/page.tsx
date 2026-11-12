@@ -4,12 +4,11 @@
 // at this stage.
 
 import Link from "next/link";
-import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import AlertsCalculator from "./AlertsCalculator";
 import ProCheckoutButton from "./ProCheckoutButton";
 import WeeklySignup from "../components/WeeklySignup";
-import HazeBand from "../components/HazeBand";
+import { Band } from "../components/gold/Kit";
 
 import { brand } from "@/lib/brand";
 const SUPABASE_URL =
@@ -149,22 +148,14 @@ export default async function AlertsPage() {
         .calc{max-width:640px;margin:0 auto;padding:12px 20px 64px}
       `}</style>
 
-      <Nav variant="light" />
-
-      <HazeBand height={150} />
-
-      <header className="hero">
-        <h1>Never overpay for weed <em>again.</em></h1>
-        <p className="hero-sub">
-          Check this before you buy. You might be leaving money on the table.
-        </p>
+      <Band eyebrow="Free alerts" title="Never overpay for weed" italic="again." sub="Check this before you buy. You might be leaving money on the table.">
         {alertCount !== null && alertCount > 0 && (
-          <p className="hero-count">
+          <p className="g-band-sub">
             <b>{alertCount.toLocaleString()}</b>{" "}
             {alertCount === 1 ? "person is" : "people are"} already getting deal alerts in Central Illinois.
           </p>
         )}
-      </header>
+      </Band>
 
       <section className="tiers">
         {/* FREE */}

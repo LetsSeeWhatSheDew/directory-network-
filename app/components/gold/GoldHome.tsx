@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { Leaf, CategoryArt, Grain } from "./Art";
 import GoldLocate from "./GoldLocate";
+import GoldSignup from "./GoldSignup";
 import { HeroTicket, MiniTicket, Arrow, Check } from "./Kit";
 import {
   nearestExhale,
@@ -118,14 +119,10 @@ export default function GoldHome({ data, origin, faq }: { data: Data; origin: Or
             <Leaf tone="ghost" className="g-alert-leaf" />
             <div>
               <div className="g-eyebrow">Free. Email only.</div>
-              <h2 id="g-alert" className="g-display">The best deal in your town, <span className="g-italic g-gold-text">every morning.</span></h2>
-              <p>One email a day, at most. Unsubscribe in one tap.</p>
+              <h2 id="g-alert" className="g-display">Your town&rsquo;s best deals, <span className="g-italic g-gold-text">every Monday.</span></h2>
+              <p>One email a week. Unsubscribe in one tap.</p>
             </div>
-            <form className="g-form" action="/alerts" method="get">
-              <label className="sr-only" htmlFor="g-email">Email address</label>
-              <input id="g-email" className="g-input" type="email" name="email" placeholder="you@email.com" autoComplete="email" required />
-              <button className="g-btn g-btn-gold" type="submit">Send me the deal <Arrow /></button>
-            </form>
+            <GoldSignup defaultCity={city} />
           </div>
         </div>
       </section>
