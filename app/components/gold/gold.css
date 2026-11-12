@@ -327,7 +327,7 @@ input.g-input, .g-root .g-input {
 
 /* locate line under the hero eyebrow */
 .g-locate { margin-top: 10px; display: flex; justify-content: center; }
-.g-locate > *, .g-locate span, .g-locate button, .g-locate div { color: rgba(244,234,213,.8) !important; font-size: 13px !important; justify-content: center; }
+.g-locate > *, .g-locate span, .g-locate button, .g-locate div { color: rgba(244,234,213,.8) !important; font-size: 13px !important; justify-content: center !important; text-align: center; }
 .g-locate span span { color: var(--g-gold) !important; font-weight: 700 !important; }
 
 /* FAQ */
