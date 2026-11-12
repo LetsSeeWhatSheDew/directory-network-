@@ -173,7 +173,7 @@ export function Band({
   leaf?: boolean;
 }) {
   return (
-    <section className="g-root g-band">
+    <section className={`g-root g-band${typeof title === "string" && title.length + String(italic || "").length > 26 ? " g-band-long" : ""}`}>
       <Grain />
       {leaf && <Leaf tone="gold" className="g-band-leaf" />}
       <div className="g-wrap g-band-in">

@@ -6,8 +6,8 @@ import { brand } from "../../lib/brand";
 import { GUIDES } from "../../lib/guides";
 
 export const GUIDE_EXTRA_CSS = `
-.gq{margin:20px 0 6px;padding:16px 18px;border-radius:16px;background:var(--pp-haze);border:1px solid var(--pp-haze-border)}
-.gq-l{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-muted);margin:0 0 6px}
+.gq{margin:20px 0 6px;padding:16px 18px;border-radius:14px;background:#FFFAF0;border:1px solid rgba(16,32,26,.14);border-left:4px solid #D9AC4F}
+.gq-l{font-size:.75rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#7A5214;margin:0 0 6px}
 .gq p{margin:0;font-size:1.04rem;line-height:1.55;color:var(--pp-ink);max-width:66ch}
 .gq-u{display:block;margin-top:8px;font-family:var(--font-mono);font-size:.72rem;color:var(--pp-muted)}
 .gp-ul{margin:0 0 12px;padding-left:1.2rem;line-height:1.6;max-width:66ch}

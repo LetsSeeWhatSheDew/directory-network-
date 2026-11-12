@@ -43,10 +43,16 @@ const CSS = `
 @media (max-width:520px){.cp-row{grid-template-columns:22px minmax(0,1fr) auto;padding:12px 10px}.cp-r b{font-size:1.02rem}}
 `;
 
+/** Menus often list products in ALL CAPS ("HUSTLER'S AMBITION BLUE SHERBET").
+ *  Shouting words become Title Case; short codes (THC, CBD, 1G, AIO) stay. */
+function calm(s: string): string {
+  return s.replace(/\b[A-Z][A-Z'’]{3,}\b/g, (w) => w.charAt(0) + w.slice(1).toLowerCase());
+}
+
 function itemLine(it: CheapestItem): string {
-  const name = it.product.replace(/\s+/g, " ").trim();
+  const name = calm(it.product.replace(/\s+/g, " ").trim());
   // Many menus already start the product name with the brand.
-  const brand = it.brand && !name.toLowerCase().startsWith(it.brand.toLowerCase()) ? `${it.brand} ` : "";
+  const brand = it.brand && !name.toLowerCase().startsWith(it.brand.toLowerCase()) ? `${calm(it.brand)} ` : "";
   return `${brand}${name}`;
 }
 

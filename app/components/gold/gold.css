@@ -433,3 +433,4 @@ a.g-line:hover { background: var(--g-cream); }
 .g-root select.g-input { appearance: none; -webkit-appearance: none; background-image: linear-gradient(45deg, transparent 50%, #10201a 50%), linear-gradient(135deg, #10201a 50%, transparent 50%) !important; background-position: calc(100% - 24px) 50%, calc(100% - 18px) 50% !important; background-size: 6px 6px !important; background-repeat: no-repeat !important; }
 .g-signup-ok { margin: 0; padding: 16px 20px; border-radius: 18px; background: rgba(217,172,79,.14); border: 1px solid rgba(217,172,79,.45); color: var(--g-cream); font-weight: 700; }
 .g-signup-err { margin: 0; color: #f2b48f; font-size: 14px; }
+.g-band-long h1 { font-size: clamp(32px, 8.6vw, 54px); max-width: 22ch; line-height: 1; }
