@@ -110,7 +110,7 @@ export async function GET(req: Request) {
                       <span style={{ fontSize: 27, fontWeight: 600, color: ink }}>{storeWithCity(d).slice(0, 38)}</span>
                       <span style={{ fontSize: 22, color: body, marginTop: 2 }}>{productOf(d).slice(0, 44)}</span>
                     </div>
-                    <span style={{ fontSize: 25, fontWeight: 700, padding: "10px 18px", borderRadius: 999, background: night ? C.firefly : C.ink, color: night ? C.nPaper : "#FBF6EE" }}>Save {m.big}</span>
+                    <span style={{ fontSize: 25, fontWeight: 700, padding: "10px 18px", borderRadius: 999, background: C.firefly, color: "#10291C" }}>Save {m.big}</span>
                   </div>
                 );
               })}

@@ -4,12 +4,12 @@
 import StoreOverflowLinks from "../../components/StoreOverflowLinks";
 import { capPerStore, overflowFor, STORE_CAP } from "../../../lib/storeCap";
 import Link from "next/link";
+import { Band, HeroTicket, StoreDeals } from "../../components/gold/Kit";
+import { CategoryArt } from "../../components/gold/Art";
 import { amountOf, saveLabel, cleanDealTitle, directionsHref, EXHALE_LINES, nearestExhale, milesLabel } from "../../../lib/exhale";
 import ExhaleCard from "../../components/ExhaleCard";
 import EmptyBreath from "../../components/EmptyBreath";
 import OtdLine from "../../components/OtdLine";
-import Nav from "../../components/Nav";
-import Footer from "../../components/Footer";
 import TrustLine from "../../components/TrustLine";
 import { effectiveCategory } from "../../../lib/inferCategory";
 import { redirect } from "next/navigation";
@@ -543,424 +543,90 @@ export default async function DealsPage({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }}
         />
       ))}
-      <style>{`
-        *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:var(--font-body);color:var(--pp-body);min-height:100vh}
-        .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:var(--pp-surface);position:sticky;top:0;z-index:100;border-bottom:1px solid var(--pp-border)}
-        .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
-        .logo-dot{width:8px;height:8px;border-radius:50%;background:var(--pp-signal-fill);animation:pulse calc(2500ms * var(--pp-pace)) 12}
-        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-        .logo-text{font-size:1.1rem;font-weight:700;color:var(--pp-ink)}
-        .logo-text span{color:var(--pp-signal)}
-        .back{font-size:.82rem;color:var(--pp-muted);text-decoration:none;font-family:var(--font-body)}
-        .back:hover{color:var(--pp-ink)}
-        .page{max-width:800px;margin:0 auto;padding:40px 20px}
-        .cat-tag{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--pp-signal);font-family:var(--font-body);margin-bottom:8px}
-        .page-title{font-size:clamp(1.5rem,4vw,2.2rem);font-weight:700;color:var(--pp-ink);letter-spacing:-.04em;line-height:1.1;margin-bottom:6px}
-        .page-sub{font-size:.88rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:24px}
-        .cat-switch{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:12px;padding:16px;margin-bottom:24px}
-        .cat-switch-label{font-size:.7rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:10px}
-        .cat-pills{display:flex;gap:8px;flex-wrap:wrap}
-        .cat-pill{font-size:.8rem;font-family:var(--font-body);font-weight:500;padding:6px 14px;border-radius:100px;text-decoration:none;border:1px solid var(--pp-border);color:var(--pp-muted)}
-        .cat-pill.active{background:var(--pp-btn);color:var(--pp-btn-fg);border:1px solid var(--pp-btn-border);font-weight:600}
-        .cat-pill:hover:not(.active){border-color:var(--pp-muted);color:var(--pp-body)}
-        .top-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--pp-signal);font-family:var(--font-body);margin-bottom:10px}
+      {topDeal && <TrackView event="deal_view" params={{ dispensary: topDeal.name || topDeal.listing_slug, category }} />}
 
-        /* TOP DEAL CARD — savings dominates */
-        .top-card{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:20px;padding:24px;position:relative;margin-bottom:24px}
-        .deal-grade{position:absolute;top:12px;right:12px;min-width:28px;height:24px;padding:0 8px;display:inline-flex;align-items:center;justify-content:center;border-radius:100px;font-family:var(--font-body);font-weight:700;font-size:.68rem;letter-spacing:.02em;opacity:.7}
-        .you-save-label{font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:2px}
-        .save-amount{font-family:var(--font-body);font-size:clamp(2.6rem,9vw,3.4rem);font-weight:700;color:var(--pp-big);letter-spacing:-.055em;line-height:1;margin-bottom:2px}
-        .save-context{font-size:.72rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:18px}
-        .disp-name{font-size:1.1rem;font-weight:700;color:var(--pp-ink);margin-top:4px}
-        .disp-detail{font-size:.8rem;color:var(--pp-muted);font-family:var(--font-body);margin-top:2px;margin-bottom:6px}
-        .deal-title-big{font-size:.92rem;font-weight:600;color:var(--pp-body);margin-bottom:14px;font-family:var(--font-body);line-height:1.4;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
-        .attrs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:16px}
-        .attr{font-size:.66rem;color:var(--pp-muted);background:var(--pp-paper);border-radius:100px;padding:2px 8px;font-family:var(--font-body)}
-        .deal-more-toggle{font-size:.78rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:16px;cursor:pointer;text-decoration:none;display:inline-block;list-style:none}
-        .deal-more-toggle::-webkit-details-marker{display:none}
-        .deal-more-toggle:hover{color:var(--pp-ink)}
-        .card-cta{display:flex;align-items:center;justify-content:center;width:100%;min-height:56px;background:var(--pp-btn);color:var(--pp-btn-fg);border:1px solid var(--pp-btn-border);padding:0 18px;border-radius:999px;text-decoration:none;font-family:var(--font-body);font-weight:600;font-size:17px}
-        .card-cta:hover{filter:brightness(.97)}
-
-        /* ALTERNATIVES — same hierarchy pattern */
-        .alt-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:12px}
-        .alt-cards{display:flex;flex-direction:column;gap:10px;margin-bottom:36px}
-        .alt-card{position:relative;padding:16px 18px 6px;display:flex !important;justify-content:space-between;align-items:center;gap:14px;flex-direction:row-reverse}
-        .alt-after{display:block;padding:0 18px 14px}
-        .alt-grade{position:absolute;top:10px;right:12px;font-size:.62rem;color:var(--pp-muted);font-family:var(--font-body);font-weight:600;letter-spacing:.08em;opacity:.7}
-        .alt-savings-block{min-width:92px;flex-shrink:0}
-        .alt-savings-label-top{font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:1px}
-        .alt-savings{font-family:var(--font-mono);font-size:1.5rem;font-weight:500;color:var(--pp-ink);letter-spacing:-.03em;line-height:1}
-        .alt-body{flex:1;min-width:0}
-        .alt-name{display:block;font-size:.92rem;font-weight:700;color:var(--pp-ink)}
-        .alt-deal{display:block;font-size:.78rem;color:var(--pp-body);font-family:var(--font-body);margin-top:2px;line-height:1.4}
-        .alt-meta{display:block;font-size:.66rem;color:var(--pp-muted);font-family:var(--font-body);margin-top:4px}
-        .no-deals{text-align:center;padding:60px 20px;background:var(--pp-surface);border-radius:16px;border:1px solid var(--pp-border)}
-        .no-deals-title{font-size:1.2rem;font-weight:700;color:var(--pp-ink);margin-bottom:8px}
-        .no-deals-sub{font-size:.875rem;color:var(--pp-muted);font-family:var(--font-body);margin-bottom:20px}
-        .no-deals-link{display:inline-block;background:var(--pp-canopy);color:var(--pp-on-dark);padding:10px 20px;border-radius:8px;text-decoration:none;font-family:var(--font-body);font-weight:700;font-size:.875rem}
-        .city-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--pp-best-tint);border:1px solid var(--pp-best-border);border-radius:10px;padding:10px 14px;margin-bottom:18px;font-family:var(--font-body);font-size:.82rem;color:var(--pp-signal);flex-wrap:wrap}
-        .city-banner-pin{font-weight:600}
-        .city-banner-clear{color:var(--pp-signal);text-decoration:none;font-weight:600;font-size:.78rem}
-        .city-banner-clear:hover{text-decoration:underline}
-        .statewide-fallback{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:12px;padding:16px 18px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-family:var(--font-body);font-size:.85rem;color:var(--pp-body)}
-        .statewide-fallback-link{color:var(--pp-signal);text-decoration:none;font-weight:700;white-space:nowrap}
-        .statewide-fallback-link:hover{text-decoration:underline}
-        .source-note{font-size:.68rem;color:var(--pp-muted);font-family:var(--font-body);text-align:center;margin-top:24px}
-        @media(max-width:600px){.page{padding:24px 14px}.nav{padding:12px 16px}}
-        @media(max-width:480px){
-          .page-title{font-size:1.35rem}
-          .top-card{padding:20px 18px;width:100%}
-          .deal-title-big{font-size:.88rem}
-          .cat-switch{padding:12px 10px}
-          .cat-pills{flex-wrap:nowrap;overflow-x:auto;gap:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-          .cat-pills::-webkit-scrollbar{display:none}
-          .cat-pill{font-size:.78rem;padding:6px 12px;flex-shrink:0;white-space:nowrap}
-          .alt-cards{gap:8px}
-          .alt-card{padding:14px 14px 6px;gap:12px}
-          .alt-after{padding:0 14px 12px}
-          .alt-savings{font-size:1.3rem}
-          .alt-savings-block{min-width:80px}
-          .alt-name{font-size:.86rem}
-          .alt-deal{font-size:.74rem}
-        }
-      `}</style>
-
-      <Nav variant="light" />
-
-      <div className="page">
-        {/* Zone 4 Phase 1: direct factual answer for AI crawlers */}
-        <p
-          style={{
-            fontSize: "1rem",
-            color: "var(--pp-muted)",
-            fontFamily: "var(--font-body)",
-            textAlign: "left",
-            marginBottom: "18px",
-            lineHeight: 1.5,
-          }}
-        >
-          {answerText}
-        </p>
-        <div className="cat-tag">{categoryLabel}</div>
-        <h1 className="page-title">{subtitle}</h1>
-        <p className="page-sub">
-          {deals.length > 0
-            ? city
-              ? `${deals.length} active deal${deals.length !== 1 ? "s" : ""} found within 15 miles of ${city}`
-              : `${deals.length} active deal${deals.length !== 1 ? "s" : ""} found in Central Illinois`
-            : city
-            ? `No active ${categoryLabel.toLowerCase()} deals within 15 miles of ${city} right now`
-            : "No active deals right now — check back soon"}
-        </p>
-        <TrustLine />
-
-        {city && (
-          <div className="city-banner">
-            <span className="city-banner-pin">Showing deals within 15 miles of {city}, IL</span>
-          </div>
+      <Band
+        eyebrow={categoryLabel}
+        title={category === "all" ? "Every deal" : categoryLabel}
+        italic={city ? `near ${city}` : "in Central IL"}
+        leaf={category === "all"}
+      >
+        {category !== "all" && (
+          <span className="g-band-art" aria-hidden="true">
+            <CategoryArt category={category} />
+          </span>
         )}
-
-        <div className="cat-switch">
-          <div className="cat-switch-label">What are you looking for?</div>
-          <div className="cat-pills">
-            {Object.entries(CATEGORY_LABELS).map(([slug, label]) => (
-              <Link
-                key={slug}
-                href={city ? `/deals/${slug}?city=${encodeURIComponent(city)}` : `/deals/${slug}`}
-                className={`cat-pill ${slug === category ? "active" : ""}`}
-              >
-                {label}
-              </Link>
-            ))}
-          </div>
+        <div className="g-stats">
+          <span className="g-stat"><b>{deals.length}</b> deal{deals.length === 1 ? "" : "s"}</span>
+          <span className="g-stat"><b>{dispensaryCount}</b> store{dispensaryCount === 1 ? "" : "s"}</span>
+          {city && <span className="g-stat">within 15 mi</span>}
         </div>
-
-        {topDeal ? (
-          <>
-            <TrackView event="deal_view" params={{ dispensary: topDeal.name || topDeal.listing_slug, category }} />
-            <div className="top-label">
-              Our recommendation{topScope === "region" ? " · across Central Illinois" : city ? ` near ${city}` : ""}
-            </div>
-            <div className="top-card">
-              <div style={{ position: "absolute", top: 12, right: 12, zIndex: 2 }}>
-                <DealBadge dealId={topDeal.deal_id || topDeal.id} />
-              </div>
-
-              {(() => {
-                const dollars = estimateSavings(topDeal);
-                const formatted = formatSavings(topDeal);
-                if (formatted === "Deal active") return null;
-                if (dollars != null) {
-                  return (
-                    <>
-                      <div className="you-save-label">You save</div>
-                      <div className="save-amount">${dollars}</div>
-                      </>
-                  );
-                }
-                return (
-                  <>
-                    <div className="save-amount">{formatted}</div>
-                    <div className="save-context">on this deal</div>
-                  </>
-                );
-              })()}
-
-              <div className="disp-name">
-                {displayDispensaryName(topDeal)}
-              </div>
-              <div className="disp-detail">
-                {topDeal.city ? `${topDeal.city}, ${topDeal.state_abbrev || 'IL'}` : 'IL'}
-                {topScope === "region" ? " · across Central Illinois" : topMiles && city ? ` · ${topMiles} from ${city}` : ""}
-                {topDeal.google_rating > 0 && ` · ${topDeal.google_rating}★`}
-              </div>
-
-              <div className="deal-title-big">
-                <span>{topDeal.deal_title || topDeal.title || `${topDeal.discount_value}% off ${topDeal.category}`}</span>
-                {(() => {
-                  const u = getExpiryUrgency(topDeal.expires_at);
-                  if (!u) return null;
-                  return (
-                    <span style={{ fontSize: ".68rem", fontFamily: "var(--font-body)", fontWeight: 700, color: u.fg, background: u.bg, padding: "2px 9px", borderRadius: 100, whiteSpace: "nowrap" }}>
-                      {u.text}
-                    </span>
-                  );
-                })()}
-              </div>
-
-              {(() => {
-                const t = trends[topDeal.slug || topDeal.listing_slug];
-                if (t === "better") return <div style={{ fontSize: ".78rem", fontFamily: "var(--font-body)", color: "var(--pp-signal)", fontWeight: 600, marginBottom: 10 }}>↓ Better deal than last week</div>;
-                if (t === "worse") return <div style={{ fontSize: ".78rem", fontFamily: "var(--font-body)", color: "var(--pp-note-fg)", fontWeight: 600, marginBottom: 10 }}>↑ Not as good as last week</div>;
-                return null;
-              })()}
-
-              <div style={{ marginBottom: 10 }}>
-                <DealFreshnessBadge verifiedAt={topDeal.verified_at} statusReason={topDeal.status_reason} />
-              </div>
-
-              <div className="attrs">
-                {topDeal.accepts_credit && <span className="attr">Cards OK</span>}
-                {topDeal.drive_thru && <span className="attr">Drive-thru</span>}
-                {topDeal.delivery && <span className="attr">Delivery</span>}
-                {topDeal.is_recurring && topDeal.recurring_days?.length > 0 && (
-                  <span className="attr">
-                    Recurring · {Array.isArray(topDeal.recurring_days)
-                      ? topDeal.recurring_days.slice(0, 3).join(", ")
-                      : topDeal.recurring_days}
-                  </span>
-                )}
-                {/* Expiration is rendered once, next to the deal title,
-                    by getExpiryUrgency() above. Do NOT also show a
-                    duplicate "Expires Apr 21" attribute pill here. */}
-              </div>
-
-              {(topDeal.deal_description || topDeal.description) && (
-                <details style={{ marginBottom: 16 }}>
-                  <summary className="deal-more-toggle">Show more ▾</summary>
-                  <div style={{ fontSize: ".82rem", color: "var(--pp-body)", fontFamily: "var(--font-body)", marginTop: 8, lineHeight: 1.5 }}>
-                    {topDeal.deal_description || topDeal.description}
-                  </div>
-                </details>
-              )}
-
-              {(() => {
-                const visit = visitDispensaryHref({
-                  website: topListing?.website,
-                  address1: topListing?.address1,
-                  city: topListing?.city ?? topDeal.city,
-                });
-                return (
-                  <DealCtaLink
-                    href={visit.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="card-cta"
-                    deal={{
-                      dispensary: topDeal.name || topDeal.listing_slug || "Illinois dispensary",
-                      dealTitle: topDeal.deal_title || topDeal.title || "",
-                      savingsAmount: estimateSavings(topDeal) ?? 0,
-                      category: topDeal.category || null,
-                    }}
-                  >
-                    {visit.label}
-                  </DealCtaLink>
-                );
-              })()}
-              {/* Secondary links — internal link graph for SEO and curious users */}
-              <div
-                style={{
-                  display: "flex",
-                  gap: 18,
-                  justifyContent: "center",
-                  marginTop: 10,
-                  fontSize: ".78rem",
-                  fontFamily: "var(--font-body)",
-                  flexWrap: "wrap",
-                }}
-              >
-                {(topDeal.id || topDeal.deal_id) && (
-                  <Link
-                    href={`/deal/${topDeal.id || topDeal.deal_id}`}
-                    style={{ color: "var(--pp-muted)", textDecoration: "none" }}
-                  >
-                    Details →
-                  </Link>
-                )}
-                {(topDeal.slug || topDeal.listing_slug) && (
-                  <Link
-                    href={`/dispensary/${topDeal.slug || topDeal.listing_slug}`}
-                    style={{ color: "var(--pp-muted)", textDecoration: "none" }}
-                  >
-                    {topDeal.name || "Dispensary"} profile →
-                  </Link>
-                )}
-                {(topDeal.id || topDeal.deal_id) && (
-                  <ShareDealButton
-                    dealId={topDeal.id || topDeal.deal_id}
-                    dispensaryName={topDeal.name || topDeal.listing_slug || "Dispensary"}
-                    dealTitle={topDeal.deal_title || topDeal.title || "Active deal"}
-                    savings={estimateSavings(topDeal) ?? null}
-                    variant="inline"
-                  />
-                )}
-              </div>
-            </div>
-
-            {alternatives.length > 0 && (
-              <>
-                <div className="alt-label">Also worth considering</div>
-                <div className="alt-cards">
-                  {alternatives.map((deal: Deal, i: number) => {
-                    const altHref = listingHref(deal.slug || deal.listing_slug, city);
-                    if (!altHref) return null;
-                    const dollars = estimateSavings(deal);
-                    const formatted = formatSavings(deal);
-                    const a = amountOf(deal);
-                    const pill = formatted === "Deal active" ? null : saveLabel(deal, dollars) || (a || dollars != null ? `Save ${a ? a.big : `$${dollars}`}` : null);
-                    const u = getExpiryUrgency(deal.expires_at);
-                    return (
-                    <ExhaleCard
-                      key={deal.id || deal.deal_id || i}
-                      index={i + 1}
-                      from="deals"
-                      deal={{ id: String(deal.deal_id || deal.id || i), slug: deal.slug || deal.listing_slug, city: deal.city }}
-                      saving={pill ? pill.replace(/^Save\s+/, "") : null}
-                      dollars={dollars ?? (a?.kind === "dollars" ? a.value : null)}
-                      percent={a?.kind === "percent" ? a.value : null}
-                      className="alt-dc"
-                      faceClassName="alt-card"
-                      words={
-                        <span className="alt-body">
-                          <span className="alt-name">{displayDispensaryName(deal)}</span>
-                          <span className="alt-deal">
-                            {cleanDealTitle(deal.deal_title || deal.title) || `${deal.discount_value}% off`}
-                          </span>
-                          <span className="alt-meta">
-                            {deal.city ? `${deal.city}, ${deal.state_abbrev || 'IL'}` : 'IL'}
-                          </span>
-                        </span>
-                      }
-                      aside={
-                        <span className="alt-savings-block">
-                          {pill ? (
-                            <span className="pp-save">{pill}</span>
-                          ) : formatted !== "Deal active" ? (
-                            <span className="alt-savings" style={{ fontSize: "1.1rem" }}>{formatted}</span>
-                          ) : null}
-                        </span>
-                      }
-                      after={
-                        <span className="alt-after">
-                          <OtdLine deal={deal} />
-                          {u && (
-                            <span style={{ marginTop: 4, display: "inline-block", fontSize: ".64rem", fontFamily: "var(--font-body)", fontWeight: 700, color: u.fg, background: u.bg, padding: "2px 8px", borderRadius: 100 }}>
-                              {u.text}
-                            </span>
-                          )}
-                          <span style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4 }}>
-                            <DealFreshnessBadge verifiedAt={deal.verified_at} statusReason={deal.status_reason} />
-                            <DealBadge dealId={deal.deal_id || deal.id} />
-                          </span>
-                        </span>
-                      }
-                      otdDeal={deal}
-                      directionsHref={directionsHref(deal)}
-                      seeHref={altHref}
-                      seeLabel="See the store"
-                      line={EXHALE_LINES[(i + 1) % EXHALE_LINES.length]}
-                    />
-                  )})}
-                </div>
-              </>
-            )}
-
-            <StoreOverflowLinks stores={cardOverflow} city={city} note={false} />
-
-            {showStatewideFallback && (
-              <div className="statewide-fallback">
-                <span>
-                  {deals.length} deal{deals.length === 1 ? "" : "s"} near {city} right now.
-                  More coming soon — get alerts for new deals.
-                </span>
-                <Link href="/alerts" className="statewide-fallback-link">
-                  Get free alerts →
-                </Link>
-              </div>
-            )}
-
-            {city && (
-              <div style={{ textAlign: "center", margin: "8px 0 20px" }}>
-                <Link
-                  href={`/deals/${category}`}
-                  style={{
-                    fontSize: ".9rem",
-                    color: "var(--pp-signal)",
-                    fontFamily: "var(--font-body)",
-                    fontWeight: 600,
-                    textDecoration: "none",
-                  }}
-                >
-                  See all Central IL deals →
-                </Link>
-              </div>
-            )}
-
-            <p className="source-note">
-              Data from direct dispensary sources ·{" "}
-              <Link href="/dispensary/submit-deal" style={{ color: "var(--pp-signal)", textDecoration: "none" }}>
-                Submit your deal →
-              </Link>
-            </p>
-          </>
-        ) : (
-          <EmptyBreath
-            steps={
-              noLocalMatches
-                ? [
-                    { href: `/deals/${category}`, label: "See all Central IL deals" },
-                    { href: "/alerts", label: "Get Monday's best deals" },
-                  ]
-                : category === "all"
-                ? [
-                    { href: "/alerts", label: "Get Monday's best deals" },
-                    { href: "/dispensaries", label: "Browse the stores" },
-                  ]
-                : [
-                    { href: "/deals/all", label: "See every deal today" },
-                    { href: "/alerts", label: "Get Monday's best deals" },
-                  ]
-            }
-          >
-            {noLocalMatches
-              ? `No ${categoryLabel.toLowerCase()} deals within 15 miles of ${city} right now. A wider look usually turns one up.`
-              : `No ${categoryLabel.toLowerCase()} deals posted on a store's own site right now. Stores post overnight; we check every morning.`}
-          </EmptyBreath>
+        <nav className="g-cat-switch" aria-label="Deal type">
+          {Object.entries(CATEGORY_LABELS).map(([slug, label]) => (
+            <Link
+              key={slug}
+              href={city ? `/deals/${slug}?city=${encodeURIComponent(city)}` : `/deals/${slug}`}
+              className={slug === category ? "on" : ""}
+              aria-current={slug === category ? "page" : undefined}
+            >
+              {label}
+            </Link>
+          ))}
+        </nav>
+        {topDeal && (
+          <HeroTicket
+            deal={topDeal}
+            miles={topPick && topPick.deal === topDeal ? topPick.miles : null}
+            scope={topScope as "near" | "widened" | "region"}
+            label={topScope === "region" ? `Best ${category === "all" ? "deal" : categoryLabel.toLowerCase() + " deal"} in Central IL` : `Best ${category === "all" ? "deal" : categoryLabel.toLowerCase() + " deal"} near ${city}`}
+          />
         )}
-      </div>
-      <Footer />
+      </Band>
+
+      <main className="g-page">
+        <div className="g-wrap">
+          <div className="g-block">
+            {/* Zone 4: direct factual answer for people and AI crawlers. */}
+            <p className="g-answer">{answerText}</p>
+            <TrustLine />
+          </div>
+
+          {deals.length > 0 ? (
+            <div className="g-block">
+              <div className="g-eyebrow">Every one, by store</div>
+              <h2 className="g-display">{category === "all" ? "All of today's deals" : `All ${categoryLabel.toLowerCase()} deals`}</h2>
+              <StoreDeals deals={deals} cityParam={city || undefined} />
+              {showStatewideFallback && (
+                <p className="g-note">
+                  Only {deals.length} near {city} right now. <Link href={`/deals/${category}`}>See all of Central Illinois</Link> or{" "}
+                  <Link href="/alerts">get free alerts</Link>.
+                </p>
+              )}
+              {city && !showStatewideFallback && (
+                <p className="g-note">
+                  <Link href={`/deals/${category}`}>See every Central IL deal</Link>
+                </p>
+              )}
+              <p className="g-note">
+                Data from the stores&apos; own sites · <Link href="/dispensary/submit-deal">Submit your deal</Link>
+              </p>
+            </div>
+          ) : (
+            <div className="g-block">
+              <p className="g-answer">
+                {noLocalMatches
+                  ? `No ${categoryLabel.toLowerCase()} deals within 15 miles of ${city} right now. A wider look usually turns one up.`
+                  : `No ${categoryLabel.toLowerCase()} deals posted on a store's own site right now. Stores post overnight; we check every morning.`}
+              </p>
+              <div className="g-near" style={{ marginTop: 12 }}>
+                {noLocalMatches && <Link href={`/deals/${category}`}>See all Central IL deals</Link>}
+                {category !== "all" && !noLocalMatches && <Link href="/deals/all">See every deal today</Link>}
+                <Link href="/alerts">Get free alerts</Link>
+              </div>
+            </div>
+          )}
+        </div>
+      </main>
     </>
   );
 }

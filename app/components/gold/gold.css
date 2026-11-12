@@ -419,3 +419,13 @@ a.g-line:hover { background: var(--g-cream); }
 .g-hr.today { color: var(--g-forest); font-weight: 800; }
 .g-band .g-sc-actions .g-btn svg { width: 18px; height: 18px; }
 .g-band .g-stat .g-dot { margin-right: 0; }
+
+/* deals pages: category picture in the band, type switcher */
+.g-band-art { position: absolute; right: var(--g-gutter); top: 26px; width: 92px; height: 92px; border-radius: 50%; background: var(--g-cream); color: var(--g-ink); display: grid; place-items: center; transform: rotate(-8deg);
+  --g-art-fill: #d9ac4f; --g-art-leaf: #9cc9a6; --g-art-hair: #d8673f; --g-art-body: #fbf5e8; }
+.g-band-art svg { width: 64px; height: 64px; }
+.g-band:has(.g-band-art) h1 { padding-right: 100px; }
+.g-cat-switch { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 16px calc(var(--g-gutter) * -1) 0; padding: 2px var(--g-gutter); }
+.g-cat-switch::-webkit-scrollbar { display: none; }
+.g-cat-switch a { flex: none; padding: 9px 16px; border-radius: 999px; font-size: 15px; font-weight: 700; text-decoration: none; color: var(--g-cream); border: 1px solid var(--g-line); background: rgba(244,234,213,.05); }
+.g-cat-switch a.on { background: var(--g-gold-grad); color: var(--g-ink); border-color: transparent; }
