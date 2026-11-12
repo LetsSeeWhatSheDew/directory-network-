@@ -225,6 +225,9 @@ export type ScraperSummary = {
   started_at: string;
   finished_at: string | null;
   listings_processed: number;
+  /** Every store this run attempted (in order), so the run log can show a
+   *  clean read with no deals instead of leaving the store out entirely. */
+  listings_read?: string[];
   listings_skipped_no_website: number;
   listings_skipped_aggregator: number;
   fetch_errors: Array<{ slug: string; error: string }>;
@@ -798,6 +801,7 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
     started_at: new Date().toISOString(),
     finished_at: null,
     listings_processed: 0,
+    listings_read: [],
     listings_skipped_no_website: 0,
     listings_skipped_aggregator: 0,
     fetch_errors: [],
@@ -863,6 +867,7 @@ export async function runCilScrape(cfg: RunConfig): Promise<ScraperSummary> {
       continue;
     }
     summary.listings_processed += 1;
+    summary.listings_read?.push(l.slug);
     try {
       const budget = cfg.perListingTimeoutMs;
       const storeDeadline = budget ? Date.now() + budget : Number.POSITIVE_INFINITY;

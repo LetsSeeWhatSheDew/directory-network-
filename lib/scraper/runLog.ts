@@ -108,6 +108,9 @@ export function buildDispensaryResults(summary: ScraperSummary): DispensaryResul
     return r;
   };
 
+  // A store read cleanly with nothing posted is still a result ("success",
+  // all zeros); without this it vanished from the log and from /status.
+  for (const slug of summary.listings_read ?? []) ensure(slug);
   for (const e of summary.fetch_errors) {
     const r = ensure(e.slug);
     r.error_message = e.error;

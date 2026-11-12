@@ -92,6 +92,30 @@ test("rendered run: a chain page that returns no deals for this store is a succe
   assert.deepEqual(summary.deals_aged, [{ slug: "bloom-a", title: "30% off Verano brands" }]);
 });
 
+test("run log: a store read cleanly with no deals is listed as a success with zero counts", () => {
+  const rows = buildDispensaryResults({
+    mode: "live",
+    started_at: "",
+    finished_at: null,
+    listings_processed: 2,
+    listings_read: ["quiet-store", "busy-store"],
+    listings_skipped_no_website: 0,
+    listings_skipped_aggregator: 0,
+    fetch_errors: [],
+    deals_found: [],
+    deals_inserted: [{ slug: "busy-store", title: "20% off flower" }],
+    deals_deduped: [],
+    deals_updated: [],
+    deals_aged: [],
+    rate_limited_hosts: [],
+  });
+  const quiet = rows.find((r) => r.slug === "quiet-store");
+  assert.ok(quiet, "quiet store is in the log");
+  assert.equal(quiet!.status, "success");
+  assert.equal(quiet!.deals_added + quiet!.deals_updated + quiet!.deals_deactivated, 0);
+  assert.equal(rows.find((r) => r.slug === "busy-store")!.deals_added, 1);
+});
+
 test("static (Vercel cron) run: same rule — every page erroring keeps the store's deals", async () => {
   const listings = [
     { slug: "down-a", city: "Peoria", website: "https://down.example/" },
