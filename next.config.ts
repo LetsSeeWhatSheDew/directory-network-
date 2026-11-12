@@ -52,6 +52,8 @@ const SECURITY_HEADERS = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // `next dev` otherwise appends its own agent notes to CLAUDE.md on every run.
+  agentRules: false,
   typescript: {
     ignoreBuildErrors: true,
   },
