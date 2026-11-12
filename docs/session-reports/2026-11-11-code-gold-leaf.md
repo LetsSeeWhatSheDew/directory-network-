@@ -81,10 +81,32 @@ Built from the only design he had put to use: the three Nov 10 flyers (Gold Leaf
 - **CLAUDE.md:** Current State rebuilt from the live DB.
 - **Checks:** 436/436 Playwright checks pass after each round. Lighthouse: home 93, city 97.
 
+## Rounds 4–5: fixes from a fresh production review (a separate reviewer, phone, GPS in Peoria)
+
+- **Open-first coupon** (`pickOpenFirst` in `lib/home/goldData.ts`):
+  - Prefers a store open right now, nearby. It never reaches 80 miles for an open store.
+  - When the nearby pick is closed, the coupon says "Closed · Opens tomorrow at 8:00 AM". Verified on production at 9:24 PM.
+  - Applies on home, towns, stores and the deals pages.
+- **Coupon label:** "Best everyday deal". BOGO, "up to" and first-time deals sit in the lists below it, by design.
+- **Counts:** home labels its region-wide numbers "all of Central IL".
+- **Buttons:** all 52 that used `--pp-btn` are now filled forest with cream text (they were pale beige).
+- **Pro copy:** promises only what exists, an email as soon as a check finds a deal. Removed the "browser notification" and "15-minute early access" claims (neither feature exists) from `/upgrade`, its success page, preferences and privacy.
+- **Deal lists:**
+  - Set-price deals show their price in the pill.
+  - "+N more" opens 10 more, then links to the store.
+  - Category pictures match more words.
+- **`/cheapest/*`:** three price coupons at the top, the best three stores per list, the rest folded.
+- **`/status`:** dropped the repeated per-store technical line.
+- **Deal page:** opens on the band. "Ongoing deal" and "Verified" sit on one line.
+- **Market report:** reflows on phones (it was ~6px text). Print is unchanged. The table scrolls and is keyboard-focusable.
+- **Desktop store page:** hours and about sit side by side.
+- **Design system:** "open" green darkened to #17663a (4.8:1 on cream).
+- **Checks:** 436/436 Playwright, Lighthouse home 92 / city 96. Each round was verified on production after deploy.
+
 ## Still open
 
 - **Free alerts are untested end to end.** I didn't submit a real signup.
-- **The scraper agent stopped without reporting.** The per-store freshness table is not done.
+- **Six stores show no deals:** The Dispensary Champaign (no website); the three RISE/Bloom stores (Cloudflare, not bypassed); Trinity on University (age gate); Cloud 9 East Peoria (read, nothing posted). See CLAUDE.md Current State.
 - **Concentrated sources:** NOXX (~129) and SHARE (~80) supply most deals. The count is honest, but it tilts town totals.
 - **From Nov 10, still open:**
   - Bloom Peoria's phone.
