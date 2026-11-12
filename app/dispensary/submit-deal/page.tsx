@@ -270,7 +270,7 @@ export default function SubmitDealPage() {
               <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10 }}>
                 {form.category && <span style={{ fontSize: ".68rem", color: "var(--pp-muted)", background: "var(--pp-paper)", borderRadius: 100, padding: "2px 9px", fontFamily: "var(--font-body)" }}>{form.category}</span>}
                 {form.is_recurring && <span style={{ fontSize: ".68rem", color: "var(--pp-muted)", background: "var(--pp-paper)", borderRadius: 100, padding: "2px 9px", fontFamily: "var(--font-body)" }}>Recurring</span>}
-                {form.expires_at && <span style={{ fontSize: ".68rem", color: "var(--pp-muted)", background: "var(--pp-paper)", borderRadius: 100, padding: "2px 9px", fontFamily: "var(--font-body)" }}>Expires {new Date(form.expires_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>}
+                {form.expires_at && <span style={{ fontSize: ".68rem", color: "var(--pp-muted)", background: "var(--pp-paper)", borderRadius: 100, padding: "2px 9px", fontFamily: "var(--font-body)" }}>Expires {new Date(form.expires_at).toLocaleDateString("en-US", { timeZone: "America/Chicago", month: "short", day: "numeric" })}</span>}
               </div>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "var(--pp-best-tint)", border: "1px solid var(--pp-best-border)", borderRadius: 10, padding: "12px 14px" }}>
                 <div>

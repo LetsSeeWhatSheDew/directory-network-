@@ -251,3 +251,16 @@ export const EXHALE_LINES = [
   "Seen on the store's own site.",
   "The math is done. That part's handled.",
 ];
+
+/** Store descriptions are written once but deals change daily, so any
+ *  sentence claiming a live deal count ("Four active deals are currently
+ *  live…", "…the highest-active-deal dispensary…") goes stale. Drop those
+ *  sentences; the live deal list on the page is the only source of truth. */
+export function stripStaleDealClaims(text: string | null | undefined): string {
+  const t = String(text || "");
+  const sentences = t.match(/[^.!?]+[.!?]+(\s|$)|[^.!?]+$/g) || [t];
+  return sentences
+    .filter((s) => !/\bactive[- ]deals?\b|\bdeals? (are|is) (currently )?live\b|\bcurrently live here\b/i.test(s))
+    .join("")
+    .trim();
+}

@@ -24,7 +24,7 @@ function daysSince(iso: string): number {
 function shortDate(iso: string): string | null {
   const t = new Date(iso);
   if (!Number.isFinite(t.getTime())) return null;
-  return t.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  return t.toLocaleDateString("en-US", { timeZone: "America/Chicago", month: "short", day: "numeric" });
 }
 
 type Props = {

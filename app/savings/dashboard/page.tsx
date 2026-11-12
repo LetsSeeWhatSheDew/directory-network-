@@ -46,7 +46,7 @@ export default function SavingsDashboard() {
       monthly: Math.round(monthly),
       lifetime: Math.round(lifetime),
       count: records.length,
-      month: now.toLocaleString("en-US", { month: "long" }),
+      month: now.toLocaleString("en-US", { timeZone: "America/Chicago", month: "long" }),
     };
   }, [records]);
 
@@ -156,7 +156,7 @@ export default function SavingsDashboard() {
                     <div className="rec-name">{r.dispensary}</div>
                     <div className="rec-title">{r.dealTitle || "Deal"}</div>
                     <div className="rec-date">
-                      {new Date(r.clickedAt).toLocaleDateString("en-US", {
+                      {new Date(r.clickedAt).toLocaleDateString("en-US", { timeZone: "America/Chicago",
                         month: "short",
                         day: "numeric",
                       })}

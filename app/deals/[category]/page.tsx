@@ -217,11 +217,11 @@ function getExpiryUrgency(expiresAt?: string | null) {
   if (daysLeft === 0) return { key: "today", text: "Expires today", bg: "var(--pp-stop-bg)", fg: "var(--pp-stop-fg)" };
   if (daysLeft === 1) return { key: "tomorrow", text: "Expires tomorrow", bg: "var(--pp-note-bg)", fg: "var(--pp-note-fg)" };
   if (daysLeft < 7) {
-    const weekday = expiry.toLocaleDateString("en-US", { weekday: "long" });
+    const weekday = expiry.toLocaleDateString("en-US", { timeZone: "America/Chicago", weekday: "long" });
     return { key: "weekday", text: `Expires ${weekday}`, bg: "var(--pp-paper)", fg: "var(--pp-muted)" };
   }
   if (daysLeft < 30) {
-    const md = expiry.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    const md = expiry.toLocaleDateString("en-US", { timeZone: "America/Chicago", month: "short", day: "numeric" });
     return { key: "date", text: `Expires ${md}`, bg: "var(--pp-paper)", fg: "var(--pp-muted)" };
   }
   return null;

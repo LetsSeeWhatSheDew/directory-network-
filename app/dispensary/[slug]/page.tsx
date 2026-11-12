@@ -26,7 +26,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { brand } from "../../../lib/brand";
 import { estimateSavings, formatSavingsDollars } from "../../../lib/dealScoring";
-import { cleanDealTitle, amountOf, nearestExhale } from "../../../lib/exhale";
+import { cleanDealTitle, amountOf, nearestExhale, stripStaleDealClaims } from "../../../lib/exhale";
 import ExhaleCard from "../../components/ExhaleCard";
 import EmptyBreath from "../../components/EmptyBreath";
 import OtdLine from "../../components/OtdLine";
@@ -246,8 +246,8 @@ function formatExpires(exp: string | null): string | null {
   if (diffDays < 0) return null;
   if (diffDays === 0) return "Expires today";
   if (diffDays === 1) return "Expires tomorrow";
-  if (diffDays < 7) return `Expires ${d.toLocaleDateString("en-US", { weekday: "long" })}`;
-  return `Expires ${d.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`;
+  if (diffDays < 7) return `Expires ${d.toLocaleDateString("en-US", { timeZone: "America/Chicago", weekday: "long" })}`;
+  return `Expires ${d.toLocaleDateString("en-US", { timeZone: "America/Chicago", month: "short", day: "numeric" })}`;
 }
 
 export async function generateMetadata({
@@ -514,7 +514,7 @@ export default async function DispensaryProfilePage({
             <section className="g-block" aria-label={`About ${name}`}>
               <div className="g-eyebrow">The store</div>
               <h2 className="g-display">About {name}</h2>
-              <p className="g-answer" style={{ borderLeftColor: "var(--g-line-ink)" }}>{listing.long_description || listing.short_description}</p>
+              <p className="g-answer" style={{ borderLeftColor: "var(--g-line-ink)" }}>{stripStaleDealClaims(listing.long_description || listing.short_description)}</p>
             </section>
           )}
 

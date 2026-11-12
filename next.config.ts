@@ -79,6 +79,9 @@ const nextConfig: NextConfig = {
       },
       // Breathe consolidation (2026-09-23): legacy/off-scope pages.
       { source: "/cannabis", destination: "/", permanent: true },
+      // Out of the Central IL scope: Missouri pages were removed 2026-11-11.
+      { source: "/cannabis/missouri", destination: "/", permanent: true },
+      { source: "/cannabis/missouri/:path*", destination: "/", permanent: true },
       { source: "/grow", destination: "/for-dispensaries", permanent: true },
       { source: "/early-access", destination: "/alerts", permanent: true },
       // There's no /deals index; the list lives at /deals/all.

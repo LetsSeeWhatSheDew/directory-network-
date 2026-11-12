@@ -35,7 +35,7 @@ const FAQ_ENTRIES = [
   },
   {
     q: "How often are deals updated?",
-    a: "Deals are reviewed and refreshed daily. Expired deals are removed automatically the moment their expiry time passes, so what you see is what's live today.",
+    a: "Every morning we re-read each store's own site. A deal we can't re-confirm for 72 hours is marked as waiting on a check, and after 7 days without a confirmation it comes down on its own. A deal with an end date comes down when it ends.",
   },
   {
     q: "Is PuffPrice free to use?",

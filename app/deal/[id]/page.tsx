@@ -171,7 +171,7 @@ function computeExpiry(exp: string | null): ExpiryBadge {
     return { text: `Ends in ${Math.max(1, Math.floor(hours))}h`, tone: "warning" };
   }
   return {
-    text: `Expires ${d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`,
+    text: `Expires ${d.toLocaleDateString("en-US", { timeZone: "America/Chicago", month: "short", day: "numeric", year: "numeric" })}`,
     tone: "soft",
   };
 }
