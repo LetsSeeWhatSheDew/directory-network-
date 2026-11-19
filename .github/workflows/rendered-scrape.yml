@@ -14,11 +14,6 @@ on:
   schedule:
     - cron: '15 11 * * *'
     - cron: '15 17 * * *'
-  # TEMP: dry run on pushes to the working branch, to prove the stores load
-  # from GitHub's machines. Remove before merging.
-  push:
-    branches: [claude/sweet-maxwell-9f298m]
-    paths: ['.github/workflows/rendered-scrape.yml']
   workflow_dispatch:
     inputs:
       apply:
