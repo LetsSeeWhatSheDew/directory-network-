@@ -6,7 +6,7 @@ on:
   workflow_dispatch: {}
   push:
     branches: [claude/sweet-maxwell-9f298m]
-    paths: ['scripts/alert-signup-probe.mjs']
+    paths: ['scripts/alert-signup-probe.mjs', 'scripts/resend-domain-check.mjs']
 
 jobs:
   probe:
@@ -14,4 +14,8 @@ jobs:
     timeout-minutes: 3
     steps:
       - uses: actions/checkout@v4
+      - name: Resend domain status (read-only)
+        run: node scripts/resend-domain-check.mjs
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
       - run: node scripts/alert-signup-probe.mjs
