@@ -17,8 +17,14 @@ The reports are live pages. Print a fresh one the morning of the meeting, so the
 - Open `https://www.puffprice.com/for-dispensaries/<store-slug>/market-report`, then Print → Save as PDF. Set Letter, "Actual size", background graphics on.
 - Or regenerate all 26 with a local dev server on port 3100. The renderer script is in `make-market-reports.mjs`: `node docs/sales-kit-2026-11-10/make-market-reports.mjs docs/sales-kit-2026-11-10/market-reports <slug> <slug> …`
 
-## Still open
+## Still open (updated Nov 19, 2026)
 
-- Send a test email to `hi@puffprice.com`. Mail for puffprice.com routes through the registrar's forwarding (MX records checked Nov 10). Where it lands is UNVERIFIED.
-- Before booking, confirm which stores are single-location independents. Ownership is UNVERIFIED.
-- Find out how you'll invoice and take ACH. Ask your bank first.
+- **Who to visit first.** Answered; ownership is from web sources, see `docs/strategy/2026-11-19-store-ownership-and-open-items.md`.
+  - **SHARE Springfield** (`share-springfield`): the region's only single-location independent.
+  - **Trinity** (`trinity-on-glen`, `trinity-on-university`): Peoria-local, 2 stores.
+  - **Maribis** (`maribis-springfield`): independent, 3 Illinois stores.
+  - **nuEra** (`nuera-east-peoria`, `nuera-pekin`, `nuera-champaign`, `nuera-urbana`): Illinois family-owned, 4 of our stores.
+  - Leave the multi-state chains (Ascend, Cresco/Sunnyside, High Profile, NOXX, Shangri-La) for later.
+- **The PDFs in `market-reports/` are from Nov 10, before Gold Leaf.** Print a fresh one from the live page the morning of each meeting, as above.
+- **Email.** `hi@puffprice.com` forwards through Namecheap, and PuffPrice can't send any email until the Resend domain verifies (`docs/ops/2026-11-19-email-fix.md`). Until that's fixed, give stores your own email, not hi@.
+- **Invoicing and ACH.** Open an account with an Illinois credit union or community bank that serves cannabis-ancillary businesses (Credit Union 1 has a program). Stripe, Square, PayPal, Bluevine and Relay refuse.
