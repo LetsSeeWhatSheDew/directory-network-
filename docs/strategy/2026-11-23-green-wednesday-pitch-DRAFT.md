@@ -17,7 +17,7 @@ What we're seeing going into the holiday (re-check Monday morning; numbers below
 - A 1g vape cart typically runs $40.42 out the door, and 100mg of gummies $11.68
 - Illinois cannabis tax adds roughly a quarter to almost half of the shelf price, so the sticker is rarely what you pay
 
-On Wednesday the full list is at puffprice.com/green-wednesday. It updates through the day.
+On Wednesday the full list is at puffprice.com/green-wednesday. It updates through the day. Town-by-town prices are at puffprice.com/cheapest#by-town.
 
 I'm happy to talk about what prices look like town by town, how the Illinois cannabis tax adds up at the register (we built a calculator for it), or what shoppers here can expect. I can send the numbers as a spreadsheet.
 
