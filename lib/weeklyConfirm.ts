@@ -32,6 +32,9 @@ export function renderWeeklyConfirmEmail(confirmUrl: string): { subject: string;
 
 export type ConfirmSendResult = "sent" | "throttled" | "unavailable" | "failed";
 
+/** Short, non-secret reason for the last failed send (Resend status + error name), for diagnosis. */
+export let lastConfirmFailure: string | null = null;
+
 /**
  * Send the confirm email for weekly row `id`. At most one per address per
  * 10 minutes per instance, so the form can't be used to flood someone's inbox.
@@ -51,9 +54,15 @@ export async function sendWeeklyConfirm(email: string, id: string): Promise<Conf
       html: m.html,
       text: m.text,
     });
-    if ((r as { error?: unknown }).error) throw new Error(JSON.stringify((r as { error?: unknown }).error).slice(0, 200));
+    const err = (r as { error?: { name?: string; statusCode?: number } | null }).error;
+    if (err) {
+      lastConfirmFailure = `resend_${err.statusCode ?? "?"}_${String(err.name || "error").replace(/[^a-z_]/gi, "").slice(0, 40)}`;
+      throw new Error(JSON.stringify(err).slice(0, 200));
+    }
+    lastConfirmFailure = null;
     return "sent";
   } catch (e) {
+    if (!lastConfirmFailure) lastConfirmFailure = "send_threw";
     forgetSeen(onceKey);
     console.error("[weekly-confirm] send failed", String(e).slice(0, 200));
     return "failed";
