@@ -15,7 +15,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { subscribeWeekly } from "@/lib/alertSubscribers";
-import { sendWeeklyConfirm } from "@/lib/weeklyConfirm";
+import { sendWeeklyConfirm, lastConfirmFailure } from "@/lib/weeklyConfirm";
 import { rateLimited, clientKey } from "@/lib/rateLimit";
 import { readJsonBody, crossSiteRequest, honeypotTripped, normalizeEmail, cleanLine, MAX_FORM_BYTES } from "@/lib/validation";
 
@@ -94,7 +94,12 @@ export async function POST(req: NextRequest) {
     if (saved.status === "pending") {
       const sent = await sendWeeklyConfirm(email, saved.id);
       if (sent === "unavailable" || sent === "failed") {
-        return fail("We couldn't send the confirm email just now. Try again later.", sent === "unavailable" ? 503 : 502);
+        // `code` is a short non-secret label (e.g. resend_403_validation_error) so a
+        // broken mail setup can be diagnosed from outside without server logs.
+        return NextResponse.json(
+          { ok: false, error: "We couldn't send the confirm email just now. Try again later.", code: sent === "unavailable" ? "no_resend_key" : lastConfirmFailure },
+          { status: sent === "unavailable" ? 503 : 502 }
+        );
       }
     }
     if (wantsJson) return NextResponse.json({ ok: true, status: saved.status });
