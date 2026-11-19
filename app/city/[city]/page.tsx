@@ -5,7 +5,8 @@
 // all three via internal linking.
 
 import Link from "next/link";
-import { isConditional } from "@/lib/exhale";
+import { isConditional, type ExDeal } from "@/lib/exhale";
+import { cityMeta } from "@/lib/cityMeta";
 import { pickOpenFirst } from "@/lib/home/goldData";
 import { Band, HeroTicket, StoreDeals, StoreCard, Faq } from "../../components/gold/Kit";
 import WatchControl from "../../components/WatchControl";
@@ -254,12 +255,9 @@ export async function generateMetadata({
   const city = toCityCase(raw);
   const [deals, listings] = await Promise.all([getCityDeals(city), getCityListings(city)]);
   // Root layout title.template appends "| PuffPrice"; don't double it here.
-  const title = `${city} Dispensary Deals Today`;
-  const n = listings.length;
-  const description =
-    deals.length > 0
-      ? `${deals.length} verified deal${deals.length === 1 ? "" : "s"} today across ${n} ${city}, IL dispensar${n === 1 ? "y" : "ies"} — plus hours, who's open now, and how to order ahead.`
-      : `All ${n} licensed dispensar${n === 1 ? "y" : "ies"} in ${city}, IL — hours, who's open now, order-ahead options, and verified deals the moment they post.`;
+  // Lead with the city's best everyday deal: a real number in the search
+  // result (lib/cityMeta.ts; Search Console showed impressions, few clicks).
+  const { title, description } = cityMeta(city, deals as unknown as ExDeal[], listings.length);
   const url = `${brand.url}/city/${encodeURIComponent(raw.toLowerCase())}`;
   // Live link preview: the city's longest exhale today (app/og/city/[city]).
   const ogImage = `${brand.url}/og/city/${encodeURIComponent(raw.toLowerCase())}`;

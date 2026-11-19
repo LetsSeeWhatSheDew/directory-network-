@@ -10,9 +10,9 @@ import { getServerLocation } from "../lib/location";
 export const metadata = {
   // The layout's "%s | PuffPrice" template doesn't apply to a page in the
   // same segment as the root layout, so the brand goes in by hand here.
-  title: { absolute: `Cannabis Deals in Central Illinois | ${brand.name}` },
+  title: { absolute: `Dispensary & Weed Deals Today in Central Illinois | ${brand.name}` },
   description:
-    "Live dispensary deals across Peoria, Bloomington-Normal, Champaign-Urbana, Springfield, and the rest of Central Illinois — updated continuously and always free to browse.",
+    "Today's dispensary deals in Peoria, Bloomington-Normal, Champaign-Urbana, Pekin and Springfield, checked on each store's own site twice a day. Free, no account, and nobody pays to rank.",
   alternates: { canonical: brand.url },
   // Live link preview: today's longest exhale (app/og/today), refreshed through the day.
   openGraph: {
