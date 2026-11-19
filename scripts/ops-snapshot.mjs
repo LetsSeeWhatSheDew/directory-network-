@@ -62,6 +62,7 @@ if (Array.isArray(deals)) {
 h("Alert subscribers (counts only)");
 console.log(`active: ${await rest("deal_alerts?select=id&is_active=eq.true", { count: true })}`);
 console.log(`pending (not confirmed): ${await rest("deal_alerts?select=id&is_active=eq.false", { count: true })}`);
+console.log(`confirm emails queued (signups waiting for mail to work): ${await rest(`deal_alerts?select=id&is_active=eq.false&categories=cs.${encodeURIComponent('{"confirm:unsent"}')}`, { count: true })}`);
 console.log(`new in last 7 days: ${await rest(`deal_alerts?select=id&created_at=gte.${new Date(Date.now() - 7 * 864e5).toISOString()}`, { count: true })}`);
 
 h("Newest scraper runs");

@@ -46,3 +46,16 @@ Matthew (Nov 19): "Get me there… I'm giving you the keys." He decided:
 - typecheck: pass.
 - `test:unit`: 187 pass.
 - `build:fixtures`: pass.
+
+## Afternoon round (same day)
+
+- **Signups survive the email outage.** A signup or watch whose confirm email fails is kept (inactive) and tagged `confirm:unsent`. The daily deal-alerts cron sends those confirms through `lib/confirmRetry.ts` and stops at the first failure.
+  - Production probe at 18:09 UTC: `HTTP 200 {"ok":true,"status":"pending","delayed":true}`.
+- **Home page** shows "Green Wednesday · Nov 25" under the hero for the week before and the day itself. The `/green-wednesday` countdown drops the Breathe line.
+- **The Mac's failing runs, explained** by `scraper_runs.error_summary`.
+  - Every Mac run Nov 16-19 hit "hard deadline: run exceeded 16 min" after about 3,650 s: the Mac slept mid-run.
+  - `scripts/run-rendered-scrape.sh` now reads NOXX only (`--slug=noxx`); GitHub reads the rest.
+- **Price check** (`scripts/price-check.ts`, runs in the daily ops snapshot): cheapest and typical out-the-door eighth, cart and gummies by town.
+  - Nov 19, 14 stores: eighth typical $26.59 (cheapest $22.92), cart $40.42, gummies $11.68.
+  - The Green Wednesday pitch draft now carries these numbers.
+- **Sales kit README** now lists who to visit first, plus the email and ACH status.
