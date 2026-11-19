@@ -18,6 +18,7 @@ import {
   type RefUnit,
 } from "../../lib/menuPrices";
 import { QuickAnswer, FaqBlock, GUIDE_EXTRA_CSS, type Faq } from "../guides/GuideParts";
+import { townTable } from "../../lib/priceCheck";
 
 const CSS = `
 .cp-best{display:grid;grid-template-columns:1fr;gap:10px;margin:6px 0 4px}
@@ -46,6 +47,13 @@ const CSS = `
 .cp-sale{display:inline-block;margin-top:2px;font-size:.7rem;font-weight:700;padding:2px 7px;border-radius:999px;background:var(--pp-note-bg);color:var(--pp-note-fg)}
 .cp-empty{margin-top:22px;padding:18px;border-radius:14px;background:var(--pp-haze);border:1px solid var(--pp-haze-border)}
 .cp-empty b{font-family:var(--font-display);font-size:1.1rem;font-weight:400}
+.cp-towns{overflow-x:auto;margin:6px 0 8px}
+.cp-towns table{border-collapse:collapse;width:100%;font-size:.92rem;font-variant-numeric:tabular-nums}
+.cp-towns th,.cp-towns td{padding:8px 8px;border-bottom:1px solid var(--pp-border);text-align:right;white-space:nowrap}
+.cp-towns th:first-child,.cp-towns td:first-child{text-align:left}
+.cp-towns th{font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--pp-muted);font-weight:600}
+.cp-towns tr.cp-region td{font-weight:700}
+.cp-towns small{display:block;font-size:.72rem;color:var(--pp-muted);font-weight:400}
 .cp-cities{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
 .cp-cities a{font-size:.85rem;padding:6px 11px;border-radius:999px;border:1px solid var(--pp-border);background:var(--pp-surface);color:inherit;text-decoration:none}
 .cp-cities a[aria-current=page]{border-color:var(--pp-canopy);font-weight:600}
@@ -246,6 +254,34 @@ export default function CheapestView({
           );
         })
       )}
+
+      {!currentCity && hasData && (() => {
+        const t = townTable(board);
+        const cell = (c: { typical: number; stores: number } | null) =>
+          c ? <>{money(c.typical)}<small>{c.stores} store{c.stores === 1 ? "" : "s"}</small></> : <span aria-label="no price read">—</span>;
+        return (
+          <>
+            <h2 className="gp-h2" id="by-town">Typical price by town</h2>
+            <p className="gp-p">
+              The middle store&apos;s cheapest price in each town for an eighth, a 1g cart and 100mg of gummies, out the door with tax, from the same menus as the lists above. Towns with one store
+              read are that store&apos;s price.
+            </p>
+            <div className="cp-towns">
+              <table>
+                <thead>
+                  <tr><th scope="col">Town</th>{REF_UNITS.map((r) => <th key={r} scope="col">{({ eighth: "Eighth", cart_1g: "1g cart", gummies_100mg: "Gummies" } as Record<RefUnit, string>)[r]}</th>)}</tr>
+                </thead>
+                <tbody>
+                  <tr className="cp-region"><td>{t.region.city}</td>{REF_UNITS.map((r) => <td key={r}>{cell(t.region.cells[r])}</td>)}</tr>
+                  {t.towns.map((row) => (
+                    <tr key={row.city}><td>{row.city}</td>{REF_UNITS.map((r) => <td key={r}>{cell(row.cells[r])}</td>)}</tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        );
+      })()}
 
       <h2 className="gp-h2">How this list works</h2>
       <p className="gp-p">
