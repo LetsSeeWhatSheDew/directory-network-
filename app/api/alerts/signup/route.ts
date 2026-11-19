@@ -16,6 +16,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { subscribeWeekly } from "@/lib/alertSubscribers";
 import { sendWeeklyConfirm, lastConfirmFailure } from "@/lib/weeklyConfirm";
+import { markConfirmUnsent } from "@/lib/confirmRetry";
 import { rateLimited, clientKey } from "@/lib/rateLimit";
 import { readJsonBody, crossSiteRequest, honeypotTripped, normalizeEmail, cleanLine, MAX_FORM_BYTES } from "@/lib/validation";
 
@@ -94,12 +95,17 @@ export async function POST(req: NextRequest) {
     if (saved.status === "pending") {
       const sent = await sendWeeklyConfirm(email, saved.id);
       if (sent === "unavailable" || sent === "failed") {
-        // `code` is a short non-secret label (e.g. resend_403_validation_error) so a
-        // broken mail setup can be diagnosed from outside without server logs.
-        return NextResponse.json(
-          { ok: false, error: "We couldn't send the confirm email just now. Try again later.", code: sent === "unavailable" ? "no_resend_key" : lastConfirmFailure },
-          { status: sent === "unavailable" ? 503 : 502 }
-        );
+        // Keep the signup: tag it so the daily retry (lib/confirmRetry.ts) sends
+        // the confirm once mail works. Still inactive until they tap the link.
+        // `code` is a short non-secret label (e.g. resend_403_validation_error)
+        // so a broken mail setup can be diagnosed from outside.
+        const code = sent === "unavailable" ? "no_resend_key" : lastConfirmFailure;
+        console.error(`[alerts/signup] confirm not sent (${code}); queued for retry`);
+        if (!(await markConfirmUnsent(saved.id))) return fail("We couldn't send the confirm email just now. Try again later.", 502);
+        if (wantsJson) return NextResponse.json({ ok: true, status: "pending", delayed: true, code });
+        const next = new URL("/alerts/confirmed", req.url);
+        next.searchParams.set("pending", "1");
+        return NextResponse.redirect(next, { status: 303 });
       }
     }
     if (wantsJson) return NextResponse.json({ ok: true, status: saved.status });

@@ -131,7 +131,7 @@ export default async function GreenWednesdayPage() {
       {!isDay && n > 0 && (
         <div className="gw-count" aria-label={`${n} days until Green Wednesday`}>
           <b>{n}</b>
-          <span>days to go. Breathe. Nothing to do yet.</span>
+          <span>{n === 1 ? "day" : "days"} to go. Bookmark this page; it fills up that morning.</span>
         </div>
       )}
 

@@ -30,6 +30,7 @@ export default function WatchControl(props: Props) {
   const [eventCity, setEventCity] = useState("");
   const [hp, setHp] = useState("");
   const [state, setState] = useState<"idle" | "busy" | "pending" | "active" | "err">("idle");
+  const [delayed, setDelayed] = useState(false);
   const [err, setErr] = useState("");
 
   const label =
@@ -62,7 +63,7 @@ export default function WatchControl(props: Props) {
     return (
       <p className="wc-done" role="status">
         {state === "pending"
-          ? <>Almost done. Check <b>{email}</b> and tap the confirm link. Nothing arrives until you do.</>
+          ? <>Almost done. Check <b>{email}</b> and tap the confirm link. Nothing arrives until you do.{delayed ? " The email can take up to a day to arrive." : ""}</>
           : activeLine}
         <style>{CSS}</style>
       </p>
@@ -99,7 +100,8 @@ export default function WatchControl(props: Props) {
                   ? { kind: "law", city: eventCity || null, email, website: hp }
                   : { kind: "city", city: props.city, email, categories: cats, min_discount: minPct ? Number(minPct) : null, website: hp };
               const r = await fetch("/api/alerts/watch", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-              const j = (await r.json().catch(() => ({}))) as { ok?: boolean; status?: string; error?: string };
+              const j = (await r.json().catch(() => ({}))) as { ok?: boolean; status?: string; error?: string; delayed?: boolean };
+              if (j.delayed) setDelayed(true);
               if (r.ok && j.ok) setState(j.status === "active" ? "active" : "pending");
               else {
                 setErr(j.error || "That didn't save. Try again in a minute.");

@@ -15,6 +15,7 @@ import { CENTRAL_IL_PUBLIC_CITIES } from "@/lib/constants/regions";
 import { isInCentralIL } from "@/lib/visibility";
 import { saveWatch, confirmUrl, WATCH_CATEGORIES } from "@/lib/dealWatch";
 import { renderConfirmEmail, alertsFrom } from "@/lib/dealAlertEmail";
+import { markConfirmUnsent } from "@/lib/confirmRetry";
 import { getCheapestBoard } from "@/lib/menuPrices";
 import { isRefUnit, itemWords, parseCeiling, toCents, fromCents } from "@/lib/priceWatch";
 import { eventById, daysUntil } from "@/lib/events";
@@ -123,10 +124,15 @@ export async function POST(req: NextRequest) {
   }
   if (!saved.needsConfirm) return NextResponse.json({ ok: true, status: "active" });
 
-  if (!process.env.RESEND_API_KEY) {
-    console.error("[alerts/watch] RESEND_API_KEY not set; confirm email not sent");
-    return NextResponse.json({ ok: false, error: "We couldn't send the confirm email just now. Try again later." }, { status: 503 });
-  }
+  // If the confirm can't go out, keep the watch (still inactive) and let the
+  // daily retry send it (lib/confirmRetry.ts).
+  const queue = async (why: string) => {
+    console.error(`[alerts/watch] confirm not sent (${why}); queued for retry`);
+    return (await markConfirmUnsent(saved.row.id))
+      ? NextResponse.json({ ok: true, status: "pending", delayed: true })
+      : NextResponse.json({ ok: false, error: "We couldn't send the confirm email just now. Try again later." }, { status: 502 });
+  };
+  if (!process.env.RESEND_API_KEY) return queue("no_resend_key");
   const m = renderConfirmEmail({ what, ask, after, confirmUrl: confirmUrl(brand.url, saved.row.id) });
   try {
     const r = await new Resend(process.env.RESEND_API_KEY).emails.send({
@@ -139,8 +145,7 @@ export async function POST(req: NextRequest) {
     });
     if ((r as { error?: unknown }).error) throw new Error(JSON.stringify((r as { error?: unknown }).error).slice(0, 200));
   } catch (e) {
-    console.error("[alerts/watch] confirm send failed", String(e).slice(0, 200));
-    return NextResponse.json({ ok: false, error: "We couldn't send the confirm email just now. Try again later." }, { status: 502 });
+    return queue(String(e).slice(0, 120));
   }
   return NextResponse.json({ ok: true, status: "pending" });
 }

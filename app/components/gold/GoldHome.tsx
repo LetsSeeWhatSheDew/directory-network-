@@ -35,6 +35,7 @@ export default function GoldHome({ data, origin, faq }: { data: Data; origin: Or
   const city = origin?.city || null;
   const towns = CENTRAL_IL_PUBLIC_CITIES.map((c) => ({ ...c, n: data.byCity[c.name] || 0 })).filter((c) => c.n > 0);
 
+  const gwDays = greenWednesdayDays();
   return (
     <div className="g-root">
       <section className="g-hero" aria-labelledby="g-h1">
@@ -47,6 +48,11 @@ export default function GoldHome({ data, origin, faq }: { data: Data; origin: Or
               Best Bud <span className="g-buck">For Your <span className="g-gold-text">Buck$</span></span>
             </h1>
             <div className="g-eyebrow" style={{ marginTop: 14 }}>{data.total} deals · {data.stores} stores · all of Central IL</div>
+            {gwDays != null && (
+              <Link className="g-season" href="/green-wednesday">
+                {gwDays === 0 ? "Green Wednesday is today" : gwDays === 1 ? "Green Wednesday is tomorrow" : "Green Wednesday · Nov 25"} <Arrow />
+              </Link>
+            )}
             <GoldLocate serverCity={city} />
           </div>
           {hero ? (
@@ -177,4 +183,13 @@ export function GoldFaq({ entries }: { entries: { q: string; a: string }[] }) {
       </div>
     </section>
   );
+}
+
+/** Days until Green Wednesday (Nov 25, 2026) in Central time, shown on the
+ *  home page for the week before and the day itself; null otherwise. */
+function greenWednesdayDays(): number | null {
+  const now = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const n = Math.round((new Date(2026, 10, 25).getTime() - today.getTime()) / 86400000);
+  return n >= 0 && n <= 7 ? n : null;
 }

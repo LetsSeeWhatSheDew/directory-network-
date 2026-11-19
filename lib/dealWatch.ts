@@ -78,7 +78,7 @@ export function safeEq(a: string, b: string): boolean {
 // ---------- tags inside categories ----------
 export const storeSlugOf = (r: Pick<WatchRow, "categories">) =>
   (r.categories || []).find((c) => c.startsWith("store:"))?.slice(6) || null;
-const isMeta = (c: string) => c.startsWith("ok:") || c.startsWith("sent:") || c.startsWith("law:");
+const isMeta = (c: string) => c.startsWith("ok:") || c.startsWith("sent:") || c.startsWith("law:") || c.startsWith("confirm:");
 export const userCategories = (r: Pick<WatchRow, "categories">) =>
   (r.categories || []).filter((c) => !isMeta(c) && !c.startsWith("store:"));
 /** Exported for tests; the tag is only valid with the server secret. */

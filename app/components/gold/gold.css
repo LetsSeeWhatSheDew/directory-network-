@@ -438,3 +438,8 @@ a.g-line:hover { background: var(--g-cream); }
 .g-band-long .g-band-leaf { opacity: .2; }
 .g-two { display: grid; gap: 0 40px; align-items: start; }
 @media (min-width: 900px) { .g-two { grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); } .g-two .g-hours { max-width: none; } }
+
+/* Seasonal link under the hero eyebrow (Green Wednesday week). */
+.g-season { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--g-gold); color: var(--g-gold-hi); font-weight: 600; font-size: 14px; text-decoration: none; }
+.g-season svg { width: 16px; height: 16px; flex: none; }
+.g-season:hover, .g-season:focus-visible { background: rgba(217,172,79,.12); }

@@ -45,5 +45,11 @@ git checkout -q -- package-lock.json 2>/dev/null
 run_with_timeout 120 git pull -q --ff-only origin main || echo "git pull failed or timed out (continuing with current checkout)"
 echo "code: $(git log --oneline -1)"
 run_with_timeout 300 npm ci --include=dev --no-audit --no-fund --silent || echo "npm ci failed or timed out (continuing)"
-run_with_timeout 1080 npx tsx scripts/scrape-rendered-deals.ts --apply
+# 2026-11-19: GitHub Actions now reads every store twice a day
+# (.github/workflows/rendered-scrape.yml). The Mac only reads the store whose
+# Cloudflare check blocks GitHub's servers but has loaded from the Mac before:
+# NOXX East Peoria. One store finishes in under a minute, so a run started on a
+# brief wake from sleep no longer dies at the 16-minute deadline (Nov 16-19:
+# every Mac run "failed" after ~3,650s of mostly-asleep wall clock).
+run_with_timeout 300 npx tsx scripts/scrape-rendered-deals.ts --apply --slug=noxx
 echo "exit $?"

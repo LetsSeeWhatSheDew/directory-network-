@@ -9,6 +9,7 @@ export default function WeeklySignup({ tone = "dark" }: { tone?: "dark" | "light
   const [city, setCity] = useState("Peoria");
   const [hp, setHp] = useState("");
   const [state, setState] = useState<"idle" | "busy" | "done" | "pending" | "err">("idle");
+  const [delayed, setDelayed] = useState(false);
   const fg = tone === "dark" ? "var(--pp-canopy-text)" : "var(--pp-ink)";
   const field: React.CSSProperties = {
     padding: "11px 12px", borderRadius: 10, border: "1px solid var(--pp-border)", fontSize: 15,
@@ -18,7 +19,7 @@ export default function WeeklySignup({ tone = "dark" }: { tone?: "dark" | "light
     return <p style={{ color: fg, fontWeight: 600, margin: 0 }}>✓ You&apos;re in. First report lands Monday.</p>;
   }
   if (state === "pending") {
-    return <p style={{ color: fg, fontWeight: 600, margin: 0 }}>✓ Almost there. Check your email and tap the link to start your Monday report.</p>;
+    return <p style={{ color: fg, fontWeight: 600, margin: 0 }}>✓ Almost there. Check your email and tap the link to start your Monday report.{delayed ? " If it isn't there yet, it's on its way: it can take up to a day." : ""}</p>;
   }
   return (
     <form
@@ -32,6 +33,7 @@ export default function WeeklySignup({ tone = "dark" }: { tone?: "dark" | "light
             body: JSON.stringify({ email, city: city.toLowerCase(), tier: "free", categories: ["all"], website: hp }),
           });
           const j = r.ok ? await r.json().catch(() => ({})) : null;
+          if (j?.delayed) setDelayed(true);
           setState(!r.ok ? "err" : j?.status === "active" ? "done" : "pending");
         } catch {
           setState("err");

@@ -17,6 +17,7 @@
 // the new-deals digest. ?dry=1 plans without sending or writing.
 
 import { Resend } from "resend";
+import type { RetryStats } from "./confirmRetry";
 import { createHash } from "crypto";
 import { brand } from "./brand";
 import { unsubscribeUrl } from "./alertSubscribers";
@@ -310,7 +311,7 @@ export async function runLawWatches(opts: { dry: boolean; day: string; resend: R
 }
 
 /** Both runs, never throwing: a failure here must not stop the deal digest. */
-export async function runExtraWatches(opts: { dry: boolean; day: string }): Promise<{ price: RunStats; events: RunStats; law: RunStats }> {
+export async function runExtraWatches(opts: { dry: boolean; day: string }): Promise<{ price: RunStats; events: RunStats; law: RunStats; confirms: RetryStats | { ok: false; reason: string } }> {
   const resend = !opts.dry && process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
   const safe = async (f: () => Promise<RunStats>): Promise<RunStats> => {
     try {
@@ -322,5 +323,8 @@ export async function runExtraWatches(opts: { dry: boolean; day: string }): Prom
   const price = await safe(() => runPriceWatches({ ...opts, resend }));
   const events = await safe(() => runEventWatches({ ...opts, resend }));
   const law = await safe(() => runLawWatches({ ...opts, resend }));
-  return { price, events, law };
+  // Confirm emails that couldn't go out at signup (lib/confirmRetry.ts).
+  // Loaded lazily: confirmRetry is server-only and this module is unit-tested.
+  const confirms = await import("./confirmRetry").then((m) => m.resendUnsentConfirms({ dry: opts.dry })).catch((e: unknown) => ({ ok: false as const, reason: String(e).slice(0, 200) }));
+  return { price, events, law, confirms };
 }

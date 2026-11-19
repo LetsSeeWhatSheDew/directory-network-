@@ -50,7 +50,7 @@ type StoredAlert = {
 // an existing row's active state, and confirmWeekly() adds the tag. Once
 // sql/migrations/2026-09-27-security-hardening.sql removes the anon INSERT
 // on deal_alerts, nothing else can create an active row either.
-const isMetaTag = (c: string) => c.startsWith("ok:") || c.startsWith("sent:");
+const isMetaTag = (c: string) => c.startsWith("ok:") || c.startsWith("sent:") || c.startsWith("confirm:");
 
 export function weeklyConfirmTag(id: string, email: string): string | null {
   const s = secret();
