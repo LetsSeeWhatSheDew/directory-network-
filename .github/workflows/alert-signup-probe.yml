@@ -1,0 +1,17 @@
+name: Alert signup probe
+
+# One real signup on production with PuffPrice's own address (hi@puffprice.com).
+# Run by hand from the Actions tab when the signup path needs proving.
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [claude/sweet-maxwell-9f298m]
+    paths: ['scripts/alert-signup-probe.mjs']
+
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/alert-signup-probe.mjs
