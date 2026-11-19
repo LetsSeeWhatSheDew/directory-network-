@@ -1,0 +1,37 @@
+name: Market report PDFs
+
+# Prints fresh sample Market Reports from the live site, for store meetings.
+# Run from the Actions tab; download the PDFs from the run's "market-reports"
+# artifact. Reads public pages only.
+on:
+  workflow_dispatch:
+    inputs:
+      slugs:
+        description: 'Store slugs, space-separated'
+        type: string
+        default: 'share-springfield trinity-on-glen trinity-on-university maribis-springfield nuera-east-peoria nuera-pekin nuera-champaign nuera-urbana'
+
+jobs:
+  pdfs:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci --no-audit --no-fund
+      - name: Print PDFs
+        env:
+          BASE: https://www.puffprice.com
+          PW_CHANNEL: chrome
+          SLUGS: ${{ inputs.slugs }}
+        run: |
+          mkdir -p out
+          node docs/sales-kit-2026-11-10/make-market-reports.mjs out $SLUGS
+          ls -la out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: market-reports
+          path: out/*.pdf
