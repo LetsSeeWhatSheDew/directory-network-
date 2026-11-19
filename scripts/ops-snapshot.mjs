@@ -65,8 +65,11 @@ console.log(`pending (not confirmed): ${await rest("deal_alerts?select=id&is_act
 console.log(`new in last 7 days: ${await rest(`deal_alerts?select=id&created_at=gte.${new Date(Date.now() - 7 * 864e5).toISOString()}`, { count: true })}`);
 
 h("Newest scraper runs");
-const runs = await rest("scraper_runs?select=started_at,finished_at,status,trigger,total_deals_added,total_deals_updated,total_deals_deactivated&order=started_at.desc&limit=8");
-if (Array.isArray(runs)) for (const r of runs) console.log(`${r.started_at} ${r.trigger} ${r.status} · +${r.total_deals_added} =${r.total_deals_updated} -${r.total_deals_deactivated}`);
+const runs = await rest("scraper_runs?select=started_at,finished_at,status,trigger,total_deals_added,total_deals_updated,total_deals_deactivated,duration_ms,error_summary,dispensary_results&order=started_at.desc&limit=10");
+if (Array.isArray(runs)) for (const r of runs) {
+  const n = Array.isArray(r.dispensary_results) ? r.dispensary_results.length : 0;
+  console.log(`${r.started_at} ${r.trigger} ${r.status} · ${n} stores · ${Math.round((r.duration_ms || 0) / 1000)}s · +${r.total_deals_added} =${r.total_deals_updated} -${r.total_deals_deactivated}${r.error_summary ? ` · error: ${String(r.error_summary).slice(0, 160)}` : ""}`);
+}
 
 h("Deal clicks / views (if tracked)");
 for (const t of ["deal_clicks", "deal_events", "click_events"]) {
