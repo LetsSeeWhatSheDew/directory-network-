@@ -1,11 +1,9 @@
 // app/alerts/page.tsx
-// Two-tier consumer page: FREE (no account) and PRO ($0.99/month).
-// Standard tier removed per GPT advice — habit beats monetization
-// at this stage.
+// Free alerts, the only consumer tier. Pro ($0.99/mo) was dropped on
+// 2026-11-19 (Matthew): shoppers never pay; stores can buy a market report.
 
 import Link from "next/link";
 import AlertsCalculator from "./AlertsCalculator";
-import ProCheckoutButton from "./ProCheckoutButton";
 import WeeklySignup from "../components/WeeklySignup";
 import { Band } from "../components/gold/Kit";
 
@@ -49,7 +47,7 @@ export const revalidate = 300;
 
 const OG_IMAGE = "https://www.puffprice.com/og-image.png";
 const OG_DESC =
-  "Central Illinois cannabis deal alerts. Free forever, no account needed. Pro is $0.99/month. Deal alerts within minutes.";
+  "Central Illinois cannabis deal alerts. Free forever, no account needed. One email every Monday with the best deals in your town.";
 
 export const metadata = {
   alternates: { canonical: `${brand.url}/alerts` },
@@ -80,17 +78,6 @@ const FREE_FEATURES = [
   "Weekly Monday digest (just email + city, no account)",
 ];
 
-const PRO_FEATURES = [
-  "Everything free",
-  "Deal alerts within minutes of dispensary updates",
-  "Daily 8am deal digest personalized to your city + categories",
-  'Price history — "this eighth was $45 last week, today $28"',
-  '"Beat My Last Price" alerts — set your price, we tell you when it\'s beaten',
-  'Monthly savings report: "You saved $84 this month"',
-  "Annual savings dashboard with shareable stats",
-  "First to know about new dispensary openings near you",
-];
-
 export default async function AlertsPage() {
   const alertCount = await getAlertCount();
   return (
@@ -106,43 +93,24 @@ export default async function AlertsPage() {
         .hero-count{margin-top:14px;font-size:.85rem;color:var(--pp-muted);font-family:var(--font-body)}
         .hero-count b{font-family:var(--font-mono);font-weight:500;color:var(--pp-ink)}
 
-        .tiers{max-width:960px;margin:0 auto;padding:48px 20px 24px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
-        @media(max-width:720px){.tiers{grid-template-columns:1fr}}
+        .tiers{max-width:560px;margin:0 auto;padding:48px 20px 24px;display:grid;gap:18px}
         .tier{background:var(--pp-surface);border:1px solid var(--pp-border);border-radius:16px;padding:28px 26px;display:flex;flex-direction:column;gap:14px;position:relative}
-        .tier.pro{background:var(--pp-haze);color:var(--pp-ink);border-color:var(--pp-haze-border)}
         .tier-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pp-signal);font-family:var(--font-body)}
-        .tier.pro .tier-eyebrow{color:var(--pp-mark)}
         .tier-name{font-size:1.35rem;font-weight:700;letter-spacing:-.02em;font-family:var(--font-body);line-height:1.1}
-        .tier.pro .tier-name{color:var(--pp-ink)}
         .tier-price{display:flex;align-items:baseline;gap:6px}
         .tier-price-big{font-size:2.4rem;font-weight:500;color:var(--pp-signal-ink);letter-spacing:-.04em;line-height:1;font-family:var(--font-mono)}
-        .tier.pro .tier-price-big{color:var(--pp-big)}
         .tier-price-period{font-size:.85rem;color:var(--pp-muted);font-family:var(--font-body)}
-        .tier.pro .tier-price-period{color:var(--pp-muted)}
         .tier-anchor{font-size:.82rem;color:var(--pp-muted);font-family:var(--font-body);line-height:1.5}
-        .tier.pro .tier-anchor{color:var(--pp-muted)}
         .tier-anchor strong{color:var(--pp-signal);font-weight:700}
-        .tier.pro .tier-anchor strong{color:var(--pp-mark)}
         .tier-headline{font-size:.95rem;font-weight:600;color:var(--pp-body);font-family:var(--font-body);line-height:1.5}
-        .tier.pro .tier-headline{color:var(--pp-body)}
         ul.tier-features{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:7px}
         ul.tier-features li{display:flex;gap:8px;align-items:flex-start;font-size:.86rem;color:var(--pp-body);font-family:var(--font-body);line-height:1.5}
-        .tier.pro ul.tier-features li{color:var(--pp-body)}
         .check{color:var(--pp-signal);font-weight:700;flex-shrink:0}
-        .tier.pro .check{color:var(--pp-mark)}
 
         .cta{display:inline-block;padding:13px 22px;border-radius:14px;font-family:var(--font-body);font-weight:700;font-size:.95rem;text-decoration:none;text-align:center;transition:transform calc(150ms * var(--pp-pace)), opacity calc(150ms * var(--pp-pace));cursor:pointer;border:none;width:100%}
         .cta-free{background:var(--pp-btn);color:var(--pp-btn-fg);box-shadow:inset 0 0 0 1px var(--pp-btn-border)}
         .cta-free:hover{filter:brightness(.97)}
-        .cta-pro{background:var(--pp-btn);color:var(--pp-btn-fg);box-shadow:inset 0 0 0 1px var(--pp-btn-border);font-weight:600}
-        .cta-pro:hover{filter:brightness(.97)}
-        .cta-pro:disabled{opacity:.7;cursor:not-allowed}
 
-        .feels{max-width:760px;margin:24px auto 0;padding:48px 24px}
-        .feels h2{font-size:clamp(1.5rem,3.5vw,2rem);font-weight:700;letter-spacing:-.03em;line-height:1.15;margin-bottom:24px;font-family:var(--font-body)}
-        .feels p{font-family:var(--font-body);font-size:1.02rem;line-height:1.7;color:var(--pp-body);margin-bottom:20px}
-        .feels p em{color:var(--pp-signal);font-style:normal;font-weight:700}
-        .feels p.closer{color:var(--pp-signal-ink);font-weight:600}
 
         .calc{max-width:640px;margin:0 auto;padding:12px 20px 64px}
       `}</style>
@@ -165,7 +133,7 @@ export default async function AlertsPage() {
             <span className="tier-price-big">$0</span>
             <span className="tier-price-period">forever</span>
           </div>
-          <p className="tier-anchor">No account, no friction, forever. Actually free — not a trial.</p>
+          <p className="tier-anchor">No account, no friction, forever. Actually free, not a trial. Nobody pays to see deals, and nobody pays to rank.</p>
           <ul className="tier-features">
             {FREE_FEATURES.map((f) => (
               <li key={f}><span className="check">✓</span>{f}</li>
@@ -176,42 +144,6 @@ export default async function AlertsPage() {
           <WeeklySignup tone="light" />
           <Link href="/this-week" style={{ fontSize: ".85rem", color: "var(--pp-signal-ink)" }}>See this week&apos;s report →</Link>
         </article>
-
-        {/* PRO */}
-        <article className="tier pro" id="pro">
-          <div className="tier-eyebrow">Pro · $0.99/month</div>
-          <div className="tier-name">Pay to stop missing deals.</div>
-          <div className="tier-price">
-            <span className="tier-price-big">$0.99</span>
-            <span className="tier-price-period">/month</span>
-          </div>
-          <p className="tier-anchor">
-            <strong>$0.99/month. That&apos;s it.</strong>
-          </p>
-          <ul className="tier-features">
-            {PRO_FEATURES.map((f) => (
-              <li key={f}><span className="check">✓</span>{f}</li>
-            ))}
-          </ul>
-          <div style={{ flex: 1 }} />
-          <ProCheckoutButton />
-        </article>
-      </section>
-
-      <section className="feels">
-        <h2>What Pro actually feels like</h2>
-        <p>
-          You&apos;re about to drive to a dispensary. Your phone buzzes. <em>&ldquo;A store 6 minutes away just posted 30% off
-          vapes.&rdquo;</em> You save $18. That&apos;s Pro.
-        </p>
-        <p>
-          You paid $35 for an eighth last month. You told us. This week we emailed you: <em>&ldquo;Same strain,
-          $27, two miles away.&rdquo;</em> That&apos;s Pro.
-        </p>
-        <p className="closer">
-          Monday morning. Your digest lands. <em>&ldquo;Best deals near you this week.&rdquo;</em> You pick one.
-          You go. You save money you didn&apos;t know you were losing. That&apos;s Pro.
-        </p>
       </section>
 
       <section className="calc">

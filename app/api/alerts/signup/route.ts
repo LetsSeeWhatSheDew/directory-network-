@@ -1,6 +1,7 @@
 // app/api/alerts/signup/route.ts
 // ============================================================
-// ALERT SIGNUP API — the Monday report (and the Pro waitlist fallback).
+// ALERT SIGNUP API: the free Monday report (the only consumer tier since Pro
+// was dropped on 2026-11-19; any old tier=pro/standard posts sign up weekly).
 // Accepts a regular form POST (303 redirect) or JSON ({ ok, status }).
 //
 // Double opt-in: a new address (or one that unsubscribed) is saved inactive
@@ -70,7 +71,6 @@ export async function POST(req: NextRequest) {
     const categories = input.categories
       .filter((c): c is string => typeof c === "string" && CATEGORIES.has(c))
       .slice(0, 5);
-    const tier = input.tier === "pro" || input.tier === "standard" ? input.tier : "free";
 
     // Optional phone → E.164, otherwise dropped.
     let phone: string | null = null;
@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
       email,
       city,
       categories: categories.length ? categories : ["all"],
-      alert_type: tier === "pro" ? "instant" : tier === "standard" ? "daily" : "weekly",
+      alert_type: "weekly",
       phone,
     });
     if (!saved.ok) {

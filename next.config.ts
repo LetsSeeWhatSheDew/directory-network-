@@ -84,6 +84,9 @@ const nextConfig: NextConfig = {
       { source: "/cannabis/missouri/:path*", destination: "/", permanent: true },
       { source: "/grow", destination: "/for-dispensaries", permanent: true },
       { source: "/early-access", destination: "/alerts", permanent: true },
+      // Pro ($0.99/mo) dropped 2026-11-19: alerts are free; the pricing page is gone.
+      { source: "/upgrade", destination: "/alerts", permanent: true },
+      { source: "/upgrade/:path*", destination: "/alerts", permanent: true },
       // There's no /deals index; the list lives at /deals/all.
       { source: "/deals", destination: "/deals/all", permanent: true },
       // /about/index described a statewide blended $/g "index" — against the

@@ -1,7 +1,7 @@
 // app/api/cron/scrape-deals/route.ts
 // Vercel Cron handler — direct-source CIL deal scraper.
 // Scheduled daily via vercel.json crons entry (Hobby plan limits cron
-// to once per day; upgrade to Pro for more frequent refresh).
+// to once per day).
 //
 // Auth: requires `Authorization: Bearer ${CRON_SECRET}` header.
 //       Vercel Cron passes this header automatically when the env var

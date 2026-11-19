@@ -15,7 +15,6 @@ import { readJsonBody, crossSiteRequest, honeypotTripped, normalizeEmail, cleanL
 
 export const dynamic = "force-dynamic";
 
-const VALID_FREQ = new Set(["weekly", "daily", "sms"]);
 const VALID_CATS = new Set(["flower", "edibles", "vapes", "concentrate", "all"]);
 
 export async function POST(req: NextRequest) {
@@ -34,7 +33,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Valid email required." }, { status: 400 });
     }
     const city = cleanLine(body.city, 40)?.toLowerCase() || null;
-    const frequency = typeof body.frequency === "string" && VALID_FREQ.has(body.frequency) ? body.frequency : "weekly";
     const categoriesRaw = Array.isArray(body.categories) ? body.categories : [];
     const categories = categoriesRaw.filter((c: unknown): c is string => typeof c === "string" && VALID_CATS.has(c)).slice(0, 5);
 
@@ -44,7 +42,7 @@ export async function POST(req: NextRequest) {
       email,
       city,
       categories: categories.length ? categories : ["all"],
-      alert_type: frequency === "daily" ? "daily" : frequency === "sms" ? "instant" : "weekly",
+      alert_type: "weekly", // the only tier since Pro was dropped (2026-11-19)
     });
     if (!saved.ok) {
       return NextResponse.json({ error: "Could not save preferences. Please try again." }, { status: 502 });

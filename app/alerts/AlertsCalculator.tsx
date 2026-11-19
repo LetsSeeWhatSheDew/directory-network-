@@ -80,12 +80,12 @@ export default function AlertsCalculator() {
                 const w = window;
                 if (typeof w.gtag === "function") w.gtag("event", "calculator_cta", { weekly: result.weekly });
               } catch {}
-              const card = document.querySelector(".tier.pro");
+              const card = document.querySelector(".tier");
               card?.scrollIntoView({ behavior: "smooth", block: "center" });
             }}
             style={cta}
           >
-            Fix that for $0.99/month →
+            Get the free Monday deals email →
           </button>
         </div>
       ) : (

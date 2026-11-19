@@ -23,7 +23,7 @@ export default function PrivacyPage() {
             Privacy Policy
           </h1>
           <p style={{ color: "var(--pp-muted)", fontFamily: "var(--font-body)", maxWidth: 520, margin: "0 auto", lineHeight: 1.6, fontSize: "1rem" }}>
-            Last updated: September 25, 2026. Short and specific.
+            Last updated: November 19, 2026. Short and specific.
           </p>
         </header>
       </div>
@@ -33,7 +33,7 @@ export default function PrivacyPage() {
 
           <h2 style={h2}>The short version</h2>
           <p>
-            PuffPrice is free to browse without an account. When you share data with us — by signing up for alerts, subscribing to Pro, or emailing us — we only use it for what you asked. We don&apos;t sell your data, and we don&apos;t share it with advertisers.
+            PuffPrice is free to browse without an account. When you share data with us — by signing up for alerts or emailing us — we only use it for what you asked. We don&apos;t sell your data, and we don&apos;t share it with advertisers.
           </p>
 
           <h2 style={h2}>What we collect</h2>
@@ -41,7 +41,7 @@ export default function PrivacyPage() {
             <strong>Nothing identifiable</strong> if you just browse. Anonymous page-view analytics only.
           </p>
           <p>
-            <strong>Email</strong> — if you subscribe to alerts, Pro, or sign up for the waitlist. We use it to send you the alerts or receipts you asked for.
+            <strong>Email</strong> — if you sign up for alerts. We use it to send you the alerts you asked for.
           </p>
           <p>
             <strong>Phone number</strong> — we don&apos;t collect one for alerts. Phone carriers block cannabis-related text messages, so alerts go by email.
@@ -53,22 +53,16 @@ export default function PrivacyPage() {
             <strong>Approximate location</strong> — if you allow browser geolocation, we read it in the browser to rank deals by proximity. Your precise GPS coordinates are not sent to our server.
           </p>
           <p>
-            <strong>Payment information</strong> — Pro payments go through Stripe. Stripe receives your card details; <em>we never see your card number or expiry.</em> We only receive a Stripe customer ID and subscription status.
+            <strong>Payment information</strong> — none. Shoppers never pay PuffPrice, so we never ask for a card.
           </p>
 
           <h2 style={h2}>Who we share it with</h2>
           <p>
-            Three third parties, each for one narrow purpose:
+            Each third party gets data for one narrow purpose:
           </p>
           <ul style={ul}>
             <li>
-              <strong>Stripe</strong> — payment processing for Pro. Stripe&apos;s privacy practices: <a href="https://stripe.com/privacy" style={link}>stripe.com/privacy</a>.
-            </li>
-            <li>
-              <strong>Resend</strong> — email delivery for the alerts and weekly report you sign up for.
-            </li>
-            <li>
-              <strong>Resend</strong> — email delivery (alerts, digest, receipts). Your email is sent to Resend only for sending messages you requested. Resend&apos;s policy: <a href="https://resend.com/legal/privacy-policy" style={link}>resend.com/legal/privacy-policy</a>.
+              <strong>Resend</strong> — email delivery for the alerts and weekly report you sign up for. Your email is sent to Resend only for sending messages you requested. Resend&apos;s policy: <a href="https://resend.com/legal/privacy-policy" style={link}>resend.com/legal/privacy-policy</a>.
             </li>
           </ul>
           <p>
@@ -112,7 +106,7 @@ export default function PrivacyPage() {
 
           <h2 style={h2}>Changes</h2>
           <p>
-            Material changes get posted here with a new &quot;Last updated&quot; date. We&apos;ll email Pro subscribers for any change that reduces their privacy meaningfully.
+            Material changes get posted here with a new &quot;Last updated&quot; date. We&apos;ll email alert subscribers about any change that reduces their privacy meaningfully.
           </p>
 
           <h2 style={h2}>Contact</h2>

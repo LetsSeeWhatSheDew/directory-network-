@@ -39,7 +39,7 @@ const FAQ_ENTRIES = [
   },
   {
     q: "Is PuffPrice free to use?",
-    a: "Yes. Browsing deals is always free with no account required. Pro ($0.99 a month, launching soon) adds instant email and browser alerts, a daily digest, price history, and a savings dashboard.",
+    a: "Yes. Browsing deals and every alert is free, with no account required. Stores can't pay to rank.",
   },
   {
     q: "Which Central Illinois cities does PuffPrice cover?",

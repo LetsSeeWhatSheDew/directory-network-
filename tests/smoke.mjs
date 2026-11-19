@@ -62,9 +62,9 @@ async function main() {
     assert(/nuera|east peoria/i.test(html), "nuera-east-peoria page missing expected copy");
   });
 
-  await test("/upgrade shows $0.99 pricing", async () => {
-    const { html } = await getHtml("/upgrade");
-    assert(/\$0\.99/.test(html), "upgrade page missing $0.99 price");
+  await test("/alerts is free only (no $0.99 Pro tier)", async () => {
+    const { html } = await getHtml("/alerts");
+    assert(!/\$0\.99/.test(html), "alerts page still shows the dropped $0.99 Pro price");
   });
 
   await test("/admin/submissions redirects to login without auth", async () => {
@@ -113,9 +113,9 @@ async function main() {
   });
 
   await test("All canonical URLs use https://www.puffprice.com (not apex)", async () => {
-    const { html } = await getHtml("/upgrade");
+    const { html } = await getHtml("/alerts");
     const bareCanonical = /canonical["\s=]+https:\/\/puffprice\.com/i.test(html);
-    assert(!bareCanonical, "canonical tag still points at apex (no www) on /upgrade");
+    assert(!bareCanonical, "canonical tag still points at apex (no www) on /alerts");
   });
 
   console.log(`\n${failed ? `✗ ${failed} failed` : "✓ all passed"} (${results.length} total)`);

@@ -170,8 +170,8 @@ export default function StartPage() {
             <li>We flag genuinely extraordinary deals with a “Top 5%” badge. No letter grades, no padding.</li>
             <li>It&rsquo;s free and no account is needed.</li>
             <li>
-              Optional <strong>Pro alerts ($0.99/month)</strong> email you the moment a new
-              deal drops near you.
+              Free alerts: a Monday email with the best deals in your town, or an email when a store
+              you follow posts something new.
             </li>
           </ul>
         </section>

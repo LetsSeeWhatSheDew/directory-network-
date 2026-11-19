@@ -9,7 +9,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Terms of Service",
   description:
-    "PuffPrice Terms of Service — plain-language terms covering the free tier, the $0.99/mo Pro tier, cancellation, data use, DMCA, and governing law (Illinois).",
+    "PuffPrice Terms of Service — plain-language terms covering free use and free alerts, deal accuracy, data use, DMCA, and governing law (Illinois).",
   alternates: { canonical: "https://www.puffprice.com/terms" },
 };
 
@@ -23,7 +23,7 @@ export default function TermsPage() {
             Terms of Service
           </h1>
           <p style={{ color: "var(--pp-muted)", fontFamily: "var(--font-body)", maxWidth: 520, margin: "0 auto", lineHeight: 1.6, fontSize: "1rem" }}>
-            Last updated: April 18, 2026. Short, plain English, no tricks.
+            Last updated: November 19, 2026. Short, plain English, no tricks.
           </p>
         </header>
       </div>
@@ -42,21 +42,12 @@ export default function TermsPage() {
             PuffPrice is for adults 21 and over. Don&apos;t use the site if you are under 21 or in a jurisdiction where viewing cannabis content is prohibited. We don&apos;t sell cannabis, and nothing on PuffPrice is a purchase offer — we surface deals published by licensed Illinois dispensaries.
           </p>
 
-          <h2 style={h2}>Free tier</h2>
+          <h2 style={h2}>Free, all of it</h2>
           <p>
-            Browsing deals, filtering by city or category, and using the directions flow is free and requires no account. You can use PuffPrice forever without paying us anything.
-          </p>
-
-          <h2 style={h2}>PuffPrice Pro — $0.99/month</h2>
-          <p>
-            Pro adds instant email and browser alerts, a daily digest email, price history on products you watch, and a personal savings dashboard. Pro is a recurring monthly subscription at $0.99 per month, billed through Stripe.
+            Browsing deals, filtering by city or category, using the directions flow and getting email alerts are all free and need no account. There is no paid tier for shoppers. You can use PuffPrice forever without paying us anything.
           </p>
           <p>
-            <strong>Cancellation.</strong> You can cancel Pro at any time from your Stripe customer portal (link included in every Pro email) or by emailing{" "}
-            <a href="mailto:matthew@jacarandapeoria.com" style={link}>matthew@jacarandapeoria.com</a>. Cancellation takes effect at the end of your current billing period — you keep Pro access through the end of that period, and no further charges are made. We do not pro-rate or refund partial months unless the charge was made in error.
-          </p>
-          <p>
-            <strong>Price changes.</strong> If we ever change the Pro price we&apos;ll email you at least 30 days before the new price applies, and you can cancel before the change takes effect.
+            <strong>Alerts.</strong> Email alerts start only after you tap the confirm link we send. Every alert email has a one-tap unsubscribe link.
           </p>
 
           <h2 style={h2}>Deal accuracy</h2>
@@ -92,7 +83,7 @@ export default function TermsPage() {
 
           <h2 style={h2}>Changes</h2>
           <p>
-            We may update these terms. Material changes get a banner on the site and an email to Pro subscribers at least 15 days before they apply. Continued use after an update means you accept the new version.
+            We may update these terms. Material changes get a banner on the site at least 15 days before they apply. Continued use after an update means you accept the new version.
           </p>
 
           <h2 style={h2}>Questions</h2>
