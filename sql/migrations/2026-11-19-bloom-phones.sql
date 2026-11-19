@@ -1,18 +1,14 @@
--- 2026-11-19: Bloom Wellness phone numbers (the three former Beyond Hello /
--- AYR / Revolution stores). FOR MATTHEW TO REVIEW AND APPLY. Not applied by Code.
--- Source: RISE directory + Leafly search snippets (docs/strategy/
--- 2026-11-19-store-ownership-and-open-items.md). Call each store to confirm
--- before applying; Peoria's number is the old Beyond Hello line.
--- Read first:
---   SELECT slug, name, phone FROM master_listings
---    WHERE project_tag = 'green'
---      AND slug IN ('beyond-hello-peoria','ayr-wellness-normal','revolution-dispensary-normal');
-
+-- 2026-11-19: Bloom Wellness phone numbers. NOT APPLIED. Needs one phone call.
+--
+-- Checked against the live master_listings table on Nov 19 (ops snapshot):
+--   beyond-hello-peoria  (Bloom Wellness Peoria)       (309) 232-8134  matches RISE + Leafly. Nothing to do.
+--   ayr-wellness-normal  (Bloom Wellness Normal, Bradford) (309) 571-1420  matches Leafly. Nothing to do.
+--   revolution-dispensary-normal (Bloom Normal, Northbrook) (309) 260-2609 in our DB,
+--     but Leafly lists (309) 210-0207. Call both; keep whichever the store answers.
+--
+-- Only if the call says Leafly is right:
 BEGIN;
-UPDATE master_listings SET phone = '(309) 232-8134'
- WHERE project_tag = 'green' AND slug = 'beyond-hello-peoria';          -- Bloom Wellness Peoria, 7620 State Route 91 Ste A
-UPDATE master_listings SET phone = '(309) 571-1420'
- WHERE project_tag = 'green' AND slug = 'ayr-wellness-normal';          -- Bloom Wellness Normal (Bradford), 1730 Bradford Ln
 UPDATE master_listings SET phone = '(309) 210-0207'
- WHERE project_tag = 'green' AND slug = 'revolution-dispensary-normal'; -- Bloom Wellness Normal (Northbrook), 1609 Northbrook Dr Ste 3
+ WHERE project_tag = 'green' AND slug = 'revolution-dispensary-normal'
+   AND phone = '(309) 260-2609';
 COMMIT;
