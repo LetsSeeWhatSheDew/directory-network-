@@ -1,5 +1,5 @@
 // scripts/alert-signup-probe.mjs — end-to-end check of the free alert signup on
-// Re-run marker: 2026-11-19 after the error-code deploy.
+// Re-run marker: 2026-11-19 second run after the error-code deploy.
 // production, using PuffPrice's OWN address (hi@puffprice.com), never a
 // shopper's. A pass means: the row saved (pending, double opt-in) AND Resend
 // accepted the confirm email (the route answers 502/503 if the send fails).
