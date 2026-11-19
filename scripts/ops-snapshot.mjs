@@ -43,6 +43,15 @@ for (const p of ["/", "/alerts", "/upgrade", "/status", "/green-wednesday", "/de
   } catch (e) { console.log(`${p}: ERR ${e.message}`); }
 }
 
+h("Search titles (what Google shows)");
+for (const p of ["/", "/city/peoria", "/city/champaign", "/city/springfield", "/city/east-peoria"]) {
+  try {
+    const html = await (await fetch(SITE + p, { signal: AbortSignal.timeout(20000) })).text();
+    const t = (html.match(/<title>([^<]*)<\/title>/) || [])[1] || "(none)";
+    console.log(`${p}: ${t.replace(/&amp;/g, "&")}`);
+  } catch (e) { console.log(`${p}: ERR ${e.message}`); }
+}
+
 if (!KEY) { console.log("\n(no service key: skipping database checks)"); process.exit(0); }
 
 h("Live deals (active_deals_with_listings, Central IL)");
