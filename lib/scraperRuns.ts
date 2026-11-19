@@ -8,6 +8,8 @@
 // few plain phrases before anything renders.
 
 import "server-only";
+import { publicPhrase, storeOk, noDealsReasonBySlug } from "./scraperText";
+export { publicPhrase, storeOk, noDealsReasonBySlug };
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://hnbjufmtmrhexmdrfubw.supabase.co";
@@ -86,21 +88,6 @@ export function runStatusWords(run: ScraperRun): { text: string; tone: "ok" | "n
   }
 }
 
-/** Map raw scraper error text to a plain public phrase. Never returns the raw text. */
-export function publicPhrase(raw: string | null | undefined): string {
-  const t = String(raw || "").toLowerCase();
-  if (!t) return "couldn't read the menu";
-  if (/timed? ?out|timeout|etimedout|deadline|took too long/.test(t)) return "timed out";
-  if (/cloudflare|captcha|challenge|forbidden|\b403\b|\b429\b|blocked|bot|access denied|perimeterx|akamai|incapsula/.test(t))
-    return "blocked by the store's security check";
-  if (/age ?gate|verify your age|21\+/.test(t)) return "stuck at the age check";
-  if (/abandon|never finished|killed|crash/.test(t)) return "check stopped before finishing";
-  if (/enotfound|econnrefused|econnreset|dns|net::|fetch failed|socket|\b5\d\d\b|\b404\b|not found|navigation|ssl|certificate|unreachable/.test(t))
-    return "site didn't load";
-  if (/parse|selector|no deals|empty|menu/.test(t)) return "couldn't read the menu";
-  return "couldn't read the menu";
-}
-
 export function durationWords(ms: number | null | undefined, run?: ScraperRun): string {
   let v = ms;
   if ((v == null || !(v > 0)) && run?.finished_at && run.status === "success")
@@ -113,10 +100,6 @@ export function durationWords(ms: number | null | undefined, run?: ScraperRun): 
   return `${Math.round(m / 60)} hr`;
 }
 
-const OK_STORE = new Set(["success", "ok", "no_deals", "unchanged"]);
-export function storeOk(r: StoreResult): boolean {
-  return OK_STORE.has(String(r.status || "").toLowerCase()) && !r.error_message;
-}
 
 /** Latest time each store was checked successfully (finished_at of the run). */
 export function lastGoodCheckBySlug(runs: ScraperRun[]): Map<string, string> {
@@ -132,6 +115,7 @@ export function lastGoodCheckBySlug(runs: ScraperRun[]): Map<string, string> {
   }
   return out;
 }
+
 
 /** Most recent run that finished (success or partial). */
 export function latestGoodRun(runs: ScraperRun[]): ScraperRun | null {

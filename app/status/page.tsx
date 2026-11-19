@@ -21,6 +21,7 @@ import {
   storeOk,
   lastGoodCheckBySlug,
   latestGoodRun,
+  noDealsReasonBySlug,
   type ScraperRun,
 } from "../../lib/scraperRuns";
 import { checkerFreshness } from "../../lib/scraperFreshness";
@@ -113,6 +114,7 @@ export default async function StatusPage() {
   const newerTrouble =
     newestRun && goodRun && newestRun.id !== goodRun.id && +new Date(newestRun.started_at) > +new Date(goodRun.started_at) && runStatusWords(newestRun).tone === "stop";
   const goodChecks = runs ? lastGoodCheckBySlug(runs) : null;
+  const whyNone = runs ? noDealsReasonBySlug(runs) : null;
   const nameBySlug = new Map(stores.map((s) => [s.slug, s.name] as const));
   const storeLabel = (slug: string) =>
     nameBySlug.get(slug) || slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
@@ -152,6 +154,7 @@ export default async function StatusPage() {
         .st-rdot.note{background:var(--pp-note-edge)}
         .st-rdot.stop{background:var(--pp-stop-edge)}
         .st-counts{font-family:var(--font-mono);font-size:.78rem;color:var(--pp-body)}
+        .st-why{display:block;font-size:.72rem;font-weight:500;max-width:11em;text-align:right;line-height:1.25;color:var(--pp-muted)}
         .st-miss{font-size:.78rem;color:var(--pp-note-fg)}
       `}</style>
 
@@ -206,6 +209,11 @@ export default async function StatusPage() {
             </span>
             <span className="gp-row-right" style={{ color: l ? "var(--pp-ink)" : "var(--pp-muted)" }}>
               {l ? `${l.n} live` : "none today"}
+              {!l && (
+                <span className="st-why">
+                  {!s.website ? "no website to check" : whyNone?.get(s.slug)?.reason || (whyNone ? "not reached yet" : null)}
+                </span>
+              )}
             </span>
           </Link>
         ))}
