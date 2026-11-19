@@ -1,0 +1,65 @@
+name: Rendered deal scrape
+
+# The real-browser deal reader (scripts/scrape-rendered-deals.ts), moved off
+# Matthew's Mac so deals stay fresh when the Mac is asleep. Same script, same
+# rules: each store's own site only, robots.txt respected, bot challenges
+# skipped, never solved. Writes source='website_rendered' deals, menu
+# snapshots and a scraper_runs row, exactly as the Mac run did.
+#
+# Times match the old launchd job (06:15 and 12:15 Central). GitHub cron is
+# UTC and has no DST, so these are 11:15/17:15 UTC: 05:15/11:15 CDT in summer,
+# 06:15/12:15 CST in winter. GitHub can start scheduled runs late; that's fine.
+
+on:
+  schedule:
+    - cron: '15 11 * * *'
+    - cron: '15 17 * * *'
+  # TEMP: dry run on pushes to the working branch, to prove the stores load
+  # from GitHub's machines. Remove before merging.
+  push:
+    branches: [claude/sweet-maxwell-9f298m]
+    paths: ['.github/workflows/rendered-scrape.yml']
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: 'Write to the database (unchecked = dry run, read only)'
+        type: boolean
+        default: true
+      slug:
+        description: 'Optional: only these stores (comma-separated slug parts)'
+        type: string
+        default: ''
+
+concurrency:
+  group: rendered-scrape
+  cancel-in-progress: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      TZ: America/Chicago
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci --include=dev --no-audit --no-fund
+      # The runner image ships Google Chrome; the script launches channel
+      # "chrome". Print the version so a broken image is obvious in the log.
+      - run: google-chrome --version
+      - name: Scrape
+        env:
+          EVENT: ${{ github.event_name }}
+          APPLY_INPUT: ${{ inputs.apply }}
+          SLUG_INPUT: ${{ inputs.slug }}
+        run: |
+          ARGS=""
+          if [ "$EVENT" = "schedule" ] || [ "$APPLY_INPUT" = "true" ]; then ARGS="--apply"; fi
+          if [ -n "$SLUG_INPUT" ]; then ARGS="$ARGS --slug=$SLUG_INPUT"; fi
+          echo "args: ${ARGS:-(dry run)}"
+          npx tsx scripts/scrape-rendered-deals.ts $ARGS
