@@ -1,0 +1,27 @@
+name: Ops snapshot (read-only)
+
+# Prints PuffPrice's health from outside: mail DNS, production pages, live
+# deals, subscriber counts, scraper runs. Reads only; writes nothing.
+# Run by hand (Actions tab) or let it run each morning after the scrapers.
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [claude/sweet-maxwell-9f298m]
+    paths: ['scripts/ops-snapshot.mjs', '.github/workflows/ops-snapshot.yml']
+  schedule:
+    - cron: '45 12 * * *'
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: node scripts/ops-snapshot.mjs
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
