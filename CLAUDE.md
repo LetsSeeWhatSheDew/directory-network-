@@ -120,8 +120,11 @@ Phase 3 target: public MCP server at mcp.puffprice.com — Month 3-6.
 - app/deals/[category]/page.tsx — deal engine pages
 - app/l/[id]/page.tsx — listing detail with content depth layer
 - app/brand/page.tsx, app/brand/[slug]/page.tsx — brand pages (scaffolded)
-- app/alerts/page.tsx — consumer signup
-- app/upgrade/page.tsx — pricing page
+- app/alerts/page.tsx — consumer signup (free only; /upgrade redirects here since Nov 19)
+- lib/confirmRetry.ts — queued confirm emails when Resend can't send
+- lib/cityMeta.ts — city page search titles (best deal leads)
+- lib/priceCheck.ts, scripts/price-check.ts — town price table (/cheapest#by-town)
+- scripts/ops-snapshot.mjs — daily read-only health check (GitHub Actions)
 - app/about/page.tsx, app/about/index/page.tsx — company + Index methodology
 - lib/brand.ts — brand config (site name / tagline / URL)
 - lib/brands.ts — brand data layer (stub until Cowork's research lands)

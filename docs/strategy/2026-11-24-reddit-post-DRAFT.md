@@ -22,9 +22,9 @@ What it's seeing as of [Mon/Tue date], tax included (refresh these from the ops 
 - [N] deals live at [N] of 26 stores right now.
 - Tax adds a quarter to almost half on top of the shelf price, so the sticker is rarely what you pay.
 
-The morning of Green Wednesday (Wed 11/25) I'll have every deal on one page, biggest saving first: puffprice.com/green-wednesday
+The morning of Green Wednesday (Wed 11/25) I'll have every deal on one page, biggest saving first: puffprice.com/green-wednesday?utm_source=reddit&utm_campaign=gw26
 
-Town-by-town prices: puffprice.com/cheapest#by-town
+Town-by-town prices: puffprice.com/cheapest?utm_source=reddit&utm_campaign=gw26#by-town
 
 If a deal's wrong or a store's missing, tell me and I'll fix it. NOXX and the Bloom stores are spotty because their sites block automated readers, and I don't get around that.
 
