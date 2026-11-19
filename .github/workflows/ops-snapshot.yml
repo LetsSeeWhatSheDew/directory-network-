@@ -6,9 +6,6 @@ name: Ops snapshot (read-only)
 
 on:
   workflow_dispatch: {}
-  push:
-    branches: [claude/sweet-maxwell-9f298m]
-    paths: ['scripts/ops-snapshot.mjs', '.github/workflows/ops-snapshot.yml']
   schedule:
     - cron: '45 12 * * *'
 

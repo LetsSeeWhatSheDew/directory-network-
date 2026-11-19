@@ -4,9 +4,6 @@ name: Alert signup probe
 # Run by hand from the Actions tab when the signup path needs proving.
 on:
   workflow_dispatch: {}
-  push:
-    branches: [claude/sweet-maxwell-9f298m]
-    paths: ['scripts/alert-signup-probe.mjs', 'scripts/resend-domain-check.mjs']
 
 jobs:
   probe:
