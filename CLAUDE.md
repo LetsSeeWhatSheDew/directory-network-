@@ -27,6 +27,15 @@ Live at puffprice.com.
 - Error monitoring: Sentry (scaffolded with env-var gating, DSN pending)
 - Brand config: lib/brand.ts — one string change renames entire site
 
+## Update 2026-11-19 (read first; supersedes the Nov 11 numbers below)
+
+- **Deal reader runs on GitHub Actions**, not the Mac: `.github/workflows/rendered-scrape.yml`, 11:15 and 17:15 UTC. NOXX and the 3 Bloom stores block GitHub's servers (Cloudflare).
+- **Live Nov 19, 11:17 AM CT:** 243 deals at 21 stores. **0 alert subscribers. 14 deal clicks all-time.**
+- **Pro is gone (Matthew, Nov 19).** Every alert is free; `/upgrade` redirects to `/alerts`. Money comes from stores (Market Report, invoiced), never from shoppers and never for rank.
+- **All PuffPrice email is broken until DNS is fixed:** Resend 403, domain not verified, no MX on `send.puffprice.com`. Steps: `docs/ops/2026-11-19-email-fix.md`.
+- **Plan:** https://claude.ai/artifact/RwMmJQFb7Tz5sNikCL2iw5 and `docs/strategy/2026-11-19-traction-plan.md`. Matthew is the named source for a monthly price check.
+- Session report: `docs/session-reports/2026-11-19-code-launch-push.md`.
+
 ## Current State (2026-11-11 night, verified against Supabase; main at Gold Leaf)
 
 Counts verified against the live `master_listings` and `deals` tables (project `hnbjufmtmrhexmdrfubw`) on Nov 11, 2026 ~9 PM CT. Re-query before quoting; deals change every run.
@@ -65,7 +74,7 @@ Counts verified against the live `master_listings` and `deals` tables (project `
 
 ## Business Tiers
 - FREE: No account, full deal access, always
-- PRO: $0.99/month — SMS alerts, daily digest, price history, savings dashboard
+- PRO: dropped Nov 19, 2026. Shoppers never pay; stores can buy a Market Report.
 
 ## Environment Variables in Vercel
 - NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY — Supabase public
