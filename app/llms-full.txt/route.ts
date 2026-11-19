@@ -7,6 +7,7 @@ import { getDealIndex } from "@/lib/dealIndex";
 import { capPerStore, STORE_CAP } from "@/lib/storeCap";
 import { GUIDES } from "@/lib/guides";
 import { getCheapestBoard, REF_UNITS, REF_DEF, RUNG_LABEL, money } from "@/lib/menuPrices";
+import { townTable } from "@/lib/priceCheck";
 import { answerLlmsLines } from "@/lib/answers";
 import { readLiveDeals, pickDealOfTheDay, dotdCopy, checkedLabel } from "@/lib/dealOfTheDay";
 import { COMMON_PAIRS, pairSlug, routeCity, planRoute, CORRIDOR_MILES } from "@/lib/routeDeals";
@@ -86,6 +87,12 @@ export async function GET() {
       for (const it of menu.byRef[r].slice(0, 5)) {
         lines.push(`- ${REF_DEF[r].label} (${REF_DEF[r].size}): ${money(it.otd)} out the door (${money(it.pretax)} shelf${it.onSale ? `, regular ${money(it.regular)}` : ""}) at ${it.storeName}, ${it.city} — ${it.brand && !it.product.toLowerCase().startsWith(it.brand.toLowerCase()) ? it.brand + " " : ""}${it.product}. Checked ${new Date(it.checkedAt).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short", timeZone: "America/Chicago" })} CT. ${u}/dispensary/${it.listingSlug}`);
       }
+    }
+    // Central Illinois Price Check: typical (median store) price by town.
+    const t = townTable(menu);
+    lines.push("", `### Typical price by town (${u}/cheapest#by-town)`, "Median of each store's cheapest out-the-door price in the town; store count in brackets.");
+    for (const row of [t.region, ...t.towns]) {
+      lines.push(`- ${row.city}: ${REF_UNITS.map((r) => `${REF_DEF[r].label} ${row.cells[r] ? `${money(row.cells[r]!.typical)} [${row.cells[r]!.stores}]` : "n/a"}`).join("; ")}`);
     }
     lines.push("");
   }
