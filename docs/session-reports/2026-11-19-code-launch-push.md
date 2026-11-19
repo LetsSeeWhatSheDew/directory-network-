@@ -59,3 +59,15 @@ Matthew (Nov 19): "Get me there… I'm giving you the keys." He decided:
   - Nov 19, 14 stores: eighth typical $26.59 (cheapest $22.92), cart $40.42, gummies $11.68.
   - The Green Wednesday pitch draft now carries these numbers.
 - **Sales kit README** now lists who to visit first, plus the email and ACH status.
+
+## Evening round
+
+- **Search titles** (`lib/cityMeta.ts`, tested): city pages lead with the day's best everyday deal.
+  - Live at 18:29 UTC: "Springfield Dispensary Deals Today: 55% Off at SHARE", "East Peoria …: 50% Off at NOXX", "Champaign …: 45% Off at Sunnyside", "Peoria …: 40% Off at Aroma Hill".
+  - Home title is now "Dispensary & Weed Deals Today in Central Illinois". The description had said "updated continuously"; it now says twice a day.
+- **Typical price by town**: on `/cheapest#by-town` and in `llms-full.txt` (`lib/priceCheck.ts`, tested).
+- **Market report PDFs**: a workflow prints them from the live site.
+  - Nov 19 run 44587610189: 8 PDFs, 314–335 KB each.
+- **Drafts**: Reddit post with UTM links (`docs/strategy/2026-11-24-reddit-post-DRAFT.md`). The pitch links the town table.
+- **Scheduled GitHub run** (18:15 UTC, an hour late) read NOXX: 346 deals at 21 stores. The Cloudflare block on NOXX is intermittent.
+- **CI** passed on 808cf6d.
