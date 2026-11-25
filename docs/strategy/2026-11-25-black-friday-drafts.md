@@ -38,6 +38,8 @@ Matthew [last name]
 PuffPrice, puffprice.com
 [phone]
 
+(Don't put hi@puffprice.com in the signature until a test email to it arrives. As of Nov 25 it bounces. Send from a personal address, not the Pearl work account.)
+
 ---
 
 ## 2. Reddit post (post Fri Nov 27 or Sat Nov 28 from Matthew's own account)
