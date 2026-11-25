@@ -1,0 +1,16 @@
+name: Competitor sitemaps (read-only)
+
+# SEO gap check: what local dispensary sites and Leafly publish. Run by hand.
+on:
+  workflow_dispatch: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: node scripts/competitor-sitemaps.mjs
