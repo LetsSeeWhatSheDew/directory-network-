@@ -57,7 +57,10 @@ function daysUntil(): number {
 export default async function GreenWednesdayPage() {
   const all = await getDeals();
   const n = daysUntil();
-  const isDay = n === 0;
+  // The full live list stays up from Green Wednesday through Black Friday
+  // weekend (Nov 25-30): stores run their holiday sales all weekend.
+  const isDay = n <= 0 && n >= -5;
+  const isWeekend = n < 0 && n >= -5;
   const announced = all.filter((d) => /green\s*wednesday|thanksgiving|black\s*friday|turkey/i.test(`${d.deal_title || ""} ${(d as { deal_description?: string }).deal_description || ""}`));
   const everyday = all
     .filter((d) => amountOf(d) && !isConditional(d))
@@ -102,7 +105,7 @@ export default async function GreenWednesdayPage() {
   return (
     <GuideShell
       crumbs={[{ href: "/deals/all", label: "Deals" }]}
-      eyebrow={`Green Wednesday · ${isDay ? "today" : n > 0 ? `${n} day${n === 1 ? "" : "s"} away` : "Nov 25, 2026"}`}
+      eyebrow={`Green Wednesday · ${isWeekend ? "Black Friday weekend" : isDay ? "today" : n > 0 ? `${n} day${n === 1 ? "" : "s"} away` : "Nov 25, 2026"}`}
       title="Green Wednesday in Central Illinois"
       lede={
         <>
@@ -137,7 +140,7 @@ export default async function GreenWednesdayPage() {
 
       {list.length > 0 ? (
         <>
-          <h2 className="gp-h2">{isDay ? `Every deal today · ${isDay ? everyday.length : list.length}` : "Announced early"}</h2>
+          <h2 className="gp-h2">{isDay ? `${isWeekend ? "Every deal this holiday weekend" : "Every deal today"} · ${everyday.length}` : "Announced early"}</h2>
           {!isDay && <p className="gp-note">Deals stores have already posted that mention Green Wednesday, Thanksgiving or Black Friday.</p>}
           <div className="gp-list">{list.map((d) => <Row key={d.deal_id} d={d} />)}</div>
           <StoreOverflowLinks stores={cappedList.overflow} />
