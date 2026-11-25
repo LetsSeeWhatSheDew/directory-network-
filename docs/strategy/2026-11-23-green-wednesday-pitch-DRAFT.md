@@ -1,4 +1,40 @@
-# DRAFT: Green Wednesday pitch to local newsrooms (send Mon Nov 23, from Matthew's own email)
+# DRAFT: Green Wednesday pitch to local newsrooms
+
+## READY TO SEND (Wed Nov 25 evening or Fri Nov 27, from Matthew's own email)
+
+Refreshed Nov 25 from ops snapshot run 45693832840 (2:20 PM CT). The Monday "going into the holiday" version below is out of date. Send this one instead.
+
+**Subject:** Green Wednesday in Central Illinois: dispensary prices fell, here are the numbers by town
+
+Hi [name],
+
+I run PuffPrice (puffprice.com). It reads every licensed dispensary's own website in Peoria, Bloomington-Normal, Champaign-Urbana, Pekin and Springfield every day and lists the deals in one place. Stores can't pay to rank.
+
+What prices looked like on Green Wednesday (Nov 25), out the door with tax:
+
+- An eighth of flower typically cost **$22.77**. The week before, it was $26.59. The cheapest was **$18.98** at nuEra in Urbana.
+- A 1g vape cart typically cost **$34.73** (it was $40.42). 100mg of gummies typically cost **$10.42** (it was $11.68).
+- **311 deals** were live at 21 of the region's 26 dispensaries. The biggest were 65% off, at Sunnyside (Champaign), Shangri-La (Springfield) and Cloud 9 (East Peoria).
+- The cheapest eighth by town: Urbana $18.98, Champaign $19.02, Pekin and East Peoria $19.06, Springfield $19.18, Bloomington and Normal $19.61, Peoria $22.77.
+
+Deals stay up through the weekend at puffprice.com/green-wednesday. Town-by-town prices are at puffprice.com/cheapest#by-town.
+
+I can send the store-by-store numbers as a spreadsheet. I'm also happy to talk about how the Illinois cannabis tax adds up at the register; it adds a quarter to almost half on top of the shelf price.
+
+Matthew [last name]
+PuffPrice, puffprice.com
+[phone]
+
+**Before sending:**
+- Fill in [name], [last name] and [phone].
+- One email per newsroom, using the To list below.
+- **Wording rule:** say "the week before" and "fell". Don't say "down 14%".
+  - Nov 19 compared 14 stores' menus; Nov 25 compared 17. The typical price moved, but the store set changed too, so a percent overstates how precise this is.
+  - If a reporter asks, say exactly that.
+
+---
+
+## Original Monday version (out of date, kept for the record)
 
 **Status:** draft, not sent. Numbers are from the Nov 19 ops snapshot (GitHub Actions run 44584273202: price check over 14 stores' menus, read 11:14–11:18 AM CT). Re-run the "Ops snapshot" workflow Monday morning and replace them; nothing goes out with a number we can't trace to a row.
 
@@ -42,4 +78,4 @@ Ops snapshot run 45693832840. Price check over 17 stores' menus, out the door wi
 - **100mg gummies:** typical $10.42, vs $11.68 (−11%). Cheapest $9.60, Maribis Springfield.
 - **Deals:** 311 live at 21 of 26 stores. Biggest headline discounts: 65% off at Sunnyside (Champaign), Shangri-La (Springfield) and Cloud 9 (East Peoria).
 
-Possible line for a reporter or a Friday post: "On Green Wednesday the typical out-the-door price of an eighth across Central Illinois fell to $22.77, down 14% from the week before."
+Possible line for a reporter or a Friday post: "On Green Wednesday the typical out-the-door price of an eighth across Central Illinois was $22.77, down from $26.59 the week before." Leave out "14%": the store set changed (14 stores, then 17).
