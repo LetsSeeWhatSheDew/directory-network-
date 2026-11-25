@@ -15,6 +15,7 @@ import { runCilScrape } from "@/lib/scraper/cil-deal-scraper";
 import { runDailyVerificationSweep } from "@/lib/scraper/dailyVerification";
 import { checkCronAuth } from "@/lib/cronAuth";
 import { insertScraperRun, patchScraperRun, finishScraperRun } from "@/lib/scraper/runLog";
+import { dispatchRenderedScrape } from "@/lib/githubDispatch";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -32,6 +33,11 @@ const SERVICE_KEY =
 async function handle(req: NextRequest): Promise<NextResponse> {
   const auth = checkCronAuth(req, "scrape-deals");
   if (!auth.ok) return auth.response;
+
+  // Kick off the real-browser reader on GitHub too (its own schedule runs
+  // hours late). No-op without GITHUB_DISPATCH_TOKEN. lib/githubDispatch.ts
+  const rendered = await dispatchRenderedScrape();
+  console.log("[scrape-deals] rendered reader dispatch:", rendered);
 
   if (!SERVICE_KEY) {
     return NextResponse.json(
@@ -85,7 +91,7 @@ async function handle(req: NextRequest): Promise<NextResponse> {
         errors: verification.errors.length,
       },
     }));
-    return NextResponse.json({ ...summary, verification });
+    return NextResponse.json({ ...summary, verification, rendered });
   } catch (err) {
     console.error("[scrape-deals] fatal", err);
     if (runId) {
