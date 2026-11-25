@@ -32,5 +32,16 @@ jobs:
             curl -s -H "Authorization: Bearer $RESEND_API_KEY" "https://api.resend.com/domains/$id" \
               | jq '{name,status,region,created_at,records:[.records[]?|{record,type,name,value,priority,status}]}'
           done
-      - name: Can the eforward servers be reached on port 25 (expect blocked on GitHub)
-        run: timeout 8 bash -c 'exec 3<>/dev/tcp/eforward1.registrar-servers.com/25 && head -1 <&3' || echo "port 25 not reachable from runner"
+      - name: Does Namecheap forwarding accept hi@ (SMTP RCPT only, no DATA, nothing is sent)
+        run: |
+          for addr in hi@puffprice.com nosuchbox-probe@puffprice.com; do
+            echo "== RCPT TO $addr"
+            timeout 20 python3 - "$addr" <<'EOF' || echo "probe failed"
+          import smtplib, sys
+          s = smtplib.SMTP("eforward1.registrar-servers.com", 25, timeout=15)
+          print("banner ok"); print("EHLO", s.ehlo("probe.puffprice.com")[0])
+          print("MAIL", s.mail(""))
+          print("RCPT", s.rcpt(sys.argv[1]))
+          s.quit()
+          EOF
+          done
