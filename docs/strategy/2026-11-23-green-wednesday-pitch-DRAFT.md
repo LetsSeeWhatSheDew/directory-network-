@@ -30,3 +30,16 @@ PuffPrice, puffprice.com
 - Matthew sends it himself. Code doesn't send.
 - Every bracket gets filled from the database that morning.
 - If the readers haven't run for 3 days in a row by then, wait and send it next month as a price check instead.
+
+---
+
+## Follow-up angle (numbers from Green Wednesday itself, Nov 25, 2:16 PM CT)
+
+Ops snapshot run 45693832840. Price check over 17 stores' menus, out the door with tax; typical = the middle store's cheapest:
+
+- **Eighth:** typical $22.77, vs $26.59 on Nov 19 (−14%). Cheapest $18.98, nuEra Urbana.
+- **1g cart:** typical $34.73, vs $40.42 (−14%). Cheapest $28.75, nuEra Urbana.
+- **100mg gummies:** typical $10.42, vs $11.68 (−11%). Cheapest $9.60, Maribis Springfield.
+- **Deals:** 311 live at 21 of 26 stores. Biggest headline discounts: 65% off at Sunnyside (Champaign), Shangri-La (Springfield) and Cloud 9 (East Peoria).
+
+Possible line for a reporter or a Friday post: "On Green Wednesday the typical out-the-door price of an eighth across Central Illinois fell to $22.77, down 14% from the week before."
