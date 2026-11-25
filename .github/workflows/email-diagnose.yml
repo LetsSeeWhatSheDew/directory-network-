@@ -1,0 +1,36 @@
+# Read-only: what Resend wants for puffprice.com vs what DNS has today.
+# Prints Resend's domain status and required records (no secrets), plus DNS.
+name: Email diagnose (read-only)
+on:
+  workflow_dispatch:
+  push:
+    branches: ["claude/**"]
+    paths: [".github/workflows/email-diagnose.yml"]
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: DNS today
+        run: |
+          for q in "NS puffprice.com" "SOA puffprice.com" "MX puffprice.com" "TXT puffprice.com" \
+                   "MX send.puffprice.com" "TXT send.puffprice.com" "CNAME send.puffprice.com" \
+                   "CNAME bounce.puffprice.com" "MX bounce.puffprice.com" "TXT bounce.puffprice.com" \
+                   "TXT resend._domainkey.puffprice.com" "TXT _dmarc.puffprice.com"; do
+            echo "== $q"; dig +short $q; done
+      - name: Resend domain status and required records
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        run: |
+          code=$(curl -s -o domains.json -w '%{http_code}' -H "Authorization: Bearer $RESEND_API_KEY" https://api.resend.com/domains)
+          echo "GET /domains -> HTTP $code"
+          jq -c '.' domains.json | head -c 2000; echo
+          for id in $(jq -r '.data[]?.id' domains.json); do
+            echo "== domain $id"
+            curl -s -H "Authorization: Bearer $RESEND_API_KEY" "https://api.resend.com/domains/$id" \
+              | jq '{name,status,region,created_at,records:[.records[]?|{record,type,name,value,priority,status}]}'
+          done
+      - name: Can the eforward servers be reached on port 25 (expect blocked on GitHub)
+        run: timeout 8 bash -c 'exec 3<>/dev/tcp/eforward1.registrar-servers.com/25 && head -1 <&3' || echo "port 25 not reachable from runner"
