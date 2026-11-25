@@ -1,6 +1,6 @@
 # DRAFT: Green Wednesday pitch to local newsrooms (send Mon Nov 23, from Matthew's own email)
 
-**Status:** draft, not sent. Numbers are from the Nov 19 ops snapshot (GitHub Actions run 44584273202: price check over 14 stores' menus, read 11:14–11:18 AM CT). Re-run the "Ops snapshot" workflow Monday morning and replace them; nothing goes out with a number we can't trace to a row.
+**Status:** SUPERSEDED Nov 25 by `2026-11-25-black-friday-drafts.md`. Draft, not sent. Numbers are from the Nov 19 ops snapshot (GitHub Actions run 44584273202: price check over 14 stores' menus, read 11:14–11:18 AM CT). Re-run the "Ops snapshot" workflow Monday morning and replace them; nothing goes out with a number we can't trace to a row.
 
 **To (one email each, not a group send):** the Peoria Journal Star (business desk), WEEK 25 news desk, WMBD/WYZZ, WGLT (Bloomington-Normal), The Pantagraph, the State Journal-Register, WCIA 3 (Champaign/Springfield). Find each one's tips or newsroom address on its own site.
 
@@ -42,4 +42,4 @@ Ops snapshot run 45693832840. Price check over 17 stores' menus, out the door wi
 - **100mg gummies:** typical $10.42, vs $11.68 (−11%). Cheapest $9.60, Maribis Springfield.
 - **Deals:** 311 live at 21 of 26 stores. Biggest headline discounts: 65% off at Sunnyside (Champaign), Shangri-La (Springfield) and Cloud 9 (East Peoria).
 
-Possible line for a reporter or a Friday post: "On Green Wednesday the typical out-the-door price of an eighth across Central Illinois fell to $22.77, down 14% from the week before."
+Don't use a "down 14%" line: Nov 19 read 14 stores and Nov 25 read 17, so the two typicals aren't like-for-like.

@@ -1,6 +1,6 @@
 # DRAFT: Reddit post for Green Wednesday week (Matthew posts, Tue Nov 24)
 
-**Status:** draft, not posted. Matthew posts from his own account. Before posting, read each sub's rules on self-promotion:
+**Status:** SUPERSEDED Nov 25 by `2026-11-25-black-friday-drafts.md`. Draft, not posted. Matthew posts from his own account. Before posting, read each sub's rules on self-promotion:
 - Some subs only allow your own site in a weekly thread.
 - Some want "I made this" flair.
 - Some ban it outright. If a sub bans it, skip it.
