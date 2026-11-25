@@ -1,4 +1,6 @@
-# Make the morning deal read reliable (about 5 minutes, Matthew)
+# Optional: make the morning deal read exact (about 5 minutes, Matthew)
+
+**Not needed anymore (Nov 25).** The repo is public, so Actions minutes are free, and the deal reader now runs on six schedule slots a day. Even with GitHub's delays, a run lands every few hours. The token below would only add an on-time ~3:40 AM run; skip it unless mornings still come up stale.
 
 **Why:** the real-browser deal reader runs on GitHub Actions. GitHub's own scheduler started it 7–10 hours late every day Nov 22–25. On Green Wednesday morning nothing had run since 7:37 PM the night before. Claude started a run by hand at 2:04 PM.
 

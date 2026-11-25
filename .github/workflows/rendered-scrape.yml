@@ -6,14 +6,19 @@ name: Rendered deal scrape
 # skipped, never solved. Writes source='website_rendered' deals, menu
 # snapshots and a scraper_runs row, exactly as the Mac run did.
 #
-# Times match the old launchd job (06:15 and 12:15 Central). GitHub cron is
-# UTC and has no DST, so these are 11:15/17:15 UTC: 05:15/11:15 CDT in summer,
-# 06:15/12:15 CST in winter. GitHub can start scheduled runs late; that's fine.
 
 on:
+  # Six slots a day. GitHub started the old twice-daily slots 7-10 hours late
+  # (Nov 22-25), so on Green Wednesday morning nothing had run. More slots
+  # means a run lands every few hours even with that delay. Public repo:
+  # Actions minutes are free. Runs never overlap (concurrency below).
   schedule:
-    - cron: '15 11 * * *'
-    - cron: '15 17 * * *'
+    - cron: '7 1 * * *'
+    - cron: '7 5 * * *'
+    - cron: '7 9 * * *'
+    - cron: '7 13 * * *'
+    - cron: '7 17 * * *'
+    - cron: '7 21 * * *'
   workflow_dispatch:
     inputs:
       apply:
