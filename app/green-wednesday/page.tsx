@@ -11,7 +11,7 @@ import OtdLine from "../components/OtdLine";
 import StoreOverflowLinks from "../components/StoreOverflowLinks";
 import WatchControl from "../components/WatchControl";
 import { watchesAvailable } from "../../lib/dealWatch";
-import { CENTRAL_IL_CITIES } from "../../lib/constants/regions";
+import { CENTRAL_IL_CITIES, CENTRAL_IL_PUBLIC_CITIES } from "../../lib/constants/regions";
 import { capPerStore, STORE_CAP } from "../../lib/storeCap";
 import { brand } from "../../lib/brand";
 import { amountOf, isConditional, needsQuantity, saveLabel, storeName, cleanDealTitle, type ExDeal } from "../../lib/exhale";
@@ -129,6 +129,8 @@ export default async function GreenWednesdayPage() {
         .gw-tips b{font-weight:600}
         .gw-tips span{font-size:.86rem;color:var(--pp-muted);line-height:1.45}
         .gp-row .pp-otd{margin-top:2px}
+        .gw-towns{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 8px}
+        .gw-towns a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:999px;border:1px solid var(--pp-border);background:var(--pp-surface);color:var(--pp-ink);font-weight:600;font-size:.9rem;text-decoration:none}
       `}</style>
 
       {!isDay && n > 0 && (
@@ -170,6 +172,13 @@ export default async function GreenWednesdayPage() {
         <Link href="/open-late"><b>Who&apos;s open latest</b><span>Every store sorted by tonight&apos;s closing time.</span></Link>
         <Link href="/medical"><b>Medical card?</b><span>Patients pay 1% state tax instead of the full rate. Stores that serve patients.</span></Link>
       </div>
+
+      <h2 className="gp-h2">Deals by town</h2>
+      <nav className="gw-towns" aria-label="Deals by town">
+        {CENTRAL_IL_PUBLIC_CITIES.map((c) => (
+          <Link key={c.slug} href={`/city/${c.slug}`}>{c.name} deals</Link>
+        ))}
+      </nav>
 
       {!isDay && preview.length > 0 && (
         <>

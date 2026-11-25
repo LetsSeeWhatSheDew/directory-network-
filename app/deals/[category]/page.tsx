@@ -24,6 +24,8 @@ import { getServerLocation } from "../../../lib/location";
 import { listingHref, visitDispensaryHref } from "../../../lib/links";
 import { displayDispensaryName } from "../../../lib/dispensaryName";
 import { brand } from "../../../lib/brand";
+import { citySlug } from "../../../lib/cityProfiles";
+import { CENTRAL_IL_PUBLIC_CITY_SLUGS } from "../../../lib/constants/regions";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://hnbjufmtmrhexmdrfubw.supabase.co';
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYmp1Zm10bXJoZXhtZHJmdWJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzQ3MTksImV4cCI6MjA4MDM1MDcxOX0.-HzY9AayfTnAKAEwKNovWgFCxdYJkwEPptzR7DHj300';
@@ -313,7 +315,9 @@ export async function generateMetadata({
   const label = CATEGORY_LABELS[category] || "Cannabis deals";
   const ogImage = `${brand.url}/og-image.png`;
   const title = city
-    ? `${city} Dispensary Deals Today`
+    ? category === "all"
+      ? `${city} Dispensary Deals Today`
+      : `${city} ${label} Deals Today`
     : category === "all"
       ? "Every Cannabis Deal in Central Illinois Today"
       : `${label} Deals in Central Illinois Today`;
@@ -322,9 +326,16 @@ export async function generateMetadata({
     : category === "all"
       ? "Every active dispensary deal in Central Illinois, biggest everyday savings first. Checked on each store's own site every morning."
       : `Find the cheapest ${label.toLowerCase()} deals at Central Illinois dispensaries right now. Real prices, real savings.`;
-  const url = city
-    ? `${brand.url}/deals/${category}?city=${encodeURIComponent(city)}`
-    : `${brand.url}/deals/${category}`;
+  // Canonical never carries ?city= (Search Console, Oct 29-Nov 25, 2026:
+  // /deals/all?city=Peoria, /deals/flower?city=Peoria etc. were indexed as
+  // their own pages, competing with /city/peoria under the same title).
+  // All deals in a public city → that city's page, the canonical city URL.
+  // One category → the category page. A location cookie never changes it.
+  const urlCitySlug = cityFromUrl ? citySlug(cityFromUrl) : null;
+  const url =
+    category === "all" && urlCitySlug && CENTRAL_IL_PUBLIC_CITY_SLUGS.includes(urlCitySlug)
+      ? `${brand.url}/city/${urlCitySlug}`
+      : `${brand.url}/deals/${category}`;
   return {
     title,
     description,

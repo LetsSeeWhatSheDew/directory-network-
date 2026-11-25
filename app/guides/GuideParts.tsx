@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { brand } from "../../lib/brand";
 import { GUIDES } from "../../lib/guides";
+import { CENTRAL_IL_PUBLIC_CITIES } from "../../lib/constants/regions";
 
 export const GUIDE_EXTRA_CSS = `
 .gq{margin:20px 0 6px;padding:16px 18px;border-radius:14px;background:#FFFAF0;border:1px solid rgba(16,32,26,.14);border-left:4px solid #D9AC4F}
@@ -18,6 +19,9 @@ export const GUIDE_EXTRA_CSS = `
 .gp-faq p{margin:0;line-height:1.55;color:var(--pp-body);max-width:66ch}
 .gp-srcs{margin:8px 0 0;padding-left:1.1rem;font-size:.84rem;color:var(--pp-muted);line-height:1.6}
 .gp-srcs a{color:var(--pp-muted)}
+.gp-towns{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 8px}
+.gp-town{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:999px;border:1px solid rgba(16,32,26,.14);background:#FFFAF0;color:var(--pp-ink);font-weight:600;font-size:.9rem;text-decoration:none}
+.gp-town:hover{border-color:#D9AC4F}
 .gp-table-wrap{overflow-x:auto;border:1px solid var(--pp-border);border-radius:14px;background:var(--pp-surface);padding:0 8px}
 `;
 
@@ -71,6 +75,15 @@ export function RelatedGuides({ current, extra }: { current: string; extra?: { h
   const others = GUIDES.filter((g) => g.slug !== current).slice(0, 7);
   return (
     <>
+      {/* Search Console (Oct 29-Nov 25, 2026): the guides drew 1,000+
+          impressions a month and linked to no city page, while the city
+          pages sat around position 15. Every guide now points at all nine. */}
+      <h2 className="gp-h2">Today&apos;s deals by town</h2>
+      <nav className="gp-towns" aria-label="Today's deals by town">
+        {CENTRAL_IL_PUBLIC_CITIES.map((c) => (
+          <Link key={c.slug} href={`/city/${c.slug}`} className="gp-town">{c.name} deals</Link>
+        ))}
+      </nav>
       <h2 className="gp-h2">Related</h2>
       <div className="gp-list">
         {(extra || []).map((e) => (
